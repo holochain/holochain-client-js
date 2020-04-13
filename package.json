@@ -1,0 +1,29 @@
+{
+  "name": "@holochain/conductor-api",
+  "version": "0.0.1",
+  "description": "Encode and decode messages to the Holochain Conductor API",
+  "main": "index.js",
+  "scripts": {
+    "build": "rm -rf ./lib ; tsc -d",
+    "dev": "rm -rf ./lib ; tsc -d -w",
+    "doc": "typedoc",
+    "fetch-dna": "ts-node test/fetch-dna",
+    "prepare": "npm run build",
+    "prepublishOnly": "npm test",
+    "test": "ts-node test | tap-diff"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/msgpack-lite": "^0.1.7",
+    "@types/node": "^13.11.1",
+    "@types/tape": "^4.2.34",
+    "tap-diff": "^0.1.1",
+    "tape": "^4.13.2",
+    "ts-node": "^8.8.2",
+    "typescript": "^3.8.3"
+  },
+  "dependencies": {
+    "msgpack-lite": "^0.1.26"
+  }
+}
