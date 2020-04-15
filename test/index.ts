@@ -1,7 +1,7 @@
 import test from 'tape'
 import * as msgpack from 'msgpack-lite'
 
-import admin, { InstallDnaRequest, InstallDnaResponse } from '../src/admin-api'
+import admin, { InstallDnaRequest, InstallDnaResponse } from '../src/api/admin'
 
 test('admin api basic encode/decode', t => {
   const request: InstallDnaRequest = { path: 'path/to/dna' }

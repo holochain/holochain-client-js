@@ -1,2 +1,2 @@
-export * from './admin-api'
-export * from './app-api'
+export * from './api/admin'
+export * from './api/app'
