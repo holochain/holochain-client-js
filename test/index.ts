@@ -1,12 +1,12 @@
 import test from 'tape'
 import * as msgpack from 'msgpack-lite'
 
-import admin, { InstallDnaRequest, InstallDnaResponse } from '../src/api/admin'
+import * as Api from '../src/api/admin'
 
 test('admin api basic encode/decode', t => {
-  const request: InstallDnaRequest = { path: 'path/to/dna' }
-  const response: InstallDnaResponse = null
-  const [msg, decoder] = admin.installDna(request)
+  const request: Api.InstallDnaRequest = { path: 'path/to/dna' }
+  const response: Api.InstallDnaResponse = null
+  const [msg, decoder] = Api.request(request)
 
   t.deepEqual(msgpack.decode(msg), request)
   t.deepEqual(decoder(msgpack.encode(response)), response)
