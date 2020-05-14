@@ -1,4 +1,4 @@
-import Websocket from 'reconnecting-websocket'
+import Websocket from 'isomorphic-ws'
 import * as msgpack from 'msgpack-lite'
 import { nanoid } from 'nanoid'
 
@@ -28,11 +28,11 @@ export class WsClient {
 
   request<Req, Res>(data: Req): Promise<Res> {
     const id = nanoid()
-    const encodedMsg = msgpack.encode({
+    const encodedMsg = {
       id,
       type: 'Request',
       data: msgpack.encode(data),
-    })
+    }
     const promise = new Promise((fulfill) => {
       this.pendingRequests[id] = { fulfill }
     })
@@ -46,7 +46,7 @@ export class WsClient {
   }
 
   awaitClose(): Promise<void> {
-    return new Promise(resolve => this.socket.addEventListener('close', () => resolve()))
+    return new Promise(resolve => this.socket.on('close', resolve))
   }
 
   static connect(url: string, signalCb?: Function): Promise<WsClient> {
