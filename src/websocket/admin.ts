@@ -16,7 +16,7 @@
  *      })
  */
 
-import * as Api from '../api'
+import * as Api from '../api/common'
 import { AdminApi } from '../api/admin'
 import { WsClient } from './client'
 import { catchError } from './common'
@@ -28,7 +28,7 @@ export class AdminWebsocket implements AdminApi {
     this.client = client
   }
 
-  static connect(url: string, signalCb: Function): Promise<AdminWebsocket> {
+  static connect(url: string, signalCb?: Function | undefined): Promise<AdminWebsocket> {
     return WsClient.connect(url, signalCb).then(client => new AdminWebsocket(client))
   }
 

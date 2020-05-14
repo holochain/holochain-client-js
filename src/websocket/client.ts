@@ -9,15 +9,16 @@ import { nanoid } from 'nanoid'
  * Uses Holochain's websocket WireMessage for communication.
  */
 export class WsClient {
-  socket: any
+  socket: Websocket
   pendingRequests: Record<string, { fulfill: Function }>
 
   constructor(socket: any) {
     this.socket = socket
     this.pendingRequests = {}
+    // TODO: allow adding signal handlers later
   }
 
-  signal(data: any) {
+  emitSignal(data: any) {
     const encoded = msgpack.encode({
       type: 'Signal',
       data: msgpack.encode(data),
@@ -39,14 +40,23 @@ export class WsClient {
     return promise as Promise<Res>
   }
 
-  static connect(url: string, signalCb: Function): Promise<WsClient> {
+  close(): Promise<void> {
+    this.socket.close();
+    return this.awaitClose()
+  }
+
+  awaitClose(): Promise<void> {
+    return new Promise(resolve => this.socket.on('close', resolve))
+  }
+
+  static connect(url: string, signalCb?: Function): Promise<WsClient> {
     return new Promise((resolve, reject) => {
       const socket = new Websocket(url)
       socket.onopen = () => {
         const hw = new WsClient(socket)
         socket.onmessage = (encodedMsg: any) => {
           const msg = msgpack.decode(encodedMsg.data)
-          if (msg.type === 'Signal') {
+          if (signalCb && msg.type === 'Signal') {
             signalCb(msgpack.decode(msg.data))
           } else if (msg.type === 'Response') {
             const id = msg.id

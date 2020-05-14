@@ -16,7 +16,7 @@
  *      })
  */
 
-import * as Api from '../api'
+import * as Api from '../api/common'
 import { AppApi } from '../api/app'
 import { WsClient } from './client'
 import { catchError } from './common'
@@ -37,5 +37,4 @@ export class AppWebsocket implements AppApi {
   // the specific request/response types come from the Interface
   // which this class implements
   callZome = this._request
-  addCell = this._request
 }

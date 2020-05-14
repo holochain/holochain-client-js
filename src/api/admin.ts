@@ -1,4 +1,4 @@
-import { Requester } from "."
+import { Requester } from "./common"
 
 export type InstallDnaRequest = { path: string }
 export type InstallDnaResponse = null
