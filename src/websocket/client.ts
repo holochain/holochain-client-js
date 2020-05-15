@@ -28,11 +28,11 @@ export class WsClient {
 
   request<Req, Res>(data: Req): Promise<Res> {
     const id = nanoid()
-    const encodedMsg = {
+    const encodedMsg = msgpack.encode({
       id,
       type: 'Request',
       data: msgpack.encode(data),
-    }
+    })
     const promise = new Promise((fulfill) => {
       this.pendingRequests[id] = { fulfill }
     })

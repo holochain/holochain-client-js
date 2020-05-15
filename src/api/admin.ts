@@ -1,12 +1,13 @@
-import { Requester } from "./common"
+import { Requester, Tagged } from "./common"
 
 export type InstallDnaRequest = { path: string }
 export type InstallDnaResponse = null
 
-export type AddCellRequest = { todo: void }
-export type AddCellResponse = { todo: void }
+export type ListDnasRequest = null
+export type ListDnasResponse = Array<string>
+
 
 export interface AdminApi {
   installDna: Requester<InstallDnaRequest, InstallDnaResponse>
-  addCell: Requester<AddCellRequest, AddCellResponse>
+  listDnas: Requester<ListDnasRequest, ListDnasResponse>
 }
