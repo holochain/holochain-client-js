@@ -28,7 +28,7 @@ export class AppWebsocket implements AppApi {
     this.client = client
   }
 
-  static connect(url: string, signalCb: Function): Promise<AppWebsocket> {
+  static connect(url: string, signalCb?: Function): Promise<AppWebsocket> {
     return WsClient.connect(url, signalCb).then(client => new AppWebsocket(client))
   }
 

@@ -16,13 +16,12 @@
  *      })
  */
 
-import * as Api from '../api/common'
-import { AdminApi, ListDnasResponse, ListDnasRequest, InstallDnaRequest, InstallDnaResponse } from '../api/admin'
+import * as Api from '../api/admin'
 import { WsClient } from './client'
 import { catchError } from './common'
 import { tagged } from '../api/common'
 
-export class AdminWebsocket implements AdminApi {
+export class AdminWebsocket implements Api.AdminApi {
   client: WsClient
 
   constructor(client: WsClient) {
@@ -37,6 +36,6 @@ export class AdminWebsocket implements AdminApi {
 
   // the specific request/response types come from the Interface
   // which this class implements
-  installDna = tagged<InstallDnaRequest, InstallDnaResponse>('InstallDna', this._request)
-  listDnas = tagged<ListDnasRequest, ListDnasResponse>('ListDnas', this._request)
+  installDna = tagged<Api.InstallDnaRequest, Api.InstallDnaResponse>('InstallDna', this._request)
+  listDnas = tagged<Api.ListDnasRequest, Api.ListDnasResponse>('ListDnas', this._request)
 }
