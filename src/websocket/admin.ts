@@ -37,10 +37,10 @@ export class AdminWebsocket implements Api.AdminApi {
   // the specific request/response types come from the Interface
   // which this class implements
   activateApp = tagged<Api.ActivateAppRequest, Api.ActivateAppResponse>('ActivateApp', this._request)
+  attachAppInterface = tagged<Api.AttachAppInterfaceRequest, Api.AttachAppInterfaceResponse>('AttachAppInterface', this._request)
   deactivateApp = tagged<Api.DeactivateAppRequest, Api.DeactivateAppResponse>('DeactivateApp', this._request)
-  installApp = tagged<Api.InstallAppRequest, Api.InstallAppResponse>('InstallApp', this._request)
-  listDnas = tagged<Api.ListDnasRequest, Api.ListDnasResponse>('ListDnas', this._request)
   dumpState = tagged<Api.DumpStateRequest, Api.DumpStateResponse>('DumpState', this._request)
   generateAgentPubKey = tagged<Api.GenerateAgentPubKeyRequest, Api.GenerateAgentPubKeyResponse>('GenerateAgentPubKey', this._request)
-  attachAppInterface = tagged<Api.AttachAppInterfaceRequest, Api.AttachAppInterfaceResponse>('AttachAppInterface', this._request)
+  installApp = tagged<Api.InstallAppRequest, Api.InstallAppResponse>('InstallApp', this._request)
+  listDnas = tagged<Api.ListDnasRequest, Api.ListDnasResponse>('ListDnas', this._request)
 }
