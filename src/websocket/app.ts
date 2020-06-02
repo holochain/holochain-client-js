@@ -17,7 +17,7 @@
  */
 
 import * as Api from '../api/common'
-import { AppApi } from '../api/app'
+import { AppApi, CallZomeRequest, CallZomeResponse } from '../api/app'
 import { WsClient } from './client'
 import { catchError } from './common'
 
@@ -32,9 +32,11 @@ export class AppWebsocket implements AppApi {
     return WsClient.connect(url, signalCb).then(client => new AppWebsocket(client))
   }
 
-  _request = <Req, Res>(req: Req) => this.client.request(req).then(catchError)
+  _request = <Req, Res>(req: Req): Promise<Res> => this.client.request(req).then(catchError)
+  _requester = <Req, Res>(tag: string) => Api.tagged<Req, Res>(tag, this._request)
 
   // the specific request/response types come from the Interface
   // which this class implements
-  callZome = this._request
+  callZome: Api.Requester<CallZomeRequest, CallZomeResponse>
+    = this._requester('ZomeCallInvocationRequest')
 }

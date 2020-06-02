@@ -19,7 +19,7 @@
 import * as Api from '../api/admin'
 import { WsClient } from './client'
 import { catchError } from './common'
-import { tagged } from '../api/common'
+import { tagged, Requester } from '../api/common'
 
 export class AdminWebsocket implements Api.AdminApi {
   client: WsClient
@@ -32,15 +32,23 @@ export class AdminWebsocket implements Api.AdminApi {
     return WsClient.connect(url, signalCb).then(client => new AdminWebsocket(client))
   }
 
-  _request = <Req, Res>(req: Req) => this.client.request(req).then(catchError)
+  _request = <Req, Res>(req: Req): Promise<Res> => this.client.request(req).then(catchError)
+  _requester = <Req, Res>(tag: string) => tagged<Req, Res>(tag, this._request)
 
   // the specific request/response types come from the Interface
   // which this class implements
-  activateApp = tagged<Api.ActivateAppRequest, Api.ActivateAppResponse>('ActivateApp', this._request)
-  attachAppInterface = tagged<Api.AttachAppInterfaceRequest, Api.AttachAppInterfaceResponse>('AttachAppInterface', this._request)
-  deactivateApp = tagged<Api.DeactivateAppRequest, Api.DeactivateAppResponse>('DeactivateApp', this._request)
-  dumpState = tagged<Api.DumpStateRequest, Api.DumpStateResponse>('DumpState', this._request)
-  generateAgentPubKey = tagged<Api.GenerateAgentPubKeyRequest, Api.GenerateAgentPubKeyResponse>('GenerateAgentPubKey', this._request)
-  installApp = tagged<Api.InstallAppRequest, Api.InstallAppResponse>('InstallApp', this._request)
-  listDnas = tagged<Api.ListDnasRequest, Api.ListDnasResponse>('ListDnas', this._request)
+  activateApp: Requester<Api.ActivateAppRequest, Api.ActivateAppResponse>
+    = this._requester('ActivateApp')
+  attachAppInterface: Requester<Api.AttachAppInterfaceRequest, Api.AttachAppInterfaceResponse>
+    = this._requester('AttachAppInterface')
+  deactivateApp: Requester<Api.DeactivateAppRequest, Api.DeactivateAppResponse>
+    = this._requester('DeactivateApp')
+  dumpState: Requester<Api.DumpStateRequest, Api.DumpStateResponse>
+    = this._requester('DumpState')
+  generateAgentPubKey: Requester<Api.GenerateAgentPubKeyRequest, Api.GenerateAgentPubKeyResponse>
+    = this._requester('GenerateAgentPubKey')
+  installApp: Requester<Api.InstallAppRequest, Api.InstallAppResponse>
+    = this._requester('InstallApp')
+  listDnas: Requester<Api.ListDnasRequest, Api.ListDnasResponse>
+    = this._requester('ListDnas')
 }

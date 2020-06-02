@@ -30,15 +30,12 @@ test('basic app interface methods', withConductor(ADMIN_PORT, async t => {
   const client = await AppWebsocket.connect(`http://localhost:${appPort}`)
 
   const response = await client.callZome({
-    type: 'ZomeCallInvocationRequest',
-    data: {
-      cap: 'secret',
-      cell_id: cellId,
-      zome_name: 'foo',
-      fn_name: 'foo',
-      payload: [],  // TODO: should this be byte array?
-      provenance: '',
-    }
+    cap: 'secret',
+    cell_id: cellId,
+    zome_name: 'foo',
+    fn_name: 'foo',
+    payload: [],  // TODO: should this be byte array?
+    provenance: 'TODO' as any,
   })
   t.equal(1, 1)
 
