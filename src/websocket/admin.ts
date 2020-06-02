@@ -7,12 +7,12 @@
  *      signal => console.log('got a signal:', signal)
  *    )
  *
- *    client.installDna({path: 'path/to/dna.hcdna'})
- *      .then(() => {
- *        console.log('DNA successfully installed')
+ *    client.generateAgentPubKey()
+ *      .then(agentPubKey => {
+ *        console.log('Agent successfully generated:', agentPubKey)
  *      })
  *      .catch(err => {
- *        console.error('problem installing DNA:', err)
+ *        console.error('problem generating agent:', err)
  *      })
  */
 
@@ -36,6 +36,11 @@ export class AdminWebsocket implements Api.AdminApi {
 
   // the specific request/response types come from the Interface
   // which this class implements
-  installDna = tagged<Api.InstallDnaRequest, Api.InstallDnaResponse>('InstallDna', this._request)
+  activateApp = tagged<Api.ActivateAppRequest, Api.ActivateAppResponse>('ActivateApp', this._request)
+  deactivateApp = tagged<Api.DeactivateAppRequest, Api.DeactivateAppResponse>('DeactivateApp', this._request)
+  installApp = tagged<Api.InstallAppRequest, Api.InstallAppResponse>('InstallApp', this._request)
   listDnas = tagged<Api.ListDnasRequest, Api.ListDnasResponse>('ListDnas', this._request)
+  dumpState = tagged<Api.DumpStateRequest, Api.DumpStateResponse>('DumpState', this._request)
+  generateAgentPubKey = tagged<Api.GenerateAgentPubKeyRequest, Api.GenerateAgentPubKeyResponse>('GenerateAgentPubKey', this._request)
+  attachAppInterface = tagged<Api.AttachAppInterfaceRequest, Api.AttachAppInterfaceResponse>('AttachAppInterface', this._request)
 }
