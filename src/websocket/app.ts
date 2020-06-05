@@ -15,6 +15,7 @@
  *        console.error('problem installing DNA:', err)
  *      })
  */
+import * as msgpack from 'msgpack-lite'
 
 import * as Api from '../api/common'
 import { AppApi, CallZomeRequest, CallZomeResponse, AppInfoRequest, AppInfoResponse } from '../api/app'
@@ -33,7 +34,9 @@ export class AppWebsocket implements AppApi {
   }
 
   _request = <Req, Res>(req: Req): Promise<Res> => this.client.request(req).then(catchError)
-  _requester = <Req, Res>(tag: string) => Api.tagged<Req, Res>(tag, this._request)
+  _requester = <Req, Res>(tag: string, transform?: Function) => (
+    Api.tagged<Req, Res>(tag, req => this._request(transform ? transform(req) : req))
+  )
 
   // the specific request/response types come from the Interface
   // which this class implements
@@ -42,4 +45,9 @@ export class AppWebsocket implements AppApi {
     = this._requester('AppInfo')
   callZome: Api.Requester<CallZomeRequest, CallZomeResponse>
     = this._requester('ZomeCallInvocation')
+}
+
+const callZomeTransform = (req: CallZomeRequest) => {
+  req.payload = msgpack.encode(req.payload)
+  return req
 }
