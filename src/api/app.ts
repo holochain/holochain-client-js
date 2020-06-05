@@ -1,5 +1,5 @@
 import { Requester } from "./common"
-import { CellId, AgentPubKey } from "./types"
+import { CellId, AgentPubKey, AppId, InstalledCell, InstalledApp } from "./types"
 
 export type CallZomeRequest = {
   cap: string,
@@ -9,8 +9,12 @@ export type CallZomeRequest = {
   payload: any,  // TODO: should this be byte array?
   provenance: AgentPubKey,
 }
-export type CallZomeResponse = { todo: void }
+export type CallZomeResponse = Buffer
+
+export type AppInfoRequest = { app_id: AppId }
+export type AppInfoResponse = InstalledApp
 
 export interface AppApi {
-  callZome: Requester<CallZomeRequest, CallZomeResponse>
+  appInfo: Requester<AppInfoRequest, AppInfoResponse>,
+  callZome: Requester<CallZomeRequest, CallZomeResponse>,
 }

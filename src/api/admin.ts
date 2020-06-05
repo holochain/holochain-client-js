@@ -1,5 +1,5 @@
 import { Requester } from "./common"
-import { AgentPubKey, MembraneProof, DnaProperties, AppId, CellId, Hash } from "./types"
+import { AgentPubKey, MembraneProof, DnaProperties, AppId, CellId, Hash, CellNick, InstalledApp } from "./types"
 
 export type ActivateAppRequest = { app_id: AppId }
 export type ActivateAppResponse = null
@@ -19,10 +19,9 @@ export type GenerateAgentPubKeyResponse = AgentPubKey
 export type InstallAppRequest = {
   app_id: AppId,
   agent_key: AgentPubKey,
-  dnas: Array<[String, DnaProperties | null]>,
-  proofs: Record<Hash, MembraneProof>
+  dnas: Array<InstallAppDnaPayload>,
 }
-export type InstallAppResponse = Array<CellId>
+export type InstallAppResponse = InstalledApp
 
 export type ListDnasRequest = null
 export type ListDnasResponse = Array<string>
@@ -35,4 +34,12 @@ export interface AdminApi {
   generateAgentPubKey: Requester<GenerateAgentPubKeyRequest, GenerateAgentPubKeyResponse>
   installApp: Requester<InstallAppRequest, InstallAppResponse>
   listDnas: Requester<ListDnasRequest, ListDnasResponse>
+}
+
+
+type InstallAppDnaPayload = {
+  path: string,
+  nick: CellNick,
+  properties?: DnaProperties,
+  membrane_proof?: MembraneProof
 }
