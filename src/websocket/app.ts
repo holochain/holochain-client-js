@@ -17,10 +17,10 @@
  */
 import * as msgpack from 'msgpack-lite'
 
-import * as Api from '../api/common'
-import { AppApi, CallZomeRequest, CallZomeResponse, AppInfoRequest, AppInfoResponse } from '../api/app'
+import { AppApi, CallZomeRequest, CallZomeResponse, AppInfoRequest, AppInfoResponse, CallZomeRequestGeneric, CallZomeResponseGeneric } from '../api/app'
 import { WsClient } from './client'
 import { catchError } from './common'
+import { Transformer, requesterTransformer, Requester } from '../api/common'
 
 export class AppWebsocket implements AppApi {
   client: WsClient
@@ -33,21 +33,30 @@ export class AppWebsocket implements AppApi {
     return WsClient.connect(url, signalCb).then(client => new AppWebsocket(client))
   }
 
-  _request = <Req, Res>(req: Req): Promise<Res> => this.client.request(req).then(catchError)
-  _requester = <Req, Res>(tag: string, transform?: Function) => (
-    Api.tagged<Req, Res>(tag, req => this._request(transform ? transform(req) : req))
-  )
+  _requester = <ReqO, ReqI, ResI, ResO>(tag: string, transformer?: Transformer<ReqO, ReqI, ResI, ResO>) =>
+    requesterTransformer(
+      req => this.client.request(req).then(catchError),
+      tag,
+      transformer
+    )
 
-  // the specific request/response types come from the Interface
-  // which this class implements
-
-  appInfo: Api.Requester<AppInfoRequest, AppInfoResponse>
+  appInfo: Requester<AppInfoRequest, AppInfoResponse>
     = this._requester('AppInfo')
-  callZome: Api.Requester<CallZomeRequest, CallZomeResponse>
-    = this._requester('ZomeCallInvocation')
+  callZome: Requester<CallZomeRequestGeneric<any>, CallZomeResponseGeneric<any>>
+    = this._requester('ZomeCallInvocation', callZomeTransform)
 }
 
-const callZomeTransform = (req: CallZomeRequest) => {
-  req.payload = msgpack.encode(req.payload)
-  return req
+const callZomeTransform: Transformer<CallZomeRequestGeneric<any>, CallZomeRequestGeneric<Buffer>, CallZomeResponseGeneric<Buffer>, CallZomeResponseGeneric<any>> = {
+  input: (req: CallZomeRequestGeneric<any>): CallZomeRequestGeneric<Buffer> => {
+    // FIXME: the Buffer produced by msgpack.encode must be converted to an Array of numbers,
+    // because on the Holochain side, SerializedBytes only knows how to deserialize from an array.
+    // Once SerializedBytes and other structs are ported to use serde_bytes, then the following line
+    // can be rewritten as:
+    // req.payload = msgpack.encode(req.payload)
+    req.payload = [...msgpack.encode(req.payload)]
+    return req
+  },
+  output: (res: CallZomeResponseGeneric<Buffer>): CallZomeResponseGeneric<any> => {
+    return msgpack.decode(res)
+  }
 }

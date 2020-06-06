@@ -1,15 +1,33 @@
 
-import * as msgpack from 'msgpack-lite'
+/**
+ * Take a Requester function which deals with tagged requests and responses,
+ * and return a Requester which deals only with the inner data types, also
+ * with the optional Transformer applied to further modify the input and output.
+ */
+export const requesterTransformer =
+  <ReqO, ReqI, ResI, ResO>(
+    requester: Requester<Tagged<ReqI>, Tagged<ResI>>,
+    tag: string,
+    transform: Transformer<ReqO, ReqI, ResI, ResO> = identityTransformer
+  ) => (
+      async (req: ReqO) => {
+        const input = { type: tag, data: transform.input(req) }
+        const response = await requester(input)
+        const output = transform.output(response.data)
+        return output
+      }
+    )
 
-// export const request = <Req, Res>(request: Req): [Buffer, Decoder<Res>] => [
-//   msgpack.encode(request),
-//   buf => msgpack.decode(buf)
-// ]
-
-export const tagged = <Req, Res>(tag: string, request: Requester<Tagged<Req>, Tagged<Res>>): Requester<Req, Res> => {
-  return (req) => request({ data: req, type: tag }).then(res => res.data)
+export type Transformer<ReqO, ReqI, ResI, ResO> = {
+  input: (req: ReqO) => ReqI,
+  output: (res: ResI) => ResO,
 }
 
-type Decoder<T> = (buf: Buffer) => T
+const identity = x => x
+const identityTransformer = {
+  input: identity,
+  output: identity,
+}
+
 export type Requester<Req, Res> = (req: Req) => Promise<Res>
 export type Tagged<T> = { type: string, data: T }

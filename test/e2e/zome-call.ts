@@ -35,14 +35,13 @@ test('basic app interface methods', withConductor(ADMIN_PORT, async t => {
   t.deepEqual(info.cell_data[0][0], cellId)
   t.equal(info.cell_data[0][1], 'mydna')
 
-  const serializedResponse = await client.callZome({
+  const response = await client.callZome({
     cap: 'secret',
     cell_id: cellId,
     zome_name: 'foo',
     fn_name: 'foo',
-    payload: [],  // TODO: should this be byte array?
     provenance: 'TODO' as any,
+    payload: { whatever: 'you want' },
   })
-  const response = msgpack.decode(serializedResponse)
   t.equal(response, "foo")
 }))

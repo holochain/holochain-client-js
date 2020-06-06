@@ -19,7 +19,7 @@
 import * as Api from '../api/admin'
 import { WsClient } from './client'
 import { catchError } from './common'
-import { tagged, Requester } from '../api/common'
+import { Transformer, requesterTransformer, Requester } from '../api/common'
 
 export class AdminWebsocket implements Api.AdminApi {
   client: WsClient
@@ -32,8 +32,12 @@ export class AdminWebsocket implements Api.AdminApi {
     return WsClient.connect(url, signalCb).then(client => new AdminWebsocket(client))
   }
 
-  _request = <Req, Res>(req: Req): Promise<Res> => this.client.request(req).then(catchError)
-  _requester = <Req, Res>(tag: string) => tagged<Req, Res>(tag, this._request)
+  _requester = <ReqO, ReqI, ResI, ResO>(tag: string, transformer?: Transformer<ReqO, ReqI, ResI, ResO>) =>
+    requesterTransformer(
+      req => this.client.request(req).then(catchError),
+      tag,
+      transformer
+    )
 
   // the specific request/response types come from the Interface
   // which this class implements
