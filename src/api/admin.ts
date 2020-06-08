@@ -11,7 +11,7 @@ export type DeactivateAppRequest = { app_id: AppId }
 export type DeactivateAppResponse = null
 
 export type DumpStateRequest = { cell_id: CellId }
-export type DumpStateResponse = { cell_id: CellId }
+export type DumpStateResponse = any
 
 export type GenerateAgentPubKeyRequest = void
 export type GenerateAgentPubKeyResponse = AgentPubKey

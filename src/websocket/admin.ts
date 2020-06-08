@@ -48,11 +48,19 @@ export class AdminWebsocket implements Api.AdminApi {
   deactivateApp: Requester<Api.DeactivateAppRequest, Api.DeactivateAppResponse>
     = this._requester('DeactivateApp')
   dumpState: Requester<Api.DumpStateRequest, Api.DumpStateResponse>
-    = this._requester('DumpState')
+    = this._requester('DumpState', dumpStateTransform)
   generateAgentPubKey: Requester<Api.GenerateAgentPubKeyRequest, Api.GenerateAgentPubKeyResponse>
     = this._requester('GenerateAgentPubKey')
   installApp: Requester<Api.InstallAppRequest, Api.InstallAppResponse>
     = this._requester('InstallApp')
   listDnas: Requester<Api.ListDnasRequest, Api.ListDnasResponse>
     = this._requester('ListDnas')
+}
+
+
+const dumpStateTransform: Transformer<Api.DumpStateRequest, Api.DumpStateRequest, string, Api.DumpStateResponse> = {
+  input: (req) => req,
+  output: (res: string): Api.DumpStateResponse => {
+    return JSON.parse(res)
+  }
 }
