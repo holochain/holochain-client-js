@@ -23,7 +23,7 @@ export type InstallAppRequest = {
 }
 export type InstallAppResponse = InstalledApp
 
-export type ListDnasRequest = null
+export type ListDnasRequest = void
 export type ListDnasResponse = Array<string>
 
 export interface AdminApi {

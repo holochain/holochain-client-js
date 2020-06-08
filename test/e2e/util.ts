@@ -71,5 +71,4 @@ export const withConductor = (port, f) => async t => {
   }
   console.log("Test ended")
   t.end()
-
 }

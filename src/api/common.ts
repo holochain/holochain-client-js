@@ -30,4 +30,5 @@ const identityTransformer = {
 }
 
 export type Requester<Req, Res> = (req: Req) => Promise<Res>
+export type RequesterUnit<Res> = () => Promise<Res>
 export type Tagged<T> = { type: string, data: T }
