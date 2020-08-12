@@ -9,6 +9,22 @@ License: [![License: CAL 1.0](https://img.shields.io/badge/License-CAL%201.0-blu
 
 A nodejs implementation of the Holochain conductor API.
 
+## Running tests
+
+The tests are based on a DNA consisting of a simple test wasm produced by Holochain. One rather onerous way to build this DNA is:
+
+- Clone the [Holochain repo](https://github.com/Holo-Host/holochain)
+- `cargo build` will produce all wasm targets
+- In `test/e2e/fixture/test.dna.workdir` of this repo, point a symlink to the directory containing the `test_wasm_foo.wasm` file that was built in the previous step
+- Run `dna-util -c test/e2e/fixture/test.dna.workdir` to produce `test/e2e/fixture/test.dna.gz`.
+
+Now you can run the tests with:
+
+```
+npm install
+npm run test
+```
+
 ## Contribute
 Holochain is an open source project.  We welcome all sorts of participation and are actively working on increasing surface area to accept it.  Please see our [contributing guidelines](/CONTRIBUTING.md) for our general practices and protocols on participating in the community, as well as specific expectations around things like code formatting, testing practices, continuous integration, etc.
 
