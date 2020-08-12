@@ -1,9 +1,0 @@
-environment_path = "/tmp/holochain-test-6VabOV"
-
-[passphrase_service]
-type = "cmd"
-
-[[admin_interfaces]]
-[admin_interfaces.driver]
-type = "websocket"
-port = 33_001
