@@ -10,7 +10,8 @@
     "doc": "typedoc",
     "prepare": "npm run build",
     "prepublishOnly": "npm test",
-    "test": "ts-node test | tap-diff",
+    "test": "npm run test:raw | tap-diff",
+    "test:raw": "RUST_LOG=debug TRYORAMA_LOG_LEVEL=info ts-node test",
     "example": "ts-node examples/zome-call"
   },
   "author": "",

@@ -5,6 +5,7 @@ import * as msgpack from 'msgpack-lite'
 import { AdminWebsocket } from '../../src/websocket/admin'
 import { AppWebsocket } from '../../src/websocket/app'
 import { withConductor } from './util'
+import { AgentPubKey, fakeAgentPubKey } from '../../src/api/types'
 
 const ADMIN_PORT = 33001
 
@@ -55,12 +56,14 @@ test('can call a zome function', withConductor(ADMIN_PORT, async t => {
   t.deepEqual(info.cell_data[0][0], cellId)
   t.equal(info.cell_data[0][1], 'mydna')
 
+  console.log(cellId)
+
   const response = await client.callZome({
     cap: 'secret',
     cell_id: cellId,
     zome_name: 'foo',
     fn_name: 'foo',
-    provenance: 'TODO' as any,
+    provenance: fakeAgentPubKey('TODO'),
     payload: { whatever: 'you want' },
   })
   t.equal(response, "foo")
