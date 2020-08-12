@@ -56,8 +56,6 @@ test('can call a zome function', withConductor(ADMIN_PORT, async t => {
   t.deepEqual(info.cell_data[0][0], cellId)
   t.equal(info.cell_data[0][1], 'mydna')
 
-  console.log(cellId)
-
   const response = await client.callZome({
     cap: 'secret',
     cell_id: cellId,
