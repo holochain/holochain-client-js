@@ -1,6 +1,6 @@
 {
   "name": "@holochain/conductor-api",
-  "version": "0.0.1-dev.6",
+  "version": "0.0.1-dev.7",
   "description": "Encode/decode messages to/from the Holochain Conductor API over Websocket",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
