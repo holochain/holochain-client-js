@@ -2,7 +2,7 @@ import { Requester } from "./common"
 import { CellId, AgentPubKey, AppId, InstalledCell, InstalledApp } from "./types"
 
 export type CallZomeRequestGeneric<Payload> = {
-  cap: string,
+  cap: Buffer,
   cell_id: CellId,
   zome_name: string,
   fn_name: string,
