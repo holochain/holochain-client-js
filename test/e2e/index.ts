@@ -57,7 +57,7 @@ test('can call a zome function', withConductor(ADMIN_PORT, async t => {
   t.equal(info.cell_data[0][1], 'mydna')
 
   const response = await client.callZome({
-    cap: 'secret',
+    cap: Buffer.from(Array(64).fill('aa').join(''), 'hex'), // TODO: change to a real capability secret
     cell_id: cellId,
     zome_name: 'foo',
     fn_name: 'foo',
