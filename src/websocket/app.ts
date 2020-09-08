@@ -48,12 +48,7 @@ export class AppWebsocket implements AppApi {
 
 const callZomeTransform: Transformer<CallZomeRequestGeneric<any>, CallZomeRequestGeneric<Buffer>, CallZomeResponseGeneric<Buffer>, CallZomeResponseGeneric<any>> = {
   input: (req: CallZomeRequestGeneric<any>): CallZomeRequestGeneric<Buffer> => {
-    // FIXME: the Buffer produced by msgpack.encode must be converted to an Array of numbers,
-    // because on the Holochain side, SerializedBytes only knows how to deserialize from an array.
-    // Once SerializedBytes and other structs are ported to use serde_bytes, then the following line
-    // can be rewritten as:
-    // req.payload = msgpack.encode(req.payload)
-    req.payload = [...msgpack.encode(req.payload)]
+    req.payload = msgpack.encode(req.payload)
     return req
   },
   output: (res: CallZomeResponseGeneric<Buffer>): CallZomeResponseGeneric<any> => {
