@@ -14,9 +14,10 @@ A nodejs implementation of the Holochain conductor API.
 The tests are based on a DNA consisting of a simple test wasm produced by Holochain. One rather onerous way to build this DNA is:
 
 - Clone the [Holochain repo](https://github.com/holochain/holochain)
-- `cargo build` will produce all wasm targets
-- In `test/e2e/fixture/test.dna.workdir` of this repo, point a symlink to the directory containing the `test_wasm_foo.wasm` file that was built in the previous step
-- Run `dna-util -c test/e2e/fixture/test.dna.workdir` to produce `test/e2e/fixture/test.dna.gz`.
+- Get the correct holochain build environment with: `cd holochain && nix-shell`
+- build the wasms with `cargo build --features 'build_wasms' --manifest-path=crates/holochain/Cargo.toml`
+- In `test/e2e/fixture/test.dna.workdir` of this repo, point a symlink to the directory containing the `test_wasm_foo.wasm` file that was built in the previous step: `ln -s $HC_TEST_WASM_DIR/wasm32-unknown-unknown/release wasms`
+- cd to the test directory and build the DNA with: `dna-util -c test/e2e/fixture/test.dna.workdir` to produce `test/e2e/fixture/test.dna.gz`.
 
 Now you can run the tests with:
 
