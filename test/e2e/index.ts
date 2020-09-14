@@ -62,7 +62,7 @@ test('can call a zome function', withConductor(ADMIN_PORT, async t => {
     zome_name: 'foo',
     fn_name: 'foo',
     provenance: fakeAgentPubKey('TODO'),
-    payload: { whatever: 'you want' },
+    payload: null,
   })
   t.equal(response, "foo")
 }))
