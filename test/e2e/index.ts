@@ -57,12 +57,16 @@ test('can call a zome function', withConductor(ADMIN_PORT, async t => {
   t.equal(info.cell_data[0][1], 'mydna')
 
   const response = await client.callZome({
-    cap: Buffer.from(Array(64).fill('aa').join(''), 'hex'), // TODO: change to a real capability secret
+    // TODO: switch to null cap once Holochain supports them
+    // cap: null,
+
+    // TODO: write a test with a real capability secret.
+    cap: Buffer.from(Array(64).fill('aa').join(''), 'hex'),
     cell_id: cellId,
     zome_name: 'foo',
     fn_name: 'foo',
     provenance: fakeAgentPubKey('TODO'),
-    payload: { whatever: 'you want' },
+    payload: null,
   })
   t.equal(response, "foo")
 }))

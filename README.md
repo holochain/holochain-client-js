@@ -13,10 +13,11 @@ A nodejs implementation of the Holochain conductor API.
 
 The tests are based on a DNA consisting of a simple test wasm produced by Holochain. One rather onerous way to build this DNA is:
 
-- Clone the [Holochain repo](https://github.com/Holo-Host/holochain)
-- `cargo build` will produce all wasm targets
-- In `test/e2e/fixture/test.dna.workdir` of this repo, point a symlink to the directory containing the `test_wasm_foo.wasm` file that was built in the previous step
-- Run `dna-util -c test/e2e/fixture/test.dna.workdir` to produce `test/e2e/fixture/test.dna.gz`.
+- Clone the [Holochain repo](https://github.com/holochain/holochain)
+- Get the correct holochain build environment with: `cd holochain && nix-shell`
+- Build the wasms with `cargo build --features 'build_wasms' --manifest-path=crates/holochain/Cargo.toml`
+- In `test/e2e/fixture/test.dna.workdir` of this repo, point a symlink to the directory containing the `test_wasm_foo.wasm` file that was built in the previous step: `ln -s $HC_TEST_WASM_DIR/wasm32-unknown-unknown/release wasms`
+- Build the DNA with `dna-util -c test/e2e/fixture/test.dna.workdir`, which will produce `test/e2e/fixture/test.dna.gz`.
 
 Now you can run the tests with:
 
@@ -31,7 +32,7 @@ Holochain is an open source project.  We welcome all sorts of participation and 
 * Connect with us on our [forum](https://forum.holochain.org)
 
 ## License
- [![License: CAL 1.0](https://img.shields.io/badge/License-CAL-1.0-blue.svg)](https://github.com/holochain/cryptographic-autonomy-license)
+ [![License: CAL 1.0](https://img.shields.io/badge/License-CAL%201.0-blue.svg)](https://github.com/holochain/cryptographic-autonomy-license)
 
 Copyright (C) 2020, Holochain Foundation
 

@@ -2,6 +2,8 @@ import { Requester } from "./common"
 import { CellId, CapSecret, AgentPubKey, AppId, InstalledApp } from "./types"
 
 export type CallZomeRequestGeneric<Payload> = {
+  // TODO: allow null cap once Holochain supports it
+  // cap: CapSecret | null,
   cap: CapSecret,
   cell_id: CellId,
   zome_name: string,
