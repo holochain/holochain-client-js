@@ -1,6 +1,5 @@
 
 const test = require('tape')
-import * as msgpack from 'msgpack-lite'
 
 import { AdminWebsocket } from '../../src/websocket/admin'
 import { AppWebsocket } from '../../src/websocket/app'

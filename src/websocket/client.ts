@@ -1,5 +1,5 @@
 import Websocket from 'isomorphic-ws'
-import * as msgpack from 'msgpack-lite'
+import msgpack from '@msgpack/msgpack';
 import { nanoid } from 'nanoid'
 
 /**
@@ -55,20 +55,22 @@ export class WsClient {
       socket.onopen = () => {
         const hw = new WsClient(socket)
         socket.onmessage = (encodedMsg: any) => {
-          const msg = msgpack.decode(encodedMsg.data)
-          if (signalCb && msg.type === 'Signal') {
-            signalCb(msgpack.decode(msg.data))
-          } else if (msg.type === 'Response') {
-            const id = msg.id
-            if (hw.pendingRequests[id]) {
-              // resolve response
-              hw.pendingRequests[id].fulfill(msgpack.decode(msg.data))
+          encodedMsg.data.arrayBuffer().then((data: any) => {
+            const msg: any = msgpack.decode(data)
+            if (signalCb && msg.type === 'Signal') {
+              signalCb(msgpack.decode(msg.data))
+            } else if (msg.type === 'Response') {
+              const id = msg.id
+              if (hw.pendingRequests[id]) {
+                // resolve response
+                hw.pendingRequests[id].fulfill(msgpack.decode(msg.data))
+              } else {
+                console.error(`Got response with no matching request. id=${id}`)
+              }
             } else {
-              console.error(`Got response with no matching request. id=${id}`)
+              console.error(`Got unrecognized Websocket message type: ${msg.type}`)
             }
-          } else {
-            console.error(`Got unrecognized Websocket message type: ${msg.type}`)
-          }
+          })
         }
         resolve(hw)
       }
