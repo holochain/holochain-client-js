@@ -16,7 +16,7 @@ The tests are based on a DNA consisting of a simple test wasm produced by Holoch
 - Clone the [Holochain repo](https://github.com/holochain/holochain)
 - Get the correct holochain build environment with: `cd holochain && nix-shell`
 - Build the wasms with `cargo build --features 'build_wasms' --manifest-path=crates/holochain/Cargo.toml`
-- In `test/e2e/fixture/test.dna.workdir` of this repo, point a symlink to the directory containing the `test_wasm_foo.wasm` file that was built in the previous step: `ln -s $HC_TEST_WASM_DIR/wasm32-unknown-unknown/release wasms`
+- In `test/e2e/fixture/test.dna.workdir` of this repo, point a symlink to the directory containing the `test_wasm_foo.wasm` file that was built in the previous step: `ln -s $HC_TEST_WASM_DIR/.wasm_target/wasm32-unknown-unknown/release wasms`
 - Build the DNA with `dna-util -c test/e2e/fixture/test.dna.workdir`, which will produce `test/e2e/fixture/test.dna.gz`.
 
 Now you can run the tests with:
