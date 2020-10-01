@@ -3,8 +3,7 @@
  * Conductor Admin API
  *
  *    const client = AdminWebsocket.connect(
- *      'ws://localhost:9000',
- *      signal => console.log('got a signal:', signal)
+ *      'ws://localhost:9000'
  *    )
  *
  *    client.generateAgentPubKey()
@@ -28,6 +27,8 @@ export class AdminWebsocket implements Api.AdminApi {
     this.client = client
   }
 
+  // NB: Admin websockets currently never receive Signals, but in case they ever
+  // do in the future, this signalCb param is provided
   static connect(url: string, signalCb?: Function | undefined): Promise<AdminWebsocket> {
     return WsClient.connect(url, signalCb).then(client => new AdminWebsocket(client))
   }

@@ -2,7 +2,7 @@
  * Defines AppWebsocket, an easy-to-use websocket implementation of the
  * Conductor API for apps
  *
- *    const client = AdminWebsocket.connect(
+ *    const client = AppWebsocket.connect(
  *      'ws://localhost:9000',
  *      signal => console.log('got a signal:', signal)
  *    )
