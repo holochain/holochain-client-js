@@ -1,5 +1,5 @@
 import Websocket from 'isomorphic-ws'
-import msgpack from '@msgpack/msgpack';
+import * as msgpack from '@msgpack/msgpack';
 import { nanoid } from 'nanoid'
 
 /**
@@ -54,24 +54,31 @@ export class WsClient {
       const socket = new Websocket(url)
       socket.onopen = () => {
         const hw = new WsClient(socket)
-        socket.onmessage = (encodedMsg: any) => {
-          encodedMsg.data.arrayBuffer().then((data: any) => {
-            const msg: any = msgpack.decode(data)
-            if (signalCb && msg.type === 'Signal') {
-              signalCb(msgpack.decode(msg.data))
-            } else if (msg.type === 'Response') {
-              const id = msg.id
-              if (hw.pendingRequests[id]) {
-                // resolve response
-                hw.pendingRequests[id].fulfill(msgpack.decode(msg.data))
-              } else {
-                console.error(`Got response with no matching request. id=${id}`)
-              }
+        socket.onmessage = async (encodedMsg: any) => {
+          console.log(encodedMsg.data)
+          let data = encodedMsg.data;
+
+          // If data is not a buffer, it will be a blob
+          if (!Buffer.isBuffer(data)) {
+            data = await data.arrayBuffer();
+          }
+
+          const msg: any = msgpack.decode(data)
+          if (signalCb && msg.type === 'Signal') {
+            signalCb(msgpack.decode(msg.data))
+          } else if (msg.type === 'Response') {
+            const id = msg.id
+            if (hw.pendingRequests[id]) {
+              // resolve response
+              hw.pendingRequests[id].fulfill(msgpack.decode(msg.data))
             } else {
-              console.error(`Got unrecognized Websocket message type: ${msg.type}`)
+              console.error(`Got response with no matching request. id=${id}`)
             }
-          })
+          } else {
+            console.error(`Got unrecognized Websocket message type: ${msg.type}`)
+          }
         }
+
         resolve(hw)
       }
     })
