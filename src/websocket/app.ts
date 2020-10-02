@@ -15,7 +15,7 @@
  *        console.error('problem installing DNA:', err)
  *      })
  */
-import * as msgpack from 'msgpack-lite'
+import * as msgpack from '@msgpack/msgpack';
 
 import { AppApi, CallZomeRequest, CallZomeResponse, AppInfoRequest, AppInfoResponse, CallZomeRequestGeneric, CallZomeResponseGeneric } from '../api/app'
 import { WsClient } from './client'
