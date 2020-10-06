@@ -69,6 +69,5 @@ export const withConductor = (port, f) => async t => {
   } finally {
     handle.kill()
   }
-  console.log("Test ended")
   t.end()
 }

@@ -55,7 +55,6 @@ export class WsClient {
       socket.onopen = () => {
         const hw = new WsClient(socket)
         socket.onmessage = async (encodedMsg: any) => {
-          console.log(encodedMsg.data)
           let data = encodedMsg.data;
 
           // If data is not a buffer, it will be a blob
