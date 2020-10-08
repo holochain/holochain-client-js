@@ -4,12 +4,15 @@ export type AgentPubKey = {
   hash: Buffer,
   hash_type: Buffer,
 }
+export type Hash = {
+  hash: Buffer,
+  hash_type: Buffer,
+}
 export type AppId = string
 export type CapSecret = Buffer
 export type CellId = [Hash, AgentPubKey]
 export type CellNick = string
 export type DnaProperties = any
-export type Hash = string
 export type InstalledApp = {
   app_id: AppId,
   cell_data: Array<InstalledCell>,

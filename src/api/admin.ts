@@ -1,5 +1,5 @@
 import { Requester } from "./common"
-import { AgentPubKey, MembraneProof, DnaProperties, AppId, CellId, Hash, CellNick, InstalledApp } from "./types"
+import { AgentPubKey, MembraneProof, DnaProperties, AppId, CellId, CellNick, InstalledApp } from "./types"
 
 export type ActivateAppRequest = { app_id: AppId }
 export type ActivateAppResponse = null
