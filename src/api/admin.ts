@@ -26,6 +26,9 @@ export type InstallAppResponse = InstalledApp
 export type ListDnasRequest = void
 export type ListDnasResponse = Array<string>
 
+export type ListCellIdsRequest = void
+export type ListCellIdsResponse = Array<CellId>
+
 export interface AdminApi {
   activateApp: Requester<ActivateAppRequest, ActivateAppResponse>
   attachAppInterface: Requester<AttachAppInterfaceRequest, AttachAppInterfaceResponse>
@@ -34,6 +37,7 @@ export interface AdminApi {
   generateAgentPubKey: Requester<GenerateAgentPubKeyRequest, GenerateAgentPubKeyResponse>
   installApp: Requester<InstallAppRequest, InstallAppResponse>
   listDnas: Requester<ListDnasRequest, ListDnasResponse>
+  listCellIds: Requester<ListCellIdsRequest, ListCellIdsResponse>
 }
 
 
