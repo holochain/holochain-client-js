@@ -1,2 +1,3 @@
 *.dna.gz
 test-config.toml
+zomes/foo/target

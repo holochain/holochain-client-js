@@ -4,7 +4,7 @@
   "properties": null,
   "zomes": {
     "foo": {
-      "wasm_path": "./wasms/test_wasm_foo.wasm"
+      "wasm_path": "../zomes/foo/target/wasm32-unknown-unknown/release/test_wasm_foo.wasm"
     }
   }
 }
