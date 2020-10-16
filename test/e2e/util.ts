@@ -2,7 +2,6 @@
 import * as TOML from '@iarna/toml'
 import { spawn } from 'child_process'
 import fs from 'fs'
-import path from 'path'
 import os from 'os'
 
 const CONFIG_PATH = './test/e2e/fixture/test-config.toml'
@@ -46,7 +45,7 @@ const awaitInterfaceReady = (handle): Promise<null> => new Promise((fulfill, rej
   })
 })
 
-const HOLOCHAIN_BIN = path.join(__dirname, '../..', 'holochain')
+const HOLOCHAIN_BIN = 'holochain'
 
 const launch = async (port) => {
   await writeConfig(port)

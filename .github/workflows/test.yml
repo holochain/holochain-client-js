@@ -8,7 +8,7 @@ jobs:
   strategy:
    matrix:
     os: [
-     # ubuntu-latest,
+     ubuntu-latest,
      macos-latest
     ]
     node: [ '10', '12', '14' ]
@@ -26,5 +26,5 @@ jobs:
       default: true
   # todo: this install holochain step can be removed/simplified
   # once holochain/holochain has releases
-  # - run: ./install-holochain.sh
+   - run: ./install-holochain.sh
    - run: ./run-test.sh
