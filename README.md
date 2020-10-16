@@ -12,19 +12,18 @@ A nodejs implementation of the Holochain conductor API.
 # Holochain Compatibility
 
 This version of `holochain-conductor-api` is currently working with `holochain/holochain` at commit:
-```
-45dd3f827caea18f41f77486ca2c37149a18b4ca
-```
+
+[45dd3f827caea18f41f77486ca2c37149a18b4ca](https://github.com/holochain/holochain/commit/45dd3f827caea18f41f77486ca2c37149a18b4ca)
 
 If updating this code, please make changes to the git `rev/sha` in two places:
-These lines in `default.nix`
+These lines in `install-holochain.sh`
 ```
 cargo install --force holochain --git https://github.com/holochain/holochain.git --rev 45dd3f827caea18f41f77486ca2c37149a18b4ca
 cargo install --force dna_util --git https://github.com/holochain/holochain.git --rev 45dd3f827caea18f41f77486ca2c37149a18b4ca
 ```
 and this line in `test/e2e/fixtures/zomes/foo/Cargo.toml`
 ```
-hdk3 = { git = "ssh://git@github.com/holochain/holochain.git", rev = "45dd3f827caea18f41f77486ca2c37149a18b4ca", package = "hdk3" }
+hdk3 = { git = "https://github.com/holochain/holochain", rev = "45dd3f827caea18f41f77486ca2c37149a18b4ca", package = "hdk3" }
 ```
 
 Notice the match between the SHA in both cases. These should always match.
