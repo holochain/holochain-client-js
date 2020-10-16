@@ -17,5 +17,16 @@ jobs:
    - uses: actions/setup-node@v2-beta
      with:
       node-version: ${{ matrix.node }}
+   - uses: actions-rs/toolchain@v1
+     with:
+      toolchain: stable
+   # @todo handle this better
+   - run: |
+      curl -sfSLO https://github.com/holochain/holochain/archive/main.tar.gz
+      tar -zxvf main.tar.gz
+      cd main
+      cargo build --features 'build_wasms' --manifest-path=crates/holochain/Cargo.toml
+      cd -
+      ln -s $PWD/main/.wasm_target/wasm32-unknown-unknown/release test/e2e/fixture/test.dna.workdir/wasms
    - run: npm install
    - run: npm run test
