@@ -39,3 +39,8 @@ fn init(_: ()) -> ExternResult<InitCallbackResult> {
 fn foo(_: ()) -> ExternResult<TestString> {
     Ok(TestString::from(String::from("foo")))
 }
+
+#[hdk_extern]
+fn bar(_: ()) -> ExternResult<TestString> {
+    Ok(TestString::from(String::from("bar")))
+}
