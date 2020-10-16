@@ -21,7 +21,7 @@ jobs:
      with:
       # borrowed from
       # https://github.com/holochain/holochain/blob/6b47b136bc419be6e85000a08a59f67b4c46226c/docs/core_testing.md#requirements
-      toolchain: 1.45.2-2020-07-31
+      toolchain: 1.45.0
       target: wasm32-unknown-unknown
   # todo: this install holochain step can be removed/simplified
   # once holochain/holochain has releases
