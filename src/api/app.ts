@@ -16,6 +16,8 @@ export type CallZomeResponse = CallZomeResponseGeneric<any>
 export type AppInfoRequest = { app_id: AppId }
 export type AppInfoResponse = InstalledApp
 
+export type SignalResponseGeneric<Payload> = Payload
+
 export interface AppApi {
   appInfo: Requester<AppInfoRequest, AppInfoResponse>,
   callZome: Requester<CallZomeRequest, CallZomeResponse>,
