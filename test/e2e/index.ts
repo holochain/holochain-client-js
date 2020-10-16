@@ -1,3 +1,4 @@
+
 const test = require('tape')
 
 import { AdminWebsocket } from '../../src/websocket/admin'
@@ -26,6 +27,7 @@ test('admin smoke test', withConductor(ADMIN_PORT, async t => {
   t.equal(dnas.length, 0)
   // NB: missing dumpState because it requires a valid cell_id
 }))
+
 
 test('can call a zome function', withConductor(ADMIN_PORT, async t => {
 
