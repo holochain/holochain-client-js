@@ -28,4 +28,3 @@ jobs:
   # once holochain/holochain has releases
    - run: ./install-holochain.sh
    - run: ./run-test.sh
-   - run: npm run test
