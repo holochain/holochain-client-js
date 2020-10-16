@@ -30,8 +30,16 @@ Notice the match between the SHA in both cases. These should always match.
 
 ## Running tests
 
+You need a version of rust available, `1.45.2` or e.g. `stable-2020-08-03`
+
+You would need `holochain` and `dna-util` on your path, best to use the specific versions that this code requires. To use `cargo` to install them, run:
 ```bash
-nix-shell --run conductor-api-test
+./install-holochain.sh
+```
+
+To perform the pre-requisite DNA compilation steps, and run the nodejs test, run:
+```bash
+./run-test.sh
 ```
 
 ## Contribute
