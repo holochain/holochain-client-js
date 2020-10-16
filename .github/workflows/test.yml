@@ -19,7 +19,9 @@ jobs:
       node-version: ${{ matrix.node }}
    - uses: actions-rs/toolchain@v1
      with:
-      toolchain: stable
+      # borrowed from
+      # https://github.com/holochain/holonix/blob/4c4d4bd9214a8493fe6c2b96b1e922f2a62e9e17/rust/config.nix#L16-L19
+      toolchain: stable-2020-08-03
    - run: ./install-holochain.sh
    - run: ./run-test.sh
    - run: npm run test
