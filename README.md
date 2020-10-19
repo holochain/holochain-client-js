@@ -13,7 +13,7 @@ A nodejs implementation of the Holochain conductor API.
 
 This version of `holochain-conductor-api` is currently working with `holochain/holochain` at commit:
 
-[45dd3f827caea18f41f77486ca2c37149a18b4ca](https://github.com/holochain/holochain/commit/45dd3f827caea18f41f77486ca2c37149a18b4ca)
+[45dd3f827caea18f41f77486ca2c37149a18b4ca](https://github.com/holochain/holochain/commit/45dd3f827caea18f41f77486ca2c37149a18b4ca) (October 14, 2020)
 
 If updating this code, please make changes to the git `rev/sha` in two places:
 These lines in `install-holochain.sh`
