@@ -15,13 +15,14 @@ This version of `holochain-conductor-api` is currently working with `holochain/h
 
 [45dd3f827caea18f41f77486ca2c37149a18b4ca](https://github.com/holochain/holochain/commit/45dd3f827caea18f41f77486ca2c37149a18b4ca) (October 14, 2020)
 
-If updating this code, please make changes to the git `rev/sha` in two places:
-These lines in `install-holochain.sh`
+If updating this code, please make changes to the git `rev/sha` in 3 places:
+1. Here in the README above ^^
+2. These lines in `install-holochain.sh`
 ```
 cargo install --force holochain --git https://github.com/holochain/holochain.git --rev 45dd3f827caea18f41f77486ca2c37149a18b4ca
 cargo install --force dna_util --git https://github.com/holochain/holochain.git --rev 45dd3f827caea18f41f77486ca2c37149a18b4ca
 ```
-and this line in `test/e2e/fixtures/zomes/foo/Cargo.toml`
+3. and this line in `test/e2e/fixtures/zomes/foo/Cargo.toml`
 ```
 hdk3 = { git = "https://github.com/holochain/holochain", rev = "45dd3f827caea18f41f77486ca2c37149a18b4ca", package = "hdk3" }
 ```
