@@ -3,10 +3,13 @@ const test = require('tape')
 
 import { AdminWebsocket } from '../../src/websocket/admin'
 import { AppWebsocket } from '../../src/websocket/app'
-import { withConductor } from './util'
+import { installAppAndDna, withConductor } from './util'
 import { AgentPubKey, fakeAgentPubKey } from '../../src/api/types'
+import { AppSignal } from '../../src/api/app'
 
 const ADMIN_PORT = 33001
+
+const TEST_ZOME_NAME = 'foo'
 
 test('admin smoke test', withConductor(ADMIN_PORT, async t => {
 
@@ -30,36 +33,15 @@ test('admin smoke test', withConductor(ADMIN_PORT, async t => {
 
 
 test('can call a zome function', withConductor(ADMIN_PORT, async t => {
-
-  const app_id = 'app'
-  const admin = await AdminWebsocket.connect(`http://localhost:${ADMIN_PORT}`)
-  const agent = await admin.generateAgentPubKey()
-  const app = await admin.installApp({
-    app_id,
-    agent_key: agent,
-    dnas: [{
-      path: 'test/e2e/fixture/test.dna.gz',
-      nick: 'mydna',
-    }],
-  })
-  t.equal(app.cell_data.length, 1)
-  const cellId = app.cell_data[0][0]
-
-  await admin.activateApp({ app_id })
-
-  const { port: appPort } = await admin.attachAppInterface({ port: 0 })
-
-  const client = await AppWebsocket.connect(`http://localhost:${appPort}`)
-
+  const [app_id, cell_id, nick, client] = await installAppAndDna(ADMIN_PORT)
   const info = await client.appInfo({ app_id })
-  t.deepEqual(info.cell_data[0][0], cellId)
-  t.equal(info.cell_data[0][1], 'mydna')
-
+  t.deepEqual(info.cell_data[0][0], cell_id)
+  t.equal(info.cell_data[0][1], nick)
   const response = await client.callZome({
     // TODO: write a test with a real capability secret.
     cap: null,
-    cell_id: cellId,
-    zome_name: 'foo',
+    cell_id,
+    zome_name: TEST_ZOME_NAME,
     fn_name: 'foo',
     provenance: fakeAgentPubKey('TODO'),
     payload: null,
@@ -67,26 +49,39 @@ test('can call a zome function', withConductor(ADMIN_PORT, async t => {
   t.equal(response, "foo")
 }))
 
+test('can receive a signal', withConductor(ADMIN_PORT, async t => {
+  await new Promise(async (resolve, reject) => {
+    try {
+      const [_app_id, cell_id, _nick, client] = await installAppAndDna(ADMIN_PORT, signalCb)
+      function signalCb (signal: AppSignal) {
+        t.deepEqual(signal, {
+          type: 'Signal',
+          data: {
+            cellId: cell_id,
+            payload: 'i am a signal'
+          }
+        })
+        resolve()
+      }
+      // trigger an emit_signal
+      await client.callZome({
+        cap: null,
+        cell_id,
+        zome_name: TEST_ZOME_NAME,
+        fn_name: 'emitter',
+        provenance: fakeAgentPubKey('TODO'),
+        payload: null,
+      })
+    } catch (e) {
+      reject(e)
+    }
+  })
+}))
+
 test(
   'callZome rejects appropriately for ZomeCallUnauthorized',
   withConductor(ADMIN_PORT, async (t) => {
-    const app_id = 'app'
-    const admin = await AdminWebsocket.connect(`http://localhost:${ADMIN_PORT}`)
-    const agent = await admin.generateAgentPubKey()
-    const app = await admin.installApp({
-      app_id,
-      agent_key: agent,
-      dnas: [
-        {
-          path: 'test/e2e/fixture/test.dna.gz',
-          nick: 'mydna',
-        },
-      ],
-    })
-    const cellId = app.cell_data[0][0]
-    await admin.activateApp({ app_id })
-    const { port: appPort } = await admin.attachAppInterface({ port: 0 })
-    const client = await AppWebsocket.connect(`http://localhost:${appPort}`)
+    const [_app_id, cell_id, _nick, client] = await installAppAndDna(ADMIN_PORT)
     try {
       await client.callZome({
         // bad cap, on purpose
@@ -96,8 +91,8 @@ test(
             .split('')
             .map((x) => parseInt(x, 10))
         ),
-        cell_id: cellId,
-        zome_name: 'foo',
+        cell_id,
+        zome_name: TEST_ZOME_NAME,
         fn_name: 'bar',
         provenance: fakeAgentPubKey('TODO'),
         payload: null,

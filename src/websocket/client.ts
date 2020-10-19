@@ -1,7 +1,7 @@
 import Websocket from 'isomorphic-ws'
 import * as msgpack from '@msgpack/msgpack'
 import { nanoid } from 'nanoid'
-import { SignalResponseGeneric } from '../api/app'
+import { AppSignal, AppSignalCb, SignalResponseGeneric } from '../api/app'
 
 /**
  * A Websocket client which can make requests and receive responses,
@@ -50,7 +50,7 @@ export class WsClient {
     return new Promise((resolve) => this.socket.on('close', resolve))
   }
 
-  static connect(url: string, signalCb?: Function): Promise<WsClient> {
+  static connect(url: string, signalCb?: AppSignalCb): Promise<WsClient> {
     return new Promise((resolve, reject) => {
       const socket = new Websocket(url)
       // make sure that there are no uncaught connection
@@ -88,7 +88,7 @@ export class WsClient {
             const decodedPayload = signalTransform(decodedMessage.App[1]);
 
             // Return a uniform format to UI (ie: { type, data } - the same format as with callZome and appInfo...)
-            const signal = { type: msg.type , data: { cellId: decodedCellId, payload: decodedPayload }};
+            const signal: AppSignal = { type: msg.type , data: { cellId: decodedCellId, payload: decodedPayload }};
             signalCb(signal);
 
           } else if (msg.type === 'Response') {

@@ -27,10 +27,11 @@ export class AdminWebsocket implements Api.AdminApi {
     this.client = client
   }
 
-  // NB: Admin websockets currently never receive Signals, but in case they ever
-  // do in the future, this signalCb param is provided
-  static connect(url: string, signalCb?: Function | undefined): Promise<AdminWebsocket> {
-    return WsClient.connect(url, signalCb).then(client => new AdminWebsocket(client))
+  // NB: Admin websockets currently don't receive Signals, but they may in the
+  // future in which case provide a `signalCb` argument here
+  static async connect(url: string): Promise<AdminWebsocket> {
+    const wsClient = await WsClient.connect(url)
+    return new AdminWebsocket(wsClient)
   }
 
   _requester = <ReqO, ReqI, ResI, ResO>(tag: string, transformer?: Transformer<ReqO, ReqI, ResI, ResO>) =>

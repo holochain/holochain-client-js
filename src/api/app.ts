@@ -16,6 +16,16 @@ export type CallZomeResponse = CallZomeResponseGeneric<any>
 export type AppInfoRequest = { app_id: AppId }
 export type AppInfoResponse = InstalledApp
 
+export type AppSignal = {
+  type: string,
+  data: {
+    cellId: CellId,
+    payload: any
+  }
+}
+
+export type AppSignalCb = (signal: AppSignal) => void
+
 export type SignalResponseGeneric<Payload> = Payload
 
 export interface AppApi {

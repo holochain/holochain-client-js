@@ -17,7 +17,7 @@
  */
 import * as msgpack from '@msgpack/msgpack';
 
-import { AppApi, CallZomeRequest, CallZomeResponse, AppInfoRequest, AppInfoResponse, CallZomeRequestGeneric, CallZomeResponseGeneric } from '../api/app'
+import { AppApi, CallZomeRequest, CallZomeResponse, AppInfoRequest, AppInfoResponse, CallZomeRequestGeneric, CallZomeResponseGeneric, AppSignalCb } from '../api/app'
 import { WsClient } from './client'
 import { catchError } from './common'
 import { Transformer, requesterTransformer, Requester } from '../api/common'
@@ -29,8 +29,9 @@ export class AppWebsocket implements AppApi {
     this.client = client
   }
 
-  static connect(url: string, signalCb?: Function): Promise<AppWebsocket> {
-    return WsClient.connect(url, signalCb).then(client => new AppWebsocket(client))
+  static async connect(url: string, signalCb?: AppSignalCb): Promise<AppWebsocket> {
+    const wsClient = await WsClient.connect(url, signalCb)
+    return new AppWebsocket(wsClient)
   }
 
   _requester = <ReqO, ReqI, ResI, ResO>(tag: string, transformer?: Transformer<ReqO, ReqI, ResI, ResO>) =>
