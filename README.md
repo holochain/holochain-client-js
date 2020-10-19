@@ -9,21 +9,37 @@ License: [![License: CAL 1.0](https://img.shields.io/badge/License-CAL%201.0-blu
 
 A nodejs implementation of the Holochain conductor API.
 
+# Holochain Compatibility
+
+This version of `holochain-conductor-api` is currently working with `holochain/holochain` at commit:
+
+[45dd3f827caea18f41f77486ca2c37149a18b4ca](https://github.com/holochain/holochain/commit/45dd3f827caea18f41f77486ca2c37149a18b4ca)
+
+If updating this code, please make changes to the git `rev/sha` in two places:
+These lines in `install-holochain.sh`
+```
+cargo install --force holochain --git https://github.com/holochain/holochain.git --rev 45dd3f827caea18f41f77486ca2c37149a18b4ca
+cargo install --force dna_util --git https://github.com/holochain/holochain.git --rev 45dd3f827caea18f41f77486ca2c37149a18b4ca
+```
+and this line in `test/e2e/fixtures/zomes/foo/Cargo.toml`
+```
+hdk3 = { git = "https://github.com/holochain/holochain", rev = "45dd3f827caea18f41f77486ca2c37149a18b4ca", package = "hdk3" }
+```
+
+Notice the match between the SHA in both cases. These should always match.
+
 ## Running tests
 
-The tests are based on a DNA consisting of a simple test wasm produced by Holochain. One rather onerous way to build this DNA is:
+You need a version of rust available, `1.45.2` or e.g. `stable-2020-08-03`
 
-- Clone the [Holochain repo](https://github.com/holochain/holochain)
-- Get the correct holochain build environment with: `cd holochain && nix-shell`
-- Build the wasms with `cargo build --features 'build_wasms' --manifest-path=crates/holochain/Cargo.toml`
-- In `test/e2e/fixture/test.dna.workdir` of this repo, point a symlink to the directory containing the `test_wasm_foo.wasm` file that was built in the previous step: `ln -s $HC_TEST_WASM_DIR/.wasm_target/wasm32-unknown-unknown/release wasms`
-- Build the DNA with `dna-util -c test/e2e/fixture/test.dna.workdir`, which will produce `test/e2e/fixture/test.dna.gz`.
-
-Now you can run the tests with:
-
+You would need `holochain` and `dna-util` on your path, best to use the specific versions that this code requires. To use `cargo` to install them, run:
+```bash
+./install-holochain.sh
 ```
-npm install
-npm run test
+
+To perform the pre-requisite DNA compilation steps, and run the nodejs test, run:
+```bash
+./run-test.sh
 ```
 
 ## Contribute

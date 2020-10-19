@@ -45,9 +45,11 @@ const awaitInterfaceReady = (handle): Promise<null> => new Promise((fulfill, rej
   })
 })
 
+const HOLOCHAIN_BIN = 'holochain'
+
 const launch = async (port) => {
   await writeConfig(port)
-  const handle = spawn('holochain', ['-c', CONFIG_PATH])
+  const handle = spawn(HOLOCHAIN_BIN, ['-c', CONFIG_PATH])
   handle.stdout.on('data', data => {
     console.info('conductor: ', data.toString('utf8'))
   })

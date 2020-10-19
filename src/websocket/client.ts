@@ -1,6 +1,7 @@
 import Websocket from 'isomorphic-ws'
-import * as msgpack from '@msgpack/msgpack';
+import * as msgpack from '@msgpack/msgpack'
 import { nanoid } from 'nanoid'
+import { SignalResponseGeneric } from '../api/app'
 
 /**
  * A Websocket client which can make requests and receive responses,
@@ -41,40 +42,65 @@ export class WsClient {
   }
 
   close(): Promise<void> {
-    this.socket.close();
+    this.socket.close()
     return this.awaitClose()
   }
 
   awaitClose(): Promise<void> {
-    return new Promise(resolve => this.socket.on('close', resolve))
+    return new Promise((resolve) => this.socket.on('close', resolve))
   }
 
   static connect(url: string, signalCb?: Function): Promise<WsClient> {
     return new Promise((resolve, reject) => {
       const socket = new Websocket(url)
+      // make sure that there are no uncaught connection
+      // errors because that causes nodejs thread to crash
+      // with uncaught exception
+      socket.onerror = (e) => {
+        if (e.error.code === 'ECONNRESET' || e.error.code === 'ECONNREFUSED') {
+          reject(
+            new Error(
+              `could not connect to holochain conductor, please check that a conductor service is running and available at ${url}`
+            )
+          )
+        } else {
+          reject(e)
+        }
+      }
       socket.onopen = () => {
         const hw = new WsClient(socket)
         socket.onmessage = async (encodedMsg: any) => {
-          let data = encodedMsg.data;
+          let data = encodedMsg.data
 
           // If data is not a buffer, it will be a blob
           if (!Buffer.isBuffer(data)) {
-            data = await data.arrayBuffer();
+            data = await data.arrayBuffer()
           }
 
           const msg: any = msgpack.decode(data)
           if (signalCb && msg.type === 'Signal') {
-            signalCb(msgpack.decode(msg.data))
+            const decodedMessage: SignalResponseGeneric<any> = msgpack.decode(msg.data);
+
+            // Note: holochain currently returns signals as an array of two values: cellId and the seralized signal payload
+            // and this array is nested within the App key within the returned message.
+            const decodedCellId = decodedMessage.App[0];
+            // Note:In order to return readible content to the UI, the signal payload must also be decoded.
+            const decodedPayload = signalTransform(decodedMessage.App[1]);
+
+            // Return a uniform format to UI (ie: { type, data } - the same format as with callZome and appInfo...)
+            const signal = { type: msg.type , data: { cellId: decodedCellId, payload: decodedPayload }};
+            signalCb(signal);
+
           } else if (msg.type === 'Response') {
-            const id = msg.id
+            const id = msg.id;
             if (hw.pendingRequests[id]) {
               // resolve response
-              hw.pendingRequests[id].fulfill(msgpack.decode(msg.data))
+              hw.pendingRequests[id].fulfill(msgpack.decode(msg.data));
             } else {
-              console.error(`Got response with no matching request. id=${id}`)
+              console.error(`Got response with no matching request. id=${id}`);
             }
           } else {
-            console.error(`Got unrecognized Websocket message type: ${msg.type}`)
+            console.error(`Got unrecognized Websocket message type: ${msg.type}`);
           }
         }
 
@@ -82,4 +108,8 @@ export class WsClient {
       }
     })
   }
+}
+
+const signalTransform = (res: SignalResponseGeneric<Buffer>): SignalResponseGeneric<any> => {
+    return msgpack.decode(res)
 }
