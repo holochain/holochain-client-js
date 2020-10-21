@@ -29,6 +29,9 @@ export type ListDnasResponse = Array<string>
 export type ListCellIdsRequest = void
 export type ListCellIdsResponse = Array<CellId>
 
+export type ListActiveAppIdsRequest = void
+export type ListActiveAppIdsResponse = Array<AppId>
+
 export interface AdminApi {
   activateApp: Requester<ActivateAppRequest, ActivateAppResponse>
   attachAppInterface: Requester<AttachAppInterfaceRequest, AttachAppInterfaceResponse>
@@ -38,6 +41,7 @@ export interface AdminApi {
   installApp: Requester<InstallAppRequest, InstallAppResponse>
   listDnas: Requester<ListDnasRequest, ListDnasResponse>
   listCellIds: Requester<ListCellIdsRequest, ListCellIdsResponse>
+  listActiveAppIds: Requester<ListActiveAppIdsRequest, ListActiveAppIdsResponse>
 }
 
 

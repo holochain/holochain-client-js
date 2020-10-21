@@ -23,11 +23,22 @@ test('admin smoke test', withConductor(ADMIN_PORT, async t => {
     app_id, agent_key, dnas: []
   })
 
+  const activeApps1 = await admin.listActiveAppIds()
+  t.equal(activeApps1.length, 0)
+
   await admin.activateApp({ app_id })
+
+  const activeApps2 = await admin.listActiveAppIds()
+  t.equal(activeApps2.length, 1)
+  t.equal(activeApps2[0], app_id)
+
   await admin.attachAppInterface({ port: 0 })
   await admin.deactivateApp({ app_id })
   const dnas = await admin.listDnas()
   t.equal(dnas.length, 0)
+
+  const activeApps3 = await admin.listActiveAppIds()
+  t.equal(activeApps3.length, 0)
   // NB: missing dumpState because it requires a valid cell_id
 }))
 
