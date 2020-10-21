@@ -27,8 +27,6 @@ export class AdminWebsocket implements Api.AdminApi {
     this.client = client
   }
 
-  // NB: Admin websockets currently don't receive Signals, but they may in the
-  // future in which case provide a `signalCb` argument here
   static async connect(url: string): Promise<AdminWebsocket> {
     const wsClient = await WsClient.connect(url)
     return new AdminWebsocket(wsClient)
