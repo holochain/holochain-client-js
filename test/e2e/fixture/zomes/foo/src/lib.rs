@@ -30,7 +30,10 @@ fn init(_: ()) -> ExternResult<InitCallbackResult> {
             functions: foo_functions,
         }
     )?;
-
+    // NB: ideally we want to simply create a single CapGrant with both functions exposed,
+    // but there is a bug in Holochain which currently prevents this. After this bug is fixed,
+    // this can be collapsed to a single CapGrantEntry with two functions.
+    // see: https://github.com/holochain/holochain/issues/418
     let mut emitter_functions: GrantedFunctions = HashSet::new();
     emitter_functions.insert((zome_info!()?.zome_name, "emitter".into()));
     create_cap_grant!(
@@ -63,5 +66,4 @@ fn emitter(_: ()) -> ExternResult<TestString> {
       Err(e) => Err(HdkError::SerializedBytes(e))
     }
 }
-
 
