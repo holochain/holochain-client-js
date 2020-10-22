@@ -3,6 +3,9 @@ import * as TOML from '@iarna/toml'
 import { spawn } from 'child_process'
 import fs from 'fs'
 import os from 'os'
+import { AppId, CellId, CellNick } from '../../src/api/types'
+import { AppWebsocket } from '../../src/websocket/app'
+import { AdminWebsocket } from '../../src/websocket/admin'
 
 const CONFIG_PATH = './test/e2e/fixture/test-config.toml'
 
@@ -72,4 +75,30 @@ export const withConductor = (port, f) => async t => {
     handle.kill()
   }
   t.end()
+}
+
+export const installAppAndDna = async (
+  adminPort: number,
+  signalCb: (signal: any) => void = () => {}
+): Promise<[AppId, CellId, CellNick, AppWebsocket]> => {
+  const app_id = 'app'
+  const nick = 'mydna'
+  const admin = await AdminWebsocket.connect(`http://localhost:${adminPort}`)
+  const agent = await admin.generateAgentPubKey()
+  const app = await admin.installApp({
+    app_id,
+    agent_key: agent,
+    dnas: [
+      {
+        path: 'test/e2e/fixture/test.dna.gz',
+        nick,
+      },
+    ],
+  })
+  const cell_id = app.cell_data[0][0]
+  await admin.activateApp({ app_id })
+  // destructure to get whatever open port was assigned to the interface
+  const { port: appPort } = await admin.attachAppInterface({ port: 0 })
+  const client = await AppWebsocket.connect(`http://localhost:${appPort}`, signalCb)
+  return [app_id, cell_id, nick, client]
 }
