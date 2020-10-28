@@ -1,7 +1,7 @@
-const REJECT_TYPES = ['Error', 'ZomeCallUnauthorized']
+const ERROR_TYPE = 'error'
 
 export const catchError = (res: any) => {
-  return REJECT_TYPES.includes(res.type)
+  return res.type === ERROR_TYPE
     ? Promise.reject(res)
     : Promise.resolve(res)
 }
