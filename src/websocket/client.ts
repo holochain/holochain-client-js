@@ -72,8 +72,8 @@ export class WsClient {
         socket.onmessage = async (encodedMsg: any) => {
           let data = encodedMsg.data
 
-          // If data is not a buffer, it will be a blob
-          if (!Buffer.isBuffer(data)) {
+          // If data is not a buffer (nodejs), it will be a blob (browser)
+          if (typeof Buffer === "undefined" || !Buffer.isBuffer(data)) {
             data = await data.arrayBuffer()
           }
 
