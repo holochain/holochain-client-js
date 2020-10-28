@@ -13,25 +13,25 @@ A nodejs implementation of the Holochain conductor API.
 
 This version of `holochain-conductor-api` is currently working with `holochain/holochain` at commit:
 
-[45dd3f827caea18f41f77486ca2c37149a18b4ca](https://github.com/holochain/holochain/commit/45dd3f827caea18f41f77486ca2c37149a18b4ca) (October 14, 2020)
+[96815c179373bbc1ffca84c48e97c5a7746e4ead](https://github.com/holochain/holochain/commit/96815c179373bbc1ffca84c48e97c5a7746e4ead) (October 27, 2020)
 
 If updating this code, please make changes to the git `rev/sha` in 3 places:
 1. Here in the README above ^^
 2. These lines in `install-holochain.sh`
 ```
-cargo install --force holochain --git https://github.com/holochain/holochain.git --rev 45dd3f827caea18f41f77486ca2c37149a18b4ca
-cargo install --force dna_util --git https://github.com/holochain/holochain.git --rev 45dd3f827caea18f41f77486ca2c37149a18b4ca
+cargo install --force holochain --git https://github.com/holochain/holochain.git --rev 96815c179373bbc1ffca84c48e97c5a7746e4ead
+cargo install --force dna_util --git https://github.com/holochain/holochain.git --rev 96815c179373bbc1ffca84c48e97c5a7746e4ead
 ```
 3. and this line in `test/e2e/fixtures/zomes/foo/Cargo.toml`
 ```
-hdk3 = { git = "https://github.com/holochain/holochain", rev = "45dd3f827caea18f41f77486ca2c37149a18b4ca", package = "hdk3" }
+hdk3 = { git = "https://github.com/holochain/holochain", rev = "96815c179373bbc1ffca84c48e97c5a7746e4ead", package = "hdk3" }
 ```
 
 Notice the match between the SHA in both cases. These should always match.
 
 ## Running tests
 
-You need a version of rust available, `1.45.2` or e.g. `stable-2020-08-03`
+You need a version (`stable` toolchain) of Rust available.
 
 You would need `holochain` and `dna-util` on your path, best to use the specific versions that this code requires. To use `cargo` to install them, run:
 ```bash

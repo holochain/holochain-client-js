@@ -109,7 +109,8 @@ test(
         payload: null,
       })
     } catch (e) {
-      t.deepEqual(e, { type: 'ZomeCallUnauthorized' })
+      t.equal(e.type, 'error')
+      t.equal(e.data.type, 'zome_call_unauthorized')
     }
   })
 )
