@@ -1,18 +1,16 @@
-
-import * as TOML from '@iarna/toml'
 import { spawn } from 'child_process'
 import fs from 'fs'
 import os from 'os'
 import { AppId, CellId, CellNick } from '../../src/api/types'
 import { AppWebsocket } from '../../src/websocket/app'
 import { AdminWebsocket } from '../../src/websocket/admin'
-
-const CONFIG_PATH = './test/e2e/fixture/test-config.toml'
+import yaml from 'js-yaml'
+const CONFIG_PATH = './test/e2e/fixture/test-config.yml'
 
 const writeConfig = (port) => {
 
   const dir = fs.mkdtempSync(`${os.tmpdir()}/holochain-test-`)
-  fs.writeFileSync(CONFIG_PATH, TOML.stringify({
+  let yamlStr = yaml.safeDump({
     environment_path: dir,
     passphrase_service: {
       type: 'cmd'
@@ -23,7 +21,8 @@ const writeConfig = (port) => {
         port,
       }
     }]
-  }))
+  });
+  fs.writeFileSync(CONFIG_PATH, yamlStr, 'utf8');
   console.info(`using LMDB environment path: ${dir}`)
 }
 
