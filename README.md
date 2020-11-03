@@ -9,6 +9,15 @@ License: [![License: CAL 1.0](https://img.shields.io/badge/License-CAL%201.0-blu
 
 A nodejs implementation of the Holochain conductor API.
 
+# Install
+
+To install from NPM, run
+```bash
+npm install --save-exact @holochain/conductor-api
+```
+
+> Note, this code is still under alpha development and npm releases are pre-releases with `dev` tags meaning they will not use full semantic versioning, and you may wish to lock to an exact version of the library for that reason, as shown in the above command.
+
 # Holochain Compatibility
 
 This version of `holochain-conductor-api` is currently working with `holochain/holochain` at commit:
