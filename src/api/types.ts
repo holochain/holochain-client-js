@@ -1,8 +1,8 @@
-export type Hash = Buffer // length 39
-export type AgentPubKey = Hash
+export type HoloHash = Buffer // length 39
+export type AgentPubKey = HoloHash
 export type AppId = string
 export type CapSecret = Buffer
-export type CellId = [Hash, AgentPubKey]
+export type CellId = [HoloHash, AgentPubKey]
 export type CellNick = string
 export type DnaProperties = any
 export type InstalledApp = {
