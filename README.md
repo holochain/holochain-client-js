@@ -22,18 +22,17 @@ npm install --save-exact @holochain/conductor-api
 
 This version of `holochain-conductor-api` is currently working with `holochain/holochain` at commit:
 
-[96815c179373bbc1ffca84c48e97c5a7746e4ead](https://github.com/holochain/holochain/commit/96815c179373bbc1ffca84c48e97c5a7746e4ead) (October 27, 2020)
+[beaab9949fbff121ffd138f36c4e61c5693b8fd6](https://github.com/holochain/holochain/commit/beaab9949fbff121ffd138f36c4e61c5693b8fd6) (Nov 10, 2020)
 
 If updating this code, please make changes to the git `rev/sha` in 3 places:
 1. Here in the README above ^^
-2. These lines in `install-holochain.sh`
-```
-cargo install --force holochain --git https://github.com/holochain/holochain.git --rev 96815c179373bbc1ffca84c48e97c5a7746e4ead
-cargo install --force dna_util --git https://github.com/holochain/holochain.git --rev 96815c179373bbc1ffca84c48e97c5a7746e4ead
+2. This line in `install-holochain.sh`
+```bash
+REV=beaab9949fbff121ffd138f36c4e61c5693b8fd6
 ```
 3. and this line in `test/e2e/fixtures/zomes/foo/Cargo.toml`
 ```
-hdk3 = { git = "https://github.com/holochain/holochain", rev = "96815c179373bbc1ffca84c48e97c5a7746e4ead", package = "hdk3" }
+hdk3 = { git = "https://github.com/holochain/holochain", rev = "beaab9949fbff121ffd138f36c4e61c5693b8fd6", package = "hdk3" }
 ```
 
 Notice the match between the SHA in both cases. These should always match.

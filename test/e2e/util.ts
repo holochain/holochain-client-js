@@ -84,6 +84,7 @@ export const installAppAndDna = async (
   const nick = 'mydna'
   const admin = await AdminWebsocket.connect(`http://localhost:${adminPort}`)
   const agent = await admin.generateAgentPubKey()
+  console.log('AGENT!', agent)
   const app = await admin.installApp({
     app_id,
     agent_key: agent,
@@ -94,6 +95,7 @@ export const installAppAndDna = async (
       },
     ],
   })
+  console.log('APP!', app)
   const cell_id = app.cell_data[0][0]
   await admin.activateApp({ app_id })
   // destructure to get whatever open port was assigned to the interface
