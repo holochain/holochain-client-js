@@ -1,4 +1,10 @@
 #!/bin/bash
 
-cargo install --force holochain --git https://github.com/holochain/holochain.git --rev 96815c179373bbc1ffca84c48e97c5a7746e4ead
-cargo install --force dna_util --git https://github.com/holochain/holochain.git --rev 96815c179373bbc1ffca84c48e97c5a7746e4ead
+REV=beaab9949fbff121ffd138f36c4e61c5693b8fd6
+
+cargo install --force holochain \
+  --git https://github.com/holochain/holochain.git \
+  --rev $REV
+cargo install --force dna_util \
+  --git https://github.com/holochain/holochain.git \
+  --rev $REV
