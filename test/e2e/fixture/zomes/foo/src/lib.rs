@@ -21,8 +21,8 @@ impl From<&str> for TestString {
 fn init(_: ()) -> ExternResult<InitCallbackResult> {
     // grant unrestricted access to accept_cap_claim so other agents can send us claims
     let mut foo_functions: GrantedFunctions = HashSet::new();
-    foo_functions.insert((zome_info!()?.zome_name, "foo".into()));
-    create_cap_grant!(
+    foo_functions.insert((zome_info()?.zome_name, "foo".into()));
+    create_cap_grant(
         CapGrantEntry {
             tag: "".into(),
             // empty access converts to unrestricted
@@ -35,8 +35,8 @@ fn init(_: ()) -> ExternResult<InitCallbackResult> {
     // this can be collapsed to a single CapGrantEntry with two functions.
     // see: https://github.com/holochain/holochain/issues/418
     let mut emitter_functions: GrantedFunctions = HashSet::new();
-    emitter_functions.insert((zome_info!()?.zome_name, "emitter".into()));
-    create_cap_grant!(
+    emitter_functions.insert((zome_info()?.zome_name, "emitter".into()));
+    create_cap_grant(
         CapGrantEntry {
             tag: "".into(),
             // empty access converts to unrestricted
@@ -61,9 +61,8 @@ fn bar(_: ()) -> ExternResult<TestString> {
 
 #[hdk_extern]
 fn emitter(_: ()) -> ExternResult<TestString> {
-    match emit_signal!(TestString::from(String::from("i am a signal"))) {
+    match emit_signal(&TestString::from(String::from("i am a signal"))) {
       Ok(()) => Ok(TestString::from(String::from("bar"))),
-      Err(e) => Err(HdkError::SerializedBytes(e))
+      Err(e) => Err(e)
     }
 }
-

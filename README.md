@@ -22,17 +22,17 @@ npm install --save-exact @holochain/conductor-api
 
 This version of `holochain-conductor-api` is currently working with `holochain/holochain` at commit:
 
-[a1174a5a3f66c47f486be312d38604e49424afaf](https://github.com/holochain/holochain/commit/a1174a5a3f66c47f486be312d38604e49424afaf) (Nov 15, 2020)
+[041ad6c2fd88c06eace450074621be2bace0eb05](https://github.com/holochain/holochain/commit/041ad6c2fd88c06eace450074621be2bace0eb05) (Nov 16, 2020)
 
 If updating this code, please make changes to the git `rev/sha` in 3 places:
 1. Here in the README above ^^
 2. This line in `install-holochain.sh`
 ```bash
-REV=a1174a5a3f66c47f486be312d38604e49424afaf
+REV=041ad6c2fd88c06eace450074621be2bace0eb05
 ```
 3. and this line in `test/e2e/fixtures/zomes/foo/Cargo.toml`
 ```
-hdk3 = { git = "https://github.com/holochain/holochain", rev = "a1174a5a3f66c47f486be312d38604e49424afaf", package = "hdk3" }
+hdk3 = { git = "https://github.com/holochain/holochain", rev = "041ad6c2fd88c06eace450074621be2bace0eb05", package = "hdk3" }
 ```
 
 Notice the match between the SHA in both cases. These should always match.

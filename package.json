@@ -1,6 +1,6 @@
 {
   "name": "@holochain/conductor-api",
-  "version": "0.0.1-dev.10",
+  "version": "0.0.1-dev.11",
   "description": "Encode/decode messages to/from the Holochain Conductor API over Websocket",
   "repository": {
     "type": "git",
@@ -19,7 +19,7 @@
     "example": "ts-node examples/zome-call"
   },
   "author": "",
-  "license": "ISC",
+  "license": "CAL-1.0",
   "dependencies": {
     "@msgpack/msgpack": "^2.1.0",
     "@types/ws": "^7.2.4",
