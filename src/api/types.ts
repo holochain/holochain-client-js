@@ -6,7 +6,7 @@ export type CellId = [HoloHash, AgentPubKey]
 export type CellNick = string
 export type DnaProperties = any
 export type InstalledApp = {
-  app_id: AppId
+  installed_app_id: AppId
   cell_data: Array<InstalledCell>
 }
 export type InstalledCell = [CellId, CellNick]

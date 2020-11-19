@@ -57,8 +57,8 @@ export class AdminWebsocket implements Api.AdminApi {
     = this._requester('list_dnas')
   listCellIds: Requester<Api.ListCellIdsRequest, Api.ListCellIdsResponse>
     = this._requester('list_cell_ids')
-  listActiveAppIds: Requester<Api.ListActiveAppIdsRequest, Api.ListActiveAppIdsResponse>
-    = this._requester('list_active_app_ids')
+  listActiveApps: Requester<Api.ListActiveAppsRequest, Api.ListActiveAppsResponse>
+    = this._requester('list_active_apps')
 }
 
 

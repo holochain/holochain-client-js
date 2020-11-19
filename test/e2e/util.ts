@@ -78,14 +78,14 @@ export const withConductor = (port, f) => async t => {
 
 export const installAppAndDna = async (
   adminPort: number,
-  signalCb: (signal: any) => void = () => {}
+  signalCb: (signal: any) => void = () => { }
 ): Promise<[AppId, CellId, CellNick, AppWebsocket]> => {
-  const app_id = 'app'
+  const installed_app_id = 'app'
   const nick = 'mydna'
   const admin = await AdminWebsocket.connect(`http://localhost:${adminPort}`)
   const agent = await admin.generateAgentPubKey()
   const app = await admin.installApp({
-    app_id,
+    installed_app_id,
     agent_key: agent,
     dnas: [
       {
@@ -95,9 +95,9 @@ export const installAppAndDna = async (
     ],
   })
   const cell_id = app.cell_data[0][0]
-  await admin.activateApp({ app_id })
+  await admin.activateApp({ installed_app_id })
   // destructure to get whatever open port was assigned to the interface
   const { port: appPort } = await admin.attachAppInterface({ port: 0 })
   const client = await AppWebsocket.connect(`http://localhost:${appPort}`, signalCb)
-  return [app_id, cell_id, nick, client]
+  return [installed_app_id, cell_id, nick, client]
 }

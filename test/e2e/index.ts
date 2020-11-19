@@ -13,39 +13,39 @@ const TEST_ZOME_NAME = 'foo'
 
 test('admin smoke test', withConductor(ADMIN_PORT, async t => {
 
-  const app_id = 'app'
+  const installed_app_id = 'app'
   const admin = await AdminWebsocket.connect(`http://localhost:${ADMIN_PORT}`)
 
   const agent_key = await admin.generateAgentPubKey()
   t.ok(agent_key)
 
   await admin.installApp({
-    app_id, agent_key, dnas: []
+    installed_app_id, agent_key, dnas: []
   })
 
-  const activeApps1 = await admin.listActiveAppIds()
+  const activeApps1 = await admin.listActiveApps()
   t.equal(activeApps1.length, 0)
 
-  await admin.activateApp({ app_id })
+  await admin.activateApp({ installed_app_id })
 
-  const activeApps2 = await admin.listActiveAppIds()
+  const activeApps2 = await admin.listActiveApps()
   t.equal(activeApps2.length, 1)
-  t.equal(activeApps2[0], app_id)
+  t.equal(activeApps2[0], installed_app_id)
 
   await admin.attachAppInterface({ port: 0 })
-  await admin.deactivateApp({ app_id })
+  await admin.deactivateApp({ installed_app_id })
   const dnas = await admin.listDnas()
   t.equal(dnas.length, 0)
 
-  const activeApps3 = await admin.listActiveAppIds()
+  const activeApps3 = await admin.listActiveApps()
   t.equal(activeApps3.length, 0)
   // NB: missing dumpState because it requires a valid cell_id
 }))
 
 
 test('can call a zome function', withConductor(ADMIN_PORT, async t => {
-  const [app_id, cell_id, nick, client] = await installAppAndDna(ADMIN_PORT)
-  const info = await client.appInfo({ app_id })
+  const [installed_app_id, cell_id, nick, client] = await installAppAndDna(ADMIN_PORT)
+  const info = await client.appInfo({ installed_app_id })
   t.deepEqual(info.cell_data[0][0], cell_id)
   t.equal(info.cell_data[0][1], nick)
   const response = await client.callZome({
@@ -63,8 +63,8 @@ test('can call a zome function', withConductor(ADMIN_PORT, async t => {
 test('can receive a signal', withConductor(ADMIN_PORT, async t => {
   await new Promise(async (resolve, reject) => {
     try {
-      const [_app_id, cell_id, _nick, client] = await installAppAndDna(ADMIN_PORT, signalCb)
-      function signalCb (signal: AppSignal) {
+      const [_installed_app_id, cell_id, _nick, client] = await installAppAndDna(ADMIN_PORT, signalCb)
+      function signalCb(signal: AppSignal) {
         t.deepEqual(signal, {
           type: 'Signal',
           data: {
@@ -92,7 +92,7 @@ test('can receive a signal', withConductor(ADMIN_PORT, async t => {
 test(
   'callZome rejects appropriately for ZomeCallUnauthorized',
   withConductor(ADMIN_PORT, async (t) => {
-    const [_app_id, cell_id, _nick, client] = await installAppAndDna(ADMIN_PORT)
+    const [_installed_app_id, cell_id, _nick, client] = await installAppAndDna(ADMIN_PORT)
     try {
       await client.callZome({
         // bad cap, on purpose

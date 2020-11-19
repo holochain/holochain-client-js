@@ -13,7 +13,7 @@ export type CallZomeResponseGeneric<Payload> = Payload
 export type CallZomeRequest = CallZomeRequestGeneric<any>
 export type CallZomeResponse = CallZomeResponseGeneric<any>
 
-export type AppInfoRequest = { app_id: AppId }
+export type AppInfoRequest = { installed_app_id: AppId }
 export type AppInfoResponse = InstalledApp
 
 export type AppSignal = {
