@@ -8,13 +8,13 @@ export type Hash = {
   hash: Buffer,
   hash_type: Buffer,
 }
-export type AppId = string
+export type InstalledAppId = string
 export type CapSecret = Buffer
 export type CellId = [Hash, AgentPubKey]
 export type CellNick = string
 export type DnaProperties = any
 export type InstalledApp = {
-  app_id: AppId,
+  installed_app_id: InstalledAppId,
   cell_data: Array<InstalledCell>,
 }
 export type InstalledCell = [CellId, CellNick]

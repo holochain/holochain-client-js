@@ -1,5 +1,5 @@
 import { Requester } from "./common"
-import { CellId, CapSecret, AgentPubKey, AppId, InstalledApp } from "./types"
+import { CellId, CapSecret, AgentPubKey, InstalledAppId, InstalledApp } from "./types"
 
 export type CallZomeRequestGeneric<Payload> = {
   cap: CapSecret | null,
@@ -13,7 +13,7 @@ export type CallZomeResponseGeneric<Payload> = Payload
 export type CallZomeRequest = CallZomeRequestGeneric<any>
 export type CallZomeResponse = CallZomeResponseGeneric<any>
 
-export type AppInfoRequest = { app_id: AppId }
+export type AppInfoRequest = { installed_app_id: InstalledAppId }
 export type AppInfoResponse = InstalledApp
 
 export type AppSignal = {
