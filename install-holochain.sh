@@ -1,6 +1,6 @@
 #!/bin/bash
 
-REV=041ad6c2fd88c06eace450074621be2bace0eb05
+REV=2dfe85db10a5d9ba3ee25ff33f4bedb1a28f875f
 
 cargo install --force holochain \
   --git https://github.com/holochain/holochain.git \

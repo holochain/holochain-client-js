@@ -1,13 +1,13 @@
 export type HoloHash = Buffer // length 39
 export type AgentPubKey = HoloHash
-export type AppId = string
+export type InstalledAppId = string
 export type CapSecret = Buffer
 export type CellId = [HoloHash, AgentPubKey]
 export type CellNick = string
 export type DnaProperties = any
 export type InstalledApp = {
-  app_id: AppId
-  cell_data: Array<InstalledCell>
+  installed_app_id: InstalledAppId,
+  cell_data: Array<InstalledCell>,
 }
 export type InstalledCell = [CellId, CellNick]
 export type MembraneProof = Buffer
