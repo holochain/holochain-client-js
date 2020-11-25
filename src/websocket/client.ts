@@ -37,7 +37,11 @@ export class WsClient {
     const promise = new Promise((fulfill) => {
       this.pendingRequests[id] = { fulfill }
     })
-    this.socket.send(encodedMsg)
+    if (this.socket.readyState === this.socket.OPEN) {
+      this.socket.send(encodedMsg)
+    } else {
+      return Promise.reject(new Error(`Socket is not open`))
+    }
     return promise as Promise<Res>
   }
 
