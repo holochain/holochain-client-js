@@ -61,16 +61,9 @@ export class WsClient {
       // errors because that causes nodejs thread to crash
       // with uncaught exception
       socket.onerror = (e) => {
-        console.log("Socket err", e.data)
-        if (e.error.code === 'ECONNRESET' || e.error.code === 'ECONNREFUSED') {
-          reject(
-            new Error(
-              `could not connect to holochain conductor, please check that a conductor service is running and available at ${url}`
-            )
-          )
-        } else {
-          reject(e)
-        }
+        reject(new Error(
+          `could not connect to holochain conductor, please check that a conductor service is running and available at ${url}`
+        ))
       }
       socket.onopen = () => {
         const hw = new WsClient(socket)
