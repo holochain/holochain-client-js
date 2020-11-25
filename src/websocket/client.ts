@@ -61,7 +61,7 @@ export class WsClient {
       // errors because that causes nodejs thread to crash
       // with uncaught exception
       socket.onerror = (e) => {
-        console.log("Socket err", e)
+        console.log("Socket err", e.data)
         if (e.error.code === 'ECONNRESET' || e.error.code === 'ECONNREFUSED') {
           reject(
             new Error(
