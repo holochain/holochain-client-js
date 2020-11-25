@@ -20,11 +20,11 @@ export class WsClient {
   }
 
   emitSignal(data: any) {
-    const encoded = msgpack.encode({
+    const encodedMsg = msgpack.encode({
       type: 'Signal',
       data: msgpack.encode(data),
     })
-    this.socket.send(encoded)
+    this.socket.send(encodedMsg)
   }
 
   request<Req, Res>(data: Req): Promise<Res> {
@@ -61,6 +61,7 @@ export class WsClient {
       // errors because that causes nodejs thread to crash
       // with uncaught exception
       socket.onerror = (e) => {
+        console.log("Socket err", e)
         if (e.error.code === 'ECONNRESET' || e.error.code === 'ECONNREFUSED') {
           reject(
             new Error(
