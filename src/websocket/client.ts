@@ -20,11 +20,11 @@ export class WsClient {
   }
 
   emitSignal(data: any) {
-    const encoded = msgpack.encode({
+    const encodedMsg = msgpack.encode({
       type: 'Signal',
       data: msgpack.encode(data),
     })
-    this.socket.send(encoded)
+    this.socket.send(encodedMsg)
   }
 
   request<Req, Res>(data: Req): Promise<Res> {
@@ -37,7 +37,11 @@ export class WsClient {
     const promise = new Promise((fulfill) => {
       this.pendingRequests[id] = { fulfill }
     })
-    this.socket.send(encodedMsg)
+    if (this.socket.readyState === this.socket.OPEN) {
+      this.socket.send(encodedMsg)
+    } else {
+      return Promise.reject(new Error(`Socket is not open`))
+    }
     return promise as Promise<Res>
   }
 
@@ -57,15 +61,9 @@ export class WsClient {
       // errors because that causes nodejs thread to crash
       // with uncaught exception
       socket.onerror = (e) => {
-        if (e.error.code === 'ECONNRESET' || e.error.code === 'ECONNREFUSED') {
-          reject(
-            new Error(
-              `could not connect to holochain conductor, please check that a conductor service is running and available at ${url}`
-            )
-          )
-        } else {
-          reject(e)
-        }
+        reject(new Error(
+          `could not connect to holochain conductor, please check that a conductor service is running and available at ${url}`
+        ))
       }
       socket.onopen = () => {
         const hw = new WsClient(socket)
