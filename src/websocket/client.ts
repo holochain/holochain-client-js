@@ -62,7 +62,7 @@ export class WsClient {
       // with uncaught exception
       socket.onerror = (e) => {
         reject(new Error(
-          `error while connecting to holochain at ${url}: ${e.error.name}, ${e.error.message}`
+          `could not connect to holochain conductor, please check that a conductor service is running and available at ${url}`
         ))
       }
       socket.onopen = () => {
