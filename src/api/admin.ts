@@ -32,6 +32,11 @@ export type ListCellIdsResponse = Array<CellId>
 export type ListActiveAppsRequest = void
 export type ListActiveAppsResponse = Array<InstalledAppId>
 
+export type AgentInfoSigned = any
+
+export type RequestAgentInfoRequest = { cell_id: CellId|null }
+export type RequestAgentInfoResponse = Array<AgentInfoSigned>
+
 export interface AdminApi {
   activateApp: Requester<ActivateAppRequest, ActivateAppResponse>
   attachAppInterface: Requester<AttachAppInterfaceRequest, AttachAppInterfaceResponse>
@@ -42,6 +47,7 @@ export interface AdminApi {
   listDnas: Requester<ListDnasRequest, ListDnasResponse>
   listCellIds: Requester<ListCellIdsRequest, ListCellIdsResponse>
   listActiveApps: Requester<ListActiveAppsRequest, ListActiveAppsResponse>
+  requestAgentInfo: Requester<RequestAgentInfoRequest, RequestAgentInfoResponse>
 }
 
 

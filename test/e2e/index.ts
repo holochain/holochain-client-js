@@ -1,13 +1,13 @@
-
 const test = require('tape')
 
 import { AdminWebsocket } from '../../src/websocket/admin'
 import { AppWebsocket } from '../../src/websocket/app'
-import { installAppAndDna, withConductor } from './util'
+import { installAppAndDna, withConductor, launch, CONFIG_PATH, CONFIG_PATH_1, FIXTURE_PATH } from './util'
 import { AgentPubKey, fakeAgentPubKey } from '../../src/api/types'
 import { AppSignal } from '../../src/api/app'
 
 const ADMIN_PORT = 33001
+const ADMIN_PORT_1 = 33002
 
 const TEST_ZOME_NAME = 'foo'
 
@@ -135,4 +135,57 @@ test('error is catchable when holochain socket is unavailable', async (t) => {
       `could not connect to holochain conductor, please check that a conductor service is running and available at ${url}`
     )
   }
+})
+
+
+test('can inject agents', async (t) => {
+    const conductor1 = await launch(ADMIN_PORT, CONFIG_PATH)
+    const conductor2 = await launch(ADMIN_PORT_1, CONFIG_PATH_1)
+    try {
+        const installed_app_id = 'app'
+
+        const admin1 = await AdminWebsocket.connect(`http://localhost:${ADMIN_PORT}`)
+        const admin2 = await AdminWebsocket.connect(`http://localhost:${ADMIN_PORT_1}`)
+
+        const agent_key_1 = await admin1.generateAgentPubKey()
+        t.ok(agent_key_1)
+
+        const agent_key_2 = await admin2.generateAgentPubKey()
+        t.ok(agent_key_2)
+
+        const nick = 'thedna'
+        let result = await admin1.installApp({
+            installed_app_id, agent_key: agent_key_1, dnas: [
+                {
+                    path: `${FIXTURE_PATH}/test.dna.gz`,
+                    nick,
+                }
+            ]
+        })
+        t.ok(result)
+
+        const app1_cell  = result.cell_data[0][0]
+        result = await admin2.installApp({
+            installed_app_id, agent_key: agent_key_2, dnas: [
+                {
+                    path: `${FIXTURE_PATH}/test.dna.gz`,
+                    nick,
+                }
+            ]
+        })
+        t.ok(result)
+
+        const app2_cell  = result.cell_data[0][0]
+
+        const app1_agentInfo = await admin1.requestAgentInfo({cell_id: null});
+        console.log("FISH", app1_agentInfo)
+        t.equal(1,0)
+        t.ok(app1_agentInfo)
+
+    }
+    finally {
+        conductor1.kill()
+        conductor2.kill()
+    }
+
 })

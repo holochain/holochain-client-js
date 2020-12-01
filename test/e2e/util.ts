@@ -5,9 +5,11 @@ import { InstalledAppId, CellId, CellNick } from '../../src/api/types'
 import { AppWebsocket } from '../../src/websocket/app'
 import { AdminWebsocket } from '../../src/websocket/admin'
 import yaml from 'js-yaml'
-const CONFIG_PATH = './test/e2e/fixture/test-config.yml'
+export const FIXTURE_PATH = './test/e2e/fixture'
+export const CONFIG_PATH = `${FIXTURE_PATH}/test-config.yml`
+export const CONFIG_PATH_1 = `${FIXTURE_PATH}/test-config-1.yml`
 
-const writeConfig = (port) => {
+const writeConfig = (port, configPath) => {
 
   const dir = fs.mkdtempSync(`${os.tmpdir()}/holochain-test-`)
   let yamlStr = yaml.safeDump({
@@ -22,7 +24,7 @@ const writeConfig = (port) => {
       }
     }]
   });
-  fs.writeFileSync(CONFIG_PATH, yamlStr, 'utf8');
+  fs.writeFileSync(configPath, yamlStr, 'utf8');
   console.info(`using LMDB environment path: ${dir}`)
 }
 
@@ -49,9 +51,9 @@ const awaitInterfaceReady = (handle): Promise<null> => new Promise((fulfill, rej
 
 const HOLOCHAIN_BIN = 'holochain'
 
-const launch = async (port) => {
-  await writeConfig(port)
-  const handle = spawn(HOLOCHAIN_BIN, ['-c', CONFIG_PATH])
+export const launch = async (port, configPath) => {
+  await writeConfig(port, configPath)
+  const handle = spawn(HOLOCHAIN_BIN, ['-c', configPath])
   handle.stdout.on('data', data => {
     console.info('conductor: ', data.toString('utf8'))
   })
@@ -63,7 +65,7 @@ const launch = async (port) => {
 }
 
 export const withConductor = (port, f) => async t => {
-  const handle = await launch(port)
+  const handle = await launch(port, CONFIG_PATH)
   try {
     await f(t)
   } catch (e) {
@@ -89,7 +91,7 @@ export const installAppAndDna = async (
     agent_key: agent,
     dnas: [
       {
-        path: 'test/e2e/fixture/test.dna.gz',
+        path: `${FIXTURE_PATH}/test.dna.gz`,
         nick,
       },
     ],

@@ -1,0 +1,7 @@
+environment_path: /tmp/tmp.Awrd4WvLCK/holochain-test-Km9sFr
+passphrase_service:
+  type: cmd
+admin_interfaces:
+  - driver:
+      type: websocket
+      port: 33002
