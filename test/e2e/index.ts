@@ -178,7 +178,7 @@ test('can inject agents', async (t) => {
         const app2_cell  = result.cell_data[0][0]
 
         const app1_agentInfo = await admin1.requestAgentInfo({cell_id: null});
-        console.log("FISH", app1_agentInfo)
+        console.log("WHY IS THIS AN EMPTY ARRAY?", app1_agentInfo)
         t.equal(1,0)
         t.ok(app1_agentInfo)
 
