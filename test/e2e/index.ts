@@ -143,16 +143,12 @@ test('can inject agents', async (t) => {
     const conductor2 = await launch(ADMIN_PORT_1, CONFIG_PATH_1)
     try {
         const installed_app_id = 'app'
-
         const admin1 = await AdminWebsocket.connect(`http://localhost:${ADMIN_PORT}`)
         const admin2 = await AdminWebsocket.connect(`http://localhost:${ADMIN_PORT_1}`)
-
         const agent_key_1 = await admin1.generateAgentPubKey()
         t.ok(agent_key_1)
-
         const agent_key_2 = await admin2.generateAgentPubKey()
         t.ok(agent_key_2)
-
         const nick = 'thedna'
         let result = await admin1.installApp({
             installed_app_id, agent_key: agent_key_1, dnas: [
@@ -163,8 +159,9 @@ test('can inject agents', async (t) => {
             ]
         })
         t.ok(result)
-
         const app1_cell  = result.cell_data[0][0]
+        await admin1.activateApp({ installed_app_id })
+
         result = await admin2.installApp({
             installed_app_id, agent_key: agent_key_2, dnas: [
                 {
@@ -174,17 +171,18 @@ test('can inject agents', async (t) => {
             ]
         })
         t.ok(result)
-
         const app2_cell  = result.cell_data[0][0]
-        console.log("app1_cell", app1_cell);
-        console.log("agent1_key", agent_key_1);
+        await admin2.activateApp({ installed_app_id })
 
-        await admin1.activateApp({ installed_app_id })
+        const conductor1_agentInfo = await admin1.requestAgentInfo({cell_id: null});
+        t.equal(conductor1_agentInfo.length, 1)
+        const conductor2_agentInfo = await admin2.requestAgentInfo({cell_id: null});
+        t.equal(conductor2_agentInfo.length, 1)
 
-        const app1_agentInfo = await admin1.requestAgentInfo({cell_id: null});
+        const app1_agentInfo = await admin1.requestAgentInfo({cell_id: app1_cell});
         t.equal(app1_agentInfo.length, 1)
-        t.ok(app1_agentInfo)
-
+        const app2_agentInfo = await admin2.requestAgentInfo({cell_id: app2_cell});
+        t.equal(app2_agentInfo.length, 1)
     }
     finally {
         conductor1.kill()
