@@ -183,6 +183,10 @@ test('can inject agents', async (t) => {
         t.equal(app1_agentInfo.length, 1)
         const app2_agentInfo = await admin2.requestAgentInfo({cell_id: app2_cell});
         t.equal(app2_agentInfo.length, 1)
+
+        await admin1.addAgentInfo({ agent_infos: conductor2_agentInfo });
+        const conductor1_agentInfo_again = await admin1.requestAgentInfo({cell_id: null});
+        t.equal(conductor1_agentInfo_again.length, 2)
     }
     finally {
         conductor1.kill()
