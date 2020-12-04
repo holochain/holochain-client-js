@@ -161,13 +161,20 @@ test('can inject agents', async (t) => {
         t.ok(result)
         const app1_cell  = result.cell_data[0][0]
         await admin1.activateApp({ installed_app_id })
+        // after activating an app requestAgentInfo should return the agentid
         const conductor1_agentInfo = await admin1.requestAgentInfo({cell_id: null});
         t.equal(conductor1_agentInfo.length, 1)
-        
-        await admin2.addAgentInfo({ agent_infos: conductor1_agentInfo });
-        const conductor2_agentInfo_again = await admin2.requestAgentInfo({cell_id: null});
-        t.equal(conductor2_agentInfo_again.length, 1)
 
+        // agent2 with no activated apps there are no agents
+        var conductor2_agentInfo = await admin2.requestAgentInfo({cell_id: null});
+        t.equal(conductor2_agentInfo.length, 0)
+
+        // but, after explicitly injecting an agent, we should see it
+        await admin2.addAgentInfo({ agent_infos: conductor1_agentInfo });
+        conductor2_agentInfo = await admin2.requestAgentInfo({cell_id: null});
+        t.equal(conductor2_agentInfo.length, 1)
+
+        // now install the app and activate it on agent 2.
         result = await admin2.installApp({
             installed_app_id, agent_key: agent_key_2, dnas: [
                 {
@@ -179,11 +186,11 @@ test('can inject agents', async (t) => {
         t.ok(result)
         const app2_cell  = result.cell_data[0][0]
         await admin2.activateApp({ installed_app_id })
+        // observe 2 agent infos
+        conductor2_agentInfo = await admin2.requestAgentInfo({cell_id: null});
+        t.equal(conductor2_agentInfo.length, 2)
 
-        const conductor2_agentInfos = await admin2.requestAgentInfo({cell_id: null});
-        t.equal(conductor2_agentInfos.length, 2)
-
-        await admin1.addAgentInfo({ agent_infos: conductor2_agentInfos });
+        await admin1.addAgentInfo({ agent_infos: conductor2_agentInfo });
         const app1_agentInfo = await admin1.requestAgentInfo({cell_id: app1_cell});
         t.equal(app1_agentInfo.length, 1)
         const app2_agentInfo = await admin2.requestAgentInfo({cell_id: app2_cell});
