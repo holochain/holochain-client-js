@@ -162,6 +162,8 @@ test('can inject agents', async (t) => {
         const app1_cell  = result.cell_data[0][0]
         await admin1.activateApp({ installed_app_id })
         // after activating an app requestAgentInfo should return the agentid
+        // requesting info with null cell_id should return all agents known about.
+        // otherwise it's just agents know about for that cell
         const conductor1_agentInfo = await admin1.requestAgentInfo({cell_id: null});
         t.equal(conductor1_agentInfo.length, 1)
 
@@ -190,6 +192,7 @@ test('can inject agents', async (t) => {
         conductor2_agentInfo = await admin2.requestAgentInfo({cell_id: null});
         t.equal(conductor2_agentInfo.length, 2)
 
+        // now confirm that we can ask for just one cell
         await admin1.addAgentInfo({ agent_infos: conductor2_agentInfo });
         const app1_agentInfo = await admin1.requestAgentInfo({cell_id: app1_cell});
         t.equal(app1_agentInfo.length, 1)
