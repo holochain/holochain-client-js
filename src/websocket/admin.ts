@@ -59,6 +59,10 @@ export class AdminWebsocket implements Api.AdminApi {
     = this._requester('list_cell_ids')
   listActiveApps: Requester<Api.ListActiveAppsRequest, Api.ListActiveAppsResponse>
     = this._requester('list_active_apps')
+  requestAgentInfo: Requester<Api.RequestAgentInfoRequest, Api.RequestAgentInfoResponse>
+    = this._requester('request_agent_info')
+  addAgentInfo: Requester<Api.AddAgentInfoRequest, Api.AddAgentInfoResponse>
+    = this._requester('add_agent_info')
 }
 
 

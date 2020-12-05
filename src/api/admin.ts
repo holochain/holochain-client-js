@@ -32,6 +32,19 @@ export type ListCellIdsResponse = Array<CellId>
 export type ListActiveAppsRequest = void
 export type ListActiveAppsResponse = Array<InstalledAppId>
 
+// this type is meant to be opaque
+export type AgentInfoSigned = any
+/*{
+    agent: any,
+    signature: any,
+    agent_info: any,
+}*/
+
+export type RequestAgentInfoRequest = { cell_id: CellId|null }
+export type RequestAgentInfoResponse = Array<AgentInfoSigned>
+export type AddAgentInfoRequest = { agent_infos: Array<AgentInfoSigned> }
+export type AddAgentInfoResponse = any
+
 export interface AdminApi {
   activateApp: Requester<ActivateAppRequest, ActivateAppResponse>
   attachAppInterface: Requester<AttachAppInterfaceRequest, AttachAppInterfaceResponse>
@@ -42,6 +55,8 @@ export interface AdminApi {
   listDnas: Requester<ListDnasRequest, ListDnasResponse>
   listCellIds: Requester<ListCellIdsRequest, ListCellIdsResponse>
   listActiveApps: Requester<ListActiveAppsRequest, ListActiveAppsResponse>
+  requestAgentInfo: Requester<RequestAgentInfoRequest, RequestAgentInfoResponse>
+  addAgentInfo: Requester<AddAgentInfoRequest, AddAgentInfoResponse>
 }
 
 
