@@ -32,11 +32,13 @@ export type ListCellIdsResponse = Array<CellId>
 export type ListActiveAppsRequest = void
 export type ListActiveAppsResponse = Array<InstalledAppId>
 
-export type AgentInfoSigned = {
-    agent: AgentPubKey,
-    signature: any, // don't yet have a type for signatures
-    agent_info: any, // don't yet have a type for agent_info
-}
+// this type is meant to be opaque
+export type AgentInfoSigned = any
+/*{
+    agent: any,
+    signature: any,
+    agent_info: any,
+}*/
 
 export type RequestAgentInfoRequest = { cell_id: CellId|null }
 export type RequestAgentInfoResponse = Array<AgentInfoSigned>

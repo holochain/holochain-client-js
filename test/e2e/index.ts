@@ -175,6 +175,7 @@ test('can inject agents', async (t) => {
         await admin2.addAgentInfo({ agent_infos: conductor1_agentInfo });
         conductor2_agentInfo = await admin2.requestAgentInfo({cell_id: null});
         t.equal(conductor2_agentInfo.length, 1)
+        t.deepEqual(conductor1_agentInfo,conductor2_agentInfo)
 
         // now install the app and activate it on agent 2.
         result = await admin2.installApp({
