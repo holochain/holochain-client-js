@@ -19,7 +19,7 @@ import * as msgpack from '@msgpack/msgpack';
 
 import { AppApi, CallZomeRequest, CallZomeResponse, AppInfoRequest, AppInfoResponse, CallZomeRequestGeneric, CallZomeResponseGeneric, AppSignalCb } from '../api/app'
 import { WsClient } from './client'
-import { catchError } from './common'
+import { catchError, promiseTimeout } from './common'
 import { Transformer, requesterTransformer, Requester } from '../api/common'
 
 export class AppWebsocket implements AppApi {
@@ -36,7 +36,7 @@ export class AppWebsocket implements AppApi {
 
   _requester = <ReqO, ReqI, ResI, ResO>(tag: string, transformer?: Transformer<ReqO, ReqI, ResI, ResO>) =>
     requesterTransformer(
-      req => this.client.request(req).then(catchError),
+      req => promiseTimeout(15000, this.client.request(req)).then(catchError),
       tag,
       transformer
     )

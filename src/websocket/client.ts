@@ -38,16 +38,7 @@ export class WsClient {
       this.pendingRequests[id] = { fulfill }
     })
     if (this.socket.readyState === this.socket.OPEN) {
-        Promise.race([
-          new Promise((res, rej) => {
-            this.socket.send(encodedMsg, eventNo => {
-               // console.log('Call Number', eventNo)
-               res(eventNo);
-             });
-           }),
-          // this.socket.send(encodedMsg),
-          new Promise((res, rej) => setTimeout(() => rej(new Error('Request Timeout in conductor-api')), 10000))
-        ])
+      this.socket.send(encodedMsg)
     } else {
       return Promise.reject(new Error(`Socket is not open`))
     }

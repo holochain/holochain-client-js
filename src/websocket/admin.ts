@@ -17,7 +17,7 @@
 
 import * as Api from '../api/admin'
 import { WsClient } from './client'
-import { catchError } from './common'
+import { catchError, promiseTimeout } from './common'
 import { Transformer, requesterTransformer, Requester } from '../api/common'
 
 export class AdminWebsocket implements Api.AdminApi {
@@ -34,7 +34,7 @@ export class AdminWebsocket implements Api.AdminApi {
 
   _requester = <ReqO, ReqI, ResI, ResO>(tag: string, transformer?: Transformer<ReqO, ReqI, ResI, ResO>) =>
     requesterTransformer(
-      req => this.client.request(req).then(catchError),
+      req => promiseTimeout(15000, this.client.request(req)).then(catchError),
       tag,
       transformer
     )
