@@ -1,4 +1,5 @@
 const ERROR_TYPE = 'error'
+const DEFAULT_TIMEOUT = 15000
 
 export const catchError = (res: any) => {
   return res.type === ERROR_TYPE
@@ -6,13 +7,15 @@ export const catchError = (res: any) => {
     : Promise.resolve(res)
 }
 
-export const promiseTimeout = (ms: number, promise: Promise<any>) => {
+export const promiseTimeout = (promise: Promise<any>, ms?: number) => {
   let id
+  let time = ms === undefined ? DEFAULT_TIMEOUT : ms
+
   let timeout = new Promise((resolve, reject) => {
     id = setTimeout(() => {
       clearTimeout(id);
-      reject(new Error('Timed out in '+ ms + 'ms.'))
-    }, ms)
+      reject(new Error('Timed out in '+ time + 'ms.'))
+    }, time)
   })
 
   return new Promise((res, rej) => {

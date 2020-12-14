@@ -36,7 +36,7 @@ export class AppWebsocket implements AppApi {
 
   _requester = <ReqO, ReqI, ResI, ResO>(tag: string, transformer?: Transformer<ReqO, ReqI, ResI, ResO>) =>
     requesterTransformer(
-      req => promiseTimeout(15000, this.client.request(req)).then(catchError),
+      (req, timeout) => promiseTimeout(this.client.request(req), timeout).then(catchError),
       tag,
       transformer
     )
