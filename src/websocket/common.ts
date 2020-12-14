@@ -27,7 +27,7 @@ export const promiseTimeout = (promise: Promise<any>, ms?: number) => {
       return res(a)
     })
     .catch(e => {
-      return rej(new Error(e))
+      return rej(e)
     });
   })
 }
