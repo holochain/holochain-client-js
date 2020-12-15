@@ -7,14 +7,14 @@ export const catchError = (res: any) => {
     : Promise.resolve(res)
 }
 
-export const promiseTimeout = (promise: Promise<any>, ms?: number) => {
+export const promiseTimeout = (promise: Promise<any>, tag: string, ms?: number) => {
   let id
   let time = ms === undefined ? DEFAULT_TIMEOUT : ms
 
   let timeout = new Promise((resolve, reject) => {
     id = setTimeout(() => {
       clearTimeout(id);
-      reject(new Error(`Timed out in ${time}ms: ${tag}'))
+      reject(new Error(`Timed out in ${time}ms: ${tag}`))
     }, time)
   })
 
