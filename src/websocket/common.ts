@@ -14,7 +14,7 @@ export const promiseTimeout = (promise: Promise<any>, ms?: number) => {
   let timeout = new Promise((resolve, reject) => {
     id = setTimeout(() => {
       clearTimeout(id);
-      reject(new Error('Timed out in '+ time + 'ms.'))
+      reject(new Error(`Timed out in ${time}ms: ${tag}'))
     }, time)
   })
 
