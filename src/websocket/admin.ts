@@ -17,24 +17,26 @@
 
 import * as Api from '../api/admin'
 import { WsClient } from './client'
-import { catchError } from './common'
+import { catchError, promiseTimeout, DEFAULT_TIMEOUT } from './common'
 import { Transformer, requesterTransformer, Requester } from '../api/common'
 
 export class AdminWebsocket implements Api.AdminApi {
   client: WsClient
+  defaultTimeout: number
 
-  constructor(client: WsClient) {
+  constructor(client: WsClient, defaultTimeout?: number) {
     this.client = client
+    this.defaultTimeout = defaultTimeout === undefined ? DEFAULT_TIMEOUT : defaultTimeout
   }
 
-  static async connect(url: string): Promise<AdminWebsocket> {
+  static async connect(url: string, defaultTimeout?: number): Promise<AdminWebsocket> {
     const wsClient = await WsClient.connect(url)
-    return new AdminWebsocket(wsClient)
+    return new AdminWebsocket(wsClient, defaultTimeout)
   }
 
   _requester = <ReqO, ReqI, ResI, ResO>(tag: string, transformer?: Transformer<ReqO, ReqI, ResI, ResO>) =>
     requesterTransformer(
-      req => this.client.request(req).then(catchError),
+      (req, timeout) => promiseTimeout(this.client.request(req), tag, timeout || this.defaultTimeout).then(catchError),
       tag,
       transformer
     )

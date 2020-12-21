@@ -10,9 +10,9 @@ export const requesterTransformer =
     tag: string,
     transform: Transformer<ReqO, ReqI, ResI, ResO> = identityTransformer
   ) => (
-      async (req: ReqO) => {
+      async (req: ReqO, timeout?: number) => {
         const input = { type: tag, data: transform.input(req) }
-        const response = await requester(input)
+        const response = await requester(input, timeout)
         const output = transform.output(response.data)
         return output
       }
@@ -29,6 +29,6 @@ const identityTransformer = {
   output: identity,
 }
 
-export type Requester<Req, Res> = (req: Req) => Promise<Res>
+export type Requester<Req, Res> = (req: Req, timeout?: number) => Promise<Res>
 export type RequesterUnit<Res> = () => Promise<Res>
 export type Tagged<T> = { type: string, data: T }

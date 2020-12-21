@@ -18,21 +18,51 @@ npm install --save-exact @holochain/conductor-api
 
 > Note, this code is still under alpha development and npm releases are pre-releases with `dev` tags meaning they will not use full semantic versioning, and you may wish to lock to an exact version of the library for that reason, as shown in the above command.
 
+## Sample usage
+
+### Use AdminWebsocket
+```
+  const admin = await AdminWebsocket.connect(`http://localhost:8000`, TIMEOUT)
+  await admin.generateAgentPubKey()
+```
+
+### Use AppWebsocket
+```
+  const signalCb = (signal: AppSignal) => {
+    // impl...
+    resolve()
+  }
+
+  const TIMEOUT = 12000
+  // default timeout is set to 12000
+  const [installed_app_id, cell_id, _nick, client] = await AppWebsocket.connect(`http://localhost:${appPort}`, 12000, signalCb)
+
+  // default timeout set here (30000) will overwrite the defaultTimeout(12000) set above
+  await client.callZome({
+   cap: null,
+   cell_id,
+   zome_name: "test_zome",
+   fn_name: 'test_emitter_fn',
+   provenance: fakeAgentPubKey('TODO'),
+   payload: null,
+  }, 30000)
+```
+
 # Holochain Compatibility
 
 This version of `holochain-conductor-api` is currently working with `holochain/holochain` at commit:
 
-[b337f81080d35821344d7565778d8e70e2947a92](https://github.com/holochain/holochain/commit/b337f81080d35821344d7565778d8e70e2947a92) (Dec 4, 2020)
+[3675b588de0aaf7eb9dc852b4012f3cfa5a27df7](https://github.com/holochain/holochain/commit/3675b588de0aaf7eb9dc852b4012f3cfa5a27df7) (Dec 21, 2020)
 
 If updating this code, please make changes to the git `rev/sha` in 3 places:
 1. Here in the README above ^^
 2. This line in `install-holochain.sh`
 ```bash
-REV=b337f81080d35821344d7565778d8e70e2947a92
+REV=3675b588de0aaf7eb9dc852b4012f3cfa5a27df7
 ```
 3. and this line in `test/e2e/fixtures/zomes/foo/Cargo.toml`
 ```
-hdk3 = { git = "https://github.com/holochain/holochain", rev = "b337f81080d35821344d7565778d8e70e2947a92", package = "hdk3" }
+hdk3 = { git = "https://github.com/holochain/holochain", rev = "3675b588de0aaf7eb9dc852b4012f3cfa5a27df7", package = "hdk3" }
 ```
 
 Notice the match between the SHA in both cases. These should always match.

@@ -14,7 +14,7 @@ const TEST_ZOME_NAME = 'foo'
 test('admin smoke test', withConductor(ADMIN_PORT, async t => {
 
   const installed_app_id = 'app'
-  const admin = await AdminWebsocket.connect(`http://localhost:${ADMIN_PORT}`)
+  const admin = await AdminWebsocket.connect(`http://localhost:${ADMIN_PORT}`, 12000)
 
   const agent_key = await admin.generateAgentPubKey()
   t.ok(agent_key)
@@ -45,7 +45,7 @@ test('admin smoke test', withConductor(ADMIN_PORT, async t => {
 
 test('can call a zome function', withConductor(ADMIN_PORT, async t => {
   const [installed_app_id, cell_id, nick, client] = await installAppAndDna(ADMIN_PORT)
-  const info = await client.appInfo({ installed_app_id })
+  const info = await client.appInfo({ installed_app_id }, 1000)
   t.deepEqual(info.cell_data[0][0], cell_id)
   t.equal(info.cell_data[0][1], nick)
   const response = await client.callZome({
@@ -56,7 +56,7 @@ test('can call a zome function', withConductor(ADMIN_PORT, async t => {
     fn_name: 'foo',
     provenance: fakeAgentPubKey('TODO'),
     payload: null,
-  })
+  }, 30000)
   t.equal(response, "foo")
 }))
 
@@ -107,7 +107,7 @@ test(
         fn_name: 'bar',
         provenance: fakeAgentPubKey('TODO'),
         payload: null,
-      })
+      }, 30000)
     } catch (e) {
       t.equal(e.type, 'error')
       t.equal(e.data.type, 'zome_call_unauthorized')
@@ -160,7 +160,7 @@ test('can inject agents', async (t) => {
         })
         t.ok(result)
         const app1_cell  = result.cell_data[0][0]
-        await admin1.activateApp({ installed_app_id })
+        await admin1.activateApp({ installed_app_id }, 1000)
         // after activating an app requestAgentInfo should return the agentid
         // requesting info with null cell_id should return all agents known about.
         // otherwise it's just agents know about for that cell

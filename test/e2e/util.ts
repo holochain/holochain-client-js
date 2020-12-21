@@ -100,6 +100,6 @@ export const installAppAndDna = async (
   await admin.activateApp({ installed_app_id })
   // destructure to get whatever open port was assigned to the interface
   const { port: appPort } = await admin.attachAppInterface({ port: 0 })
-  const client = await AppWebsocket.connect(`http://localhost:${appPort}`, signalCb)
+  const client = await AppWebsocket.connect(`http://localhost:${appPort}`, 12000, signalCb)
   return [installed_app_id, cell_id, nick, client]
 }
