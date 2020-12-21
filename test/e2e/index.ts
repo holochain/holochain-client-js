@@ -14,7 +14,7 @@ const TEST_ZOME_NAME = 'foo'
 test('admin smoke test', withConductor(ADMIN_PORT, async t => {
 
   const installed_app_id = 'app'
-  const admin = await AdminWebsocket.connect(`http://localhost:${ADMIN_PORT}`)
+  const admin = await AdminWebsocket.connect(`http://localhost:${ADMIN_PORT}`, 12000)
 
   const agent_key = await admin.generateAgentPubKey()
   t.ok(agent_key)
