@@ -17,16 +17,16 @@
 
 import * as Api from '../api/admin'
 import { WsClient } from './client'
-import { catchError, promiseTimeout } from './common'
+import { catchError, promiseTimeout, DEFAULT_TIMEOUT } from './common'
 import { Transformer, requesterTransformer, Requester } from '../api/common'
 
 export class AdminWebsocket implements Api.AdminApi {
   client: WsClient
-  timeout?: number
+  timeout: number
 
   constructor(client: WsClient, timeout?: number) {
     this.client = client
-    this.timeout = timeout
+    this.timeout = timeout === undefined ? DEFAULT_TIMEOUT : timeout
   }
 
   static async connect(url: string, timeout?: number): Promise<AdminWebsocket> {
