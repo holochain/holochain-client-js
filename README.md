@@ -18,6 +18,36 @@ npm install --save-exact @holochain/conductor-api
 
 > Note, this code is still under alpha development and npm releases are pre-releases with `dev` tags meaning they will not use full semantic versioning, and you may wish to lock to an exact version of the library for that reason, as shown in the above command.
 
+## Sample usage
+
+### Use AdminWebsocket
+```
+  const admin = await AdminWebsocket.connect(`http://localhost:8000`, TIMEOUT)
+  await admin.generateAgentPubKey()
+```
+
+### Use AppWebsocket
+```
+  const signalCb = (signal: AppSignal) => {
+    // impl...
+    resolve()
+  }
+
+  const TIMEOUT = 12000
+  // default timeout is set to 12000
+  const [installed_app_id, cell_id, _nick, client] = await AppWebsocket.connect(`http://localhost:${appPort}`, 12000, signalCb)
+
+  // default timeout set here (30000) will overwrite the defaultTimeout(12000) set above
+  await client.callZome({
+   cap: null,
+   cell_id,
+   zome_name: "test_zome",
+   fn_name: 'test_emitter_fn',
+   provenance: fakeAgentPubKey('TODO'),
+   payload: null,
+  }, 30000)
+```
+
 # Holochain Compatibility
 
 This version of `holochain-conductor-api` is currently working with `holochain/holochain` at commit:
