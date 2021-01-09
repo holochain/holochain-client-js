@@ -1,5 +1,5 @@
 import { Requester } from "./common"
-import { AgentPubKey, MembraneProof, DnaProperties, InstalledAppId, CellId, CellNick, InstalledApp } from "./types"
+import { HoloHash, AgentPubKey, MembraneProof, DnaProperties, InstalledAppId, CellId, CellNick, InstalledApp } from "./types"
 
 export type ActivateAppRequest = { installed_app_id: InstalledAppId }
 export type ActivateAppResponse = null
@@ -15,6 +15,13 @@ export type DumpStateResponse = any
 
 export type GenerateAgentPubKeyRequest = void
 export type GenerateAgentPubKeyResponse = AgentPubKey
+
+export type RegisterDnaRequest = {
+    source: DnaSource,
+    properties?: DnaProperties,
+}
+
+export type RegisterDnaResponse = HoloHash
 
 export type InstallAppRequest = {
   installed_app_id: InstalledAppId,
@@ -51,6 +58,7 @@ export interface AdminApi {
   deactivateApp: Requester<DeactivateAppRequest, DeactivateAppResponse>
   dumpState: Requester<DumpStateRequest, DumpStateResponse>
   generateAgentPubKey: Requester<GenerateAgentPubKeyRequest, GenerateAgentPubKeyResponse>
+  registerDna: Requester<RegisterDnaRequest, RegisterDnaResponse>
   installApp: Requester<InstallAppRequest, InstallAppResponse>
   listDnas: Requester<ListDnasRequest, ListDnasResponse>
   listCellIds: Requester<ListCellIdsRequest, ListCellIdsResponse>
@@ -61,8 +69,14 @@ export interface AdminApi {
 
 
 type InstallAppDnaPayload = {
-  path: string,
+  path?: string,
+  hash?: HoloHash
   nick: CellNick,
   properties?: DnaProperties,
   membrane_proof?: MembraneProof
+}
+
+type DnaSource = {
+    path?: string,
+    hash?: HoloHash
 }

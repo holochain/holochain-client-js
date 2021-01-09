@@ -19,8 +19,13 @@ test('admin smoke test', withConductor(ADMIN_PORT, async t => {
   const agent_key = await admin.generateAgentPubKey()
   t.ok(agent_key)
 
+  const path = `${FIXTURE_PATH}/test.dna.gz`;
+  const hash = await admin.registerDna({
+      source: {path}
+  })
+  t.ok(hash)
   await admin.installApp({
-    installed_app_id, agent_key, dnas: []
+      installed_app_id, agent_key, dnas: [{hash, nick: "thedna"}]
   })
 
   const activeApps1 = await admin.listActiveApps()
@@ -34,8 +39,9 @@ test('admin smoke test', withConductor(ADMIN_PORT, async t => {
 
   await admin.attachAppInterface({ port: 0 })
   await admin.deactivateApp({ installed_app_id })
+
   const dnas = await admin.listDnas()
-  t.equal(dnas.length, 0)
+  t.equal(dnas.length, 1)
 
   const activeApps3 = await admin.listActiveApps()
   t.equal(activeApps3.length, 0)
