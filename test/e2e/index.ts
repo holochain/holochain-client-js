@@ -5,6 +5,10 @@ import { AppWebsocket } from '../../src/websocket/app'
 import { installAppAndDna, withConductor, launch, CONFIG_PATH, CONFIG_PATH_1, FIXTURE_PATH } from './util'
 import { AgentPubKey, fakeAgentPubKey } from '../../src/api/types'
 import { AppSignal } from '../../src/api/app'
+import zlib from 'zlib';
+import fs from 'fs';
+import { DnaFile } from '../../src/api/admin'
+import { decode } from '@msgpack/msgpack'
 
 const ADMIN_PORT = 33001
 const ADMIN_PORT_1 = 33002
@@ -48,6 +52,47 @@ test('admin smoke test', withConductor(ADMIN_PORT, async t => {
   // NB: missing dumpState because it requires a valid cell_id
 }))
 
+
+test('admin register dna with full binary file', withConductor(ADMIN_PORT, async t => {
+
+  const installed_app_id = 'app'
+  const admin = await AdminWebsocket.connect(`http://localhost:${ADMIN_PORT}`, 12000)
+
+  const agent_key = await admin.generateAgentPubKey()
+  t.ok(agent_key)
+
+  const path = `${FIXTURE_PATH}/test.dna.gz`;
+
+  const zippedDnaFile = fs.readFileSync(path);
+  const dnaFile = zlib.gunzipSync(zippedDnaFile);
+
+  const decodedDnaFile: DnaFile  = decode(dnaFile.buffer) as DnaFile;
+  const hash = await admin.registerDna({
+      source: { wasm: decodedDnaFile }
+  })
+  t.ok(hash)
+  await admin.installApp({
+      installed_app_id, agent_key, dnas: [{hash, nick: "thedna"}]
+  })
+
+  const activeApps1 = await admin.listActiveApps()
+  t.equal(activeApps1.length, 0)
+
+  await admin.activateApp({ installed_app_id })
+
+  const activeApps2 = await admin.listActiveApps()
+  t.equal(activeApps2.length, 1)
+  t.equal(activeApps2[0], installed_app_id)
+
+  await admin.attachAppInterface({ port: 0 })
+  await admin.deactivateApp({ installed_app_id })
+
+  const dnas = await admin.listDnas()
+  t.equal(dnas.length, 1)
+
+  const activeApps3 = await admin.listActiveApps()
+  t.equal(activeApps3.length, 0)
+}))
 
 test('can call a zome function', withConductor(ADMIN_PORT, async t => {
   const [installed_app_id, cell_id, nick, client] = await installAppAndDna(ADMIN_PORT)

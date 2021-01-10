@@ -76,7 +76,31 @@ type InstallAppDnaPayload = {
   membrane_proof?: MembraneProof
 }
 
-type DnaSource = {
-    path?: string,
-    hash?: HoloHash
+type DnaSource = 
+  {
+    path: string 
+  }
+   | 
+  {
+    wasm: DnaFile
+  };
+
+export interface HoloHashed<T> {
+  hash: Uint8Array;
+  content: T;
 }
+
+export interface DnaFile {
+  dna: HoloHashed<DnaDef>;
+  code: Array<WasmCode>;
+}
+
+export interface DnaDef {
+  name: String;
+  uuid: String;
+  properties: Uint8Array;
+  zomes: Zomes;
+}
+
+export type Zomes = Array<[string, { wasm_hash: Array<Uint8Array> }]>;
+export type WasmCode = [Uint8Array, { code: Array<number> }];
