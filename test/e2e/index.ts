@@ -44,12 +44,23 @@ test('admin smoke test', withConductor(ADMIN_PORT, async t => {
   await admin.attachAppInterface({ port: 0 })
   await admin.deactivateApp({ installed_app_id })
 
-  const dnas = await admin.listDnas()
+  let dnas = await admin.listDnas()
   t.equal(dnas.length, 1)
 
   const activeApps3 = await admin.listActiveApps()
   t.equal(activeApps3.length, 0)
   // NB: missing dumpState because it requires a valid cell_id
+
+  // install from hash
+  const newHash = await admin.registerDna({
+    source: {hash},
+    properties: {uuid: "123456"}
+  })
+  t.ok(newHash)
+
+  dnas = await admin.listDnas()
+  t.equal(dnas.length, 2)
+
 }))
 
 
