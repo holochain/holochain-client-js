@@ -9,6 +9,10 @@ License: [![License: CAL 1.0](https://img.shields.io/badge/License-CAL%201.0-blu
 
 A nodejs implementation of the Holochain conductor API.
 
+# Conductor API documentation
+
+Holochain's conductor API is under active development.  This node module tracks that development fairly closely but sometimes gets behind.
+
 # Install
 
 To install from NPM, run
@@ -52,17 +56,17 @@ npm install --save-exact @holochain/conductor-api
 
 This version of `holochain-conductor-api` is currently working with `holochain/holochain` at commit:
 
-[c1286bc8f41c3de5fc5823bf0ccf8869df92c548](https://github.com/holochain/holochain/commit/c1286bc8f41c3de5fc5823bf0ccf8869df92c548) (Jan 11, 2021)
+[d770a2e71df9d4cc87c91b926322be71a0785396](https://github.com/holochain/holochain/commit/d770a2e71df9d4cc87c91b926322be71a0785396) (Jan 11, 2021)
 
 If updating this code, please make changes to the git `rev/sha` in 3 places:
 1. Here in the README above ^^
 2. This line in `install-holochain.sh`
 ```bash
-REV=c1286bc8f41c3de5fc5823bf0ccf8869df92c548
+REV=d770a2e71df9d4cc87c91b926322be71a0785396
 ```
 3. and this line in `test/e2e/fixtures/zomes/foo/Cargo.toml`
 ```
-hdk3 = { git = "https://github.com/holochain/holochain", rev = "c1286bc8f41c3de5fc5823bf0ccf8869df92c548", package = "hdk3" }
+hdk3 = { git = "https://github.com/holochain/holochain", rev = "d770a2e71df9d4cc87c91b926322be71a0785396", package = "hdk3" }
 ```
 
 Notice the match between the SHA in both cases. These should always match.

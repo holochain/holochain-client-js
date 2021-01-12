@@ -10,4 +10,4 @@ crate-type = [ "cdylib", "rlib" ]
 
 [dependencies]
 serde = "=1.0.104"
-hdk3 = { git = "https://github.com/holochain/holochain", rev = "c1286bc8f41c3de5fc5823bf0ccf8869df92c548", package = "hdk3" }
+hdk3 = { git = "https://github.com/holochain/holochain", rev = "d770a2e71df9d4cc87c91b926322be71a0785396", package = "hdk3" }

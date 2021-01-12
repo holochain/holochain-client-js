@@ -17,8 +17,9 @@ export type GenerateAgentPubKeyRequest = void
 export type GenerateAgentPubKeyResponse = AgentPubKey
 
 export type RegisterDnaRequest = {
-    source: DnaSource,
-    properties?: DnaProperties,
+  source: DnaSource,
+  uuid?: string,
+  properties?: DnaProperties,
 }
 
 export type RegisterDnaResponse = HoloHash
