@@ -76,13 +76,17 @@ type InstallAppDnaPayload = {
   membrane_proof?: MembraneProof
 }
 
-type DnaSource = 
+type DnaSource =
   {
-    path: string 
+    hash: HoloHash
   }
-   | 
+  |
   {
-    wasm: DnaFile
+    path: string
+  }
+   |
+  {
+    dna_file: DnaFile
   };
 
 export interface HoloHashed<T> {

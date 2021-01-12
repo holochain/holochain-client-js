@@ -68,7 +68,7 @@ test('admin register dna with full binary file', withConductor(ADMIN_PORT, async
 
   const decodedDnaFile: DnaFile  = decode(dnaFile.buffer) as DnaFile;
   const hash = await admin.registerDna({
-      source: { wasm: decodedDnaFile }
+      source: { dna_file: decodedDnaFile }
   })
   t.ok(hash)
   await admin.installApp({
