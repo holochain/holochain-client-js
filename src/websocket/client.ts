@@ -1,4 +1,4 @@
-import Websocket from 'isomorphic-ws'
+import * as Websocket from 'isomorphic-ws'
 import * as msgpack from '@msgpack/msgpack'
 import { nanoid } from 'nanoid'
 import { AppSignal, AppSignalCb, SignalResponseGeneric } from '../api/app'
