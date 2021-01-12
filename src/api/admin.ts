@@ -90,7 +90,7 @@ type DnaSource =
   };
 
 export interface HoloHashed<T> {
-  hash: Uint8Array;
+  hash: HoloHash;
   content: T;
 }
 
@@ -102,9 +102,9 @@ export interface DnaFile {
 export interface DnaDef {
   name: String;
   uuid: String;
-  properties: Uint8Array;
+  properties: HoloHash;
   zomes: Zomes;
 }
 
-export type Zomes = Array<[string, { wasm_hash: Array<Uint8Array> }]>;
-export type WasmCode = [Uint8Array, { code: Array<number> }];
+export type Zomes = Array<[string, { wasm_hash: Array<HoloHash> }]>;
+export type WasmCode = [HoloHash, { code: Array<number> }];
