@@ -48,6 +48,11 @@ npm install --save-exact @holochain/conductor-api
   }, 30000)
 ```
 
+## API Reference
+
+See [docs/API.md](docs/API.md)
+
+
 # Holochain Compatibility
 
 This version of `holochain-conductor-api` is currently working with `holochain/holochain` at commit:
