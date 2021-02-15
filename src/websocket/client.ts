@@ -76,18 +76,22 @@ export class WsClient {
           }
 
           const msg: any = msgpack.decode(data)
-          if (signalCb && msg.type === 'Signal') {
-            const decodedMessage: SignalResponseGeneric<any> = msgpack.decode(msg.data);
+          if (msg.type === 'Signal') {
+            if (signalCb) {
+              const decodedMessage: SignalResponseGeneric<any> = msgpack.decode(msg.data);
 
-            // Note: holochain currently returns signals as an array of two values: cellId and the seralized signal payload
-            // and this array is nested within the App key within the returned message.
-            const decodedCellId = decodedMessage.App[0];
-            // Note:In order to return readible content to the UI, the signal payload must also be decoded.
-            const decodedPayload = signalTransform(decodedMessage.App[1]);
+              // Note: holochain currently returns signals as an array of two values: cellId and the serialized signal payload
+              // and this array is nested within the App key within the returned message.
+              const decodedCellId = decodedMessage.App[0];
+              // Note:In order to return readible content to the UI, the signal payload must also be decoded.
+              const decodedPayload = signalTransform(decodedMessage.App[1]);
 
-            // Return a uniform format to UI (ie: { type, data } - the same format as with callZome and appInfo...)
-            const signal: AppSignal = { type: msg.type , data: { cellId: decodedCellId, payload: decodedPayload }};
-            signalCb(signal);
+              // Return a uniform format to UI (ie: { type, data } - the same format as with callZome and appInfo...)
+              const signal: AppSignal = { type: msg.type , data: { cellId: decodedCellId, payload: decodedPayload }};
+              signalCb(signal);
+            } else {
+              console.error(`Received signal but no signal callback was set in constructor`);
+            }
 
           } else if (msg.type === 'Response') {
             const id = msg.id;
