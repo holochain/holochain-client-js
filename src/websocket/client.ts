@@ -12,10 +12,12 @@ import { AppSignal, AppSignalCb, SignalResponseGeneric } from '../api/app'
 export class WsClient {
   socket: Websocket
   pendingRequests: Record<string, { fulfill: Function }>
+  noSignalCbFlag: Boolean
 
   constructor(socket: any) {
     this.socket = socket
     this.pendingRequests = {}
+    this.noSignalCbFlag = false
     // TODO: allow adding signal handlers later
   }
 
@@ -90,8 +92,10 @@ export class WsClient {
               const signal: AppSignal = { type: msg.type , data: { cellId: decodedCellId, payload: decodedPayload }};
               signalCb(signal);
             } else {
-              console.error(`Received signal but no signal callback was set in constructor`);
+              if (!hw.noSignalCbFlag) console.log(`Received signal but no signal callback was set in constructor`);
+              hw.noSignalCbFlag = true;
             }
+
 
           } else if (msg.type === 'Response') {
             const id = msg.id;
