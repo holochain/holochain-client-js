@@ -1,4 +1,4 @@
-import * as Websocket from 'isomorphic-ws'
+import Websocket from 'isomorphic-ws'
 import * as msgpack from '@msgpack/msgpack'
 import { nanoid } from 'nanoid'
 import { AppSignal, AppSignalCb, SignalResponseGeneric } from '../api/app'
@@ -11,11 +11,15 @@ import { AppSignal, AppSignalCb, SignalResponseGeneric } from '../api/app'
  */
 export class WsClient {
   socket: Websocket
-  pendingRequests: Record<string, { fulfill: Function }>
+  pendingRequests: Record<number, { fulfill: Function, reject: Function }>
+  freeIndices: number[]
+  maxIndex: number
 
   constructor(socket: any) {
     this.socket = socket
     this.pendingRequests = {}
+    this.freeIndices = []
+    this.maxIndex = 0
     // TODO: allow adding signal handlers later
   }
 
@@ -28,14 +32,19 @@ export class WsClient {
   }
 
   request<Req, Res>(data: Req): Promise<Res> {
-    const id = nanoid()
+    let index = this.freeIndices.shift();
+    if (index === undefined) {
+      index = this.maxIndex;
+      this.maxIndex += 1;
+    }
+    let id: number = index;
     const encodedMsg = msgpack.encode({
       id,
       type: 'Request',
       data: msgpack.encode(data),
     })
-    const promise = new Promise((fulfill) => {
-      this.pendingRequests[id] = { fulfill }
+    const promise = new Promise((fulfill, reject) => {
+      this.pendingRequests[id] = { fulfill, reject }
     })
     if (this.socket.readyState === this.socket.OPEN) {
       this.socket.send(encodedMsg)
@@ -43,6 +52,22 @@ export class WsClient {
       return Promise.reject(new Error(`Socket is not open`))
     }
     return promise as Promise<Res>
+  }
+
+  handleResponse(msg: any) {
+    const id = msg.id;
+    if (this.pendingRequests[id]) {
+      // resolve response
+      if(msg.data === null || msg.data === undefined) {
+        this.pendingRequests[id].reject(new Error(`Response canceled by responder`));
+      } else {
+        this.pendingRequests[id].fulfill(msgpack.decode(msg.data));
+      }
+      this.freeIndices.push(id);
+    } else {
+      console.error(`Got response with no matching request. id=${id}`);
+    }
+
   }
 
   close(): Promise<void> {
@@ -90,13 +115,20 @@ export class WsClient {
             signalCb(signal);
 
           } else if (msg.type === 'Response') {
-            const id = msg.id;
-            if (hw.pendingRequests[id]) {
-              // resolve response
-              hw.pendingRequests[id].fulfill(msgpack.decode(msg.data));
-            } else {
-              console.error(`Got response with no matching request. id=${id}`);
-            }
+            hw.handleResponse(msg);
+          //   const id = msg.id;
+          //   if (hw.pendingRequests[id]) {
+          //     // resolve response
+          //     if(msg.data === null) {
+
+          //     } else {
+          //     hw.pendingRequests[id].fulfill(msgpack.decode(msg.data));
+
+          //     }
+          //     hw.freeIndices.push(id);
+          //   } else {
+          //     console.error(`Got response with no matching request. id=${id}`);
+          //   }
           } else {
             console.error(`Got unrecognized Websocket message type: ${msg.type}`);
           }

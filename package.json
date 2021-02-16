@@ -34,6 +34,6 @@
     "tap-diff": "^0.1.1",
     "tape": "^5.0",
     "ts-node": "^8.10.2",
-    "typescript": "^3.9.3"
+    "typescript": "^3.9.9"
   }
 }
