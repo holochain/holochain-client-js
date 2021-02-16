@@ -12,7 +12,7 @@ import { AppSignal, AppSignalCb, SignalResponseGeneric } from '../api/app'
 export class WsClient {
   socket: Websocket
   pendingRequests: Record<string, { fulfill: Function }>
-  noSignalCbFlag: Boolean
+  alreadyWarnedNoSignalCb: boolean
 
   constructor(socket: any) {
     this.socket = socket
