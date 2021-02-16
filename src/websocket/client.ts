@@ -17,7 +17,7 @@ export class WsClient {
   constructor(socket: any) {
     this.socket = socket
     this.pendingRequests = {}
-    this.noSignalCbFlag = false
+    this.alreadyWarnedNoSignalCb = false
     // TODO: allow adding signal handlers later
   }
 
