@@ -92,8 +92,8 @@ export class WsClient {
               const signal: AppSignal = { type: msg.type , data: { cellId: decodedCellId, payload: decodedPayload }};
               signalCb(signal);
             } else {
-              if (!hw.noSignalCbFlag) console.log(`Received signal but no signal callback was set in constructor`);
-              hw.noSignalCbFlag = true;
+              if (!hw.alreadyWarnedNoSignalCb) console.log(`Received signal but no signal callback was set in constructor`);
+              hw.alreadyWarnedNoSignalCb = true;
             }
 
 
