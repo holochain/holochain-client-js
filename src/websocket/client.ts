@@ -12,14 +12,12 @@ import { AppSignal, AppSignalCb, SignalResponseGeneric } from '../api/app'
 export class WsClient {
   socket: Websocket
   pendingRequests: Record<number, { fulfill: Function, reject: Function }>
-  freeIndices: number[]
-  maxIndex: number
+  index: number
 
   constructor(socket: any) {
     this.socket = socket
     this.pendingRequests = {}
-    this.freeIndices = []
-    this.maxIndex = 0
+    this.index = 0
     // TODO: allow adding signal handlers later
   }
 
@@ -32,12 +30,8 @@ export class WsClient {
   }
 
   request<Req, Res>(data: Req): Promise<Res> {
-    let index = this.freeIndices.shift();
-    if (index === undefined) {
-      index = this.maxIndex;
-      this.maxIndex += 1;
-    }
-    let id: number = index;
+    let id = this.index;
+    this.index += 1;
     const encodedMsg = msgpack.encode({
       id,
       type: 'Request',
@@ -63,7 +57,6 @@ export class WsClient {
       } else {
         this.pendingRequests[id].fulfill(msgpack.decode(msg.data));
       }
-      this.freeIndices.push(id);
     } else {
       console.error(`Got response with no matching request. id=${id}`);
     }
@@ -116,19 +109,6 @@ export class WsClient {
 
           } else if (msg.type === 'Response') {
             hw.handleResponse(msg);
-          //   const id = msg.id;
-          //   if (hw.pendingRequests[id]) {
-          //     // resolve response
-          //     if(msg.data === null) {
-
-          //     } else {
-          //     hw.pendingRequests[id].fulfill(msgpack.decode(msg.data));
-
-          //     }
-          //     hw.freeIndices.push(id);
-          //   } else {
-          //     console.error(`Got response with no matching request. id=${id}`);
-          //   }
           } else {
             console.error(`Got unrecognized Websocket message type: ${msg.type}`);
           }
