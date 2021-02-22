@@ -1,4 +1,4 @@
-import * as Websocket from 'isomorphic-ws'
+import Websocket from 'isomorphic-ws'
 import * as msgpack from '@msgpack/msgpack'
 import { nanoid } from 'nanoid'
 import { AppSignal, AppSignalCb, SignalResponseGeneric } from '../api/app'
@@ -13,10 +13,47 @@ export class WsClient {
   socket: Websocket
   pendingRequests: Record<string, { fulfill: Function }>
 
-  constructor(socket: any) {
+  constructor(socket: any, signalCb?: AppSignalCb) {
     this.socket = socket
     this.pendingRequests = {}
-    // TODO: allow adding signal handlers later
+    socket.onmessage = async (encodedMsg: any) => {
+      let data = encodedMsg.data
+
+      // If data is not a buffer (nodejs), it will be a blob (browser)
+      if (typeof Buffer === 'undefined' || !Buffer.isBuffer(data)) {
+        data = await data.arrayBuffer()
+      }
+
+      const msg: any = msgpack.decode(data)
+      if (signalCb && msg.type === 'Signal') {
+        const decodedMessage: SignalResponseGeneric<any> = msgpack.decode(
+          msg.data
+        )
+
+        // Note: holochain currently returns signals as an array of two values: cellId and the seralized signal payload
+        // and this array is nested within the App key within the returned message.
+        const decodedCellId = decodedMessage.App[0]
+        // Note:In order to return readible content to the UI, the signal payload must also be decoded.
+        const decodedPayload = signalTransform(decodedMessage.App[1])
+
+        // Return a uniform format to UI (ie: { type, data } - the same format as with callZome and appInfo...)
+        const signal: AppSignal = {
+          type: msg.type,
+          data: { cellId: decodedCellId, payload: decodedPayload }
+        }
+        signalCb(signal)
+      } else if (msg.type === 'Response') {
+        const id = msg.id
+        if (this.pendingRequests[id]) {
+          // resolve response
+          this.pendingRequests[id].fulfill(msgpack.decode(msg.data))
+        } else {
+          console.error(`Got response with no matching request. id=${id}`)
+        }
+      } else {
+        console.error(`Got unrecognized Websocket message type: ${msg.type}`)
+      }
+    }
   }
 
   emitSignal(data: any) {
@@ -66,43 +103,7 @@ export class WsClient {
         ))
       }
       socket.onopen = () => {
-        const hw = new WsClient(socket)
-        socket.onmessage = async (encodedMsg: any) => {
-          let data = encodedMsg.data
-
-          // If data is not a buffer (nodejs), it will be a blob (browser)
-          if (typeof Buffer === "undefined" || !Buffer.isBuffer(data)) {
-            data = await data.arrayBuffer()
-          }
-
-          const msg: any = msgpack.decode(data)
-          if (signalCb && msg.type === 'Signal') {
-            const decodedMessage: SignalResponseGeneric<any> = msgpack.decode(msg.data);
-
-            // Note: holochain currently returns signals as an array of two values: cellId and the seralized signal payload
-            // and this array is nested within the App key within the returned message.
-            const decodedCellId = decodedMessage.App[0];
-            // Note:In order to return readible content to the UI, the signal payload must also be decoded.
-            const decodedPayload = signalTransform(decodedMessage.App[1]);
-
-            // Return a uniform format to UI (ie: { type, data } - the same format as with callZome and appInfo...)
-            const signal: AppSignal = { type: msg.type , data: { cellId: decodedCellId, payload: decodedPayload }};
-            signalCb(signal);
-
-          } else if (msg.type === 'Response') {
-            const id = msg.id;
-            if (hw.pendingRequests[id]) {
-              // resolve response
-              hw.pendingRequests[id].fulfill(msgpack.decode(msg.data));
-            } else {
-              console.error(`Got response with no matching request. id=${id}`);
-            }
-          } else {
-            console.error(`Got unrecognized Websocket message type: ${msg.type}`);
-          }
-        }
-
-        resolve(hw)
+        resolve(new WsClient(socket, signalCb))
       }
     })
   }
