@@ -12,46 +12,51 @@ import { AppSignal, AppSignalCb, SignalResponseGeneric } from '../api/app'
 export class WsClient {
   socket: Websocket
   pendingRequests: Record<string, { fulfill: Function }>
+  alreadyWarnedNoSignalCb: boolean
 
   constructor(socket: any, signalCb?: AppSignalCb) {
     this.socket = socket
     this.pendingRequests = {}
+    this.alreadyWarnedNoSignalCb = false
+    // TODO: allow adding signal handlers later
     socket.onmessage = async (encodedMsg: any) => {
       let data = encodedMsg.data
 
       // If data is not a buffer (nodejs), it will be a blob (browser)
-      if (typeof Buffer === 'undefined' || !Buffer.isBuffer(data)) {
+      if (typeof Buffer === "undefined" || !Buffer.isBuffer(data)) {
         data = await data.arrayBuffer()
       }
 
       const msg: any = msgpack.decode(data)
-      if (signalCb && msg.type === 'Signal') {
-        const decodedMessage: SignalResponseGeneric<any> = msgpack.decode(
-          msg.data
-        )
+      if (msg.type === 'Signal') {
+        if (signalCb) {
+          const decodedMessage: SignalResponseGeneric<any> = msgpack.decode(msg.data);
 
-        // Note: holochain currently returns signals as an array of two values: cellId and the seralized signal payload
-        // and this array is nested within the App key within the returned message.
-        const decodedCellId = decodedMessage.App[0]
-        // Note:In order to return readible content to the UI, the signal payload must also be decoded.
-        const decodedPayload = signalTransform(decodedMessage.App[1])
+          // Note: holochain currently returns signals as an array of two values: cellId and the serialized signal payload
+          // and this array is nested within the App key within the returned message.
+          const decodedCellId = decodedMessage.App[0];
+          // Note:In order to return readible content to the UI, the signal payload must also be decoded.
+          const decodedPayload = signalTransform(decodedMessage.App[1]);
 
-        // Return a uniform format to UI (ie: { type, data } - the same format as with callZome and appInfo...)
-        const signal: AppSignal = {
-          type: msg.type,
-          data: { cellId: decodedCellId, payload: decodedPayload }
+          // Return a uniform format to UI (ie: { type, data } - the same format as with callZome and appInfo...)
+          const signal: AppSignal = { type: msg.type , data: { cellId: decodedCellId, payload: decodedPayload }};
+          signalCb(signal);
+        } else {
+          if (!this.alreadyWarnedNoSignalCb) console.log(`Received signal but no signal callback was set in constructor`);
+          this.alreadyWarnedNoSignalCb = true;
         }
-        signalCb(signal)
+
+
       } else if (msg.type === 'Response') {
-        const id = msg.id
+        const id = msg.id;
         if (this.pendingRequests[id]) {
           // resolve response
-          this.pendingRequests[id].fulfill(msgpack.decode(msg.data))
+          this.pendingRequests[id].fulfill(msgpack.decode(msg.data));
         } else {
-          console.error(`Got response with no matching request. id=${id}`)
+          console.error(`Got response with no matching request. id=${id}`);
         }
       } else {
-        console.error(`Got unrecognized Websocket message type: ${msg.type}`)
+        console.error(`Got unrecognized Websocket message type: ${msg.type}`);
       }
     }
   }
