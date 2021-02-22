@@ -85,13 +85,21 @@ export const installAppAndDna = async (
   const installed_app_id = 'app'
   const nick = 'mydna'
   const admin = await AdminWebsocket.connect(`http://localhost:${adminPort}`)
+
+  const path = `${FIXTURE_PATH}/test.dna.gz`;
+  const hash = await admin.registerDna({
+    source: {path}
+  })
+
+  console.log("THE HASH:", hash)
+
   const agent = await admin.generateAgentPubKey()
   const app = await admin.installApp({
     installed_app_id,
     agent_key: agent,
     dnas: [
       {
-        path: `${FIXTURE_PATH}/test.dna.gz`,
+        hash,
         nick,
       },
     ],

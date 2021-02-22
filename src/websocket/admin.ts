@@ -53,6 +53,8 @@ export class AdminWebsocket implements Api.AdminApi {
     = this._requester('dump_state', dumpStateTransform)
   generateAgentPubKey: Requester<Api.GenerateAgentPubKeyRequest, Api.GenerateAgentPubKeyResponse>
     = this._requester('generate_agent_pub_key')
+  registerDna: Requester<Api.RegisterDnaRequest, Api.RegisterDnaResponse>
+    = this._requester('register_dna')
   installApp: Requester<Api.InstallAppRequest, Api.InstallAppResponse>
     = this._requester('install_app')
   listDnas: Requester<Api.ListDnasRequest, Api.ListDnasResponse>
