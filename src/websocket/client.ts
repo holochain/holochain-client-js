@@ -12,10 +12,12 @@ import { AppSignal, AppSignalCb, SignalResponseGeneric } from '../api/app'
 export class WsClient {
   socket: Websocket
   pendingRequests: Record<string, { fulfill: Function }>
+  alreadyWarnedNoSignalCb: boolean
 
   constructor(socket: any) {
     this.socket = socket
     this.pendingRequests = {}
+    this.alreadyWarnedNoSignalCb = false
     // TODO: allow adding signal handlers later
   }
 
@@ -76,18 +78,24 @@ export class WsClient {
           }
 
           const msg: any = msgpack.decode(data)
-          if (signalCb && msg.type === 'Signal') {
-            const decodedMessage: SignalResponseGeneric<any> = msgpack.decode(msg.data);
+          if (msg.type === 'Signal') {
+            if (signalCb) {
+              const decodedMessage: SignalResponseGeneric<any> = msgpack.decode(msg.data);
 
-            // Note: holochain currently returns signals as an array of two values: cellId and the seralized signal payload
-            // and this array is nested within the App key within the returned message.
-            const decodedCellId = decodedMessage.App[0];
-            // Note:In order to return readible content to the UI, the signal payload must also be decoded.
-            const decodedPayload = signalTransform(decodedMessage.App[1]);
+              // Note: holochain currently returns signals as an array of two values: cellId and the serialized signal payload
+              // and this array is nested within the App key within the returned message.
+              const decodedCellId = decodedMessage.App[0];
+              // Note:In order to return readible content to the UI, the signal payload must also be decoded.
+              const decodedPayload = signalTransform(decodedMessage.App[1]);
 
-            // Return a uniform format to UI (ie: { type, data } - the same format as with callZome and appInfo...)
-            const signal: AppSignal = { type: msg.type , data: { cellId: decodedCellId, payload: decodedPayload }};
-            signalCb(signal);
+              // Return a uniform format to UI (ie: { type, data } - the same format as with callZome and appInfo...)
+              const signal: AppSignal = { type: msg.type , data: { cellId: decodedCellId, payload: decodedPayload }};
+              signalCb(signal);
+            } else {
+              if (!hw.alreadyWarnedNoSignalCb) console.log(`Received signal but no signal callback was set in constructor`);
+              hw.alreadyWarnedNoSignalCb = true;
+            }
+
 
           } else if (msg.type === 'Response') {
             const id = msg.id;
