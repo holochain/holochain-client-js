@@ -1,4 +1,4 @@
-use hdk3::prelude::*;
+use hdk::prelude::*;
 
 #[derive(Clone, Debug, Serialize, Deserialize, SerializedBytes)]
 #[repr(transparent)]
