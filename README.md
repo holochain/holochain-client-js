@@ -39,7 +39,7 @@ npm install --save-exact @holochain/conductor-api
 
   const TIMEOUT = 12000
   // default timeout is set to 12000
-  const [installed_app_id, cell_id, _nick, client] = await AppWebsocket.connect(`http://localhost:${appPort}`, 12000, signalCb)
+  const client = await AppWebsocket.connect(`http://localhost:${appPort}`, 12000, signalCb)
 
   // default timeout set here (30000) will overwrite the defaultTimeout(12000) set above
   await client.callZome({
