@@ -18,7 +18,6 @@ export class WsClient {
     this.socket = socket
     this.pendingRequests = {}
     this.alreadyWarnedNoSignalCb = false
-    // TODO: allow adding signal handlers later
     socket.onmessage = async (encodedMsg: any) => {
       let data = encodedMsg.data
 
