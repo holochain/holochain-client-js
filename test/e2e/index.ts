@@ -15,7 +15,7 @@ const ADMIN_PORT_1 = 33002
 
 const TEST_ZOME_NAME = 'foo'
 
-test('admin smoke test', withConductor(ADMIN_PORT, async t => {
+test('admin smoke test: registerDna + installApp', withConductor(ADMIN_PORT, async t => {
 
   const installed_app_id = 'app'
   const admin = await AdminWebsocket.connect(`http://localhost:${ADMIN_PORT}`, 12000)
@@ -60,6 +60,43 @@ test('admin smoke test', withConductor(ADMIN_PORT, async t => {
 
   dnas = await admin.listDnas()
   t.equal(dnas.length, 2)
+
+}))
+
+test.only('admin smoke test: installBundle', withConductor(ADMIN_PORT, async t => {
+
+  const installed_app_id = 'app'
+  const admin = await AdminWebsocket.connect(`http://localhost:${ADMIN_PORT}`, 12000)
+
+  const agent_key = await admin.generateAgentPubKey()
+  t.ok(agent_key)
+
+  const path = `${FIXTURE_PATH}/test.dna`;
+  const hash = await admin.installAppBundle({
+    source: path,
+    agent_key,
+    installed_app_id,
+    membrane_proofs: {}
+  })
+  t.ok(hash)
+
+  const activeApps1 = await admin.listActiveApps()
+  t.equal(activeApps1.length, 0)
+
+  await admin.activateApp({ installed_app_id })
+
+  const activeApps2 = await admin.listActiveApps()
+  t.equal(activeApps2.length, 1)
+  t.equal(activeApps2[0], installed_app_id)
+
+  await admin.attachAppInterface({ port: 0 })
+  await admin.deactivateApp({ installed_app_id })
+
+  let dnas = await admin.listDnas()
+  t.equal(dnas.length, 1)
+
+  const activeApps3 = await admin.listActiveApps()
+  t.equal(activeApps3.length, 0)
 
 }))
 
@@ -108,8 +145,8 @@ test('admin register dna with full binary file', withConductor(ADMIN_PORT, async
 test('can call a zome function', withConductor(ADMIN_PORT, async t => {
   const [installed_app_id, cell_id, nick, client] = await installAppAndDna(ADMIN_PORT)
   const info = await client.appInfo({ installed_app_id }, 1000)
-  t.deepEqual(info.cell_data[0][0], cell_id)
-  t.equal(info.cell_data[0][1], nick)
+  t.deepEqual(info.cell_data[0].cell_id, cell_id)
+  t.equal(info.cell_data[0].cell_nick, nick)
   const response = await client.callZome({
     // TODO: write a test with a real capability secret.
     cap: null,
@@ -221,8 +258,8 @@ test('can inject agents', async (t) => {
             ]
         })
         t.ok(result)
-        const app1_cell  = result.cell_data[0][0]
-        await admin1.activateApp({ installed_app_id }, 1000)
+        const app1_cell  = result.slots['thedna'].base_cell_id
+        const r = await admin1.activateApp({ installed_app_id }, 1000)
         // after activating an app requestAgentInfo should return the agentid
         // requesting info with null cell_id should return all agents known about.
         // otherwise it's just agents know about for that cell
@@ -249,7 +286,7 @@ test('can inject agents', async (t) => {
             ]
         })
         t.ok(result)
-        const app2_cell  = result.cell_data[0][0]
+        const app2_cell  = result.slots['thedna'].base_cell_id
         await admin2.activateApp({ installed_app_id })
         // observe 2 agent infos
         conductor2_agentInfo = await admin2.requestAgentInfo({cell_id: null});
