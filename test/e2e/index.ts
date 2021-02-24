@@ -63,7 +63,7 @@ test('admin smoke test: registerDna + installApp', withConductor(ADMIN_PORT, asy
 
 }))
 
-test.only('admin smoke test: installBundle', withConductor(ADMIN_PORT, async t => {
+test('admin smoke test: installBundle', withConductor(ADMIN_PORT, async t => {
 
   const installed_app_id = 'app'
   const admin = await AdminWebsocket.connect(`http://localhost:${ADMIN_PORT}`, 12000)
@@ -71,7 +71,7 @@ test.only('admin smoke test: installBundle', withConductor(ADMIN_PORT, async t =
   const agent_key = await admin.generateAgentPubKey()
   t.ok(agent_key)
 
-  const path = `${FIXTURE_PATH}/test.dna`;
+  const path = `${FIXTURE_PATH}/test.happ`;
   const hash = await admin.installAppBundle({
     source: path,
     agent_key,
