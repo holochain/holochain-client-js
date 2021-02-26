@@ -17,10 +17,9 @@ export type GenerateAgentPubKeyRequest = void
 export type GenerateAgentPubKeyResponse = AgentPubKey
 
 export type RegisterDnaRequest = {
-  source: DnaSource,
   uuid?: string,
   properties?: DnaProperties,
-}
+} & DnaSource
 
 export type RegisterDnaResponse = HoloHash
 
@@ -112,13 +111,11 @@ export type AppBundle =
     }
 
 export type AppBundleSource =
-    AppBundle
+    {bundle: AppBundle}
     |
-    string
+    {path: string}
 
 export type InstallAppBundleRequest = {
-    /// The unique identifier for an installed app in this conductor.
-    source: AppBundleSource,
 
     /// The agent to use when creating Cells for this App.
     agent_key: AgentPubKey,
@@ -130,7 +127,10 @@ export type InstallAppBundleRequest = {
     /// Include proof-of-membrane-membership data for cells that require it,
     /// keyed by the CellNick specified in the app bundle manifest.
     membrane_proofs: {[key: string]: MembraneProof},
-}
+} &
+/// The unique identifier for an installed app in this conductor.
+AppBundleSource
+
 
 export type InstallAppBundleResponse = InstalledApp
 
@@ -165,7 +165,7 @@ export interface AdminApi {
   registerDna: Requester<RegisterDnaRequest, RegisterDnaResponse>
   installApp: Requester<InstallAppRequest, InstallAppResponse>
   createCloneCell: Requester<CreateCloneCellRequest, CreateCloneCellResponse>
-    installAppBundle: Requester<InstallAppBundleRequest, InstallAppBundleResponse>
+  installAppBundle: Requester<InstallAppBundleRequest, InstallAppBundleResponse>
   listDnas: Requester<ListDnasRequest, ListDnasResponse>
   listCellIds: Requester<ListCellIdsRequest, ListCellIdsResponse>
   listActiveApps: Requester<ListActiveAppsRequest, ListActiveAppsResponse>
@@ -175,14 +175,50 @@ export interface AdminApi {
 
 
 type InstallAppDnaPayload = {
-  path?: string,
-  hash?: HoloHash
+  hash: HoloHash
   nick: CellNick,
   properties?: DnaProperties,
   membrane_proof?: MembraneProof
 }
 
-type DnaSource =
+type ZomeLocation = {
+    /// Expect file to be part of this bundle
+    Bundled(PathBuf),
+
+    /// Get file from local filesystem (not bundled)
+    Path(PathBuf),
+
+    /// Get file from URL
+    Url(String),
+}
+
+type ZomeManifest = {
+    name: string,
+    hash?: string,
+} & ZomeLocation
+
+type DnaManifest = {
+    /// The friendly "name" of a Holochain DNA.
+    name: string,
+
+    /// A UUID for uniquifying this Dna.
+    // TODO: consider Vec<u8> instead (https://github.com/holochain/holochain/pull/86#discussion_r412689085)
+    uuid?: string,
+
+    /// Any arbitrary application properties can be included in this object.
+    properties?: DnaProperties,
+
+    /// An array of zomes associated with your DNA.
+    /// The order is significant: it determines initialization order.
+    zomes: Array<ZomeManifest>,
+}
+
+export type DnaBundle = {
+    manifest: DnaManifest,
+    resources: ResourceMap,
+}
+
+export type DnaSource =
   {
     hash: HoloHash
   }
@@ -192,24 +228,12 @@ type DnaSource =
   }
    |
   {
-    dna_file: DnaFile
+    bundle: DnaBundle
   };
 
 export interface HoloHashed<T> {
   hash: HoloHash;
   content: T;
-}
-
-export interface DnaFile {
-  dna: HoloHashed<DnaDef>;
-  code: Array<WasmCode>;
-}
-
-export interface DnaDef {
-  name: String;
-  uuid: String;
-  properties: HoloHash;
-  zomes: Zomes;
 }
 
 export type Zomes = Array<[string, { wasm_hash: Array<HoloHash> }]>;

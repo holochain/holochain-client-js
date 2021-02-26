@@ -86,9 +86,9 @@ export const installAppAndDna = async (
   const nick = 'mydna'
   const admin = await AdminWebsocket.connect(`http://localhost:${adminPort}`)
 
-  const path = `${FIXTURE_PATH}/test.dna.gz`;
+  const path = `${FIXTURE_PATH}/test.dna`;
   const hash = await admin.registerDna({
-    source: {path}
+    path
   })
 
   console.log("THE HASH:", hash)

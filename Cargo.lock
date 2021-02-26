@@ -110,7 +110,7 @@ dependencies = [
 [[package]]
 name = "fixt"
 version = "0.0.1"
-source = "git+https://github.com/holochain/holochain?rev=d2ce21aa51672328e162f9a5c8137ccba9efd5b8#d2ce21aa51672328e162f9a5c8137ccba9efd5b8"
+source = "git+https://github.com/holochain/holochain?rev=5f1d1271ce8a9548ffda50d1fdf3ed37801ae2a9#5f1d1271ce8a9548ffda50d1fdf3ed37801ae2a9"
 dependencies = [
  "holochain_serialized_bytes",
  "lazy_static",
@@ -143,7 +143,7 @@ checksum = "d7afe4a420e3fe79967a00898cc1f4db7c8a49a9333a29f8a4bd76a253d5cd04"
 [[package]]
 name = "hdk"
 version = "0.0.1"
-source = "git+https://github.com/holochain/holochain?rev=d2ce21aa51672328e162f9a5c8137ccba9efd5b8#d2ce21aa51672328e162f9a5c8137ccba9efd5b8"
+source = "git+https://github.com/holochain/holochain?rev=5f1d1271ce8a9548ffda50d1fdf3ed37801ae2a9#5f1d1271ce8a9548ffda50d1fdf3ed37801ae2a9"
 dependencies = [
  "hdk_derive",
  "holo_hash",
@@ -161,7 +161,7 @@ dependencies = [
 [[package]]
 name = "hdk_derive"
 version = "0.0.1"
-source = "git+https://github.com/holochain/holochain?rev=d2ce21aa51672328e162f9a5c8137ccba9efd5b8#d2ce21aa51672328e162f9a5c8137ccba9efd5b8"
+source = "git+https://github.com/holochain/holochain?rev=5f1d1271ce8a9548ffda50d1fdf3ed37801ae2a9#5f1d1271ce8a9548ffda50d1fdf3ed37801ae2a9"
 dependencies = [
  "holochain_zome_types",
  "paste",
@@ -182,7 +182,7 @@ dependencies = [
 [[package]]
 name = "holo_hash"
 version = "0.0.1"
-source = "git+https://github.com/holochain/holochain?rev=d2ce21aa51672328e162f9a5c8137ccba9efd5b8#d2ce21aa51672328e162f9a5c8137ccba9efd5b8"
+source = "git+https://github.com/holochain/holochain?rev=5f1d1271ce8a9548ffda50d1fdf3ed37801ae2a9#5f1d1271ce8a9548ffda50d1fdf3ed37801ae2a9"
 dependencies = [
  "base64",
  "blake2b_simd",
@@ -247,7 +247,7 @@ dependencies = [
 [[package]]
 name = "holochain_zome_types"
 version = "0.0.1"
-source = "git+https://github.com/holochain/holochain?rev=d2ce21aa51672328e162f9a5c8137ccba9efd5b8#d2ce21aa51672328e162f9a5c8137ccba9efd5b8"
+source = "git+https://github.com/holochain/holochain?rev=5f1d1271ce8a9548ffda50d1fdf3ed37801ae2a9#5f1d1271ce8a9548ffda50d1fdf3ed37801ae2a9"
 dependencies = [
  "chrono",
  "fixt",
@@ -548,9 +548,9 @@ dependencies = [
 
 [[package]]
 name = "serde_json"
-version = "1.0.62"
+version = "1.0.63"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ea1c6153794552ea7cf7cf63b1231a25de00ec90db326ba6264440fa08e31486"
+checksum = "43535db9747a4ba938c0ce0a98cc631a46ebf943c9e1d604e091df6007620bf6"
 dependencies = [
  "indexmap",
  "itoa",

@@ -7,7 +7,7 @@ import { AgentPubKey, fakeAgentPubKey } from '../../src/api/types'
 import { AppSignal } from '../../src/api/app'
 import zlib from 'zlib';
 import fs from 'fs';
-import { DnaFile } from '../../src/api/admin'
+import { DnaBundle } from '../../src/api/admin'
 import { decode } from '@msgpack/msgpack'
 
 const ADMIN_PORT = 33001
@@ -23,9 +23,9 @@ test('admin smoke test: registerDna + installApp', withConductor(ADMIN_PORT, asy
   const agent_key = await admin.generateAgentPubKey()
   t.ok(agent_key)
 
-  const path = `${FIXTURE_PATH}/test.dna.gz`;
+  const path = `${FIXTURE_PATH}/test.dna`;
   const hash = await admin.registerDna({
-      source: {path}
+      path
   })
   t.ok(hash)
   await admin.installApp({
@@ -53,7 +53,7 @@ test('admin smoke test: registerDna + installApp', withConductor(ADMIN_PORT, asy
 
   // install from hash and uuid
   const newHash = await admin.registerDna({
-    source: {hash},
+    hash,
     uuid: "123456"
   })
   t.ok(newHash)
@@ -73,7 +73,7 @@ test('admin smoke test: installBundle', withConductor(ADMIN_PORT, async t => {
 
   const path = `${FIXTURE_PATH}/test.happ`;
   const hash = await admin.installAppBundle({
-    source: path,
+    path,
     agent_key,
     installed_app_id,
     membrane_proofs: {}
@@ -101,7 +101,7 @@ test('admin smoke test: installBundle', withConductor(ADMIN_PORT, async t => {
 }))
 
 
-test('admin register dna with full binary file', withConductor(ADMIN_PORT, async t => {
+test('admin register dna with full binary bundle', withConductor(ADMIN_PORT, async t => {
 
   const installed_app_id = 'app'
   const admin = await AdminWebsocket.connect(`http://localhost:${ADMIN_PORT}`, 12000)
@@ -109,14 +109,14 @@ test('admin register dna with full binary file', withConductor(ADMIN_PORT, async
   const agent_key = await admin.generateAgentPubKey()
   t.ok(agent_key)
 
-  const path = `${FIXTURE_PATH}/test.dna.gz`;
+  const path = `${FIXTURE_PATH}/test.dna`;
 
-  const zippedDnaFile = fs.readFileSync(path);
-  const dnaFile = zlib.gunzipSync(zippedDnaFile);
+  const zippedDnaBundle = fs.readFileSync(path);
+  const encodedDnaBundle = zlib.gunzipSync(zippedDnaBundle);
 
-  const decodedDnaFile: DnaFile  = decode(dnaFile.buffer) as DnaFile;
+  const dnaBundle: DnaBundle  = decode(encodedDnaBundle.buffer) as DnaBundle;
   const hash = await admin.registerDna({
-      source: { dna_file: decodedDnaFile }
+      bundle: dnaBundle
   })
   t.ok(hash)
   await admin.installApp({
@@ -249,17 +249,16 @@ test('can inject agents', async (t) => {
         const agent_key_2 = await admin2.generateAgentPubKey()
         t.ok(agent_key_2)
         const nick = 'thedna'
+        const path = `${FIXTURE_PATH}/test.dna`;
+        const hash = await admin1.registerDna({path})
+        t.ok(hash)
         let result = await admin1.installApp({
-            installed_app_id, agent_key: agent_key_1, dnas: [
-                {
-                    path: `${FIXTURE_PATH}/test.dna.gz`,
-                    nick,
-                }
-            ]
+            installed_app_id, agent_key: agent_key_1, dnas: [{hash, nick}]
         })
         t.ok(result)
         const app1_cell  = result.slots['thedna'].base_cell_id
         const r = await admin1.activateApp({ installed_app_id }, 1000)
+
         // after activating an app requestAgentInfo should return the agentid
         // requesting info with null cell_id should return all agents known about.
         // otherwise it's just agents know about for that cell
@@ -277,13 +276,12 @@ test('can inject agents', async (t) => {
         t.deepEqual(conductor1_agentInfo,conductor2_agentInfo)
 
         // now install the app and activate it on agent 2.
+        await admin2.registerDna({
+            path
+        })
+        t.ok(hash)
         result = await admin2.installApp({
-            installed_app_id, agent_key: agent_key_2, dnas: [
-                {
-                    path: `${FIXTURE_PATH}/test.dna.gz`,
-                    nick,
-                }
-            ]
+            installed_app_id, agent_key: agent_key_2, dnas: [{hash, nick}]
         })
         t.ok(result)
         const app2_cell  = result.slots['thedna'].base_cell_id
