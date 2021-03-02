@@ -10,6 +10,8 @@ import fs from 'fs';
 import { DnaBundle } from '../../src/api/admin'
 import { decode } from '@msgpack/msgpack'
 
+const delay = ms => new Promise(r => setTimeout(r, ms))
+
 const ADMIN_PORT = 33001
 const ADMIN_PORT_1 = 33002
 
@@ -259,6 +261,8 @@ test('can inject agents', async (t) => {
         const app1_cell  = result.slots['thedna'].base_cell_id
         const r = await admin1.activateApp({ installed_app_id }, 1000)
 
+        await delay(500);
+
         // after activating an app requestAgentInfo should return the agentid
         // requesting info with null cell_id should return all agents known about.
         // otherwise it's just agents know about for that cell
@@ -286,6 +290,7 @@ test('can inject agents', async (t) => {
         t.ok(result)
         const app2_cell  = result.slots['thedna'].base_cell_id
         await admin2.activateApp({ installed_app_id })
+        await delay(500);
         // observe 2 agent infos
         conductor2_agentInfo = await admin2.requestAgentInfo({cell_id: null});
         t.equal(conductor2_agentInfo.length, 2)
