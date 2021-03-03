@@ -100,7 +100,7 @@ buffer
 
 ## `<AdminWebsocket>.registerDna({ source as  path | bundle | hash, uuid?, properties? })`
 Request a Dna to be registered in the database for later installation.
-
+Note: if a hash is passed as the dna source, then you must pass a uuid or a properties
 - dna source as one of the following named properties:
   - `path` -a `string` of path to a DNA bundle file
   - `hash` - a `string` of a registered DNA (assumes either or both uuid and properties set)
@@ -128,8 +128,7 @@ buffer  // hash of DNA registered
 ```
 
 ## `<AdminWebsocket>.installAppBundle({ installed_app_id, source as path | bundle | hash, uuid?, properties? })`
-Request a new Dna to be registered using the given source, and optional uuid and properties.
-Note: if a hash is passed as the dna source, then you must pass a uuid or a properties
+Request a hApp to be installed using the given source, and optional uuid and properties.
 - `installed_app_id` - a `string`
 - bundle source as one  of the following named properties:
   - `path` -a `string`  of path to an App bundle file
