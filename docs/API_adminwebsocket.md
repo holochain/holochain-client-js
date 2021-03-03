@@ -98,12 +98,41 @@ Returns a `Promise` for the corresponding response.
 buffer
 ```
 
-## `<AdminWebsocket>.installApp({ installed_app_id, source as path | bundle | hash, uuid?, properties? })`
+## `<AdminWebsocket>.registerDna({ source as  path | bundle | hash, uuid?, properties? })`
+Request a Dna to be registered in the database for later installation.
+
+- dna source as one of the following named properties:
+  - `path` -a `string` of path to a DNA bundle file
+  - `hash` - a `string` of a registered DNA (assumes either or both uuid and properties set)
+  - `bundle` - an `object` with properties
+    - `manifest` - an `object` with properties
+      - `name` -a `string`
+      - `uuid` - an (optional) `string`
+      - `properties` - an (optional) `object`
+      - `zomes` - an `array` of zome manifest `object` that have properties
+        - `name` a `string`
+        - `hash` an (optional) `string`
+        - a zome location `object` as one of the following named properties:
+          - `bundled` - an `string` which is a key to the zome data in the resources map
+          - `path` - a `string` path to zome data in a file
+          - `url` - a `string` url to the zome data file
+    - `resources` - an `object` with keys storing zome data
+- `uuid` - an (optional) `string` which overrides the DNA manifest `uuid`
+- `properties` - an (optional) `object` which overrides the DNA manifest `properties`
+
+Returns a `Promise` for the corresponding response.
+
+### Response format
+```javascript
+buffer  // hash of DNA registered
+```
+
+## `<AdminWebsocket>.installAppBundle({ installed_app_id, source as path | bundle | hash, uuid?, properties? })`
 Request a new Dna to be registered using the given source, and optional uuid and properties.
 Note: if a hash is passed as the dna source, then you must pass a uuid or a properties
 - `installed_app_id` - a `string`
-- bundle source as one of:
-  - `path` -a `string`
+- bundle source as one  of the following named properties:
+  - `path` -a `string`  of path to an App bundle file
   - `hash` - a `string`
   - `bundle` - an `object` with properties
     - `manifest` -an `object` with properties
@@ -117,14 +146,24 @@ Note: if a hash is passed as the dna source, then you must pass a uuid or a prop
           - `bundled` - a `string` path to a wasm in resources of this bundle
           - `path` - a `string` path to an external wasm file
           - `url` - a `string` url to an external wasm file
+    - `resources` - an `object` with keys storing wasm data
 Returns a `Promise` for the corresponding response.
 
 ### Response format
-hash of registered dna as:
+installedApp `object` with properties:
 ```javascript
-buffer
+{
+    "installed_app_id": string,
+    "slots": {
+        [key: string]: {
+            base_cell_id: [buffer, buffer],  // CellId
+            is_provisioned: boolean,
+            clone_limit: number,
+            clones: [[buffer, buffer]], // array of CellIds
+        }
+    }
+}
 ```
-
 
 ## `<AdminWebsocket>.installApp({ installed_app_id, agent_key, dnas })`
 Request a new App to be created using the given Agent and DNAs.
@@ -139,6 +178,7 @@ Request a new App to be created using the given Agent and DNAs.
 Returns a `Promise` for the corresponding response.
 
 ### Response format
+installedApp `object` with properties:
 ```javascript
 {
     "installed_app_id": string,
