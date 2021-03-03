@@ -109,8 +109,8 @@ dependencies = [
 
 [[package]]
 name = "fixt"
-version = "0.0.1"
-source = "git+https://github.com/holochain/holochain?rev=cb9b8bfd93c41891198fb0a18cc7d574f08c5a10#cb9b8bfd93c41891198fb0a18cc7d574f08c5a10"
+version = "0.0.2-alpha.1"
+source = "git+https://github.com/holochain/holochain?rev=11c2d2391a71cc6d589e48d081f87d6f477ab83d#11c2d2391a71cc6d589e48d081f87d6f477ab83d"
 dependencies = [
  "holochain_serialized_bytes",
  "lazy_static",
@@ -142,8 +142,8 @@ checksum = "d7afe4a420e3fe79967a00898cc1f4db7c8a49a9333a29f8a4bd76a253d5cd04"
 
 [[package]]
 name = "hdk"
-version = "0.0.1"
-source = "git+https://github.com/holochain/holochain?rev=cb9b8bfd93c41891198fb0a18cc7d574f08c5a10#cb9b8bfd93c41891198fb0a18cc7d574f08c5a10"
+version = "0.0.100-alpha.1"
+source = "git+https://github.com/holochain/holochain?rev=11c2d2391a71cc6d589e48d081f87d6f477ab83d#11c2d2391a71cc6d589e48d081f87d6f477ab83d"
 dependencies = [
  "hdk_derive",
  "holo_hash",
@@ -160,8 +160,8 @@ dependencies = [
 
 [[package]]
 name = "hdk_derive"
-version = "0.0.1"
-source = "git+https://github.com/holochain/holochain?rev=cb9b8bfd93c41891198fb0a18cc7d574f08c5a10#cb9b8bfd93c41891198fb0a18cc7d574f08c5a10"
+version = "0.0.2-alpha.1"
+source = "git+https://github.com/holochain/holochain?rev=11c2d2391a71cc6d589e48d081f87d6f477ab83d#11c2d2391a71cc6d589e48d081f87d6f477ab83d"
 dependencies = [
  "holochain_zome_types",
  "paste",
@@ -181,8 +181,8 @@ dependencies = [
 
 [[package]]
 name = "holo_hash"
-version = "0.0.1"
-source = "git+https://github.com/holochain/holochain?rev=cb9b8bfd93c41891198fb0a18cc7d574f08c5a10#cb9b8bfd93c41891198fb0a18cc7d574f08c5a10"
+version = "0.0.2-alpha.1"
+source = "git+https://github.com/holochain/holochain?rev=11c2d2391a71cc6d589e48d081f87d6f477ab83d#11c2d2391a71cc6d589e48d081f87d6f477ab83d"
 dependencies = [
  "base64",
  "blake2b_simd",
@@ -246,8 +246,8 @@ dependencies = [
 
 [[package]]
 name = "holochain_zome_types"
-version = "0.0.1"
-source = "git+https://github.com/holochain/holochain?rev=cb9b8bfd93c41891198fb0a18cc7d574f08c5a10#cb9b8bfd93c41891198fb0a18cc7d574f08c5a10"
+version = "0.0.2-alpha.1"
+source = "git+https://github.com/holochain/holochain?rev=11c2d2391a71cc6d589e48d081f87d6f477ab83d#11c2d2391a71cc6d589e48d081f87d6f477ab83d"
 dependencies = [
  "chrono",
  "fixt",
@@ -287,9 +287,9 @@ checksum = "e2abad23fbc42b3700f2f279844dc832adb2b2eb069b2df918f455c4e18cc646"
 
 [[package]]
 name = "libc"
-version = "0.2.86"
+version = "0.2.87"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b7282d924be3275cec7f6756ff4121987bc6481325397dde6ba3e7802b1a8b1c"
+checksum = "265d751d31d6780a3f956bb5b8022feba2d94eeee5a84ba64f4212eedca42213"
 
 [[package]]
 name = "lock_api"
@@ -339,9 +339,9 @@ dependencies = [
 
 [[package]]
 name = "once_cell"
-version = "1.6.0"
+version = "1.7.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4ad167a2f54e832b82dbe003a046280dceffe5227b5f79e08e363a29638cfddd"
+checksum = "af8b08b04175473088b46763e51ee54da5f9a164bc162f615b91bc179dbf15a3"
 
 [[package]]
 name = "parking_lot"
@@ -375,9 +375,9 @@ checksum = "7151b083b0664ed58ed669fcdd92f01c3d2fdbf10af4931a301474950b52bfa9"
 
 [[package]]
 name = "pin-project-lite"
-version = "0.2.4"
+version = "0.2.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "439697af366c49a6d0a010c56a0d97685bc140ce0d377b13a2ea2aa42d64a827"
+checksum = "0cf491442e4b033ed1c722cb9f0df5fcfcf4de682466c46469c36bc47dc5548a"
 
 [[package]]
 name = "ppv-lite86"
@@ -548,9 +548,9 @@ dependencies = [
 
 [[package]]
 name = "serde_json"
-version = "1.0.62"
+version = "1.0.64"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ea1c6153794552ea7cf7cf63b1231a25de00ec90db326ba6264440fa08e31486"
+checksum = "799e97dc9fdae36a5c8b8f2cae9ce2ee9fdce2058c57a93e6099d919fd982f79"
 dependencies = [
  "indexmap",
  "itoa",
@@ -658,9 +658,9 @@ dependencies = [
 
 [[package]]
 name = "tracing"
-version = "0.1.24"
+version = "0.1.25"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f77d3842f76ca899ff2dbcf231c5c65813dea431301d6eb686279c15c4464f12"
+checksum = "01ebdc2bb4498ab1ab5f5b73c5803825e60199229ccba0698170e3be0e7f959f"
 dependencies = [
  "cfg-if 1.0.0",
  "pin-project-lite",

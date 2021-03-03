@@ -86,9 +86,9 @@ export const installAppAndDna = async (
   const nick = 'mydna'
   const admin = await AdminWebsocket.connect(`http://localhost:${adminPort}`)
 
-  const path = `${FIXTURE_PATH}/test.dna.gz`;
+  const path = `${FIXTURE_PATH}/test.dna`;
   const hash = await admin.registerDna({
-    source: {path}
+    path
   })
 
   console.log("THE HASH:", hash)
@@ -104,7 +104,8 @@ export const installAppAndDna = async (
       },
     ],
   })
-  const cell_id = app.cell_data[0][0]
+  console.log("THE INSTALL RESULT:", app)
+  const cell_id = app.slots['mydna'].base_cell_id
   await admin.activateApp({ installed_app_id })
   // destructure to get whatever open port was assigned to the interface
   const { port: appPort } = await admin.attachAppInterface({ port: 0 })
