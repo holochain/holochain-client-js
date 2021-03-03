@@ -1,5 +1,5 @@
 import { Requester } from "./common"
-import { HoloHash, AgentPubKey, MembraneProof, DnaProperties, InstalledAppId, CellId, CellNick, InstalledApp } from "./types"
+import { HoloHash, AgentPubKey, MembraneProof, DnaProperties, InstalledAppId, CellId, CellNick, InstalledApp, SlotId } from "./types"
 
 export type ActivateAppRequest = { installed_app_id: InstalledAppId }
 export type ActivateAppResponse = null
@@ -17,10 +17,9 @@ export type GenerateAgentPubKeyRequest = void
 export type GenerateAgentPubKeyResponse = AgentPubKey
 
 export type RegisterDnaRequest = {
-  source: DnaSource,
   uuid?: string,
   properties?: DnaProperties,
-}
+} & DnaSource
 
 export type RegisterDnaResponse = HoloHash
 
@@ -30,6 +29,110 @@ export type InstallAppRequest = {
   dnas: Array<InstallAppDnaPayload>,
 }
 export type InstallAppResponse = InstalledApp
+
+export type CreateCloneCellRequest = {
+    /// Properties to override when installing this Dna
+    properties?: DnaProperties,
+    /// The DNA to clone
+    dna_hash: HoloHash,
+    /// The Agent key with which to create this Cell
+    /// (TODO: should this be derived from the App?)
+    agent_key: AgentPubKey,
+    /// The App with which to associate the newly created Cell
+    installed_app_id: InstalledAppId,
+
+    /// The SlotId under which to create this clone
+    /// (needed to track cloning permissions and `clone_count`)
+    slot_id: SlotId,
+    /// Proof-of-membership, if required by this DNA
+    membrane_proof?: MembraneProof
+}
+export type CreateCloneCellResponse = CellId
+
+export type ResourceBytes = Buffer
+export type ResourceMap = {[key: string]: ResourceBytes}
+export type CellProvisioning =
+    {
+        /// Always create a new Cell when installing this App
+        create: {deferred: boolean},
+    } | {
+        /// Always create a new Cell when installing the App,
+        /// and use a unique UUID to ensure a distinct DHT network
+        create_clone: {deferred: boolean},
+    } | {
+        /// Require that a Cell is already installed which matches the DNA version
+        /// spec, and which has an Agent that's associated with this App's agent
+        /// via DPKI. If no such Cell exists, *app installation fails*.
+        use_existing: {deferred: boolean},
+    } | {
+        /// Try `UseExisting`, and if that fails, fallback to `Create`
+        create_if_no_exists: {deferred: boolean}
+    } | {
+        /// Disallow provisioning altogether. In this case, we expect
+        /// `clone_limit > 0`: otherwise, no Cells will ever be created.
+        disabled: {}
+    };
+
+
+export type HoloHashB64 = string;
+export type DnaVersionSpec = Array<HoloHashB64>
+export type DnaVersionFlexible =
+    {
+        singleton: HoloHashB64
+    }
+    |
+    {
+        multiple: DnaVersionSpec
+    }
+export type AppSlotDnaManifest = {
+    location?: Location,
+    properties?: DnaProperties,
+    uuid?: string,
+    version?: DnaVersionFlexible,
+}
+export type AppSlotManifest = {
+    id: SlotId,
+    provisioning?: CellProvisioning,
+    dna: AppSlotDnaManifest,
+}
+export type AppManifest = {
+    name: string,
+    description?: string,
+    slots: Array<AppSlotManifest>,
+}
+export type AppBundle =
+    {
+        manifest: AppManifest,
+
+        /// The full or partial resource data. Each entry must correspond to one
+        /// of the Bundled Locations specified by the Manifest. Bundled Locations
+        /// are always relative paths (relative to the root_dir).
+        resources: ResourceMap,
+    }
+
+export type AppBundleSource =
+    {bundle: AppBundle}
+    |
+    {path: string}
+
+export type InstallAppBundleRequest = {
+
+    /// The agent to use when creating Cells for this App.
+    agent_key: AgentPubKey,
+
+    /// The unique identifier for an installed app in this conductor.
+    /// If not specified, it will be derived from the app name in the bundle manifest.
+    installed_app_id?: InstalledAppId,
+
+    /// Include proof-of-membrane-membership data for cells that require it,
+    /// keyed by the CellNick specified in the app bundle manifest.
+    membrane_proofs: {[key: string]: MembraneProof},
+} &
+/// The unique identifier for an installed app in this conductor.
+AppBundleSource
+
+
+export type InstallAppBundleResponse = InstalledApp
 
 export type ListDnasRequest = void
 export type ListDnasResponse = Array<string>
@@ -61,6 +164,8 @@ export interface AdminApi {
   generateAgentPubKey: Requester<GenerateAgentPubKeyRequest, GenerateAgentPubKeyResponse>
   registerDna: Requester<RegisterDnaRequest, RegisterDnaResponse>
   installApp: Requester<InstallAppRequest, InstallAppResponse>
+  createCloneCell: Requester<CreateCloneCellRequest, CreateCloneCellResponse>
+  installAppBundle: Requester<InstallAppBundleRequest, InstallAppBundleResponse>
   listDnas: Requester<ListDnasRequest, ListDnasResponse>
   listCellIds: Requester<ListCellIdsRequest, ListCellIdsResponse>
   listActiveApps: Requester<ListActiveAppsRequest, ListActiveAppsResponse>
@@ -70,14 +175,50 @@ export interface AdminApi {
 
 
 type InstallAppDnaPayload = {
-  path?: string,
-  hash?: HoloHash
+  hash: HoloHash
   nick: CellNick,
   properties?: DnaProperties,
   membrane_proof?: MembraneProof
 }
 
-type DnaSource =
+type ZomeLocation = {
+    /// Expect file to be part of this bundle
+    Bundled(PathBuf),
+
+    /// Get file from local filesystem (not bundled)
+    Path(PathBuf),
+
+    /// Get file from URL
+    Url(String),
+}
+
+type ZomeManifest = {
+    name: string,
+    hash?: string,
+} & ZomeLocation
+
+type DnaManifest = {
+    /// The friendly "name" of a Holochain DNA.
+    name: string,
+
+    /// A UUID for uniquifying this Dna.
+    // TODO: consider Vec<u8> instead (https://github.com/holochain/holochain/pull/86#discussion_r412689085)
+    uuid?: string,
+
+    /// Any arbitrary application properties can be included in this object.
+    properties?: DnaProperties,
+
+    /// An array of zomes associated with your DNA.
+    /// The order is significant: it determines initialization order.
+    zomes: Array<ZomeManifest>,
+}
+
+export type DnaBundle = {
+    manifest: DnaManifest,
+    resources: ResourceMap,
+}
+
+export type DnaSource =
   {
     hash: HoloHash
   }
@@ -87,24 +228,12 @@ type DnaSource =
   }
    |
   {
-    dna_file: DnaFile
+    bundle: DnaBundle
   };
 
 export interface HoloHashed<T> {
   hash: HoloHash;
   content: T;
-}
-
-export interface DnaFile {
-  dna: HoloHashed<DnaDef>;
-  code: Array<WasmCode>;
-}
-
-export interface DnaDef {
-  name: String;
-  uuid: String;
-  properties: HoloHash;
-  zomes: Zomes;
 }
 
 export type Zomes = Array<[string, { wasm_hash: Array<HoloHash> }]>;
