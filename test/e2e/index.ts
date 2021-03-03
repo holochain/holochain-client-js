@@ -74,13 +74,13 @@ test('admin smoke test: installBundle', withConductor(ADMIN_PORT, async t => {
   t.ok(agent_key)
 
   const path = `${FIXTURE_PATH}/test.happ`;
-  const hash = await admin.installAppBundle({
+  const installedApp = await admin.installAppBundle({
     path,
     agent_key,
     installed_app_id,
     membrane_proofs: {}
   })
-  t.ok(hash)
+  t.ok(installedApp)
 
   const activeApps1 = await admin.listActiveApps()
   t.equal(activeApps1.length, 0)
@@ -90,6 +90,10 @@ test('admin smoke test: installBundle', withConductor(ADMIN_PORT, async t => {
   const activeApps2 = await admin.listActiveApps()
   t.equal(activeApps2.length, 1)
   t.equal(activeApps2[0], installed_app_id)
+
+  const cellIds = await admin.listCellIds()
+  t.equal(cellIds.length, 1)
+  t.deepEqual(cellIds[0], installedApp.slots['foo'].base_cell_id)
 
   await admin.attachAppInterface({ port: 0 })
   await admin.deactivateApp({ installed_app_id })
