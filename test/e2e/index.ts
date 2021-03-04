@@ -2,6 +2,7 @@ const test = require('tape')
 
 import { AdminWebsocket } from '../../src/websocket/admin'
 import { AppWebsocket } from '../../src/websocket/app'
+import { WsClient } from '../../src/websocket/client'
 import { installAppAndDna, withConductor, launch, CONFIG_PATH, CONFIG_PATH_1, FIXTURE_PATH } from './util'
 import { AgentPubKey, fakeAgentPubKey } from '../../src/api/types'
 import { AppSignal } from '../../src/api/app'
@@ -163,6 +164,18 @@ test('can call a zome function', withConductor(ADMIN_PORT, async t => {
     payload: null,
   }, 30000)
   t.equal(response, "foo")
+}))
+
+test('can handle canceled response', withConductor(ADMIN_PORT, async t => {
+  // const client = await WsClient.connect(`http://localhost:${ADMIN_PORT}`);A
+  const client = new WsClient({ send: (_d) =>{} });
+  let prom = client.request("blah");
+  client.handleResponse({id: 0})
+  try {
+    const resp = await prom;
+  } catch (e) {
+    t.deepEqual(e, new Error(`Response canceled by responder`))
+  }
 }))
 
 test('can receive a signal', withConductor(ADMIN_PORT, async t => {
