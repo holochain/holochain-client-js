@@ -174,30 +174,30 @@ export interface AdminApi {
 }
 
 
-type InstallAppDnaPayload = {
+export type InstallAppDnaPayload = {
   hash: HoloHash
   nick: CellNick,
   properties?: DnaProperties,
   membrane_proof?: MembraneProof
 }
 
-type ZomeLocation = {
+export type ZomeLocation = {
     /// Expect file to be part of this bundle
-    Bundled(PathBuf),
-
+    bundled: string;
+} | {
     /// Get file from local filesystem (not bundled)
-    Path(PathBuf),
-
+    Path: string;
+} | {
     /// Get file from URL
-    Url(String),
+    url: string;
 }
 
-type ZomeManifest = {
+export type ZomeManifest = {
     name: string,
     hash?: string,
 } & ZomeLocation
 
-type DnaManifest = {
+export type DnaManifest = {
     /// The friendly "name" of a Holochain DNA.
     name: string,
 
@@ -214,8 +214,8 @@ type DnaManifest = {
 }
 
 export type DnaBundle = {
-    manifest: DnaManifest,
-    resources: ResourceMap,
+    manifest: DnaManifest;
+    resources: ResourceMap;
 }
 
 export type DnaSource =
