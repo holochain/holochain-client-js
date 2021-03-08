@@ -186,7 +186,7 @@ export type ZomeLocation = {
     bundled: string;
 } | {
     /// Get file from local filesystem (not bundled)
-    Path: string;
+    path: string;
 } | {
     /// Get file from URL
     url: string;
