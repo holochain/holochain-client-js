@@ -1,2 +1,3 @@
 
-require('./e2e')
+// require('./e2e')
+require('./shim')

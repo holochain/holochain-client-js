@@ -17,6 +17,20 @@ impl From<&str> for TestString {
     }
 }
 
+fn path(s: &str) -> ExternResult<EntryHash> {
+    let path = Path::from(s);
+    path.ensure()?;
+    Ok(path.hash()?)
+}
+
+fn base() -> ExternResult<EntryHash> {
+    path("a")
+}
+
+fn target() -> ExternResult<EntryHash> {
+    path("b")
+}
+
 #[hdk_extern]
 fn init(_: ()) -> ExternResult<InitCallbackResult> {
     // grant unrestricted access to accept_cap_claim so other agents can send us claims
@@ -30,6 +44,18 @@ fn init(_: ()) -> ExternResult<InitCallbackResult> {
             functions: foo_functions,
         }
     )?;
+
+    let mut faa_functions: GrantedFunctions = HashSet::new();
+    faa_functions.insert((zome_info()?.zome_name, "faa".into()));
+    create_cap_grant(
+        CapGrantEntry {
+            tag: "".into(),
+            // empty access converts to unrestricted
+            access: ().into(),
+            functions: faa_functions,
+        }
+    )?;
+
     // NB: ideally we want to simply create a single CapGrant with both functions exposed,
     // but there is a bug in Holochain which currently prevents this. After this bug is fixed,
     // this can be collapsed to a single CapGrantEntry with two functions.
@@ -51,6 +77,11 @@ fn init(_: ()) -> ExternResult<InitCallbackResult> {
 #[hdk_extern]
 fn foo(_: ()) -> ExternResult<TestString> {
     Ok(TestString::from(String::from("foo")))
+}
+
+#[hdk_extern]
+fn faa(_: ()) -> ExternResult<HeaderHash> {
+    Ok(hdk3::prelude::create_link(base()?, target()?, ())?)
 }
 
 #[hdk_extern]

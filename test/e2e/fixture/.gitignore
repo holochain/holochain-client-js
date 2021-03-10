@@ -1,4 +1,5 @@
 *.dna.gz
 test-config.yml
 test-config-1.yml
+test-config-2.yml
 zomes/foo/target

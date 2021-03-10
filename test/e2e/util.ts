@@ -9,7 +9,7 @@ export const FIXTURE_PATH = './test/e2e/fixture'
 export const CONFIG_PATH = `${FIXTURE_PATH}/test-config.yml`
 export const CONFIG_PATH_1 = `${FIXTURE_PATH}/test-config-1.yml`
 
-const writeConfig = (port, configPath) => {
+export const writeConfig = (port, configPath) => {
 
   const dir = fs.mkdtempSync(`${os.tmpdir()}/holochain-test-`)
   let yamlStr = yaml.safeDump({

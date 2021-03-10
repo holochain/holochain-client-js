@@ -4,3 +4,5 @@ test/e2e/fixture/test.dna.workdir/wasms
 .DS_Store
 .cargo
 target
+tmp
+*.log

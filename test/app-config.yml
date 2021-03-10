@@ -1,0 +1,5 @@
+# Servicelogger App
+- dnas:
+  - ./e2e/fixture/test.dna.gz
+  app_name: test
+  app_port: 42233 # service port

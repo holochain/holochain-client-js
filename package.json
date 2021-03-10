@@ -16,18 +16,23 @@
     "prepublishOnly": "npm test",
     "test": "npm run test:raw | tap-diff",
     "test:raw": "RUST_LOG=error RUST_BACKTRACE=1 ts-node test",
-    "example": "ts-node examples/zome-call"
+    "example": "ts-node examples/zome-call",
+    "test-bug": "RUST_LOG=error RUST_BACKTRACE=1 ts-node test/shim"
   },
   "author": "",
   "license": "CAL-1.0",
   "dependencies": {
     "@msgpack/msgpack": "^2.1.0",
     "@types/ws": "^7.2.4",
+    "@whi/stdlog": "^0.3.4",
     "isomorphic-ws": "^4.0.1",
     "nanoid": "^3.1.9",
     "ws": "^7.3.0"
   },
   "devDependencies": {
+    "@holo-host/cryptolib": "^0.3.0",
+    "@holochain/lair-client": "^0.1.1",
+    "@holochain-open-dev/holochain-run-dna": "^0.3.2",
     "@types/node": "^14.0",
     "@types/tape": "^4.13.0",
     "js-yaml": "^3.14.0",
