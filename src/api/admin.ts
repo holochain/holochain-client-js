@@ -96,6 +96,9 @@ export type AppSlotManifest = {
     dna: AppSlotDnaManifest,
 }
 export type AppManifest = {
+    /// Currently one "1" is supported
+    manifest_version: string;
+
     name: string,
     description?: string,
     slots: Array<AppSlotManifest>,
@@ -198,6 +201,9 @@ export type ZomeManifest = {
 } & ZomeLocation
 
 export type DnaManifest = {
+    /// Currently one "1" is supported
+    manifest_version: string;
+
     /// The friendly "name" of a Holochain DNA.
     name: string,
 
