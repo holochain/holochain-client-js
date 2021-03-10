@@ -96,6 +96,9 @@ export type AppSlotManifest = {
     dna: AppSlotDnaManifest,
 }
 export type AppManifest = {
+    /// Currently one "1" is supported
+    manifest_version: string;
+
     name: string,
     description?: string,
     slots: Array<AppSlotManifest>,
@@ -174,30 +177,33 @@ export interface AdminApi {
 }
 
 
-type InstallAppDnaPayload = {
+export type InstallAppDnaPayload = {
   hash: HoloHash
   nick: CellNick,
   properties?: DnaProperties,
   membrane_proof?: MembraneProof
 }
 
-type ZomeLocation = {
+export type ZomeLocation = {
     /// Expect file to be part of this bundle
-    Bundled(PathBuf),
-
+    bundled: string;
+} | {
     /// Get file from local filesystem (not bundled)
-    Path(PathBuf),
-
+    path: string;
+} | {
     /// Get file from URL
-    Url(String),
+    url: string;
 }
 
-type ZomeManifest = {
+export type ZomeManifest = {
     name: string,
     hash?: string,
 } & ZomeLocation
 
-type DnaManifest = {
+export type DnaManifest = {
+    /// Currently one "1" is supported
+    manifest_version: string;
+
     /// The friendly "name" of a Holochain DNA.
     name: string,
 
@@ -214,8 +220,8 @@ type DnaManifest = {
 }
 
 export type DnaBundle = {
-    manifest: DnaManifest,
-    resources: ResourceMap,
+    manifest: DnaManifest;
+    resources: ResourceMap;
 }
 
 export type DnaSource =
