@@ -80,7 +80,7 @@ Notice the match between the SHA in both cases. These should always match.
 
 You need a version (`stable` toolchain) of Rust available.
 
-You would need `holochain` and `dna-util` on your path, best to use the specific versions that this code requires. To use `cargo` to install them, run:
+You need `holochain` and `hc` on your path, best to use the specific versions that this code requires. To use `cargo` to install them, run:
 ```bash
 ./install-holochain.sh
 ```
@@ -98,7 +98,7 @@ Holochain is an open source project.  We welcome all sorts of participation and 
 ## License
  [![License: CAL 1.0](https://img.shields.io/badge/License-CAL%201.0-blue.svg)](https://github.com/holochain/cryptographic-autonomy-license)
 
-Copyright (C) 2020, Holochain Foundation
+Copyright (C) 2020-2021, Holochain Foundation
 
 This program is free software: you can redistribute it and/or modify it under the terms of the license
 provided in the LICENSE file (CAL-1.0).  This program is distributed in the hope that it will be useful,
