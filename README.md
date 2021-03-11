@@ -61,17 +61,13 @@ See [docs/API.md](docs/API.md)
 
 This version of `holochain-conductor-api` is currently working with `holochain/holochain` at commit:
 
-[c251d3017617b543bb1698024a37d7998483570a](https://github.com/holochain/holochain/commit/c251d3017617b543bb1698024a37d7998483570a) (Feb 23, 2021)
+[a82372a62d46a503e48f345360d0fb18cc5822d1](https://github.com/holochain/holochain/commit/a82372a62d46a503e48f345360d0fb18cc5822d1) (Mar 11, 2021) and hdk version 0.0.100 from crates.io
 
-If updating this code, please make changes to the git `rev/sha` in 3 places:
+If updating this code, please make changes to the git `rev/sha` in 2 places:
 1. Here in the README above ^^
 2. This line in `install-holochain.sh`
 ```bash
-REV=c251d3017617b543bb1698024a37d7998483570a
-```
-3. and this line in `test/e2e/fixtures/zomes/foo/Cargo.toml`
-```
-hdk = { git = "https://github.com/holochain/holochain", rev = "c251d3017617b543bb1698024a37d7998483570a", package = "hdk" }
+REV=a82372a62d46a503e48f345360d0fb18cc5822d1
 ```
 
 Notice the match between the SHA in both cases. These should always match.
