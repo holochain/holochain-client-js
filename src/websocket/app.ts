@@ -50,9 +50,11 @@ export class AppWebsocket implements AppApi {
 }
 
 const callZomeTransform: Transformer<CallZomeRequestGeneric<any>, CallZomeRequestGeneric<Buffer>, CallZomeResponseGeneric<Buffer>, CallZomeResponseGeneric<any>> = {
-  input: (req: CallZomeRequestGeneric<any>): CallZomeRequestGeneric<Buffer> => {
-    req.payload = msgpack.encode(req.payload)
-    return req
+  input: (req:  CallZomeRequestGeneric<any>): CallZomeRequestGeneric<Buffer> => {
+    return {
+      ...req,
+      payload: Buffer.from(msgpack.encode(req.payload))
+    }
   },
   output: (res: CallZomeResponseGeneric<Buffer>): CallZomeResponseGeneric<any> => {
     return msgpack.decode(res)
