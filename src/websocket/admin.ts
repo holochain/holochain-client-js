@@ -19,6 +19,7 @@ import * as Api from '../api/admin'
 import { WsClient } from './client'
 import { catchError, promiseTimeout, DEFAULT_TIMEOUT } from './common'
 import { Transformer, requesterTransformer, Requester } from '../api/common'
+import {ListAppInterfacesRequest} from "../api/admin";
 
 export class AdminWebsocket implements Api.AdminApi {
   client: WsClient
@@ -67,6 +68,8 @@ export class AdminWebsocket implements Api.AdminApi {
     = this._requester('list_cell_ids')
   listActiveApps: Requester<Api.ListActiveAppsRequest, Api.ListActiveAppsResponse>
     = this._requester('list_active_apps')
+  listAppInterfaces: Requester<Api.ListAppInterfacesRequest, Api.ListAppInterfacesResponse>
+      = this._requester('list_app_interfaces')
   requestAgentInfo: Requester<Api.RequestAgentInfoRequest, Api.RequestAgentInfoResponse>
     = this._requester('request_agent_info')
   addAgentInfo: Requester<Api.AddAgentInfoRequest, Api.AddAgentInfoResponse>
