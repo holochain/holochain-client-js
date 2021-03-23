@@ -9,7 +9,7 @@ import { AppSignal } from '../../src/api/app'
 import zlib from 'zlib';
 import fs from 'fs';
 import { DnaBundle } from '../../src/api/admin'
-import msgpack from '@msgpack/msgpack'
+import { decode } from '@msgpack/msgpack'
 
 const delay = ms => new Promise(r => setTimeout(r, ms))
 
@@ -121,7 +121,7 @@ test('admin register dna with full binary bundle', withConductor(ADMIN_PORT, asy
   const zippedDnaBundle = fs.readFileSync(path);
   const encodedDnaBundle = zlib.gunzipSync(zippedDnaBundle);
 
-  const dnaBundle: DnaBundle  = msgpack.decode(encodedDnaBundle.buffer) as DnaBundle;
+  const dnaBundle: DnaBundle  = decode(encodedDnaBundle.buffer) as DnaBundle;
   const hash = await admin.registerDna({
       bundle: dnaBundle
   })

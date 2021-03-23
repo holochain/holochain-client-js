@@ -15,7 +15,7 @@
  *        console.error('problem installing DNA:', err)
  *      })
  */
-import msgpack from '@msgpack/msgpack';
+import { encode, decode} from '@msgpack/msgpack';
 
 import { AppApi, CallZomeRequest, CallZomeResponse, AppInfoRequest, AppInfoResponse, CallZomeRequestGeneric, CallZomeResponseGeneric, AppSignalCb } from '../api/app'
 import { WsClient } from './client'
@@ -51,10 +51,10 @@ export class AppWebsocket implements AppApi {
 
 const callZomeTransform: Transformer<CallZomeRequestGeneric<any>, CallZomeRequestGeneric<Buffer>, CallZomeResponseGeneric<Buffer>, CallZomeResponseGeneric<any>> = {
   input: (req: CallZomeRequestGeneric<any>): CallZomeRequestGeneric<Buffer> => {
-    req.payload = msgpack.encode(req.payload)
+    req.payload = encode(req.payload)
     return req
   },
   output: (res: CallZomeResponseGeneric<Buffer>): CallZomeResponseGeneric<any> => {
-    return msgpack.decode(res)
+    return decode(res)
   }
 }
