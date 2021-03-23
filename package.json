@@ -21,7 +21,7 @@
   "author": "",
   "license": "CAL-1.0",
   "dependencies": {
-    "@msgpack/msgpack": "^2.1.0",
+    "@msgpack/msgpack": "^2.3.0",
     "@types/ws": "^7.2.4",
     "isomorphic-ws": "^4.0.1",
     "nanoid": "^3.1.9",
