@@ -12,7 +12,7 @@
     "build": "rm -rf ./lib ; tsc -d ",
     "dev": "rm -rf ./lib ; tsc -d -w",
     "doc": "typedoc",
-    "prepare": "npm run build",
+    "prepare": "npm i",
     "prepublishOnly": "npm test",
     "test": "npm run test:raw | tap-diff",
     "test:raw": "RUST_LOG=error RUST_BACKTRACE=1 ts-node test",
