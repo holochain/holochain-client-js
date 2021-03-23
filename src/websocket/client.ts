@@ -1,5 +1,5 @@
 import Websocket from "isomorphic-ws";
-import { encode, decode } from "@msgpack/msgpack";
+import msgpack from "@msgpack/msgpack";
 import { nanoid } from "nanoid";
 import { AppSignal, AppSignalCb, SignalResponseGeneric } from "../api/app";
 
@@ -29,10 +29,10 @@ export class WsClient {
         data = await data.arrayBuffer();
       }
 
-      const msg: any = decode(data);
+      const msg: any = msgpack.decode(data);
       if (msg.type === "Signal") {
         if (signalCb) {
-          const decodedMessage: SignalResponseGeneric<any> = decode(
+          const decodedMessage: SignalResponseGeneric<any> = msgpack.decode(
             msg.data
           );
 
@@ -64,9 +64,9 @@ export class WsClient {
   }
 
   emitSignal(data: any) {
-    const encodedMsg = encode({
+    const encodedMsg = msgpack.encode({
       type: "Signal",
-      data: encode(data),
+      data: msgpack.encode(data),
     });
     this.socket.send(encodedMsg);
   }
@@ -74,10 +74,10 @@ export class WsClient {
   request<Req, Res>(data: Req): Promise<Res> {
     let id = this.index;
     this.index += 1;
-    const encodedMsg = encode({
+    const encodedMsg = msgpack.encode({
       id,
       type: "Request",
-      data: encode(data),
+      data: msgpack.encode(data),
     });
     const promise = new Promise((fulfill, reject) => {
       this.pendingRequests[id] = { fulfill, reject };
@@ -99,7 +99,7 @@ export class WsClient {
           new Error(`Response canceled by responder`)
         );
       } else {
-        this.pendingRequests[id].fulfill(decode(msg.data));
+        this.pendingRequests[id].fulfill(msgpack.decode(msg.data));
       }
     } else {
       console.error(`Got response with no matching request. id=${id}`);
@@ -138,5 +138,5 @@ export class WsClient {
 const signalTransform = (
   res: SignalResponseGeneric<Buffer>
 ): SignalResponseGeneric<any> => {
-  return decode(res);
+  return msgpack.decode(res);
 };
