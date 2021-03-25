@@ -9,8 +9,8 @@
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "scripts": {
-    "build": "rm -rf ./lib ; tsc --esModuleInterop --lib es2015,dom -d",
-    "dev": "rm -rf ./lib ; tsc --esModuleInterop --lib es2015,dom -d -w",
+    "build": "rm -rf ./lib ; tsc -d",
+    "dev": "rm -rf ./lib ; tsc -d -w",
     "doc": "typedoc",
     "prepare": "npm run build",
     "prepublishOnly": "npm test",
