@@ -19,7 +19,6 @@
     "example": "ts-node examples/zome-call"
   },
   "author": "",
-  "license": "CAL-1.0",
   "dependencies": {
     "@msgpack/msgpack": "2.4.0",
     "@types/ws": "^7.2.4",
