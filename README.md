@@ -25,13 +25,13 @@ npm install --save-exact @holochain/conductor-api
 ## Sample usage
 
 ### Use AdminWebsocket
-```
+```typescript
   const admin = await AdminWebsocket.connect(`http://localhost:8000`, TIMEOUT)
   await admin.generateAgentPubKey()
 ```
 
 ### Use AppWebsocket
-```
+```typescript
   const signalCb = (signal: AppSignal) => {
     // impl...
     resolve()
