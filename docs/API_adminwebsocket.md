@@ -98,16 +98,16 @@ Returns a `Promise` for the corresponding response.
 buffer
 ```
 
-## `<AdminWebsocket>.registerDna({ source as  path | bundle | hash, uuid?, properties? })`
+## `<AdminWebsocket>.registerDna({ source as  path | bundle | hash, uid?, properties? })`
 Request a Dna to be registered in the database for later installation.
-Note: if a hash is passed as the dna source, then you must pass a uuid or a properties
+Note: if a hash is passed as the dna source, then you must pass a uid or a properties
 - dna source as one of the following named properties:
   - `path` -a `string` of path to a DNA bundle file
-  - `hash` - a `string` of a registered DNA (assumes either or both uuid and properties set)
+  - `hash` - a `string` of a registered DNA (assumes either or both uid and properties set)
   - `bundle` - an `object` with properties
     - `manifest` - an `object` with properties
       - `name` -a `string`
-      - `uuid` - an (optional) `string`
+      - `uid` - an (optional) `string`
       - `properties` - an (optional) `object`
       - `zomes` - an `array` of zome manifest `object` that have properties
         - `name` a `string`
@@ -117,7 +117,7 @@ Note: if a hash is passed as the dna source, then you must pass a uuid or a prop
           - `path` - a `string` path to zome data in a file
           - `url` - a `string` url to the zome data file
     - `resources` - an `object` with keys storing zome data
-- `uuid` - an (optional) `string` which overrides the DNA manifest `uuid`
+- `uid` - an (optional) `string` which overrides the DNA manifest `uid`
 - `properties` - an (optional) `object` which overrides the DNA manifest `properties`
 
 Returns a `Promise` for the corresponding response.
@@ -127,8 +127,8 @@ Returns a `Promise` for the corresponding response.
 buffer  // hash of DNA registered
 ```
 
-## `<AdminWebsocket>.installAppBundle({ installed_app_id, source as path | bundle | hash, uuid?, properties? })`
-Request a hApp to be installed using the given source, and optional uuid and properties.
+## `<AdminWebsocket>.installAppBundle({ installed_app_id, source as path | bundle | hash, uid?, properties? })`
+Request a hApp to be installed using the given source, and optional uid and properties.
 - `installed_app_id` - a `string`
 - bundle source as one  of the following named properties:
   - `path` -a `string`  of path to an App bundle file
@@ -136,7 +136,7 @@ Request a hApp to be installed using the given source, and optional uuid and pro
   - `bundle` - an `object` with properties
     - `manifest` -an `object` with properties
       - `name` - a `string`
-      - `uuid` - an (optional) `string`
+      - `uid` - an (optional) `string`
       - `properties` - an (optional) `object`
       - `zomes` - an array of `object` with properties
         - `name` - a `string`

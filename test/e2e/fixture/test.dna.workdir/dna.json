@@ -1,6 +1,6 @@
 {
   "name": "test-dna",
-  "uuid": "",
+  "uid": "",
   "properties": null,
   "zomes": {
     "foo": {

@@ -54,10 +54,10 @@ test('admin smoke test: registerDna + installApp', withConductor(ADMIN_PORT, asy
   t.equal(activeApps3.length, 0)
   // NB: missing dumpState because it requires a valid cell_id
 
-  // install from hash and uuid
+  // install from hash and uid
   const newHash = await admin.registerDna({
     hash,
-    uuid: "123456"
+    uid: "123456"
   })
   t.ok(newHash)
 
