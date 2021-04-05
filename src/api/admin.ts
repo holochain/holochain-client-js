@@ -17,7 +17,7 @@ export type GenerateAgentPubKeyRequest = void
 export type GenerateAgentPubKeyResponse = AgentPubKey
 
 export type RegisterDnaRequest = {
-  uuid?: string,
+  uid?: string,
   properties?: DnaProperties,
 } & DnaSource
 
@@ -57,7 +57,7 @@ export type CellProvisioning =
         create: {deferred: boolean},
     } | {
         /// Always create a new Cell when installing the App,
-        /// and use a unique UUID to ensure a distinct DHT network
+        /// and use a unique UID to ensure a distinct DHT network
         create_clone: {deferred: boolean},
     } | {
         /// Require that a Cell is already installed which matches the DNA version
@@ -87,7 +87,7 @@ export type DnaVersionFlexible =
 export type AppSlotDnaManifest = {
     location?: Location,
     properties?: DnaProperties,
-    uuid?: string,
+    uid?: string,
     version?: DnaVersionFlexible,
 }
 export type AppSlotManifest = {
@@ -215,9 +215,9 @@ export type DnaManifest = {
     /// The friendly "name" of a Holochain DNA.
     name: string,
 
-    /// A UUID for uniquifying this Dna.
+    /// A UID for uniquifying this Dna.
     // TODO: consider Vec<u8> instead (https://github.com/holochain/holochain/pull/86#discussion_r412689085)
-    uuid?: string,
+    uid?: string,
 
     /// Any arbitrary application properties can be included in this object.
     properties?: DnaProperties,
