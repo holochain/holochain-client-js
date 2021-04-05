@@ -132,7 +132,7 @@ export type InstallAppBundleRequest = {
     /// keyed by the CellNick specified in the app bundle manifest.
     membrane_proofs: {[key: string]: MembraneProof},
 
-    /// Optional fixed UID. May be overridden during installation.
+    /// Optional global UID override.  If set will override the UID value for all DNAs in the bundle.
     uid?: Uid,
 } &
 /// The unique identifier for an installed app in this conductor.
