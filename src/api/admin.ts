@@ -118,6 +118,7 @@ export type AppBundleSource =
     |
     {path: string}
 
+export type Uid = string;
 export type InstallAppBundleRequest = {
 
     /// The agent to use when creating Cells for this App.
@@ -130,6 +131,9 @@ export type InstallAppBundleRequest = {
     /// Include proof-of-membrane-membership data for cells that require it,
     /// keyed by the CellNick specified in the app bundle manifest.
     membrane_proofs: {[key: string]: MembraneProof},
+
+    /// Optional fixed UID. May be overridden during installation.
+    uid?: Uid,
 } &
 /// The unique identifier for an installed app in this conductor.
 AppBundleSource
