@@ -1,11 +1,15 @@
 {
   "name": "@holochain/conductor-api",
-  "version": "0.0.1-dev.8",
+  "version": "0.0.3",
   "description": "Encode/decode messages to/from the Holochain Conductor API over Websocket",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/holochain/holochain-conductor-api.git"
+  },
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "scripts": {
-    "build": "rm -rf ./lib ; tsc -d ",
+    "build": "rm -rf ./lib ; tsc -d",
     "dev": "rm -rf ./lib ; tsc -d -w",
     "doc": "typedoc",
     "prepare": "npm run build",
@@ -15,22 +19,20 @@
     "example": "ts-node examples/zome-call"
   },
   "author": "",
-  "license": "ISC",
   "dependencies": {
+    "@msgpack/msgpack": "2.4.0",
     "@types/ws": "^7.2.4",
     "isomorphic-ws": "^4.0.1",
-    "msgpack-lite": "^0.1.26",
     "nanoid": "^3.1.9",
     "ws": "^7.3.0"
   },
   "devDependencies": {
-    "@iarna/toml": "^2.2.3",
-    "@types/msgpack-lite": "^0.1.7",
     "@types/node": "^14.0",
     "@types/tape": "^4.13.0",
+    "js-yaml": "^3.14.0",
     "tap-diff": "^0.1.1",
     "tape": "^5.0",
     "ts-node": "^8.10.2",
-    "typescript": "^3.9.3"
+    "typescript": "^3.9.9"
   }
 }

@@ -1,2 +1,6 @@
+test.dna
+test.happ
 *.dna.gz
-test-config.toml
+test-config.yml
+test-config-1.yml
+zomes/foo/target

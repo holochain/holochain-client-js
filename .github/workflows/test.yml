@@ -1,0 +1,30 @@
+name: npm tests
+
+on: [ push, pull_request ]
+
+jobs:
+ test:
+  runs-on: ${{ matrix.os }}
+  strategy:
+   matrix:
+    os: [
+     ubuntu-latest,
+     macos-latest
+    ]
+    node: [ '14' ] # '10', '12', to speed up CI for now
+  steps:
+   - uses: actions/checkout@v2
+   - uses: actions/setup-node@v2-beta
+     with:
+      node-version: ${{ matrix.node }}
+   - uses: actions-rs/toolchain@v1
+     with:
+      # borrowed from
+      # https://github.com/holochain/holochain/blob/6b47b136bc419be6e85000a08a59f67b4c46226c/docs/core_testing.md#requirements
+      toolchain: stable-2020-08-03
+      target: wasm32-unknown-unknown
+      default: true
+  # todo: this install holochain step can be removed/simplified
+  # once holochain/holochain has releases
+   - run: ./install-holochain.sh
+   - run: ./run-test.sh

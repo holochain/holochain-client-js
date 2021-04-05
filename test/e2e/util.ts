@@ -1,15 +1,18 @@
-
-import * as TOML from '@iarna/toml'
 import { spawn } from 'child_process'
 import fs from 'fs'
 import os from 'os'
+import { InstalledAppId, CellId, CellNick } from '../../src/api/types'
+import { AppWebsocket } from '../../src/websocket/app'
+import { AdminWebsocket } from '../../src/websocket/admin'
+import yaml from 'js-yaml'
+export const FIXTURE_PATH = './test/e2e/fixture'
+export const CONFIG_PATH = `${FIXTURE_PATH}/test-config.yml`
+export const CONFIG_PATH_1 = `${FIXTURE_PATH}/test-config-1.yml`
 
-const CONFIG_PATH = './test/e2e/fixture/test-config.toml'
-
-const writeConfig = (port) => {
+const writeConfig = (port, configPath) => {
 
   const dir = fs.mkdtempSync(`${os.tmpdir()}/holochain-test-`)
-  fs.writeFileSync(CONFIG_PATH, TOML.stringify({
+  let yamlStr = yaml.safeDump({
     environment_path: dir,
     passphrase_service: {
       type: 'cmd'
@@ -20,7 +23,8 @@ const writeConfig = (port) => {
         port,
       }
     }]
-  }))
+  });
+  fs.writeFileSync(configPath, yamlStr, 'utf8');
   console.info(`using LMDB environment path: ${dir}`)
 }
 
@@ -45,9 +49,11 @@ const awaitInterfaceReady = (handle): Promise<null> => new Promise((fulfill, rej
   })
 })
 
-const launch = async (port) => {
-  await writeConfig(port)
-  const handle = spawn('holochain', ['-c', CONFIG_PATH])
+const HOLOCHAIN_BIN = 'holochain'
+
+export const launch = async (port, configPath) => {
+  await writeConfig(port, configPath)
+  const handle = spawn(HOLOCHAIN_BIN, ['-c', configPath])
   handle.stdout.on('data', data => {
     console.info('conductor: ', data.toString('utf8'))
   })
@@ -59,7 +65,7 @@ const launch = async (port) => {
 }
 
 export const withConductor = (port, f) => async t => {
-  const handle = await launch(port)
+  const handle = await launch(port, CONFIG_PATH)
   try {
     await f(t)
   } catch (e) {
@@ -69,6 +75,40 @@ export const withConductor = (port, f) => async t => {
   } finally {
     handle.kill()
   }
-  console.log("Test ended")
   t.end()
+}
+
+export const installAppAndDna = async (
+  adminPort: number,
+  signalCb: (signal: any) => void = () => {}
+): Promise<[InstalledAppId, CellId, CellNick, AppWebsocket]> => {
+  const installed_app_id = 'app'
+  const nick = 'mydna'
+  const admin = await AdminWebsocket.connect(`http://localhost:${adminPort}`)
+
+  const path = `${FIXTURE_PATH}/test.dna`;
+  const hash = await admin.registerDna({
+    path
+  })
+
+  console.log("THE HASH:", hash)
+
+  const agent = await admin.generateAgentPubKey()
+  const app = await admin.installApp({
+    installed_app_id,
+    agent_key: agent,
+    dnas: [
+      {
+        hash,
+        nick,
+      },
+    ],
+  })
+  console.log("THE INSTALL RESULT:", app)
+  const cell_id = app.slots['mydna'].base_cell_id
+  await admin.activateApp({ installed_app_id })
+  // destructure to get whatever open port was assigned to the interface
+  const { port: appPort } = await admin.attachAppInterface({ port: 0 })
+  const client = await AppWebsocket.connect(`http://localhost:${appPort}`, 12000, signalCb)
+  return [installed_app_id, cell_id, nick, client]
 }

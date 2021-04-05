@@ -1,10 +1,8 @@
 import { Requester } from "./common"
-import { CellId, CapSecret, AgentPubKey, AppId, InstalledApp } from "./types"
+import { CellId, CapSecret, AgentPubKey, InstalledAppId, InstalledAppInfo } from "./types"
 
 export type CallZomeRequestGeneric<Payload> = {
-  // TODO: allow null cap once Holochain supports it
-  // cap: CapSecret | null,
-  cap: CapSecret,
+  cap: CapSecret | null,
   cell_id: CellId,
   zome_name: string,
   fn_name: string,
@@ -15,8 +13,20 @@ export type CallZomeResponseGeneric<Payload> = Payload
 export type CallZomeRequest = CallZomeRequestGeneric<any>
 export type CallZomeResponse = CallZomeResponseGeneric<any>
 
-export type AppInfoRequest = { app_id: AppId }
-export type AppInfoResponse = InstalledApp
+export type AppInfoRequest = { installed_app_id: InstalledAppId }
+export type AppInfoResponse = InstalledAppInfo
+
+export type AppSignal = {
+  type: string,
+  data: {
+    cellId: CellId,
+    payload: any
+  }
+}
+
+export type AppSignalCb = (signal: AppSignal) => void
+
+export type SignalResponseGeneric<Payload> = Payload
 
 export interface AppApi {
   appInfo: Requester<AppInfoRequest, AppInfoResponse>,

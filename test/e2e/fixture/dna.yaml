@@ -1,0 +1,8 @@
+---
+manifest_version: "1"
+name: test-dna
+uid: 9a28aac8-337c-11eb-adc1-0Z02acw20115
+properties: ~
+zomes:
+  - name: foo
+    bundled: "zomes/foo/target/wasm32-unknown-unknown/release/test_wasm_foo.wasm"

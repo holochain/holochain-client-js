@@ -1,0 +1,7 @@
+[workspace]
+members = [
+  "test/e2e/fixture/zomes/foo"
+]
+
+[profile.dev]
+opt-level = "z"

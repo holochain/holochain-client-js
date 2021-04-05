@@ -1,0 +1,15 @@
+---
+manifest_version: "1"
+name: foo-test
+description: ""
+slots:
+  - id: foo
+    provisioning:
+      strategy: create
+      deferred: false
+    dna:
+      bundled: ./test.dna
+      properties: ~
+      uid: ~
+      version: ~
+      clone_limit: 0
