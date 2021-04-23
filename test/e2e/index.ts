@@ -31,9 +31,10 @@ test('admin smoke test: registerDna + installApp', withConductor(ADMIN_PORT, asy
       path
   })
   t.ok(hash)
-  await admin.installApp({
+  const installedApp = await admin.installApp({
       installed_app_id, agent_key, dnas: [{hash, nick: "thedna"}]
   })
+  t.deepEqual(installedApp.status, {Inactive: { NeverActivated: null } })
 
   const activeApps1 = await admin.listActiveApps()
   t.equal(activeApps1.length, 0)
@@ -82,6 +83,7 @@ test('admin smoke test: installBundle', withConductor(ADMIN_PORT, async t => {
     membrane_proofs: {}
   })
   t.ok(installedApp)
+  t.deepEqual(installedApp.status, {Inactive: { NeverActivated: null } })
 
   const activeApps1 = await admin.listActiveApps()
   t.equal(activeApps1.length, 0)
@@ -94,7 +96,7 @@ test('admin smoke test: installBundle', withConductor(ADMIN_PORT, async t => {
 
   const cellIds = await admin.listCellIds()
   t.equal(cellIds.length, 1)
-  t.deepEqual(cellIds[0], installedApp.slots['foo'].base_cell_id)
+  t.deepEqual(cellIds[0], installedApp.cell_data[0].cell_id)
 
   await admin.attachAppInterface({ port: 0 })
   await admin.deactivateApp({ installed_app_id })
@@ -154,6 +156,7 @@ test('can call a zome function', withConductor(ADMIN_PORT, async t => {
   const info = await client.appInfo({ installed_app_id }, 1000)
   t.deepEqual(info.cell_data[0].cell_id, cell_id)
   t.equal(info.cell_data[0].cell_nick, nick)
+  t.deepEqual(info.status, {Active: null})
   const response = await client.callZome({
     // TODO: write a test with a real capability secret.
     cap: null,
@@ -296,7 +299,7 @@ test('can inject agents', async (t) => {
             installed_app_id, agent_key: agent_key_1, dnas: [{hash, nick}]
         })
         t.ok(result)
-        const app1_cell  = result.slots['thedna'].base_cell_id
+        const app1_cell  = result.cell_data[0].cell_id
         const r = await admin1.activateApp({ installed_app_id }, 1000)
 
         await delay(500);
@@ -326,7 +329,7 @@ test('can inject agents', async (t) => {
             installed_app_id, agent_key: agent_key_2, dnas: [{hash, nick}]
         })
         t.ok(result)
-        const app2_cell  = result.slots['thedna'].base_cell_id
+        const app2_cell  = result.cell_data[0].cell_id
         await admin2.activateApp({ installed_app_id })
         await delay(500);
         // observe 2 agent infos

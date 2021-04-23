@@ -7,27 +7,18 @@ export type CellNick = string
 export type DnaProperties = any
 export type SlotId = string;
 
-export type AppSlot = {
-    base_cell_id: CellId,
-    is_provisioned: boolean,
-    clone_limit: number,
-    clones: Array<CellId>,
-}
-
-export type InstalledApp = {
-  installed_app_id: InstalledAppId,
-  _agent_key: AgentPubKey,
-  slots: {[key:string]: AppSlot},
-}
-
 export type InstalledCell = {
     cell_id: CellId,
     cell_nick: CellNick,
 }
+
+export type DeactivationReason = string
+export type InstalledAppStatus = string
+
 export type InstalledAppInfo = {
     installed_app_id: InstalledAppId,
     cell_data: Array<InstalledCell>
-    active: boolean
+    status: InstalledAppStatus,
 }
 export type MembraneProof = Buffer
 
