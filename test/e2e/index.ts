@@ -34,7 +34,7 @@ test('admin smoke test: registerDna + installApp', withConductor(ADMIN_PORT, asy
   const installedApp = await admin.installApp({
       installed_app_id, agent_key, dnas: [{hash, nick: "thedna"}]
   })
-  t.deepEqual(installedApp.status, {Inactive: { NeverActivated: null } })
+  t.deepEqual(installedApp.status, {inactive: { reason: { never_activated: null } } })
 
   const activeApps1 = await admin.listActiveApps()
   t.equal(activeApps1.length, 0)
@@ -83,7 +83,7 @@ test('admin smoke test: installBundle', withConductor(ADMIN_PORT, async t => {
     membrane_proofs: {}
   })
   t.ok(installedApp)
-  t.deepEqual(installedApp.status, {Inactive: { NeverActivated: null } })
+  t.deepEqual(installedApp.status, {inactive: { reason: { never_activated: null } } })
 
   const activeApps1 = await admin.listActiveApps()
   t.equal(activeApps1.length, 0)
@@ -156,7 +156,7 @@ test('can call a zome function', withConductor(ADMIN_PORT, async t => {
   const info = await client.appInfo({ installed_app_id }, 1000)
   t.deepEqual(info.cell_data[0].cell_id, cell_id)
   t.equal(info.cell_data[0].cell_nick, nick)
-  t.deepEqual(info.status, {Active: null})
+  t.deepEqual(info.status, {active: null})
   const response = await client.callZome({
     // TODO: write a test with a real capability secret.
     cap: null,
