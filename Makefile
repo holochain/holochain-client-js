@@ -28,8 +28,7 @@ update-hc:
 
 update-hc-sha:
 	@if [ $(HC_REV) ]; then\
-		echo "⚙️  Updating holo-envoy using holochain rev: $(HC_REV)";\
-		echo "✔  Updating holo-nixpkgs rev in nixpkgs.nix...";\
+		echo "⚙️  Updating conductor-api using holochain rev: $(HC_REV)";\
 		echo "✔  Replacing rev...";\
 		sed -i '3s/.*/REV=$(HC_REV)/' ./install-holochain.sh;\
 	else \
