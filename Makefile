@@ -1,5 +1,10 @@
 .PHONY: test
 
+VERSION:=$(shell npm view '@holochain/conductor-api' version)
+
+get-version:
+	@echo 'Version: '${VERSION}
+
 install-hc:
 	./install-holochain.sh
 
@@ -34,3 +39,16 @@ update-hc-sha:
 	else \
 		echo "No holo-nixpkgs rev provided"; \
   fi
+
+#############################
+# █▀█ █▀▀ █░░ █▀▀ ▄▀█ █▀ █▀▀
+# █▀▄ ██▄ █▄▄ ██▄ █▀█ ▄█ ██▄
+#############################
+
+# use this  to make a minor release 1.1 to 1.2
+release-minor:
+	npm version minor --force && npm publish
+
+# use this  to make a major release 1.1 to 2.1
+release-major:
+	npm version major --force && npm publish
