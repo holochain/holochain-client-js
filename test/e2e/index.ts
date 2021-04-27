@@ -4,7 +4,7 @@ import { AdminWebsocket } from '../../src/websocket/admin'
 import { AppWebsocket } from '../../src/websocket/app'
 import { WsClient } from '../../src/websocket/client'
 import { installAppAndDna, withConductor, launch, CONFIG_PATH, CONFIG_PATH_1, FIXTURE_PATH } from './util'
-import { AgentPubKey, fakeAgentPubKey } from '../../src/api/types'
+import { AgentPubKey, fakeAgentPubKey, InstalledAppStatus} from '../../src/api/types'
 import { AppSignal } from '../../src/api/app'
 import zlib from 'zlib';
 import fs from 'fs';
@@ -34,7 +34,9 @@ test('admin smoke test: registerDna + installApp', withConductor(ADMIN_PORT, asy
   const installedApp = await admin.installApp({
       installed_app_id, agent_key, dnas: [{hash, nick: "thedna"}]
   })
-  t.deepEqual(installedApp.status, {inactive: { reason: { never_activated: null } } })
+
+  const status : InstalledAppStatus = installedApp.status
+  t.deepEqual(status, {inactive: { reason: { never_activated: null } } })
 
   const activeApps1 = await admin.listActiveApps()
   t.equal(activeApps1.length, 0)
@@ -149,11 +151,12 @@ test('admin register dna with full binary bundle', withConductor(ADMIN_PORT, asy
 
   const activeApps3 = await admin.listActiveApps()
   t.equal(activeApps3.length, 0)
+
 }))
 
-test('can call a zome function', withConductor(ADMIN_PORT, async t => {
-  const [installed_app_id, cell_id, nick, client] = await installAppAndDna(ADMIN_PORT)
-  const info = await client.appInfo({ installed_app_id }, 1000)
+test('can call a zome function and then deactivate', withConductor(ADMIN_PORT, async t => {
+  const [installed_app_id, cell_id, nick, client, admin] = await installAppAndDna(ADMIN_PORT)
+  let info = await client.appInfo({ installed_app_id }, 1000)
   t.deepEqual(info.cell_data[0].cell_id, cell_id)
   t.equal(info.cell_data[0].cell_nick, nick)
   t.deepEqual(info.status, {active: null})
@@ -167,6 +170,11 @@ test('can call a zome function', withConductor(ADMIN_PORT, async t => {
     payload: null,
   }, 30000)
   t.equal(response, "foo")
+
+  await admin.deactivateApp({ installed_app_id })
+  info = await client.appInfo({ installed_app_id }, 1000)
+  t.deepEqual(info.status, {inactive: {reason: { normal: null }}})
+
 }))
 
 test('can call a zome function twice, reusing args', withConductor(ADMIN_PORT, async t => {

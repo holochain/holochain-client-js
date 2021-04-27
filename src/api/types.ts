@@ -12,8 +12,9 @@ export type InstalledCell = {
     cell_nick: CellNick,
 }
 
-export type DeactivationReason = string
-export type InstalledAppStatus = string
+export type DeactivationReason = { never_activated: null } | { normal: null } | { quarantined: { error: string} }
+export type InstalledAppStatus =
+  {inactive : {reason: DeactivationReason}} | {active: null}
 
 export type InstalledAppInfo = {
     installed_app_id: InstalledAppId,
