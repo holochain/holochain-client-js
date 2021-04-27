@@ -45,6 +45,13 @@ update-hc-sha:
 # █▀▄ ██▄ █▄▄ ██▄ █▀█ ▄█ ██▄
 #############################
 
+release:
+	make release-minor
+	git checkout -b release-${VERSION}
+	git add .
+	git commit -m release-${VERSION}
+	git push origin HEAD
+
 # use this  to make a minor release 1.1 to 1.2
 release-minor:
 	npm version minor --force && npm publish
