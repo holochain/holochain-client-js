@@ -9,7 +9,7 @@ jobs:
    matrix:
     os: [
      ubuntu-latest,
-     macos-latest
+     # macos-latest  re-enable later, too slow.
     ]
     node: [ 14.x ] # '10', '12', to speed up CI for now
   steps:
