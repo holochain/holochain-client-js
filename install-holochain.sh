@@ -1,6 +1,6 @@
 #!/bin/bash
 
-REV=d292df185a1c463ded0d904e9d7846fa237d3225
+REV=24477159cd80f3a44fd82bba60baa360e76b9f0d
 LAIR_REV=a01a40640574d3cfabae33dfe3f861de7bd7a57c
 
 cargo install --force holochain \
