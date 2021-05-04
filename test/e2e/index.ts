@@ -4,7 +4,7 @@ import { AdminWebsocket } from '../../src/websocket/admin'
 import { AppWebsocket } from '../../src/websocket/app'
 import { WsClient } from '../../src/websocket/client'
 import { installAppAndDna, withConductor, launch, CONFIG_PATH, CONFIG_PATH_1, FIXTURE_PATH } from './util'
-import { AgentPubKey, fakeAgentPubKey } from '../../src/api/types'
+import { AgentPubKey, fakeAgentPubKey, InstalledAppStatus} from '../../src/api/types'
 import { AppSignal } from '../../src/api/app'
 import zlib from 'zlib';
 import fs from 'fs';
@@ -31,9 +31,12 @@ test('admin smoke test: registerDna + installApp', withConductor(ADMIN_PORT, asy
       path
   })
   t.ok(hash)
-  await admin.installApp({
+  const installedApp = await admin.installApp({
       installed_app_id, agent_key, dnas: [{hash, nick: "thedna"}]
   })
+
+  const status : InstalledAppStatus = installedApp.status
+  t.deepEqual(status, {inactive: { reason: { never_activated: null } } })
 
   const activeApps1 = await admin.listActiveApps()
   t.equal(activeApps1.length, 0)
@@ -82,6 +85,7 @@ test('admin smoke test: installBundle', withConductor(ADMIN_PORT, async t => {
     membrane_proofs: {}
   })
   t.ok(installedApp)
+  t.deepEqual(installedApp.status, {inactive: { reason: { never_activated: null } } })
 
   const activeApps1 = await admin.listActiveApps()
   t.equal(activeApps1.length, 0)
@@ -94,7 +98,7 @@ test('admin smoke test: installBundle', withConductor(ADMIN_PORT, async t => {
 
   const cellIds = await admin.listCellIds()
   t.equal(cellIds.length, 1)
-  t.deepEqual(cellIds[0], installedApp.slots['foo'].base_cell_id)
+  t.deepEqual(cellIds[0], installedApp.cell_data[0].cell_id)
 
   await admin.attachAppInterface({ port: 0 })
   await admin.deactivateApp({ installed_app_id })
@@ -147,13 +151,15 @@ test('admin register dna with full binary bundle', withConductor(ADMIN_PORT, asy
 
   const activeApps3 = await admin.listActiveApps()
   t.equal(activeApps3.length, 0)
+
 }))
 
-test('can call a zome function', withConductor(ADMIN_PORT, async t => {
-  const [installed_app_id, cell_id, nick, client] = await installAppAndDna(ADMIN_PORT)
-  const info = await client.appInfo({ installed_app_id }, 1000)
+test('can call a zome function and then deactivate', withConductor(ADMIN_PORT, async t => {
+  const [installed_app_id, cell_id, nick, client, admin] = await installAppAndDna(ADMIN_PORT)
+  let info = await client.appInfo({ installed_app_id }, 1000)
   t.deepEqual(info.cell_data[0].cell_id, cell_id)
   t.equal(info.cell_data[0].cell_nick, nick)
+  t.deepEqual(info.status, {active: null})
   const response = await client.callZome({
     // TODO: write a test with a real capability secret.
     cap: null,
@@ -164,6 +170,11 @@ test('can call a zome function', withConductor(ADMIN_PORT, async t => {
     payload: null,
   }, 30000)
   t.equal(response, "foo")
+
+  await admin.deactivateApp({ installed_app_id })
+  info = await client.appInfo({ installed_app_id }, 1000)
+  t.deepEqual(info.status, {inactive: {reason: { normal: null }}})
+
 }))
 
 test('can call a zome function twice, reusing args', withConductor(ADMIN_PORT, async t => {
@@ -296,7 +307,7 @@ test('can inject agents', async (t) => {
             installed_app_id, agent_key: agent_key_1, dnas: [{hash, nick}]
         })
         t.ok(result)
-        const app1_cell  = result.slots['thedna'].base_cell_id
+        const app1_cell  = result.cell_data[0].cell_id
         const r = await admin1.activateApp({ installed_app_id }, 1000)
 
         await delay(500);
@@ -326,7 +337,7 @@ test('can inject agents', async (t) => {
             installed_app_id, agent_key: agent_key_2, dnas: [{hash, nick}]
         })
         t.ok(result)
-        const app2_cell  = result.slots['thedna'].base_cell_id
+        const app2_cell  = result.cell_data[0].cell_id
         await admin2.activateApp({ installed_app_id })
         await delay(500);
         // observe 2 agent infos

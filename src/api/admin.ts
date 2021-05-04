@@ -1,5 +1,5 @@
 import { Requester } from "./common"
-import { HoloHash, AgentPubKey, MembraneProof, DnaProperties, InstalledAppId, CellId, CellNick, InstalledApp, SlotId } from "./types"
+import { HoloHash, AgentPubKey, MembraneProof, DnaProperties, InstalledAppId, CellId, CellNick, InstalledAppInfo, SlotId } from "./types"
 
 export type ActivateAppRequest = { installed_app_id: InstalledAppId }
 export type ActivateAppResponse = null
@@ -28,7 +28,7 @@ export type InstallAppRequest = {
   agent_key: AgentPubKey,
   dnas: Array<InstallAppDnaPayload>,
 }
-export type InstallAppResponse = InstalledApp
+export type InstallAppResponse = InstalledAppInfo
 
 export type CreateCloneCellRequest = {
     /// Properties to override when installing this Dna
@@ -139,7 +139,7 @@ export type InstallAppBundleRequest = {
 AppBundleSource
 
 
-export type InstallAppBundleResponse = InstalledApp
+export type InstallAppBundleResponse = InstalledAppInfo
 
 export type ListDnasRequest = void
 export type ListDnasResponse = Array<string>
