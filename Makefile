@@ -36,7 +36,7 @@ update-hc-sha:
 		echo "✔  Replacing rev...";\
 		sed -i '3s/.*/REV=$(HC_REV)/' ./install-holochain.sh;\
 	else \
-		echo "No holo-nixpkgs rev provided"; \
+		echo "No holochain rev provided"; \
   fi
 
 #############################
