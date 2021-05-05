@@ -35,6 +35,8 @@ update-hc-sha:
 		echo "⚙️  Updating conductor-api using holochain rev: $(HC_REV)";\
 		echo "✔  Replacing rev...";\
 		sed -i '3s/.*/REV=$(HC_REV)/' ./install-holochain.sh;\
+		sed -i -e 's/^hdk = .*/hdk = {git ="https:\/\/github.com\/holochain\/holochain", rev = "$(HC_REV)", package = "hdk"}/' test/e2e/fixture/zomes/foo/Cargo.toml;\
+		sed -i -e 's/^- `holochain\/holochain` at commit: .*/- `holochain\/holochain` at commit: [$(HC_REV)](https:\/\/github.com\/holochain\/holochain\/commit\/$(HC_REV))/' README.md;\
 	else \
 		echo "No holochain rev provided"; \
   fi
