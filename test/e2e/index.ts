@@ -4,7 +4,7 @@ import { AdminWebsocket } from '../../src/websocket/admin'
 import { AppWebsocket } from '../../src/websocket/app'
 import { WsClient } from '../../src/websocket/client'
 import { installAppAndDna, withConductor, launch, CONFIG_PATH, CONFIG_PATH_1, FIXTURE_PATH } from './util'
-import { AgentPubKey, fakeAgentPubKey, InstalledAppStatus} from '../../src/api/types'
+import { AgentPubKey, fakeAgentPubKey, InstalledAppStatus, InstalledAppInfo } from '../../src/api/types'
 import { AppSignal } from '../../src/api/app'
 import zlib from 'zlib';
 import fs from 'fs';
@@ -18,7 +18,7 @@ const ADMIN_PORT_1 = 33002
 
 const TEST_ZOME_NAME = 'foo'
 
-test('admin smoke test: registerDna + installApp', withConductor(ADMIN_PORT, async t => {
+test.only('admin smoke test: registerDna + installApp', withConductor(ADMIN_PORT, async t => {
 
   const installed_app_id = 'app'
   const admin = await AdminWebsocket.connect(`http://localhost:${ADMIN_PORT}`, 12000)
@@ -31,17 +31,21 @@ test('admin smoke test: registerDna + installApp', withConductor(ADMIN_PORT, asy
       path
   })
   t.ok(hash)
+  const cell_nick = "thedna"
   const installedApp = await admin.installApp({
-      installed_app_id, agent_key, dnas: [{hash, nick: "thedna"}]
+      installed_app_id, agent_key, dnas: [{hash, nick: cell_nick}]
   })
 
   const status : InstalledAppStatus = installedApp.status
-  t.deepEqual(status, {inactive: { reason: { never_activated: null } } })
+  t.deepEqual(status, { inactive: { reason: { never_activated: null } } })
 
   const activeApps1 = await admin.listActiveApps()
   t.equal(activeApps1.length, 0)
 
-  await admin.activateApp({ installed_app_id })
+  const activeAppInfo: InstalledAppInfo = await admin.activateApp({ installed_app_id })
+  t.deepEqual(activeAppInfo.status, { active: null })
+  t.equal(activeAppInfo.cell_data[0].cell_nick, cell_nick)
+  t.equal(activeAppInfo.installed_app_id, installed_app_id)
 
   const activeApps2 = await admin.listActiveApps()
   t.equal(activeApps2.length, 1)
@@ -90,7 +94,9 @@ test('admin smoke test: installBundle', withConductor(ADMIN_PORT, async t => {
   const activeApps1 = await admin.listActiveApps()
   t.equal(activeApps1.length, 0)
 
-  await admin.activateApp({ installed_app_id })
+  const activeAppInfo: InstalledAppInfo = await admin.activateApp({ installed_app_id })
+  t.deepEqual(activeAppInfo.status, { active: null })
+  t.equal(activeAppInfo.installed_app_id, installed_app_id)
 
   const activeApps2 = await admin.listActiveApps()
   t.equal(activeApps2.length, 1)
@@ -130,6 +136,7 @@ test('admin register dna with full binary bundle', withConductor(ADMIN_PORT, asy
       bundle: dnaBundle
   })
   t.ok(hash)
+  const cell_nick = "thedna"
   await admin.installApp({
       installed_app_id, agent_key, dnas: [{hash, nick: "thedna"}]
   })
@@ -137,7 +144,10 @@ test('admin register dna with full binary bundle', withConductor(ADMIN_PORT, asy
   const activeApps1 = await admin.listActiveApps()
   t.equal(activeApps1.length, 0)
 
-  await admin.activateApp({ installed_app_id })
+  const activeAppInfo: InstalledAppInfo = await admin.activateApp({ installed_app_id })
+  t.deepEqual(activeAppInfo.status, { active: null })
+  t.equal(activeAppInfo.cell_data[0].cell_nick, cell_nick)
+  t.equal(activeAppInfo.installed_app_id, installed_app_id)
 
   const activeApps2 = await admin.listActiveApps()
   t.equal(activeApps2.length, 1)
@@ -304,11 +314,15 @@ test('can inject agents', async (t) => {
         const hash = await admin1.registerDna({path})
         t.ok(hash)
         let result = await admin1.installApp({
-            installed_app_id, agent_key: agent_key_1, dnas: [{hash, nick}]
+          installed_app_id, agent_key: agent_key_1, dnas: [{hash, nick}]
         })
         t.ok(result)
         const app1_cell  = result.cell_data[0].cell_id
-        const r = await admin1.activateApp({ installed_app_id }, 1000)
+        const activeApp1Info: InstalledAppInfo = await admin1.activateApp({ installed_app_id }, 1000)
+        t.deepEqual(activeApp1Info.status, { active: null })
+        t.equal(activeApp1Info.cell_data[0].cell_nick, nick)
+        t.equal(activeApp1Info.installed_app_id, installed_app_id)
+
 
         await delay(500);
 
@@ -330,15 +344,19 @@ test('can inject agents', async (t) => {
 
         // now install the app and activate it on agent 2.
         await admin2.registerDna({
-            path
+          path
         })
         t.ok(hash)
         result = await admin2.installApp({
-            installed_app_id, agent_key: agent_key_2, dnas: [{hash, nick}]
+          installed_app_id, agent_key: agent_key_2, dnas: [{hash, nick}]
         })
         t.ok(result)
         const app2_cell  = result.cell_data[0].cell_id
-        await admin2.activateApp({ installed_app_id })
+        const activeApp2Info: InstalledAppInfo = await admin2.activateApp({ installed_app_id })
+        t.deepEqual(activeApp2Info.status, { active: null })
+        t.equal(activeApp2Info.cell_data[0].cell_nick, nick)
+        t.equal(activeApp2Info.installed_app_id, installed_app_id)
+
         await delay(500);
         // observe 2 agent infos
         conductor2_agentInfo = await admin2.requestAgentInfo({cell_id: null});
