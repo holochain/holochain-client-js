@@ -39,16 +39,22 @@ test('admin smoke test: registerDna + installApp', withConductor(ADMIN_PORT, asy
   t.deepEqual(status, {inactive: { reason: { never_activated: null } } })
 
   const activeApps1 = await admin.listActiveApps()
+  console.log('active', activeApps1)
   t.equal(activeApps1.length, 0)
-
+  
+  const inactiveApps = await admin.listInactiveApps()
+  console.log('inactiveApps', inactiveApps)
+  t.equal(inactiveApps.length, 1)
+  
   await admin.activateApp({ installed_app_id })
-
+  
   const activeApps2 = await admin.listActiveApps()
   t.equal(activeApps2.length, 1)
   t.equal(activeApps2[0], installed_app_id)
-
-  const inactiveApps = await admin.listInactiveApps()
-  t.equal(inactiveApps.length, 0)
+  
+  const inactiveApps1 = await admin.listInactiveApps()
+  console.log('inactiveApps', inactiveApps1)
+  t.equal(inactiveApps1.length, 0)
 
   await admin.attachAppInterface({ port: 0 })
   await admin.deactivateApp({ installed_app_id })
