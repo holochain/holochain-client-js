@@ -47,8 +47,14 @@ test('admin smoke test: registerDna + installApp', withConductor(ADMIN_PORT, asy
   t.equal(activeApps2.length, 1)
   t.equal(activeApps2[0], installed_app_id)
 
+  const inactiveApps = await admin.listInactiveApps()
+  t.equal(inactiveApps.length, 0)
+
   await admin.attachAppInterface({ port: 0 })
   await admin.deactivateApp({ installed_app_id })
+
+  const inactiveApps2 = await admin.listInactiveApps()
+  t.equal(inactiveApps2.length, 1)
 
   let dnas = await admin.listDnas()
   t.equal(dnas.length, 1)

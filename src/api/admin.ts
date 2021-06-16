@@ -150,6 +150,9 @@ export type ListCellIdsResponse = Array<CellId>
 export type ListActiveAppsRequest = void
 export type ListActiveAppsResponse = Array<InstalledAppId>
 
+export type ListInActiveAppsRequest = void
+export type ListInActiveAppsResponse = Array<InstalledAppId>
+
 export type ListAppInterfacesRequest = void
 export type ListAppInterfacesResponse = Array<number>
 
