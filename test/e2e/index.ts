@@ -42,9 +42,12 @@ test('admin smoke test: registerDna + installApp', withConductor(ADMIN_PORT, asy
   console.log('active', activeApps1)
   t.equal(activeApps1.length, 0)
   
-  const inactiveApps = await admin.listInactiveApps()
-  console.log('inactiveApps', inactiveApps)
-  t.equal(inactiveApps.length, 1)
+  const appsInfo = await admin.listApps()
+  console.log('appsInfo', appsInfo)
+  t.equal(appsInfo.active_apps.length, 0)
+  t.equal(appsInfo.inactive_apps.length, 1)
+  t.equal(appsInfo.inactive_apps[0].cell_data.length, 1)
+  t.deepEqual(appsInfo.inactive_apps[0].status, {inactive:{reason: {never_activated: null}}})
   
   await admin.activateApp({ installed_app_id })
   
@@ -52,15 +55,21 @@ test('admin smoke test: registerDna + installApp', withConductor(ADMIN_PORT, asy
   t.equal(activeApps2.length, 1)
   t.equal(activeApps2[0], installed_app_id)
   
-  const inactiveApps1 = await admin.listInactiveApps()
-  console.log('inactiveApps', inactiveApps1)
-  t.equal(inactiveApps1.length, 0)
+  const appsInfo2 = await admin.listApps()
+  console.log('appsInfo', appsInfo2)
+  t.equal(appsInfo2.inactive_apps.length, 0)
+  t.equal(appsInfo2.active_apps.length, 1)
+  t.equal(appsInfo2.active_apps[0].cell_data.length, 1)
+  t.deepEqual(appsInfo2.active_apps[0].status, {active: null})
 
   await admin.attachAppInterface({ port: 0 })
   await admin.deactivateApp({ installed_app_id })
 
-  const inactiveApps2 = await admin.listInactiveApps()
-  t.equal(inactiveApps2.length, 1)
+  const appsInfo3 = await admin.listApps()
+  console.log('appsInfo', appsInfo3)
+  t.equal(appsInfo3.active_apps.length, 0)
+  t.equal(appsInfo3.inactive_apps.length, 1)
+  t.deepEqual(appsInfo3.inactive_apps[0].status, {inactive:{reason: {normal: null}}})
 
   let dnas = await admin.listDnas()
   t.equal(dnas.length, 1)
@@ -234,7 +243,7 @@ test('can receive a signal', withConductor(ADMIN_PORT, async t => {
             payload: 'i am a signal'
           }
         })
-        resolve()
+        resolve(null)
       }
       // trigger an emit_signal
       await client.callZome({
