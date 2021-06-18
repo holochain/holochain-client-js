@@ -150,11 +150,11 @@ export type ListCellIdsResponse = Array<CellId>
 export type ListActiveAppsRequest = void
 export type ListActiveAppsResponse = Array<InstalledAppId>
 
-export type ListAppsRequest = void
-export interface ListAppsResponse  {
-    active_apps: Array<InstalledAppInfo>;
-    inactive_apps: Array<InstalledAppInfo>;
+export type AppStatusFilter =  'Active' | 'Inactive';
+export type ListAppsRequest = {
+    status_filter?: AppStatusFilter;
 }
+export type ListAppsResponse = Array<InstalledAppInfo>
 
 export type ListAppInterfacesRequest = void
 export type ListAppInterfacesResponse = Array<number>
