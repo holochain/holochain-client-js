@@ -150,7 +150,7 @@ export type ListCellIdsResponse = Array<CellId>
 export type ListActiveAppsRequest = void
 export type ListActiveAppsResponse = Array<InstalledAppId>
 
-export type AppStatusFilter =  'Active' | 'Inactive';
+export type AppStatusFilter =  {'Active': null }| {'Inactive': null};
 export type ListAppsRequest = {
     status_filter?: AppStatusFilter;
 }

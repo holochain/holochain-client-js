@@ -182,7 +182,7 @@ checksum = "e78d4f1cc4ae33bbfc157ed5d5a5ef3bc29227303d595861deb238fcec4e9457"
 [[package]]
 name = "fixt"
 version = "0.0.2-alpha.1"
-source = "git+https://github.com/holochain/holochain?rev=278a9dc2d29b4f31188fdf8c5543529cee6760a5#278a9dc2d29b4f31188fdf8c5543529cee6760a5"
+source = "git+https://github.com/holochain/holochain?rev=6b34b1797042b72aa7ae80364d3616a321924f75#6b34b1797042b72aa7ae80364d3616a321924f75"
 dependencies = [
  "holochain_serialized_bytes",
  "lazy_static",
@@ -227,7 +227,7 @@ checksum = "d7afe4a420e3fe79967a00898cc1f4db7c8a49a9333a29f8a4bd76a253d5cd04"
 [[package]]
 name = "hdk"
 version = "0.0.101-alpha.0"
-source = "git+https://github.com/holochain/holochain?rev=278a9dc2d29b4f31188fdf8c5543529cee6760a5#278a9dc2d29b4f31188fdf8c5543529cee6760a5"
+source = "git+https://github.com/holochain/holochain?rev=6b34b1797042b72aa7ae80364d3616a321924f75#6b34b1797042b72aa7ae80364d3616a321924f75"
 dependencies = [
  "hdk_derive",
  "holo_hash",
@@ -245,7 +245,7 @@ dependencies = [
 [[package]]
 name = "hdk_derive"
 version = "0.0.2-alpha.1"
-source = "git+https://github.com/holochain/holochain?rev=278a9dc2d29b4f31188fdf8c5543529cee6760a5#278a9dc2d29b4f31188fdf8c5543529cee6760a5"
+source = "git+https://github.com/holochain/holochain?rev=6b34b1797042b72aa7ae80364d3616a321924f75#6b34b1797042b72aa7ae80364d3616a321924f75"
 dependencies = [
  "holochain_zome_types",
  "paste",
@@ -266,7 +266,7 @@ dependencies = [
 [[package]]
 name = "holo_hash"
 version = "0.0.2-alpha.1"
-source = "git+https://github.com/holochain/holochain?rev=278a9dc2d29b4f31188fdf8c5543529cee6760a5#278a9dc2d29b4f31188fdf8c5543529cee6760a5"
+source = "git+https://github.com/holochain/holochain?rev=6b34b1797042b72aa7ae80364d3616a321924f75#6b34b1797042b72aa7ae80364d3616a321924f75"
 dependencies = [
  "base64",
  "blake2b_simd",
@@ -330,7 +330,7 @@ dependencies = [
 [[package]]
 name = "holochain_zome_types"
 version = "0.0.2-alpha.1"
-source = "git+https://github.com/holochain/holochain?rev=278a9dc2d29b4f31188fdf8c5543529cee6760a5#278a9dc2d29b4f31188fdf8c5543529cee6760a5"
+source = "git+https://github.com/holochain/holochain?rev=6b34b1797042b72aa7ae80364d3616a321924f75#6b34b1797042b72aa7ae80364d3616a321924f75"
 dependencies = [
  "chrono",
  "derive_builder",
