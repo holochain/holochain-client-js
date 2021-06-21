@@ -150,7 +150,10 @@ export type ListCellIdsResponse = Array<CellId>
 export type ListActiveAppsRequest = void
 export type ListActiveAppsResponse = Array<InstalledAppId>
 
-export type AppStatusFilter =  'active' | 'inactive';
+export enum AppStatusFilter {
+    Active = 'active',
+    Inactive = 'inactive'
+};
 export type ListAppsRequest = {
     status_filter?: AppStatusFilter;
 }

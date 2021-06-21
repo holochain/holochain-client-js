@@ -87,7 +87,7 @@ const listAppsTransform: Transformer<Api.ListAppsRequest, InternalListAppsReques
     const args: InternalListAppsRequest = {};
 
     if (req.status_filter) {
-      args.status_filter = req.status_filter === 'active' ? { Active: null } : { Inactive: null };
+      args.status_filter = req.status_filter === Api.AppStatusFilter.Active ? { Active: null } : { Inactive: null };
     }
 
     return args
