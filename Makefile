@@ -21,7 +21,7 @@ test-all:
 #############################
 # How to update holochain?
 # make HC_REV="HC_REV" update-hc
-# Example use: make HC_REV="f0e38fd9895054115d8755572e29a5d3639f69e6" update-hc
+# Example use: make HC_REV="fbbe611fd19e50637ee5725a5c2e7f0616a6073c" update-hc
 # Note: After running this we should run the tests and check
 
 update-hc:

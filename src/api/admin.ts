@@ -150,6 +150,15 @@ export type ListCellIdsResponse = Array<CellId>
 export type ListActiveAppsRequest = void
 export type ListActiveAppsResponse = Array<InstalledAppId>
 
+export enum AppStatusFilter {
+    Active = 'active',
+    Inactive = 'inactive'
+};
+export type ListAppsRequest = {
+    status_filter?: AppStatusFilter;
+}
+export type ListAppsResponse = Array<InstalledAppInfo>
+
 export type ListAppInterfacesRequest = void
 export type ListAppInterfacesResponse = Array<number>
 
@@ -179,6 +188,7 @@ export interface AdminApi {
   listDnas: Requester<ListDnasRequest, ListDnasResponse>
   listCellIds: Requester<ListCellIdsRequest, ListCellIdsResponse>
   listActiveApps: Requester<ListActiveAppsRequest, ListActiveAppsResponse>
+  listApps: Requester<ListAppsRequest, ListAppsResponse>
   listAppInterfaces: Requester<ListAppInterfacesRequest, ListAppInterfacesResponse>
   requestAgentInfo: Requester<RequestAgentInfoRequest, RequestAgentInfoResponse>
   addAgentInfo: Requester<AddAgentInfoRequest, AddAgentInfoResponse>

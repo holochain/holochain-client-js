@@ -39,16 +39,45 @@ test('admin smoke test: registerDna + installApp', withConductor(ADMIN_PORT, asy
   t.deepEqual(status, {inactive: { reason: { never_activated: null } } })
 
   const activeApps1 = await admin.listActiveApps()
+  console.log('active', activeApps1)
   t.equal(activeApps1.length, 0)
+  
+  const allAppsInfo = await admin.listApps({})
+  console.log('allAppsInfo', allAppsInfo)
+  t.equal(allAppsInfo.length, 1)
 
+  const activeAppsInfo = await admin.listApps({status_filter: 'active'})
+  const inactiveAppsInfo = await admin.listApps({status_filter: 'inactive'})
+  t.equal(activeAppsInfo.length, 0)
+  t.equal(inactiveAppsInfo.length, 1)
+  t.equal(inactiveAppsInfo[0].cell_data.length, 1)
+  t.deepEqual(inactiveAppsInfo[0].status, {inactive:{reason: {never_activated: null}}})
+  
   await admin.activateApp({ installed_app_id })
-
+  
   const activeApps2 = await admin.listActiveApps()
   t.equal(activeApps2.length, 1)
   t.equal(activeApps2[0], installed_app_id)
+  
+  const activeAppsInfo2 = await admin.listApps({status_filter: 'active'})
+  const inactiveAppsInfo2 = await admin.listApps({status_filter: 'inactive'})
+  console.log('activeAppsInfo2', activeAppsInfo2)
+  console.log('inactiveAppsInfo2', inactiveAppsInfo2)
+  t.equal(inactiveAppsInfo2.length, 0)
+  t.equal(activeAppsInfo2.length, 1)
+  t.equal(activeAppsInfo2[0].cell_data.length, 1)
+  t.deepEqual(activeAppsInfo2[0].status, {active: null})
 
   await admin.attachAppInterface({ port: 0 })
   await admin.deactivateApp({ installed_app_id })
+
+  const activeAppsInfo3 = await admin.listApps({status_filter: 'active'})
+  const inactiveAppsInfo3 = await admin.listApps({status_filter: 'inactive'})
+  console.log('activeAppsInfo3', activeAppsInfo3)
+  console.log('inactiveAppsInfo3', inactiveAppsInfo3)
+  t.equal(activeAppsInfo3.length, 0)
+  t.equal(inactiveAppsInfo3.length, 1)
+  t.deepEqual(inactiveAppsInfo3[0].status, {inactive:{reason: {normal: null}}})
 
   let dnas = await admin.listDnas()
   t.equal(dnas.length, 1)
@@ -222,7 +251,7 @@ test('can receive a signal', withConductor(ADMIN_PORT, async t => {
             payload: 'i am a signal'
           }
         })
-        resolve()
+        resolve(null)
       }
       // trigger an emit_signal
       await client.callZome({
