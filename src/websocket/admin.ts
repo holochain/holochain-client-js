@@ -68,12 +68,31 @@ export class AdminWebsocket implements Api.AdminApi {
     = this._requester('list_cell_ids')
   listActiveApps: Requester<Api.ListActiveAppsRequest, Api.ListActiveAppsResponse>
     = this._requester('list_active_apps')
+  listApps: Requester<Api.ListAppsRequest, Api.ListAppsResponse>
+    = this._requester('list_apps', listAppsTransform)
   listAppInterfaces: Requester<Api.ListAppInterfacesRequest, Api.ListAppInterfacesResponse>
       = this._requester('list_app_interfaces')
   requestAgentInfo: Requester<Api.RequestAgentInfoRequest, Api.RequestAgentInfoResponse>
     = this._requester('request_agent_info')
   addAgentInfo: Requester<Api.AddAgentInfoRequest, Api.AddAgentInfoResponse>
     = this._requester('add_agent_info')
+}
+
+interface InternalListAppsRequest {
+  status_filter?: {Active: null} | {Inactive: null}
+}
+
+const listAppsTransform: Transformer<Api.ListAppsRequest, InternalListAppsRequest, Api.ListAppsResponse, Api.ListAppsResponse> = {
+  input: (req) => {
+    const args: InternalListAppsRequest = {};
+
+    if (req.status_filter) {
+      args.status_filter = req.status_filter === Api.AppStatusFilter.Active ? { Active: null } : { Inactive: null };
+    }
+
+    return args
+  },
+  output: (res) => res
 }
 
 
