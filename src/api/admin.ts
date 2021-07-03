@@ -2,7 +2,7 @@ import { Requester } from "./common"
 import { HoloHash, AgentPubKey, MembraneProof, DnaProperties, InstalledAppId, CellId, CellNick, InstalledAppInfo, SlotId } from "./types"
 
 export type ActivateAppRequest = { installed_app_id: InstalledAppId }
-export type ActivateAppResponse = null
+export type ActivateAppResponse = InstalledAppInfo
 
 export type AttachAppInterfaceRequest = { port: number }
 export type AttachAppInterfaceResponse = { port: number }
