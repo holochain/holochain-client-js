@@ -18,7 +18,7 @@ const ADMIN_PORT_1 = 33002
 
 const TEST_ZOME_NAME = 'foo'
 
-test.only('admin smoke test: registerDna + installApp', withConductor(ADMIN_PORT, async t => {
+test('admin smoke test: registerDna + installApp', withConductor(ADMIN_PORT, async t => {
 
   const installed_app_id = 'app'
   const admin = await AdminWebsocket.connect(`http://localhost:${ADMIN_PORT}`, 12000)
