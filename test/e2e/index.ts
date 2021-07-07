@@ -8,7 +8,7 @@ import { AgentPubKey, fakeAgentPubKey, InstalledAppStatus, InstalledAppInfo } fr
 import { AppSignal } from '../../src/api/app'
 import zlib from 'zlib';
 import fs from 'fs';
-import { DnaBundle } from '../../src/api/admin'
+import { DnaBundle, AppStatusFilter } from '../../src/api/admin'
 import { decode } from '@msgpack/msgpack'
 
 const delay = ms => new Promise(r => setTimeout(r, ms))
@@ -49,8 +49,8 @@ test('admin smoke test: registerDna + installApp', withConductor(ADMIN_PORT, asy
   console.log('allAppsInfo', allAppsInfo)
   t.equal(allAppsInfo.length, 1)
 
-  const activeAppsInfo = await admin.listApps({ status_filter: 'active' })
-  const inactiveAppsInfo = await admin.listApps({ status_filter: 'inactive' })
+  const activeAppsInfo = await admin.listApps({ status_filter: AppStatusFilter.Active })
+  const inactiveAppsInfo = await admin.listApps({ status_filter:  AppStatusFilter.Inactive })
   t.equal(activeAppsInfo.length, 0)
   t.equal(inactiveAppsInfo.length, 1)
   t.equal(inactiveAppsInfo[0].cell_data.length, 1)
@@ -65,8 +65,8 @@ test('admin smoke test: registerDna + installApp', withConductor(ADMIN_PORT, asy
   t.equal(activeApps2.length, 1)
   t.equal(activeApps2[0], installed_app_id)
 
-  const activeAppsInfo2 = await admin.listApps({ status_filter: 'active' })
-  const inactiveAppsInfo2 = await admin.listApps({ status_filter: 'inactive' })
+  const activeAppsInfo2 = await admin.listApps({ status_filter: AppStatusFilter.Active})
+  const inactiveAppsInfo2 = await admin.listApps({ status_filter: AppStatusFilter.Inactive })
   console.log('activeAppsInfo2', activeAppsInfo2)
   console.log('inactiveAppsInfo2', inactiveAppsInfo2)
   t.equal(inactiveAppsInfo2.length, 0)
@@ -77,8 +77,8 @@ test('admin smoke test: registerDna + installApp', withConductor(ADMIN_PORT, asy
   await admin.attachAppInterface({ port: 0 })
   await admin.deactivateApp({ installed_app_id })
 
-  const activeAppsInfo3 = await admin.listApps({ status_filter: 'active' })
-  const inactiveAppsInfo3 = await admin.listApps({ status_filter: 'inactive' })
+  const activeAppsInfo3 = await admin.listApps({ status_filter: AppStatusFilter.Active })
+  const inactiveAppsInfo3 = await admin.listApps({ status_filter: AppStatusFilter.Inactive })
   console.log('activeAppsInfo3', activeAppsInfo3)
   console.log('inactiveAppsInfo3', inactiveAppsInfo3)
   t.equal(activeAppsInfo3.length, 0)
