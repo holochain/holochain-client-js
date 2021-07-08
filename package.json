@@ -10,7 +10,7 @@
   "module": "dist/index.js",
   "types": "lib/index.d.ts",
   "scripts": {
-    "build": "rm -rf ./lib ./dist ; tsc -d --module es2015 --outDir dist",
+    "build": "rm -rf ./lib ./dist ; tsc -d ; tsc -d --module es2015 --outDir ./dist",
     "dev": "rm -rf ./lib ; tsc -d -w",
     "doc": "typedoc",
     "prepare": "npm run build",
