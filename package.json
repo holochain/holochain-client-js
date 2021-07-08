@@ -6,9 +6,14 @@
     "type": "git",
     "url": "https://github.com/holochain/holochain-conductor-api.git"
   },
-  "main": "./lib/index.js",
-  "module": "./lib.es/index.js",
-  "types": "./lib/index.d.ts",
+  "main": "lib/index.js",
+  "module": "lib.es/index.js",
+  "types": "lib/index.d.ts",
+  "files": [
+    "src/**/*",
+    "lib/**/*",
+    "lib.es/**/*"
+  ],
   "scripts": {
     "build": "rm -rf ./lib ./dist ; tsc -d && tsc --outDir lib.es --module es2015",
     "dev": "rm -rf ./lib ; tsc -d -w",
