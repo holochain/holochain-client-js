@@ -9,8 +9,12 @@
   "main": "lib/index.js",
   "module": "lib.es/index.js",
   "types": "lib/index.d.ts",
+  "files": [
+    "./lib/**/*",
+    "./lib.es/**/*"
+  ],
   "scripts": {
-    "build": "rm -rf ./lib ./dist ; tsc -d && tsc -d --outDir lib.es",
+    "build": "rm -rf ./lib ./dist ; tsc -d && tsc -d --outDir lib.es --module es2015",
     "dev": "rm -rf ./lib ; tsc -d -w",
     "doc": "typedoc",
     "prepare": "npm run build",
