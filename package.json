@@ -7,10 +7,10 @@
     "url": "https://github.com/holochain/holochain-conductor-api.git"
   },
   "main": "lib/index.js",
-  "module": "dist/index.js",
+  "module": "lib.es/index.js",
   "types": "lib/index.d.ts",
   "scripts": {
-    "build": "rm -rf ./lib ./dist ; tsc -d && tsc --project tsconfig.es.json",
+    "build": "rm -rf ./lib ./dist ; tsc -d && tsc -d --outDir lib.es --module es2015",
     "dev": "rm -rf ./lib ; tsc -d -w",
     "doc": "typedoc",
     "prepare": "npm run build",
