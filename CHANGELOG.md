@@ -16,4 +16,4 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Change log
 
 ### Fixed
-- Downstream compilation issues when using rollup and typscript (adds an esmodules compilation target to dist)
+- Downstream compilation issues when using rollup and typescript (adds an esmodules compilation target to dist)
