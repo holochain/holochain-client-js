@@ -1,8 +1,8 @@
 import { Requester } from "./common"
-import { HoloHash, AgentPubKey, MembraneProof, DnaProperties, InstalledAppId, CellId, CellNick, InstalledApp, SlotId } from "./types"
+import { HoloHash, AgentPubKey, MembraneProof, DnaProperties, InstalledAppId, CellId, CellNick, InstalledAppInfo, SlotId } from "./types"
 
 export type ActivateAppRequest = { installed_app_id: InstalledAppId }
-export type ActivateAppResponse = null
+export type ActivateAppResponse = InstalledAppInfo
 
 export type AttachAppInterfaceRequest = { port: number }
 export type AttachAppInterfaceResponse = { port: number }
@@ -28,7 +28,7 @@ export type InstallAppRequest = {
   agent_key: AgentPubKey,
   dnas: Array<InstallAppDnaPayload>,
 }
-export type InstallAppResponse = InstalledApp
+export type InstallAppResponse = InstalledAppInfo
 
 export type CreateCloneCellRequest = {
     /// Properties to override when installing this Dna
@@ -139,7 +139,7 @@ export type InstallAppBundleRequest = {
 AppBundleSource
 
 
-export type InstallAppBundleResponse = InstalledApp
+export type InstallAppBundleResponse = InstalledAppInfo
 
 export type ListDnasRequest = void
 export type ListDnasResponse = Array<string>
@@ -149,6 +149,15 @@ export type ListCellIdsResponse = Array<CellId>
 
 export type ListActiveAppsRequest = void
 export type ListActiveAppsResponse = Array<InstalledAppId>
+
+export enum AppStatusFilter {
+    Active = 'active',
+    Inactive = 'inactive'
+};
+export type ListAppsRequest = {
+    status_filter?: AppStatusFilter;
+}
+export type ListAppsResponse = Array<InstalledAppInfo>
 
 export type ListAppInterfacesRequest = void
 export type ListAppInterfacesResponse = Array<number>
@@ -179,6 +188,7 @@ export interface AdminApi {
   listDnas: Requester<ListDnasRequest, ListDnasResponse>
   listCellIds: Requester<ListCellIdsRequest, ListCellIdsResponse>
   listActiveApps: Requester<ListActiveAppsRequest, ListActiveAppsResponse>
+  listApps: Requester<ListAppsRequest, ListAppsResponse>
   listAppInterfaces: Requester<ListAppInterfacesRequest, ListAppInterfacesResponse>
   requestAgentInfo: Requester<RequestAgentInfoRequest, RequestAgentInfoResponse>
   addAgentInfo: Requester<AddAgentInfoRequest, AddAgentInfoResponse>

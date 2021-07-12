@@ -1,15 +1,21 @@
 {
   "name": "@holochain/conductor-api",
-  "version": "0.0.3",
+  "version": "0.1.1",
   "description": "Encode/decode messages to/from the Holochain Conductor API over Websocket",
   "repository": {
     "type": "git",
     "url": "https://github.com/holochain/holochain-conductor-api.git"
   },
   "main": "lib/index.js",
+  "module": "lib.es/index.js",
   "types": "lib/index.d.ts",
+  "files": [
+    "src/**/*",
+    "lib/**/*",
+    "lib.es/**/*"
+  ],
   "scripts": {
-    "build": "rm -rf ./lib ; tsc -d",
+    "build": "rm -rf ./lib ./dist ; tsc -d && tsc --outDir lib.es --module es2015",
     "dev": "rm -rf ./lib ; tsc -d -w",
     "doc": "typedoc",
     "prepare": "npm run build",

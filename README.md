@@ -59,27 +59,21 @@ See [docs/API.md](docs/API.md)
 
 # Holochain Compatibility
 
-This version of `holochain-conductor-api` is currently working with `holochain/holochain` at commit:
-
-[a82372a62d46a503e48f345360d0fb18cc5822d1](https://github.com/holochain/holochain/commit/a82372a62d46a503e48f345360d0fb18cc5822d1) (Mar 11, 2021) and hdk version 0.0.100 from crates.io
+This version of `holochain-conductor-api` is currently working with
+- `holochain/holochain` at commit: [c6e501eceae06f381c80ed50ea7bb971f8d1edcc](https://github.com/holochain/holochain/commit/c6e501eceae06f381c80ed50ea7bb971f8d1edcc)
+- hdk version 0.0.100 from crates.io
 
 If updating this code, please make changes to the git `rev/sha` in 2 places:
 1. Here in the README above ^^
-2. This line in `install-holochain.sh`
-```bash
-REV=a82372a62d46a503e48f345360d0fb18cc5822d1
-```
-
-Notice the match between the SHA in both cases. These should always match.
+2. The `rev` line in `default.nix`
+3. Break the sha256 hash by changing one letter, and do `nix-shell` to get the new sha and replace it
+5. You may need to do the same with the cargoSha.
 
 ## Running tests
 
 You need a version (`stable` toolchain) of Rust available.
 
-You need `holochain` and `hc` on your path, best to use the specific versions that this code requires. To use `cargo` to install them, run:
-```bash
-./install-holochain.sh
-```
+You need `holochain` and `hc` on your path, best to get them from nix with `nix-shell`
 
 To perform the pre-requisite DNA compilation steps, and run the nodejs test, run:
 ```bash
