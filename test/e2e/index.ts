@@ -4,11 +4,11 @@ import { AdminWebsocket } from '../../src/websocket/admin'
 import { AppWebsocket } from '../../src/websocket/app'
 import { WsClient } from '../../src/websocket/client'
 import { installAppAndDna, withConductor, launch, CONFIG_PATH, CONFIG_PATH_1, FIXTURE_PATH } from './util'
-import { AgentPubKey, fakeAgentPubKey, InstalledAppStatus, InstalledAppInfo } from '../../src/api/types'
+import { AgentPubKey, fakeAgentPubKey, InstalledAppInfoStatus, InstalledAppInfo } from '../../src/api/types'
 import { AppSignal } from '../../src/api/app'
 import zlib from 'zlib';
 import fs from 'fs';
-import { DnaBundle, AppStatusFilter } from '../../src/api/admin'
+import { DnaBundle, AppStatusFilter, ActivateAppResponse } from '../../src/api/admin'
 import { decode } from '@msgpack/msgpack'
 
 const delay = ms => new Promise(r => setTimeout(r, ms))
@@ -36,54 +36,58 @@ test('admin smoke test: registerDna + installApp', withConductor(ADMIN_PORT, asy
     installed_app_id, agent_key, dnas: [{ hash, nick: cell_nick }]
   })
 
-  const status: InstalledAppStatus = installedApp.status
-  t.deepEqual(status, { inactive: { reason: { never_activated: null } } })
+  const status: InstalledAppInfoStatus = installedApp.status
+  t.deepEqual(status, { disabled: { reason: { never_started: null } } })
 
   const activeApps1 = await admin.listActiveApps()
   console.log('active', activeApps1)
   t.equal(activeApps1.length, 0)
 
-
+  const startApp1 = await admin.startApp({ installed_app_id })
+  t.notOk(startApp1)
 
   const allAppsInfo = await admin.listApps({})
   console.log('allAppsInfo', allAppsInfo)
   t.equal(allAppsInfo.length, 1)
 
-  const activeAppsInfo = await admin.listApps({ status_filter: AppStatusFilter.Active })
-  const inactiveAppsInfo = await admin.listApps({ status_filter:  AppStatusFilter.Inactive })
-  t.equal(activeAppsInfo.length, 0)
-  t.equal(inactiveAppsInfo.length, 1)
-  t.equal(inactiveAppsInfo[0].cell_data.length, 1)
-  t.deepEqual(inactiveAppsInfo[0].status, { inactive: { reason: { never_activated: null } } })
+  const runningAppsInfo = await admin.listApps({ status_filter: AppStatusFilter.Running })
+  const disabledAppsInfo = await admin.listApps({ status_filter: AppStatusFilter.Disabled })
+  const pausedAppsInfo = await admin.listApps({ status_filter: AppStatusFilter.Paused })
+  t.equal(runningAppsInfo.length, 0)
+  t.equal(pausedAppsInfo.length, 0)
+  t.equal(disabledAppsInfo.length, 1)
+  t.equal(disabledAppsInfo[0].cell_data.length, 1)
+  t.deepEqual(disabledAppsInfo[0].status, { disabled: { reason: { never_started: null } } })
 
-  const activeAppInfo: InstalledAppInfo = await admin.activateApp({ installed_app_id })
-  t.deepEqual(activeAppInfo.status, { active: null })
-  t.equal(activeAppInfo.cell_data[0].cell_nick, cell_nick)
-  t.equal(activeAppInfo.installed_app_id, installed_app_id)
+  const {app, errors} = await admin.enableApp({ installed_app_id })
+  t.deepEqual(app.status, { running: null })
+  t.equal(app.cell_data[0].cell_nick, cell_nick)
+  t.equal(app.installed_app_id, installed_app_id)
+  t.equal(errors.length, 0)
 
   const activeApps2 = await admin.listActiveApps()
   t.equal(activeApps2.length, 1)
   t.equal(activeApps2[0], installed_app_id)
 
-  const activeAppsInfo2 = await admin.listApps({ status_filter: AppStatusFilter.Active})
-  const inactiveAppsInfo2 = await admin.listApps({ status_filter: AppStatusFilter.Inactive })
-  console.log('activeAppsInfo2', activeAppsInfo2)
-  console.log('inactiveAppsInfo2', inactiveAppsInfo2)
-  t.equal(inactiveAppsInfo2.length, 0)
-  t.equal(activeAppsInfo2.length, 1)
-  t.equal(activeAppsInfo2[0].cell_data.length, 1)
-  t.deepEqual(activeAppsInfo2[0].status, { active: null })
+  const runningAppsInfo2 = await admin.listApps({ status_filter: AppStatusFilter.Running})
+  const disabledAppsInfo2 = await admin.listApps({ status_filter:  AppStatusFilter.Disabled })
+  const pausedAppsInfo2 = await admin.listApps({ status_filter: AppStatusFilter.Paused })
+  t.equal(pausedAppsInfo2.length, 0)
+  t.equal(disabledAppsInfo2.length, 0)
+  t.equal(runningAppsInfo2.length, 1)
+  t.equal(runningAppsInfo2[0].cell_data.length, 1)
+  t.deepEqual(runningAppsInfo2[0].status, { running: null })
 
   await admin.attachAppInterface({ port: 0 })
-  await admin.deactivateApp({ installed_app_id })
+  await admin.disableApp({ installed_app_id })
 
-  const activeAppsInfo3 = await admin.listApps({ status_filter: AppStatusFilter.Active })
-  const inactiveAppsInfo3 = await admin.listApps({ status_filter: AppStatusFilter.Inactive })
-  console.log('activeAppsInfo3', activeAppsInfo3)
-  console.log('inactiveAppsInfo3', inactiveAppsInfo3)
-  t.equal(activeAppsInfo3.length, 0)
-  t.equal(inactiveAppsInfo3.length, 1)
-  t.deepEqual(inactiveAppsInfo3[0].status, { inactive: { reason: { normal: null } } })
+  const runningAppsInfo3 = await admin.listApps({ status_filter: AppStatusFilter.Running })
+  const disabledAppsInfo3 = await admin.listApps({ status_filter: AppStatusFilter.Disabled })
+  const pausedAppsInfo3 = await admin.listApps({ status_filter: AppStatusFilter.Paused })
+  t.equal(runningAppsInfo3.length, 0)
+  t.equal(pausedAppsInfo3.length, 0)
+  t.equal(disabledAppsInfo3.length, 1)
+  t.deepEqual(disabledAppsInfo3[0].status, { disabled: { reason: { user: null } } })
 
   let dnas = await admin.listDnas()
   t.equal(dnas.length, 1)
@@ -120,14 +124,15 @@ test('admin smoke test: installBundle', withConductor(ADMIN_PORT, async t => {
     membrane_proofs: {}
   })
   t.ok(installedApp)
-  t.deepEqual(installedApp.status, { inactive: { reason: { never_activated: null } } })
+  t.deepEqual(installedApp.status, { disabled: { reason: { never_started: null } } })
 
   const activeApps1 = await admin.listActiveApps()
   t.equal(activeApps1.length, 0)
 
-  const activeAppInfo: InstalledAppInfo = await admin.activateApp({ installed_app_id })
-  t.deepEqual(activeAppInfo.status, { active: null })
-  t.equal(activeAppInfo.installed_app_id, installed_app_id)
+  const activeAppInfo = await admin.activateApp({ installed_app_id })
+  t.deepEqual(activeAppInfo.app.status, { running: null })
+  t.equal(activeAppInfo.app.installed_app_id, installed_app_id)
+  t.equal(activeAppInfo.errors.length, 0)
 
   const activeApps2 = await admin.listActiveApps()
   t.equal(activeApps2.length, 1)
@@ -175,10 +180,11 @@ test('admin register dna with full binary bundle', withConductor(ADMIN_PORT, asy
   const activeApps1 = await admin.listActiveApps()
   t.equal(activeApps1.length, 0)
 
-  const activeAppInfo: InstalledAppInfo = await admin.activateApp({ installed_app_id })
-  t.deepEqual(activeAppInfo.status, { active: null })
-  t.equal(activeAppInfo.cell_data[0].cell_nick, cell_nick)
-  t.equal(activeAppInfo.installed_app_id, installed_app_id)
+  const activeAppInfo: ActivateAppResponse = await admin.activateApp({ installed_app_id })
+  t.deepEqual(activeAppInfo.app.status, { running: null })
+  t.equal(activeAppInfo.app.cell_data[0].cell_nick, cell_nick)
+  t.equal(activeAppInfo.app.installed_app_id, installed_app_id)
+  t.equal(activeAppInfo.errors.length, 0)
 
   const activeApps2 = await admin.listActiveApps()
   t.equal(activeApps2.length, 1)
@@ -200,7 +206,7 @@ test('can call a zome function and then deactivate', withConductor(ADMIN_PORT, a
   let info = await client.appInfo({ installed_app_id }, 1000)
   t.deepEqual(info.cell_data[0].cell_id, cell_id)
   t.equal(info.cell_data[0].cell_nick, nick)
-  t.deepEqual(info.status, { active: null })
+  t.deepEqual(info.status, { running: null })
   const response = await client.callZome({
     // TODO: write a test with a real capability secret.
     cap: null,
@@ -214,7 +220,7 @@ test('can call a zome function and then deactivate', withConductor(ADMIN_PORT, a
 
   await admin.deactivateApp({ installed_app_id })
   info = await client.appInfo({ installed_app_id }, 1000)
-  t.deepEqual(info.status, { inactive: { reason: { normal: null } } })
+  t.deepEqual(info.status, { disabled: { reason: { user: null } } })
 
 }))
 
@@ -349,10 +355,11 @@ test('can inject agents', async (t) => {
     })
     t.ok(result)
     const app1_cell = result.cell_data[0].cell_id
-    const activeApp1Info: InstalledAppInfo = await admin1.activateApp({ installed_app_id }, 1000)
-    t.deepEqual(activeApp1Info.status, { active: null })
-    t.equal(activeApp1Info.cell_data[0].cell_nick, nick)
-    t.equal(activeApp1Info.installed_app_id, installed_app_id)
+    const activeApp1Info = await admin1.activateApp({ installed_app_id }, 1000)
+    t.deepEqual(activeApp1Info.app.status, { running: null })
+    t.equal(activeApp1Info.app.cell_data[0].cell_nick, nick)
+    t.equal(activeApp1Info.app.installed_app_id, installed_app_id)
+    t.equal(activeApp1Info.errors.length, 0)
 
 
     await delay(500);
@@ -383,10 +390,11 @@ test('can inject agents', async (t) => {
     })
     t.ok(result)
     const app2_cell = result.cell_data[0].cell_id
-    const activeApp2Info: InstalledAppInfo = await admin2.activateApp({ installed_app_id })
-    t.deepEqual(activeApp2Info.status, { active: null })
-    t.equal(activeApp2Info.cell_data[0].cell_nick, nick)
-    t.equal(activeApp2Info.installed_app_id, installed_app_id)
+    const activeApp2Info = await admin2.activateApp({ installed_app_id })
+    t.deepEqual(activeApp2Info.app.status, { running: null })
+    t.equal(activeApp2Info.app.cell_data[0].cell_nick, nick)
+    t.equal(activeApp2Info.app.installed_app_id, installed_app_id)
+    t.equal(activeApp2Info.errors.length, 0)
 
     await delay(500);
     // observe 2 agent infos
