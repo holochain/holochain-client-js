@@ -61,7 +61,7 @@ See [docs/API.md](docs/API.md)
 
 This version of `holochain-conductor-api` is currently working with
 - `holochain/holochain` at commit: [1eb5b70f64b2188e6ef0c876367838b8a6a2015d](https://github.com/holochain/holochain/commit/1eb5b70f64b2188e6ef0c876367838b8a6a2015d)
-- hdk version 0.0.100 from crates.io
+- hdk version 0.0.101 from crates.io
 
 If updating this code, please make changes to the git `rev/sha` in 2 places:
 1. Here in the README above ^^
