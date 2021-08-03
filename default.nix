@@ -8,7 +8,7 @@ let
     holochainVersionId = "custom";
 
     holochainVersion = {
-     rev = "1eb5b70f64b2188e6ef0c876367838b8a6a2015d";
+     rev = "c5dbdf28825927106bc32d186dd54f20d35df468";
      sha256 = "sha256:0i4fh1qhb04f701m4mgr1pw9mv22lxzfqgnp3j3x9pf3kmj2vxah";
      cargoSha256 = "sha256:1xikr23lglh7629g8bdq52r2c20s1r0xdy90w2vlgpsrkq5zn69i";
      bins = {
