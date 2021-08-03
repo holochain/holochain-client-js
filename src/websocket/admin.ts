@@ -44,12 +44,20 @@ export class AdminWebsocket implements Api.AdminApi {
 
   // the specific request/response types come from the Interface
   // which this class implements
-  activateApp: Requester<Api.ActivateAppRequest, Api.ActivateAppResponse>
-    = this._requester('activate_app')
   attachAppInterface: Requester<Api.AttachAppInterfaceRequest, Api.AttachAppInterfaceResponse>
     = this._requester('attach_app_interface')
+  // Deprecated
+  activateApp: Requester<Api.ActivateAppRequest, Api.ActivateAppResponse>
+    = this._requester('activate_app')
+  // Deprecated
   deactivateApp: Requester<Api.DeactivateAppRequest, Api.DeactivateAppResponse>
     = this._requester('deactivate_app')
+  enableApp: Requester<Api.EnableAppRequest, Api.EnableAppResponse>
+    = this._requester('enable_app')
+  disableApp: Requester<Api.DisableAppRequest, Api.DisableAppResponse>
+    = this._requester('disable_app')
+  startApp: Requester<Api.StartAppRequest, Api.StartAppResponse>
+    = this._requester('start_app')
   dumpState: Requester<Api.DumpStateRequest, Api.DumpStateResponse>
     = this._requester('dump_state', dumpStateTransform)
   generateAgentPubKey: Requester<Api.GenerateAgentPubKeyRequest, Api.GenerateAgentPubKeyResponse>
@@ -66,6 +74,7 @@ export class AdminWebsocket implements Api.AdminApi {
     = this._requester('list_dnas')
   listCellIds: Requester<Api.ListCellIdsRequest, Api.ListCellIdsResponse>
     = this._requester('list_cell_ids')
+  // Deprecated
   listActiveApps: Requester<Api.ListActiveAppsRequest, Api.ListActiveAppsResponse>
     = this._requester('list_active_apps')
   listApps: Requester<Api.ListAppsRequest, Api.ListAppsResponse>
@@ -79,7 +88,12 @@ export class AdminWebsocket implements Api.AdminApi {
 }
 
 interface InternalListAppsRequest {
-  status_filter?: {Active: null} | {Inactive: null}
+  status_filter?: 
+    {Running: null} 
+    | {Enabled: null} 
+    | {Paused: null}
+    | {Disabled: null}
+    | {Stopped: null}
 }
 
 const listAppsTransform: Transformer<Api.ListAppsRequest, InternalListAppsRequest, Api.ListAppsResponse, Api.ListAppsResponse> = {
@@ -87,7 +101,7 @@ const listAppsTransform: Transformer<Api.ListAppsRequest, InternalListAppsReques
     const args: InternalListAppsRequest = {};
 
     if (req.status_filter) {
-      args.status_filter = req.status_filter === Api.AppStatusFilter.Active ? { Active: null } : { Inactive: null };
+      args.status_filter = getAppStatusInApiForm(req.status_filter)
     }
 
     return args
@@ -95,10 +109,34 @@ const listAppsTransform: Transformer<Api.ListAppsRequest, InternalListAppsReques
   output: (res) => res
 }
 
-
 const dumpStateTransform: Transformer<Api.DumpStateRequest, Api.DumpStateRequest, string, Api.DumpStateResponse> = {
   input: (req) => req,
   output: (res: string): Api.DumpStateResponse => {
     return JSON.parse(res)
+  }
+}
+
+function getAppStatusInApiForm(status_filter: Api.AppStatusFilter) {
+  switch (status_filter) {
+    case Api.AppStatusFilter.Running:
+    return {
+      Running: null
+    }
+    case Api.AppStatusFilter.Enabled:
+    return {
+      Enabled: null
+    }
+    case Api.AppStatusFilter.Paused:
+    return {
+      Paused: null
+    }
+    case Api.AppStatusFilter.Disabled:
+    return {
+      Disabled: null
+    }
+    case Api.AppStatusFilter.Stopped:
+    return {
+      Stopped: null
+    }
   }
 }
