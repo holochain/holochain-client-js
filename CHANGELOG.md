@@ -10,10 +10,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Fixed
 
 
-## 2021-07-09: v0.1.1
+## 2021-07-09: v0.2.0
+### Added
+- Add new admin conductor api endpoints - EnableApp, StartApp and DisableApp
+### Changed
+- Deprecated admin conductor api endpoints: ActivateApp & DisactivateApp
 
+## 2021-07-09: v0.1.1
 ### Added
 - Change log
-
 ### Fixed
 - Downstream compilation issues when using rollup and typescript (adds an esmodules compilation target to dist)
