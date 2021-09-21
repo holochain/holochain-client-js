@@ -74,6 +74,8 @@ export class AdminWebsocket implements Api.AdminApi {
     = this._requester('register_dna')
   installApp: Requester<Api.InstallAppRequest, Api.InstallAppResponse>
     = this._requester('install_app')
+  uninstallApp: Requester<Api.UninstallAppRequest, Api.UninstallAppResponse>
+    = this._requester('uninstall_app')
   installAppBundle: Requester<Api.InstallAppBundleRequest, Api.InstallAppBundleResponse>
     = this._requester('install_app_bundle')
   createCloneCell: Requester<Api.CreateCloneCellRequest, Api.CreateCloneCellResponse>
@@ -96,9 +98,9 @@ export class AdminWebsocket implements Api.AdminApi {
 }
 
 interface InternalListAppsRequest {
-  status_filter?: 
-    {Running: null} 
-    | {Enabled: null} 
+  status_filter?:
+    {Running: null}
+    | {Enabled: null}
     | {Paused: null}
     | {Disabled: null}
     | {Stopped: null}

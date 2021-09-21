@@ -56,6 +56,11 @@ export type InstallAppRequest = {
 };
 export type InstallAppResponse = InstalledAppInfo;
 
+export type UninstallAppRequest = {
+  installed_app_id: InstalledAppId;
+};
+export type UninstallAppResponse = null;
+
 export type CreateCloneCellRequest = {
   /// Properties to override when installing this Dna
   properties?: DnaProperties;
@@ -217,6 +222,7 @@ export interface AdminApi {
   >;
   registerDna: Requester<RegisterDnaRequest, RegisterDnaResponse>;
   installApp: Requester<InstallAppRequest, InstallAppResponse>;
+  uninstallApp: Requester<UninstallAppRequest, UninstallAppResponse>;
   createCloneCell: Requester<CreateCloneCellRequest, CreateCloneCellResponse>;
   installAppBundle: Requester<
     InstallAppBundleRequest,

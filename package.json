@@ -1,6 +1,6 @@
 {
   "name": "@holochain/conductor-api",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Encode/decode messages to/from the Holochain Conductor API over Websocket",
   "repository": {
     "type": "git",
@@ -15,8 +15,8 @@
     "lib.es/**/*"
   ],
   "scripts": {
-    "build": "rm -rf ./lib ./dist && tsc -d && tsc --outDir lib.es --module es2015",
-    "dev": "rm -rf ./lib && tsc -d -w",
+    "build": "rimraf ./lib ./dist && tsc -d && tsc --outDir lib.es --module es2015",
+    "dev": "rimraf ./lib && tsc -d -w",
     "doc": "typedoc",
     "prepare": "npm run build",
     "prepublishOnly": "npm test",
@@ -31,12 +31,13 @@
     "cross-fetch": "^3.1.4",
     "isomorphic-ws": "^4.0.1",
     "nanoid": "^3.1.9",
-    "ws": "^7.3.0"
+    "ws": "^7.4.6"
   },
   "devDependencies": {
     "@types/node": "^14.0",
     "@types/tape": "^4.13.0",
     "js-yaml": "^3.14.0",
+    "rimraf": "^3.0.2",
     "tap-diff": "^0.1.1",
     "tape": "^5.0",
     "ts-node": "^8.10.2",
