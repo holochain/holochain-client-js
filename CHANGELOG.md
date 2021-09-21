@@ -12,6 +12,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## Unreleased
 ### Added
 - Adds support for UninstallApp which is available in holochain 0.0.106
+- Adds support for automatically detecting Launcher run context for overriding installedApi
 
 ## 2021-07-09: v0.2.0
 ### Added
