@@ -1,6 +1,6 @@
 {
   "name": "@holochain/conductor-api",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Encode/decode messages to/from the Holochain Conductor API over Websocket",
   "repository": {
     "type": "git",
@@ -30,7 +30,7 @@
     "@types/ws": "^7.2.4",
     "isomorphic-ws": "^4.0.1",
     "nanoid": "^3.1.9",
-    "ws": "^7.3.0"
+    "ws": "^7.4.6"
   },
   "devDependencies": {
     "@types/node": "^14.0",
