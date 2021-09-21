@@ -176,6 +176,13 @@ Request a new App to be created using the given Agent and DNAs.
 
 Returns a `Promise` for the corresponding response.
 
+## `<AdminWebsocket>.installApp({ installed_app_id })`
+Request that an app be permanently removed from the database.
+
+- `installed_app_id` - a `string`
+
+Returns a `Promise` for the corresponding response.
+
 ### Response format
 installedApp `object` with properties:
 ```javascript
