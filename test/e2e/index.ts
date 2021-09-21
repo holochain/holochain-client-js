@@ -341,8 +341,8 @@ test('error is catchable when holochain socket is unavailable', async (t) => {
 
 
 test('can inject agents', async (t) => {
-  const conductor1 = await launch(ADMIN_PORT, CONFIG_PATH)
-  const conductor2 = await launch(ADMIN_PORT_1, CONFIG_PATH_1)
+  const [conductor1,l1] = await launch(ADMIN_PORT, CONFIG_PATH)
+  const [conductor2,l2] = await launch(ADMIN_PORT_1, CONFIG_PATH_1)
   try {
     const installed_app_id = 'app'
     const admin1 = await AdminWebsocket.connect(`http://localhost:${ADMIN_PORT}`)
@@ -417,6 +417,8 @@ test('can inject agents', async (t) => {
   finally {
     conductor1.kill()
     conductor2.kill()
+    l1.kill()
+    l2.kill()
   }
 
 })

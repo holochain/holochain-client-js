@@ -63,7 +63,7 @@ const LAIR_BIN = 'lair-keystore'
 export const launch = async (port, configPath) => {
   const lairDir = await writeConfig(port, configPath)
   console.log(`Spawning lair for test with keystore at:  ${lairDir}`)
-  const lairHandle = await spawn(LAIR_BIN, ["-d", lairDir], {
+  const lairHandle = spawn(LAIR_BIN, ["-d", lairDir], {
     env: {
       // TODO: maybe put this behind a flag?
       "RUST_BACKTRACE": "1",
@@ -81,18 +81,20 @@ export const launch = async (port, configPath) => {
     console.info('conductor> ', data.toString('utf8'))
   })
   await awaitInterfaceReady(handle)
-  return handle
+  return [handle,lairHandle]
 }
 
 export const withConductor = (port, f) => async t => {
-  const handle = await launch(port, CONFIG_PATH)
+  const [handle, lairHandle] = await launch(port, CONFIG_PATH)
   try {
     await f(t)
   } catch (e) {
     console.error("Test caught exception: ", e)
+    lairHandle.kill()
     handle.kill()
     throw e
   } finally {
+    lairHandle.kill()
     handle.kill()
   }
   t.end()
