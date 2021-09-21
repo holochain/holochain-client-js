@@ -1,5 +1,6 @@
 import { InstalledAppId } from "../api/types";
 
+// This is coupled with https://github.com/holochain/launcher/blob/develop/src-tauri/src/uis/caddy.rs#L13
 export const LAUNCHER_ENV_URL = "/.launcher-env.json";
 
 export interface LauncherEnvironment {
