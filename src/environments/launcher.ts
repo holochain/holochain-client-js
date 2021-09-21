@@ -33,14 +33,19 @@ async function fetchLauncherEnvironment(): Promise<
   }
 }
 
-let promise: Promise<any> = Promise.reject();
+const isBrowser = typeof window !== "undefined";
+let promise: Promise<any>;
 
-if (typeof window !== 'undefined') {
-  promise = fetchLauncherEnvironment();
+if (isBrowser) {
+  promise = fetchLauncherEnvironment().catch(console.error);
 }
 
-export function getLauncherEnvironment(): Promise<
+export async function getLauncherEnvironment(): Promise<
   LauncherEnvironment | undefined
 > {
-  return promise;
+  if (isBrowser) {
+    return promise;
+  } else {
+    return undefined;
+  }
 }
