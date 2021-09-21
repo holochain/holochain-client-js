@@ -21,19 +21,28 @@ import { AppApi, CallZomeRequest, CallZomeResponse, AppInfoRequest, AppInfoRespo
 import { WsClient } from './client'
 import { catchError, promiseTimeout, DEFAULT_TIMEOUT } from './common'
 import { Transformer, requesterTransformer, Requester } from '../api/common'
+import { fetchLauncherEnvironment } from '../environments/launcher';
+import { InstalledAppId } from '../api/types';
 
 export class AppWebsocket implements AppApi {
   client: WsClient
   defaultTimeout: number
 
-  constructor(client: WsClient, defaultTimeout?: number) {
+  constructor(client: WsClient, defaultTimeout?: number, protected overrideInstalledAppId?: InstalledAppId) {
     this.client = client
     this.defaultTimeout = defaultTimeout === undefined ? DEFAULT_TIMEOUT : defaultTimeout
   }
 
   static async connect(url: string, defaultTimeout?: number, signalCb?: AppSignalCb): Promise<AppWebsocket> {
+    // Check if we are in the launcher's environment, and if so, redirect the url to connect to
+    const env = await fetchLauncherEnvironment()
+
+    if (env) {
+      url = `ws://localhost:${env.APP_INTERFACE_PORT}`
+    }
+
     const wsClient = await WsClient.connect(url, signalCb)
-    return new AppWebsocket(wsClient, defaultTimeout)
+    return new AppWebsocket(wsClient, defaultTimeout, env ? env.INSTALLED_APP_ID: undefined)
   }
 
   _requester = <ReqO, ReqI, ResI, ResO>(tag: string, transformer?: Transformer<ReqO, ReqI, ResI, ResO>) =>
@@ -60,3 +69,18 @@ const callZomeTransform: Transformer<CallZomeRequestGeneric<any>, CallZomeReques
     return decode(res)
   }
 }
+
+const appInfoTransform = (overrideInstalledAppId?: InstalledAppId): Transformer<AppInfoRequest, AppInfoRequest, AppInfoResponse, AppInfoResponse> => ({
+  input: (req:  AppInfoRequest): AppInfoRequest => {
+    if (overrideInstalledAppId) {
+      return {
+        installed_app_id: overrideInstalledAppId
+      };
+    } 
+
+    return req
+  },
+  output: (res: AppInfoResponse): AppInfoResponse => {
+    return res
+  }
+})
