@@ -1,6 +1,6 @@
 import { InstalledAppId } from "../api/types";
 
-export const LAUNCHER_ENV_URL = "/.launcher.env";
+export const LAUNCHER_ENV_URL = "/.launcher-env.json";
 
 export interface LauncherEnvironment {
   APP_INTERFACE_PORT: number;
