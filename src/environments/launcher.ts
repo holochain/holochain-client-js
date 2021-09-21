@@ -33,7 +33,11 @@ async function fetchLauncherEnvironment(): Promise<
   }
 }
 
-const promise = fetchLauncherEnvironment();
+let promise: Promise<any> = Promise.reject();
+
+if (typeof window !== 'undefined') {
+  promise = fetchLauncherEnvironment();
+}
 
 export function getLauncherEnvironment(): Promise<
   LauncherEnvironment | undefined
