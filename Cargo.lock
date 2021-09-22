@@ -56,9 +56,9 @@ checksum = "ab5ef0d4909ef3724cc8cce6ccc8572c5c817592e9285f5464f8e86f8bd3726e"
 
 [[package]]
 name = "hdk"
-version = "0.0.106"
+version = "0.0.107"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "cc3ff73bd49767ec8ff9cf8973625ac88bf1445dec14e8b3bf9cd5115b1e786e"
+checksum = "1df307ee1ddbc819b292761091270837f090c52627e46cb9555c7c40a42e9363"
 dependencies = [
  "hdk_derive",
  "holo_hash",
@@ -75,9 +75,9 @@ dependencies = [
 
 [[package]]
 name = "hdk_derive"
-version = "0.0.8"
+version = "0.0.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "2a9900788a672f5c4e0eab2c9e7ae1efd667cc11cb94ccf4f2d69541895af0c2"
+checksum = "247b98b122ff7bf6703d2b1877c4211082c602a1265d0d9e79db351446ef1cdc"
 dependencies = [
  "holochain_zome_types",
  "paste",
@@ -88,9 +88,9 @@ dependencies = [
 
 [[package]]
 name = "holo_hash"
-version = "0.0.6"
+version = "0.0.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4a29197878928112186c00a22b849160814f0bc4bb87f2467f4a76313e449a16"
+checksum = "e70ba98cfdd900d746c37163d088225f16031c283e71017d6671e40b9503c429"
 dependencies = [
  "holochain_serialized_bytes",
  "serde",
@@ -150,9 +150,9 @@ dependencies = [
 
 [[package]]
 name = "holochain_zome_types"
-version = "0.0.8"
+version = "0.0.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b2e3b10dd83b4647aec783ac454919886da8ff1e3d3f799260fcc224a5137b36"
+checksum = "1e51e5c52432490fc6e6a6885f7ec61da4fa0df103419b4297b561ad4dc5c7ec"
 dependencies = [
  "chrono",
  "holo_hash",
@@ -194,9 +194,9 @@ checksum = "dd25036021b0de88a0aff6b850051563c6516d0bf53f8638938edbb9de732736"
 
 [[package]]
 name = "kitsune_p2p_timestamp"
-version = "0.0.2"
+version = "0.0.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "50a9c190de462bf66a50ffca767e4cd85f7ff0e356eb6614b6ae2febe7aa9f29"
+checksum = "507278ec2536a6db8c4c2349ad972add821cc23e84a9afbe039a560e1d3c250b"
 dependencies = [
  "chrono",
  "serde",
