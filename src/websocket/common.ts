@@ -10,9 +10,9 @@ export const catchError = (res: any) => {
 export const promiseTimeout = (promise: Promise<any>, tag: string, ms: number) => {
   let id
 
-  let timeout = new Promise((resolve, reject) => {
+  const timeout = new Promise((_, reject) => {
     id = setTimeout(() => {
-      clearTimeout(id);
+      clearTimeout(id)
       reject(new Error(`Timed out in ${ms}ms: ${tag}`))
     }, ms)
   })
@@ -22,11 +22,11 @@ export const promiseTimeout = (promise: Promise<any>, tag: string, ms: number) =
       promise,
       timeout
     ]).then((a) => {
-      clearTimeout(id);
+      clearTimeout(id)
       return res(a)
     })
-    .catch(e => {
-      return rej(e)
-    });
+      .catch(e => {
+        return rej(e)
+      })
   })
 }
