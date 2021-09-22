@@ -20,6 +20,7 @@ import { WsClient } from './client'
 import { catchError, promiseTimeout, DEFAULT_TIMEOUT } from './common'
 import { Transformer, requesterTransformer, Requester } from '../api/common'
 import {ListAppInterfacesRequest} from "../api/admin";
+import { getLauncherEnvironment } from '../environments/launcher';
 
 export class AdminWebsocket implements Api.AdminApi {
   client: WsClient
@@ -31,6 +32,13 @@ export class AdminWebsocket implements Api.AdminApi {
   }
 
   static async connect(url: string, defaultTimeout?: number): Promise<AdminWebsocket> {
+    // Check if we are in the launcher's environment, and if so, redirect the url to connect to
+    const env = await getLauncherEnvironment()
+
+    if (env) {
+      url = `ws://localhost:${env.ADMIN_INTERFACE_PORT}`
+    }
+    
     const wsClient = await WsClient.connect(url)
     return new AdminWebsocket(wsClient, defaultTimeout)
   }
@@ -66,6 +74,8 @@ export class AdminWebsocket implements Api.AdminApi {
     = this._requester('register_dna')
   installApp: Requester<Api.InstallAppRequest, Api.InstallAppResponse>
     = this._requester('install_app')
+  uninstallApp: Requester<Api.UninstallAppRequest, Api.UninstallAppResponse>
+    = this._requester('uninstall_app')
   installAppBundle: Requester<Api.InstallAppBundleRequest, Api.InstallAppBundleResponse>
     = this._requester('install_app_bundle')
   createCloneCell: Requester<Api.CreateCloneCellRequest, Api.CreateCloneCellResponse>
@@ -88,9 +98,9 @@ export class AdminWebsocket implements Api.AdminApi {
 }
 
 interface InternalListAppsRequest {
-  status_filter?: 
-    {Running: null} 
-    | {Enabled: null} 
+  status_filter?:
+    {Running: null}
+    | {Enabled: null}
     | {Paused: null}
     | {Disabled: null}
     | {Stopped: null}

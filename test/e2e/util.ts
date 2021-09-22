@@ -9,14 +9,21 @@ export const FIXTURE_PATH = './test/e2e/fixture'
 export const CONFIG_PATH = `${FIXTURE_PATH}/test-config.yml`
 export const CONFIG_PATH_1 = `${FIXTURE_PATH}/test-config-1.yml`
 
-const writeConfig = (port, configPath) => {
+const writeConfig = (port, configPath) : string => {
 
   const dir = fs.mkdtempSync(`${os.tmpdir()}/holochain-test-`)
+  const lairDir = `${dir}/keystore`
+  if (!fs.existsSync(lairDir)) {
+    fs.mkdirSync(lairDir);
+  }
+
   let yamlStr = yaml.safeDump({
     environment_path: dir,
     passphrase_service: {
-      type: 'cmd'
+      type: 'danger_insecure_from_config',
+      passphrase: 'password'
     },
+    keystore_path: lairDir,
     admin_interfaces: [{
       driver: {
         type: 'websocket',
@@ -25,7 +32,8 @@ const writeConfig = (port, configPath) => {
     }]
   });
   fs.writeFileSync(configPath, yamlStr, 'utf8');
-  console.info(`using LMDB environment path: ${dir}`)
+  console.info(`using database environment path: ${dir}`)
+  return lairDir
 }
 
 const awaitInterfaceReady = (handle): Promise<null> => new Promise((fulfill, reject) => {
@@ -50,9 +58,21 @@ const awaitInterfaceReady = (handle): Promise<null> => new Promise((fulfill, rej
 })
 
 const HOLOCHAIN_BIN = 'holochain'
+const LAIR_BIN = 'lair-keystore'
 
 export const launch = async (port, configPath) => {
-  await writeConfig(port, configPath)
+  const lairDir = await writeConfig(port, configPath)
+  console.log(`Spawning lair for test with keystore at:  ${lairDir}`)
+  const lairHandle = spawn(LAIR_BIN, ["-d", lairDir], {
+    env: {
+      // TODO: maybe put this behind a flag?
+      "RUST_BACKTRACE": "1",
+      ...process.env,
+    }
+  })
+  // Wait for lair to output data such as "#lair-keystore-ready#" before starting holochain
+  await new Promise((resolve) => { lairHandle.stdout.once("data", resolve) })
+
   const handle = spawn(HOLOCHAIN_BIN, ['-c', configPath])
   handle.stdout.on('data', data => {
     console.info('conductor: ', data.toString('utf8'))
@@ -61,18 +81,20 @@ export const launch = async (port, configPath) => {
     console.info('conductor> ', data.toString('utf8'))
   })
   await awaitInterfaceReady(handle)
-  return handle
+  return [handle,lairHandle]
 }
 
 export const withConductor = (port, f) => async t => {
-  const handle = await launch(port, CONFIG_PATH)
+  const [handle, lairHandle] = await launch(port, CONFIG_PATH)
   try {
     await f(t)
   } catch (e) {
     console.error("Test caught exception: ", e)
+    lairHandle.kill()
     handle.kill()
     throw e
   } finally {
+    lairHandle.kill()
     handle.kill()
   }
   t.end()

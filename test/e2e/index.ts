@@ -18,7 +18,7 @@ const ADMIN_PORT_1 = 33002
 
 const TEST_ZOME_NAME = 'foo'
 
-test('admin smoke test: registerDna + installApp', withConductor(ADMIN_PORT, async t => {
+test('admin smoke test: registerDna + installApp + uninstallApp', withConductor(ADMIN_PORT, async t => {
 
   const installed_app_id = 'app'
   const admin = await AdminWebsocket.connect(`http://localhost:${ADMIN_PORT}`, 12000)
@@ -46,7 +46,7 @@ test('admin smoke test: registerDna + installApp', withConductor(ADMIN_PORT, asy
   const startApp1 = await admin.startApp({ installed_app_id })
   t.notOk(startApp1)
 
-  const allAppsInfo = await admin.listApps({})
+  let allAppsInfo = await admin.listApps({})
   console.log('allAppsInfo', allAppsInfo)
   t.equal(allAppsInfo.length, 1)
 
@@ -105,6 +105,11 @@ test('admin smoke test: registerDna + installApp', withConductor(ADMIN_PORT, asy
 
   dnas = await admin.listDnas()
   t.equal(dnas.length, 2)
+
+  await admin.uninstallApp({installed_app_id});
+  allAppsInfo = await admin.listApps({})
+  console.log('allAppsInfo', allAppsInfo)
+    t.equal(allAppsInfo.length, 0)
 
 }))
 
@@ -336,8 +341,8 @@ test('error is catchable when holochain socket is unavailable', async (t) => {
 
 
 test('can inject agents', async (t) => {
-  const conductor1 = await launch(ADMIN_PORT, CONFIG_PATH)
-  const conductor2 = await launch(ADMIN_PORT_1, CONFIG_PATH_1)
+  const [conductor1,l1] = await launch(ADMIN_PORT, CONFIG_PATH)
+  const [conductor2,l2] = await launch(ADMIN_PORT_1, CONFIG_PATH_1)
   try {
     const installed_app_id = 'app'
     const admin1 = await AdminWebsocket.connect(`http://localhost:${ADMIN_PORT}`)
@@ -412,6 +417,8 @@ test('can inject agents', async (t) => {
   finally {
     conductor1.kill()
     conductor2.kill()
+    l1.kill()
+    l2.kill()
   }
 
 })
