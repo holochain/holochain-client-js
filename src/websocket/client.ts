@@ -36,6 +36,11 @@ export class WsClient {
             msg.data
           );
 
+          if (!decodedMessage.App) {
+            // We have received a system signal, do nothing
+            return;
+          }
+
           // Note: holochain currently returns signals as an array of two values: cellId and the serialized signal payload
           // and this array is nested within the App key within the returned message.
           const decodedCellId = decodedMessage.App[0];
