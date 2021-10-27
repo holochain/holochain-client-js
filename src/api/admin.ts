@@ -1,4 +1,4 @@
-import { Requester } from "./common";
+import { Requester } from "./common"
 import {
   HoloHash,
   AgentPubKey,
@@ -8,8 +8,8 @@ import {
   CellId,
   CellNick,
   InstalledAppInfo,
-  SlotId,
-} from "./types";
+  SlotId
+} from "./types"
 
 export type AttachAppInterfaceRequest = { port: number };
 export type AttachAppInterfaceResponse = { port: number };
@@ -27,14 +27,14 @@ export type DeactivateAppResponse = null;
 export type EnableAppRequest = { installed_app_id: InstalledAppId };
 export type EnableAppResponse = {
   app: InstalledAppInfo;
-  errors: Array<[CellId, String]>;
+  errors: Array<[CellId, string]>;
 };
 
 export type DisableAppRequest = { installed_app_id: InstalledAppId };
 export type DisableAppResponse = null;
 
 export type StartAppRequest = { installed_app_id: InstalledAppId };
-export type StartAppResponse = Boolean;
+export type StartAppResponse = boolean;
 
 export type DumpStateRequest = { cell_id: CellId };
 export type DumpStateResponse = any;
@@ -84,39 +84,39 @@ export type ResourceBytes = Buffer;
 export type ResourceMap = { [key: string]: ResourceBytes };
 export type CellProvisioning =
   | {
-      /// Always create a new Cell when installing this App
-      create: { deferred: boolean };
-    }
+    /// Always create a new Cell when installing this App
+    create: { deferred: boolean };
+  }
   | {
-      /// Always create a new Cell when installing the App,
-      /// and use a unique UID to ensure a distinct DHT network
-      create_clone: { deferred: boolean };
-    }
+    /// Always create a new Cell when installing the App,
+    /// and use a unique UID to ensure a distinct DHT network
+    create_clone: { deferred: boolean };
+  }
   | {
-      /// Require that a Cell is already installed which matches the DNA version
-      /// spec, and which has an Agent that's associated with this App's agent
-      /// via DPKI. If no such Cell exists, *app installation fails*.
-      use_existing: { deferred: boolean };
-    }
+    /// Require that a Cell is already installed which matches the DNA version
+    /// spec, and which has an Agent that's associated with this App's agent
+    /// via DPKI. If no such Cell exists, *app installation fails*.
+    use_existing: { deferred: boolean };
+  }
   | {
-      /// Try `UseExisting`, and if that fails, fallback to `Create`
-      create_if_no_exists: { deferred: boolean };
-    }
+    /// Try `UseExisting`, and if that fails, fallback to `Create`
+    create_if_no_exists: { deferred: boolean };
+  }
   | {
-      /// Disallow provisioning altogether. In this case, we expect
-      /// `clone_limit > 0`: otherwise, no Cells will ever be created.
-      disabled: {};
-    };
+    /// Disallow provisioning altogether. In this case, we expect
+    /// `clone_limit > 0`: otherwise, no Cells will ever be created.
+    disabled: Record<string, never>;
+  };
 
 export type HoloHashB64 = string;
 export type DnaVersionSpec = Array<HoloHashB64>;
 export type DnaVersionFlexible =
   | {
-      singleton: HoloHashB64;
-    }
+    singleton: HoloHashB64;
+  }
   | {
-      multiple: DnaVersionSpec;
-    };
+    multiple: DnaVersionSpec;
+  };
 export type AppSlotDnaManifest = {
   location?: Location;
   properties?: DnaProperties;
@@ -253,17 +253,17 @@ export type InstallAppDnaPayload = {
 
 export type ZomeLocation =
   | {
-      /// Expect file to be part of this bundle
-      bundled: string;
-    }
+    /// Expect file to be part of this bundle
+    bundled: string;
+  }
   | {
-      /// Get file from local filesystem (not bundled)
-      path: string;
-    }
+    /// Get file from local filesystem (not bundled)
+    path: string;
+  }
   | {
-      /// Get file from URL
-      url: string;
-    };
+    /// Get file from URL
+    url: string;
+  };
 
 export type ZomeManifest = {
   name: string;
@@ -296,14 +296,14 @@ export type DnaBundle = {
 
 export type DnaSource =
   | {
-      hash: HoloHash;
-    }
+    hash: HoloHash;
+  }
   | {
-      path: string;
-    }
+    path: string;
+  }
   | {
-      bundle: DnaBundle;
-    };
+    bundle: DnaBundle;
+  };
 
 export interface HoloHashed<T> {
   hash: HoloHash;
