@@ -1,4 +1,4 @@
-const test = require('tape')
+import test from 'tape'
 
 import { AdminWebsocket } from '../../src/websocket/admin'
 import { AppWebsocket } from '../../src/websocket/app'
@@ -6,8 +6,8 @@ import { WsClient } from '../../src/websocket/client'
 import { installAppAndDna, withConductor, launch, CONFIG_PATH, CONFIG_PATH_1, FIXTURE_PATH } from './util'
 import { AgentPubKey, fakeAgentPubKey, InstalledAppInfoStatus, InstalledAppInfo } from '../../src/api/types'
 import { AppSignal } from '../../src/api/app'
-import zlib from 'zlib';
-import fs from 'fs';
+import zlib from 'zlib'
+import fs from 'fs'
 import { DnaBundle, AppStatusFilter, ActivateAppResponse, EnableAppResponse } from '../../src/api/admin'
 import { decode } from '@msgpack/msgpack'
 
@@ -26,14 +26,14 @@ test('admin smoke test: registerDna + installApp + uninstallApp', withConductor(
   const agent_key = await admin.generateAgentPubKey()
   t.ok(agent_key)
 
-  const path = `${FIXTURE_PATH}/test.dna`;
+  const path = `${FIXTURE_PATH}/test.dna`
   const hash = await admin.registerDna({
-    path
+    path,
   })
   t.ok(hash)
-  const cell_nick = "thedna"
+  const cell_nick = 'thedna'
   const installedApp = await admin.installApp({
-    installed_app_id, agent_key, dnas: [{ hash, nick: cell_nick }]
+    installed_app_id, agent_key, dnas: [{ hash, nick: cell_nick }],
   })
 
   const status: InstalledAppInfoStatus = installedApp.status
@@ -99,7 +99,7 @@ test('admin smoke test: registerDna + installApp + uninstallApp', withConductor(
   // install from hash and uid
   const newHash = await admin.registerDna({
     hash,
-    uid: "123456"
+    uid: "123456",
   })
   t.ok(newHash)
 
@@ -121,12 +121,12 @@ test('admin smoke test: installBundle', withConductor(ADMIN_PORT, async t => {
   const agent_key = await admin.generateAgentPubKey()
   t.ok(agent_key)
 
-  const path = `${FIXTURE_PATH}/test.happ`;
+  const path = `${FIXTURE_PATH}/test.happ`
   const installedApp = await admin.installAppBundle({
     path,
     agent_key,
     installed_app_id,
-    membrane_proofs: {}
+    membrane_proofs: {},
   })
   t.ok(installedApp)
   t.deepEqual(installedApp.status, { disabled: { reason: { never_started: null } } })
@@ -150,7 +150,7 @@ test('admin smoke test: installBundle', withConductor(ADMIN_PORT, async t => {
   await admin.attachAppInterface({ port: 0 })
   await admin.disableApp({ installed_app_id })
 
-  let dnas = await admin.listDnas()
+  const dnas = await admin.listDnas()
   t.equal(dnas.length, 1)
 
   const activeApps3 = await admin.listApps({ status_filter: AppStatusFilter.Running })
@@ -167,19 +167,19 @@ test('admin register dna with full binary bundle', withConductor(ADMIN_PORT, asy
   const agent_key = await admin.generateAgentPubKey()
   t.ok(agent_key)
 
-  const path = `${FIXTURE_PATH}/test.dna`;
+  const path = `${FIXTURE_PATH}/test.dna`
 
-  const zippedDnaBundle = fs.readFileSync(path);
-  const encodedDnaBundle = zlib.gunzipSync(zippedDnaBundle);
+  const zippedDnaBundle = fs.readFileSync(path)
+  const encodedDnaBundle = zlib.gunzipSync(zippedDnaBundle)
 
-  const dnaBundle: DnaBundle = decode(encodedDnaBundle.buffer) as DnaBundle;
+  const dnaBundle: DnaBundle = decode(encodedDnaBundle.buffer) as DnaBundle
   const hash = await admin.registerDna({
-    bundle: dnaBundle
+    bundle: dnaBundle,
   })
   t.ok(hash)
   const cell_nick = "thedna"
   await admin.installApp({
-    installed_app_id, agent_key, dnas: [{ hash, nick: "thedna" }]
+    installed_app_id, agent_key, dnas: [{ hash, nick: "thedna" }],
   })
 
   const runningApps1 = await admin.listApps({ status_filter: AppStatusFilter.Running })
@@ -218,7 +218,7 @@ test('can call a zome function and then deactivate', withConductor(ADMIN_PORT, a
     cell_id,
     zome_name: TEST_ZOME_NAME,
     fn_name: 'foo',
-    provenance: fakeAgentPubKey('TODO'),
+    provenance: fakeAgentPubKey(),
     payload: null,
   }, 30000)
   t.equal(response, "foo")
@@ -240,39 +240,39 @@ test('can call a zome function twice, reusing args', withConductor(ADMIN_PORT, a
     cell_id,
     zome_name: TEST_ZOME_NAME,
     fn_name: 'foo',
-    provenance: fakeAgentPubKey('TODO'),
+    provenance: fakeAgentPubKey(),
     payload: null,
   }
   const response = await client.callZome(args, 30000)
-  t.equal(response, "foo")
+  t.equal(response, 'foo')
   const response2 = await client.callZome(args, 30000)
-  t.equal(response, "foo")
+  t.equal(response2, 'foo')
 }))
 
 
 test('can handle canceled response', withConductor(ADMIN_PORT, async t => {
   // const client = await WsClient.connect(`http://localhost:${ADMIN_PORT}`);A
-  const client = new WsClient({ send: (_d) => { } });
-  let prom = client.request("blah");
+  const client = new WsClient({ send: () => { /* do nothing */ } })
+  const prom = client.request('blah')
   client.handleResponse({ id: 0 })
   try {
-    const resp = await prom;
+    await prom
   } catch (e) {
-    t.deepEqual(e, new Error(`Response canceled by responder`))
+    t.deepEqual(e, new Error('Response canceled by responder'))
   }
 }))
 
 test('can receive a signal', withConductor(ADMIN_PORT, async t => {
   await new Promise(async (resolve, reject) => {
     try {
-      const [installed_app_id, cell_id, _nick, client] = await installAppAndDna(ADMIN_PORT, signalCb)
+      const [cell_id, client] = await installAppAndDna(ADMIN_PORT, signalCb)
       function signalCb(signal: AppSignal) {
         t.deepEqual(signal, {
           type: 'Signal',
           data: {
             cellId: cell_id,
-            payload: 'i am a signal'
-          }
+            payload: 'i am a signal',
+          },
         })
         resolve(null)
       }
@@ -282,7 +282,7 @@ test('can receive a signal', withConductor(ADMIN_PORT, async t => {
         cell_id,
         zome_name: TEST_ZOME_NAME,
         fn_name: 'emitter',
-        provenance: fakeAgentPubKey('TODO'),
+        provenance: fakeAgentPubKey(),
         payload: null,
       })
     } catch (e) {
@@ -294,7 +294,7 @@ test('can receive a signal', withConductor(ADMIN_PORT, async t => {
 test(
   'callZome rejects appropriately for ZomeCallUnauthorized',
   withConductor(ADMIN_PORT, async (t) => {
-    const [installed_app_id, cell_id, _nick, client] = await installAppAndDna(ADMIN_PORT)
+    const [cell_id, client] = await installAppAndDna(ADMIN_PORT)
     try {
       await client.callZome({
         // bad cap, on purpose
@@ -307,7 +307,7 @@ test(
         cell_id,
         zome_name: TEST_ZOME_NAME,
         fn_name: 'bar',
-        provenance: fakeAgentPubKey('TODO'),
+        provenance: fakeAgentPubKey(),
         payload: null,
       }, 30000)
     } catch (e) {
@@ -352,11 +352,11 @@ test('can inject agents', async (t) => {
     const agent_key_2 = await admin2.generateAgentPubKey()
     t.ok(agent_key_2)
     const nick = 'thedna'
-    const path = `${FIXTURE_PATH}/test.dna`;
+    const path = `${FIXTURE_PATH}/test.dna`
     const hash = await admin1.registerDna({ path })
     t.ok(hash)
     let result = await admin1.installApp({
-      installed_app_id, agent_key: agent_key_1, dnas: [{ hash, nick }]
+      installed_app_id, agent_key: agent_key_1, dnas: [{ hash, nick }],
     })
     t.ok(result)
     const app1_cell = result.cell_data[0].cell_id
@@ -367,31 +367,31 @@ test('can inject agents', async (t) => {
     t.equal(activeApp1Info.errors.length, 0)
 
 
-    await delay(500);
+    await delay(500)
 
     // after activating an app requestAgentInfo should return the agentid
     // requesting info with null cell_id should return all agents known about.
     // otherwise it's just agents know about for that cell
-    const conductor1_agentInfo = await admin1.requestAgentInfo({ cell_id: null });
+    const conductor1_agentInfo = await admin1.requestAgentInfo({ cell_id: null })
     t.equal(conductor1_agentInfo.length, 1)
 
     // agent2 with no activated apps there are no agents
-    var conductor2_agentInfo = await admin2.requestAgentInfo({ cell_id: null });
+    let conductor2_agentInfo = await admin2.requestAgentInfo({ cell_id: null })
     t.equal(conductor2_agentInfo.length, 0)
 
     // but, after explicitly injecting an agent, we should see it
-    await admin2.addAgentInfo({ agent_infos: conductor1_agentInfo });
-    conductor2_agentInfo = await admin2.requestAgentInfo({ cell_id: null });
+    await admin2.addAgentInfo({ agent_infos: conductor1_agentInfo })
+    conductor2_agentInfo = await admin2.requestAgentInfo({ cell_id: null })
     t.equal(conductor2_agentInfo.length, 1)
     t.deepEqual(conductor1_agentInfo, conductor2_agentInfo)
 
     // now install the app and activate it on agent 2.
     await admin2.registerDna({
-      path
+      path,
     })
     t.ok(hash)
     result = await admin2.installApp({
-      installed_app_id, agent_key: agent_key_2, dnas: [{ hash, nick }]
+      installed_app_id, agent_key: agent_key_2, dnas: [{ hash, nick }],
     })
     t.ok(result)
     const app2_cell = result.cell_data[0].cell_id
@@ -401,16 +401,16 @@ test('can inject agents', async (t) => {
     t.equal(activeApp2Info.app.installed_app_id, installed_app_id)
     t.equal(activeApp2Info.errors.length, 0)
 
-    await delay(500);
+    await delay(500)
     // observe 2 agent infos
-    conductor2_agentInfo = await admin2.requestAgentInfo({ cell_id: null });
+    conductor2_agentInfo = await admin2.requestAgentInfo({ cell_id: null })
     t.equal(conductor2_agentInfo.length, 2)
 
     // now confirm that we can ask for just one cell
-    await admin1.addAgentInfo({ agent_infos: conductor2_agentInfo });
-    const app1_agentInfo = await admin1.requestAgentInfo({ cell_id: app1_cell });
+    await admin1.addAgentInfo({ agent_infos: conductor2_agentInfo })
+    const app1_agentInfo = await admin1.requestAgentInfo({ cell_id: app1_cell })
     t.equal(app1_agentInfo.length, 1)
-    const app2_agentInfo = await admin2.requestAgentInfo({ cell_id: app2_cell });
+    const app2_agentInfo = await admin2.requestAgentInfo({ cell_id: app2_cell })
     t.equal(app2_agentInfo.length, 1)
 
   }

@@ -15,14 +15,14 @@
  *        console.error('problem installing DNA:', err)
  *      })
  */
-import { encode, decode} from '@msgpack/msgpack';
+import { encode, decode } from '@msgpack/msgpack'
 
-import { AppApi, CallZomeRequest, CallZomeResponse, AppInfoRequest, AppInfoResponse, CallZomeRequestGeneric, CallZomeResponseGeneric, AppSignalCb } from '../api/app'
+import { AppApi, AppInfoRequest, AppInfoResponse, CallZomeRequestGeneric, CallZomeResponseGeneric, AppSignalCb } from '../api/app'
 import { WsClient } from './client'
 import { catchError, promiseTimeout, DEFAULT_TIMEOUT } from './common'
 import { Transformer, requesterTransformer, Requester } from '../api/common'
-import { getLauncherEnvironment } from '../environments/launcher';
-import { InstalledAppId } from '../api/types';
+import { getLauncherEnvironment } from '../environments/launcher'
+import { InstalledAppId } from '../api/types'
 
 export class AppWebsocket implements AppApi {
   client: WsClient
@@ -59,28 +59,28 @@ export class AppWebsocket implements AppApi {
 }
 
 const callZomeTransform: Transformer<CallZomeRequestGeneric<any>, CallZomeRequestGeneric<Uint8Array>, CallZomeResponseGeneric<Uint8Array>, CallZomeResponseGeneric<any>> = {
-  input: (req:  CallZomeRequestGeneric<any>): CallZomeRequestGeneric<Uint8Array> => {
+  input: (req: CallZomeRequestGeneric<any>): CallZomeRequestGeneric<Uint8Array> => {
     return {
       ...req,
-      payload: encode(req.payload)
+      payload: encode(req.payload),
     }
   },
   output: (res: CallZomeResponseGeneric<Uint8Array>): CallZomeResponseGeneric<any> => {
     return decode(res)
-  }
+  },
 }
 
 const appInfoTransform = (overrideInstalledAppId?: InstalledAppId): Transformer<AppInfoRequest, AppInfoRequest, AppInfoResponse, AppInfoResponse> => ({
   input: (req:  AppInfoRequest): AppInfoRequest => {
     if (overrideInstalledAppId) {
       return {
-        installed_app_id: overrideInstalledAppId
-      };
+        installed_app_id: overrideInstalledAppId,
+      }
     } 
 
     return req
   },
   output: (res: AppInfoResponse): AppInfoResponse => {
     return res
-  }
+  },
 })

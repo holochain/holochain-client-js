@@ -19,8 +19,7 @@ import * as Api from '../api/admin'
 import { WsClient } from './client'
 import { catchError, promiseTimeout, DEFAULT_TIMEOUT } from './common'
 import { Transformer, requesterTransformer, Requester } from '../api/common'
-import {ListAppInterfacesRequest} from "../api/admin";
-import { getLauncherEnvironment } from '../environments/launcher';
+import { getLauncherEnvironment } from '../environments/launcher'
 
 export class AdminWebsocket implements Api.AdminApi {
   client: WsClient
@@ -90,7 +89,7 @@ export class AdminWebsocket implements Api.AdminApi {
   listApps: Requester<Api.ListAppsRequest, Api.ListAppsResponse>
     = this._requester('list_apps', listAppsTransform)
   listAppInterfaces: Requester<Api.ListAppInterfacesRequest, Api.ListAppInterfacesResponse>
-      = this._requester('list_app_interfaces')
+    = this._requester('list_app_interfaces')
   requestAgentInfo: Requester<Api.RequestAgentInfoRequest, Api.RequestAgentInfoResponse>
     = this._requester('request_agent_info')
   addAgentInfo: Requester<Api.AddAgentInfoRequest, Api.AddAgentInfoResponse>
@@ -99,16 +98,16 @@ export class AdminWebsocket implements Api.AdminApi {
 
 interface InternalListAppsRequest {
   status_filter?:
-    {Running: null}
-    | {Enabled: null}
-    | {Paused: null}
-    | {Disabled: null}
-    | {Stopped: null}
+  { Running: null }
+  | { Enabled: null }
+  | { Paused: null }
+  | { Disabled: null }
+  | { Stopped: null }
 }
 
 const listAppsTransform: Transformer<Api.ListAppsRequest, InternalListAppsRequest, Api.ListAppsResponse, Api.ListAppsResponse> = {
   input: (req) => {
-    const args: InternalListAppsRequest = {};
+    const args: InternalListAppsRequest = {}
 
     if (req.status_filter) {
       args.status_filter = getAppStatusInApiForm(req.status_filter)
@@ -116,37 +115,37 @@ const listAppsTransform: Transformer<Api.ListAppsRequest, InternalListAppsReques
 
     return args
   },
-  output: (res) => res
+  output: (res) => res,
 }
 
 const dumpStateTransform: Transformer<Api.DumpStateRequest, Api.DumpStateRequest, string, Api.DumpStateResponse> = {
   input: (req) => req,
   output: (res: string): Api.DumpStateResponse => {
     return JSON.parse(res)
-  }
+  },
 }
 
 function getAppStatusInApiForm(status_filter: Api.AppStatusFilter) {
   switch (status_filter) {
-    case Api.AppStatusFilter.Running:
+  case Api.AppStatusFilter.Running:
     return {
-      Running: null
+      Running: null,
     }
-    case Api.AppStatusFilter.Enabled:
+  case Api.AppStatusFilter.Enabled:
     return {
-      Enabled: null
+      Enabled: null,
     }
-    case Api.AppStatusFilter.Paused:
+  case Api.AppStatusFilter.Paused:
     return {
-      Paused: null
+      Paused: null,
     }
-    case Api.AppStatusFilter.Disabled:
+  case Api.AppStatusFilter.Disabled:
     return {
-      Disabled: null
+      Disabled: null,
     }
-    case Api.AppStatusFilter.Stopped:
+  case Api.AppStatusFilter.Stopped:
     return {
-      Stopped: null
+      Stopped: null,
     }
   }
 }

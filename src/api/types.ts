@@ -22,23 +22,23 @@ export type PausedAppReason = {
 };
 export type DisabledAppReason =
   | {
-      never_started: null;
-    }
+    never_started: null;
+  }
   | { user: null }
   | { error: string };
 
 export type InstalledAppInfoStatus =
   | {
-      paused: { reason: PausedAppReason };
-    }
+    paused: { reason: PausedAppReason };
+  }
   | {
-      disabled: {
-        reason: DisabledAppReason;
-      };
-    }
-  | {
-      running: null;
+    disabled: {
+      reason: DisabledAppReason;
     };
+  }
+  | {
+    running: null;
+  };
 
 export type InstalledAppInfo = {
   installed_app_id: InstalledAppId;
@@ -47,11 +47,11 @@ export type InstalledAppInfo = {
 };
 export type MembraneProof = Buffer;
 
-export const fakeAgentPubKey = (x: any) =>
+export const fakeAgentPubKey = () =>
   Buffer.from(
     [0x84, 0x20, 0x24].concat(
       "000000000000000000000000000000000000"
         .split("")
         .map((x) => parseInt(x, 10))
     )
-  );
+  )
