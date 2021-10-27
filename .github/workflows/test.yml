@@ -26,6 +26,10 @@ jobs:
         set -xe
         mkdir -p ~/.config/nix/
         cp ./.github/nix.conf ~/.config/nix/
+    - name: Use cachix
+      uses: cachix/cachix-action@v10
+      with:
+        name: holochain-ci
     - name: Prepare Nix environment
       run: nix-shell --command "echo Completed"
     - name: Run all tests
