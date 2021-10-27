@@ -23,7 +23,7 @@
     "test": "npm run test:raw | tap-diff",
     "test:raw": "RUST_LOG=error RUST_BACKTRACE=1 ts-node test",
     "example": "ts-node examples/zome-call",
-    "lint": "eslint src/** --fix"
+    "lint": "eslint src/** test/** --fix"
   },
   "author": "",
   "dependencies": {
