@@ -14,24 +14,24 @@ const writeConfig = (port, configPath) : string => {
   const dir = fs.mkdtempSync(`${os.tmpdir()}/holochain-test-`)
   const lairDir = `${dir}/keystore`
   if (!fs.existsSync(lairDir)) {
-    fs.mkdirSync(lairDir);
+    fs.mkdirSync(lairDir)
   }
 
-  let yamlStr = yaml.safeDump({
+  const yamlStr = yaml.safeDump({
     environment_path: dir,
     passphrase_service: {
       type: 'danger_insecure_from_config',
-      passphrase: 'password'
+      passphrase: 'password',
     },
     keystore_path: lairDir,
     admin_interfaces: [{
       driver: {
         type: 'websocket',
         port,
-      }
-    }]
-  });
-  fs.writeFileSync(configPath, yamlStr, 'utf8');
+      },
+    }],
+  })
+  fs.writeFileSync(configPath, yamlStr, 'utf8')
   console.info(`using database environment path: ${dir}`)
   return lairDir
 }
@@ -68,7 +68,7 @@ export const launch = async (port, configPath) => {
       // TODO: maybe put this behind a flag?
       "RUST_BACKTRACE": "1",
       ...process.env,
-    }
+    },
   })
   // Wait for lair to output data such as "#lair-keystore-ready#" before starting holochain
   await new Promise((resolve) => { lairHandle.stdout.once("data", resolve) })
@@ -102,15 +102,15 @@ export const withConductor = (port, f) => async t => {
 
 export const installAppAndDna = async (
   adminPort: number,
-  signalCb: (signal: any) => void = () => {}
-): Promise<[InstalledAppId, CellId, CellNick, AppWebsocket, AdminWebsocket]> => {
+  signalCb: (signal: any) => void = (() => {})
+): Promise<{ installed_app_id: InstalledAppId, cell_id: CellId, nick: CellNick, client: AppWebsocket, admin: AdminWebsocket}> => {
   const installed_app_id = 'app'
   const nick = 'mydna'
   const admin = await AdminWebsocket.connect(`http://localhost:${adminPort}`)
 
-  const path = `${FIXTURE_PATH}/test.dna`;
+  const path = `${FIXTURE_PATH}/test.dna`
   const hash = await admin.registerDna({
-    path
+    path,
   })
 
   console.log("THE HASH:", hash)
@@ -123,7 +123,7 @@ export const installAppAndDna = async (
       {
         hash,
         nick,
-      },
+      }
     ],
   })
   console.log("THE INSTALL RESULT:", app)
@@ -132,5 +132,5 @@ export const installAppAndDna = async (
   // destructure to get whatever open port was assigned to the interface
   const { port: appPort } = await admin.attachAppInterface({ port: 0 })
   const client = await AppWebsocket.connect(`http://localhost:${appPort}`, 12000, signalCb)
-    return [installed_app_id, cell_id, nick, client, admin]
+  return {installed_app_id, cell_id, nick, client, admin}
 }

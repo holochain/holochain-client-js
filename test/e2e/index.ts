@@ -4,11 +4,11 @@ import { AdminWebsocket } from '../../src/websocket/admin'
 import { AppWebsocket } from '../../src/websocket/app'
 import { WsClient } from '../../src/websocket/client'
 import { installAppAndDna, withConductor, launch, CONFIG_PATH, CONFIG_PATH_1, FIXTURE_PATH } from './util'
-import { AgentPubKey, fakeAgentPubKey, InstalledAppInfoStatus, InstalledAppInfo } from '../../src/api/types'
+import { fakeAgentPubKey, InstalledAppInfoStatus } from '../../src/api/types'
 import { AppSignal } from '../../src/api/app'
 import zlib from 'zlib'
 import fs from 'fs'
-import { DnaBundle, AppStatusFilter, ActivateAppResponse, EnableAppResponse } from '../../src/api/admin'
+import { DnaBundle, AppStatusFilter, EnableAppResponse } from '../../src/api/admin'
 import { decode } from '@msgpack/msgpack'
 
 const delay = ms => new Promise(r => setTimeout(r, ms))
@@ -106,10 +106,10 @@ test('admin smoke test: registerDna + installApp + uninstallApp', withConductor(
   dnas = await admin.listDnas()
   t.equal(dnas.length, 2)
 
-  await admin.uninstallApp({installed_app_id});
+  await admin.uninstallApp({installed_app_id})
   allAppsInfo = await admin.listApps({})
   console.log('allAppsInfo', allAppsInfo)
-    t.equal(allAppsInfo.length, 0)
+  t.equal(allAppsInfo.length, 0)
 
 }))
 
@@ -207,7 +207,7 @@ test('admin register dna with full binary bundle', withConductor(ADMIN_PORT, asy
 }))
 
 test('can call a zome function and then deactivate', withConductor(ADMIN_PORT, async t => {
-  const [installed_app_id, cell_id, nick, client, admin] = await installAppAndDna(ADMIN_PORT)
+  const {installed_app_id, cell_id, nick, client, admin} = await installAppAndDna(ADMIN_PORT)
   let info = await client.appInfo({ installed_app_id }, 1000)
   t.deepEqual(info.cell_data[0].cell_id, cell_id)
   t.equal(info.cell_data[0].cell_nick, nick)
@@ -230,7 +230,7 @@ test('can call a zome function and then deactivate', withConductor(ADMIN_PORT, a
 }))
 
 test('can call a zome function twice, reusing args', withConductor(ADMIN_PORT, async t => {
-  const [installed_app_id, cell_id, nick, client] = await installAppAndDna(ADMIN_PORT)
+  const {installed_app_id, cell_id, nick, client} = await installAppAndDna(ADMIN_PORT)
   const info = await client.appInfo({ installed_app_id }, 1000)
   t.deepEqual(info.cell_data[0].cell_id, cell_id)
   t.equal(info.cell_data[0].cell_nick, nick)
@@ -263,38 +263,36 @@ test('can handle canceled response', withConductor(ADMIN_PORT, async t => {
 }))
 
 test('can receive a signal', withConductor(ADMIN_PORT, async t => {
-  await new Promise(async (resolve, reject) => {
-    try {
-      const [cell_id, client] = await installAppAndDna(ADMIN_PORT, signalCb)
-      function signalCb(signal: AppSignal) {
-        t.deepEqual(signal, {
-          type: 'Signal',
-          data: {
-            cellId: cell_id,
-            payload: 'i am a signal',
-          },
-        })
-        resolve(null)
-      }
-      // trigger an emit_signal
-      await client.callZome({
-        cap: null,
-        cell_id,
-        zome_name: TEST_ZOME_NAME,
-        fn_name: 'emitter',
-        provenance: fakeAgentPubKey(),
-        payload: null,
-      })
-    } catch (e) {
-      reject(e)
-    }
+  let resolveSignalPromise
+  const signalReceivedPromise = new Promise(resolve => resolveSignalPromise = resolve)
+  const signalCb = (signal: AppSignal) => {
+    t.deepEqual(signal, {
+      type: 'Signal',
+      data: {
+        cellId: cell_id,
+        payload: 'i am a signal',
+      },
+    })
+    resolveSignalPromise()
+  }
+
+  const {cell_id, client} = await installAppAndDna(ADMIN_PORT, signalCb)
+  // trigger an emit_signal
+  await client.callZome({
+    cap: null,
+    cell_id,
+    zome_name: TEST_ZOME_NAME,
+    fn_name: 'emitter',
+    provenance: fakeAgentPubKey(),
+    payload: null,
   })
+  await signalReceivedPromise
 }))
 
 test(
   'callZome rejects appropriately for ZomeCallUnauthorized',
   withConductor(ADMIN_PORT, async (t) => {
-    const [cell_id, client] = await installAppAndDna(ADMIN_PORT)
+    const {cell_id, client} = await installAppAndDna(ADMIN_PORT)
     try {
       await client.callZome({
         // bad cap, on purpose

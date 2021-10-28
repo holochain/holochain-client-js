@@ -34,9 +34,12 @@ async function fetchLauncherEnvironment(): Promise<
 }
 
 const isBrowser = typeof window !== "undefined"
+const isJest =
+  process && process.env && process.env.JEST_WORKER_ID !== undefined
+
 let promise: Promise<any>
 
-if (isBrowser) {
+if (isBrowser && !isJest) {
   promise = fetchLauncherEnvironment().catch(console.error)
 }
 

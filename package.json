@@ -23,7 +23,7 @@
     "test": "npm run test:raw | tap-diff",
     "test:raw": "RUST_LOG=error RUST_BACKTRACE=1 ts-node test",
     "example": "ts-node examples/zome-call",
-    "lint": "eslint src/** --fix"
+    "lint": "eslint src/** test/** --fix"
   },
   "author": "",
   "dependencies": {
@@ -34,7 +34,8 @@
     "ws": "^7.4.6"
   },
   "devDependencies": {
-    "@types/node": "^14.0",
+    "@detools/tap-diff": "^0.2.2",
+    "@types/node": "^14.17.32",
     "@types/tape": "^4.13.0",
     "@types/ws": "^7.2.4",
     "@typescript-eslint/eslint-plugin": "^4.29.0",
@@ -42,7 +43,6 @@
     "eslint": "^7.32.0",
     "js-yaml": "^3.14.0",
     "rimraf": "^3.0.2",
-    "@detools/tap-diff": "^0.2.2",
     "tape": "^5.0",
     "ts-node": "^8.10.2",
     "typescript": "^3.9.9"
