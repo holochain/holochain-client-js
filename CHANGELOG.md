@@ -8,6 +8,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Removed
 ### Changed
 ### Fixed
+## 2021-10-28: v0.2.3
+
+### Fixed
+- It now works in a browser context. 0.2.2 introduced an exception in the browser context by improperly checking for a node specific variable. [#88](https://github.com/holochain/holochain-conductor-api/pull/88)
+
 ## 2021-10-28: v0.2.2
 
 ### Fixed
