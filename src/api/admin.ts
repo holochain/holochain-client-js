@@ -1,4 +1,4 @@
-import { Requester } from "./common";
+import { Requester } from "./common"
 import {
   HoloHash,
   AgentPubKey,
@@ -7,8 +7,8 @@ import {
   InstalledAppId,
   CellId,
   InstalledAppInfo,
-  RoleId,
-} from "./types";
+  RoleId
+} from "./types"
 
 export type AttachAppInterfaceRequest = { port: number };
 export type AttachAppInterfaceResponse = { port: number };
