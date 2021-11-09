@@ -60,14 +60,10 @@ See [docs/API.md](docs/API.md)
 # Holochain Compatibility
 
 This version of `holochain-conductor-api` is currently working with
-- `holochain/holochain` at commit: [72c491e2205a33f90f635ab8bc850205da472dc0](https://github.com/holochain/holochain/commit/72c491e2205a33f90f635ab8bc850205da472dc0)
-- hdk version 0.0.107 from crates.io
+- `holochain/holochain` 0.0.114 at commit: [43e5a2ca5a7bf59a7b1beff1f54a13af1bf7ac52](https://github.com/holochain/holochain/commit/43e5a2ca5a7bf59a7b1beff1f54a13af1bf7ac52)
+- hdk version 0.0.114 from crates.io
 
-If updating this code, please make changes to the git `rev/sha` in 2 places:
-1. Here in the README above ^^
-2. The `rev` line in `default.nix`
-3. Break the sha256 hash by changing one letter, and do `nix-shell` to get the new sha and replace it
-5. You may need to do the same with the cargoSha.
+If updating this code, please make changes to the git `rev/sha` above.  (You can get this from `hn-introspect` after updating the holonix-hash)
 
 ## Running tests
 
