@@ -21,7 +21,7 @@ impl From<&str> for TestString {
 fn init(_: ()) -> ExternResult<InitCallbackResult> {
     // grant unrestricted access to accept_cap_claim so other agents can send us claims
     let mut foo_functions = BTreeSet::new();
-    foo_functions.insert((zome_info()?.zome_name, "foo".into()));
+    foo_functions.insert((zome_info()?.name, "foo".into()));
     create_cap_grant(CapGrantEntry {
         tag: "".into(),
         // empty access converts to unrestricted
@@ -33,7 +33,7 @@ fn init(_: ()) -> ExternResult<InitCallbackResult> {
     // this can be collapsed to a single CapGrantEntry with two functions.
     // see: https://github.com/holochain/holochain/issues/418
     let mut emitter_functions = BTreeSet::new();
-    emitter_functions.insert((zome_info()?.zome_name, "emitter".into()));
+    emitter_functions.insert((zome_info()?.name, "emitter".into()));
     create_cap_grant(CapGrantEntry {
         tag: "".into(),
         // empty access converts to unrestricted

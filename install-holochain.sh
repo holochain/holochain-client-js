@@ -1,11 +1,9 @@
 #!/bin/bash
 
-REV=c5dbdf28825927106bc32d186dd54f20d35df468
-LAIR_REV=a01a40640574d3cfabae33dfe3f861de7bd7a57c
+REV=72c491e2205a33f90f635ab8bc850205da472dc0
+LAIR_REV=2d141376680d719c8fb41c514965686681f3f967
 
-cargo install --force holochain \
-  --git https://github.com/holochain/holochain.git \
-  --rev $REV
+
 cargo install holochain_cli --force --bin hc \
   --git https://github.com/holochain/holochain.git \
   --rev $REV

@@ -6,9 +6,8 @@ import {
   DnaProperties,
   InstalledAppId,
   CellId,
-  CellNick,
   InstalledAppInfo,
-  SlotId
+  RoleId
 } from "./types"
 
 export type AttachAppInterfaceRequest = { port: number };
@@ -72,9 +71,9 @@ export type CreateCloneCellRequest = {
   /// The App with which to associate the newly created Cell
   installed_app_id: InstalledAppId;
 
-  /// The SlotId under which to create this clone
+  /// The RoleId under which to create this clone
   /// (needed to track cloning permissions and `clone_count`)
-  slot_id: SlotId;
+  role_id: RoleId;
   /// Proof-of-membership, if required by this DNA
   membrane_proof?: MembraneProof;
 };
@@ -84,49 +83,49 @@ export type ResourceBytes = Buffer;
 export type ResourceMap = { [key: string]: ResourceBytes };
 export type CellProvisioning =
   | {
-    /// Always create a new Cell when installing this App
-    create: { deferred: boolean };
-  }
+      /// Always create a new Cell when installing this App
+      create: { deferred: boolean };
+    }
   | {
-    /// Always create a new Cell when installing the App,
-    /// and use a unique UID to ensure a distinct DHT network
-    create_clone: { deferred: boolean };
-  }
+      /// Always create a new Cell when installing the App,
+      /// and use a unique UID to ensure a distinct DHT network
+      create_clone: { deferred: boolean };
+    }
   | {
-    /// Require that a Cell is already installed which matches the DNA version
-    /// spec, and which has an Agent that's associated with this App's agent
-    /// via DPKI. If no such Cell exists, *app installation fails*.
-    use_existing: { deferred: boolean };
-  }
+      /// Require that a Cell is already installed which matches the DNA version
+      /// spec, and which has an Agent that's associated with this App's agent
+      /// via DPKI. If no such Cell exists, *app installation fails*.
+      use_existing: { deferred: boolean };
+    }
   | {
-    /// Try `UseExisting`, and if that fails, fallback to `Create`
-    create_if_no_exists: { deferred: boolean };
-  }
+      /// Try `UseExisting`, and if that fails, fallback to `Create`
+      create_if_no_exists: { deferred: boolean };
+    }
   | {
-    /// Disallow provisioning altogether. In this case, we expect
-    /// `clone_limit > 0`: otherwise, no Cells will ever be created.
-    disabled: Record<string, never>;
-  };
+      /// Disallow provisioning altogether. In this case, we expect
+      /// `clone_limit > 0`: otherwise, no Cells will ever be created.
+      disabled: Record<string, never>;
+    };
 
 export type HoloHashB64 = string;
 export type DnaVersionSpec = Array<HoloHashB64>;
 export type DnaVersionFlexible =
   | {
-    singleton: HoloHashB64;
-  }
+      singleton: HoloHashB64;
+    }
   | {
-    multiple: DnaVersionSpec;
-  };
-export type AppSlotDnaManifest = {
+      multiple: DnaVersionSpec;
+    };
+export type AppRoleDnaManifest = {
   location?: Location;
   properties?: DnaProperties;
   uid?: string;
   version?: DnaVersionFlexible;
 };
-export type AppSlotManifest = {
-  id: SlotId;
+export type AppRoleManifest = {
+  id: RoleId;
   provisioning?: CellProvisioning;
-  dna: AppSlotDnaManifest;
+  dna: AppRoleDnaManifest;
 };
 export type AppManifest = {
   /// Currently one "1" is supported
@@ -134,7 +133,7 @@ export type AppManifest = {
 
   name: string;
   description?: string;
-  slots: Array<AppSlotManifest>;
+  roles: Array<AppRoleManifest>;
 };
 export type AppBundle = {
   manifest: AppManifest;
@@ -246,24 +245,23 @@ export interface AdminApi {
 
 export type InstallAppDnaPayload = {
   hash: HoloHash;
-  nick: CellNick;
-  properties?: DnaProperties;
+  role_id: RoleId;
   membrane_proof?: MembraneProof;
 };
 
 export type ZomeLocation =
   | {
-    /// Expect file to be part of this bundle
-    bundled: string;
-  }
+      /// Expect file to be part of this bundle
+      bundled: string;
+    }
   | {
-    /// Get file from local filesystem (not bundled)
-    path: string;
-  }
+      /// Get file from local filesystem (not bundled)
+      path: string;
+    }
   | {
-    /// Get file from URL
-    url: string;
-  };
+      /// Get file from URL
+      url: string;
+    };
 
 export type ZomeManifest = {
   name: string;
@@ -296,14 +294,14 @@ export type DnaBundle = {
 
 export type DnaSource =
   | {
-    hash: HoloHash;
-  }
+      hash: HoloHash;
+    }
   | {
-    path: string;
-  }
+      path: string;
+    }
   | {
-    bundle: DnaBundle;
-  };
+      bundle: DnaBundle;
+    };
 
 export interface HoloHashed<T> {
   hash: HoloHash;

@@ -2,7 +2,7 @@
 manifest_version: "1"
 name: foo-test
 description: ""
-slots:
+roles:
   - id: foo
     provisioning:
       strategy: create

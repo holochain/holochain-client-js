@@ -3,13 +3,12 @@ export type AgentPubKey = HoloHash;
 export type InstalledAppId = string;
 export type CapSecret = Buffer;
 export type CellId = [HoloHash, AgentPubKey];
-export type CellNick = string;
 export type DnaProperties = any;
-export type SlotId = string;
+export type RoleId = string;
 
 export type InstalledCell = {
   cell_id: CellId;
-  cell_nick: CellNick;
+  role_id: RoleId;
 };
 
 export type DeactivationReason =
