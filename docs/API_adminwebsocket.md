@@ -153,7 +153,7 @@ installedApp `object` with properties:
 ```javascript
 {
     "installed_app_id": string,
-    "slots": {
+    "roles": {
         [key: string]: {
             base_cell_id: [buffer, buffer],  // CellId
             is_provisioned: boolean,
@@ -171,7 +171,7 @@ Request a new App to be created using the given Agent and DNAs.
 - `agent_key` - a `buffer`
 - `dnas` - an `array` of `object` with properties
   - `hash` - a `string`
-  - `nick` - a `string`
+  - `role` - a `string`
   - `membrane_proof` - an (optional) `buffer`
 
 Returns a `Promise` for the corresponding response.
@@ -188,7 +188,7 @@ installedApp `object` with properties:
 ```javascript
 {
     "installed_app_id": string,
-    "slots": {
+    "roles": {
         [key: string]: {
             base_cell_id: [buffer, buffer],  // CellId
             is_provisioned: boolean,

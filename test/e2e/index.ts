@@ -447,20 +447,20 @@ test("can inject agents", async (t) => {
     t.ok(agent_key_1)
     const agent_key_2 = await admin2.generateAgentPubKey()
     t.ok(agent_key_2)
-    const nick = "thedna"
+    const role = "thedna"
     const path = `${FIXTURE_PATH}/test.dna`
     const hash = await admin1.registerDna({ path })
     t.ok(hash)
     let result = await admin1.installApp({
       installed_app_id,
       agent_key: agent_key_1,
-      dnas: [{ hash, role_id: nick }],
+      dnas: [{ hash, role_id: role }],
     })
     t.ok(result)
     const app1_cell = result.cell_data[0].cell_id
     const activeApp1Info = await admin1.enableApp({ installed_app_id }, 1000)
     t.deepEqual(activeApp1Info.app.status, { running: null })
-    t.equal(activeApp1Info.app.cell_data[0].role_id, nick)
+    t.equal(activeApp1Info.app.cell_data[0].role_id, role)
     t.equal(activeApp1Info.app.installed_app_id, installed_app_id)
     t.equal(activeApp1Info.errors.length, 0)
 
@@ -492,13 +492,13 @@ test("can inject agents", async (t) => {
     result = await admin2.installApp({
       installed_app_id,
       agent_key: agent_key_2,
-      dnas: [{ hash, role_id: nick }],
+      dnas: [{ hash, role_id: role }],
     })
     t.ok(result)
     const app2_cell = result.cell_data[0].cell_id
     const activeApp2Info = await admin2.enableApp({ installed_app_id })
     t.deepEqual(activeApp2Info.app.status, { running: null })
-    t.equal(activeApp2Info.app.cell_data[0].role_id, nick)
+    t.equal(activeApp2Info.app.cell_data[0].role_id, role)
     t.equal(activeApp2Info.app.installed_app_id, installed_app_id)
     t.equal(activeApp2Info.errors.length, 0)
 
