@@ -55,7 +55,7 @@ export class AppWebsocket implements AppApi {
   appInfo: Requester<AppInfoRequest, AppInfoResponse>
     = this._requester('app_info', appInfoTransform(this.overrideInstalledAppId))
   callZome: Requester<CallZomeRequestGeneric<any>, CallZomeResponseGeneric<any>>
-    = this._requester('zome_call_invocation', callZomeTransform)
+    = this._requester('zome_call', callZomeTransform)
 }
 
 const callZomeTransform: Transformer<CallZomeRequestGeneric<any>, CallZomeRequestGeneric<Uint8Array>, CallZomeResponseGeneric<Uint8Array>, CallZomeResponseGeneric<any>> = {
