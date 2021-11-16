@@ -22,7 +22,7 @@ import { WsClient } from './client'
 import { catchError, promiseTimeout, DEFAULT_TIMEOUT } from './common'
 import { Transformer, requesterTransformer, Requester } from '../api/common'
 import { getLauncherEnvironment } from '../environments/launcher'
-import { InstalledAppId } from '../api/types'
+import { InstalledAppId } from '../types/common'
 
 export class AppWebsocket implements AppApi {
   client: WsClient

@@ -1,14 +1,13 @@
-import { Requester } from "./common"
+import { Requester } from "./common";
 import {
   HoloHash,
   AgentPubKey,
-  MembraneProof,
   DnaProperties,
   InstalledAppId,
   CellId,
-  InstalledAppInfo,
-  RoleId
-} from "./types"
+  RoleId,
+} from "../types/common";
+import { InstalledAppInfo, MembraneProof } from "./types";
 
 export type AttachAppInterfaceRequest = { port: number };
 export type AttachAppInterfaceResponse = { port: number };
@@ -37,6 +36,12 @@ export type StartAppResponse = boolean;
 
 export type DumpStateRequest = { cell_id: CellId };
 export type DumpStateResponse = any;
+
+export type DumpFullStateRequest = {
+  cell_id: CellId;
+  dht_ops_cursor: number | undefined;
+};
+export type DumpFullStateResponse = any;
 
 export type GenerateAgentPubKeyRequest = void;
 export type GenerateAgentPubKeyResponse = AgentPubKey;
@@ -215,6 +220,7 @@ export interface AdminApi {
   disableApp: Requester<DisableAppRequest, DisableAppResponse>;
   startApp: Requester<StartAppRequest, StartAppResponse>;
   dumpState: Requester<DumpStateRequest, DumpStateResponse>;
+  dumpFullState: Requester<DumpFullStateRequest, DumpFullStateResponse>;
   generateAgentPubKey: Requester<
     GenerateAgentPubKeyRequest,
     GenerateAgentPubKeyResponse

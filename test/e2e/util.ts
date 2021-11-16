@@ -1,7 +1,7 @@
 import { spawn } from "child_process"
 import fs from "fs"
 import os from "os"
-import { InstalledAppId, CellId, RoleId } from "../../src/api/types"
+import { InstalledAppId, CellId, RoleId } from "../../src/types/common"
 import { AppWebsocket } from "../../src/websocket/app"
 import { AdminWebsocket } from "../../src/websocket/admin"
 import yaml from "js-yaml"

@@ -1,15 +1,4 @@
-export type HoloHash = Buffer; // length 39
-export type AgentPubKey = HoloHash;
-export type InstalledAppId = string;
-export type CapSecret = Buffer;
-export type CellId = [HoloHash, AgentPubKey];
-export type DnaProperties = any;
-export type RoleId = string;
-
-export type InstalledCell = {
-  cell_id: CellId;
-  role_id: RoleId;
-};
+import { InstalledAppId, InstalledCell } from "../types/common";
 
 export type DeactivationReason =
   | { never_activated: null }
@@ -21,23 +10,23 @@ export type PausedAppReason = {
 };
 export type DisabledAppReason =
   | {
-    never_started: null;
-  }
+      never_started: null;
+    }
   | { user: null }
   | { error: string };
 
 export type InstalledAppInfoStatus =
   | {
-    paused: { reason: PausedAppReason };
-  }
+      paused: { reason: PausedAppReason };
+    }
   | {
-    disabled: {
-      reason: DisabledAppReason;
+      disabled: {
+        reason: DisabledAppReason;
+      };
+    }
+  | {
+      running: null;
     };
-  }
-  | {
-    running: null;
-  };
 
 export type InstalledAppInfo = {
   installed_app_id: InstalledAppId;
@@ -53,4 +42,6 @@ export const fakeAgentPubKey = () =>
         .split("")
         .map((x) => parseInt(x, 10))
     )
-  )
+  );
+
+export interface Header {}
