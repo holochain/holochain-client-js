@@ -8,6 +8,7 @@ import {
   RoleId,
 } from "../types/common";
 import { InstalledAppInfo, MembraneProof } from "./types";
+import { FullStateDump } from "./state-dump";
 
 export type AttachAppInterfaceRequest = { port: number };
 export type AttachAppInterfaceResponse = { port: number };
@@ -41,7 +42,7 @@ export type DumpFullStateRequest = {
   cell_id: CellId;
   dht_ops_cursor: number | undefined;
 };
-export type DumpFullStateResponse = any;
+export type DumpFullStateResponse = FullStateDump;
 
 export type GenerateAgentPubKeyRequest = void;
 export type GenerateAgentPubKeyResponse = AgentPubKey;
