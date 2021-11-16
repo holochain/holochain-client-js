@@ -310,10 +310,6 @@ export type DnaSource =
       bundle: DnaBundle;
     };
 
-export interface HoloHashed<T> {
-  hash: HoloHash;
-  content: T;
-}
 
 export type Zomes = Array<[string, { wasm_hash: Array<HoloHash> }]>;
 export type WasmCode = [HoloHash, { code: Array<number> }];
