@@ -7,6 +7,7 @@ import {
   KitsuneSpace,
   Signature,
 } from "../types/common";
+import { DhtOp } from "../types/dht-ops";
 import { Entry } from "../types/entry";
 import { Header } from "../types/header";
 
@@ -26,8 +27,6 @@ export interface P2pAgentsDump {
   /// All other agent info.
   peers: Array<AgentInfoDump>;
 }
-
-export type DhtOp = any;
 
 export interface FullIntegrationStateDump {
   validation_limbo: Array<DhtOp>;
