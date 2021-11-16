@@ -9,7 +9,6 @@ export type KitsuneSpace = Buffer;
 
 export type InstalledAppId = string;
 
-export type CapSecret = Buffer;
 export type Signature = Buffer;
 
 export type CellId = [HoloHash, AgentPubKey];

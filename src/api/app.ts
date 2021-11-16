@@ -1,11 +1,11 @@
 import { Requester } from "./common";
 import {
   CellId,
-  CapSecret,
   AgentPubKey,
   InstalledAppId,
 } from "../types/common";
 import { InstalledAppInfo } from "./types";
+import { CapSecret } from "../types/capabilities";
 
 export type CallZomeRequestGeneric<Payload> = {
   cap: CapSecret | null;
