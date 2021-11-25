@@ -1,6 +1,6 @@
 import { AgentPubKey } from "./common";
 
-export type CapSecret = Buffer;
+export type CapSecret = Uint8Array;
 
 export interface CapClaim {
   tag: string;
