@@ -1,15 +1,15 @@
-export type HoloHash = Buffer; // length 39
+export type HoloHash = Uint8Array; // length 39
 export type AgentPubKey = HoloHash;
 export type DnaHash = HoloHash;
 export type EntryHash = HoloHash;
 export type HeaderHash = HoloHash;
 
-export type KitsuneAgent = Buffer;
-export type KitsuneSpace = Buffer;
+export type KitsuneAgent = Uint8Array;
+export type KitsuneSpace = Uint8Array;
 
 export type InstalledAppId = string;
 
-export type Signature = Buffer;
+export type Signature = Uint8Array;
 
 export type CellId = [HoloHash, AgentPubKey];
 
