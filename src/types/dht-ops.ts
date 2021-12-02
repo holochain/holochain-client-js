@@ -10,6 +10,7 @@ import {
   Update,
 } from "./header";
 import { Entry } from "./entry";
+import { Signature } from "./common";
 
 // https://github.com/holochain/holochain/blob/develop/crates/types/src/dht_op.rs
 
@@ -25,20 +26,25 @@ export enum DhtOpType {
   RegisterRemoveLink = "RegisterRemoveLink",
 }
 
-export interface DhtOpContent<T, H extends Header> {
-  type: T;
-  header: SignedHeaderHashed<H>;
-}
-
 export type DhtOp =
-  | (DhtOpContent<DhtOpType.StoreElement, Header> & {
-      maybe_entry: Entry | undefined;
-    })
-  | (DhtOpContent<DhtOpType.StoreEntry, NewEntryHeader> & { entry: Entry })
-  | DhtOpContent<DhtOpType.RegisterAgentActivity, Header>
-  | DhtOpContent<DhtOpType.RegisterUpdatedContent, Update>
-  | DhtOpContent<DhtOpType.RegisterUpdatedElement, Update>
-  | DhtOpContent<DhtOpType.RegisterDeletedBy, Delete>
-  | DhtOpContent<DhtOpType.RegisterDeletedEntryHeader, Delete>
-  | DhtOpContent<DhtOpType.RegisterAddLink, CreateLink>
-  | DhtOpContent<DhtOpType.RegisterRemoveLink, DeleteLink>;
+  | { [DhtOpType.StoreElement]: [Signature, Header, Entry | undefined] }
+  | { [DhtOpType.StoreEntry]: [Signature, NewEntryHeader, Entry] }
+  | { [DhtOpType.RegisterAgentActivity]: [Signature, Header] }
+  | {
+      [DhtOpType.RegisterUpdatedContent]: [
+        Signature,
+        Update,
+        Entry | undefined
+      ];
+    }
+  | {
+      [DhtOpType.RegisterUpdatedElement]: [
+        Signature,
+        Update,
+        Entry | undefined
+      ];
+    }
+  | { [DhtOpType.RegisterDeletedBy]: [Signature, Delete] }
+  | { [DhtOpType.RegisterDeletedEntryHeader]: [Signature, Delete] }
+  | { [DhtOpType.RegisterAddLink]: [Signature, CreateLink] }
+  | { [DhtOpType.RegisterRemoveLink]: [Signature, DeleteLink] };
