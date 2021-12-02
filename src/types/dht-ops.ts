@@ -48,3 +48,11 @@ export type DhtOp =
   | { [DhtOpType.RegisterDeletedEntryHeader]: [Signature, Delete] }
   | { [DhtOpType.RegisterAddLink]: [Signature, CreateLink] }
   | { [DhtOpType.RegisterRemoveLink]: [Signature, DeleteLink] };
+
+export function getDhtOpType(op: DhtOp): DhtOpType {
+  return Object.keys(op)[0] as DhtOpType;
+}
+
+export function getDhtOpHeader(op: DhtOp): Header {
+  return Object.values(op)[1];
+}
