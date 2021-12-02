@@ -61,6 +61,6 @@ export function getDhtOpEntry(op: DhtOp): Entry | undefined {
   return Object.values(op)[2];
 }
 
-export function getDhtOpSignature(op: DhtOp): Entry | undefined {
+export function getDhtOpSignature(op: DhtOp): Signature {
   return Object.values(op)[1];
 }
