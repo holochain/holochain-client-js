@@ -54,13 +54,13 @@ export function getDhtOpType(op: DhtOp): DhtOpType {
 }
 
 export function getDhtOpHeader(op: DhtOp): Header {
-  return Object.values(op)[1];
+  return Object.values(op)[0][1];
 }
 
 export function getDhtOpEntry(op: DhtOp): Entry | undefined {
-  return Object.values(op)[2];
+  return Object.values(op)[0][2];
 }
 
 export function getDhtOpSignature(op: DhtOp): Signature {
-  return Object.values(op)[1];
+  return Object.values(op)[0][1];
 }
