@@ -56,3 +56,7 @@ export function getDhtOpType(op: DhtOp): DhtOpType {
 export function getDhtOpHeader(op: DhtOp): Header {
   return Object.values(op)[1];
 }
+
+export function getDhtOpEntry(op: DhtOp): Entry | undefined {
+  return Object.values(op)[2];
+}
