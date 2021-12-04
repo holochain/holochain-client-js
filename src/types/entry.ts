@@ -16,7 +16,7 @@ export type EntryType =
 
 export interface EntryContent<E extends string, C> {
   entry_type: E;
-  content: C;
+  entry: C;
 }
 
 export type Entry =
