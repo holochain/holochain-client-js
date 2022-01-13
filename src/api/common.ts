@@ -23,7 +23,7 @@ export type Transformer<ReqO, ReqI, ResI, ResO> = {
   output: (res: ResI) => ResO,
 }
 
-const identity = x => x
+const identity = (x: any) => x
 const identityTransformer = {
   input: identity,
   output: identity,

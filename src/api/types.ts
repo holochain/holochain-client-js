@@ -1,15 +1,4 @@
-export type HoloHash = Buffer; // length 39
-export type AgentPubKey = HoloHash;
-export type InstalledAppId = string;
-export type CapSecret = Buffer;
-export type CellId = [HoloHash, AgentPubKey];
-export type DnaProperties = any;
-export type RoleId = string;
-
-export type InstalledCell = {
-  cell_id: CellId;
-  role_id: RoleId;
-};
+import { InstalledAppId, InstalledCell } from "../types/common"
 
 export type DeactivationReason =
   | { never_activated: null }

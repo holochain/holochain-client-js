@@ -1,32 +1,31 @@
-# holochain/conductor-api
+# holochain-client-js
 
 [![Project](https://img.shields.io/badge/project-holochain-blue.svg?style=flat-square)](http://holochain.org/)
 [![Forum](https://img.shields.io/badge/chat-forum%2eholochain%2enet-blue.svg?style=flat-square)](https://forum.holochain.org)
-[![Chat](https://img.shields.io/badge/chat-chat%2eholochain%2enet-blue.svg?style=flat-square)](https://chat.holochain.org)
 
 [![Twitter Follow](https://img.shields.io/twitter/follow/holochain.svg?style=social&label=Follow)](https://twitter.com/holochain)
 License: [![License: CAL 1.0](https://img.shields.io/badge/License-CAL%201.0-blue.svg)](https://github.com/holochain/cryptographic-autonomy-license)
 
-A nodejs implementation of the Holochain conductor API.
+A Nodejs client for the Holochain Conductor API
 
 # Conductor API documentation
 
-Holochain's conductor API is under active development.  This node module tracks that development fairly closely but sometimes gets behind.
+Holochain's Conductor API is under active development. This client package tracks that development fairly closely but sometimes gets behind.
 
-# Install
+## Installation
 
 To install from NPM, run
 ```bash
-npm install --save-exact @holochain/conductor-api
+npm install --save-exact @holochain/client
 ```
 
-> Note, this code is still under alpha development and npm releases are pre-releases with `dev` tags meaning they will not use full semantic versioning, and you may wish to lock to an exact version of the library for that reason, as shown in the above command.
+> This code is still under alpha development and npm releases are pre-releases with `dev` tags meaning they will not use full semantic versioning, and you may wish to lock to an exact version of the library for that reason, as shown in the above command.
 
 ## Sample usage
 
 ### Use AdminWebsocket
 ```typescript
-  const admin = await AdminWebsocket.connect(`http://localhost:8000`, TIMEOUT)
+  const admin = await AdminWebsocket.connect(`ws://localhost:8000`, TIMEOUT)
   await admin.generateAgentPubKey()
 ```
 
@@ -39,7 +38,7 @@ npm install --save-exact @holochain/conductor-api
 
   const TIMEOUT = 12000
   // default timeout is set to 12000
-  const client = await AppWebsocket.connect(`http://localhost:${appPort}`, 12000, signalCb)
+  const client = await AppWebsocket.connect(`ws://localhost:${appPort}`, 12000, signalCb)
 
   // default timeout set here (30000) will overwrite the defaultTimeout(12000) set above
   await client.callZome({
@@ -59,9 +58,9 @@ See [docs/API.md](docs/API.md)
 
 # Holochain Compatibility
 
-This version of `holochain-conductor-api` is currently working with
-- `holochain/holochain` 0.0.114 at commit: [43e5a2ca5a7bf59a7b1beff1f54a13af1bf7ac52](https://github.com/holochain/holochain/commit/43e5a2ca5a7bf59a7b1beff1f54a13af1bf7ac52)
-- hdk version 0.0.114 from crates.io
+This version of `@holochain/client` is currently working with
+- `holochain/holochain` at tag [holochain-0.0.121][https://github.com/holochain/holochain/tree/holochain-0.0.121)
+- hdk version [0.0.117 from crates.io](https://crates.io/crates/hdk/0.0.117)
 
 If updating this code, please make changes to the git `rev/sha` above.  (You can get this from `hn-introspect` after updating the holonix-hash)
 
@@ -69,15 +68,16 @@ If updating this code, please make changes to the git `rev/sha` above.  (You can
 
 You need a version (`stable` toolchain) of Rust available.
 
-You need `holochain` and `hc` on your path, best to get them from nix with `nix-shell`
+You need `holochain` and `hc` on your path, best to get them from nix with `nix-shell`.
 
-To perform the pre-requisite DNA compilation steps, and run the nodejs test, run:
+To perform the pre-requisite DNA compilation steps, and run the Nodejs test, run:
 ```bash
+nix-shell
 ./run-test.sh
 ```
 
 ## Contribute
-Holochain is an open source project.  We welcome all sorts of participation and are actively working on increasing surface area to accept it.  Please see our [contributing guidelines](/CONTRIBUTING.md) for our general practices and protocols on participating in the community, as well as specific expectations around things like code formatting, testing practices, continuous integration, etc.
+Holochain is an open source project.  We welcome all sorts of participation and are actively working on increasing surface area to accept it.  Please see our [contribution guidelines](/CONTRIBUTING.md) for our general practices and protocols on participating in the community, as well as specific expectations around things like code formatting, testing practices, continuous integration, etc.
 
 * Connect with us on our [forum](https://forum.holochain.org)
 

@@ -1,4 +1,4 @@
-import { InstalledAppId } from "../api/types"
+import { InstalledAppId } from "../types/common"
 import fetch from "cross-fetch"
 
 // This is coupled with https://github.com/holochain/launcher/blob/develop/src-tauri/src/uis/caddy.rs#L13

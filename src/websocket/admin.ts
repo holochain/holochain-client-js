@@ -37,7 +37,7 @@ export class AdminWebsocket implements Api.AdminApi {
     if (env) {
       url = `ws://localhost:${env.ADMIN_INTERFACE_PORT}`
     }
-    
+
     const wsClient = await WsClient.connect(url)
     return new AdminWebsocket(wsClient, defaultTimeout)
   }
@@ -67,6 +67,8 @@ export class AdminWebsocket implements Api.AdminApi {
     = this._requester('start_app')
   dumpState: Requester<Api.DumpStateRequest, Api.DumpStateResponse>
     = this._requester('dump_state', dumpStateTransform)
+  dumpFullState: Requester<Api.DumpFullStateRequest, Api.DumpFullStateResponse>
+    = this._requester('dump_full_state')
   generateAgentPubKey: Requester<Api.GenerateAgentPubKeyRequest, Api.GenerateAgentPubKeyResponse>
     = this._requester('generate_agent_pub_key')
   registerDna: Requester<Api.RegisterDnaRequest, Api.RegisterDnaResponse>
