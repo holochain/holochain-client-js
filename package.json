@@ -1,50 +1,49 @@
 {
-  "name": "@holochain/conductor-api",
-  "version": "0.2.4",
-  "description": "Encode/decode messages to/from the Holochain Conductor API over Websocket",
+  "name": "@holochain/client",
+  "version": "0.3.0",
+  "description": "A Nodejs client for the Holochain conductor API",
+  "author": "Holochain Foundation <info@holochain.org> (http://holochain.org)",
+  "license": "CAL 1.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/holochain/holochain-conductor-api.git"
+    "url": "git+https://github.com/holochain/holochain-client-js.git"
   },
-  "main": "lib/index.js",
-  "module": "lib.es/index.js",
-  "types": "lib/index.d.ts",
-  "files": [
-    "src/**/*",
-    "lib/**/*",
-    "lib.es/**/*"
+  "keywords": [
+    "holochain",
+    "client",
+    "conductor api"
   ],
-  "scripts": {
-    "build": "rimraf ./lib ./dist && tsc -d && tsc --outDir lib.es --module es2015",
-    "dev": "rimraf ./lib && tsc -d -w",
-    "doc": "typedoc",
-    "prepare": "npm run build",
-    "prepublishOnly": "npm test",
-    "test": "npm run test:raw | tap-diff",
-    "test:raw": "RUST_LOG=error RUST_BACKTRACE=1 ts-node test",
-    "example": "ts-node examples/zome-call",
-    "lint": "eslint src/** test/** --fix"
+  "bugs": {
+    "url": "https://github.com/holochain/holochain-client-js/issues"
   },
-  "author": "",
+  "homepage": "https://github.com/holochain/holochain-client-js#readme",
+
+  "files": [
+    "lib"
+  ],
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+
+  "scripts": {
+    "lint": "eslint src/**/*.ts test/**/*.ts --fix",
+    "test": "RUST_LOG=error RUST_BACKTRACE=1 ts-node test",
+    "build": "tsc -b"
+  },
+
   "dependencies": {
-    "@msgpack/msgpack": "2.4.0",
+    "@msgpack/msgpack": "^2.7.1",
     "cross-fetch": "^3.1.4",
-    "isomorphic-ws": "^4.0.1",
-    "nanoid": "^3.1.9",
-    "ws": "^7.4.6"
+    "isomorphic-ws": "^4.0.1"
   },
   "devDependencies": {
-    "@detools/tap-diff": "^0.2.2",
-    "@types/node": "^14.17.32",
-    "@types/tape": "^4.13.0",
-    "@types/ws": "^7.2.4",
-    "@typescript-eslint/eslint-plugin": "^4.29.0",
-    "@typescript-eslint/parser": "^4.29.0",
-    "eslint": "^7.32.0",
-    "js-yaml": "^3.14.0",
-    "rimraf": "^3.0.2",
-    "tape": "^5.0",
-    "ts-node": "^8.10.2",
-    "typescript": "^3.9.9"
+    "@types/js-yaml": "^3.12.7",
+    "@types/tape": "^4.13.2",
+    "@typescript-eslint/eslint-plugin": "^5.9.0",
+    "@typescript-eslint/parser": "^5.9.0",
+    "eslint": "^8.6.0",
+    "js-yaml": "^3.14.1",
+    "tape": "^5.4.0",
+    "ts-node": "^10.4.0",
+    "typescript": "^4.5.4"
   }
 }

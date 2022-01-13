@@ -22,7 +22,7 @@ import { WsClient } from './client'
 import { catchError, promiseTimeout, DEFAULT_TIMEOUT } from './common'
 import { Transformer, requesterTransformer, Requester } from '../api/common'
 import { getLauncherEnvironment } from '../environments/launcher'
-import { InstalledAppId } from '../api/types'
+import { InstalledAppId } from '../types/common'
 
 export class AppWebsocket implements AppApi {
   client: WsClient
@@ -42,7 +42,7 @@ export class AppWebsocket implements AppApi {
     }
 
     const wsClient = await WsClient.connect(url, signalCb)
-    return new AppWebsocket(wsClient, defaultTimeout, env ? env.INSTALLED_APP_ID: undefined)
+    return new AppWebsocket(wsClient, defaultTimeout, env ? env.INSTALLED_APP_ID : undefined)
   }
 
   _requester = <ReqO, ReqI, ResI, ResO>(tag: string, transformer?: Transformer<ReqO, ReqI, ResI, ResO>) =>
@@ -71,12 +71,12 @@ const callZomeTransform: Transformer<CallZomeRequestGeneric<any>, CallZomeReques
 }
 
 const appInfoTransform = (overrideInstalledAppId?: InstalledAppId): Transformer<AppInfoRequest, AppInfoRequest, AppInfoResponse, AppInfoResponse> => ({
-  input: (req:  AppInfoRequest): AppInfoRequest => {
+  input: (req: AppInfoRequest): AppInfoRequest => {
     if (overrideInstalledAppId) {
       return {
         installed_app_id: overrideInstalledAppId,
       }
-    } 
+    }
 
     return req
   },

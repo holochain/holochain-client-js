@@ -1,4 +1,4 @@
-import test from "tape"
+import test, { Test } from "tape"
 
 import { AdminWebsocket } from "../../src/websocket/admin"
 import { AppWebsocket } from "../../src/websocket/app"
@@ -12,7 +12,7 @@ import {
   FIXTURE_PATH
 } from "./util"
 import { fakeAgentPubKey, InstalledAppInfoStatus } from "../../src/api/types"
-import { AppSignal } from "../../src/api/app"
+import { AppSignal, CallZomeRequest } from "../../src/api/app"
 import zlib from "zlib"
 import fs from "fs"
 import {
@@ -22,7 +22,7 @@ import {
 } from "../../src/api/admin"
 import { decode } from "@msgpack/msgpack"
 
-const delay = (ms) => new Promise((r) => setTimeout(r, ms))
+const delay = (ms: number) => new Promise((r) => setTimeout(r, ms))
 
 const ADMIN_PORT = 33001
 const ADMIN_PORT_1 = 33002
@@ -31,10 +31,10 @@ const TEST_ZOME_NAME = "foo"
 
 test(
   "admin smoke test: registerDna + installApp + uninstallApp",
-  withConductor(ADMIN_PORT, async (t) => {
+  withConductor(ADMIN_PORT, async (t: Test) => {
     const installed_app_id = "app"
     const admin = await AdminWebsocket.connect(
-      `http://localhost:${ADMIN_PORT}`,
+      `ws://localhost:${ADMIN_PORT}`,
       12000
     )
 
@@ -161,10 +161,10 @@ test(
 
 test(
   "admin smoke test: installBundle",
-  withConductor(ADMIN_PORT, async (t) => {
+  withConductor(ADMIN_PORT, async (t: Test) => {
     const installed_app_id = "app"
     const admin = await AdminWebsocket.connect(
-      `http://localhost:${ADMIN_PORT}`,
+      `ws://localhost:${ADMIN_PORT}`,
       12000
     )
 
@@ -218,10 +218,10 @@ test(
 
 test(
   "admin register dna with full binary bundle",
-  withConductor(ADMIN_PORT, async (t) => {
+  withConductor(ADMIN_PORT, async (t: Test) => {
     const installed_app_id = "app"
     const admin = await AdminWebsocket.connect(
-      `http://localhost:${ADMIN_PORT}`,
+      `ws://localhost:${ADMIN_PORT}`,
       12000
     )
 
@@ -279,7 +279,7 @@ test(
 
 test(
   "can call a zome function and then deactivate",
-  withConductor(ADMIN_PORT, async (t) => {
+  withConductor(ADMIN_PORT, async (t: Test) => {
     const { installed_app_id, cell_id, role_id, client, admin } =
       await installAppAndDna(ADMIN_PORT)
     let info = await client.appInfo({ installed_app_id }, 1000)
@@ -289,7 +289,7 @@ test(
     const response = await client.callZome(
       {
         // TODO: write a test with a real capability secret.
-        cap: null,
+        cap_secret: null,
         cell_id,
         zome_name: TEST_ZOME_NAME,
         fn_name: "foo",
@@ -308,15 +308,15 @@ test(
 
 test(
   "can call a zome function twice, reusing args",
-  withConductor(ADMIN_PORT, async (t) => {
+  withConductor(ADMIN_PORT, async (t: Test) => {
     const { installed_app_id, cell_id, role_id, client } =
       await installAppAndDna(ADMIN_PORT)
     const info = await client.appInfo({ installed_app_id }, 1000)
     t.deepEqual(info.cell_data[0].cell_id, cell_id)
     t.equal(info.cell_data[0].role_id, role_id)
-    const args = {
+    const args: CallZomeRequest = {
       // TODO: write a test with a real capability secret.
-      cap: null,
+      cap_secret: null,
       cell_id,
       zome_name: TEST_ZOME_NAME,
       fn_name: "foo",
@@ -332,8 +332,8 @@ test(
 
 test(
   "can handle canceled response",
-  withConductor(ADMIN_PORT, async (t) => {
-    // const client = await WsClient.connect(`http://localhost:${ADMIN_PORT}`);A
+  withConductor(ADMIN_PORT, async (t: Test) => {
+    // const client = await WsClient.connect(`ws://localhost:${ADMIN_PORT}`);A
     const client = new WsClient({
       send: () => {
         /* do nothing */
@@ -351,8 +351,8 @@ test(
 
 test(
   "can receive a signal",
-  withConductor(ADMIN_PORT, async (t) => {
-    let resolveSignalPromise
+  withConductor(ADMIN_PORT, async (t: Test) => {
+    let resolveSignalPromise: (value?: unknown) => void | undefined
     const signalReceivedPromise = new Promise(
       (resolve) => (resolveSignalPromise = resolve)
     )
@@ -370,7 +370,7 @@ test(
     const { cell_id, client } = await installAppAndDna(ADMIN_PORT, signalCb)
     // trigger an emit_signal
     await client.callZome({
-      cap: null,
+      cap_secret: null,
       cell_id,
       zome_name: TEST_ZOME_NAME,
       fn_name: "emitter",
@@ -383,13 +383,13 @@ test(
 
 test(
   "callZome rejects appropriately for ZomeCallUnauthorized",
-  withConductor(ADMIN_PORT, async (t) => {
+  withConductor(ADMIN_PORT, async (t: Test) => {
     const { cell_id, client } = await installAppAndDna(ADMIN_PORT)
     try {
       await client.callZome(
         {
           // bad cap, on purpose
-          cap: Buffer.from(
+          cap_secret: Buffer.from(
             // 64 bytes
             "0000000000000000000000000000000000000000000000000000000000000000"
               .split("")
@@ -411,8 +411,8 @@ test(
 )
 
 // no conductor
-test("error is catchable when holochain socket is unavailable", async (t) => {
-  const url = `http://localhost:${ADMIN_PORT}`
+test("error is catchable when holochain socket is unavailable", async (t: Test) => {
+  const url = `ws://localhost:${ADMIN_PORT}`
   try {
     await AdminWebsocket.connect(url)
   } catch (e) {
@@ -432,16 +432,16 @@ test("error is catchable when holochain socket is unavailable", async (t) => {
   }
 })
 
-test("can inject agents", async (t) => {
+test("can inject agents", async (t: Test) => {
   const [conductor1, l1] = await launch(ADMIN_PORT, CONFIG_PATH)
   const [conductor2, l2] = await launch(ADMIN_PORT_1, CONFIG_PATH_1)
   try {
     const installed_app_id = "app"
     const admin1 = await AdminWebsocket.connect(
-      `http://localhost:${ADMIN_PORT}`
+      `ws://localhost:${ADMIN_PORT}`
     )
     const admin2 = await AdminWebsocket.connect(
-      `http://localhost:${ADMIN_PORT_1}`
+      `ws://localhost:${ADMIN_PORT_1}`
     )
     const agent_key_1 = await admin1.generateAgentPubKey()
     t.ok(agent_key_1)
@@ -527,9 +527,9 @@ test("can inject agents", async (t) => {
 
 test(
   "admin smoke test: listAppInterfaces + attachAppInterface",
-  withConductor(ADMIN_PORT, async (t) => {
+  withConductor(ADMIN_PORT, async (t: Test) => {
     const admin = await AdminWebsocket.connect(
-      `http://localhost:${ADMIN_PORT}`
+      `ws://localhost:${ADMIN_PORT}`
     )
 
     let interfaces = await admin.listAppInterfaces()

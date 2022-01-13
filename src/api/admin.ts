@@ -2,13 +2,13 @@ import { Requester } from "./common"
 import {
   HoloHash,
   AgentPubKey,
-  MembraneProof,
   DnaProperties,
   InstalledAppId,
   CellId,
-  InstalledAppInfo,
   RoleId
-} from "./types"
+} from "../types/common"
+import { InstalledAppInfo, MembraneProof } from "./types"
+import { FullStateDump } from "./state-dump"
 
 export type AttachAppInterfaceRequest = { port: number };
 export type AttachAppInterfaceResponse = { port: number };
@@ -37,6 +37,12 @@ export type StartAppResponse = boolean;
 
 export type DumpStateRequest = { cell_id: CellId };
 export type DumpStateResponse = any;
+
+export type DumpFullStateRequest = {
+  cell_id: CellId;
+  dht_ops_cursor: number | undefined;
+};
+export type DumpFullStateResponse = FullStateDump;
 
 export type GenerateAgentPubKeyRequest = void;
 export type GenerateAgentPubKeyResponse = AgentPubKey;
@@ -215,6 +221,7 @@ export interface AdminApi {
   disableApp: Requester<DisableAppRequest, DisableAppResponse>;
   startApp: Requester<StartAppRequest, StartAppResponse>;
   dumpState: Requester<DumpStateRequest, DumpStateResponse>;
+  dumpFullState: Requester<DumpFullStateRequest, DumpFullStateResponse>;
   generateAgentPubKey: Requester<
     GenerateAgentPubKeyRequest,
     GenerateAgentPubKeyResponse
@@ -303,10 +310,6 @@ export type DnaSource =
       bundle: DnaBundle;
     };
 
-export interface HoloHashed<T> {
-  hash: HoloHash;
-  content: T;
-}
 
 export type Zomes = Array<[string, { wasm_hash: Array<HoloHash> }]>;
 export type WasmCode = [HoloHash, { code: Array<number> }];

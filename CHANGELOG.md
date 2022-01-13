@@ -8,6 +8,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Removed
 ### Changed
 ### Fixed
+
+## 2022-01-12: v0.3.0
+
+### Added
+- Adding types and `dump full state` call [#94](https://github.com/holochain/holochain-conductor-api/pull/94)
+
+### Removed
+- Everything that's not needed to use the library, run tests or publish the npm package
+### Changed
+- Renamed package to @holochain/client and repository to holochain-client-js
+- Use git tag instead of revision SHA for version mentions [#92](https://github.com/holochain/holochain-conductor-api/pull/92)
+- Updated to Holochain v0.0.121 and HDK v0.0.117
+### Fixed
+- Failed tests cause non-zero exit code [#93](https://github.com/holochain/holochain-conductor-api/pull/93)
 ## 2021-10-28: v0.2.3
 
 ### Fixed

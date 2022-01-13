@@ -9,10 +9,10 @@ import { AppSignal, AppSignalCb, SignalResponseGeneric } from "../api/app"
  * Uses Holochain's websocket WireMessage for communication.
  */
 export class WsClient {
-  socket: Websocket;
-  pendingRequests: Record<number, { fulfill: (msg: unknown) => ReturnType<typeof decode>; reject: (error: Error) => void }>;
-  index: number;
-  alreadyWarnedNoSignalCb: boolean;
+  socket: Websocket
+  pendingRequests: Record<number, { fulfill: (msg: unknown) => ReturnType<typeof decode>; reject: (error: Error) => void }>
+  index: number
+  alreadyWarnedNoSignalCb: boolean
 
   constructor(socket: any, signalCb?: AppSignalCb) {
     this.socket = socket

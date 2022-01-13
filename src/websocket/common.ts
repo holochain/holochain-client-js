@@ -8,7 +8,7 @@ export const catchError = (res: any) => {
 }
 
 export const promiseTimeout = (promise: Promise<any>, tag: string, ms: number) => {
-  let id
+  let id: NodeJS.Timeout
 
   const timeout = new Promise((_, reject) => {
     id = setTimeout(() => {

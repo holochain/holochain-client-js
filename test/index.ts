@@ -1,2 +1,1 @@
-
-require('./e2e')
+import ('./e2e')
