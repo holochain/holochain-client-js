@@ -60,7 +60,7 @@ See [docs/API.md](docs/API.md)
 # Holochain Compatibility
 
 This version of `@holochain/client` is currently working with
-- `holochain/holochain` at tag [holochain-0.0.121][https://github.com/holochain/holochain/tree/holochain-0.0.121)
+- `holochain/holochain` at tag [holochain-0.0.121](https://github.com/holochain/holochain/tree/holochain-0.0.121)
 - hdk version [0.0.117 from crates.io](https://crates.io/crates/hdk/0.0.117)
 
 If updating this code, please make changes to the git `rev/sha` above.  (You can get this from `hn-introspect` after updating the holonix-hash)
