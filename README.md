@@ -1,4 +1,4 @@
-# holochain-client-js
+# Holochain Client - JavaScript
 
 [![Project](https://img.shields.io/badge/Project-Holochain-blue.svg?style=flat-square)](http://holochain.org/)
 [![Forum](https://img.shields.io/badge/Forum-forum%2eholochain%2enet-blue.svg?style=flat-square)](https://forum.holochain.org)
@@ -9,9 +9,7 @@ License: [![License: CAL 1.0](https://img.shields.io/badge/License-CAL%201.0-blu
 
 A Nodejs client for the Holochain Conductor API
 
-# Conductor API documentation
-
-Holochain's Conductor API is under active development. This client package tracks that development fairly closely but sometimes gets behind.
+> Holochain's Conductor API is under active development. This client package tracks that development fairly closely but sometimes gets behind.
 
 ## Installation
 
