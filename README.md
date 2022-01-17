@@ -2,12 +2,12 @@
 
 [![Project](https://img.shields.io/badge/Project-Holochain-blue.svg?style=flat-square)](http://holochain.org/)
 [![Forum](https://img.shields.io/badge/Forum-forum%2eholochain%2enet-blue.svg?style=flat-square)](https://forum.holochain.org)
-![CI](https://github.com/holochain/holochain-client-js/actions/workflows/test.yml/badge.svg?branch=main)
+[![License: CAL 1.0](https://img.shields.io/badge/License-CAL%201.0-blue.svg)](https://github.com/holochain/cryptographic-autonomy-license)
+![Test](https://github.com/holochain/holochain-client-js/actions/workflows/test.yml/badge.svg?branch=main)
 
 [![Twitter Follow](https://img.shields.io/twitter/follow/holochain.svg?style=social&label=Follow)](https://twitter.com/holochain)
-License: [![License: CAL 1.0](https://img.shields.io/badge/License-CAL%201.0-blue.svg)](https://github.com/holochain/cryptographic-autonomy-license)
 
-A Nodejs client for the Holochain Conductor API
+A JavaScript client for the Holochain Conductor API (works with browsers as well as Nodejs)
 
 > Holochain's Conductor API is under active development. This client package tracks that development fairly closely but sometimes gets behind.
 
@@ -58,8 +58,8 @@ See [docs/API.md](docs/API.md)
 # Holochain Compatibility
 
 This version of `@holochain/client` is currently working with
-- `holochain/holochain` at tag [holochain-0.0.121](https://github.com/holochain/holochain/tree/holochain-0.0.121)
-- hdk version [0.0.117 from crates.io](https://crates.io/crates/hdk/0.0.117)
+- `holochain/holochain` at tag [holochain-0.0.122](https://github.com/holochain/holochain/tree/holochain-0.0.122)
+- hdk version [0.0.118 from crates.io](https://crates.io/crates/hdk/0.0.118)
 
 If updating this code, please make changes to the git `rev/sha` above.  (You can get this from `hn-introspect` after updating the holonix-hash)
 
