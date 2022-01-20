@@ -1,6 +1,6 @@
 {
   "name": "@holochain/client",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "A Nodejs client for the Holochain conductor API",
   "author": "Holochain Foundation <info@holochain.org> (http://holochain.org)",
   "license": "CAL 1.0",
@@ -19,15 +19,17 @@
   "homepage": "https://github.com/holochain/holochain-client-js#readme",
 
   "files": [
-    "lib"
+    "lib",
+    "lib.es"
   ],
   "main": "lib/index.js",
+  "module": "lib.es/index.js",
   "types": "lib/index.d.ts",
 
   "scripts": {
     "lint": "eslint src/**/*.ts test/**/*.ts --fix",
     "test": "RUST_LOG=error RUST_BACKTRACE=1 ts-node test",
-    "build": "tsc -b"
+    "build": "rimraf ./lib ./lib.es .tsbuildinfo && tsc -b"
   },
 
   "dependencies": {
@@ -42,6 +44,7 @@
     "@typescript-eslint/parser": "^5.9.0",
     "eslint": "^8.6.0",
     "js-yaml": "^3.14.1",
+    "rimraf": "^3.0.2",
     "tape": "^5.4.0",
     "ts-node": "^10.4.0",
     "typescript": "^4.5.4"
