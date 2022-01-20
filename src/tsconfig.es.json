@@ -1,0 +1,13 @@
+{
+  "extends": "../tsconfig",
+  "compilerOptions": {
+    "outDir": "../lib.es",
+    "module": "es2015",
+    "sourceMap": true,
+    "moduleResolution": "node",
+    "tsBuildInfoFile": "../.tsbuildinfo"
+  },
+  "include": [
+    "**/*"
+  ]
+}

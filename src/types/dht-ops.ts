@@ -1,12 +1,9 @@
 import {
-  Create,
   CreateLink,
   Delete,
   DeleteLink,
   Header,
-  HeaderType,
   NewEntryHeader,
-  SignedHeaderHashed,
   Update
 } from "./header"
 import { Entry } from "./entry"
