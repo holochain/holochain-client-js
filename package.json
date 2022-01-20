@@ -1,44 +1,52 @@
 {
-  "name": "@holochain/conductor-api",
-  "version": "0.2.0",
-  "description": "Encode/decode messages to/from the Holochain Conductor API over Websocket",
+  "name": "@holochain/client",
+  "version": "0.3.2",
+  "description": "A Nodejs client for the Holochain conductor API",
+  "author": "Holochain Foundation <info@holochain.org> (http://holochain.org)",
+  "license": "CAL 1.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/holochain/holochain-conductor-api.git"
+    "url": "git+https://github.com/holochain/holochain-client-js.git"
   },
+  "keywords": [
+    "holochain",
+    "client",
+    "conductor api"
+  ],
+  "bugs": {
+    "url": "https://github.com/holochain/holochain-client-js/issues"
+  },
+  "homepage": "https://github.com/holochain/holochain-client-js#readme",
+
+  "files": [
+    "lib",
+    "lib.es"
+  ],
   "main": "lib/index.js",
   "module": "lib.es/index.js",
   "types": "lib/index.d.ts",
-  "files": [
-    "src/**/*",
-    "lib/**/*",
-    "lib.es/**/*"
-  ],
+
   "scripts": {
-    "build": "rm -rf ./lib ./dist && tsc -d && tsc --outDir lib.es --module es2015",
-    "dev": "rm -rf ./lib && tsc -d -w",
-    "doc": "typedoc",
-    "prepare": "npm run build",
-    "prepublishOnly": "npm test",
-    "test": "npm run test:raw | tap-diff",
-    "test:raw": "RUST_LOG=error RUST_BACKTRACE=1 ts-node test",
-    "example": "ts-node examples/zome-call"
+    "lint": "eslint src/**/*.ts test/**/*.ts --fix",
+    "test": "RUST_LOG=error RUST_BACKTRACE=1 ts-node test",
+    "build": "rimraf ./lib ./lib.es .tsbuildinfo && tsc -b"
   },
-  "author": "",
+
   "dependencies": {
-    "@msgpack/msgpack": "2.4.0",
-    "@types/ws": "^7.2.4",
-    "isomorphic-ws": "^4.0.1",
-    "nanoid": "^3.1.9",
-    "ws": "^7.3.0"
+    "@msgpack/msgpack": "^2.7.1",
+    "cross-fetch": "^3.1.4",
+    "isomorphic-ws": "^4.0.1"
   },
   "devDependencies": {
-    "@types/node": "^14.0",
-    "@types/tape": "^4.13.0",
-    "js-yaml": "^3.14.0",
-    "tap-diff": "^0.1.1",
-    "tape": "^5.0",
-    "ts-node": "^8.10.2",
-    "typescript": "^3.9.9"
+    "@types/js-yaml": "^3.12.7",
+    "@types/tape": "^4.13.2",
+    "@typescript-eslint/eslint-plugin": "^5.9.0",
+    "@typescript-eslint/parser": "^5.9.0",
+    "eslint": "^8.6.0",
+    "js-yaml": "^3.14.1",
+    "rimraf": "^3.0.2",
+    "tape": "^5.4.0",
+    "ts-node": "^10.4.0",
+    "typescript": "^4.5.4"
   }
 }

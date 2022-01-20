@@ -1,15 +1,14 @@
-import { Requester } from "./common";
+import { Requester } from "./common"
 import {
   HoloHash,
   AgentPubKey,
-  MembraneProof,
   DnaProperties,
   InstalledAppId,
   CellId,
-  CellNick,
-  InstalledAppInfo,
-  SlotId,
-} from "./types";
+  RoleId
+} from "../types/common"
+import { InstalledAppInfo, MembraneProof } from "./types"
+import { FullStateDump } from "./state-dump"
 
 export type AttachAppInterfaceRequest = { port: number };
 export type AttachAppInterfaceResponse = { port: number };
@@ -27,17 +26,23 @@ export type DeactivateAppResponse = null;
 export type EnableAppRequest = { installed_app_id: InstalledAppId };
 export type EnableAppResponse = {
   app: InstalledAppInfo;
-  errors: Array<[CellId, String]>;
+  errors: Array<[CellId, string]>;
 };
 
 export type DisableAppRequest = { installed_app_id: InstalledAppId };
 export type DisableAppResponse = null;
 
 export type StartAppRequest = { installed_app_id: InstalledAppId };
-export type StartAppResponse = Boolean;
+export type StartAppResponse = boolean;
 
 export type DumpStateRequest = { cell_id: CellId };
 export type DumpStateResponse = any;
+
+export type DumpFullStateRequest = {
+  cell_id: CellId;
+  dht_ops_cursor: number | undefined;
+};
+export type DumpFullStateResponse = FullStateDump;
 
 export type GenerateAgentPubKeyRequest = void;
 export type GenerateAgentPubKeyResponse = AgentPubKey;
@@ -56,6 +61,11 @@ export type InstallAppRequest = {
 };
 export type InstallAppResponse = InstalledAppInfo;
 
+export type UninstallAppRequest = {
+  installed_app_id: InstalledAppId;
+};
+export type UninstallAppResponse = null;
+
 export type CreateCloneCellRequest = {
   /// Properties to override when installing this Dna
   properties?: DnaProperties;
@@ -67,9 +77,9 @@ export type CreateCloneCellRequest = {
   /// The App with which to associate the newly created Cell
   installed_app_id: InstalledAppId;
 
-  /// The SlotId under which to create this clone
+  /// The RoleId under which to create this clone
   /// (needed to track cloning permissions and `clone_count`)
-  slot_id: SlotId;
+  role_id: RoleId;
   /// Proof-of-membership, if required by this DNA
   membrane_proof?: MembraneProof;
 };
@@ -100,7 +110,7 @@ export type CellProvisioning =
   | {
       /// Disallow provisioning altogether. In this case, we expect
       /// `clone_limit > 0`: otherwise, no Cells will ever be created.
-      disabled: {};
+      disabled: Record<string, never>;
     };
 
 export type HoloHashB64 = string;
@@ -112,16 +122,16 @@ export type DnaVersionFlexible =
   | {
       multiple: DnaVersionSpec;
     };
-export type AppSlotDnaManifest = {
+export type AppRoleDnaManifest = {
   location?: Location;
   properties?: DnaProperties;
   uid?: string;
   version?: DnaVersionFlexible;
 };
-export type AppSlotManifest = {
-  id: SlotId;
+export type AppRoleManifest = {
+  id: RoleId;
   provisioning?: CellProvisioning;
-  dna: AppSlotDnaManifest;
+  dna: AppRoleDnaManifest;
 };
 export type AppManifest = {
   /// Currently one "1" is supported
@@ -129,7 +139,7 @@ export type AppManifest = {
 
   name: string;
   description?: string;
-  slots: Array<AppSlotManifest>;
+  roles: Array<AppRoleManifest>;
 };
 export type AppBundle = {
   manifest: AppManifest;
@@ -211,12 +221,14 @@ export interface AdminApi {
   disableApp: Requester<DisableAppRequest, DisableAppResponse>;
   startApp: Requester<StartAppRequest, StartAppResponse>;
   dumpState: Requester<DumpStateRequest, DumpStateResponse>;
+  dumpFullState: Requester<DumpFullStateRequest, DumpFullStateResponse>;
   generateAgentPubKey: Requester<
     GenerateAgentPubKeyRequest,
     GenerateAgentPubKeyResponse
   >;
   registerDna: Requester<RegisterDnaRequest, RegisterDnaResponse>;
   installApp: Requester<InstallAppRequest, InstallAppResponse>;
+  uninstallApp: Requester<UninstallAppRequest, UninstallAppResponse>;
   createCloneCell: Requester<CreateCloneCellRequest, CreateCloneCellResponse>;
   installAppBundle: Requester<
     InstallAppBundleRequest,
@@ -240,8 +252,7 @@ export interface AdminApi {
 
 export type InstallAppDnaPayload = {
   hash: HoloHash;
-  nick: CellNick;
-  properties?: DnaProperties;
+  role_id: RoleId;
   membrane_proof?: MembraneProof;
 };
 
@@ -299,10 +310,6 @@ export type DnaSource =
       bundle: DnaBundle;
     };
 
-export interface HoloHashed<T> {
-  hash: HoloHash;
-  content: T;
-}
 
 export type Zomes = Array<[string, { wasm_hash: Array<HoloHash> }]>;
 export type WasmCode = [HoloHash, { code: Array<number> }];

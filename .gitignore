@@ -1,7 +1,6 @@
-node_modules/
-lib/
-test/e2e/fixture/test.dna.workdir/wasms
-.DS_Store
 .cargo
 target
-lib.es/
+node_modules
+/lib
+.tsbuildinfo
+/lib.es

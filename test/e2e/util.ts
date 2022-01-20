@@ -1,78 +1,105 @@
-import { spawn } from 'child_process'
-import fs from 'fs'
-import os from 'os'
-import { InstalledAppId, CellId, CellNick } from '../../src/api/types'
-import { AppWebsocket } from '../../src/websocket/app'
-import { AdminWebsocket } from '../../src/websocket/admin'
-import yaml from 'js-yaml'
-export const FIXTURE_PATH = './test/e2e/fixture'
+import { spawn, ChildProcessWithoutNullStreams } from "child_process"
+import fs from "fs"
+import os from "os"
+import { InstalledAppId, CellId, RoleId } from "../../src/types/common"
+import { AppWebsocket } from "../../src/websocket/app"
+import { AdminWebsocket } from "../../src/websocket/admin"
+import yaml from "js-yaml"
+import { Test } from "tape"
+export const FIXTURE_PATH = "./test/e2e/fixture"
 export const CONFIG_PATH = `${FIXTURE_PATH}/test-config.yml`
 export const CONFIG_PATH_1 = `${FIXTURE_PATH}/test-config-1.yml`
 
-const writeConfig = (port, configPath) => {
-
+const writeConfig = (port: number, configPath: fs.PathOrFileDescriptor): string => {
   const dir = fs.mkdtempSync(`${os.tmpdir()}/holochain-test-`)
-  let yamlStr = yaml.safeDump({
+  const lairDir = `${dir}/keystore`
+  if (!fs.existsSync(lairDir)) {
+    fs.mkdirSync(lairDir)
+  }
+
+  const yamlStr = yaml.safeDump({
     environment_path: dir,
-    passphrase_service: {
-      type: 'cmd'
+    keystore: {
+      type: "lair_server_legacy_deprecated",
+      keystore_path: lairDir,
+      danger_passphrase_insecure_from_config: "test-passphrase",
     },
-    admin_interfaces: [{
-      driver: {
-        type: 'websocket',
-        port,
+    admin_interfaces: [
+      {
+        driver: {
+          type: "websocket",
+          port,
+        },
       }
-    }]
-  });
-  fs.writeFileSync(configPath, yamlStr, 'utf8');
-  console.info(`using LMDB environment path: ${dir}`)
+    ],
+  })
+  fs.writeFileSync(configPath, yamlStr, "utf8")
+  console.info(`using database environment path: ${dir}`)
+  return lairDir
 }
 
-const awaitInterfaceReady = (handle): Promise<null> => new Promise((fulfill, reject) => {
-  const pattern = 'Conductor ready.'
-  let resolved = false
-  handle.on('close', code => {
-    resolved = true
-    console.info(`Conductor exited with code ${code}`)
-    reject(`Conductor exited before starting interface (code ${code})`)
-  })
-  handle.stdout.on('data', data => {
-    if (resolved) {
-      return
-    }
-    const line = data.toString('utf8')
-    if (line.match(pattern)) {
-      console.info(`Conductor process spawning completed.`)
+const awaitInterfaceReady = (handle: ChildProcessWithoutNullStreams): Promise<null> =>
+  new Promise((fulfill, reject) => {
+    const pattern = "Conductor ready."
+    let resolved = false
+    handle.on("close", (code) => {
       resolved = true
-      fulfill()
-    }
+      console.info(`Conductor exited with code ${code}`)
+      reject(`Conductor exited before starting interface (code ${code})`)
+    })
+    handle.stdout.on("data", (data) => {
+      if (resolved) {
+        return
+      }
+      const line = data.toString("utf8")
+      if (line.match(pattern)) {
+        console.info(`Conductor process spawning completed.`)
+        resolved = true
+        fulfill(null)
+      }
+    })
   })
-})
 
-const HOLOCHAIN_BIN = 'holochain'
+const HOLOCHAIN_BIN = "holochain"
+const LAIR_BIN = "lair-keystore"
 
-export const launch = async (port, configPath) => {
-  await writeConfig(port, configPath)
-  const handle = spawn(HOLOCHAIN_BIN, ['-c', configPath])
-  handle.stdout.on('data', data => {
-    console.info('conductor: ', data.toString('utf8'))
+export const launch = async (port: number, configPath: fs.PathOrFileDescriptor) => {
+  const lairDir = await writeConfig(port, configPath)
+  console.log(`Spawning lair for test with keystore at:  ${lairDir}`)
+  const lairHandle = spawn(LAIR_BIN, ["-d", lairDir], {
+    env: {
+      // TODO: maybe put this behind a flag?
+      RUST_BACKTRACE: "1",
+      ...process.env,
+    },
   })
-  handle.stderr.on('data', data => {
-    console.info('conductor> ', data.toString('utf8'))
+  // Wait for lair to output data such as "#lair-keystore-ready#" before starting holochain
+  await new Promise((resolve) => {
+    lairHandle.stdout.once("data", resolve)
+  })
+
+  const handle = spawn(HOLOCHAIN_BIN, ["-c", configPath.toString()])
+  handle.stdout.on("data", (data) => {
+    console.info("conductor: ", data.toString("utf8"))
+  })
+  handle.stderr.on("data", (data) => {
+    console.info("conductor> ", data.toString("utf8"))
   })
   await awaitInterfaceReady(handle)
-  return handle
+  return [handle, lairHandle]
 }
 
-export const withConductor = (port, f) => async t => {
-  const handle = await launch(port, CONFIG_PATH)
+export const withConductor = (port: number, f: (t: Test) => Promise<void>) => async (t: Test) => {
+  const [handle, lairHandle] = await launch(port, CONFIG_PATH)
   try {
     await f(t)
   } catch (e) {
     console.error("Test caught exception: ", e)
+    lairHandle.kill()
     handle.kill()
     throw e
   } finally {
+    lairHandle.kill()
     handle.kill()
   }
   t.end()
@@ -81,14 +108,20 @@ export const withConductor = (port, f) => async t => {
 export const installAppAndDna = async (
   adminPort: number,
   signalCb: (signal: any) => void = () => {}
-): Promise<[InstalledAppId, CellId, CellNick, AppWebsocket, AdminWebsocket]> => {
-  const installed_app_id = 'app'
-  const nick = 'mydna'
-  const admin = await AdminWebsocket.connect(`http://localhost:${adminPort}`)
+): Promise<{
+  installed_app_id: InstalledAppId;
+  cell_id: CellId;
+  role_id: RoleId;
+  client: AppWebsocket;
+  admin: AdminWebsocket;
+}> => {
+  const installed_app_id = "app"
+  const role_id = "mydna"
+  const admin = await AdminWebsocket.connect(`ws://localhost:${adminPort}`)
 
-  const path = `${FIXTURE_PATH}/test.dna`;
+  const path = `${FIXTURE_PATH}/test.dna`
   const hash = await admin.registerDna({
-    path
+    path,
   })
 
   console.log("THE HASH:", hash)
@@ -100,8 +133,8 @@ export const installAppAndDna = async (
     dnas: [
       {
         hash,
-        nick,
-      },
+        role_id,
+      }
     ],
   })
   console.log("THE INSTALL RESULT:", app)
@@ -109,6 +142,10 @@ export const installAppAndDna = async (
   await admin.activateApp({ installed_app_id })
   // destructure to get whatever open port was assigned to the interface
   const { port: appPort } = await admin.attachAppInterface({ port: 0 })
-  const client = await AppWebsocket.connect(`http://localhost:${appPort}`, 12000, signalCb)
-    return [installed_app_id, cell_id, nick, client, admin]
+  const client = await AppWebsocket.connect(
+    `ws://localhost:${appPort}`,
+    12000,
+    signalCb
+  )
+  return { installed_app_id, cell_id, role_id, client, admin }
 }
