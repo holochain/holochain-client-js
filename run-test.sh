@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -exo pipefail
+
 cd test/e2e/fixture/zomes/foo
 cargo build --release --target wasm32-unknown-unknown --target-dir ./target
 cd ../.. # into fixtures
