@@ -1,30 +1,16 @@
 import { decode } from '@msgpack/msgpack'
-import {
-  AppBundle,
-  AppBundleSource,
-  DnaProperties
-} from '.'
+import { AppBundle, AppBundleSource, DnaProperties } from '.'
 
 export type HappProperties = { [role_id: string]: DnaProperties }
 
 const readAppBundleFromPath = async (path: string): Promise<AppBundle> => {
   const isBrowser = typeof window !== 'undefined'
   if (isBrowser) {
-    throw new Error('todo')
+    throw new Error('Cannot read app bundle from path in browser context')
   }
-  const {
-    readFile
-  }: {
-    readFile: (path: string) => Promise<Uint8Array>
-  } = require('fs/promises')
-  const {
-    gunzip
-  }: {
-    gunzip: (
-      buffer: Uint8Array,
-      callback: (error: Error | null, result: Uint8Array) => void
-    ) => Promise<Uint8Array>
-  } = require('zlib')
+  const { promises: { readFile } } = await import('fs')
+  const { gunzip } = await import('zlib')
+
   const compressed = await readFile(path)
   const encoded: Uint8Array = await new Promise((resolve, reject) =>
     gunzip(compressed, (err, bytes) =>
