@@ -13,6 +13,7 @@ import {
 } from "./util"
 import { fakeAgentPubKey, InstalledAppInfoStatus } from "../../src/api/types"
 import { AppSignal, CallZomeRequest } from "../../src/api/app"
+import { appBundleWithProperties } from "../../src/bundle"
 import zlib from "zlib"
 import fs from "fs"
 import {
@@ -541,3 +542,54 @@ test(
     t.equal(interfaces.length, 1)
   })
 )
+
+test("can install app bundle with custom properties", withConductor(ADMIN_PORT, async (t: Test) => {
+  const admin = await AdminWebsocket.connect(
+    `ws://localhost:${ADMIN_PORT}`,
+    12000
+  )
+
+  const agent_key = await admin.generateAgentPubKey()
+  t.ok(agent_key)
+
+  const path = `${FIXTURE_PATH}/test.happ`
+  const installed_app_id = "app"
+  const properties = "specialProperties"
+  const appSource = await appBundleWithProperties({ path }, { foo: properties })
+  const installedApp = await admin.installAppBundle({
+    ...appSource,
+    agent_key,
+    installed_app_id,
+    membrane_proofs: {},
+  })
+  t.ok(installedApp)
+  t.deepEqual(installedApp.status, {
+    disabled: { reason: { never_started: null } },
+  })
+
+  const cell_id = installedApp.cell_data[0].cell_id
+
+  const enabledAppInfo = await admin.enableApp({ installed_app_id })
+  t.deepEqual(enabledAppInfo.app.status, { running: null })
+  t.equal(enabledAppInfo.app.installed_app_id, installed_app_id)
+  t.equal(enabledAppInfo.errors.length, 0)
+
+  const { port: appPort} = await admin.attachAppInterface({ port: 0 })
+  const app = await AppWebsocket.connect(
+    `ws://localhost:${appPort}`,
+    12000
+  )
+
+  const response = await app.callZome(
+    {
+      cap_secret: null,
+      cell_id,
+      zome_name: TEST_ZOME_NAME,
+      fn_name: "properties",
+      provenance: fakeAgentPubKey(),
+      payload: null,
+    },
+    30000
+  )
+  t.deepEqual(response, properties)
+}))

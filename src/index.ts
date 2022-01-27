@@ -3,4 +3,5 @@ export * from './api/app'
 export * from './api/types'
 export * from './websocket/admin'
 export * from './websocket/app'
-export * from './types';
+export * from './types'
+export * from './bundle'
