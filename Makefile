@@ -5,11 +5,7 @@ VERSION:=$(shell npm view '@holochain/conductor-api' version)
 get-version:
 	@echo 'Version: '${VERSION}
 
-install-hc:
-	./install-holochain.sh
-
 test:
-	make install-hc
 	make test-all
 
 test-all:
