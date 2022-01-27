@@ -17,7 +17,6 @@
     "url": "https://github.com/holochain/holochain-client-js/issues"
   },
   "homepage": "https://github.com/holochain/holochain-client-js#readme",
-
   "files": [
     "lib",
     "lib.es"
@@ -25,13 +24,11 @@
   "main": "lib/index.js",
   "module": "lib.es/index.js",
   "types": "lib/index.d.ts",
-
   "scripts": {
     "lint": "eslint src/**/*.ts test/**/*.ts --fix",
     "test": "RUST_LOG=error RUST_BACKTRACE=1 ts-node test",
     "build": "rimraf ./lib ./lib.es .tsbuildinfo && tsc -b"
   },
-
   "dependencies": {
     "@msgpack/msgpack": "^2.7.1",
     "cross-fetch": "^3.1.4",
