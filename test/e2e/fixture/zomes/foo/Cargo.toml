@@ -10,4 +10,6 @@ crate-type = [ "cdylib", "rlib" ]
 
 [dependencies]
 serde = "=1.0.123"
+serde_yaml = "0.8.0"
+rmp-serde = "0.15.0"
 hdk = "=0.0.118"

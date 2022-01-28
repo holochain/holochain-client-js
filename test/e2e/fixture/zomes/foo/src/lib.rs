@@ -28,7 +28,7 @@ fn init(_: ()) -> ExternResult<InitCallbackResult> {
         access: ().into(),
         functions: foo_functions,
     })?;
-    // NB: ideally we want to simply create a single CapGrant with both functions exposed,
+    // NB: ideally we want to simply create a single CapGrant with all three functions exposed,
     // but there is a bug in Holochain which currently prevents this. After this bug is fixed,
     // this can be collapsed to a single CapGrantEntry with two functions.
     // see: https://github.com/holochain/holochain/issues/418
@@ -39,6 +39,14 @@ fn init(_: ()) -> ExternResult<InitCallbackResult> {
         // empty access converts to unrestricted
         access: ().into(),
         functions: emitter_functions,
+    })?;
+    let mut properties_functions = BTreeSet::new();
+    properties_functions.insert((zome_info()?.name, "properties".into()));
+    create_cap_grant(CapGrantEntry {
+        tag: "".into(),
+        // empty access converts to unrestricted
+        access: ().into(),
+        functions: properties_functions,
     })?;
 
     Ok(InitCallbackResult::Pass)
@@ -60,4 +68,13 @@ fn emitter(_: ()) -> ExternResult<TestString> {
         Ok(()) => Ok(TestString::from(String::from("bar"))),
         Err(e) => Err(e),
     }
+}
+
+#[derive(Debug, Deserialize, Serialize, SerializedBytes)]
+struct DnaProperties(serde_yaml::Value);
+
+#[hdk_extern]
+fn properties(_: ()) -> ExternResult<DnaProperties> {
+    let properties = dna_info()?.properties;
+    Ok(properties.try_into()?)
 }

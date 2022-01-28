@@ -162,7 +162,7 @@ export type InstallAppBundleRequest = {
   installed_app_id?: InstalledAppId;
 
   /// Include proof-of-membrane-membership data for cells that require it,
-  /// keyed by the CellNick specified in the app bundle manifest.
+  /// keyed by the role ID specified in the app bundle manifest.
   membrane_proofs: { [key: string]: MembraneProof };
 
   /// Optional global UID override.  If set will override the UID value for all DNAs in the bundle.
