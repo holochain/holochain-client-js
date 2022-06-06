@@ -1,6 +1,7 @@
+.vscode
 .cargo
 target
 node_modules
 /lib
-.tsbuildinfo
 /lib.es
+.tsbuildinfo

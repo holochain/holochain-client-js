@@ -1,14 +1,19 @@
-import { Requester } from "./common"
 import {
-  HoloHash,
   AgentPubKey,
-  DnaProperties,
-  InstalledAppId,
   CellId,
-  RoleId
-} from "../types/common"
-import { InstalledAppInfo, MembraneProof } from "./types"
-import { FullStateDump } from "./state-dump"
+  DnaHash,
+  DnaProperties,
+  HeaderHash,
+  HoloHash,
+  InstalledAppId,
+  InstalledCell,
+  KitsuneAgent,
+  KitsuneSpace,
+  RoleId,
+  Signature,
+} from "../../types.js";
+import { DhtOp, Entry, Header } from "../../hdk/index.js";
+import { Requester } from "../common.js";
 
 export type AttachAppInterfaceRequest = { port: number };
 export type AttachAppInterfaceResponse = { port: number };
@@ -28,6 +33,43 @@ export type EnableAppResponse = {
   app: InstalledAppInfo;
   errors: Array<[CellId, string]>;
 };
+
+export type DeactivationReason =
+  | { never_activated: null }
+  | { normal: null }
+  | { quarantined: { error: string } };
+
+export type PausedAppReason = {
+  error: string;
+};
+
+export type DisabledAppReason =
+  | {
+      never_started: null;
+    }
+  | { user: null }
+  | { error: string };
+
+export type InstalledAppInfoStatus =
+  | {
+      paused: { reason: PausedAppReason };
+    }
+  | {
+      disabled: {
+        reason: DisabledAppReason;
+      };
+    }
+  | {
+      running: null;
+    };
+
+export type InstalledAppInfo = {
+  installed_app_id: InstalledAppId;
+  cell_data: Array<InstalledCell>;
+  status: InstalledAppInfoStatus;
+};
+
+export type MembraneProof = Buffer;
 
 export type DisableAppRequest = { installed_app_id: InstalledAppId };
 export type DisableAppResponse = null;
@@ -162,7 +204,7 @@ export type InstallAppBundleRequest = {
   installed_app_id?: InstalledAppId;
 
   /// Include proof-of-membrane-membership data for cells that require it,
-  /// keyed by the role ID specified in the app bundle manifest.
+  /// keyed by the CellNick specified in the app bundle manifest.
   membrane_proofs: { [key: string]: MembraneProof };
 
   /// Optional global UID override.  If set will override the UID value for all DNAs in the bundle.
@@ -310,6 +352,48 @@ export type DnaSource =
       bundle: DnaBundle;
     };
 
-
 export type Zomes = Array<[string, { wasm_hash: Array<HoloHash> }]>;
 export type WasmCode = [HoloHash, { code: Array<number> }];
+
+export interface AgentInfoDump {
+  kitsune_agent: KitsuneAgent;
+  kitsune_space: KitsuneSpace;
+  dump: string;
+}
+
+export interface P2pAgentsDump {
+  /// The info of this agent's cell.
+  this_agent_info: AgentInfoDump | undefined;
+  /// The dna as a [`DnaHash`] and [`kitsune_p2p::KitsuneSpace`].
+  this_dna: [DnaHash, KitsuneSpace] | undefined;
+  /// The agent as [`AgentPubKey`] and [`kitsune_p2p::KitsuneAgent`].
+  this_agent: [AgentPubKey, KitsuneAgent] | undefined;
+  /// All other agent info.
+  peers: Array<AgentInfoDump>;
+}
+
+export interface FullIntegrationStateDump {
+  validation_limbo: Array<DhtOp>;
+  integration_limbo: Array<DhtOp>;
+  integrated: Array<DhtOp>;
+
+  dht_ops_cursor: number;
+}
+
+export interface SourceChainJsonElement {
+  signature: Signature;
+  header_address: HeaderHash;
+  header: Header;
+  entry: Entry | undefined;
+}
+
+export interface SourceChainJsonDump {
+  elements: Array<SourceChainJsonElement>;
+  published_ops_count: number;
+}
+
+export interface FullStateDump {
+  peer_dump: P2pAgentsDump;
+  source_chain_dump: SourceChainJsonDump;
+  integration_dump: FullIntegrationStateDump;
+}

@@ -3,10 +3,11 @@ import {
   DnaHash,
   EntryHash,
   HeaderHash,
-  Signature
-} from "./common"
-import { EntryType } from "./entry"
-import { HoloHashed, Timestamp } from "./common"
+  HoloHashed,
+  Signature,
+  Timestamp,
+} from "../types.js";
+import { EntryType } from "./entry.js";
 
 export interface SignedHeaderHashed<H extends Header = Header> {
   header: HoloHashed<H>;

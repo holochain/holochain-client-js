@@ -1,1 +1,1 @@
-import ('./e2e')
+import "./e2e/index.js";
