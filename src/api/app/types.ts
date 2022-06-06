@@ -1,11 +1,7 @@
-import { Requester } from "./common"
-import {
-  CellId,
-  AgentPubKey,
-  InstalledAppId
-} from "../types/common"
-import { InstalledAppInfo } from "./types"
-import { CapSecret } from "../types/capabilities"
+import { CapSecret } from "../../hdk/capabilities.js";
+import { AgentPubKey, CellId, InstalledAppId } from "../../types.js";
+import { Requester } from "../common.js";
+import { InstalledAppInfo } from "../admin/index.js";
 
 export type CallZomeRequestGeneric<Payload> = {
   cap_secret: CapSecret | null;

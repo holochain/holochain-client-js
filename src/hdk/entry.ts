@@ -1,5 +1,5 @@
-import { CapClaim, ZomeCallCapGrant } from "./capabilities"
-import { AgentPubKey } from "./common"
+import { CapClaim, ZomeCallCapGrant } from "./capabilities.js";
+import { AgentPubKey } from "../types.js";
 
 export type EntryVisibility = "Public" | "Private";
 export type AppEntryType = {
