@@ -1,13 +1,13 @@
+import { Signature } from "../types.js";
+import { Entry } from "./entry.js";
 import {
   CreateLink,
   Delete,
   DeleteLink,
   Header,
   NewEntryHeader,
-  Update
-} from "./header"
-import { Entry } from "./entry"
-import { Signature } from "./common"
+  Update,
+} from "./header.js";
 
 // https://github.com/holochain/holochain/blob/develop/crates/types/src/dht_op.rs
 
@@ -28,45 +28,45 @@ export type DhtOp =
   | { [DhtOpType.StoreEntry]: [Signature, NewEntryHeader, Entry] }
   | { [DhtOpType.RegisterAgentActivity]: [Signature, Header] }
   | {
-    [DhtOpType.RegisterUpdatedContent]: [
-      Signature,
-      Update,
-      Entry | undefined
-    ];
-  }
+      [DhtOpType.RegisterUpdatedContent]: [
+        Signature,
+        Update,
+        Entry | undefined
+      ];
+    }
   | {
-    [DhtOpType.RegisterUpdatedElement]: [
-      Signature,
-      Update,
-      Entry | undefined
-    ];
-  }
+      [DhtOpType.RegisterUpdatedElement]: [
+        Signature,
+        Update,
+        Entry | undefined
+      ];
+    }
   | { [DhtOpType.RegisterDeletedBy]: [Signature, Delete] }
   | { [DhtOpType.RegisterDeletedEntryHeader]: [Signature, Delete] }
   | { [DhtOpType.RegisterAddLink]: [Signature, CreateLink] }
   | { [DhtOpType.RegisterRemoveLink]: [Signature, DeleteLink] };
 
 export function getDhtOpType(op: DhtOp): DhtOpType {
-  return Object.keys(op)[0] as DhtOpType
+  return Object.keys(op)[0] as DhtOpType;
 }
 
 export function getDhtOpHeader(op: DhtOp): Header {
-  const header = Object.values(op)[0][1]
+  const header = Object.values(op)[0][1];
 
-  if (header.author) return header
+  if (header.author) return header;
   else {
-    const headerType = Object.keys(header)[0]
+    const headerType = Object.keys(header)[0];
     return {
       type: headerType,
       ...header[headerType],
-    }
+    };
   }
 }
 
 export function getDhtOpEntry(op: DhtOp): Entry | undefined {
-  return Object.values(op)[0][2]
+  return Object.values(op)[0][2];
 }
 
 export function getDhtOpSignature(op: DhtOp): Signature {
-  return Object.values(op)[0][1]
+  return Object.values(op)[0][1];
 }

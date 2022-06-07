@@ -1,9 +1,9 @@
 {
   "name": "@holochain/client",
-  "version": "0.3.2",
-  "description": "A Nodejs client for the Holochain conductor API",
+  "version": "0.3.4",
+  "description": "A JavaScript client for the Holochain Conductor API",
   "author": "Holochain Foundation <info@holochain.org> (http://holochain.org)",
-  "license": "CAL 1.0",
+  "license": "CAL-1.0",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/holochain/holochain-client-js.git"
@@ -17,36 +17,41 @@
     "url": "https://github.com/holochain/holochain-client-js/issues"
   },
   "homepage": "https://github.com/holochain/holochain-client-js#readme",
-
-  "files": [
-    "lib",
-    "lib.es"
-  ],
-  "main": "lib/index.js",
-  "module": "lib.es/index.js",
-  "types": "lib/index.d.ts",
-
-  "scripts": {
-    "lint": "eslint src/**/*.ts test/**/*.ts --fix",
-    "test": "RUST_LOG=error RUST_BACKTRACE=1 ts-node test",
-    "build": "rimraf ./lib ./lib.es .tsbuildinfo && tsc -b"
+  "engines": {
+    "node": "^14.13.1 || >=16.0.0 || >=18.0.0"
   },
-
+  "type": "module",
+  "exports": {
+    ".": "./lib/index.js"
+  },
+  "types": "lib/index.d.ts",
+  "files": [
+    "lib"
+  ],
+  "scripts": {
+    "lint": "eslint --fix --ext .ts src test .eslintrc.cjs",
+    "test": "RUST_LOG=error RUST_BACKTRACE=1 node --loader ts-node/esm test/index.ts",
+    "build": "rimraf ./lib && tsc -p tsconfig.build.json"
+  },
   "dependencies": {
-    "@msgpack/msgpack": "^2.7.1",
-    "cross-fetch": "^3.1.4",
-    "isomorphic-ws": "^4.0.1"
+    "@msgpack/msgpack": "^2.7.2",
+    "cross-fetch": "^3.1.5",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-tsdoc": "^0.2.16",
+    "isomorphic-ws": "^4.0.1",
+    "prettier": "^2.6.2"
   },
   "devDependencies": {
     "@types/js-yaml": "^3.12.7",
     "@types/tape": "^4.13.2",
-    "@typescript-eslint/eslint-plugin": "^5.9.0",
-    "@typescript-eslint/parser": "^5.9.0",
-    "eslint": "^8.6.0",
+    "@typescript-eslint/eslint-plugin": "^5.27.0",
+    "@typescript-eslint/parser": "^5.27.0",
+    "eslint": "^8.16.0",
     "js-yaml": "^3.14.1",
     "rimraf": "^3.0.2",
-    "tape": "^5.4.0",
-    "ts-node": "^10.4.0",
-    "typescript": "^4.5.4"
+    "tape": "^5.5.3",
+    "ts-node": "^10.8.1",
+    "typescript": "^4.7.2"
   }
 }
