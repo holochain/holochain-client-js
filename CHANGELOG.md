@@ -9,6 +9,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Changed
 ### Fixed
 
+## 2022-06-07: v0.4.0
+
+### Changed
+
+- Converted to pure ES module (dropped CommonJS support)
+
 ## 2022-01-20: v0.3.2
 
 ### Added
