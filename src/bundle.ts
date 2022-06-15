@@ -11,8 +11,8 @@ const readAppBundleFromPath = async (path: string): Promise<AppBundle> => {
   }
   const {
     promises: { readFile },
-  } = await import("fs");
-  const { gunzip } = await import("zlib");
+  } = await import("node:fs");
+  const { gunzip } = await import("node:zlib");
 
   const compressed = await readFile(path);
   const encoded: Uint8Array = await new Promise((resolve, reject) =>
