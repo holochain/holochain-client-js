@@ -9,6 +9,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Changed
 ### Fixed
 
+## 2022-06-07: v0.4.1
+
+### Changed
+
+- Convert module import to URL schema in lazy imports. [\#111](https://github.com/holochain/holochain-client-js/pull/111)
+
 ## 2022-06-07: v0.4.0
 
 ### Changed
