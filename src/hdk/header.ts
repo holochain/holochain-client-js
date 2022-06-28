@@ -10,7 +10,7 @@ import {
 import { EntryType } from "./entry.js";
 
 export interface SignedHeaderHashed<H extends Header = Header> {
-  header: HoloHashed<H>;
+  hashed: HoloHashed<H>;
   signature: Signature;
 }
 
