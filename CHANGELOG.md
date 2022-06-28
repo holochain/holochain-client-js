@@ -9,6 +9,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Changed
 ### Fixed
 
+## 2022-06-07: v0.4.3
+
+### Fixed
+
+- Correct field name `hashed` in Header [\#113](https://github.com/holochain/holochain-client-js/pull/113)
+
 ## 2022-06-07: v0.4.1
 
 ### Changed
