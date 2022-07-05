@@ -2,7 +2,7 @@ export type HoloHash = Uint8Array; // length 39
 export type AgentPubKey = HoloHash;
 export type DnaHash = HoloHash;
 export type EntryHash = HoloHash;
-export type HeaderHash = HoloHash;
+export type ActionHash = HoloHash;
 export type AnyDhtHash = HoloHash;
 
 export type KitsuneAgent = Uint8Array;

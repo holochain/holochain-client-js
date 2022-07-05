@@ -4,29 +4,29 @@ import {
   CreateLink,
   Delete,
   DeleteLink,
-  Header,
-  NewEntryHeader,
+  Action,
+  NewEntryAction,
   Update,
-} from "./header.js";
+} from "./action.js";
 
 // https://github.com/holochain/holochain/blob/develop/crates/types/src/dht_op.rs
 
 export enum DhtOpType {
-  StoreElement = "StoreElement",
+  StoreRecord = "StoreRecord",
   StoreEntry = "StoreEntry",
   RegisterAgentActivity = "RegisterAgentActivity",
   RegisterUpdatedContent = "RegisterUpdatedContent",
-  RegisterUpdatedElement = "RegisterUpdatedElement",
+  RegisterUpdatedRecord = "RegisterUpdatedRecord",
   RegisterDeletedBy = "RegisterDeletedBy",
-  RegisterDeletedEntryHeader = "RegisterDeletedEntryHeader",
+  RegisterDeletedEntryAction = "RegisterDeletedEntryAction",
   RegisterAddLink = "RegisterAddLink",
   RegisterRemoveLink = "RegisterRemoveLink",
 }
 
 export type DhtOp =
-  | { [DhtOpType.StoreElement]: [Signature, Header, Entry | undefined] }
-  | { [DhtOpType.StoreEntry]: [Signature, NewEntryHeader, Entry] }
-  | { [DhtOpType.RegisterAgentActivity]: [Signature, Header] }
+  | { [DhtOpType.StoreRecord]: [Signature, Action, Entry | undefined] }
+  | { [DhtOpType.StoreEntry]: [Signature, NewEntryAction, Entry] }
+  | { [DhtOpType.RegisterAgentActivity]: [Signature, Action] }
   | {
       [DhtOpType.RegisterUpdatedContent]: [
         Signature,
@@ -35,14 +35,10 @@ export type DhtOp =
       ];
     }
   | {
-      [DhtOpType.RegisterUpdatedElement]: [
-        Signature,
-        Update,
-        Entry | undefined
-      ];
+      [DhtOpType.RegisterUpdatedRecord]: [Signature, Update, Entry | undefined];
     }
   | { [DhtOpType.RegisterDeletedBy]: [Signature, Delete] }
-  | { [DhtOpType.RegisterDeletedEntryHeader]: [Signature, Delete] }
+  | { [DhtOpType.RegisterDeletedEntryAction]: [Signature, Delete] }
   | { [DhtOpType.RegisterAddLink]: [Signature, CreateLink] }
   | { [DhtOpType.RegisterRemoveLink]: [Signature, DeleteLink] };
 
@@ -50,15 +46,15 @@ export function getDhtOpType(op: DhtOp): DhtOpType {
   return Object.keys(op)[0] as DhtOpType;
 }
 
-export function getDhtOpHeader(op: DhtOp): Header {
-  const header = Object.values(op)[0][1];
+export function getDhtOpAction(op: DhtOp): Action {
+  const action = Object.values(op)[0][1];
 
-  if (header.author) return header;
+  if (action.author) return action;
   else {
-    const headerType = Object.keys(header)[0];
+    const actionType = Object.keys(action)[0];
     return {
-      type: headerType,
-      ...header[headerType],
+      type: actionType,
+      ...action[actionType],
     };
   }
 }

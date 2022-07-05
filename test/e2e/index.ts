@@ -6,6 +6,7 @@ import {
   AdminWebsocket,
   AppStatusFilter,
   DnaBundle,
+  DumpStateResponse,
   EnableAppResponse,
   InstalledAppInfoStatus,
 } from "../../src/api/admin/index.js";
@@ -318,6 +319,38 @@ test(
 );
 
 test(
+  "stateDump",
+  withConductor(ADMIN_PORT, async (t: Test) => {
+    const { installed_app_id, cell_id, role_id, client, admin } =
+      await installAppAndDna(ADMIN_PORT);
+    const info = await client.appInfo({ installed_app_id }, 1000);
+    t.deepEqual(info.cell_data[0].cell_id, cell_id);
+    t.equal(info.cell_data[0].role_id, role_id);
+    t.deepEqual(info.status, { running: null });
+    const response = await client.callZome(
+      {
+        // TODO: write a test with a real capability secret.
+        cap_secret: null,
+        cell_id,
+        zome_name: TEST_ZOME_NAME,
+        fn_name: "foo",
+        provenance: fakeAgentPubKey(),
+        payload: null,
+      },
+      30000
+    );
+    t.equal(response, "foo");
+
+    const state: DumpStateResponse = await admin.dumpState({
+      cell_id: info.cell_data[0].cell_id,
+    });
+    // A couple random tests to prove that things are where we expect them
+    t.equal(state[0].source_chain_dump.records.length, 6);
+    t.equal(state[0].source_chain_dump.records[0].action.type, "Dna");
+  })
+);
+
+test(
   "can call a zome function twice, reusing args",
   withConductor(ADMIN_PORT, async (t: Test) => {
     const { installed_app_id, cell_id, role_id, client } =
@@ -546,5 +579,34 @@ test(
 
     interfaces = await admin.listAppInterfaces();
     t.equal(interfaces.length, 1);
+  })
+);
+
+test(
+  "can use some of the defined js bindings",
+  withConductor(ADMIN_PORT, async (t: Test) => {
+    const { installed_app_id, cell_id, role_id, client, admin } =
+      await installAppAndDna(ADMIN_PORT);
+    let info = await client.appInfo({ installed_app_id }, 1000);
+    t.deepEqual(info.cell_data[0].cell_id, cell_id);
+    t.equal(info.cell_data[0].role_id, role_id);
+    t.deepEqual(info.status, { running: null });
+    const response = await client.callZome(
+      {
+        // TODO: write a test with a real capability secret.
+        cap_secret: null,
+        cell_id,
+        zome_name: TEST_ZOME_NAME,
+        fn_name: "foo",
+        provenance: fakeAgentPubKey(),
+        payload: null,
+      },
+      30000
+    );
+    t.equal(response, "foo");
+
+    await admin.disableApp({ installed_app_id });
+    info = await client.appInfo({ installed_app_id }, 1000);
+    t.deepEqual(info.status, { disabled: { reason: { user: null } } });
   })
 );
