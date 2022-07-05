@@ -323,7 +323,7 @@ test(
   withConductor(ADMIN_PORT, async (t: Test) => {
     const { installed_app_id, cell_id, role_id, client, admin } =
       await installAppAndDna(ADMIN_PORT);
-    let info = await client.appInfo({ installed_app_id }, 1000);
+    const info = await client.appInfo({ installed_app_id }, 1000);
     t.deepEqual(info.cell_data[0].cell_id, cell_id);
     t.equal(info.cell_data[0].role_id, role_id);
     t.deepEqual(info.status, { running: null });
@@ -341,13 +341,14 @@ test(
     );
     t.equal(response, "foo");
 
-    const state : DumpStateResponse = await admin.dumpState({ cell_id: info.cell_data[0].cell_id });
+    const state: DumpStateResponse = await admin.dumpState({
+      cell_id: info.cell_data[0].cell_id,
+    });
     // A couple random tests to prove that things are where we expect them
-    t.equal(state[0].source_chain_dump.records.length, 6)
-    t.equal(state[0].source_chain_dump.records[0].action.type, 'Dna')
+    t.equal(state[0].source_chain_dump.records.length, 6);
+    t.equal(state[0].source_chain_dump.records[0].action.type, "Dna");
   })
 );
-
 
 test(
   "can call a zome function twice, reusing args",

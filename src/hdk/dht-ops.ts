@@ -35,11 +35,7 @@ export type DhtOp =
       ];
     }
   | {
-      [DhtOpType.RegisterUpdatedRecord]: [
-        Signature,
-        Update,
-        Entry | undefined
-      ];
+      [DhtOpType.RegisterUpdatedRecord]: [Signature, Update, Entry | undefined];
     }
   | { [DhtOpType.RegisterDeletedBy]: [Signature, Delete] }
   | { [DhtOpType.RegisterDeletedEntryAction]: [Signature, Delete] }
