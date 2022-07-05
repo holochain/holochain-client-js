@@ -3,7 +3,7 @@ import {
   CellId,
   DnaHash,
   DnaProperties,
-  HeaderHash,
+  ActionHash,
   HoloHash,
   InstalledAppId,
   InstalledCell,
@@ -12,7 +12,7 @@ import {
   RoleId,
   Signature,
 } from "../../types.js";
-import { DhtOp, Entry, Header } from "../../hdk/index.js";
+import { DhtOp, Entry, Action } from "../../hdk/index.js";
 import { Requester } from "../common.js";
 
 export type AttachAppInterfaceRequest = { port: number };
@@ -380,15 +380,15 @@ export interface FullIntegrationStateDump {
   dht_ops_cursor: number;
 }
 
-export interface SourceChainJsonElement {
+export interface SourceChainJsonRecord {
   signature: Signature;
-  header_address: HeaderHash;
-  header: Header;
+  action_address: ActionHash;
+  action: Action;
   entry: Entry | undefined;
 }
 
 export interface SourceChainJsonDump {
-  elements: Array<SourceChainJsonElement>;
+  records: Array<SourceChainJsonRecord>;
   published_ops_count: number;
 }
 

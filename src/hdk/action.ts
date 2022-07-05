@@ -2,21 +2,21 @@ import {
   AgentPubKey,
   DnaHash,
   EntryHash,
-  HeaderHash,
+  ActionHash,
   HoloHashed,
   Signature,
   Timestamp,
 } from "../types.js";
 import { EntryType } from "./entry.js";
 
-export interface SignedHeaderHashed<H extends Header = Header> {
+export interface SignedActionHashed<H extends Action = Action> {
   hashed: HoloHashed<H>;
   signature: Signature;
 }
 
-export type HeaderHashed = HoloHashed<Header>;
+export type ActionHashed = HoloHashed<Action>;
 
-export enum HeaderType {
+export enum ActionType {
   Dna = "Dna",
   AgentValidationPkg = "AgentValidationPkg",
   InitZomesComplete = "InitZomesComplete",
@@ -29,7 +29,7 @@ export enum HeaderType {
   Delete = "Delete",
 }
 
-export type Header =
+export type Action =
   | Dna
   | AgentValidationPkg
   | InitZomesComplete
@@ -38,12 +38,12 @@ export type Header =
   | OpenChain
   | CloseChain
   | Delete
-  | NewEntryHeader;
+  | NewEntryAction;
 
-export type NewEntryHeader = Create | Update;
+export type NewEntryAction = Create | Update;
 
 export interface Dna {
-  type: HeaderType.Dna;
+  type: ActionType.Dna;
 
   author: AgentPubKey;
   timestamp: Timestamp;
@@ -51,32 +51,32 @@ export interface Dna {
 }
 
 export interface AgentValidationPkg {
-  type: HeaderType.AgentValidationPkg;
+  type: ActionType.AgentValidationPkg;
 
   author: AgentPubKey;
   timestamp: Timestamp;
-  header_seq: number;
-  prev_header: HeaderHash;
+  action_seq: number;
+  prev_action: ActionHash;
 
   membrane_proof: any;
 }
 
 export interface InitZomesComplete {
-  type: HeaderType.InitZomesComplete;
+  type: ActionType.InitZomesComplete;
 
   author: AgentPubKey;
   timestamp: Timestamp;
-  header_seq: number;
-  prev_header: HeaderHash;
+  action_seq: number;
+  prev_action: ActionHash;
 }
 
 export interface CreateLink {
-  type: HeaderType.CreateLink;
+  type: ActionType.CreateLink;
 
   author: AgentPubKey;
   timestamp: Timestamp;
-  header_seq: number;
-  prev_header: HeaderHash;
+  action_seq: number;
+  prev_action: ActionHash;
 
   base_address: EntryHash;
   target_address: EntryHash;
@@ -85,48 +85,48 @@ export interface CreateLink {
 }
 
 export interface DeleteLink {
-  type: HeaderType.DeleteLink;
+  type: ActionType.DeleteLink;
 
   author: AgentPubKey;
   timestamp: Timestamp;
-  header_seq: number;
-  prev_header: HeaderHash;
+  action_seq: number;
+  prev_action: ActionHash;
 
   base_address: EntryHash;
-  link_add_address: HeaderHash;
+  link_add_address: ActionHash;
 }
 
 export interface OpenChain {
-  type: HeaderType.OpenChain;
+  type: ActionType.OpenChain;
 
   author: AgentPubKey;
   timestamp: Timestamp;
-  header_seq: number;
-  prev_header: HeaderHash;
+  action_seq: number;
+  prev_action: ActionHash;
 
   prev_dna_hash: DnaHash;
 }
 
 export interface CloseChain {
-  type: HeaderType.CloseChain;
+  type: ActionType.CloseChain;
 
   author: AgentPubKey;
   timestamp: Timestamp;
-  header_seq: number;
-  prev_header: HeaderHash;
+  action_seq: number;
+  prev_action: ActionHash;
 
   new_dna_hash: DnaHash;
 }
 
 export interface Update {
-  type: HeaderType.Update;
+  type: ActionType.Update;
 
   author: AgentPubKey;
   timestamp: Timestamp;
-  header_seq: number;
-  prev_header: HeaderHash;
+  action_seq: number;
+  prev_action: ActionHash;
 
-  original_header_address: HeaderHash;
+  original_action_address: ActionHash;
   original_entry_address: EntryHash;
 
   entry_type: EntryType;
@@ -134,24 +134,24 @@ export interface Update {
 }
 
 export interface Delete {
-  type: HeaderType.Delete;
+  type: ActionType.Delete;
 
   author: AgentPubKey;
   timestamp: Timestamp;
-  header_seq: number;
-  prev_header: HeaderHash;
+  action_seq: number;
+  prev_action: ActionHash;
 
-  deletes_address: HeaderHash;
+  deletes_address: ActionHash;
   deletes_entry_address: EntryHash;
 }
 
 export interface Create {
-  type: HeaderType.Create;
+  type: ActionType.Create;
 
   author: AgentPubKey;
   timestamp: Timestamp;
-  header_seq: number;
-  prev_header: HeaderHash;
+  action_seq: number;
+  prev_action: ActionHash;
 
   entry_type: EntryType;
   entry_hash: EntryHash;
