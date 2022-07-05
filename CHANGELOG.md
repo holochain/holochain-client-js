@@ -7,9 +7,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Added
 ### Removed
 ### Changed
-- Updates nomenclature in types from Header/Element to Action/Record as per changes from holochain 0.0.145
-- Update test fixture to holochain 0.0.147
 ### Fixed
+
+## 2022-07-05: v0.5.0
+
+### Added
+
+- Type `Record` and `RecordEntry`
+
+### Changed
+
+- Updates nomenclature in types from Header/Element to Action/Record as per changes from holochain 0.0.145 [PR \#117](https://github.com/holochain/holochain-client-js/pull/117)
+- Update test fixture to holochain 0.0.147 [PR \#117](https://github.com/holochain/holochain-client-js/pull/117)
 
 ## 2022-06-07: v0.4.3
 
