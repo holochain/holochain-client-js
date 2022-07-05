@@ -76,10 +76,10 @@ Returns a `Promise` for the corresponding response.
 ```javascript
 [
     {
-        "element": {
+        "record": {
             "signature": buffer,
-            "header_address": buffer,
-            "header": object,
+            "action_address": buffer,
+            "action": object,
             "entry": object?
         }
     },
