@@ -7,7 +7,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Added
 ### Removed
 ### Changed
+- Use more specific type `DnaHash` in `CellId` [PR \#120](https://github.com/holochain/holochain-client-js/pull/120)
+- Change argument `appInfoTransform` of `appInfo` to take an `AppWebsocket` [PR \#121](https://github.com/holochain/holochain-client-js/pull/121)
+
 ### Fixed
+- fix(type): use entry type for record [PR \#119](https://github.com/holochain/holochain-client-js/pull/119)
 
 ## 2022-07-05: v0.5.0
 
