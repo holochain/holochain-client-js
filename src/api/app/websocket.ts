@@ -89,7 +89,7 @@ export class AppWebsocket implements AppApi {
 
   appInfo: Requester<AppInfoRequest, AppInfoResponse> = this._requester(
     "app_info",
-    appInfoTransform(this.overrideInstalledAppId)
+    appInfoTransform(this)
   );
   callZome: Requester<
     CallZomeRequestGeneric<any>,
@@ -119,7 +119,7 @@ const callZomeTransform: Transformer<
 };
 
 const appInfoTransform = (
-  overrideInstalledAppId?: InstalledAppId
+  appWs: AppWebsocket
 ): Transformer<
   AppInfoRequest,
   AppInfoRequest,
@@ -127,9 +127,9 @@ const appInfoTransform = (
   AppInfoResponse
 > => ({
   input: (req: AppInfoRequest): AppInfoRequest => {
-    if (overrideInstalledAppId) {
+    if (appWs.overrideInstalledAppId) {
       return {
-        installed_app_id: overrideInstalledAppId,
+        installed_app_id: appWs.overrideInstalledAppId,
       };
     }
 
