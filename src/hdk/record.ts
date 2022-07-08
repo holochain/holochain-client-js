@@ -1,4 +1,5 @@
 import { SignedActionHashed } from "./action.js";
+import { Entry } from "./entry.js";
 
 export type Record = {
   signed_action: SignedActionHashed;
@@ -7,9 +8,7 @@ export type Record = {
 
 export type RecordEntry =
   | {
-      Present: {
-        entry: Uint8Array;
-      };
+      Present: Entry;
     }
   | {
       Hidden: void;
