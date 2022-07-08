@@ -39,7 +39,7 @@ import {
 export class AppWebsocket implements AppApi {
   client: WsClient;
   defaultTimeout: number;
-  protected overrideInstalledAppId?: InstalledAppId;
+  overrideInstalledAppId?: InstalledAppId;
 
   constructor(
     client: WsClient,
