@@ -12,7 +12,7 @@ export type InstalledAppId = string;
 
 export type Signature = Uint8Array;
 
-export type CellId = [HoloHash, AgentPubKey];
+export type CellId = [DnaHash, AgentPubKey];
 
 export type DnaProperties = any;
 export type RoleId = string;
