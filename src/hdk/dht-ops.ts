@@ -47,7 +47,21 @@ export function getDhtOpType(op: DhtOp): DhtOpType {
 }
 
 export function getDhtOpAction(op: DhtOp): Action {
+  const opType = getDhtOpType(op);
   const action = Object.values(op)[0][1];
+
+  if (opType === DhtOpType.RegisterAddLink) {
+    return {
+      type: 'CreateLink',
+      ...action,
+    }
+  }
+  if (opType === DhtOpType.RegisterUpdatedContent || opType === DhtOpType.RegisterUpdatedRecord) {
+    return {
+      type: 'Update',
+      ...action,
+    }
+  }
 
   if (action.author) return action;
   else {
@@ -58,6 +72,7 @@ export function getDhtOpAction(op: DhtOp): Action {
     };
   }
 }
+
 
 export function getDhtOpEntry(op: DhtOp): Entry | undefined {
   return Object.values(op)[0][2];
