@@ -1,7 +1,8 @@
 import { InstalledAppId } from "../types.js";
 import fetch from "cross-fetch";
 
-// This is coupled with https://github.com/holochain/launcher/blob/develop/src-tauri/src/uis/caddy.rs#L13
+// This is based on
+// https://github.com/holochain/launcher/blob/213aae208c58f2496811d80859723b71f6750426/crates/holochain_web_app_manager/src/caddy/utils.rs#L49
 export const LAUNCHER_ENV_URL = "/.launcher-env.json";
 
 export interface LauncherEnvironment {
