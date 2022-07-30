@@ -20,6 +20,8 @@
   "engines": {
     "node": "^14.13.1 || >=16.0.0 || >=18.0.0"
   },
+  "main": "lib/index.js",
+  "module": "lib/index.js",
   "type": "module",
   "exports": {
     ".": "./lib/index.js"
