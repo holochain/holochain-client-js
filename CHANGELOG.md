@@ -3,6 +3,12 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/). This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## \[Unreleased\]
+### Added
+### Removed
+### Changed
+### Fixed
+
+## 2022-08-01: v0.7.0
 
 ### Added
 - Main entry points in `package.json` for CommonJS and ECMA modules.
@@ -10,7 +16,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Removed
 - BREAKING: `bundle.ts` module, which was Nodejs-specific and not compatible with browser-based clients.
 
-### Changed
 ### Fixed
 - Update link to launcher in comment (#123).
 - Cater for some edge cases for function `getDhtOpAction` (#122).
