@@ -52,15 +52,18 @@ export function getDhtOpAction(op: DhtOp): Action {
 
   if (opType === DhtOpType.RegisterAddLink) {
     return {
-      type: 'CreateLink',
+      type: "CreateLink",
       ...action,
-    }
+    };
   }
-  if (opType === DhtOpType.RegisterUpdatedContent || opType === DhtOpType.RegisterUpdatedRecord) {
+  if (
+    opType === DhtOpType.RegisterUpdatedContent ||
+    opType === DhtOpType.RegisterUpdatedRecord
+  ) {
     return {
-      type: 'Update',
+      type: "Update",
       ...action,
-    }
+    };
   }
 
   if (action.author) return action;
@@ -72,7 +75,6 @@ export function getDhtOpAction(op: DhtOp): Action {
     };
   }
 }
-
 
 export function getDhtOpEntry(op: DhtOp): Entry | undefined {
   return Object.values(op)[0][2];
