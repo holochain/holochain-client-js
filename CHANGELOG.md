@@ -5,9 +5,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## \[Unreleased\]
 
 ### Added
+- Main entry points in `package.json` for CommonJS and ECMA modules.
+
 ### Removed
+- BREAKING: `bundle.ts` module, which was Nodejs-specific and not compatible with browser-based clients.
+
 ### Changed
 ### Fixed
+- Update link to launcher in comment (#123).
+- Cater for some edge cases for function `getDhtOpAction` (#122).
 
 ## 2022-07-08: v0.6.0
 
