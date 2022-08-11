@@ -22,19 +22,6 @@ Create a new connection to the given URL.
 Returns a `Promise` for a new connected instance of `AdminWebsocket`.
 
 
-## `<AdminWebsocket>.activateApp({ installed_app_id })`
-Send a request to activate an installed app.
-
-- `installed_app_id` - a `string`
-
-Returns a `Promise` for the corresponding response.
-
-### Response format
-```javascript
-null
-```
-
-
 ## `<AdminWebsocket>.attachAppInterface({ port })`
 Send a request to open the given port for `AppWebsocket` connections.
 
@@ -50,8 +37,8 @@ Returns a `Promise` for the corresponding response.
 ```
 
 
-## `<AdminWebsocket>.deactivateApp({ installed_app_id })`
-Send a request to deactivate a running app.
+## `<AdminWebsocket>.disableApp({ installed_app_id })`
+Send a request to disable a running app.
 
 - `installed_app_id` - a `string`
 
@@ -85,6 +72,19 @@ Returns a `Promise` for the corresponding response.
     },
     ...
 ]
+```
+
+
+## `<AdminWebsocket>.enableApp({ installed_app_id })`
+Send a request to enable an installed app.
+
+- `installed_app_id` - a `string`
+
+Returns a `Promise` for the corresponding response.
+
+### Response format
+```javascript
+null
 ```
 
 
