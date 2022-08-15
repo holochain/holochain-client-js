@@ -23,6 +23,10 @@ Returns a `Promise` for a new connected instance of `AdminWebsocket`.
 
 
 ## `<AdminWebsocket>.activateApp({ installed_app_id })`
+
+| :exclamation: This method is deprecated. Please use `enableApp` instead  |
+|--------------------------------------------------------------------------|
+
 Send a request to activate an installed app.
 
 - `installed_app_id` - a `string`
@@ -51,7 +55,24 @@ Returns a `Promise` for the corresponding response.
 
 
 ## `<AdminWebsocket>.deactivateApp({ installed_app_id })`
-Send a request to deactivate a running app.
+
+| :exclamation: This method is deprecated. Please use `disableApp` instead  |
+|---------------------------------------------------------------------------|
+
+Send a request to disable a running app.
+
+- `installed_app_id` - a `string`
+
+Returns a `Promise` for the corresponding response.
+
+### Response format
+```javascript
+null
+```
+
+
+## `<AdminWebsocket>.disableApp({ installed_app_id })`
+Send a request to disable a running app.
 
 - `installed_app_id` - a `string`
 
@@ -85,6 +106,19 @@ Returns a `Promise` for the corresponding response.
     },
     ...
 ]
+```
+
+
+## `<AdminWebsocket>.enableApp({ installed_app_id })`
+Send a request to enable an installed app.
+
+- `installed_app_id` - a `string`
+
+Returns a `Promise` for the corresponding response.
+
+### Response format
+```javascript
+null
 ```
 
 
