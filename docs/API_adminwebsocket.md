@@ -132,16 +132,16 @@ Returns a `Promise` for the corresponding response.
 buffer
 ```
 
-## `<AdminWebsocket>.registerDna({ source as  path | bundle | hash, uid?, properties? })`
+## `<AdminWebsocket>.registerDna({ source as  path | bundle | hash, network_seed?, properties? })`
 Request a Dna to be registered in the database for later installation.
-Note: if a hash is passed as the dna source, then you must pass a uid or a properties
+Note: if a hash is passed as the dna source, then you must pass a network seed or properties
 - dna source as one of the following named properties:
   - `path` -a `string` of path to a DNA bundle file
-  - `hash` - a `string` of a registered DNA (assumes either or both uid and properties set)
+  - `hash` - a `string` of a registered DNA (assumes either or both network seed and properties set)
   - `bundle` - an `object` with properties
     - `manifest` - an `object` with properties
       - `name` -a `string`
-      - `uid` - an (optional) `string`
+      - `network_seed` - an (optional) `string`
       - `properties` - an (optional) `object`
       - `zomes` - an `array` of zome manifest `object` that have properties
         - `name` a `string`
@@ -151,7 +151,7 @@ Note: if a hash is passed as the dna source, then you must pass a uid or a prope
           - `path` - a `string` path to zome data in a file
           - `url` - a `string` url to the zome data file
     - `resources` - an `object` with keys storing zome data
-- `uid` - an (optional) `string` which overrides the DNA manifest `uid`
+- `network_seed` - an (optional) `string` which overrides the DNA manifest `network_seed`
 - `properties` - an (optional) `object` which overrides the DNA manifest `properties`
 
 Returns a `Promise` for the corresponding response.
@@ -161,8 +161,8 @@ Returns a `Promise` for the corresponding response.
 buffer  // hash of DNA registered
 ```
 
-## `<AdminWebsocket>.installAppBundle({ installed_app_id, source as path | bundle | hash, uid?, properties? })`
-Request a hApp to be installed using the given source, and optional uid and properties.
+## `<AdminWebsocket>.installAppBundle({ installed_app_id, source as path | bundle | hash, network_seed?, properties? })`
+Request a hApp to be installed using the given source, and optional network seed and properties.
 - `installed_app_id` - a `string`
 - bundle source as one  of the following named properties:
   - `path` -a `string`  of path to an App bundle file
@@ -170,7 +170,7 @@ Request a hApp to be installed using the given source, and optional uid and prop
   - `bundle` - an `object` with properties
     - `manifest` -an `object` with properties
       - `name` - a `string`
-      - `uid` - an (optional) `string`
+      - `network_seed` - an (optional) `string`
       - `properties` - an (optional) `object`
       - `zomes` - an array of `object` with properties
         - `name` - a `string`

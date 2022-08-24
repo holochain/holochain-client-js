@@ -90,7 +90,7 @@ export type GenerateAgentPubKeyRequest = void;
 export type GenerateAgentPubKeyResponse = AgentPubKey;
 
 export type RegisterDnaRequest = {
-  uid?: string;
+  network_seed?: string;
   properties?: DnaProperties;
 } & DnaSource;
 
@@ -167,7 +167,7 @@ export type DnaVersionFlexible =
 export type AppRoleDnaManifest = {
   location?: Location;
   properties?: DnaProperties;
-  uid?: string;
+  network_seed?: NetworkSeed;
   version?: DnaVersionFlexible;
 };
 export type AppRoleManifest = {
@@ -194,7 +194,7 @@ export type AppBundle = {
 
 export type AppBundleSource = { bundle: AppBundle } | { path: string };
 
-export type Uid = string;
+export type NetworkSeed = string;
 export type InstallAppBundleRequest = {
   /// The agent to use when creating Cells for this App.
   agent_key: AgentPubKey;
@@ -207,8 +207,8 @@ export type InstallAppBundleRequest = {
   /// keyed by the CellNick specified in the app bundle manifest.
   membrane_proofs: { [key: string]: MembraneProof };
 
-  /// Optional global UID override.  If set will override the UID value for all DNAs in the bundle.
-  uid?: Uid;
+  /// Optional global network seed override.  If set will override the network seed value for all DNAs in the bundle.
+  network_seed?: NetworkSeed;
 } & AppBundleSource; /// The unique identifier for an installed app in this conductor.
 
 export type InstallAppBundleResponse = InstalledAppInfo;
@@ -324,9 +324,8 @@ export type DnaManifest = {
   /// The friendly "name" of a Holochain DNA.
   name: string;
 
-  /// A UID for uniquifying this Dna.
-  // TODO: consider Vec<u8> instead (https://github.com/holochain/holochain/pull/86#discussion_r412689085)
-  uid?: string;
+  /// A network seed for uniquifying this DNA.
+  network_seed?: NetworkSeed;
 
   /// Any arbitrary application properties can be included in this object.
   properties?: DnaProperties;
