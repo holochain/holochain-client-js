@@ -12,8 +12,8 @@ import {
 } from "../../src/api/admin/index.js";
 import {
   AppSignal,
-  CallZomeRequest,
   AppWebsocket,
+  CallZomeRequest,
 } from "../../src/api/app/index.js";
 import { WsClient } from "../../src/api/client.js";
 import {
@@ -154,10 +154,10 @@ test(
     t.equal(activeApps3.length, 0);
     // NB: missing dumpState because it requires a valid cell_id
 
-    // install from hash and uid
+    // install from hash and network seed
     const newHash = await admin.registerDna({
       hash,
-      uid: "123456",
+      network_seed: "123456",
     });
     t.ok(newHash);
 
@@ -608,5 +608,33 @@ test(
     await admin.disableApp({ installed_app_id });
     info = await client.appInfo({ installed_app_id }, 1000);
     t.deepEqual(info.status, { disabled: { reason: { user: null } } });
+  })
+);
+
+test(
+  "admin smoke test: install 2 hApp bundles with different network seeds",
+  withConductor(ADMIN_PORT, async (t: Test) => {
+    const admin = await AdminWebsocket.connect(`ws://localhost:${ADMIN_PORT}`);
+    const agent_key = await admin.generateAgentPubKey();
+
+    const installedApp1 = await admin.installAppBundle({
+      agent_key,
+      installed_app_id: "test-app1",
+      membrane_proofs: {},
+      path: `${FIXTURE_PATH}/test.happ`,
+      network_seed: "1",
+    });
+    const installedApp2 = await admin.installAppBundle({
+      agent_key,
+      installed_app_id: "test-app2",
+      membrane_proofs: {},
+      path: `${FIXTURE_PATH}/test.happ`,
+      network_seed: "2",
+    });
+
+    t.isNotDeepEqual(
+      installedApp1.cell_data[0].cell_id[0],
+      installedApp2.cell_data[0].cell_id[0]
+    );
   })
 );
