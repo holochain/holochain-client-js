@@ -34,6 +34,8 @@ import {
   AppSignalCb,
   CallZomeRequestGeneric,
   CallZomeResponseGeneric,
+  CreateCloneCellRequest,
+  CreateCloneCellResponse,
 } from "./types.js";
 
 export class AppWebsocket implements AppApi {
@@ -95,6 +97,8 @@ export class AppWebsocket implements AppApi {
     CallZomeRequestGeneric<any>,
     CallZomeResponseGeneric<any>
   > = this._requester("zome_call", callZomeTransform);
+  createCloneCell: Requester<CreateCloneCellRequest, CreateCloneCellResponse> =
+    this._requester("create_clone_cell");
 }
 
 const callZomeTransform: Transformer<
