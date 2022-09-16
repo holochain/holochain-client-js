@@ -45,22 +45,12 @@ export const launch = async (port: number) => {
 
   const runConductorPromise = new Promise<void>((resolve) => {
     runConductorProcess.stdout.on("data", (data: Buffer) => {
-      const adminPortMatches = data
-        .toString()
-        .match(/Running conductor on admin port (\d+)/);
       const isConductorStarted = data
         .toString()
         .includes("Connected successfully to a running holochain");
-      if (adminPortMatches || isConductorStarted) {
-        if (adminPortMatches) {
-          //   this.adminApiUrl.port = adminPortMatches[1];
-          //   logger.debug(`starting conductor\n${data}`);
-          console.info("admin port", adminPortMatches[1]);
-        }
-        if (isConductorStarted) {
-          // this is the last output of the startup process
-          resolve();
-        }
+      if (isConductorStarted) {
+        // this is the last output of the startup process
+        resolve();
       }
     });
   });
@@ -68,7 +58,7 @@ export const launch = async (port: number) => {
   return runConductorProcess;
 };
 
-const cleanSandboxConductors = () => {
+export const cleanSandboxConductors = () => {
   const cleanSandboxConductorsProcess = spawn("hc", ["sandbox", "clean"]);
   const cleanSandboxConductorsPromise = new Promise<void>((resolve) => {
     cleanSandboxConductorsProcess.stdout.on("end", () => {

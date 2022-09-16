@@ -18,6 +18,7 @@ import {
 } from "../../src/api/app/index.js";
 import { WsClient } from "../../src/api/client.js";
 import {
+  cleanSandboxConductors,
   FIXTURE_PATH,
   installAppAndDna,
   launch,
@@ -518,90 +519,91 @@ test("error is catchable when holochain socket is unavailable", async (t: Test) 
 test("can inject agents", async (t: Test) => {
   const conductor1 = await launch(ADMIN_PORT);
   const conductor2 = await launch(ADMIN_PORT_1);
-  try {
-    const installed_app_id = "app";
-    const admin1 = await AdminWebsocket.connect(`ws://localhost:${ADMIN_PORT}`);
-    const admin2 = await AdminWebsocket.connect(
-      `ws://localhost:${ADMIN_PORT_1}`
-    );
-    const agent_key_1 = await admin1.generateAgentPubKey();
-    t.ok(agent_key_1);
-    const agent_key_2 = await admin2.generateAgentPubKey();
-    t.ok(agent_key_2);
-    const role = "thedna";
-    const path = `${FIXTURE_PATH}/test.dna`;
-    const hash = await admin1.registerDna({ path });
-    t.ok(hash);
-    let result = await admin1.installApp({
-      installed_app_id,
-      agent_key: agent_key_1,
-      dnas: [{ hash, role_id: role }],
-    });
-    t.ok(result);
-    const app1_cell = result.cell_data[0].cell_id;
-    const activeApp1Info = await admin1.enableApp({ installed_app_id }, 1000);
-    t.deepEqual(activeApp1Info.app.status, { running: null });
-    t.equal(activeApp1Info.app.cell_data[0].role_id, role);
-    t.equal(activeApp1Info.app.installed_app_id, installed_app_id);
-    t.equal(activeApp1Info.errors.length, 0);
+  const installed_app_id = "app";
+  const admin1 = await AdminWebsocket.connect(`ws://localhost:${ADMIN_PORT}`);
+  const admin2 = await AdminWebsocket.connect(`ws://localhost:${ADMIN_PORT_1}`);
+  const agent_key_1 = await admin1.generateAgentPubKey();
+  t.ok(agent_key_1);
+  const agent_key_2 = await admin2.generateAgentPubKey();
+  t.ok(agent_key_2);
+  const role = "thedna";
+  const path = `${FIXTURE_PATH}/test.dna`;
+  const hash = await admin1.registerDna({ path });
+  t.ok(hash);
+  let result = await admin1.installApp({
+    installed_app_id,
+    agent_key: agent_key_1,
+    dnas: [{ hash, role_id: role }],
+  });
+  t.ok(result);
+  const app1_cell = result.cell_data[0].cell_id;
+  const activeApp1Info = await admin1.enableApp({ installed_app_id }, 1000);
+  t.deepEqual(activeApp1Info.app.status, { running: null });
+  t.equal(activeApp1Info.app.cell_data[0].role_id, role);
+  t.equal(activeApp1Info.app.installed_app_id, installed_app_id);
+  t.equal(activeApp1Info.errors.length, 0);
 
-    await delay(500);
+  await delay(500);
 
-    // after activating an app requestAgentInfo should return the agentid
-    // requesting info with null cell_id should return all agents known about.
-    // otherwise it's just agents know about for that cell
-    const conductor1_agentInfo = await admin1.requestAgentInfo({
-      cell_id: null,
-    });
-    t.equal(conductor1_agentInfo.length, 1);
+  // after activating an app requestAgentInfo should return the agentid
+  // requesting info with null cell_id should return all agents known about.
+  // otherwise it's just agents know about for that cell
+  const conductor1_agentInfo = await admin1.requestAgentInfo({
+    cell_id: null,
+  });
+  t.equal(conductor1_agentInfo.length, 1);
 
-    // agent2 with no activated apps there are no agents
-    let conductor2_agentInfo = await admin2.requestAgentInfo({ cell_id: null });
-    t.equal(conductor2_agentInfo.length, 0);
+  // agent2 with no activated apps there are no agents
+  let conductor2_agentInfo = await admin2.requestAgentInfo({ cell_id: null });
+  t.equal(conductor2_agentInfo.length, 0);
 
-    // but, after explicitly injecting an agent, we should see it
-    await admin2.addAgentInfo({ agent_infos: conductor1_agentInfo });
-    conductor2_agentInfo = await admin2.requestAgentInfo({ cell_id: null });
-    t.equal(conductor2_agentInfo.length, 1);
-    t.deepEqual(conductor1_agentInfo, conductor2_agentInfo);
+  // but, after explicitly injecting an agent, we should see it
+  await admin2.addAgentInfo({ agent_infos: conductor1_agentInfo });
+  conductor2_agentInfo = await admin2.requestAgentInfo({ cell_id: null });
+  t.equal(conductor2_agentInfo.length, 1);
+  t.deepEqual(conductor1_agentInfo, conductor2_agentInfo);
 
-    // now install the app and activate it on agent 2.
-    await admin2.registerDna({
-      path,
-    });
-    t.ok(hash);
-    result = await admin2.installApp({
-      installed_app_id,
-      agent_key: agent_key_2,
-      dnas: [{ hash, role_id: role }],
-    });
-    t.ok(result);
-    const app2_cell = result.cell_data[0].cell_id;
-    const activeApp2Info = await admin2.enableApp({ installed_app_id });
-    t.deepEqual(activeApp2Info.app.status, { running: null });
-    t.equal(activeApp2Info.app.cell_data[0].role_id, role);
-    t.equal(activeApp2Info.app.installed_app_id, installed_app_id);
-    t.equal(activeApp2Info.errors.length, 0);
+  // now install the app and activate it on agent 2.
+  await admin2.registerDna({
+    path,
+  });
+  t.ok(hash);
+  result = await admin2.installApp({
+    installed_app_id,
+    agent_key: agent_key_2,
+    dnas: [{ hash, role_id: role }],
+  });
+  t.ok(result);
+  const app2_cell = result.cell_data[0].cell_id;
+  const activeApp2Info = await admin2.enableApp({ installed_app_id });
+  t.deepEqual(activeApp2Info.app.status, { running: null });
+  t.equal(activeApp2Info.app.cell_data[0].role_id, role);
+  t.equal(activeApp2Info.app.installed_app_id, installed_app_id);
+  t.equal(activeApp2Info.errors.length, 0);
 
-    await delay(500);
-    // observe 2 agent infos
-    conductor2_agentInfo = await admin2.requestAgentInfo({ cell_id: null });
-    t.equal(conductor2_agentInfo.length, 2);
+  await delay(500);
+  // observe 2 agent infos
+  conductor2_agentInfo = await admin2.requestAgentInfo({ cell_id: null });
+  t.equal(conductor2_agentInfo.length, 2);
 
-    // now confirm that we can ask for just one cell
-    await admin1.addAgentInfo({ agent_infos: conductor2_agentInfo });
-    const app1_agentInfo = await admin1.requestAgentInfo({
-      cell_id: app1_cell,
-    });
-    t.equal(app1_agentInfo.length, 1);
-    const app2_agentInfo = await admin2.requestAgentInfo({
-      cell_id: app2_cell,
-    });
-    t.equal(app2_agentInfo.length, 1);
-  } finally {
-    conductor1.kill();
-    conductor2.kill();
+  // now confirm that we can ask for just one cell
+  await admin1.addAgentInfo({ agent_infos: conductor2_agentInfo });
+  const app1_agentInfo = await admin1.requestAgentInfo({
+    cell_id: app1_cell,
+  });
+  t.equal(app1_agentInfo.length, 1);
+  const app2_agentInfo = await admin2.requestAgentInfo({
+    cell_id: app2_cell,
+  });
+  t.equal(app2_agentInfo.length, 1);
+
+  if (conductor1.pid) {
+    process.kill(-conductor1.pid);
   }
+  if (conductor2.pid) {
+    process.kill(-conductor2.pid);
+  }
+  await cleanSandboxConductors();
 });
 
 test(
