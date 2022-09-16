@@ -1,3 +1,5 @@
+import { RoleId } from "../types.js";
+
 const ERROR_TYPE = "error";
 export const DEFAULT_TIMEOUT = 15000;
 
@@ -62,3 +64,32 @@ export const promiseTimeout = (
       });
   });
 };
+
+export class CloneId {
+  private static readonly CLONE_ID_DELIMITER = ".";
+  private readonly roleId: RoleId;
+  private readonly index: number;
+
+  constructor(roleId: RoleId, index: number) {
+    this.roleId = roleId;
+    this.index = index;
+  }
+
+  static fromRoleId(roleId: RoleId) {
+    const parts = roleId.split(CloneId.CLONE_ID_DELIMITER);
+    if (parts.length !== 2) {
+      throw new Error(
+        "Malformed clone id: must consist of {role id.clone index}"
+      );
+    }
+    return new CloneId(parts[0], parseInt(parts[1]));
+  }
+
+  toString() {
+    return `${this.roleId}${CloneId.CLONE_ID_DELIMITER}${this.index}`;
+  }
+
+  getBaseRoleId() {
+    return this.roleId;
+  }
+}
