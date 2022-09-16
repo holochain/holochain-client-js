@@ -17,6 +17,7 @@ import {
   CreateCloneCellRequest,
 } from "../../src/api/app/index.js";
 import { WsClient } from "../../src/api/client.js";
+import { CloneId } from "../../src/api/common.js";
 import {
   cleanSandboxConductors,
   FIXTURE_PATH,
@@ -393,47 +394,6 @@ test(
 );
 
 test(
-  "can create a callable clone cell",
-  withConductor(ADMIN_PORT, async (t: Test) => {
-    try {
-      const { installed_app_id, role_id, client } = await installAppAndDna(
-        ADMIN_PORT
-      );
-      const info = await client.appInfo({ installed_app_id }, 1000);
-      const createCloneCellParams: CreateCloneCellRequest = {
-        app_id: installed_app_id,
-        role_id,
-        network_seed: "clone-0",
-      };
-      const cloneCell = await client.createCloneCell(createCloneCellParams);
-      const expectedCloneId = `${info.cell_data[0].role_id}.0`;
-      t.equal(cloneCell.role_id, expectedCloneId, "correct clone id");
-      t.deepEqual(
-        cloneCell.cell_id[1],
-        info.cell_data[0].cell_id[1],
-        "clone cell agent key matches base cell agent key"
-      );
-      const params: CallZomeRequest = {
-        cap_secret: null,
-        cell_id: cloneCell.cell_id,
-        zome_name: TEST_ZOME_NAME,
-        fn_name: "foo",
-        provenance: fakeAgentPubKey(),
-        payload: null,
-      };
-      const response = await client.callZome(params);
-      t.equal(
-        response,
-        "foo",
-        "clone cell can be called with same zome call as base cell"
-      );
-    } catch (error) {
-      console.log("errowwwwwr", error);
-    }
-  })
-);
-
-test(
   "can receive a signal",
   withConductor(ADMIN_PORT, async (t: Test) => {
     let resolveSignalPromise: (value?: unknown) => void | undefined;
@@ -675,5 +635,74 @@ test(
       installedApp1.cell_data[0].cell_id[0],
       installedApp2.cell_data[0].cell_id[0]
     );
+  })
+);
+
+test(
+  "can create a callable clone cell",
+  withConductor(ADMIN_PORT, async (t: Test) => {
+    const { installed_app_id, role_id, client } = await installAppAndDna(
+      ADMIN_PORT
+    );
+    const info = await client.appInfo({ installed_app_id }, 1000);
+    const createCloneCellParams: CreateCloneCellRequest = {
+      app_id: installed_app_id,
+      role_id,
+      network_seed: "clone-0",
+    };
+    const cloneCell = await client.createCloneCell(createCloneCellParams);
+    const expectedCloneId = new CloneId(role_id, 0).toString();
+    t.equal(cloneCell.role_id, expectedCloneId, "correct clone id");
+    t.deepEqual(
+      cloneCell.cell_id[1],
+      info.cell_data[0].cell_id[1],
+      "clone cell agent key matches base cell agent key"
+    );
+    const params: CallZomeRequest = {
+      cap_secret: null,
+      cell_id: cloneCell.cell_id,
+      zome_name: TEST_ZOME_NAME,
+      fn_name: "foo",
+      provenance: fakeAgentPubKey(),
+      payload: null,
+    };
+    const response = await client.callZome(params);
+    t.equal(
+      response,
+      "foo",
+      "clone cell can be called with same zome call as base cell"
+    );
+  })
+);
+
+test.only(
+  "can archive a clone cell",
+  withConductor(ADMIN_PORT, async (t: Test) => {
+    const { installed_app_id, role_id, client } = await installAppAndDna(
+      ADMIN_PORT
+    );
+    const info = await client.appInfo({ installed_app_id }, 1000);
+    const createCloneCellParams: CreateCloneCellRequest = {
+      app_id: installed_app_id,
+      role_id,
+      network_seed: "clone-0",
+    };
+    const cloneCell = await client.createCloneCell(createCloneCellParams);
+    const expectedCloneId = new CloneId(role_id, 0).toString();
+    t.equal(cloneCell.role_id, expectedCloneId, "correct clone id");
+    // const params: CallZomeRequest = {
+    //   cap_secret: null,
+    //   cell_id: cloneCell.cell_id,
+    //   zome_name: TEST_ZOME_NAME,
+    //   fn_name: "foo",
+    //   provenance: fakeAgentPubKey(),
+    //   payload: null,
+    // };
+    // const response = await client.callZome(params);
+    // t.equal(
+    //   response,
+    //   "foo",
+    //   "clone cell can be called with same zome call as base cell"
+    // );
   })
 );
