@@ -101,10 +101,6 @@ export class AdminWebsocket implements Api.AdminApi {
     Api.InstallAppBundleRequest,
     Api.InstallAppBundleResponse
   > = this._requester("install_app_bundle");
-  createCloneCell: Requester<
-    Api.CreateCloneCellRequest,
-    Api.CreateCloneCellResponse
-  > = this._requester("create_clone_cell");
   listDnas: Requester<Api.ListDnasRequest, Api.ListDnasResponse> =
     this._requester("list_dnas");
   listCellIds: Requester<Api.ListCellIdsRequest, Api.ListCellIdsResponse> =

@@ -108,25 +108,6 @@ export type UninstallAppRequest = {
 };
 export type UninstallAppResponse = null;
 
-export type CreateCloneCellRequest = {
-  /// Properties to override when installing this Dna
-  properties?: DnaProperties;
-  /// The DNA to clone
-  dna_hash: HoloHash;
-  /// The Agent key with which to create this Cell
-  /// (TODO: should this be derived from the App?)
-  agent_key: AgentPubKey;
-  /// The App with which to associate the newly created Cell
-  installed_app_id: InstalledAppId;
-
-  /// The RoleId under which to create this clone
-  /// (needed to track cloning permissions and `clone_count`)
-  role_id: RoleId;
-  /// Proof-of-membership, if required by this DNA
-  membrane_proof?: MembraneProof;
-};
-export type CreateCloneCellResponse = CellId;
-
 export type ResourceBytes = Buffer;
 export type ResourceMap = { [key: string]: ResourceBytes };
 export type CellProvisioning =
@@ -271,7 +252,6 @@ export interface AdminApi {
   registerDna: Requester<RegisterDnaRequest, RegisterDnaResponse>;
   installApp: Requester<InstallAppRequest, InstallAppResponse>;
   uninstallApp: Requester<UninstallAppRequest, UninstallAppResponse>;
-  createCloneCell: Requester<CreateCloneCellRequest, CreateCloneCellResponse>;
   installAppBundle: Requester<
     InstallAppBundleRequest,
     InstallAppBundleResponse
