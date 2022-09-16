@@ -3,30 +3,23 @@ import { Test } from "tape";
 import { AdminWebsocket } from "../../src/api/admin/websocket.js";
 import { AppSignalCb } from "../../src/api/app/types.js";
 import { AppWebsocket } from "../../src/api/app/websocket.js";
-import { CellId, DnaHash, InstalledAppId, RoleId } from "../../src/types.js";
+import { CellId, InstalledAppId, RoleId } from "../../src/types.js";
 export const FIXTURE_PATH = "./test/e2e/fixture";
 export const CONFIG_PATH = `${FIXTURE_PATH}/test-config.yml`;
 export const CONFIG_PATH_1 = `${FIXTURE_PATH}/test-config-1.yml`;
 
-const LAIR_PASSWORD = "lair-password";
+const LAIR_PASSPHRASE = "passphrase";
 
-export const launch = async (port?: number) => {
+export const launch = async (port: number) => {
   // create sandbox conductor
-  const args = ["sandbox", "--piped", "create", "network", "quic"];
-  if (port) {
-    args.push("--override-port", port.toString());
-  }
+  const args = ["sandbox", "--piped", "create"];
   const createConductorProcess = spawn("hc", args);
-  createConductorProcess.stdin.write(LAIR_PASSWORD);
+  createConductorProcess.stdin.write(LAIR_PASSPHRASE);
   createConductorProcess.stdin.end();
 
   let conductorDir = "";
   const createConductorPromise = new Promise<void>((resolve) => {
     createConductorProcess.stdout.on("data", (data) => {
-      // console.info(
-      //   "data coming from create conductor process",
-      //   data.toString()
-      // );
       const tmpDirMatches = data.toString().match(/Created (\[".+"])/);
       if (tmpDirMatches) {
         conductorDir = JSON.parse(tmpDirMatches[1])[0];
@@ -41,13 +34,13 @@ export const launch = async (port?: number) => {
   // start sandbox conductor
   const runConductorProcess = spawn(
     "hc",
-    ["sandbox", "--piped", "run", "-e", conductorDir],
+    ["sandbox", "--piped", `-f=${port}`, "run", "-e", conductorDir],
     {
       detached: true, // create a process group; without this option, killing
       // the process doesn't kill the conductor
     }
   );
-  runConductorProcess.stdin.write(LAIR_PASSWORD);
+  runConductorProcess.stdin.write(LAIR_PASSPHRASE);
   runConductorProcess.stdin.end();
 
   const runConductorPromise = new Promise<void>((resolve) => {
@@ -59,10 +52,11 @@ export const launch = async (port?: number) => {
         .toString()
         .includes("Connected successfully to a running holochain");
       if (adminPortMatches || isConductorStarted) {
-        // if (adminPortMatches) {
-        //   this.adminApiUrl.port = adminPortMatches[1];
-        //   logger.debug(`starting conductor\n${data}`);
-        // }
+        if (adminPortMatches) {
+          //   this.adminApiUrl.port = adminPortMatches[1];
+          //   logger.debug(`starting conductor\n${data}`);
+          console.info("admin port", adminPortMatches[1]);
+        }
         if (isConductorStarted) {
           // this is the last output of the startup process
           resolve();
@@ -72,6 +66,16 @@ export const launch = async (port?: number) => {
   });
   await runConductorPromise;
   return runConductorProcess;
+};
+
+const cleanSandboxConductors = () => {
+  const cleanSandboxConductorsProcess = spawn("hc", ["sandbox", "clean"]);
+  const cleanSandboxConductorsPromise = new Promise<void>((resolve) => {
+    cleanSandboxConductorsProcess.stdout.on("end", () => {
+      resolve();
+    });
+  });
+  return cleanSandboxConductorsPromise;
 };
 
 export const withConductor =
@@ -86,6 +90,7 @@ export const withConductor =
       if (conductorProcess.pid) {
         process.kill(-conductorProcess.pid);
       }
+      await cleanSandboxConductors();
     }
     t.end();
   };
@@ -99,7 +104,6 @@ export const installAppAndDna = async (
   role_id: RoleId;
   client: AppWebsocket;
   admin: AdminWebsocket;
-  dna_hash: DnaHash;
 }> => {
   const installed_app_id = "app";
   const role_id = "mydna";
@@ -133,5 +137,5 @@ export const installAppAndDna = async (
     12000,
     signalCb
   );
-  return { installed_app_id, cell_id, role_id, client, admin, dna_hash: hash };
+  return { installed_app_id, cell_id, role_id, client, admin };
 };
