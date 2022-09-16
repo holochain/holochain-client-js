@@ -1,116 +1,91 @@
-import { ChildProcessWithoutNullStreams, spawn } from "node:child_process";
-import fs from "node:fs";
-import yaml from "js-yaml";
-import os from "node:os";
+import { spawn } from "node:child_process";
 import { Test } from "tape";
-import { AppSignalCb } from "../../src/api/app/types.js";
-import { CellId, InstalledAppId, RoleId } from "../../src/types.js";
 import { AdminWebsocket } from "../../src/api/admin/websocket.js";
+import { AppSignalCb } from "../../src/api/app/types.js";
 import { AppWebsocket } from "../../src/api/app/websocket.js";
+import { CellId, DnaHash, InstalledAppId, RoleId } from "../../src/types.js";
 export const FIXTURE_PATH = "./test/e2e/fixture";
 export const CONFIG_PATH = `${FIXTURE_PATH}/test-config.yml`;
 export const CONFIG_PATH_1 = `${FIXTURE_PATH}/test-config-1.yml`;
 
-const writeConfig = (
-  port: number,
-  configPath: fs.PathOrFileDescriptor
-): string => {
-  const dir = fs.mkdtempSync(`${os.tmpdir()}/holochain-test-`);
-  const lairDir = `${dir}/keystore`;
-  if (!fs.existsSync(lairDir)) {
-    fs.mkdirSync(lairDir);
+const LAIR_PASSWORD = "lair-password";
+
+export const launch = async (port?: number) => {
+  // create sandbox conductor
+  const args = ["sandbox", "--piped", "create", "network", "quic"];
+  if (port) {
+    args.push("--override-port", port.toString());
   }
+  const createConductorProcess = spawn("hc", args);
+  createConductorProcess.stdin.write(LAIR_PASSWORD);
+  createConductorProcess.stdin.end();
 
-  const yamlStr = yaml.safeDump({
-    environment_path: dir,
-    keystore: {
-      type: "lair_server_legacy_deprecated",
-      keystore_path: lairDir,
-      danger_passphrase_insecure_from_config: "test-passphrase",
-    },
-    admin_interfaces: [
-      {
-        driver: {
-          type: "websocket",
-          port,
-        },
-      },
-    ],
-  });
-  fs.writeFileSync(configPath, yamlStr, "utf8");
-  console.info(`using database environment path: ${dir}`);
-  return lairDir;
-};
-
-const awaitInterfaceReady = (
-  handle: ChildProcessWithoutNullStreams
-): Promise<null> =>
-  new Promise((fulfill, reject) => {
-    const pattern = "Conductor ready.";
-    let resolved = false;
-    handle.on("close", (code) => {
-      resolved = true;
-      console.info(`Conductor exited with code ${code}`);
-      reject(`Conductor exited before starting interface (code ${code})`);
-    });
-    handle.stdout.on("data", (data) => {
-      if (resolved) {
-        return;
-      }
-      const line = data.toString("utf8");
-      if (line.match(pattern)) {
-        console.info(`Conductor process spawning completed.`);
-        resolved = true;
-        fulfill(null);
+  let conductorDir = "";
+  const createConductorPromise = new Promise<void>((resolve) => {
+    createConductorProcess.stdout.on("data", (data) => {
+      // console.info(
+      //   "data coming from create conductor process",
+      //   data.toString()
+      // );
+      const tmpDirMatches = data.toString().match(/Created (\[".+"])/);
+      if (tmpDirMatches) {
+        conductorDir = JSON.parse(tmpDirMatches[1])[0];
       }
     });
+    createConductorProcess.stdout.on("end", () => {
+      resolve();
+    });
   });
+  await createConductorPromise;
 
-const HOLOCHAIN_BIN = "holochain";
-const LAIR_BIN = "lair-keystore";
+  // start sandbox conductor
+  const runConductorProcess = spawn(
+    "hc",
+    ["sandbox", "--piped", "run", "-e", conductorDir],
+    {
+      detached: true, // create a process group; without this option, killing
+      // the process doesn't kill the conductor
+    }
+  );
+  runConductorProcess.stdin.write(LAIR_PASSWORD);
+  runConductorProcess.stdin.end();
 
-export const launch = async (
-  port: number,
-  configPath: fs.PathOrFileDescriptor
-) => {
-  const lairDir = await writeConfig(port, configPath);
-  console.log(`Spawning lair for test with keystore at:  ${lairDir}`);
-  const lairHandle = spawn(LAIR_BIN, ["-d", lairDir], {
-    env: {
-      // TODO: maybe put this behind a flag?
-      RUST_BACKTRACE: "1",
-      ...process.env,
-    },
+  const runConductorPromise = new Promise<void>((resolve) => {
+    runConductorProcess.stdout.on("data", (data: Buffer) => {
+      const adminPortMatches = data
+        .toString()
+        .match(/Running conductor on admin port (\d+)/);
+      const isConductorStarted = data
+        .toString()
+        .includes("Connected successfully to a running holochain");
+      if (adminPortMatches || isConductorStarted) {
+        // if (adminPortMatches) {
+        //   this.adminApiUrl.port = adminPortMatches[1];
+        //   logger.debug(`starting conductor\n${data}`);
+        // }
+        if (isConductorStarted) {
+          // this is the last output of the startup process
+          resolve();
+        }
+      }
+    });
   });
-  // Wait for lair to output data such as "#lair-keystore-ready#" before starting holochain
-  await new Promise((resolve) => {
-    lairHandle.stdout.once("data", resolve);
-  });
-
-  const handle = spawn(HOLOCHAIN_BIN, ["-c", configPath.toString()]);
-  handle.stdout.on("data", (data) => {
-    console.info("conductor: ", data.toString("utf8"));
-  });
-  handle.stderr.on("data", (data) => {
-    console.info("conductor> ", data.toString("utf8"));
-  });
-  await awaitInterfaceReady(handle);
-  return [handle, lairHandle];
+  await runConductorPromise;
+  return runConductorProcess;
 };
 
 export const withConductor =
   (port: number, f: (t: Test) => Promise<void>) => async (t: Test) => {
-    const [handle, lairHandle] = await launch(port, CONFIG_PATH);
+    const conductorProcess = await launch(port);
     try {
       await f(t);
     } catch (e) {
       console.error("Test caught exception: ", e);
-      lairHandle.kill();
-      handle.kill();
       throw e;
     } finally {
-      lairHandle.kill();
-      handle.kill();
+      if (conductorProcess.pid) {
+        process.kill(-conductorProcess.pid);
+      }
     }
     t.end();
   };
@@ -124,6 +99,7 @@ export const installAppAndDna = async (
   role_id: RoleId;
   client: AppWebsocket;
   admin: AdminWebsocket;
+  dna_hash: DnaHash;
 }> => {
   const installed_app_id = "app";
   const role_id = "mydna";
@@ -157,5 +133,5 @@ export const installAppAndDna = async (
     12000,
     signalCb
   );
-  return { installed_app_id, cell_id, role_id, client, admin };
+  return { installed_app_id, cell_id, role_id, client, admin, dna_hash: hash };
 };
