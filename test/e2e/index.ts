@@ -14,11 +14,10 @@ import {
   AppSignal,
   AppWebsocket,
   CallZomeRequest,
+  CreateCloneCellRequest,
 } from "../../src/api/app/index.js";
 import { WsClient } from "../../src/api/client.js";
 import {
-  CONFIG_PATH,
-  CONFIG_PATH_1,
   FIXTURE_PATH,
   installAppAndDna,
   launch,
@@ -377,7 +376,6 @@ test(
 test(
   "can handle canceled response",
   withConductor(ADMIN_PORT, async (t: Test) => {
-    // const client = await WsClient.connect(`ws://localhost:${ADMIN_PORT}`);A
     const client = new WsClient({
       send: () => {
         /* do nothing */
@@ -389,6 +387,47 @@ test(
       await prom;
     } catch (e) {
       t.deepEqual(e, new Error("Response canceled by responder"));
+    }
+  })
+);
+
+test(
+  "can create a callable clone cell",
+  withConductor(ADMIN_PORT, async (t: Test) => {
+    try {
+      const { installed_app_id, role_id, client } = await installAppAndDna(
+        ADMIN_PORT
+      );
+      const info = await client.appInfo({ installed_app_id }, 1000);
+      const createCloneCellParams: CreateCloneCellRequest = {
+        app_id: installed_app_id,
+        role_id,
+        network_seed: "clone-0",
+      };
+      const cloneCell = await client.createCloneCell(createCloneCellParams);
+      const expectedCloneId = `${info.cell_data[0].role_id}.0`;
+      t.equal(cloneCell.role_id, expectedCloneId, "correct clone id");
+      t.deepEqual(
+        cloneCell.cell_id[1],
+        info.cell_data[0].cell_id[1],
+        "clone cell agent key matches base cell agent key"
+      );
+      const params: CallZomeRequest = {
+        cap_secret: null,
+        cell_id: cloneCell.cell_id,
+        zome_name: TEST_ZOME_NAME,
+        fn_name: "foo",
+        provenance: fakeAgentPubKey(),
+        payload: null,
+      };
+      const response = await client.callZome(params);
+      t.equal(
+        response,
+        "foo",
+        "clone cell can be called with same zome call as base cell"
+      );
+    } catch (error) {
+      console.log("errowwwwwr", error);
     }
   })
 );
@@ -477,8 +516,8 @@ test("error is catchable when holochain socket is unavailable", async (t: Test) 
 });
 
 test("can inject agents", async (t: Test) => {
-  const [conductor1, l1] = await launch(ADMIN_PORT, CONFIG_PATH);
-  const [conductor2, l2] = await launch(ADMIN_PORT_1, CONFIG_PATH_1);
+  const conductor1 = await launch(ADMIN_PORT);
+  const conductor2 = await launch(ADMIN_PORT_1);
   try {
     const installed_app_id = "app";
     const admin1 = await AdminWebsocket.connect(`ws://localhost:${ADMIN_PORT}`);
@@ -562,8 +601,6 @@ test("can inject agents", async (t: Test) => {
   } finally {
     conductor1.kill();
     conductor2.kill();
-    l1.kill();
-    l2.kill();
   }
 });
 
