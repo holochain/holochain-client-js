@@ -645,12 +645,14 @@ test(
       ADMIN_PORT
     );
     const info = await client.appInfo({ installed_app_id });
+
     const createCloneCellParams: CreateCloneCellRequest = {
       app_id: installed_app_id,
       role_id,
       network_seed: "clone-0",
     };
     const cloneCell = await client.createCloneCell(createCloneCellParams);
+
     const expectedCloneId = new CloneId(role_id, 0).toString();
     t.equal(cloneCell.role_id, expectedCloneId, "correct clone id");
     t.deepEqual(
@@ -687,10 +689,12 @@ test(
       network_seed: "clone-0",
     };
     const cloneCell = await client.createCloneCell(createCloneCellParams);
+
     await client.archiveCloneCell({
       app_id: installed_app_id,
       clone_cell_id: cloneCell.cell_id,
     });
+
     const appInfo = await client.appInfo({ installed_app_id });
     t.equal(
       appInfo.cell_data.length,
@@ -730,10 +734,12 @@ test(
       app_id: installed_app_id,
       clone_cell_id: cloneCell.cell_id,
     });
+
     await admin.restoreCloneCell({
       app_id: installed_app_id,
       clone_cell_id: CloneId.fromRoleId(cloneCell.role_id).toString(),
     });
+
     const appInfo = await client.appInfo({ installed_app_id });
     t.equal(
       appInfo.cell_data.length,
@@ -750,5 +756,51 @@ test(
     };
     const resopnse = await client.callZome(params);
     t.equal(resopnse, "foo", "restored clone cell can be called");
+  })
+);
+
+test(
+  "can delete archived clone cells of an app",
+  withConductor(ADMIN_PORT, async (t: Test) => {
+    const { installed_app_id, role_id, client, admin } = await installAppAndDna(
+      ADMIN_PORT
+    );
+    const createCloneCellParams: CreateCloneCellRequest = {
+      app_id: installed_app_id,
+      role_id,
+      network_seed: "clone-0",
+    };
+    const cloneCell0 = await client.createCloneCell(createCloneCellParams);
+    createCloneCellParams.network_seed = "clone-1";
+    const cloneCell1 = await client.createCloneCell(createCloneCellParams);
+    await client.archiveCloneCell({
+      app_id: installed_app_id,
+      clone_cell_id: cloneCell0.cell_id,
+    });
+    await client.archiveCloneCell({
+      app_id: installed_app_id,
+      clone_cell_id: cloneCell1.cell_id,
+    });
+
+    await admin.deleteArchivedCloneCells({ app_id: installed_app_id, role_id });
+
+    try {
+      await admin.restoreCloneCell({
+        app_id: installed_app_id,
+        clone_cell_id: cloneCell0.cell_id,
+      });
+      t.fail();
+    } catch (error) {
+      t.pass("deleted clone cell 0 cannot be restored");
+    }
+    try {
+      await admin.restoreCloneCell({
+        app_id: installed_app_id,
+        clone_cell_id: cloneCell1.cell_id,
+      });
+      t.fail();
+    } catch (error) {
+      t.pass("deleted clone cell 1 cannot be restored");
+    }
   })
 );

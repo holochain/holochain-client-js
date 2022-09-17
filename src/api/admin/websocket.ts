@@ -126,6 +126,10 @@ export class AdminWebsocket implements Api.AdminApi {
     Api.RestoreCloneCellRequest,
     Api.RestoreCloneCellResponse
   > = this._requester("restore_clone_cell");
+  deleteArchivedCloneCells: Requester<
+    Api.DeleteArchivedCloneCellsRequest,
+    Api.DeleteArchivedCloneCellsResponse
+  > = this._requester("delete_archived_clone_cells");
 }
 
 interface InternalListAppsRequest {

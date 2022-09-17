@@ -238,6 +238,14 @@ export type AddAgentInfoResponse = any;
 export type RestoreCloneCellRequest = ArchiveCloneCellRequest;
 export type RestoreCloneCellResponse = ArchiveCloneCellResponse;
 
+export interface DeleteArchivedCloneCellsRequest {
+  // The app id that the clone cells belong to
+  app_id: InstalledAppId;
+  // The role id that the clone cells belong to
+  role_id: RoleId;
+}
+export type DeleteArchivedCloneCellsResponse = void;
+
 export interface AdminApi {
   attachAppInterface: Requester<
     AttachAppInterfaceRequest,
@@ -280,6 +288,10 @@ export interface AdminApi {
   restoreCloneCell: Requester<
     RestoreCloneCellRequest,
     RestoreCloneCellResponse
+  >;
+  deleteArchivedCloneCells: Requester<
+    DeleteArchivedCloneCellsRequest,
+    DeleteArchivedCloneCellsResponse
   >;
 }
 

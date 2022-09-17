@@ -31,34 +31,34 @@ export type AppInfoRequest = { installed_app_id: InstalledAppId };
 export type AppInfoResponse = InstalledAppInfo;
 
 export interface CreateCloneCellRequest {
-  /// The app id that the DNA to clone belongs to
+  // The app id that the DNA to clone belongs to
   app_id: InstalledAppId;
-  /// The DNA's role id to clone
-  /// The Role id under which to create this clone
+  // The DNA's role id to clone
+  // The Role id under which to create this clone
   role_id: RoleId;
-  /// The network seed of a DNA is included in the computation of the DNA hash.
-  /// The DNA hash in turn determines the network peers and the DHT, meaning
-  /// that only peers with the same DNA hash of a shared DNA participate in the
-  /// same network and co-create the DHT. To create a separate DHT for the DNA,
-  /// a unique network seed can be specified.
+  // The network seed of a DNA is included in the computation of the DNA hash.
+  // The DNA hash in turn determines the network peers and the DHT, meaning
+  // that only peers with the same DNA hash of a shared DNA participate in the
+  // same network and co-create the DHT. To create a separate DHT for the DNA,
+  // a unique network seed can be specified.
   network_seed?: NetworkSeed;
-  /// Any arbitrary application properties can be included in this object to override the DNA properties.
+  // Any arbitrary application properties can be included in this object to override the DNA properties.
   properties?: DnaProperties;
-  /// The time used to denote the origin of the network, used to calculate
-  /// time windows during gossip.
-  /// All Action timestamps must come after this time.
+  // The time used to denote the origin of the network, used to calculate
+  // time windows during gossip.
+  // All Action timestamps must come after this time.
   origin_time?: Timestamp;
-  /// Optionally set a proof of membership for the new cell
+  // Optionally set a proof of membership for the new cell
   membrane_proof?: MembraneProof;
-  /// Optionally a name for the DNA clone
+  // Optionally a name for the DNA clone
   name?: string;
 }
 export type CreateCloneCellResponse = InstalledCell;
 
 export interface ArchiveCloneCellRequest {
-  /// The app id that the clone cell belongs to
+  // The app id that the clone cell belongs to
   app_id: InstalledAppId;
-  /// The clone id or cell id of the clone cell
+  // The clone id or cell id of the clone cell
   clone_cell_id: RoleId | CellId;
 }
 export type ArchiveCloneCellResponse = void;
