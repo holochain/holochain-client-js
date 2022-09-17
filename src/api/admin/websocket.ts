@@ -122,6 +122,10 @@ export class AdminWebsocket implements Api.AdminApi {
   > = this._requester("request_agent_info");
   addAgentInfo: Requester<Api.AddAgentInfoRequest, Api.AddAgentInfoResponse> =
     this._requester("add_agent_info");
+  restoreCloneCell: Requester<
+    Api.RestoreCloneCellRequest,
+    Api.RestoreCloneCellResponse
+  > = this._requester("restore_clone_cell");
 }
 
 interface InternalListAppsRequest {

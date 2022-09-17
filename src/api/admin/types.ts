@@ -14,6 +14,10 @@ import {
 } from "../../types.js";
 import { DhtOp, Entry, Action } from "../../hdk/index.js";
 import { Requester } from "../common.js";
+import {
+  ArchiveCloneCellRequest,
+  ArchiveCloneCellResponse,
+} from "../app/types.js";
 
 export type AttachAppInterfaceRequest = { port: number };
 export type AttachAppInterfaceResponse = { port: number };
@@ -231,6 +235,9 @@ export type RequestAgentInfoResponse = Array<AgentInfoSigned>;
 export type AddAgentInfoRequest = { agent_infos: Array<AgentInfoSigned> };
 export type AddAgentInfoResponse = any;
 
+export type RestoreCloneCellRequest = ArchiveCloneCellRequest;
+export type RestoreCloneCellResponse = ArchiveCloneCellResponse;
+
 export interface AdminApi {
   attachAppInterface: Requester<
     AttachAppInterfaceRequest,
@@ -270,6 +277,10 @@ export interface AdminApi {
     RequestAgentInfoResponse
   >;
   addAgentInfo: Requester<AddAgentInfoRequest, AddAgentInfoResponse>;
+  restoreCloneCell: Requester<
+    RestoreCloneCellRequest,
+    RestoreCloneCellResponse
+  >;
 }
 
 export type InstallAppDnaPayload = {

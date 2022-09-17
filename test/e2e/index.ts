@@ -644,7 +644,7 @@ test(
     const { installed_app_id, role_id, client } = await installAppAndDna(
       ADMIN_PORT
     );
-    const info = await client.appInfo({ installed_app_id }, 1000);
+    const info = await client.appInfo({ installed_app_id });
     const createCloneCellParams: CreateCloneCellRequest = {
       app_id: installed_app_id,
       role_id,
@@ -691,7 +691,7 @@ test(
       app_id: installed_app_id,
       clone_cell_id: cloneCell.cell_id,
     });
-    const appInfo = await client.appInfo({ installed_app_id }, 1000);
+    const appInfo = await client.appInfo({ installed_app_id });
     t.equal(
       appInfo.cell_data.length,
       1,
@@ -711,5 +711,44 @@ test(
     } catch (error) {
       t.pass("archived clone call cannot be called");
     }
+  })
+);
+
+test(
+  "can restore an archived clone cell",
+  withConductor(ADMIN_PORT, async (t: Test) => {
+    const { installed_app_id, role_id, client, admin } = await installAppAndDna(
+      ADMIN_PORT
+    );
+    const createCloneCellParams: CreateCloneCellRequest = {
+      app_id: installed_app_id,
+      role_id,
+      network_seed: "clone-0",
+    };
+    const cloneCell = await client.createCloneCell(createCloneCellParams);
+    await client.archiveCloneCell({
+      app_id: installed_app_id,
+      clone_cell_id: cloneCell.cell_id,
+    });
+    await admin.restoreCloneCell({
+      app_id: installed_app_id,
+      clone_cell_id: CloneId.fromRoleId(cloneCell.role_id).toString(),
+    });
+    const appInfo = await client.appInfo({ installed_app_id });
+    t.equal(
+      appInfo.cell_data.length,
+      2,
+      "restored clone cell is part of app info"
+    );
+    const params: CallZomeRequest = {
+      cap_secret: null,
+      cell_id: cloneCell.cell_id,
+      zome_name: TEST_ZOME_NAME,
+      fn_name: "foo",
+      provenance: fakeAgentPubKey(),
+      payload: null,
+    };
+    const resopnse = await client.callZome(params);
+    t.equal(resopnse, "foo", "restored clone cell can be called");
   })
 );

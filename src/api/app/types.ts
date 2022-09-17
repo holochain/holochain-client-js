@@ -59,7 +59,7 @@ export interface ArchiveCloneCellRequest {
   /// The app id that the clone cell belongs to
   app_id: InstalledAppId;
   /// The clone id or cell id of the clone cell
-  clone_cell_id: CloneId | CellId;
+  clone_cell_id: RoleId | CellId;
 }
 export type ArchiveCloneCellResponse = void;
 
