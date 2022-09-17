@@ -675,34 +675,41 @@ test(
   })
 );
 
-test.only(
+test(
   "can archive a clone cell",
   withConductor(ADMIN_PORT, async (t: Test) => {
     const { installed_app_id, role_id, client } = await installAppAndDna(
       ADMIN_PORT
     );
-    const info = await client.appInfo({ installed_app_id }, 1000);
     const createCloneCellParams: CreateCloneCellRequest = {
       app_id: installed_app_id,
       role_id,
       network_seed: "clone-0",
     };
     const cloneCell = await client.createCloneCell(createCloneCellParams);
-    const expectedCloneId = new CloneId(role_id, 0).toString();
-    t.equal(cloneCell.role_id, expectedCloneId, "correct clone id");
-    // const params: CallZomeRequest = {
-    //   cap_secret: null,
-    //   cell_id: cloneCell.cell_id,
-    //   zome_name: TEST_ZOME_NAME,
-    //   fn_name: "foo",
-    //   provenance: fakeAgentPubKey(),
-    //   payload: null,
-    // };
-    // const response = await client.callZome(params);
-    // t.equal(
-    //   response,
-    //   "foo",
-    //   "clone cell can be called with same zome call as base cell"
-    // );
+    await client.archiveCloneCell({
+      app_id: installed_app_id,
+      clone_cell_id: cloneCell.cell_id,
+    });
+    const appInfo = await client.appInfo({ installed_app_id }, 1000);
+    t.equal(
+      appInfo.cell_data.length,
+      1,
+      "archived clone cell is not part of app info"
+    );
+    const params: CallZomeRequest = {
+      cap_secret: null,
+      cell_id: cloneCell.cell_id,
+      zome_name: TEST_ZOME_NAME,
+      fn_name: "foo",
+      provenance: fakeAgentPubKey(),
+      payload: null,
+    };
+    try {
+      await client.callZome(params);
+      t.fail();
+    } catch (error) {
+      t.pass("archived clone call cannot be called");
+    }
   })
 );

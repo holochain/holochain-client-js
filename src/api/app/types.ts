@@ -8,7 +8,7 @@ import {
   RoleId,
   Timestamp,
 } from "../../types.js";
-import { Requester } from "../common.js";
+import { CloneId, Requester } from "../common.js";
 import {
   InstalledAppInfo,
   MembraneProof,
@@ -54,6 +54,14 @@ export interface CreateCloneCellRequest {
   name?: string;
 }
 export type CreateCloneCellResponse = InstalledCell;
+
+export interface ArchiveCloneCellRequest {
+  /// The app id that the clone cell belongs to
+  app_id: InstalledAppId;
+  /// The clone id or cell id of the clone cell
+  clone_cell_id: CloneId | CellId;
+}
+export type ArchiveCloneCellResponse = void;
 
 export type AppSignal = {
   type: string;

@@ -34,8 +34,10 @@ import {
   AppSignalCb,
   CallZomeRequestGeneric,
   CallZomeResponseGeneric,
+  ArchiveCloneCellRequest,
   CreateCloneCellRequest,
   CreateCloneCellResponse,
+  ArchiveCloneCellResponse,
 } from "./types.js";
 
 export class AppWebsocket implements AppApi {
@@ -93,12 +95,19 @@ export class AppWebsocket implements AppApi {
     "app_info",
     appInfoTransform(this)
   );
+
   callZome: Requester<
     CallZomeRequestGeneric<any>,
     CallZomeResponseGeneric<any>
   > = this._requester("zome_call", callZomeTransform);
+
   createCloneCell: Requester<CreateCloneCellRequest, CreateCloneCellResponse> =
     this._requester("create_clone_cell");
+
+  archiveCloneCell: Requester<
+    ArchiveCloneCellRequest,
+    ArchiveCloneCellResponse
+  > = this._requester("archive_clone_cell");
 }
 
 const callZomeTransform: Transformer<
