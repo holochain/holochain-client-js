@@ -4,6 +4,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## \[Unreleased\]
 ### Added
+- Added calls for clone cell management:
+  - App API: create clone cell
+  - App API: archive clone cell
+  - Admin API: restore clone cell
+  - Admin API: delete archived clone cells
+- Added utility class `CloneId`
 ### Removed
 ### Changed
 ### Fixed
