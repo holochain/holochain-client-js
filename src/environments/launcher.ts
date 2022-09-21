@@ -15,6 +15,7 @@ async function fetchLauncherEnvironment(): Promise<
   LauncherEnvironment | undefined
 > {
   const env = await fetch(LAUNCHER_ENV_URL);
+  console.log("@holochain/client@fetchLauncherEnvironment: env: ", env);
 
   if (env.ok) {
     const launcherEnvironment = await env.json();

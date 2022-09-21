@@ -33,7 +33,8 @@
   "scripts": {
     "lint": "eslint --fix --ext .ts src test .eslintrc.cjs",
     "test": "RUST_LOG=error RUST_BACKTRACE=1 node --loader ts-node/esm test/index.ts",
-    "build": "rimraf ./lib && tsc -p tsconfig.build.json"
+    "build": "rimraf ./lib && tsc -p tsconfig.build.json",
+    "publish-to-branch": "npm run build && cp package.json ./dist/ && cp -r ./lib ./dist && gh-pages -d dist -b ui-build"
   },
   "dependencies": {
     "@msgpack/msgpack": "^2.7.2",
@@ -45,6 +46,7 @@
     "prettier": "^2.6.2"
   },
   "devDependencies": {
+    "gh-pages": "^3.2.3",
     "@types/js-yaml": "^3.12.7",
     "@types/tape": "^4.13.2",
     "@typescript-eslint/eslint-plugin": "^5.27.0",
