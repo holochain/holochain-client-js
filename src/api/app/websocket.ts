@@ -58,7 +58,10 @@ export class AppWebsocket implements AppApi {
     signalCb?: AppSignalCb
   ): Promise<AppWebsocket> {
     // Check if we are in the launcher's environment, and if so, redirect the url to connect to
+    console.log("@holochain/client: Starting to connect to AdminWebsocket.")
     const env = await getLauncherEnvironment();
+    console.log("@holochain/client: Fetched launcher-env.json: ", env);
+
 
     if (env) {
       url = `ws://localhost:${env.APP_INTERFACE_PORT}`;
