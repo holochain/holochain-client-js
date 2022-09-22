@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Added
 ### Removed
 ### Changed
+- Upgraded `isomorphic-ws` to v5.0.0 which provides native ES modules.
+
 ### Fixed
 
 ## 2022-08-24: v0.8.0
