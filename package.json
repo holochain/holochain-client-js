@@ -33,8 +33,7 @@
   "scripts": {
     "lint": "eslint --fix --ext .ts src test .eslintrc.cjs",
     "test": "RUST_LOG=error RUST_BACKTRACE=1 node --loader ts-node/esm test/index.ts",
-    "build": "rimraf ./lib && tsc -p tsconfig.build.json",
-    "publish-to-branch": "npm run build && cp package.json ./dist/ && cp -r ./lib ./dist && gh-pages -d dist -b ui-build"
+    "build": "rimraf ./lib && tsc -p tsconfig.build.json"
   },
   "dependencies": {
     "@msgpack/msgpack": "^2.7.2",
