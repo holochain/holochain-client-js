@@ -45,7 +45,6 @@
     "prettier": "^2.6.2"
   },
   "devDependencies": {
-    "gh-pages": "^3.2.3",
     "@types/js-yaml": "^3.12.7",
     "@types/tape": "^4.13.2",
     "@typescript-eslint/eslint-plugin": "^5.27.0",

@@ -16,7 +16,6 @@ async function fetchLauncherEnvironment(): Promise<
 > {
   const env = await fetch(LAUNCHER_ENV_URL);
 
-
   if (env.ok) {
     const launcherEnvironment = await env.json();
     return launcherEnvironment;
