@@ -15,7 +15,7 @@ async function fetchLauncherEnvironment(): Promise<
   LauncherEnvironment | undefined
 > {
   const env = await fetch(LAUNCHER_ENV_URL);
-  console.log("@holochain/client@fetchLauncherEnvironment: env: ", env);
+
 
   if (env.ok) {
     const launcherEnvironment = await env.json();
@@ -24,7 +24,7 @@ async function fetchLauncherEnvironment(): Promise<
     // We are not in the launcher environment
     if (env.status === 404) {
       console.warn(
-        "[@holochain/conductor-api]: you are in a development environment. When this UI is run in the Holochain Launcher, `AppWebsocket.connect()`, `AdminWebsocket.connect()` and `appWebsocket.appInfo()` will have their parameters ignored and substituted by the ones provided by the Holochain Launcher."
+        "[@holochain/client]: you are in a development environment. When this UI is run in the Holochain Launcher, `AppWebsocket.connect()`, `AdminWebsocket.connect()` and `appWebsocket.appInfo()` will have their parameters ignored and substituted by the ones provided by the Holochain Launcher."
       );
       return undefined;
     } else {
@@ -35,6 +35,7 @@ async function fetchLauncherEnvironment(): Promise<
   }
 }
 
+const isTauriWindow = !!(window as any).__TAURI__;
 const isBrowser = typeof window !== "undefined";
 const isJest =
   typeof process !== "undefined" &&
@@ -50,7 +51,7 @@ if (isBrowser && !isJest) {
 export async function getLauncherEnvironment(): Promise<
   LauncherEnvironment | undefined
 > {
-  if (isBrowser) {
+  if (isBrowser || isTauriWindow) {
     return promise;
   } else {
     return undefined;
