@@ -34,8 +34,8 @@ async function fetchLauncherEnvironment(): Promise<
   }
 }
 
-const isTauriWindow = !!(window as any).__TAURI__;
 const isBrowser = typeof window !== "undefined";
+const isTauriWindow = isBrowser && !!(window as any).__TAURI__;
 const isJest =
   typeof process !== "undefined" &&
   process.env &&
