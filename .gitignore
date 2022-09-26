@@ -2,7 +2,6 @@
 .cargo
 target
 node_modules
-/dist
 /lib
 /lib.es
 .tsbuildinfo
