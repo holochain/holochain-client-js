@@ -9,7 +9,8 @@ roles:
       deferred: false
     dna:
       bundled: ./test.dna
-      properties: ~
-      network_seed: ~
+      modifiers:
+        properties: ~
+        network_seed: ~
       version: ~
       clone_limit: 10
