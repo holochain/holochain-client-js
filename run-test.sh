@@ -8,4 +8,3 @@ hc app pack . -o test.happ
 cd ../../.. # into root folder
 npm install
 npm run test
-rm test/e2e/fixture/test-config*.yml

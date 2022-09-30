@@ -14,6 +14,10 @@ import {
 } from "../../types.js";
 import { DhtOp, Entry, Action } from "../../hdk/index.js";
 import { Requester } from "../common.js";
+import {
+  ArchiveCloneCellRequest,
+  ArchiveCloneCellResponse,
+} from "../app/types.js";
 
 export type AttachAppInterfaceRequest = { port: number };
 export type AttachAppInterfaceResponse = { port: number };
@@ -90,8 +94,10 @@ export type GenerateAgentPubKeyRequest = void;
 export type GenerateAgentPubKeyResponse = AgentPubKey;
 
 export type RegisterDnaRequest = {
-  network_seed?: string;
-  properties?: DnaProperties;
+  modifiers?: {
+    network_seed?: string;
+    properties?: DnaProperties;
+  };
 } & DnaSource;
 
 export type RegisterDnaResponse = HoloHash;
@@ -107,25 +113,6 @@ export type UninstallAppRequest = {
   installed_app_id: InstalledAppId;
 };
 export type UninstallAppResponse = null;
-
-export type CreateCloneCellRequest = {
-  /// Properties to override when installing this Dna
-  properties?: DnaProperties;
-  /// The DNA to clone
-  dna_hash: HoloHash;
-  /// The Agent key with which to create this Cell
-  /// (TODO: should this be derived from the App?)
-  agent_key: AgentPubKey;
-  /// The App with which to associate the newly created Cell
-  installed_app_id: InstalledAppId;
-
-  /// The RoleId under which to create this clone
-  /// (needed to track cloning permissions and `clone_count`)
-  role_id: RoleId;
-  /// Proof-of-membership, if required by this DNA
-  membrane_proof?: MembraneProof;
-};
-export type CreateCloneCellResponse = CellId;
 
 export type ResourceBytes = Buffer;
 export type ResourceMap = { [key: string]: ResourceBytes };
@@ -250,6 +237,17 @@ export type RequestAgentInfoResponse = Array<AgentInfoSigned>;
 export type AddAgentInfoRequest = { agent_infos: Array<AgentInfoSigned> };
 export type AddAgentInfoResponse = any;
 
+export type RestoreCloneCellRequest = ArchiveCloneCellRequest;
+export type RestoreCloneCellResponse = ArchiveCloneCellResponse;
+
+export interface DeleteArchivedCloneCellsRequest {
+  // The app id that the clone cells belong to
+  app_id: InstalledAppId;
+  // The role id that the clone cells belong to
+  role_id: RoleId;
+}
+export type DeleteArchivedCloneCellsResponse = void;
+
 export interface AdminApi {
   attachAppInterface: Requester<
     AttachAppInterfaceRequest,
@@ -271,7 +269,6 @@ export interface AdminApi {
   registerDna: Requester<RegisterDnaRequest, RegisterDnaResponse>;
   installApp: Requester<InstallAppRequest, InstallAppResponse>;
   uninstallApp: Requester<UninstallAppRequest, UninstallAppResponse>;
-  createCloneCell: Requester<CreateCloneCellRequest, CreateCloneCellResponse>;
   installAppBundle: Requester<
     InstallAppBundleRequest,
     InstallAppBundleResponse
@@ -290,6 +287,14 @@ export interface AdminApi {
     RequestAgentInfoResponse
   >;
   addAgentInfo: Requester<AddAgentInfoRequest, AddAgentInfoResponse>;
+  restoreCloneCell: Requester<
+    RestoreCloneCellRequest,
+    RestoreCloneCellResponse
+  >;
+  deleteArchivedCloneCells: Requester<
+    DeleteArchivedCloneCellsRequest,
+    DeleteArchivedCloneCellsResponse
+  >;
 }
 
 export type InstallAppDnaPayload = {

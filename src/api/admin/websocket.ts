@@ -101,10 +101,6 @@ export class AdminWebsocket implements Api.AdminApi {
     Api.InstallAppBundleRequest,
     Api.InstallAppBundleResponse
   > = this._requester("install_app_bundle");
-  createCloneCell: Requester<
-    Api.CreateCloneCellRequest,
-    Api.CreateCloneCellResponse
-  > = this._requester("create_clone_cell");
   listDnas: Requester<Api.ListDnasRequest, Api.ListDnasResponse> =
     this._requester("list_dnas");
   listCellIds: Requester<Api.ListCellIdsRequest, Api.ListCellIdsResponse> =
@@ -126,6 +122,14 @@ export class AdminWebsocket implements Api.AdminApi {
   > = this._requester("request_agent_info");
   addAgentInfo: Requester<Api.AddAgentInfoRequest, Api.AddAgentInfoResponse> =
     this._requester("add_agent_info");
+  restoreCloneCell: Requester<
+    Api.RestoreCloneCellRequest,
+    Api.RestoreCloneCellResponse
+  > = this._requester("restore_clone_cell");
+  deleteArchivedCloneCells: Requester<
+    Api.DeleteArchivedCloneCellsRequest,
+    Api.DeleteArchivedCloneCellsResponse
+  > = this._requester("delete_archived_clone_cells");
 }
 
 interface InternalListAppsRequest {

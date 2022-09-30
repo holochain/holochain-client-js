@@ -3,5 +3,4 @@
 target
 node_modules
 /lib
-/lib.es
 .tsbuildinfo
