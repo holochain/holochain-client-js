@@ -10,8 +10,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   - Admin API: restore clone cell
   - Admin API: delete archived clone cells
 - Added utility class `CloneId`
+
 ### Removed
 ### Changed
+- **BREAKING CHANGE**: `RegisterDnaRequest` parameters have changed in Conductor API.
 - Upgraded `isomorphic-ws` to v5.0.0 which provides native ES modules.
 
 ### Fixed
