@@ -94,8 +94,10 @@ export type GenerateAgentPubKeyRequest = void;
 export type GenerateAgentPubKeyResponse = AgentPubKey;
 
 export type RegisterDnaRequest = {
-  network_seed?: string;
-  properties?: DnaProperties;
+  modifiers?: {
+    network_seed?: string;
+    properties?: DnaProperties;
+  };
 } & DnaSource;
 
 export type RegisterDnaResponse = HoloHash;

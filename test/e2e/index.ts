@@ -56,6 +56,7 @@ test(
 
     const path = `${FIXTURE_PATH}/test.dna`;
     const hash = await admin.registerDna({
+      modifiers: {},
       path,
     });
 
@@ -158,7 +159,9 @@ test(
     // install from hash and network seed
     const newHash = await admin.registerDna({
       hash,
-      network_seed: "123456",
+      modifiers: {
+        network_seed: "123456",
+      },
     });
     t.ok(newHash);
 
@@ -248,6 +251,7 @@ test(
 
     const dnaBundle: DnaBundle = decode(encodedDnaBundle.buffer) as DnaBundle;
     const hash = await admin.registerDna({
+      modifiers: {},
       bundle: dnaBundle,
     });
     t.ok(hash);
@@ -488,7 +492,7 @@ test("can inject agents", async (t: Test) => {
   t.ok(agent_key_2);
   const role = "thedna";
   const path = `${FIXTURE_PATH}/test.dna`;
-  const hash = await admin1.registerDna({ path });
+  const hash = await admin1.registerDna({ path, modifiers: {} });
   t.ok(hash);
   let result = await admin1.installApp({
     installed_app_id,
@@ -525,6 +529,7 @@ test("can inject agents", async (t: Test) => {
 
   // now install the app and activate it on agent 2.
   await admin2.registerDna({
+    modifiers: {},
     path,
   });
   t.ok(hash);
@@ -649,7 +654,9 @@ test(
     const createCloneCellParams: CreateCloneCellRequest = {
       app_id: installed_app_id,
       role_id,
-      network_seed: "clone-0",
+      modifiers: {
+        network_seed: "clone-0",
+      },
     };
     const cloneCell = await client.createCloneCell(createCloneCellParams);
 
@@ -686,7 +693,9 @@ test(
     const createCloneCellParams: CreateCloneCellRequest = {
       app_id: installed_app_id,
       role_id,
-      network_seed: "clone-0",
+      modifiers: {
+        network_seed: "clone-0",
+      },
     };
     const cloneCell = await client.createCloneCell(createCloneCellParams);
 
@@ -727,7 +736,9 @@ test(
     const createCloneCellParams: CreateCloneCellRequest = {
       app_id: installed_app_id,
       role_id,
-      network_seed: "clone-0",
+      modifiers: {
+        network_seed: "clone-0",
+      },
     };
     const cloneCell = await client.createCloneCell(createCloneCellParams);
     await client.archiveCloneCell({
@@ -768,10 +779,12 @@ test(
     const createCloneCellParams: CreateCloneCellRequest = {
       app_id: installed_app_id,
       role_id,
-      network_seed: "clone-0",
+      modifiers: {
+        network_seed: "clone-0",
+      },
     };
     const cloneCell0 = await client.createCloneCell(createCloneCellParams);
-    createCloneCellParams.network_seed = "clone-1";
+    createCloneCellParams.modifiers.network_seed = "clone-1";
     const cloneCell1 = await client.createCloneCell(createCloneCellParams);
     await client.archiveCloneCell({
       app_id: installed_app_id,

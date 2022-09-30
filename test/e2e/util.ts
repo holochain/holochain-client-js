@@ -101,6 +101,7 @@ export const installAppAndDna = async (
 
   const path = `${FIXTURE_PATH}/test.dna`;
   const hash = await admin.registerDna({
+    modifiers: {},
     path,
   });
 
