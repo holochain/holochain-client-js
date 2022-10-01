@@ -65,6 +65,12 @@ export const promiseTimeout = (
   });
 };
 
+/**
+ * Identifier of a clone cell, composed of the DNA's role id and the index
+ * of the clone, starting at 0.
+ *
+ * Example: `profiles.0`
+ */
 export class CloneId {
   private static readonly CLONE_ID_DELIMITER = ".";
   private readonly roleId: RoleId;
@@ -75,6 +81,11 @@ export class CloneId {
     this.index = index;
   }
 
+  /**
+   * Parse a role id of a clone cell to obtain a clone id instance.
+   * @param roleId Role id to parse.
+   * @returns A clone id instance.
+   */
   static fromRoleId(roleId: RoleId) {
     const parts = roleId.split(CloneId.CLONE_ID_DELIMITER);
     if (parts.length !== 2) {
