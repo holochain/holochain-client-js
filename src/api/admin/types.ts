@@ -17,6 +17,7 @@ import { Requester } from "../common.js";
 import {
   ArchiveCloneCellRequest,
   ArchiveCloneCellResponse,
+  CreateCloneCellResponse,
 } from "../app/types.js";
 
 export type AttachAppInterfaceRequest = { port: number };
@@ -238,7 +239,7 @@ export type AddAgentInfoRequest = { agent_infos: Array<AgentInfoSigned> };
 export type AddAgentInfoResponse = any;
 
 export type RestoreCloneCellRequest = ArchiveCloneCellRequest;
-export type RestoreCloneCellResponse = ArchiveCloneCellResponse;
+export type RestoreCloneCellResponse = CreateCloneCellResponse;
 
 export interface DeleteArchivedCloneCellsRequest {
   // The app id that the clone cells belong to
