@@ -233,7 +233,7 @@ test(
 );
 
 test(
-  "admin register dna with full binary bundle",
+  "admin register dna with full binary bundle + get dna def",
   withConductor(ADMIN_PORT, async (t: Test) => {
     const installed_app_id = "app";
     const admin = await AdminWebsocket.connect(
@@ -249,7 +249,7 @@ test(
     const zippedDnaBundle = fs.readFileSync(path);
     const encodedDnaBundle = zlib.gunzipSync(zippedDnaBundle);
 
-    const dnaBundle: DnaBundle = decode(encodedDnaBundle.buffer) as DnaBundle;
+    const dnaBundle = decode(encodedDnaBundle.buffer) as DnaBundle;
     const hash = await admin.registerDna({
       modifiers: {},
       bundle: dnaBundle,
@@ -261,6 +261,40 @@ test(
       agent_key,
       dnas: [{ hash, role_id: "thedna" }],
     });
+
+    const dnaDefinition = await admin.getDnaDefinition(hash);
+    t.equal(dnaDefinition.name, "test-dna", "dna definition: name matches");
+    console.log("properties", dnaDefinition.integrity_zomes[0]);
+    t.equal(
+      dnaDefinition.modifiers.network_seed,
+      "9a28aac8-337c-11eb-adc1-0Z02acw20115",
+      "dna definition: network seed matches"
+    );
+    t.equal(
+      Math.floor(dnaDefinition.modifiers.origin_time / 1000),
+      new Date("2022-02-11T23:05:19.470323Z").getTime(),
+      "dna definition: origin time matches"
+    );
+    t.equal(
+      decode(dnaDefinition.modifiers.properties),
+      null,
+      "dna definition: properties match"
+    );
+    t.equal(
+      dnaDefinition.integrity_zomes[0][0],
+      "foo",
+      "dna definition: integrity zome matches"
+    );
+    t.equal(
+      dnaDefinition.coordinator_zomes[0][0],
+      "coordinator",
+      "dna definition: coordinator zome matches"
+    );
+    t.equal(
+      dnaDefinition.coordinator_zomes[0][1].dependencies[0],
+      "foo",
+      "dna definition: coordinator dependency matches"
+    );
 
     const runningApps1 = await admin.listApps({
       status_filter: AppStatusFilter.Running,

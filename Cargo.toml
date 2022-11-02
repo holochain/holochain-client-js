@@ -1,6 +1,7 @@
 [workspace]
 members = [
-  "test/e2e/fixture/zomes/foo"
+  "test/e2e/fixture/zomes/foo",
+  "test/e2e/fixture/zomes/coordinator",
 ]
 
 [profile.dev]

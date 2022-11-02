@@ -5,8 +5,6 @@ import { AppSignalCb } from "../../src/api/app/types.js";
 import { AppWebsocket } from "../../src/api/app/websocket.js";
 import { CellId, InstalledAppId, RoleId } from "../../src/types.js";
 export const FIXTURE_PATH = "./test/e2e/fixture";
-export const CONFIG_PATH = `${FIXTURE_PATH}/test-config.yml`;
-export const CONFIG_PATH_1 = `${FIXTURE_PATH}/test-config-1.yml`;
 
 const LAIR_PASSPHRASE = "passphrase";
 
