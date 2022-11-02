@@ -1,4 +1,4 @@
-import { decode, encode } from "@msgpack/msgpack";
+import { decode } from "@msgpack/msgpack";
 import fs from "node:fs";
 import test, { Test } from "tape";
 import zlib from "zlib";
@@ -6,7 +6,6 @@ import {
   AdminWebsocket,
   AppStatusFilter,
   DnaBundle,
-  DnaModifiers,
   DumpStateResponse,
   EnableAppResponse,
   InstalledAppInfoStatus,
@@ -233,7 +232,7 @@ test(
   })
 );
 
-test.only(
+test(
   "admin register dna with full binary bundle + get dna def",
   withConductor(ADMIN_PORT, async (t: Test) => {
     const installed_app_id = "app";

@@ -93,6 +93,10 @@ export class AdminWebsocket implements Api.AdminApi {
   > = this._requester("generate_agent_pub_key");
   registerDna: Requester<Api.RegisterDnaRequest, Api.RegisterDnaResponse> =
     this._requester("register_dna");
+  getDnaDefinition: Requester<
+    Api.GetDnaDefinitionRequest,
+    Api.GetDnaDefinitionResponse
+  > = this._requester("get_dna_definition");
   installApp: Requester<Api.InstallAppRequest, Api.InstallAppResponse> =
     this._requester("install_app");
   uninstallApp: Requester<Api.UninstallAppRequest, Api.UninstallAppResponse> =
