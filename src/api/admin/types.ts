@@ -11,12 +11,13 @@ import {
   KitsuneSpace,
   RoleId,
   Signature,
+  Timestamp,
+  WasmHash,
 } from "../../types.js";
 import { DhtOp, Entry, Action } from "../../hdk/index.js";
 import { Requester } from "../common.js";
 import {
   ArchiveCloneCellRequest,
-  ArchiveCloneCellResponse,
   CreateCloneCellResponse,
 } from "../app/types.js";
 
@@ -102,6 +103,30 @@ export type RegisterDnaRequest = {
 } & DnaSource;
 
 export type RegisterDnaResponse = HoloHash;
+
+export type DnaModifiers = {
+  network_seed: NetworkSeed;
+  properties: DnaProperties;
+  origin_time: Timestamp;
+};
+
+export type ZomeName = string;
+export type ZomeDefinition = [
+  ZomeName,
+  { wasm_hash: WasmHash; dependencies: ZomeName[] }
+];
+export type IntegrityZome = ZomeDefinition;
+export type CoordinatorZome = ZomeDefinition;
+
+export type DnaDefinition = {
+  name: string;
+  modifiers: DnaModifiers;
+  integrity_zomes: IntegrityZome[];
+  coordinator_zomes: CoordinatorZome[];
+};
+
+export type GetDnaDefinitionRequest = DnaHash;
+export type GetDnaDefinitionResponse = DnaDefinition;
 
 export type InstallAppRequest = {
   installed_app_id: InstalledAppId;
@@ -268,6 +293,10 @@ export interface AdminApi {
     GenerateAgentPubKeyResponse
   >;
   registerDna: Requester<RegisterDnaRequest, RegisterDnaResponse>;
+  getDnaDefinition: Requester<
+    GetDnaDefinitionRequest,
+    GetDnaDefinitionResponse
+  >;
   installApp: Requester<InstallAppRequest, InstallAppResponse>;
   uninstallApp: Requester<UninstallAppRequest, UninstallAppResponse>;
   installAppBundle: Requester<

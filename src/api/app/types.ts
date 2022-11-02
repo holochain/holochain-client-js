@@ -8,7 +8,7 @@ import {
   RoleId,
   Timestamp,
 } from "../../types.js";
-import { CloneId, Requester } from "../common.js";
+import { Requester } from "../common.js";
 import {
   InstalledAppInfo,
   MembraneProof,
