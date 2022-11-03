@@ -2,7 +2,6 @@ import { decode } from "@msgpack/msgpack";
 import fs from "node:fs";
 import test, { Test } from "tape";
 import zlib from "zlib";
-import { AppEntryType } from "../../lib/index.js";
 import {
   AdminWebsocket,
   AppStatusFilter,
@@ -19,6 +18,7 @@ import {
 } from "../../src/api/app/index.js";
 import { WsClient } from "../../src/api/client.js";
 import { CloneId } from "../../src/api/common.js";
+import { AppEntryType } from "../../src/hdk/entry.js";
 import {
   cleanSandboxConductors,
   FIXTURE_PATH,
