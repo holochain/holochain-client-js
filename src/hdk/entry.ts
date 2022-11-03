@@ -2,7 +2,7 @@ import { CapClaim, ZomeCallCapGrant } from "./capabilities.js";
 import { AgentPubKey } from "../types.js";
 import { CounterSigningSessionData } from "./countersigning.js";
 
-export type EntryVisibility = "Public" | "Private";
+export type EntryVisibility = { Public: null } | { Private: null };
 export type AppEntryType = {
   id: number;
   zome_id: number;
