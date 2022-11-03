@@ -18,6 +18,7 @@ import {
 } from "../../src/api/app/index.js";
 import { WsClient } from "../../src/api/client.js";
 import { CloneId } from "../../src/api/common.js";
+import { AppEntryType } from "../../src/hdk/entry.js";
 import {
   cleanSandboxConductors,
   FIXTURE_PATH,
@@ -41,6 +42,7 @@ const ADMIN_PORT = 33001;
 const ADMIN_PORT_1 = 33002;
 
 const TEST_ZOME_NAME = "foo";
+const COORDINATOR_ZOME_NAME = "coordinator";
 
 test(
   "admin smoke test: registerDna + installApp + uninstallApp",
@@ -233,7 +235,7 @@ test(
 );
 
 test(
-  "admin register dna with full binary bundle",
+  "admin register dna with full binary bundle + get dna def",
   withConductor(ADMIN_PORT, async (t: Test) => {
     const installed_app_id = "app";
     const admin = await AdminWebsocket.connect(
@@ -249,7 +251,7 @@ test(
     const zippedDnaBundle = fs.readFileSync(path);
     const encodedDnaBundle = zlib.gunzipSync(zippedDnaBundle);
 
-    const dnaBundle: DnaBundle = decode(encodedDnaBundle.buffer) as DnaBundle;
+    const dnaBundle = decode(encodedDnaBundle.buffer) as DnaBundle;
     const hash = await admin.registerDna({
       modifiers: {},
       bundle: dnaBundle,
@@ -261,6 +263,40 @@ test(
       agent_key,
       dnas: [{ hash, role_id: "thedna" }],
     });
+
+    const dnaDefinition = await admin.getDnaDefinition(hash);
+    t.equal(dnaDefinition.name, "test-dna", "dna definition: name matches");
+    console.log("properties", dnaDefinition.integrity_zomes[0]);
+    t.equal(
+      dnaDefinition.modifiers.network_seed,
+      "9a28aac8-337c-11eb-adc1-0Z02acw20115",
+      "dna definition: network seed matches"
+    );
+    t.equal(
+      Math.floor(dnaDefinition.modifiers.origin_time / 1000),
+      new Date("2022-02-11T23:05:19.470323Z").getTime(),
+      "dna definition: origin time matches"
+    );
+    t.equal(
+      decode(dnaDefinition.modifiers.properties),
+      null,
+      "dna definition: properties match"
+    );
+    t.equal(
+      dnaDefinition.integrity_zomes[0][0],
+      "foo",
+      "dna definition: integrity zome matches"
+    );
+    t.equal(
+      dnaDefinition.coordinator_zomes[0][0],
+      "coordinator",
+      "dna definition: coordinator zome matches"
+    );
+    t.equal(
+      dnaDefinition.coordinator_zomes[0][1].dependencies[0],
+      "foo",
+      "dna definition: coordinator dependency matches"
+    );
 
     const runningApps1 = await admin.listApps({
       status_filter: AppStatusFilter.Running,
@@ -303,19 +339,24 @@ test(
     t.deepEqual(info.cell_data[0].cell_id, cell_id);
     t.equal(info.cell_data[0].role_id, role_id);
     t.deepEqual(info.status, { running: null });
+    const appEntryType: AppEntryType = {
+      id: 0,
+      zome_id: 0,
+      visibility: { Private: null },
+    };
     const response = await client.callZome(
       {
         // TODO: write a test with a real capability secret.
         cap_secret: null,
         cell_id,
-        zome_name: TEST_ZOME_NAME,
-        fn_name: "foo",
-        provenance: fakeAgentPubKey(),
-        payload: null,
+        zome_name: COORDINATOR_ZOME_NAME,
+        fn_name: "echo_app_entry_type",
+        provenance: cell_id[1],
+        payload: appEntryType,
       },
       30000
     );
-    t.equal(response, "foo");
+    t.equal(response, null, "app entry type deserializes correctly");
 
     await admin.disableApp({ installed_app_id });
     info = await client.appInfo({ installed_app_id }, 1000);

@@ -8,3 +8,9 @@ integrity:
   zomes:
     - name: foo
       bundled: "zomes/foo/target/wasm32-unknown-unknown/release/test_wasm_foo.wasm"
+coordinator:
+  zomes:
+    - name: coordinator
+      bundled: "zomes/coordinator/target/wasm32-unknown-unknown/release/coordinator.wasm"
+      dependencies:
+        - name: foo

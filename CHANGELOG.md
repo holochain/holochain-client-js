@@ -8,6 +8,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Changed
 ### Fixed
 
+## 2022-11-02: v0.9.3
+### Added
+- Add Admin API call `getDnaDefinition`, which returns the DNA definition for a given DNA hash.
+
+### Changed
+- Upgrade to Holochain v0.0.170
+
+### Fixed
+- Fix AppEntryType type definition, leading to wrong deserialization.
+
 ## 2022-09-30: v0.9.2
 ### Fixed
 - Response type for request `RestoreCloneCell` set to `InstalledCell`.
