@@ -18,6 +18,7 @@ import {
 } from "../../src/api/app/index.js";
 import { WsClient } from "../../src/api/client.js";
 import { CloneId } from "../../src/api/common.js";
+import { AppEntryType } from "../../src/hdk/entry.js";
 import {
   cleanSandboxConductors,
   FIXTURE_PATH,
@@ -41,6 +42,7 @@ const ADMIN_PORT = 33001;
 const ADMIN_PORT_1 = 33002;
 
 const TEST_ZOME_NAME = "foo";
+const COORDINATOR_ZOME_NAME = "coordinator";
 
 test(
   "admin smoke test: registerDna + installApp + uninstallApp",
@@ -337,19 +339,24 @@ test(
     t.deepEqual(info.cell_data[0].cell_id, cell_id);
     t.equal(info.cell_data[0].role_id, role_id);
     t.deepEqual(info.status, { running: null });
+    const appEntryType: AppEntryType = {
+      id: 0,
+      zome_id: 0,
+      visibility: { Private: null },
+    };
     const response = await client.callZome(
       {
         // TODO: write a test with a real capability secret.
         cap_secret: null,
         cell_id,
-        zome_name: TEST_ZOME_NAME,
-        fn_name: "foo",
-        provenance: fakeAgentPubKey(),
-        payload: null,
+        zome_name: COORDINATOR_ZOME_NAME,
+        fn_name: "echo_app_entry_type",
+        provenance: cell_id[1],
+        payload: appEntryType,
       },
       30000
     );
-    t.equal(response, "foo");
+    t.equal(response, null, "app entry type deserializes correctly");
 
     await admin.disableApp({ installed_app_id });
     info = await client.appInfo({ installed_app_id }, 1000);

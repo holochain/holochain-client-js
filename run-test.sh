@@ -8,5 +8,5 @@ cd ../.. # into fixtures
 hc dna pack . -o test.dna
 hc app pack . -o test.happ
 cd ../../.. # into root folder
-# npm install
-# npm run test
+npm install
+npm run test
