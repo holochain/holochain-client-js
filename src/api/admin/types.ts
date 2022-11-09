@@ -14,7 +14,7 @@ import {
   Timestamp,
   WasmHash,
 } from "../../types.js";
-import { DhtOp, Entry, Action } from "../../hdk/index.js";
+import { DhtOp, Entry, Action, ZomeCallCapGrant } from "../../hdk/index.js";
 import { Requester } from "../common.js";
 import {
   ArchiveCloneCellRequest,
@@ -110,6 +110,7 @@ export type DnaModifiers = {
   origin_time: Timestamp;
 };
 
+export type FnName = string;
 export type ZomeName = string;
 export type ZomeDefinition = [
   ZomeName,
@@ -274,6 +275,16 @@ export interface DeleteArchivedCloneCellsRequest {
 }
 export type DeleteArchivedCloneCellsResponse = void;
 
+export interface GrantZomeCallCapabilityPayload {
+  /// Cell for which to authorize the capability.
+  cell_id: CellId;
+  /// Specifies the capability, consisting of zomes and functions to allow
+  /// signing for as well as access level, secret and assignees.
+  cap_grant: ZomeCallCapGrant;
+}
+export type GrantZomeCallCapabilityRequest = GrantZomeCallCapabilityPayload;
+export type GrantZomeCallCapabilityResponse = void;
+
 export interface AdminApi {
   attachAppInterface: Requester<
     AttachAppInterfaceRequest,
@@ -324,6 +335,10 @@ export interface AdminApi {
   deleteArchivedCloneCells: Requester<
     DeleteArchivedCloneCellsRequest,
     DeleteArchivedCloneCellsResponse
+  >;
+  grantZomeCallCapability: Requester<
+    GrantZomeCallCapabilityRequest,
+    GrantZomeCallCapabilityResponse
   >;
 }
 

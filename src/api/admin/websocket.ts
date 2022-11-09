@@ -134,6 +134,10 @@ export class AdminWebsocket implements Api.AdminApi {
     Api.DeleteArchivedCloneCellsRequest,
     Api.DeleteArchivedCloneCellsResponse
   > = this._requester("delete_archived_clone_cells");
+  grantZomeCallCapability: Requester<
+    Api.GrantZomeCallCapabilityRequest,
+    Api.GrantZomeCallCapabilityResponse
+  > = this._requester("grant_zome_call_capability");
 }
 
 interface InternalListAppsRequest {
