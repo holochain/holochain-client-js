@@ -7,6 +7,8 @@ import {
   InstalledCell,
   RoleId,
   Timestamp,
+  DnaHash,
+  DnaGossipInfo,
 } from "../../types.js";
 import { Requester } from "../common.js";
 import {
@@ -91,6 +93,13 @@ export type AppSignal = {
     payload: any;
   };
 };
+
+export interface GossipInfoRequest {
+  // The DNA's for which to get gossip info
+  dnas: DnaHash[];
+}
+
+export type GossipInfoResponse = DnaGossipInfo[];
 
 export type AppSignalCb = (signal: AppSignal) => void;
 
