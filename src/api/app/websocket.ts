@@ -16,6 +16,7 @@
  *      })
  */
 import { decode, encode } from "@msgpack/msgpack";
+import { EventEmitter } from "events";
 import { getLauncherEnvironment } from "../../environments/launcher.js";
 import { InstalledAppId } from "../../types.js";
 import { WsClient } from "../client.js";
@@ -40,7 +41,7 @@ import {
   ArchiveCloneCellResponse,
 } from "./types.js";
 
-export class AppWebsocket implements AppApi {
+export class AppWebsocket extends EventEmitter implements AppApi {
   client: WsClient;
   defaultTimeout: number;
   overrideInstalledAppId?: InstalledAppId;
@@ -50,6 +51,7 @@ export class AppWebsocket implements AppApi {
     defaultTimeout?: number,
     overrideInstalledAppId?: InstalledAppId
   ) {
+    super()
     this.client = client;
     this.defaultTimeout =
       defaultTimeout === undefined ? DEFAULT_TIMEOUT : defaultTimeout;
@@ -69,11 +71,16 @@ export class AppWebsocket implements AppApi {
     }
 
     const wsClient = await WsClient.connect(url, signalCb);
-    return new AppWebsocket(
+    
+    const appWebsocket = new AppWebsocket(
       wsClient,
       defaultTimeout,
       env ? env.INSTALLED_APP_ID : undefined
     );
+
+    wsClient.on('signal', signal => appWebsocket.emit('signal', signal))
+    
+    return appWebsocket
   }
 
   _requester = <ReqO, ReqI, ResI, ResO>(

@@ -40,8 +40,8 @@ const ADMIN_PORT_1 = 33002;
 const TEST_ZOME_NAME = "foo";
 const COORDINATOR_ZOME_NAME = "coordinator";
 
-test(
-  "can call a zome function and get app ino",
+test.skip(
+  "can call a zome function and get app info",
   withConductor(ADMIN_PORT, async (t: Test) => {
     const { installed_app_id, cell_id, role_id, client, admin } = await installAppAndDna(ADMIN_PORT);
 
@@ -82,9 +82,48 @@ test(
       }        
     );
 
+    t.equal(response_from_role_id, null, "app entry type deserializes correctly");
+
     await admin.disableApp({ installed_app_id });
     info = await appAgentWs.appInfo();
     t.deepEqual(info.status, { disabled: { reason: { user: null } } });
+  })
+);
+
+test(
+  "can receive a signal",
+  withConductor(ADMIN_PORT, async (t: Test) => {
+    let resolveSignalPromise: (value?: unknown) => void | undefined;
+    const signalReceivedPromise = new Promise(
+      (resolve) => (resolveSignalPromise = resolve)
+    );
+    const signalCb = (signal: AppSignal) => {
+      t.deepEqual(signal, {
+        type: "Signal",
+        data: {
+          cellId: cell_id,
+          payload: "i am a signal",
+        },
+      });
+      resolveSignalPromise();
+    };
+
+    const { cell_id, client, installed_app_id } = await installAppAndDna(ADMIN_PORT);
+
+    const appAgentWs = new AppAgentWebsocket(client, installed_app_id);
+    
+    appAgentWs.on('signal', signalCb)
+
+    // trigger an emit_signal
+    await client.callZome({
+      cap_secret: null,
+      cell_id,
+      zome_name: TEST_ZOME_NAME,
+      fn_name: "emitter",
+      provenance: fakeAgentPubKey(),
+      payload: null,
+    });
+    await signalReceivedPromise;
   })
 );
 
@@ -119,80 +158,6 @@ test.skip(
     // A couple random tests to prove that things are where we expect them
     t.equal(state[0].source_chain_dump.records.length, 6);
     t.equal(state[0].source_chain_dump.records[0].action.type, "Dna");
-  })
-);
-
-test.skip(
-  "can call a zome function twice, reusing args",
-  withConductor(ADMIN_PORT, async (t: Test) => {
-    const { installed_app_id, cell_id, role_id, client } =
-      await installAppAndDna(ADMIN_PORT);
-    const info = await client.appInfo({ installed_app_id }, 1000);
-    t.deepEqual(info.cell_data[0].cell_id, cell_id);
-    t.equal(info.cell_data[0].role_id, role_id);
-    const args: CallZomeRequest = {
-      // TODO: write a test with a real capability secret.
-      cap_secret: null,
-      cell_id,
-      zome_name: TEST_ZOME_NAME,
-      fn_name: "foo",
-      provenance: fakeAgentPubKey(),
-      payload: null,
-    };
-    const response = await client.callZome(args, 30000);
-    t.equal(response, "foo");
-    const response2 = await client.callZome(args, 30000);
-    t.equal(response2, "foo");
-  })
-);
-
-test.skip(
-  "can handle canceled response",
-  withConductor(ADMIN_PORT, async (t: Test) => {
-    const client = new WsClient({
-      send: () => {
-        /* do nothing */
-      },
-    });
-    const prom = client.request("blah");
-    client.handleResponse({ id: 0 });
-    try {
-      await prom;
-    } catch (e) {
-      t.deepEqual(e, new Error("Response canceled by responder"));
-    }
-  })
-);
-
-test.skip(
-  "can receive a signal",
-  withConductor(ADMIN_PORT, async (t: Test) => {
-    let resolveSignalPromise: (value?: unknown) => void | undefined;
-    const signalReceivedPromise = new Promise(
-      (resolve) => (resolveSignalPromise = resolve)
-    );
-    const signalCb = (signal: AppSignal) => {
-      t.deepEqual(signal, {
-        type: "Signal",
-        data: {
-          cellId: cell_id,
-          payload: "i am a signal",
-        },
-      });
-      resolveSignalPromise();
-    };
-
-    const { cell_id, client } = await installAppAndDna(ADMIN_PORT, signalCb);
-    // trigger an emit_signal
-    await client.callZome({
-      cap_secret: null,
-      cell_id,
-      zome_name: TEST_ZOME_NAME,
-      fn_name: "emitter",
-      provenance: fakeAgentPubKey(),
-      payload: null,
-    });
-    await signalReceivedPromise;
   })
 );
 

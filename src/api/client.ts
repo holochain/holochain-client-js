@@ -1,5 +1,6 @@
 import { decode, encode } from "@msgpack/msgpack";
 import Websocket from "isomorphic-ws";
+import { EventEmitter, listenerCount } from 'events';
 import { AppSignal, AppSignalCb, SignalResponseGeneric } from "./app/types.js";
 
 /**
@@ -8,7 +9,7 @@ import { AppSignal, AppSignalCb, SignalResponseGeneric } from "./app/types.js";
  *
  * Uses Holochain's websocket WireMessage for communication.
  */
-export class WsClient {
+export class WsClient extends EventEmitter {
   socket: Websocket;
   pendingRequests: Record<
     number,
@@ -18,14 +19,18 @@ export class WsClient {
     }
   >;
   index: number;
-  alreadyWarnedNoSignalCb: boolean;
 
   constructor(socket: any, signalCb?: AppSignalCb) {
+    super()
     this.socket = socket;
     this.pendingRequests = {};
     this.index = 0;
-    // TODO: allow adding signal handlers later
-    this.alreadyWarnedNoSignalCb = false;
+
+    if (signalCb) {
+      console.log("Providing a signal callback on client initialization is deprecated. Instead, add an event handler using `.on('signal', signalCb)`.")
+      this.on('signal', signalCb)
+    }
+
     socket.onmessage = async (encodedMsg: any) => {
       let data = encodedMsg.data;
 
@@ -36,33 +41,25 @@ export class WsClient {
 
       const msg: any = decode(data);
       if (msg.type === "Signal") {
-        if (signalCb) {
-          const decodedMessage: SignalResponseGeneric<any> = decode(msg.data);
+        const decodedMessage: SignalResponseGeneric<any> = decode(msg.data);
 
-          if (!decodedMessage.App) {
-            // We have received a system signal, do nothing
-            return;
-          }
-
-          // Note: holochain currently returns signals as an array of two values: cellId and the serialized signal payload
-          // and this array is nested within the App key within the returned message.
-          const decodedCellId = decodedMessage.App[0];
-          // Note:In order to return readible content to the UI, the signal payload must also be decoded.
-          const decodedPayload = signalTransform(decodedMessage.App[1]);
-
-          // Return a uniform format to UI (ie: { type, data } - the same format as with callZome and appInfo...)
-          const signal: AppSignal = {
-            type: msg.type,
-            data: { cellId: decodedCellId, payload: decodedPayload },
-          };
-          signalCb(signal);
-        } else {
-          if (!this.alreadyWarnedNoSignalCb)
-            console.log(
-              "Received signal but no signal callback was set in constructor"
-            );
-          this.alreadyWarnedNoSignalCb = true;
+        if (!decodedMessage.App) {
+          // We have received a system signal, do nothing
+          return;
         }
+
+        // Note: holochain currently returns signals as an array of two values: cellId and the serialized signal payload
+        // and this array is nested within the App key within the returned message.
+        const decodedCellId = decodedMessage.App[0];
+        // Note:In order to return readible content to the UI, the signal payload must also be decoded.
+        const decodedPayload = signalTransform(decodedMessage.App[1]);
+
+        // Return a uniform format to UI (ie: { type, data } - the same format as with callZome and appInfo...)
+        const signal: AppSignal = {
+          type: msg.type,
+          data: { cellId: decodedCellId, payload: decodedPayload },
+        };
+        this.emit('signal', signal);
       } else if (msg.type === "Response") {
         this.handleResponse(msg);
       } else {

@@ -439,7 +439,7 @@ test(
 );
 
 test(
-  "can receive a signal",
+  "can handle a signal using signalCb",
   withConductor(ADMIN_PORT, async (t: Test) => {
     let resolveSignalPromise: (value?: unknown) => void | undefined;
     const signalReceivedPromise = new Promise(
@@ -457,6 +457,41 @@ test(
     };
 
     const { cell_id, client } = await installAppAndDna(ADMIN_PORT, signalCb);
+    // trigger an emit_signal
+    await client.callZome({
+      cap_secret: null,
+      cell_id,
+      zome_name: TEST_ZOME_NAME,
+      fn_name: "emitter",
+      provenance: fakeAgentPubKey(),
+      payload: null,
+    });
+    await signalReceivedPromise;
+  })
+);
+
+test(
+  "can receive a signal using event handler",
+  withConductor(ADMIN_PORT, async (t: Test) => {
+    let resolveSignalPromise: (value?: unknown) => void | undefined;
+    const signalReceivedPromise = new Promise(
+      (resolve) => (resolveSignalPromise = resolve)
+    );
+    const signalCb = (signal: AppSignal) => {
+      t.deepEqual(signal, {
+        type: "Signal",
+        data: {
+          cellId: cell_id,
+          payload: "i am a signal",
+        },
+      });
+      resolveSignalPromise();
+    };
+
+    const { cell_id, client } = await installAppAndDna(ADMIN_PORT);
+    
+    client.on('signal', signalCb)
+    
     // trigger an emit_signal
     await client.callZome({
       cap_secret: null,

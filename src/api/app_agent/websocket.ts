@@ -38,6 +38,8 @@ export class AppAgentWebsocket extends EventEmitter implements AppAgentClient  {
     super()
     this.appWebsocket = appWebsocket;
     this.installedAppId = installedAppId
+
+    this.appWebsocket.on('signal', signal => this.emit('signal', signal))
   }
 
   // async appInfo (): Promise<AppInfoResponse> {
