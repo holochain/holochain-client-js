@@ -73,6 +73,10 @@ export interface CreateCloneCellRequest {
    * Optionally a name for the DNA clone.
    */
   name?: string;
+  /**
+   * Optionally a clone_id. Currently not used, pending implentation in conductor api.
+   */
+  clone_id?: string;
 }
 export type CreateCloneCellResponse = InstalledCell;
 
