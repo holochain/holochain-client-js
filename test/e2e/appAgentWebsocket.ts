@@ -10,7 +10,7 @@ import {
   CreateCloneCellRequest,
 } from "../../src/api/app/index.js";
 import {
-  AppAgentWebsocket,
+  AppAgentWebsocket, AppCreateCloneCellRequest,
 } from "../../src/api/app_agent/index.js";
 import { WsClient } from "../../src/api/client.js";
 import { CloneId } from "../../src/api/common.js";
@@ -40,7 +40,7 @@ const ADMIN_PORT_1 = 33002;
 const TEST_ZOME_NAME = "foo";
 const COORDINATOR_ZOME_NAME = "coordinator";
 
-test.skip(
+test(
   "can call a zome function and get app info",
   withConductor(ADMIN_PORT, async (t: Test) => {
     const { installed_app_id, cell_id, role_id, client, admin } = await installAppAndDna(ADMIN_PORT);
@@ -115,7 +115,7 @@ test(
     appAgentWs.on('signal', signalCb)
 
     // trigger an emit_signal
-    await client.callZome({
+    await appAgentWs.callZome({
       cap_secret: null,
       cell_id,
       zome_name: TEST_ZOME_NAME,
@@ -127,154 +127,7 @@ test(
   })
 );
 
-//
-
-
-test.skip(
-  "stateDump",
-  withConductor(ADMIN_PORT, async (t: Test) => {
-    const { installed_app_id, cell_id, role_id, client, admin } =
-      await installAppAndDna(ADMIN_PORT);
-    const info = await client.appInfo({ installed_app_id }, 1000);
-    t.deepEqual(info.cell_data[0].cell_id, cell_id);
-    t.equal(info.cell_data[0].role_id, role_id);
-    t.deepEqual(info.status, { running: null });
-    const response = await client.callZome(
-      {
-        // TODO: write a test with a real capability secret.
-        cap_secret: null,
-        cell_id,
-        zome_name: TEST_ZOME_NAME,
-        fn_name: "foo",
-        provenance: fakeAgentPubKey(),
-        payload: null,
-      }
-    );
-    t.equal(response, "foo");
-
-    const state: DumpStateResponse = await admin.dumpState({
-      cell_id: info.cell_data[0].cell_id,
-    });
-    // A couple random tests to prove that things are where we expect them
-    t.equal(state[0].source_chain_dump.records.length, 6);
-    t.equal(state[0].source_chain_dump.records[0].action.type, "Dna");
-  })
-);
-
-// no conductor
-test.skip("error is catchable when holochain socket is unavailable", async (t: Test) => {
-  const url = `ws://localhost:${ADMIN_PORT}`;
-  try {
-    await AdminWebsocket.connect(url);
-  } catch (e) {
-    t.equal(
-      e.message,
-      `could not connect to holochain conductor, please check that a conductor service is running and available at ${url}`
-    );
-  }
-
-  try {
-    await AppWebsocket.connect(url);
-  } catch (e) {
-    t.equal(
-      e.message,
-      `could not connect to holochain conductor, please check that a conductor service is running and available at ${url}`
-    );
-  }
-});
-
-test.skip("can inject agents", async (t: Test) => {
-  const conductor1 = await launch(ADMIN_PORT);
-  const conductor2 = await launch(ADMIN_PORT_1);
-  const installed_app_id = "app";
-  const admin1 = await AdminWebsocket.connect(`ws://localhost:${ADMIN_PORT}`);
-  const admin2 = await AdminWebsocket.connect(`ws://localhost:${ADMIN_PORT_1}`);
-  const agent_key_1 = await admin1.generateAgentPubKey();
-  t.ok(agent_key_1);
-  const agent_key_2 = await admin2.generateAgentPubKey();
-  t.ok(agent_key_2);
-  const role = "thedna";
-  const path = `${FIXTURE_PATH}/test.dna`;
-  const hash = await admin1.registerDna({ path, modifiers: {} });
-  t.ok(hash);
-  let result = await admin1.installApp({
-    installed_app_id,
-    agent_key: agent_key_1,
-    dnas: [{ hash, role_id: role }],
-  });
-  t.ok(result);
-  const app1_cell = result.cell_data[0].cell_id;
-  const activeApp1Info = await admin1.enableApp({ installed_app_id }, 1000);
-  t.deepEqual(activeApp1Info.app.status, { running: null });
-  t.equal(activeApp1Info.app.cell_data[0].role_id, role);
-  t.equal(activeApp1Info.app.installed_app_id, installed_app_id);
-  t.equal(activeApp1Info.errors.length, 0);
-
-  await delay(500);
-
-  // after activating an app requestAgentInfo should return the agentid
-  // requesting info with null cell_id should return all agents known about.
-  // otherwise it's just agents know about for that cell
-  const conductor1_agentInfo = await admin1.requestAgentInfo({
-    cell_id: null,
-  });
-  t.equal(conductor1_agentInfo.length, 1);
-
-  // agent2 with no activated apps there are no agents
-  let conductor2_agentInfo = await admin2.requestAgentInfo({ cell_id: null });
-  t.equal(conductor2_agentInfo.length, 0);
-
-  // but, after explicitly injecting an agent, we should see it
-  await admin2.addAgentInfo({ agent_infos: conductor1_agentInfo });
-  conductor2_agentInfo = await admin2.requestAgentInfo({ cell_id: null });
-  t.equal(conductor2_agentInfo.length, 1);
-  t.deepEqual(conductor1_agentInfo, conductor2_agentInfo);
-
-  // now install the app and activate it on agent 2.
-  await admin2.registerDna({
-    modifiers: {},
-    path,
-  });
-  t.ok(hash);
-  result = await admin2.installApp({
-    installed_app_id,
-    agent_key: agent_key_2,
-    dnas: [{ hash, role_id: role }],
-  });
-  t.ok(result);
-  const app2_cell = result.cell_data[0].cell_id;
-  const activeApp2Info = await admin2.enableApp({ installed_app_id });
-  t.deepEqual(activeApp2Info.app.status, { running: null });
-  t.equal(activeApp2Info.app.cell_data[0].role_id, role);
-  t.equal(activeApp2Info.app.installed_app_id, installed_app_id);
-  t.equal(activeApp2Info.errors.length, 0);
-
-  await delay(500);
-  // observe 2 agent infos
-  conductor2_agentInfo = await admin2.requestAgentInfo({ cell_id: null });
-  t.equal(conductor2_agentInfo.length, 2);
-
-  // now confirm that we can ask for just one cell
-  await admin1.addAgentInfo({ agent_infos: conductor2_agentInfo });
-  const app1_agentInfo = await admin1.requestAgentInfo({
-    cell_id: app1_cell,
-  });
-  t.equal(app1_agentInfo.length, 1);
-  const app2_agentInfo = await admin2.requestAgentInfo({
-    cell_id: app2_cell,
-  });
-  t.equal(app2_agentInfo.length, 1);
-
-  if (conductor1.pid) {
-    process.kill(-conductor1.pid);
-  }
-  if (conductor2.pid) {
-    process.kill(-conductor2.pid);
-  }
-  await cleanSandboxConductors();
-});
-
-test.skip(
+test(
   "can create a callable clone cell",
   withConductor(ADMIN_PORT, async (t: Test) => {
     const { installed_app_id, role_id, client } = await installAppAndDna(
@@ -282,14 +135,15 @@ test.skip(
     );
     const info = await client.appInfo({ installed_app_id });
 
-    const createCloneCellParams: CreateCloneCellRequest = {
-      app_id: installed_app_id,
+    const appAgentWs = new AppAgentWebsocket(client, installed_app_id);
+
+    const createCloneCellParams: AppCreateCloneCellRequest = {
       role_id,
       modifiers: {
         network_seed: "clone-0",
       },
     };
-    const cloneCell = await client.createCloneCell(createCloneCellParams);
+    const cloneCell = await appAgentWs.createCloneCell(createCloneCellParams);
 
     const expectedCloneId = new CloneId(role_id, 0).toString();
     t.equal(cloneCell.role_id, expectedCloneId, "correct clone id");
@@ -306,7 +160,7 @@ test.skip(
       provenance: fakeAgentPubKey(),
       payload: null,
     };
-    const response = await client.callZome(params);
+    const response = await appAgentWs.callZome(params);
     t.equal(
       response,
       "foo",
@@ -315,27 +169,28 @@ test.skip(
   })
 );
 
-test.skip(
+test(
   "can archive a clone cell",
   withConductor(ADMIN_PORT, async (t: Test) => {
     const { installed_app_id, role_id, client } = await installAppAndDna(
       ADMIN_PORT
     );
-    const createCloneCellParams: CreateCloneCellRequest = {
-      app_id: installed_app_id,
+
+    const appAgentWs = new AppAgentWebsocket(client, installed_app_id)
+
+    const createCloneCellParams: AppCreateCloneCellRequest = {
       role_id,
       modifiers: {
         network_seed: "clone-0",
       },
     };
-    const cloneCell = await client.createCloneCell(createCloneCellParams);
+    const cloneCell = await appAgentWs.createCloneCell(createCloneCellParams);
 
-    await client.archiveCloneCell({
-      app_id: installed_app_id,
+    await appAgentWs.archiveCloneCell({
       clone_cell_id: cloneCell.cell_id,
     });
 
-    const appInfo = await client.appInfo({ installed_app_id });
+    const appInfo = await appAgentWs.appInfo();
     t.equal(
       appInfo.cell_data.length,
       1,
@@ -350,7 +205,7 @@ test.skip(
       payload: null,
     };
     try {
-      await client.callZome(params);
+      await appAgentWs.callZome(params);
       t.fail();
     } catch (error) {
       t.pass("archived clone call cannot be called");
@@ -446,5 +301,38 @@ test.skip(
     } catch (error) {
       t.pass("deleted clone cell 1 cannot be restored");
     }
+  })
+);
+
+//
+
+test.skip(
+  "stateDump",
+  withConductor(ADMIN_PORT, async (t: Test) => {
+    const { installed_app_id, cell_id, role_id, client, admin } =
+      await installAppAndDna(ADMIN_PORT);
+    const info = await client.appInfo({ installed_app_id }, 1000);
+    t.deepEqual(info.cell_data[0].cell_id, cell_id);
+    t.equal(info.cell_data[0].role_id, role_id);
+    t.deepEqual(info.status, { running: null });
+    const response = await client.callZome(
+      {
+        // TODO: write a test with a real capability secret.
+        cap_secret: null,
+        cell_id,
+        zome_name: TEST_ZOME_NAME,
+        fn_name: "foo",
+        provenance: fakeAgentPubKey(),
+        payload: null,
+      }
+    );
+    t.equal(response, "foo");
+
+    const state: DumpStateResponse = await admin.dumpState({
+      cell_id: info.cell_data[0].cell_id,
+    });
+    // A couple random tests to prove that things are where we expect them
+    t.equal(state[0].source_chain_dump.records.length, 6);
+    t.equal(state[0].source_chain_dump.records[0].action.type, "Dna");
   })
 );

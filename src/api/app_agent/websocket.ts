@@ -20,10 +20,12 @@ import ldsh from 'lodash'
 const { omit } = ldsh
 
 import { InstalledAppId } from '../../types.js';
-import { AppInfoResponse, AppWebsocket, CallZomeRequest, CallZomeResponse, InstalledAppInfo } from "../index.js";
+import { AppInfoResponse, AppWebsocket, ArchiveCloneCellResponse, CallZomeRequest, CallZomeResponse, CreateCloneCellRequest, CreateCloneCellResponse, InstalledAppInfo } from "../index.js";
 import {
   AppAgentCallZomeRequest,
   AppAgentClient,
+  AppArchiveCloneCellRequest,
+  AppCreateCloneCellRequest,
 } from "./types.js";
 
 export class AppAgentWebsocket extends EventEmitter implements AppAgentClient  {
@@ -80,5 +82,19 @@ export class AppAgentWebsocket extends EventEmitter implements AppAgentClient  {
       // TODO: can this be handled in ts?
       throw new Error('TODO: callZome requires a role_id or cell_id arg')
     }
-  };
+  }
+
+  async createCloneCell (args: AppCreateCloneCellRequest): Promise<CreateCloneCellResponse> {
+    return this.appWebsocket.createCloneCell({
+      app_id: this.installedAppId,
+      ...args
+    })
+  }
+
+  async archiveCloneCell (args: AppArchiveCloneCellRequest): Promise<ArchiveCloneCellResponse> {
+    return this.appWebsocket.archiveCloneCell({
+      app_id: this.installedAppId,
+      ...args
+    })
+  }
 }
