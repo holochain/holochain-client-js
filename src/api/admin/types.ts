@@ -9,7 +9,7 @@ import {
   InstalledCell,
   KitsuneAgent,
   KitsuneSpace,
-  RoleId,
+  RoleName as RoleName,
   Signature,
   Timestamp,
   WasmHash,
@@ -185,7 +185,7 @@ export type AppRoleDnaManifest = {
   version?: DnaVersionFlexible;
 };
 export type AppRoleManifest = {
-  id: RoleId;
+  name: RoleName;
   provisioning?: CellProvisioning;
   dna: AppRoleDnaManifest;
 };
@@ -271,7 +271,7 @@ export interface DeleteArchivedCloneCellsRequest {
   // The app id that the clone cells belong to
   app_id: InstalledAppId;
   // The role id that the clone cells belong to
-  role_id: RoleId;
+  role_name: RoleName;
 }
 export type DeleteArchivedCloneCellsResponse = void;
 
@@ -344,7 +344,7 @@ export interface AdminApi {
 
 export type InstallAppDnaPayload = {
   hash: HoloHash;
-  role_id: RoleId;
+  role_name: RoleName;
   membrane_proof?: MembraneProof;
 };
 
