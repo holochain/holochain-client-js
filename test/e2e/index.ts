@@ -16,12 +16,12 @@ import {
   CreateCloneCellRequest,
 } from "../../src/api/app/index.js";
 import { WsClient } from "../../src/api/client.js";
+import { generateSigningKeyPair } from "../../src/api/app/util.js";
 import { CloneId } from "../../src/api/common.js";
 import { AppEntryType } from "../../src/hdk/entry.js";
 import {
   cleanSandboxConductors,
   FIXTURE_PATH,
-  generateSigningKeyPair,
   grantSigningKey,
   grantSigningKeyAndSignZomeCall,
   installAppAndDna,

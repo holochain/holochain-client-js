@@ -5,8 +5,8 @@ import crypto from "node:crypto";
 import { AdminWebsocket } from "../../src/api/admin/websocket.js";
 import {
   AppSignalCb,
-  ZomeCall,
   ZomeCallUnsigned,
+  CallZomeRequest,
 } from "../../src/api/app/types.js";
 import { AppWebsocket } from "../../src/api/app/websocket.js";
 import { CapSecret } from "../../src/hdk/capabilities.js";
@@ -19,6 +19,7 @@ import {
 import { encode } from "@msgpack/msgpack";
 import { hashZomeCall } from "@holochain/serialization/holochain_serialization_js.js";
 import { FunctionName, ZomeName } from "../../src/api/index.js";
+import { generateSigningKeyPair } from "../../src/api/app/util.js";
 
 export const FIXTURE_PATH = "./test/e2e/fixture";
 export type ZomeCallUnsignedPayload =
@@ -154,15 +155,6 @@ export const installAppAndDna = async (
   return { installed_app_id, cell_id, role_name: role_name, client, admin };
 };
 
-export const generateSigningKeyPair = () => {
-  const keyPair = nacl.sign.keyPair();
-  const signingKey = new Uint8Array(
-    [132, 32, 36].concat(...keyPair.publicKey).concat(...[1, 2, 3, 4])
-  ) as AgentPubKey;
-  const keys: [nacl.SignKeyPair, AgentPubKey] = [keyPair, signingKey];
-  return keys;
-};
-
 export const grantSigningKey = async (
   admin: AdminWebsocket,
   cellId: CellId,
@@ -207,7 +199,7 @@ export const signZomeCall = (
     .sign(hashedZomeCall, keyPair.secretKey)
     .subarray(0, nacl.sign.signatureLength);
 
-  const signedZomeCall: ZomeCall = {
+  const signedZomeCall: CallZomeRequest = {
     ...unsignedZomeCallPayload,
     signature,
   };
