@@ -110,7 +110,7 @@ export type DnaModifiers = {
   origin_time: Timestamp;
 };
 
-export type FnName = string;
+export type FunctionName = string;
 export type ZomeName = string;
 export type ZomeDefinition = [
   ZomeName,
