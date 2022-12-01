@@ -32,17 +32,15 @@
   ],
   "scripts": {
     "lint": "eslint --fix --ext .ts src test .eslintrc.cjs",
-    "test": "RUST_LOG=error RUST_BACKTRACE=1 node --loader ts-node/esm test/index.ts",
+    "test": "RUST_LOG=error RUST_BACKTRACE=1 node --experimental-wasm-modules --loader ts-node/esm test/index.ts",
     "build": "rimraf ./lib && tsc -p tsconfig.build.json"
   },
   "dependencies": {
+    "@holochain/serialization": "file:../holochain-serialization-js/pkg",
     "@msgpack/msgpack": "^2.7.2",
     "cross-fetch": "^3.1.5",
-    "eslint-config-prettier": "^8.5.0",
-    "eslint-plugin-prettier": "^4.0.0",
-    "eslint-plugin-tsdoc": "^0.2.16",
     "isomorphic-ws": "^5.0.0",
-    "prettier": "^2.6.2"
+    "tweetnacl": "^1.0.3"
   },
   "devDependencies": {
     "@types/js-yaml": "^3.12.7",
@@ -51,7 +49,11 @@
     "@typescript-eslint/eslint-plugin": "^5.27.0",
     "@typescript-eslint/parser": "^5.27.0",
     "eslint": "^8.16.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-tsdoc": "^0.2.16",
     "js-yaml": "^3.14.1",
+    "prettier": "^2.6.2",
     "rimraf": "^3.0.2",
     "tape": "^5.5.3",
     "ts-node": "^10.8.1",
