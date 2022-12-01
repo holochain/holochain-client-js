@@ -15,7 +15,7 @@
  *        console.error('problem installing DNA:', err)
  *      })
  */
-import { decode, encode } from "@msgpack/msgpack";
+import { decode } from "@msgpack/msgpack";
 import { getLauncherEnvironment } from "../../environments/launcher.js";
 import { InstalledAppId } from "../../types.js";
 import { WsClient } from "../client.js";
@@ -97,10 +97,8 @@ export class AppWebsocket implements AppApi {
     appInfoTransform(this)
   );
 
-  callZome: Requester<CallZomeRequest, CallZomeResponseGeneric<any>> = this._requester(
-    "zome_call",
-    callZomeTransform
-  );
+  callZome: Requester<CallZomeRequest, CallZomeResponseGeneric<any>> =
+    this._requester("zome_call", callZomeTransform);
 
   createCloneCell: Requester<CreateCloneCellRequest, CreateCloneCellResponse> =
     this._requester("create_clone_cell");

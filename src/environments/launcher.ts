@@ -34,24 +34,8 @@ async function fetchLauncherEnvironment(): Promise<
   }
 }
 
-const isBrowser = typeof window !== "undefined";
-const isJest =
-  typeof process !== "undefined" &&
-  process.env &&
-  process.env.JEST_WORKER_ID !== undefined;
+const isLauncher =
+  typeof window !== "undefined" && "__HC_LAUNCHER_ENV__" in window;
 
-let promise: Promise<any>;
-
-if (isBrowser && !isJest) {
-  promise = fetchLauncherEnvironment().catch(console.error);
-}
-
-export async function getLauncherEnvironment(): Promise<
-  LauncherEnvironment | undefined
-> {
-  if (isBrowser) {
-    return promise;
-  } else {
-    return undefined;
-  }
-}
+export const getLauncherEnvironment = async () =>
+  isLauncher ? fetchLauncherEnvironment() : undefined;
