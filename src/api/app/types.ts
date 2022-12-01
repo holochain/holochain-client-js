@@ -23,7 +23,16 @@ export type CallZomeRequestGeneric<Payload> = {
   payload: Payload;
   provenance: AgentPubKey;
 };
-export type CallZomeRequest = CallZomeRequestGeneric<any>;
+
+export interface ZomeCallUnsigned extends CallZomeRequestGeneric<any> {
+  nonce: Uint8Array;
+  expires_at: number;
+}
+
+export interface CallZomeRequest extends ZomeCallUnsigned {
+  signature: Uint8Array;
+}
+
 export type CallZomeResponseGeneric<Payload> = Payload;
 export type CallZomeResponse = CallZomeResponseGeneric<any>;
 
