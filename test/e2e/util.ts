@@ -1,14 +1,21 @@
+import { hashZomeCall } from "@holochain/serialization/holochain_serialization_js.js";
+import { encode } from "@msgpack/msgpack";
 import { spawn } from "node:child_process";
 import { Test } from "tape";
 import nacl from "tweetnacl";
-import crypto from "node:crypto";
 import { AdminWebsocket } from "../../src/api/admin/websocket.js";
 import {
   AppSignalCb,
-  ZomeCallUnsigned,
   CallZomeRequest,
+  ZomeCallUnsigned,
 } from "../../src/api/app/types.js";
+import {
+  generateSigningKeyPair,
+  randomCapSecret,
+  randomNonce,
+} from "../../src/api/app/util.js";
 import { AppWebsocket } from "../../src/api/app/websocket.js";
+import { FunctionName, ZomeName } from "../../src/api/index.js";
 import { CapSecret } from "../../src/hdk/capabilities.js";
 import {
   AgentPubKey,
@@ -16,10 +23,6 @@ import {
   InstalledAppId,
   RoleName,
 } from "../../src/types.js";
-import { encode } from "@msgpack/msgpack";
-import { hashZomeCall } from "@holochain/serialization/holochain_serialization_js.js";
-import { FunctionName, ZomeName } from "../../src/api/index.js";
-import { generateSigningKeyPair } from "../../src/api/app/util.js";
 
 export const FIXTURE_PATH = "./test/e2e/fixture";
 export type ZomeCallUnsignedPayload =
@@ -161,7 +164,7 @@ export const grantSigningKey = async (
   functions: Array<[ZomeName, FunctionName]>,
   signingKey: AgentPubKey
 ) => {
-  const capSecret = new Uint8Array(crypto.randomBytes(64));
+  const capSecret = randomCapSecret();
   await admin.grantZomeCallCapability({
     cell_id: cellId,
     cap_grant: {
@@ -191,7 +194,7 @@ export const signZomeCall = (
     fn_name: payload.fn_name,
     provenance: signingKey,
     payload: encode(payload.payload),
-    nonce: new Uint8Array(crypto.randomBytes(32)),
+    nonce: randomNonce(),
     expires_at: new Date().getTime() * 1000 + 1000000 * 60 * 5, // 5 mins from now in microseconds
   };
   const hashedZomeCall = hashZomeCall(unsignedZomeCallPayload);

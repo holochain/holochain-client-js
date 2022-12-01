@@ -15,6 +15,8 @@ import {
   NetworkSeed,
 } from "../admin/index.js";
 
+export type Nonce256Bit = Uint8Array;
+
 export type CallZomeRequestGeneric<Payload> = {
   cap_secret: CapSecret | null;
   cell_id: CellId;
@@ -25,7 +27,7 @@ export type CallZomeRequestGeneric<Payload> = {
 };
 
 export interface ZomeCallUnsigned extends CallZomeRequestGeneric<any> {
-  nonce: Uint8Array;
+  nonce: Nonce256Bit;
   expires_at: number;
 }
 
