@@ -23,7 +23,11 @@ export const randomCapSecret: () => CapSecret = () => randomByteArray(64);
 export const randomNonce: () => Nonce256Bit = () => randomByteArray(32);
 
 const randomByteArray = (length: number) => {
-  if (window && "crypto" in window && "getRandomValues" in window.crypto) {
+  if (
+    typeof window !== "undefined" &&
+    "crypto" in window &&
+    "getRandomValues" in window.crypto
+  ) {
     return window.crypto.getRandomValues(new Uint8Array(length));
   } else {
     return new Uint8Array(crypto.randomBytes(length));
