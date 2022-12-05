@@ -34,8 +34,8 @@ async function fetchLauncherEnvironment(): Promise<
   }
 }
 
-const isLauncher =
-  typeof window !== "undefined" && "__HC_LAUNCHER_ENV__" in window;
+export const isLauncher =
+  typeof window === "object" && "__HC_LAUNCHER_ENV__" in window;
 
 export const getLauncherEnvironment = async () =>
   isLauncher ? fetchLauncherEnvironment() : undefined;

@@ -3,8 +3,8 @@ import { RoleName } from "../types.js";
 const ERROR_TYPE = "error";
 export const DEFAULT_TIMEOUT = 15000;
 
-export type Transformer<ReqO, ReqI, ResI, ResO> = {
-  input: (req: ReqO) => ReqI;
+export type Transformer<ReqI, ReqO, ResI, ResO> = {
+  input: (req: ReqI) => ReqO;
   output: (res: ResI) => ResO;
 };
 
@@ -18,13 +18,14 @@ export type Tagged<T> = { type: string; data: T };
  * with the optional Transformer applied to further modify the input and output.
  */
 export const requesterTransformer =
-  <ReqO, ReqI, ResI, ResO>(
-    requester: Requester<Tagged<ReqI>, Tagged<ResI>>,
+  <ReqI, ReqO, ResI, ResO>(
+    requester: Requester<Tagged<ReqO>, Tagged<ResI>>,
     tag: string,
-    transform: Transformer<ReqO, ReqI, ResI, ResO> = identityTransformer
+    transform: Transformer<ReqI, ReqO, ResI, ResO> = identityTransformer
   ) =>
-  async (req: ReqO, timeout?: number) => {
-    const input = { type: tag, data: transform.input(req) };
+  async (req: ReqI, timeout?: number) => {
+    const transformedInput = await transform.input(req);
+    const input = { type: tag, data: transformedInput };
     const response = await requester(input, timeout);
     const output = transform.output(response.data);
     return output;

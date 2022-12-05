@@ -15,9 +15,14 @@
  *        console.error('problem installing DNA:', err)
  *      })
  */
-import { decode } from "@msgpack/msgpack";
-import { getLauncherEnvironment } from "../../environments/launcher.js";
-import { InstalledAppId } from "../../types.js";
+import { hashZomeCall } from "@holochain/serialization";
+import { decode, encode } from "@msgpack/msgpack";
+import {
+  getLauncherEnvironment,
+  isLauncher,
+} from "../../environments/launcher.js";
+import { AgentPubKey, InstalledAppId } from "../../types.js";
+import { FunctionName, ZomeName } from "../admin/types.js";
 import { WsClient } from "../client.js";
 import {
   catchError,
@@ -40,6 +45,20 @@ import {
   ArchiveCloneCellResponse,
   CallZomeRequest,
 } from "./types.js";
+import { randomNonce } from "./util.js";
+import { invoke } from "@tauri-apps/api/tauri";
+
+type TauriByteArray = number[];
+interface CallZomeRequestUnsignedTauri<Payload> {
+  cap_secret: TauriByteArray | null;
+  cell_id: [TauriByteArray, TauriByteArray];
+  zome_name: ZomeName;
+  fn_name: FunctionName;
+  payload: Payload;
+  provenance: TauriByteArray;
+  nonce: TauriByteArray;
+  expires_at: number;
+}
 
 export class AppWebsocket implements AppApi {
   client: WsClient;
@@ -77,9 +96,9 @@ export class AppWebsocket implements AppApi {
     );
   }
 
-  _requester = <ReqO, ReqI, ResI, ResO>(
+  _requester = <ReqI, ReqO, ResI, ResO>(
     tag: string,
-    transformer?: Transformer<ReqO, ReqI, ResI, ResO>
+    transformer?: Transformer<ReqI, ReqO, ResI, ResO>
   ) =>
     requesterTransformer(
       (req, timeout) =>
@@ -111,18 +130,31 @@ export class AppWebsocket implements AppApi {
 
 const callZomeTransform: Transformer<
   CallZomeRequestGeneric<any>,
-  CallZomeRequestGeneric<Uint8Array>,
+  Promise<CallZomeRequest>,
   CallZomeResponseGeneric<Uint8Array>,
   CallZomeResponseGeneric<any>
 > = {
-  input: (
-    req: CallZomeRequestGeneric<any>
-  ): CallZomeRequestGeneric<Uint8Array> => req,
-  output: (
-    res: CallZomeResponseGeneric<Uint8Array>
-  ): CallZomeResponseGeneric<any> => {
-    return decode(res);
+  input: async (req) => {
+    if (isLauncher) {
+      const zomeCallUnsigned: CallZomeRequestUnsignedTauri<any> = {
+        provenance: Array.from(req.provenance),
+        cell_id: [Array.from(req.cell_id[0]), Array.from(req.cell_id[1])],
+        zome_name: req.zome_name,
+        fn_name: req.fn_name,
+        cap_secret: req.cap_secret === null ? null : Array.from(req.cap_secret),
+        payload: req.payload,
+        nonce: Array.from(randomNonce()),
+        expires_at: Date.now() + 5 * 60 * 60 * 1000,
+      };
+      const signedZomeCall: CallZomeRequest = await invoke("sign_zome_call", {
+        zomeCallUnsigned,
+      });
+      return signedZomeCall;
+    } else {
+      throw new Error("not implemented!");
+    }
   },
+  output: (res) => decode(res),
 };
 
 const appInfoTransform = (
@@ -133,16 +165,13 @@ const appInfoTransform = (
   AppInfoResponse,
   AppInfoResponse
 > => ({
-  input: (req: AppInfoRequest): AppInfoRequest => {
+  input: (req) => {
     if (appWs.overrideInstalledAppId) {
       return {
         installed_app_id: appWs.overrideInstalledAppId,
       };
     }
-
     return req;
   },
-  output: (res: AppInfoResponse): AppInfoResponse => {
-    return res;
-  },
+  output: (res) => res,
 });

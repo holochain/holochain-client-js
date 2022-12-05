@@ -38,6 +38,7 @@
   "dependencies": {
     "@holochain/serialization": "file:./holochain-serialization-0.1.0.tgz",
     "@msgpack/msgpack": "^2.7.2",
+    "@tauri-apps/api": "^1.2.0",
     "cross-fetch": "^3.1.5",
     "isomorphic-ws": "^5.0.0",
     "tweetnacl": "^1.0.3"
