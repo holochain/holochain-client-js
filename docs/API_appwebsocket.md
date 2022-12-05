@@ -45,7 +45,7 @@ Returns a `Promise` for the corresponding response.
 ```
 
 
-## `<AppWebsocket>.callZome({ cell_id, zome_name, fn_name, payload, provenance, cap })`
+## `<AppWebsocket>.callZome({ cell_id, zome_name, fn_name, payload, provenance, cap_secret })`
 Send a request to call a cell's zome function.
 
 - `cell_id` - a 2 part `array` with
@@ -55,7 +55,7 @@ Send a request to call a cell's zome function.
 - `fn_name` - a `string`
 - `payload` - an `object`
 - `provenance` - a `buffer`
-- `cap` - a `buffer`
+- `cap_secret` - a `buffer`
 
 Returns a `Promise` for the corresponding response.
 
