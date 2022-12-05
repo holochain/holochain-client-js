@@ -10,9 +10,11 @@ import {
 } from "../../types.js";
 import { Requester } from "../common.js";
 import {
+  FunctionName,
   InstalledAppInfo,
   MembraneProof,
   NetworkSeed,
+  ZomeName,
 } from "../admin/index.js";
 
 export type Nonce256Bit = Uint8Array;
@@ -20,18 +22,18 @@ export type Nonce256Bit = Uint8Array;
 export type CallZomeRequestGeneric<Payload> = {
   cap_secret: CapSecret | null;
   cell_id: CellId;
-  zome_name: string;
-  fn_name: string;
+  zome_name: ZomeName;
+  fn_name: FunctionName;
   payload: Payload;
   provenance: AgentPubKey;
 };
 
-export interface ZomeCallUnsigned extends CallZomeRequestGeneric<any> {
+export interface CallZomeRequestUnsigned extends CallZomeRequestGeneric<any> {
   nonce: Nonce256Bit;
   expires_at: number;
 }
 
-export interface CallZomeRequest extends ZomeCallUnsigned {
+export interface CallZomeRequest extends CallZomeRequestUnsigned {
   signature: Uint8Array;
 }
 

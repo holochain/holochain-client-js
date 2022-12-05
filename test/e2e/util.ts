@@ -7,7 +7,7 @@ import { AdminWebsocket } from "../../src/api/admin/websocket.js";
 import {
   AppSignalCb,
   CallZomeRequest,
-  ZomeCallUnsigned,
+  CallZomeRequestUnsigned,
 } from "../../src/api/app/types.js";
 import {
   generateSigningKeyPair,
@@ -27,7 +27,7 @@ import {
 export const FIXTURE_PATH = "./test/e2e/fixture";
 export type ZomeCallUnsignedPayload =
   | Pick<
-      ZomeCallUnsigned,
+      CallZomeRequestUnsigned,
       "cell_id" | "zome_name" | "fn_name" | "provenance" | "payload"
     > & { cap_secret?: CapSecret };
 
@@ -187,7 +187,7 @@ export const signZomeCall = (
   keyPair: nacl.SignKeyPair,
   payload: ZomeCallUnsignedPayload
 ) => {
-  const unsignedZomeCallPayload: ZomeCallUnsigned = {
+  const unsignedZomeCallPayload: CallZomeRequestUnsigned = {
     cap_secret: capSecret,
     cell_id: payload.cell_id,
     zome_name: payload.zome_name,
