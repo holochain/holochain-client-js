@@ -28,7 +28,7 @@ export type Timestamp = number;
 export interface HoloHashed<T> {
   hash: HoloHash;
   content: T;
-};
+}
 
 export type DnaGossipInfo = {
   total_historical_gossip_throughput: HistoricalGossipThroughput;

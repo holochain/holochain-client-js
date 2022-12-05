@@ -111,10 +111,8 @@ export class AppWebsocket implements AppApi {
     ArchiveCloneCellResponse
   > = this._requester("archive_clone_cell");
 
-  gossipInfo: Requester<
-    GossipInfoRequest,
-    GossipInfoResponse
-  > = this._requester("gossip_info");
+  gossipInfo: Requester<GossipInfoRequest, GossipInfoResponse> =
+    this._requester("gossip_info");
 }
 
 const callZomeTransform: Transformer<

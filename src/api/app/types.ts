@@ -95,7 +95,7 @@ export type AppSignal = {
 };
 
 export interface GossipInfoRequest {
-  // The DNA's for which to get gossip info
+  /** The DNAs for which to get gossip info */
   dnas: DnaHash[];
 }
 
