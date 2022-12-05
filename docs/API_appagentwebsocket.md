@@ -31,7 +31,7 @@ Returns a `Promise` for the corresponding response.
 ```
 
 
-## `<AppWebsocket>.callZome({ cell_id?, role_id?, zome_name, fn_name, payload, provenance, cap_secret })`
+## `<AppAgentWebsocket>.callZome({ cell_id?, role_id?, zome_name, fn_name, payload, provenance, cap_secret })`
 Send a request to call a cell's zome function.
 
 - `cell_id?` - an optional 2 part `array` with
@@ -53,7 +53,7 @@ Returns a `Promise` for the corresponding response.
 any
 ```
 
-## `<AppWebsocket>.createCloneCell({ role_id, modifiers,  })`
+## `<AppAgentWebsocket>.createCloneCell({ role_id, modifiers,  })`
 Send a request to call a cell's zome function.
 - `role_id` - the role id of the dna to be cloned
 -  `modifiers`: an object
@@ -87,7 +87,7 @@ Returns a `Promise` containing the cloned cell
 }
 ```
 
-## `<AppWebsocket>.archiveClonedCell({ clone_cell_id })`
+## `<AppAgentWebsocket>.archiveClonedCell({ clone_cell_id })`
 
 
 - `clone_cell_id?` - either a `CellId` (see `callZome` above) or a `RoleId` string, specifying the cell to be archived
