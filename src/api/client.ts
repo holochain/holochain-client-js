@@ -1,6 +1,6 @@
 import { decode, encode } from "@msgpack/msgpack";
 import Websocket from "isomorphic-ws";
-import { EventEmitter } from 'events';
+import { EventEmitter } from "events";
 import { AppSignal, AppSignalCb, SignalResponseGeneric } from "./app/types.js";
 
 /**
@@ -21,14 +21,16 @@ export class WsClient extends EventEmitter {
   index: number;
 
   constructor(socket: any, signalCb?: AppSignalCb) {
-    super()
+    super();
     this.socket = socket;
     this.pendingRequests = {};
     this.index = 0;
 
     if (signalCb) {
-      console.log("Providing a signal callback on client initialization is deprecated. Instead, add an event handler using `.on('signal', signalCb)`.")
-      this.on('signal', signalCb)
+      console.log(
+        "Providing a signal callback on client initialization is deprecated. Instead, add an event handler using `.on('signal', signalCb)`."
+      );
+      this.on("signal", signalCb);
     }
 
     socket.onmessage = async (encodedMsg: any) => {
@@ -59,7 +61,7 @@ export class WsClient extends EventEmitter {
           type: msg.type,
           data: { cellId: decodedCellId, payload: decodedPayload },
         };
-        this.emit('signal', signal);
+        this.emit("signal", signal);
       } else if (msg.type === "Response") {
         this.handleResponse(msg);
       } else {

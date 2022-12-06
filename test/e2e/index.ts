@@ -489,9 +489,9 @@ test(
     };
 
     const { cell_id, client } = await installAppAndDna(ADMIN_PORT);
-    
-    client.on('signal', signalCb)
-    
+
+    client.on("signal", signalCb);
+
     // trigger an emit_signal
     await client.callZome({
       cap_secret: null,

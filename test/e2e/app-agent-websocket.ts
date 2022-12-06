@@ -10,7 +10,8 @@ import {
   CreateCloneCellRequest,
 } from "../../src/api/app/index.js";
 import {
-  AppAgentWebsocket, AppCreateCloneCellRequest,
+  AppAgentWebsocket,
+  AppCreateCloneCellRequest,
 } from "../../src/api/app_agent/index.js";
 import { WsClient } from "../../src/api/client.js";
 import { CloneId } from "../../src/api/common.js";
@@ -43,7 +44,8 @@ const COORDINATOR_ZOME_NAME = "coordinator";
 test(
   "can call a zome function and get app info",
   withConductor(ADMIN_PORT, async (t: Test) => {
-    const { installed_app_id, cell_id, role_id, client, admin } = await installAppAndDna(ADMIN_PORT);
+    const { installed_app_id, cell_id, role_id, client, admin } =
+      await installAppAndDna(ADMIN_PORT);
 
     const appAgentWs = new AppAgentWebsocket(client, installed_app_id);
 
@@ -58,31 +60,31 @@ test(
       visibility: { Private: null },
     };
 
-    const response = await appAgentWs.callZome(
-      {
-        cap_secret: null,
-        cell_id,
-        zome_name: COORDINATOR_ZOME_NAME,
-        fn_name: "echo_app_entry_type",
-        provenance: cell_id[1],
-        payload: appEntryType,
-      }        
-    );
+    const response = await appAgentWs.callZome({
+      cap_secret: null,
+      cell_id,
+      zome_name: COORDINATOR_ZOME_NAME,
+      fn_name: "echo_app_entry_type",
+      provenance: cell_id[1],
+      payload: appEntryType,
+    });
 
     t.equal(response, null, "app entry type deserializes correctly");
 
-    const response_from_role_id = await appAgentWs.callZome(
-      {
-        cap_secret: null,
-        role_id,
-        zome_name: COORDINATOR_ZOME_NAME,
-        fn_name: "echo_app_entry_type",
-        provenance: cell_id[1],
-        payload: appEntryType,
-      }        
-    );
+    const response_from_role_id = await appAgentWs.callZome({
+      cap_secret: null,
+      role_id,
+      zome_name: COORDINATOR_ZOME_NAME,
+      fn_name: "echo_app_entry_type",
+      provenance: cell_id[1],
+      payload: appEntryType,
+    });
 
-    t.equal(response_from_role_id, null, "app entry type deserializes correctly");
+    t.equal(
+      response_from_role_id,
+      null,
+      "app entry type deserializes correctly"
+    );
 
     await admin.disableApp({ installed_app_id });
     info = await appAgentWs.appInfo();
@@ -108,11 +110,13 @@ test(
       resolveSignalPromise();
     };
 
-    const { cell_id, client, installed_app_id } = await installAppAndDna(ADMIN_PORT);
+    const { cell_id, client, installed_app_id } = await installAppAndDna(
+      ADMIN_PORT
+    );
 
     const appAgentWs = new AppAgentWebsocket(client, installed_app_id);
-    
-    appAgentWs.on('signal', signalCb)
+
+    appAgentWs.on("signal", signalCb);
 
     // trigger an emit_signal
     await appAgentWs.callZome({
@@ -176,7 +180,7 @@ test(
       ADMIN_PORT
     );
 
-    const appAgentWs = new AppAgentWebsocket(client, installed_app_id)
+    const appAgentWs = new AppAgentWebsocket(client, installed_app_id);
 
     const createCloneCellParams: AppCreateCloneCellRequest = {
       role_id,

@@ -51,7 +51,7 @@ export class AppWebsocket extends EventEmitter implements AppApi {
     defaultTimeout?: number,
     overrideInstalledAppId?: InstalledAppId
   ) {
-    super()
+    super();
     this.client = client;
     this.defaultTimeout =
       defaultTimeout === undefined ? DEFAULT_TIMEOUT : defaultTimeout;
@@ -71,16 +71,16 @@ export class AppWebsocket extends EventEmitter implements AppApi {
     }
 
     const wsClient = await WsClient.connect(url, signalCb);
-    
+
     const appWebsocket = new AppWebsocket(
       wsClient,
       defaultTimeout,
       env ? env.INSTALLED_APP_ID : undefined
     );
 
-    wsClient.on('signal', signal => appWebsocket.emit('signal', signal))
-    
-    return appWebsocket
+    wsClient.on("signal", (signal) => appWebsocket.emit("signal", signal));
+
+    return appWebsocket;
   }
 
   _requester = <ReqO, ReqI, ResI, ResO>(
