@@ -38,6 +38,8 @@ import {
   CreateCloneCellRequest,
   CreateCloneCellResponse,
   ArchiveCloneCellResponse,
+  GossipInfoRequest,
+  GossipInfoResponse,
 } from "./types.js";
 
 export class AppWebsocket implements AppApi {
@@ -108,6 +110,9 @@ export class AppWebsocket implements AppApi {
     ArchiveCloneCellRequest,
     ArchiveCloneCellResponse
   > = this._requester("archive_clone_cell");
+
+  gossipInfo: Requester<GossipInfoRequest, GossipInfoResponse> =
+    this._requester("gossip_info");
 }
 
 const callZomeTransform: Transformer<
