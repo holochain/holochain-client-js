@@ -1,30 +1,12 @@
 import test, { Test } from "tape";
 import {
-  AdminWebsocket,
-  DumpStateResponse,
-} from "../../src/api/admin/index.js";
-import {
-  AppSignal,
-  AppWebsocket,
-  CallZomeRequest,
-  CreateCloneCellRequest,
-} from "../../src/api/app/index.js";
-import {
   AppAgentWebsocket,
   AppCreateCloneCellRequest,
-} from "../../src/api/app_agent/index.js";
-import { WsClient } from "../../src/api/client.js";
+} from "../../src/api/app-agent/index.js";
+import { AppSignal, CallZomeRequest } from "../../src/api/app/index.js";
 import { CloneId } from "../../src/api/common.js";
 import { AppEntryType } from "../../src/hdk/entry.js";
-import {
-  cleanSandboxConductors,
-  FIXTURE_PATH,
-  installAppAndDna,
-  launch,
-  withConductor,
-} from "./util.js";
-
-const delay = (ms: number) => new Promise((r) => setTimeout(r, ms));
+import { installAppAndDna, withConductor } from "./util.js";
 
 const fakeAgentPubKey = () =>
   Buffer.from(
@@ -36,7 +18,6 @@ const fakeAgentPubKey = () =>
   );
 
 const ADMIN_PORT = 33001;
-const ADMIN_PORT_1 = 33002;
 
 const TEST_ZOME_NAME = "foo";
 const COORDINATOR_ZOME_NAME = "coordinator";
