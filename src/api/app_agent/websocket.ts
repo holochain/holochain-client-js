@@ -24,8 +24,7 @@
  */
 
 import { EventEmitter } from 'events'
-import ldsh from 'lodash'
-const { omit } = ldsh
+import omit from 'lodash.omit'
 
 import { InstalledAppId } from '../../types.js';
 import { AppInfoResponse, AppWebsocket, ArchiveCloneCellResponse, CallZomeRequest, CallZomeResponse, CreateCloneCellRequest, CreateCloneCellResponse, InstalledAppInfo } from "../index.js";
@@ -63,7 +62,7 @@ export class AppAgentWebsocket extends EventEmitter implements AppAgentClient  {
       const cell_id = appInfo.cell_data.find(c => c.role_id === request.role_id)?.cell_id
       
       if (!cell_id) {
-        throw new Error(`TODO: No cell found with role_id ${request.role_id}`)
+        throw new Error(`No cell found with role_id ${request.role_id}`)
       }
 
       const callZomeRequest = {
@@ -74,7 +73,7 @@ export class AppAgentWebsocket extends EventEmitter implements AppAgentClient  {
     } else if (request.cell_id) {
       return this.appWebsocket.callZome(request as CallZomeRequest, timeout)
     } else {
-      throw new Error('TODO: callZome requires a role_id or cell_id arg')
+      throw new Error('callZome requires a role_id or cell_id arg')
     }
   }
 
