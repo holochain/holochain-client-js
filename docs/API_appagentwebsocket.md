@@ -10,7 +10,7 @@ This is useful for simplifying zome and app info calls, and especially because i
 **Instance properties**
 
 - `<AppAgentWebsocket>.appWebsocket` - the AppWebsocket instance that all calls are forwarded to.
-- `<AppAgentWebsocket>.installedAppId` - the installedAppId that all calls are restricted to
+- `<AppAgentWebsocket>.installedAppId` - the InstalledAppId that all calls are restricted to
 
 
 ## `<AppAgentWebsocket>.appInfo()`
