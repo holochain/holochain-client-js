@@ -5,6 +5,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## \[Unreleased\]
 ### Added
 - Interface AppAgentClient, along with a class that implements that interface AppAgentWebsocket as part of work to unify the holochain and holo client apis. Happ devs will now be able to write the majority of their client code using the AppAgentClient interface, completely agnostic as to whether they're in a pure holochain or holo context.
+- Add App API call `gossip_info`, which returns progress data on historical gossip.
 
 ### Removed
 ### Changed
