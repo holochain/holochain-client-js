@@ -38,10 +38,11 @@ import {
 export class AppAgentWebsocket extends EventEmitter implements AppAgentClient  {
   appWebsocket: AppWebsocket;
   installedAppId: InstalledAppId;
+  cachedAppInfo?: InstalledAppInfo;
 
   constructor(
     appWebsocket: AppWebsocket,
-    installedAppId: InstalledAppId
+    installedAppId: InstalledAppId,
   ) {
     super()
     this.appWebsocket = appWebsocket;
@@ -51,14 +52,17 @@ export class AppAgentWebsocket extends EventEmitter implements AppAgentClient  {
   }
 
   async appInfo (): Promise<AppInfoResponse> {
-    return this.appWebsocket.appInfo({
+    const appInfo = await this.appWebsocket.appInfo({
       installed_app_id: this.installedAppId
-    })  
+    })
+
+    this.cachedAppInfo = appInfo
+    return appInfo
   }
 
   async callZome (request: AppAgentCallZomeRequest, timeout?: number): Promise<CallZomeResponse> {
     if (request.role_id) {
-      const appInfo = await this.appInfo()
+      const appInfo = this.cachedAppInfo || await this.appInfo()
       const cell_id = appInfo.cell_data.find(c => c.role_id === request.role_id)?.cell_id
       
       if (!cell_id) {
@@ -78,10 +82,14 @@ export class AppAgentWebsocket extends EventEmitter implements AppAgentClient  {
   }
 
   async createCloneCell (args: AppCreateCloneCellRequest): Promise<CreateCloneCellResponse> {
-    return this.appWebsocket.createCloneCell({
+    const clonedCell =  this.appWebsocket.createCloneCell({
       app_id: this.installedAppId,
       ...args
     })
+
+    this.cachedAppInfo = undefined
+
+    return clonedCell
   }
 
   async archiveCloneCell (args: AppArchiveCloneCellRequest): Promise<ArchiveCloneCellResponse> {

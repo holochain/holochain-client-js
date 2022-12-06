@@ -1,6 +1,6 @@
 import { decode, encode } from "@msgpack/msgpack";
 import Websocket from "isomorphic-ws";
-import { EventEmitter, listenerCount } from 'events';
+import { EventEmitter } from 'events';
 import { AppSignal, AppSignalCb, SignalResponseGeneric } from "./app/types.js";
 
 /**
