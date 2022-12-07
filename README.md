@@ -49,6 +49,30 @@ npm install --save-exact @holochain/client
   }, 30000)
 ```
 
+### Use AppAgentWebsocket
+```typescript
+  const signalCb = (signal: AppSignal) => {
+    // impl...
+    resolve()
+  }
+
+  const TIMEOUT = 12000
+  // default timeout is set to 12000
+  const appWs = await AppWebsocket.connect(`ws://localhost:${appPort}`, 12000, signalCb)
+
+  const client = new AppAgentWebsocket(appWs, 'installed_app_id')
+
+  // default timeout set here (30000) will overwrite the defaultTimeout(12000) set above
+  await client.callZome({
+   cap: null,
+   role_id: 'dnas_role_id', // role_id is unique per app, so you can unambiguously identify your dna with role_id in this client,
+   zome_name: "test_zome",
+   fn_name: 'test_emitter_fn',
+   provenance: fakeAgentPubKey('TODO'),
+   payload: null,
+  }, 30000)
+```
+
 ## API Reference
 
 See [docs/API.md](docs/API.md)
