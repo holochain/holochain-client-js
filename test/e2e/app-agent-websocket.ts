@@ -5,7 +5,7 @@ import {
 } from "../../src/api/app-agent/index.js";
 import { AppSignal, CallZomeRequest } from "../../src/api/app/index.js";
 import { CloneId } from "../../src/api/common.js";
-import { AppEntryType } from "../../src/hdk/entry.js";
+import { AppEntryDef } from "../../src/hdk/entry.js";
 import { installAppAndDna, withConductor } from "./util.js";
 
 const fakeAgentPubKey = () =>
@@ -25,19 +25,19 @@ const COORDINATOR_ZOME_NAME = "coordinator";
 test(
   "can call a zome function and get app info",
   withConductor(ADMIN_PORT, async (t: Test) => {
-    const { installed_app_id, cell_id, role_id, client, admin } =
+    const { installed_app_id, cell_id, role_name, client, admin } =
       await installAppAndDna(ADMIN_PORT);
 
     const appAgentWs = new AppAgentWebsocket(client, installed_app_id);
 
     let info = await appAgentWs.appInfo();
     t.deepEqual(info.cell_data[0].cell_id, cell_id);
-    t.equal(info.cell_data[0].role_id, role_id);
+    t.equal(info.cell_data[0].role_name, role_name);
     t.deepEqual(info.status, { running: null });
 
-    const appEntryType: AppEntryType = {
-      id: 0,
-      zome_id: 0,
+    const appEntryDef: AppEntryDef = {
+      entry_index: 0,
+      zome_index: 0,
       visibility: { Private: null },
     };
 
@@ -47,22 +47,22 @@ test(
       zome_name: COORDINATOR_ZOME_NAME,
       fn_name: "echo_app_entry_type",
       provenance: cell_id[1],
-      payload: appEntryType,
+      payload: appEntryDef,
     });
 
     t.equal(response, null, "app entry type deserializes correctly");
 
-    const response_from_role_id = await appAgentWs.callZome({
+    const response_from_role_name = await appAgentWs.callZome({
       cap_secret: null,
-      role_id,
+      role_name,
       zome_name: COORDINATOR_ZOME_NAME,
       fn_name: "echo_app_entry_type",
       provenance: cell_id[1],
-      payload: appEntryType,
+      payload: appEntryDef,
     });
 
     t.equal(
-      response_from_role_id,
+      response_from_role_name,
       null,
       "app entry type deserializes correctly"
     );
@@ -115,7 +115,7 @@ test(
 test(
   "can create a callable clone cell",
   withConductor(ADMIN_PORT, async (t: Test) => {
-    const { installed_app_id, role_id, client } = await installAppAndDna(
+    const { installed_app_id, role_name, client } = await installAppAndDna(
       ADMIN_PORT
     );
     const info = await client.appInfo({ installed_app_id });
@@ -123,15 +123,15 @@ test(
     const appAgentWs = new AppAgentWebsocket(client, installed_app_id);
 
     const createCloneCellParams: AppCreateCloneCellRequest = {
-      role_id,
+      role_name,
       modifiers: {
         network_seed: "clone-0",
       },
     };
     const cloneCell = await appAgentWs.createCloneCell(createCloneCellParams);
 
-    const expectedCloneId = new CloneId(role_id, 0).toString();
-    t.equal(cloneCell.role_id, expectedCloneId, "correct clone id");
+    const expectedCloneId = new CloneId(role_name, 0).toString();
+    t.equal(cloneCell.role_name, expectedCloneId, "correct clone id");
     t.deepEqual(
       cloneCell.cell_id[1],
       info.cell_data[0].cell_id[1],
@@ -157,14 +157,14 @@ test(
 test(
   "can archive a clone cell",
   withConductor(ADMIN_PORT, async (t: Test) => {
-    const { installed_app_id, role_id, client } = await installAppAndDna(
+    const { installed_app_id, role_name, client } = await installAppAndDna(
       ADMIN_PORT
     );
 
     const appAgentWs = new AppAgentWebsocket(client, installed_app_id);
 
     const createCloneCellParams: AppCreateCloneCellRequest = {
-      role_id,
+      role_name,
       modifiers: {
         network_seed: "clone-0",
       },

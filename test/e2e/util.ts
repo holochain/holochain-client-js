@@ -1,9 +1,8 @@
 import { spawn } from "node:child_process";
 import { Test } from "tape";
 import { AdminWebsocket } from "../../src/api/admin/websocket.js";
-import { AppSignalCb } from "../../src/api/app/types.js";
 import { AppWebsocket } from "../../src/api/app/websocket.js";
-import { CellId, InstalledAppId, RoleId } from "../../src/types.js";
+import { CellId, InstalledAppId, RoleName } from "../../src/types.js";
 export const FIXTURE_PATH = "./test/e2e/fixture";
 
 const LAIR_PASSPHRASE = "passphrase";
@@ -88,12 +87,12 @@ export const installAppAndDna = async (
 ): Promise<{
   installed_app_id: InstalledAppId;
   cell_id: CellId;
-  role_id: RoleId;
+  role_name: RoleName;
   client: AppWebsocket;
   admin: AdminWebsocket;
 }> => {
   const installed_app_id = "app";
-  const role_id = "mydna";
+  const role_name = "mydna";
   const admin = await AdminWebsocket.connect(`ws://localhost:${adminPort}`);
 
   const path = `${FIXTURE_PATH}/test.dna`;
@@ -111,7 +110,7 @@ export const installAppAndDna = async (
     dnas: [
       {
         hash,
-        role_id,
+        role_name,
       },
     ],
   });
@@ -121,5 +120,5 @@ export const installAppAndDna = async (
   // destructure to get whatever open port was assigned to the interface
   const { port: appPort } = await admin.attachAppInterface({ port: 0 });
   const client = await AppWebsocket.connect(`ws://localhost:${appPort}`, 12000);
-  return { installed_app_id, cell_id, role_id, client, admin };
+  return { installed_app_id, cell_id, role_name, client, admin };
 };

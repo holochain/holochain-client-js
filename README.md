@@ -65,7 +65,7 @@ npm install --save-exact @holochain/client
   // default timeout set here (30000) will overwrite the defaultTimeout(12000) set above
   await client.callZome({
    cap: null,
-   role_id: 'dnas_role_id', // role_id is unique per app, so you can unambiguously identify your dna with role_id in this client,
+   role_name: 'dnas_role_name', // role_name is unique per app, so you can unambiguously identify your dna with role_name in this client,
    zome_name: "test_zome",
    fn_name: 'test_emitter_fn',
    provenance: fakeAgentPubKey('TODO'),

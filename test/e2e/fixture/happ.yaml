@@ -3,7 +3,7 @@ manifest_version: "1"
 name: foo-test
 description: ""
 roles:
-  - id: foo
+  - name: foo
     provisioning:
       strategy: create
       deferred: false

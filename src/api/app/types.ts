@@ -5,7 +5,7 @@ import {
   DnaProperties,
   InstalledAppId,
   InstalledCell,
-  RoleId,
+  RoleName,
   Timestamp,
   DnaHash,
   DnaGossipInfo,
@@ -40,7 +40,7 @@ export interface CreateCloneCellRequest {
   /**
    * The DNA's role id to clone.
    */
-  role_id: RoleId;
+  role_name: RoleName;
   /**
    * Modifiers to set for the new cell.
    * At least one of the modifiers must be set to obtain a distinct hash for
@@ -82,7 +82,7 @@ export interface ArchiveCloneCellRequest {
   // The app id that the clone cell belongs to
   app_id: InstalledAppId;
   // The clone id or cell id of the clone cell
-  clone_cell_id: RoleId | CellId;
+  clone_cell_id: RoleName | CellId;
 }
 export type ArchiveCloneCellResponse = void;
 

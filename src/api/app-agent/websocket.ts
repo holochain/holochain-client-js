@@ -7,7 +7,7 @@
  *    const client = new AppAgentWebsocket(appWs, 'my_installed_app_id')
  *
  *    client.callZome({
- *      role_id: 'my_role_id' // role_id is unique per app, so you can unambiguously identify your dna with role_id in this client,
+ *      role_name: 'my_role_name' // role_name is unique per app, so you can unambiguously identify your dna with role_name in this client,
  *      zome_name: 'zome',
  *      fn_name: 'fn',
  *      payload: { value: 'v' }
@@ -66,25 +66,25 @@ export class AppAgentWebsocket extends EventEmitter implements AppAgentClient {
     request: AppAgentCallZomeRequest,
     timeout?: number
   ): Promise<CallZomeResponse> {
-    if (request.role_id) {
+    if (request.role_name) {
       const appInfo = this.cachedAppInfo || (await this.appInfo());
       const cell_id = appInfo.cell_data.find(
-        (c) => c.role_id === request.role_id
+        (c) => c.role_name === request.role_name
       )?.cell_id;
 
       if (!cell_id) {
-        throw new Error(`No cell found with role_id ${request.role_id}`);
+        throw new Error(`No cell found with role_name ${request.role_name}`);
       }
 
       const callZomeRequest = {
-        ...omit(request, "role_id"),
+        ...omit(request, "role_name"),
         cell_id,
       };
       return this.appWebsocket.callZome(callZomeRequest, timeout);
     } else if (request.cell_id) {
       return this.appWebsocket.callZome(request as CallZomeRequest, timeout);
     } else {
-      throw new Error("callZome requires a role_id or cell_id arg");
+      throw new Error("callZome requires a role_name or cell_id arg");
     }
   }
 
