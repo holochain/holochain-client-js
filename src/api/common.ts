@@ -1,4 +1,4 @@
-import { RoleId } from "../types.js";
+import { RoleName } from "../types.js";
 
 const ERROR_TYPE = "error";
 export const DEFAULT_TIMEOUT = 15000;
@@ -73,21 +73,21 @@ export const promiseTimeout = (
  */
 export class CloneId {
   private static readonly CLONE_ID_DELIMITER = ".";
-  private readonly roleId: RoleId;
+  private readonly roleName: RoleName;
   private readonly index: number;
 
-  constructor(roleId: RoleId, index: number) {
-    this.roleId = roleId;
+  constructor(roleName: RoleName, index: number) {
+    this.roleName = roleName;
     this.index = index;
   }
 
   /**
    * Parse a role id of a clone cell to obtain a clone id instance.
-   * @param roleId Role id to parse.
+   * @param roleName Role id to parse.
    * @returns A clone id instance.
    */
-  static fromRoleId(roleId: RoleId) {
-    const parts = roleId.split(CloneId.CLONE_ID_DELIMITER);
+  static fromRoleName(roleName: RoleName) {
+    const parts = roleName.split(CloneId.CLONE_ID_DELIMITER);
     if (parts.length !== 2) {
       throw new Error(
         "Malformed clone id: must consist of {role id.clone index}"
@@ -97,10 +97,10 @@ export class CloneId {
   }
 
   toString() {
-    return `${this.roleId}${CloneId.CLONE_ID_DELIMITER}${this.index}`;
+    return `${this.roleName}${CloneId.CLONE_ID_DELIMITER}${this.index}`;
   }
 
-  getBaseRoleId() {
-    return this.roleId;
+  getBaseRoleName() {
+    return this.roleName;
   }
 }

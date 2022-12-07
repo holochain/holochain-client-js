@@ -1,3 +1,4 @@
+import { FnName, ZomeName } from "../api/index.js";
 import { AgentPubKey } from "../types.js";
 
 export type CapSecret = Uint8Array;
@@ -11,7 +12,7 @@ export interface CapClaim {
 export interface ZomeCallCapGrant {
   tag: string;
   access: CapAccess;
-  functions: Array<{ zome: string; fn_name: string }>;
+  functions: Array<[ZomeName, FnName]>;
 }
 
 export type CapAccess =

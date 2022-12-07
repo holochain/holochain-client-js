@@ -9,12 +9,12 @@ import {
   InstalledCell,
   KitsuneAgent,
   KitsuneSpace,
-  RoleId,
+  RoleName as RoleName,
   Signature,
   Timestamp,
   WasmHash,
 } from "../../types.js";
-import { DhtOp, Entry, Action } from "../../hdk/index.js";
+import { DhtOp, Entry, Action, ZomeCallCapGrant } from "../../hdk/index.js";
 import { Requester } from "../common.js";
 import {
   ArchiveCloneCellRequest,
@@ -110,6 +110,7 @@ export type DnaModifiers = {
   origin_time: Timestamp;
 };
 
+export type FnName = string;
 export type ZomeName = string;
 export type ZomeDefinition = [
   ZomeName,
@@ -184,7 +185,7 @@ export type AppRoleDnaManifest = {
   version?: DnaVersionFlexible;
 };
 export type AppRoleManifest = {
-  id: RoleId;
+  name: RoleName;
   provisioning?: CellProvisioning;
   dna: AppRoleDnaManifest;
 };
@@ -270,9 +271,19 @@ export interface DeleteArchivedCloneCellsRequest {
   // The app id that the clone cells belong to
   app_id: InstalledAppId;
   // The role id that the clone cells belong to
-  role_id: RoleId;
+  role_name: RoleName;
 }
 export type DeleteArchivedCloneCellsResponse = void;
+
+export interface GrantZomeCallCapabilityPayload {
+  /// Cell for which to authorize the capability.
+  cell_id: CellId;
+  /// Specifies the capability, consisting of zomes and functions to allow
+  /// signing for as well as access level, secret and assignees.
+  cap_grant: ZomeCallCapGrant;
+}
+export type GrantZomeCallCapabilityRequest = GrantZomeCallCapabilityPayload;
+export type GrantZomeCallCapabilityResponse = void;
 
 export interface AdminApi {
   attachAppInterface: Requester<
@@ -325,11 +336,15 @@ export interface AdminApi {
     DeleteArchivedCloneCellsRequest,
     DeleteArchivedCloneCellsResponse
   >;
+  grantZomeCallCapability: Requester<
+    GrantZomeCallCapabilityRequest,
+    GrantZomeCallCapabilityResponse
+  >;
 }
 
 export type InstallAppDnaPayload = {
   hash: HoloHash;
-  role_id: RoleId;
+  role_name: RoleName;
   membrane_proof?: MembraneProof;
 };
 

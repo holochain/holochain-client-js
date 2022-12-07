@@ -16,11 +16,11 @@ export type Signature = Uint8Array;
 export type CellId = [DnaHash, AgentPubKey];
 
 export type DnaProperties = any;
-export type RoleId = string;
+export type RoleName = string;
 
 export type InstalledCell = {
   cell_id: CellId;
-  role_id: RoleId;
+  role_name: RoleName;
 };
 
 export type Timestamp = number;
