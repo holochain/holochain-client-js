@@ -87,7 +87,7 @@ export class AppAgentWebsocket extends EventEmitter implements AppAgentClient {
     } else if (request.cell_id) {
       return this.appWebsocket.callZome(request as CallZomeRequest, timeout);
     } else {
-      throw new Error("callZome requires a role_id or cell_id arg");
+      throw new Error("callZome requires a role_name or cell_id arg");
     }
   }
 

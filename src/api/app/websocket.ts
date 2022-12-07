@@ -47,7 +47,7 @@ import {
   GossipInfoRequest,
   GossipInfoResponse,
 } from "./types.js";
-import { randomNonce } from "./util.js";
+import { getNonceExpiration, randomNonce } from "./util.js";
 
 export class AppWebsocket extends EventEmitter implements AppApi {
   client: WsClient;
@@ -128,14 +128,14 @@ export class AppWebsocket extends EventEmitter implements AppApi {
     this._requester("gossip_info");
 }
 
-type Nonce256Bit = Uint8Array;
+export type Nonce256Bit = Uint8Array;
 
-interface CallZomeRequestUnsigned extends CallZomeRequest {
+export interface CallZomeRequestUnsigned extends CallZomeRequest {
   nonce: Nonce256Bit;
   expires_at: number;
 }
 
-interface CallZomeRequestSigned extends CallZomeRequestUnsigned {
+export interface CallZomeRequestSigned extends CallZomeRequestUnsigned {
   signature: Uint8Array;
 }
 
@@ -145,7 +145,6 @@ interface CallZomeRequestUnsignedTauri
     CallZomeRequestUnsigned,
     "cap_secret" | "cell_id" | "provenance" | "nonce"
   > {
-  cap_secret: TauriByteArray | null;
   cell_id: [TauriByteArray, TauriByteArray];
   provenance: TauriByteArray;
   nonce: TauriByteArray;
@@ -165,10 +164,9 @@ const callZomeTransform: Transformer<
         cell_id: [Array.from(req.cell_id[0]), Array.from(req.cell_id[1])],
         zome_name: req.zome_name,
         fn_name: req.fn_name,
-        cap_secret: req.cap_secret === null ? null : Array.from(req.cap_secret),
         payload: req.payload,
         nonce: Array.from(randomNonce()),
-        expires_at: Date.now() + 5 * 60 * 1000 * 1000, // 5 mins in microseconds
+        expires_at: getNonceExpiration(),
       };
       const signedZomeCall: CallZomeRequestSigned = await invoke(
         "sign_zome_call",
