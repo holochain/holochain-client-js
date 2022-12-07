@@ -2,18 +2,15 @@
  * Defines AppWebsocket, an easy-to-use websocket implementation of the
  * Conductor API for apps
  *
- *    const client = AppWebsocket.connect(
- *      'ws://localhost:9000',
- *      signal => console.log('got a signal:', signal)
- *    )
+ *    const client = AppWebsocket.connect('ws://localhost:9000');
  *
- *    client.callZome({...})  // TODO: show what's in here
+ *    client.callZome({...})
  *      .then(() => {
  *        console.log('DNA successfully installed')
  *      })
  *      .catch(err => {
  *        console.error('problem installing DNA:', err)
- *      })
+ *      });
  */
 import { decode, encode } from "@msgpack/msgpack";
 import { EventEmitter } from "events";
@@ -63,6 +60,7 @@ export class AppWebsocket extends EventEmitter implements AppApi {
   static async connect(
     url: string,
     defaultTimeout?: number,
+    //** @deprecated */
     signalCb?: AppSignalCb
   ): Promise<AppWebsocket> {
     // Check if we are in the launcher's environment, and if so, redirect the url to connect to

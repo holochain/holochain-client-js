@@ -2,10 +2,7 @@
  * Defines AppAgentWebsocket, an easy-to-use websocket implementation of the
  * Conductor API for apps, restricted to a single app provided on initialization
  *
- *    const appWs = AppWebsocket.connect(
- *      'ws://localhost:9000',
- *      signal => console.log('got a signal:', signal)
- *    )
+ *    const appWs = AppWebsocket.connect('ws://localhost:9000')
  *
  *    const client = new AppAgentWebsocket(appWs, 'my_installed_app_id')
  *

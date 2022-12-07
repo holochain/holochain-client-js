@@ -84,8 +84,7 @@ export const withConductor =
   };
 
 export const installAppAndDna = async (
-  adminPort: number,
-  signalCb?: AppSignalCb
+  adminPort: number
 ): Promise<{
   installed_app_id: InstalledAppId;
   cell_id: CellId;
@@ -121,10 +120,6 @@ export const installAppAndDna = async (
   await admin.activateApp({ installed_app_id });
   // destructure to get whatever open port was assigned to the interface
   const { port: appPort } = await admin.attachAppInterface({ port: 0 });
-  const client = await AppWebsocket.connect(
-    `ws://localhost:${appPort}`,
-    12000,
-    signalCb
-  );
+  const client = await AppWebsocket.connect(`ws://localhost:${appPort}`, 12000);
   return { installed_app_id, cell_id, role_id, client, admin };
 };
