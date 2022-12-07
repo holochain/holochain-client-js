@@ -36,7 +36,6 @@
     "build": "rimraf ./lib && tsc -p tsconfig.build.json"
   },
   "dependencies": {
-    "@holochain/serialization": "file:../holochain-serialization-js/pkg",
     "@msgpack/msgpack": "^2.7.2",
     "cross-fetch": "^3.1.5",
     "eslint-config-prettier": "^8.5.0",
