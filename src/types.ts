@@ -29,3 +29,19 @@ export interface HoloHashed<T> {
   hash: HoloHash;
   content: T;
 }
+
+export type DnaGossipInfo = {
+  total_historical_gossip_throughput: HistoricalGossipThroughput;
+};
+
+export type HistoricalGossipThroughput = {
+  expected_op_bytes: InOut;
+  expected_op_count: InOut;
+  op_bytes: InOut;
+  op_count: InOut;
+};
+
+export type InOut = {
+  incoming: number;
+  outgoing: number;
+};

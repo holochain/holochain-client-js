@@ -15,13 +15,14 @@
  *        console.error('problem installing DNA:', err)
  *      })
  */
-import { hashZomeCall } from "@holochain/serialization";
-import { decode, encode } from "@msgpack/msgpack";
+import { decode } from "@msgpack/msgpack";
+import { invoke } from "@tauri-apps/api/tauri";
+import { EventEmitter } from "events";
 import {
   getLauncherEnvironment,
   isLauncher,
 } from "../../environments/launcher.js";
-import { AgentPubKey, InstalledAppId } from "../../types.js";
+import { InstalledAppId } from "../../types.js";
 import { FunctionName, ZomeName } from "../admin/types.js";
 import { WsClient } from "../client.js";
 import {
@@ -37,16 +38,17 @@ import {
   AppInfoRequest,
   AppInfoResponse,
   AppSignalCb,
-  CallZomeRequestGeneric,
-  CallZomeResponseGeneric,
   ArchiveCloneCellRequest,
-  CreateCloneCellRequest,
-  CreateCloneCellResponse,
   ArchiveCloneCellResponse,
   CallZomeRequest,
+  CallZomeRequestGeneric,
+  CallZomeResponseGeneric,
+  CreateCloneCellRequest,
+  CreateCloneCellResponse,
+  GossipInfoRequest,
+  GossipInfoResponse,
 } from "./types.js";
 import { randomNonce } from "./util.js";
-import { invoke } from "@tauri-apps/api/tauri";
 
 type TauriByteArray = number[];
 interface CallZomeRequestUnsignedTauri<Payload> {
@@ -60,7 +62,7 @@ interface CallZomeRequestUnsignedTauri<Payload> {
   expires_at: number;
 }
 
-export class AppWebsocket implements AppApi {
+export class AppWebsocket extends EventEmitter implements AppApi {
   client: WsClient;
   defaultTimeout: number;
   overrideInstalledAppId?: InstalledAppId;
@@ -70,6 +72,7 @@ export class AppWebsocket implements AppApi {
     defaultTimeout?: number,
     overrideInstalledAppId?: InstalledAppId
   ) {
+    super();
     this.client = client;
     this.defaultTimeout =
       defaultTimeout === undefined ? DEFAULT_TIMEOUT : defaultTimeout;
@@ -89,11 +92,16 @@ export class AppWebsocket implements AppApi {
     }
 
     const wsClient = await WsClient.connect(url, signalCb);
-    return new AppWebsocket(
+
+    const appWebsocket = new AppWebsocket(
       wsClient,
       defaultTimeout,
       env ? env.INSTALLED_APP_ID : undefined
     );
+
+    wsClient.on("signal", (signal) => appWebsocket.emit("signal", signal));
+
+    return appWebsocket;
   }
 
   _requester = <ReqI, ReqO, ResI, ResO>(
@@ -126,6 +134,9 @@ export class AppWebsocket implements AppApi {
     ArchiveCloneCellRequest,
     ArchiveCloneCellResponse
   > = this._requester("archive_clone_cell");
+
+  gossipInfo: Requester<GossipInfoRequest, GossipInfoResponse> =
+    this._requester("gossip_info");
 }
 
 const callZomeTransform: Transformer<
