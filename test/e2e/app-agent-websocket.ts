@@ -5,7 +5,7 @@ import {
 } from "../../src/api/app-agent/index.js";
 import { AppSignal, CallZomeRequest } from "../../src/api/app/index.js";
 import { CloneId } from "../../src/api/common.js";
-import { AppEntryType } from "../../src/hdk/entry.js";
+import { AppEntryDef } from "../../src/hdk/entry.js";
 import { installAppAndDna, withConductor } from "./util.js";
 
 const fakeAgentPubKey = () =>
@@ -35,9 +35,9 @@ test(
     t.equal(info.cell_data[0].role_name, role_name);
     t.deepEqual(info.status, { running: null });
 
-    const appEntryType: AppEntryType = {
-      id: 0,
-      zome_id: 0,
+    const appEntryDef: AppEntryDef = {
+      entry_index: 0,
+      zome_index: 0,
       visibility: { Private: null },
     };
 
@@ -47,7 +47,7 @@ test(
       zome_name: COORDINATOR_ZOME_NAME,
       fn_name: "echo_app_entry_type",
       provenance: cell_id[1],
-      payload: appEntryType,
+      payload: appEntryDef,
     });
 
     t.equal(response, null, "app entry type deserializes correctly");
@@ -58,7 +58,7 @@ test(
       zome_name: COORDINATOR_ZOME_NAME,
       fn_name: "echo_app_entry_type",
       provenance: cell_id[1],
-      payload: appEntryType,
+      payload: appEntryDef,
     });
 
     t.equal(

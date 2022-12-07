@@ -1,4 +1,4 @@
-import { hashZomeCall } from "@holochain/serialization/pkg/holochain_serialization_js.js";
+import { hashZomeCall } from "@holochain/serialization/holochain_serialization_js.js";
 import { encode } from "@msgpack/msgpack";
 import crypto from "crypto";
 import nacl from "tweetnacl";

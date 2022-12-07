@@ -13,12 +13,13 @@ import {
 import {
   AppSignal,
   AppWebsocket,
+  CallZomeRequest,
   CreateCloneCellRequest,
 } from "../../src/api/app/index.js";
 import { WsClient } from "../../src/api/client.js";
 import { generateSigningKeyPair } from "../../src/api/app/util.js";
 import { CloneId } from "../../src/api/common.js";
-import { AppEntryType } from "../../src/hdk/entry.js";
+import { AppEntryDef } from "../../src/hdk/entry.js";
 import {
   cleanSandboxConductors,
   FIXTURE_PATH,
@@ -28,7 +29,6 @@ import {
   launch,
   signZomeCall,
   withConductor,
-  ZomeCallUnsignedPayload,
 } from "./util.js";
 
 const delay = (ms: number) => new Promise((r) => setTimeout(r, ms));
@@ -339,18 +339,19 @@ test(
     t.deepEqual(info.cell_data[0].cell_id, cell_id);
     t.equal(info.cell_data[0].role_name, role_name);
     t.deepEqual(info.status, { running: null });
-    const appEntryType: AppEntryType = {
-      id: 0,
-      zome_id: 0,
+    const appEntryDef: AppEntryDef = {
+      entry_index: 0,
+      zome_index: 0,
       visibility: { Private: null },
     };
 
-    const unsignedZomeCallPayload: ZomeCallUnsignedPayload = {
+    const unsignedZomeCallPayload: CallZomeRequest = {
+      cap_secret: null,
       cell_id,
       zome_name: COORDINATOR_ZOME_NAME,
-      fn_name: "echo_app_entry_type",
+      fn_name: "echo_app_entry_def",
       provenance: cell_id[1],
-      payload: appEntryType,
+      payload: appEntryDef,
     };
 
     const signedZomeCall = await grantSigningKeyAndSignZomeCall(
@@ -358,7 +359,7 @@ test(
       unsignedZomeCallPayload
     );
     const response = await client.callZome(signedZomeCall, 30000);
-    t.equal(response, null, "app entry type deserializes correctly");
+    t.equal(response, null, "app entry def deserializes correctly");
 
     await admin.disableApp({ installed_app_id });
     info = await client.appInfo({ installed_app_id }, 1000);
@@ -375,7 +376,8 @@ test(
     t.deepEqual(info.cell_data[0].cell_id, cell_id);
     t.equal(info.cell_data[0].role_name, role_name);
     t.deepEqual(info.status, { running: null });
-    const unsignedZomeCallPayload: ZomeCallUnsignedPayload = {
+    const unsignedZomeCallPayload: CallZomeRequest = {
+      cap_secret: null,
       cell_id,
       zome_name: TEST_ZOME_NAME,
       fn_name: "foo",
@@ -414,45 +416,6 @@ test(
     } catch (e) {
       t.deepEqual(e, new Error("Response canceled by responder"));
     }
-  })
-);
-
-test(
-  "can handle a signal using signalCb",
-  withConductor(ADMIN_PORT, async (t: Test) => {
-    let resolveSignalPromise: (value?: unknown) => void | undefined;
-    const signalReceivedPromise = new Promise(
-      (resolve) => (resolveSignalPromise = resolve)
-    );
-    const signalCb = (signal: AppSignal) => {
-      t.deepEqual(signal, {
-        type: "Signal",
-        data: {
-          cellId: cell_id,
-          payload: "i am a signal",
-        },
-      });
-      resolveSignalPromise();
-    };
-
-    const { cell_id, client, admin } = await installAppAndDna(
-      ADMIN_PORT,
-      signalCb
-    );
-    // trigger an emit_signal
-    const unsignedZomeCallPayload: ZomeCallUnsignedPayload = {
-      cell_id,
-      zome_name: TEST_ZOME_NAME,
-      fn_name: "emitter",
-      provenance: fakeAgentPubKey(),
-      payload: null,
-    };
-    const signedZomeCall = await grantSigningKeyAndSignZomeCall(
-      admin,
-      unsignedZomeCallPayload
-    );
-    await client.callZome(signedZomeCall);
-    await signalReceivedPromise;
   })
 );
 
@@ -503,7 +466,8 @@ test(
         [[TEST_ZOME_NAME, "bar"]],
         signingKey
       );
-      const unsignedZomeCallPayload: ZomeCallUnsignedPayload = {
+      const unsignedZomeCallPayload: CallZomeRequest = {
+        cap_secret: null,
         cell_id,
         zome_name: TEST_ZOME_NAME,
         fn_name: "bar",
@@ -663,7 +627,8 @@ test(
     t.deepEqual(info.cell_data[0].cell_id, cell_id);
     t.equal(info.cell_data[0].role_name, role_name);
     t.deepEqual(info.status, { running: null });
-    const unsignedZomeCallPayload: ZomeCallUnsignedPayload = {
+    const unsignedZomeCallPayload: CallZomeRequest = {
+      cap_secret: null,
       cell_id,
       zome_name: TEST_ZOME_NAME,
       fn_name: "foo",
@@ -734,7 +699,8 @@ test(
       info.cell_data[0].cell_id[1],
       "clone cell agent key matches base cell agent key"
     );
-    const params: ZomeCallUnsignedPayload = {
+    const params: CallZomeRequest = {
+      cap_secret: null,
       cell_id: cloneCell.cell_id,
       zome_name: TEST_ZOME_NAME,
       fn_name: "foo",
@@ -776,7 +742,8 @@ test(
       1,
       "archived clone cell is not part of app info"
     );
-    const params: ZomeCallUnsignedPayload = {
+    const params: CallZomeRequest = {
+      cap_secret: null,
       cell_id: cloneCell.cell_id,
       zome_name: TEST_ZOME_NAME,
       fn_name: "foo",
@@ -821,7 +788,8 @@ test(
       2,
       "restored clone cell is part of app info"
     );
-    const params: ZomeCallUnsignedPayload = {
+    const params: CallZomeRequest = {
+      cap_secret: null,
       cell_id: cloneCell.cell_id,
       zome_name: TEST_ZOME_NAME,
       fn_name: "foo",

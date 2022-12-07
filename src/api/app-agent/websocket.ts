@@ -2,15 +2,12 @@
  * Defines AppAgentWebsocket, an easy-to-use websocket implementation of the
  * Conductor API for apps, restricted to a single app provided on initialization
  *
- *    const appWs = AppWebsocket.connect(
- *      'ws://localhost:9000',
- *      signal => console.log('got a signal:', signal)
- *    )
+ *    const appWs = AppWebsocket.connect('ws://localhost:9000')
  *
  *    const client = new AppAgentWebsocket(appWs, 'my_installed_app_id')
  *
  *    client.callZome({
- *      role_id: 'my_role_id' // role_id is unique per app, so you can unambiguously identify your dna with role_id in this client,
+ *      role_name: 'my_role_name' // role_name is unique per app, so you can unambiguously identify your dna with role_name in this client,
  *      zome_name: 'zome',
  *      fn_name: 'fn',
  *      payload: { value: 'v' }
@@ -76,11 +73,11 @@ export class AppAgentWebsocket extends EventEmitter implements AppAgentClient {
       )?.cell_id;
 
       if (!cell_id) {
-        throw new Error(`No cell found with role_id ${request.role_name}`);
+        throw new Error(`No cell found with role_name ${request.role_name}`);
       }
 
       const callZomeRequest = {
-        ...omit(request, "role_id"),
+        ...omit(request, "role_name"),
         cell_id,
       };
       return this.appWebsocket.callZome(callZomeRequest, timeout);

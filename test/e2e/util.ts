@@ -1,16 +1,21 @@
 // import { hashZomeCall } from "@holochain/serialization/holochain_serialization_js.js";
+import { hashZomeCall } from "@holochain/serialization/pkg";
 import { encode } from "@msgpack/msgpack";
 import { spawn } from "node:child_process";
 import { Test } from "tape";
 import nacl from "tweetnacl";
 import { AdminWebsocket } from "../../src/api/admin/websocket.js";
-import { AppSignalCb, CallZomeRequest } from "../../src/api/app/types.js";
+import { CallZomeRequest } from "../../src/api/app/types.js";
 import {
   generateSigningKeyPair,
   randomCapSecret,
   randomNonce,
 } from "../../src/api/app/util.js";
-import { AppWebsocket } from "../../src/api/app/websocket.js";
+import {
+  AppWebsocket,
+  CallZomeRequestSigned,
+  CallZomeRequestUnsigned,
+} from "../../src/api/app/websocket.js";
 import { FunctionName, ZomeName } from "../../src/api/index.js";
 import { CapSecret } from "../../src/hdk/capabilities.js";
 import {
@@ -21,11 +26,6 @@ import {
 } from "../../src/types.js";
 
 export const FIXTURE_PATH = "./test/e2e/fixture";
-export type ZomeCallUnsignedPayload =
-  | Pick<
-      CallZomeRequestUnsigned,
-      "cell_id" | "zome_name" | "fn_name" | "provenance" | "payload"
-    > & { cap_secret?: CapSecret };
 
 const LAIR_PASSPHRASE = "passphrase";
 
@@ -109,8 +109,7 @@ export const withConductor =
   };
 
 export const installAppAndDna = async (
-  adminPort: number,
-  signalCb?: AppSignalCb
+  adminPort: number
 ): Promise<{
   installed_app_id: InstalledAppId;
   cell_id: CellId;
@@ -137,7 +136,7 @@ export const installAppAndDna = async (
     dnas: [
       {
         hash,
-        role_name: role_name,
+        role_name,
       },
     ],
   });
@@ -146,11 +145,7 @@ export const installAppAndDna = async (
   await admin.enableApp({ installed_app_id });
   // destructure to get whatever open port was assigned to the interface
   const { port: appPort } = await admin.attachAppInterface({ port: 0 });
-  const client = await AppWebsocket.connect(
-    `ws://localhost:${appPort}`,
-    12000,
-    signalCb
-  );
+  const client = await AppWebsocket.connect(`ws://localhost:${appPort}`, 12000);
   return { installed_app_id, cell_id, role_name: role_name, client, admin };
 };
 
@@ -181,15 +176,15 @@ export const signZomeCall = (
   capSecret: CapSecret,
   signingKey: AgentPubKey,
   keyPair: nacl.SignKeyPair,
-  payload: ZomeCallUnsignedPayload
+  zomeCall: CallZomeRequest
 ) => {
   const unsignedZomeCallPayload: CallZomeRequestUnsigned = {
     cap_secret: capSecret,
-    cell_id: payload.cell_id,
-    zome_name: payload.zome_name,
-    fn_name: payload.fn_name,
+    cell_id: zomeCall.cell_id,
+    zome_name: zomeCall.zome_name,
+    fn_name: zomeCall.fn_name,
     provenance: signingKey,
-    payload: encode(payload.payload),
+    payload: encode(zomeCall.payload),
     nonce: randomNonce(),
     expires_at: new Date().getTime() * 1000 + 1000000 * 60 * 5, // 5 mins from now in microseconds
   };
@@ -198,7 +193,7 @@ export const signZomeCall = (
     .sign(hashedZomeCall, keyPair.secretKey)
     .subarray(0, nacl.sign.signatureLength);
 
-  const signedZomeCall: CallZomeRequest = {
+  const signedZomeCall: CallZomeRequestSigned = {
     ...unsignedZomeCallPayload,
     signature,
   };
@@ -207,7 +202,7 @@ export const signZomeCall = (
 
 export const grantSigningKeyAndSignZomeCall = async (
   admin: AdminWebsocket,
-  payload: ZomeCallUnsignedPayload
+  payload: CallZomeRequest
 ) => {
   const [keyPair, signingKey] = generateSigningKeyPair();
   const capSecret = await grantSigningKey(

@@ -3,15 +3,15 @@ import { AgentPubKey } from "../types.js";
 import { CounterSigningSessionData } from "./countersigning.js";
 
 export type EntryVisibility = { Public: null } | { Private: null };
-export type AppEntryType = {
-  id: number;
-  zome_id: number;
+export type AppEntryDef = {
+  entry_index: number;
+  zome_index: number;
   visibility: EntryVisibility;
 };
 
 export type EntryType =
   | "Agent"
-  | { App: AppEntryType }
+  | { App: AppEntryDef }
   | "CapClaim"
   | "CapGrant";
 
