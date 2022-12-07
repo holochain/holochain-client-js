@@ -19,8 +19,6 @@ import {
   ZomeName,
 } from "../admin/index.js";
 
-export type Nonce256Bit = Uint8Array;
-
 export type CallZomeRequestGeneric<Payload> = {
   cap_secret: CapSecret | null;
   cell_id: CellId;
@@ -29,15 +27,7 @@ export type CallZomeRequestGeneric<Payload> = {
   payload: Payload;
   provenance: AgentPubKey;
 };
-
-export interface CallZomeRequestUnsigned extends CallZomeRequestGeneric<any> {
-  nonce: Nonce256Bit;
-  expires_at: number;
-}
-
-export interface CallZomeRequest extends CallZomeRequestUnsigned {
-  signature: Uint8Array;
-}
+export type CallZomeRequest = CallZomeRequestGeneric<any>;
 
 export type CallZomeResponseGeneric<Payload> = Payload;
 export type CallZomeResponse = CallZomeResponseGeneric<any>;

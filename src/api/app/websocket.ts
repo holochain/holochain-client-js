@@ -23,7 +23,6 @@ import {
   isLauncher,
 } from "../../environments/launcher.js";
 import { InstalledAppId } from "../../types.js";
-import { FunctionName, ZomeName } from "../admin/types.js";
 import { WsClient } from "../client.js";
 import {
   catchError,
@@ -41,7 +40,7 @@ import {
   ArchiveCloneCellRequest,
   ArchiveCloneCellResponse,
   CallZomeRequest,
-  CallZomeRequestGeneric,
+  CallZomeResponse,
   CallZomeResponseGeneric,
   CreateCloneCellRequest,
   CreateCloneCellResponse,
@@ -49,18 +48,6 @@ import {
   GossipInfoResponse,
 } from "./types.js";
 import { randomNonce } from "./util.js";
-
-type TauriByteArray = number[];
-interface CallZomeRequestUnsignedTauri<Payload> {
-  cap_secret: TauriByteArray | null;
-  cell_id: [TauriByteArray, TauriByteArray];
-  zome_name: ZomeName;
-  fn_name: FunctionName;
-  payload: Payload;
-  provenance: TauriByteArray;
-  nonce: TauriByteArray;
-  expires_at: number;
-}
 
 export class AppWebsocket extends EventEmitter implements AppApi {
   client: WsClient;
@@ -124,8 +111,10 @@ export class AppWebsocket extends EventEmitter implements AppApi {
     appInfoTransform(this)
   );
 
-  callZome: Requester<CallZomeRequest, CallZomeResponseGeneric<any>> =
-    this._requester("zome_call", callZomeTransform);
+  callZome: Requester<CallZomeRequest, CallZomeResponse> = this._requester(
+    "zome_call",
+    callZomeTransform
+  );
 
   createCloneCell: Requester<CreateCloneCellRequest, CreateCloneCellResponse> =
     this._requester("create_clone_cell");
@@ -139,15 +128,39 @@ export class AppWebsocket extends EventEmitter implements AppApi {
     this._requester("gossip_info");
 }
 
+type Nonce256Bit = Uint8Array;
+
+interface CallZomeRequestUnsigned extends CallZomeRequest {
+  nonce: Nonce256Bit;
+  expires_at: number;
+}
+
+interface CallZomeRequestSigned extends CallZomeRequestUnsigned {
+  signature: Uint8Array;
+}
+
+type TauriByteArray = number[]; // Tauri requires a number array instead of a Uint8Array
+interface CallZomeRequestUnsignedTauri
+  extends Omit<
+    CallZomeRequestUnsigned,
+    "cap_secret" | "cell_id" | "provenance" | "nonce"
+  > {
+  cap_secret: TauriByteArray | null;
+  cell_id: [TauriByteArray, TauriByteArray];
+  provenance: TauriByteArray;
+  nonce: TauriByteArray;
+  expires_at: number;
+}
+
 const callZomeTransform: Transformer<
-  CallZomeRequestGeneric<any>,
-  Promise<CallZomeRequest>,
+  CallZomeRequest,
+  Promise<CallZomeRequestSigned>,
   CallZomeResponseGeneric<Uint8Array>,
-  CallZomeResponseGeneric<any>
+  CallZomeResponse
 > = {
   input: async (req) => {
     if (isLauncher) {
-      const zomeCallUnsigned: CallZomeRequestUnsignedTauri<any> = {
+      const zomeCallUnsigned: CallZomeRequestUnsignedTauri = {
         provenance: Array.from(req.provenance),
         cell_id: [Array.from(req.cell_id[0]), Array.from(req.cell_id[1])],
         zome_name: req.zome_name,
@@ -155,11 +168,12 @@ const callZomeTransform: Transformer<
         cap_secret: req.cap_secret === null ? null : Array.from(req.cap_secret),
         payload: req.payload,
         nonce: Array.from(randomNonce()),
-        expires_at: Date.now() + 5 * 60 * 60 * 1000,
+        expires_at: Date.now() + 5 * 60 * 1000 * 1000, // 5 mins in microseconds
       };
-      const signedZomeCall: CallZomeRequest = await invoke("sign_zome_call", {
-        zomeCallUnsigned,
-      });
+      const signedZomeCall: CallZomeRequestSigned = await invoke(
+        "sign_zome_call",
+        { zomeCallUnsigned }
+      );
       return signedZomeCall;
     } else {
       throw new Error("not implemented!");
