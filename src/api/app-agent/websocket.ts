@@ -69,14 +69,14 @@ export class AppAgentWebsocket extends EventEmitter implements AppAgentClient {
     request: AppAgentCallZomeRequest,
     timeout?: number
   ): Promise<CallZomeResponse> {
-    if (request.role_id) {
+    if (request.role_name) {
       const appInfo = this.cachedAppInfo || (await this.appInfo());
       const cell_id = appInfo.cell_data.find(
-        (c) => c.role_id === request.role_id
+        (c) => c.role_name === request.role_name
       )?.cell_id;
 
       if (!cell_id) {
-        throw new Error(`No cell found with role_id ${request.role_id}`);
+        throw new Error(`No cell found with role_id ${request.role_name}`);
       }
 
       const callZomeRequest = {

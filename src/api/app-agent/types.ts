@@ -4,15 +4,15 @@ import {
   CreateCloneCellRequest,
   CreateCloneCellResponse,
 } from "..";
-import { CellId, RoleId } from "../..";
+import { CellId, RoleName } from "../..";
 import {
-  CallZomeRequest,
   AppInfoResponse,
   ArchiveCloneCellRequest,
+  CallZomeRequest,
 } from "../app";
 
 export type AppAgentCallZomeRequest = Omit<CallZomeRequest, "cell_id"> & {
-  role_id?: RoleId;
+  role_name?: RoleName;
   cell_id?: CellId;
 };
 

@@ -1,14 +1,10 @@
-import { hashZomeCall } from "@holochain/serialization/holochain_serialization_js.js";
+// import { hashZomeCall } from "@holochain/serialization/holochain_serialization_js.js";
 import { encode } from "@msgpack/msgpack";
 import { spawn } from "node:child_process";
 import { Test } from "tape";
 import nacl from "tweetnacl";
 import { AdminWebsocket } from "../../src/api/admin/websocket.js";
-import {
-  AppSignalCb,
-  CallZomeRequest,
-  CallZomeRequestUnsigned,
-} from "../../src/api/app/types.js";
+import { AppSignalCb, CallZomeRequest } from "../../src/api/app/types.js";
 import {
   generateSigningKeyPair,
   randomCapSecret,
