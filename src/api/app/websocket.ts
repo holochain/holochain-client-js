@@ -13,7 +13,7 @@
  *      });
  */
 import { decode, encode } from "@msgpack/msgpack";
-import { EventEmitter } from "events";
+import Emittery from "emittery";
 import { getLauncherEnvironment } from "../../environments/launcher.js";
 import { InstalledAppId } from "../../types.js";
 import { WsClient } from "../client.js";
@@ -40,7 +40,7 @@ import {
   GossipInfoResponse,
 } from "./types.js";
 
-export class AppWebsocket extends EventEmitter implements AppApi {
+export class AppWebsocket extends Emittery implements AppApi {
   client: WsClient;
   defaultTimeout: number;
   overrideInstalledAppId?: InstalledAppId;

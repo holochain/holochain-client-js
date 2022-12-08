@@ -20,8 +20,8 @@
  *      })
  */
 
-import { EventEmitter } from "events";
-import omit from "lodash/omit.js";
+ import Emittery from "emittery";
+ import omit from "lodash/omit.js";
 
 import { InstalledAppId } from "../../types.js";
 import {
@@ -40,7 +40,7 @@ import {
   AppCreateCloneCellRequest,
 } from "./types.js";
 
-export class AppAgentWebsocket extends EventEmitter implements AppAgentClient {
+export class AppAgentWebsocket extends Emittery implements AppAgentClient {
   appWebsocket: AppWebsocket;
   installedAppId: InstalledAppId;
   cachedAppInfo?: InstalledAppInfo;

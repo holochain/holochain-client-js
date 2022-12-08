@@ -1,6 +1,6 @@
 import { decode, encode } from "@msgpack/msgpack";
 import Websocket from "isomorphic-ws";
-import { EventEmitter } from "events";
+import Emittery from "emittery";
 import { AppSignal, AppSignalCb, SignalResponseGeneric } from "./app/types.js";
 
 /**
@@ -9,7 +9,7 @@ import { AppSignal, AppSignalCb, SignalResponseGeneric } from "./app/types.js";
  *
  * Uses Holochain's websocket WireMessage for communication.
  */
-export class WsClient extends EventEmitter {
+export class WsClient extends Emittery {
   socket: Websocket;
   pendingRequests: Record<
     number,

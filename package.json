@@ -41,7 +41,7 @@
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-tsdoc": "^0.2.16",
-    "events": "^3.3.0",
+    "emittery": "^1.0.1",
     "isomorphic-ws": "^5.0.0",
     "lodash": "^4.5.0",
     "prettier": "^2.6.2",
