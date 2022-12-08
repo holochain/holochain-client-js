@@ -9,16 +9,14 @@ import {
   DumpStateResponse,
   EnableAppResponse,
   InstalledAppInfoStatus,
-} from "../../src/api/admin/index.js";
-import {
   AppSignal,
   AppWebsocket,
   CallZomeRequest,
   CreateCloneCellRequest,
-} from "../../src/api/app/index.js";
+  CloneId,
+  AppEntryDef
+} from "../../src/index.js";
 import { WsClient } from "../../src/api/client.js";
-import { CloneId } from "../../src/api/common.js";
-import { AppEntryDef } from "../../src/hdk/entry.js";
 import {
   cleanSandboxConductors,
   FIXTURE_PATH,

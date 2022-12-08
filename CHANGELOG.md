@@ -6,7 +6,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Added
 ### Removed
 ### Changed
+- EventEmitter -> Emittery
 ### Fixed
+- Missing export of AppAgentWebsocket
 
 ## 2022-12-07: v0.10.0
 ### Added
