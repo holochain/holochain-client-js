@@ -20,8 +20,8 @@
  *      })
  */
 
- import Emittery from "emittery";
- import omit from "lodash/omit.js";
+import Emittery, { UnsubscribeFunction } from "emittery";
+import omit from "lodash/omit.js";
 
 import { InstalledAppId } from "../../types.js";
 import {
@@ -36,21 +36,26 @@ import {
 import {
   AppAgentCallZomeRequest,
   AppAgentClient,
+  AppAgentEvents,
   AppArchiveCloneCellRequest,
   AppCreateCloneCellRequest,
+  RoleNameCallZomeRequest,
 } from "./types.js";
 
-export class AppAgentWebsocket extends Emittery implements AppAgentClient {
+export class AppAgentWebsocket implements AppAgentClient {
   appWebsocket: AppWebsocket;
   installedAppId: InstalledAppId;
   cachedAppInfo?: InstalledAppInfo;
 
+  emitter = new Emittery<AppAgentEvents>();
+
   constructor(appWebsocket: AppWebsocket, installedAppId: InstalledAppId) {
-    super();
     this.appWebsocket = appWebsocket;
     this.installedAppId = installedAppId;
 
-    this.appWebsocket.on("signal", (signal) => this.emit("signal", signal));
+    this.appWebsocket.on("signal", (signal) =>
+      this.emitter.emit("signal", signal)
+    );
   }
 
   async appInfo(): Promise<AppInfoResponse> {
@@ -66,14 +71,16 @@ export class AppAgentWebsocket extends Emittery implements AppAgentClient {
     request: AppAgentCallZomeRequest,
     timeout?: number
   ): Promise<CallZomeResponse> {
-    if (request.role_name) {
+    const role_name: string | undefined = (request as RoleNameCallZomeRequest)
+      .role_name;
+    if (role_name) {
       const appInfo = this.cachedAppInfo || (await this.appInfo());
       const cell_id = appInfo.cell_data.find(
-        (c) => c.role_name === request.role_name
+        (c) => c.role_name === role_name
       )?.cell_id;
 
       if (!cell_id) {
-        throw new Error(`No cell found with role_name ${request.role_name}`);
+        throw new Error(`No cell found with role_name ${role_name}`);
       }
 
       const callZomeRequest = {
@@ -81,7 +88,7 @@ export class AppAgentWebsocket extends Emittery implements AppAgentClient {
         cell_id,
       };
       return this.appWebsocket.callZome(callZomeRequest, timeout);
-    } else if (request.cell_id) {
+    } else if ((request as CallZomeRequest).cell_id) {
       return this.appWebsocket.callZome(request as CallZomeRequest, timeout);
     } else {
       throw new Error("callZome requires a role_name or cell_id arg");
@@ -108,5 +115,12 @@ export class AppAgentWebsocket extends Emittery implements AppAgentClient {
       app_id: this.installedAppId,
       ...args,
     });
+  }
+
+  on<Name extends keyof AppAgentEvents>(
+    eventName: Name | readonly Name[],
+    listener: (eventData: AppAgentEvents[Name]) => void | Promise<void>
+  ): UnsubscribeFunction {
+    return this.emitter.on(eventName, listener);
   }
 }
