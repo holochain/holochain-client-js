@@ -1,4 +1,4 @@
-import { EventEmitter } from "events";
+import Emittery from "emittery";
 import {
   ArchiveCloneCellResponse,
   CreateCloneCellRequest,
@@ -23,7 +23,7 @@ export type AppArchiveCloneCellRequest = Omit<
   "app_id"
 >;
 
-export interface AppAgentClient extends EventEmitter {
+export interface AppAgentClient extends Emittery {
   callZome(args: AppAgentCallZomeRequest, timeout?: number): Promise<any>;
   appInfo(): Promise<AppInfoResponse>;
   createCloneCell(

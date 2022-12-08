@@ -2,10 +2,11 @@ import test, { Test } from "tape";
 import {
   AppAgentWebsocket,
   AppCreateCloneCellRequest,
-} from "../../src/api/app-agent/index.js";
-import { AppSignal, CallZomeRequest } from "../../src/api/app/index.js";
-import { CloneId } from "../../src/api/common.js";
-import { AppEntryDef } from "../../src/hdk/entry.js";
+  AppSignal,
+  CallZomeRequest,
+  CloneId,
+  AppEntryDef
+} from "../../src/index.js";
 import { installAppAndDna, withConductor } from "./util.js";
 
 const fakeAgentPubKey = () =>

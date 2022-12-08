@@ -12,13 +12,9 @@
  *        console.error('problem installing DNA:', err)
  *      });
  */
-import { decode } from "@msgpack/msgpack";
-import { invoke } from "@tauri-apps/api/tauri";
-import { EventEmitter } from "events";
-import {
-  getLauncherEnvironment,
-  isLauncher,
-} from "../../environments/launcher.js";
+import { decode, encode } from "@msgpack/msgpack";
+import Emittery from "emittery";
+import { getLauncherEnvironment } from "../../environments/launcher.js";
 import { InstalledAppId } from "../../types.js";
 import { WsClient } from "../client.js";
 import {
@@ -46,7 +42,7 @@ import {
 } from "./types.js";
 import { getNonceExpiration, randomNonce } from "./util.js";
 
-export class AppWebsocket extends EventEmitter implements AppApi {
+export class AppWebsocket extends Emittery implements AppApi {
   client: WsClient;
   defaultTimeout: number;
   overrideInstalledAppId?: InstalledAppId;

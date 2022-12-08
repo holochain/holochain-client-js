@@ -2,32 +2,26 @@ import { decode } from "@msgpack/msgpack";
 import fs from "node:fs";
 import test, { Test } from "tape";
 import zlib from "zlib";
+import { WsClient } from "../../src/api/client.js";
 import {
   AdminWebsocket,
+  AppEntryDef,
+  AppSignal,
   AppStatusFilter,
+  AppWebsocket,
+  CallZomeRequest,
+  CloneId,
+  CreateCloneCellRequest,
   DnaBundle,
   DumpStateResponse,
   EnableAppResponse,
   InstalledAppInfoStatus,
-} from "../../src/api/admin/index.js";
-import {
-  AppSignal,
-  AppWebsocket,
-  CallZomeRequest,
-  CreateCloneCellRequest,
-} from "../../src/api/app/index.js";
-import { WsClient } from "../../src/api/client.js";
-import { generateSigningKeyPair } from "../../src/api/app/util.js";
-import { CloneId } from "../../src/api/common.js";
-import { AppEntryDef } from "../../src/hdk/entry.js";
+} from "../../src/index.js";
 import {
   cleanSandboxConductors,
   FIXTURE_PATH,
-  grantSigningKey,
-  grantSigningKeyAndSignZomeCall,
   installAppAndDna,
   launch,
-  signZomeCall,
   withConductor,
 } from "./util.js";
 
