@@ -6,11 +6,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Added
 ### Removed
 ### Changed
-- EventEmitter -> Emittery
+### Fixed
+
+## 2022-12-08: v0.10.2
 ### Fixed
 - Missing export of AppAgentWebsocket
 
-## 2022-12-08: v0.10.0
+## 2022-12-08: v0.10.1
 ### Fixed
 - Switch event emitter package from "events" to "Emittery".
 
