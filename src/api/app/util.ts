@@ -1,4 +1,4 @@
-import { hashZomeCall } from "@holochain/serialization/holochain_serialization_js.js";
+import { hashZomeCall } from "@holochain/serialization/pkg/holochain_serialization_js.js";
 import { encode } from "@msgpack/msgpack";
 import crypto from "crypto";
 import nacl from "tweetnacl";
@@ -49,7 +49,7 @@ export const grantSigningKey = async (
   cellId: CellId,
   functions: Array<[ZomeName, FunctionName]>,
   signingKey: AgentPubKey
-) => {
+): Promise<CapSecret> => {
   const capSecret = randomCapSecret();
   await admin.grantZomeCallCapability({
     cell_id: cellId,
@@ -81,7 +81,7 @@ export const signZomeCall = (
     provenance: signingKey,
     payload: encode(payload.payload),
     nonce: randomNonce(),
-    expires_at: Date.now() + 1000 * 1000 * 60 * 5, // 5 mins from now in microseconds
+    expires_at: getNonceExpiration(),
   };
   const hashedZomeCall = hashZomeCall(unsignedZomeCallPayload);
   const signature = nacl

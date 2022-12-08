@@ -1,29 +1,9 @@
 // import { hashZomeCall } from "@holochain/serialization/holochain_serialization_js.js";
-import { hashZomeCall } from "@holochain/serialization/pkg";
-import { encode } from "@msgpack/msgpack";
 import { spawn } from "node:child_process";
 import { Test } from "tape";
-import nacl from "tweetnacl";
 import { AdminWebsocket } from "../../src/api/admin/websocket.js";
-import { CallZomeRequest } from "../../src/api/app/types.js";
-import {
-  generateSigningKeyPair,
-  randomCapSecret,
-  randomNonce,
-} from "../../src/api/app/util.js";
-import {
-  AppWebsocket,
-  CallZomeRequestSigned,
-  CallZomeRequestUnsigned,
-} from "../../src/api/app/websocket.js";
-import { FunctionName, ZomeName } from "../../src/api/index.js";
-import { CapSecret } from "../../src/hdk/capabilities.js";
-import {
-  AgentPubKey,
-  CellId,
-  InstalledAppId,
-  RoleName,
-} from "../../src/types.js";
+import { AppWebsocket } from "../../src/api/app/websocket.js";
+import { CellId, InstalledAppId, RoleName } from "../../src/types.js";
 
 export const FIXTURE_PATH = "./test/e2e/fixture";
 
@@ -147,71 +127,4 @@ export const installAppAndDna = async (
   const { port: appPort } = await admin.attachAppInterface({ port: 0 });
   const client = await AppWebsocket.connect(`ws://localhost:${appPort}`, 12000);
   return { installed_app_id, cell_id, role_name: role_name, client, admin };
-};
-
-export const grantSigningKey = async (
-  admin: AdminWebsocket,
-  cellId: CellId,
-  functions: Array<[ZomeName, FunctionName]>,
-  signingKey: AgentPubKey
-) => {
-  const capSecret = randomCapSecret();
-  await admin.grantZomeCallCapability({
-    cell_id: cellId,
-    cap_grant: {
-      tag: "zome-call-signing-key",
-      functions,
-      access: {
-        Assigned: {
-          secret: capSecret,
-          assignees: [signingKey],
-        },
-      },
-    },
-  });
-  return capSecret;
-};
-
-export const signZomeCall = (
-  capSecret: CapSecret,
-  signingKey: AgentPubKey,
-  keyPair: nacl.SignKeyPair,
-  zomeCall: CallZomeRequest
-) => {
-  const unsignedZomeCallPayload: CallZomeRequestUnsigned = {
-    cap_secret: capSecret,
-    cell_id: zomeCall.cell_id,
-    zome_name: zomeCall.zome_name,
-    fn_name: zomeCall.fn_name,
-    provenance: signingKey,
-    payload: encode(zomeCall.payload),
-    nonce: randomNonce(),
-    expires_at: new Date().getTime() * 1000 + 1000000 * 60 * 5, // 5 mins from now in microseconds
-  };
-  const hashedZomeCall = hashZomeCall(unsignedZomeCallPayload);
-  const signature = nacl
-    .sign(hashedZomeCall, keyPair.secretKey)
-    .subarray(0, nacl.sign.signatureLength);
-
-  const signedZomeCall: CallZomeRequestSigned = {
-    ...unsignedZomeCallPayload,
-    signature,
-  };
-  return signedZomeCall;
-};
-
-export const grantSigningKeyAndSignZomeCall = async (
-  admin: AdminWebsocket,
-  payload: CallZomeRequest
-) => {
-  const [keyPair, signingKey] = generateSigningKeyPair();
-  const capSecret = await grantSigningKey(
-    admin,
-    payload.cell_id,
-    [[payload.zome_name, payload.fn_name]],
-    signingKey
-  );
-  payload = { ...payload, cap_secret: capSecret };
-  const signedZomeCall = signZomeCall(capSecret, signingKey, keyPair, payload);
-  return signedZomeCall;
 };

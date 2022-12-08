@@ -36,7 +36,7 @@
     "build": "rimraf ./lib && tsc -p tsconfig.build.json"
   },
   "dependencies": {
-    "@holochain/serialization": "file:../holochain-serialization-js",
+    "@holochain/serialization": "git://github.com/holochain/holochain-serialization-js",
     "@msgpack/msgpack": "^2.7.2",
     "@tauri-apps/api": "^1.2.0",
     "cross-fetch": "^3.1.5",

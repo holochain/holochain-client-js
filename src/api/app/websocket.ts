@@ -12,10 +12,19 @@
  *        console.error('problem installing DNA:', err)
  *      });
  */
+import { hashZomeCall } from "@holochain/serialization/pkg/holochain_serialization_js.js";
 import { decode, encode } from "@msgpack/msgpack";
+import { invoke } from "@tauri-apps/api/tauri";
+import nacl from "tweetnacl";
 import Emittery from "emittery";
-import { getLauncherEnvironment } from "../../environments/launcher.js";
-import { InstalledAppId } from "../../types.js";
+import {
+  getLauncherEnvironment,
+  isLauncher,
+} from "../../environments/launcher.js";
+import { CapSecret } from "../../hdk/capabilities.js";
+import { AgentPubKey, CellId, InstalledAppId } from "../../types.js";
+import { FunctionName, ZomeName } from "../admin/types.js";
+import { AdminWebsocket } from "../admin/websocket.js";
 import { WsClient } from "../client.js";
 import {
   catchError,
@@ -40,7 +49,12 @@ import {
   GossipInfoRequest,
   GossipInfoResponse,
 } from "./types.js";
-import { getNonceExpiration, randomNonce } from "./util.js";
+import {
+  generateSigningKeyPair,
+  getNonceExpiration,
+  grantSigningKey,
+  randomNonce,
+} from "./util.js";
 
 export class AppWebsocket extends Emittery implements AppApi {
   client: WsClient;
@@ -125,6 +139,7 @@ export class AppWebsocket extends Emittery implements AppApi {
 export type Nonce256Bit = Uint8Array;
 
 export interface CallZomeRequestUnsigned extends CallZomeRequest {
+  cap_secret: CapSecret;
   nonce: Nonce256Bit;
   expires_at: number;
 }
@@ -144,6 +159,29 @@ interface CallZomeRequestUnsignedTauri
   nonce: TauriByteArray;
   expires_at: number;
 }
+
+const signingProps: Map<
+  CellId,
+  {
+    capSecret: CapSecret;
+    keyPair: nacl.SignKeyPair;
+    signingKey: AgentPubKey;
+  }
+> = new Map();
+export const setSigningPops = async (
+  adminWs: AdminWebsocket,
+  cellId: CellId,
+  functions: [[ZomeName, FunctionName]]
+) => {
+  const [keyPair, signingKey] = generateSigningKeyPair();
+  const capSecret = await grantSigningKey(
+    adminWs,
+    cellId,
+    functions,
+    signingKey
+  );
+  signingProps.set(cellId, { capSecret, keyPair, signingKey });
+};
 
 const callZomeTransform: Transformer<
   CallZomeRequest,
@@ -168,7 +206,30 @@ const callZomeTransform: Transformer<
       );
       return signedZomeCall;
     } else {
-      throw new Error("not implemented!");
+      const signingPropsForCell = signingProps.get(req.cell_id);
+      if (signingPropsForCell) {
+        const unsignedZomeCall: CallZomeRequestUnsigned = {
+          ...req,
+          payload: encode(req.payload),
+          cap_secret: signingPropsForCell.capSecret,
+          nonce: randomNonce(),
+          expires_at: getNonceExpiration(),
+        };
+        const hashedZomeCall = hashZomeCall(unsignedZomeCall);
+        const signature = nacl
+          .sign(hashedZomeCall, signingPropsForCell.keyPair.secretKey)
+          .subarray(0, nacl.sign.signatureLength);
+
+        const signedZomeCall: CallZomeRequestSigned = {
+          ...unsignedZomeCall,
+          signature,
+        };
+        return signedZomeCall;
+      } else {
+        throw new Error(
+          "cannot sign zome call: signing properties have not been set"
+        );
+      }
     }
   },
   output: (res) => decode(res),
