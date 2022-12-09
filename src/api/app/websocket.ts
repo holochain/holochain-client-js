@@ -196,7 +196,7 @@ const callZomeTransform: Transformer<
         cell_id: [Array.from(req.cell_id[0]), Array.from(req.cell_id[1])],
         zome_name: req.zome_name,
         fn_name: req.fn_name,
-        payload: req.payload,
+        payload: encode(req.payload),
         nonce: Array.from(randomNonce()),
         expires_at: getNonceExpiration(),
       };
