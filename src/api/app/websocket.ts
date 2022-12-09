@@ -139,7 +139,7 @@ export class AppWebsocket extends Emittery implements AppApi {
 export type Nonce256Bit = Uint8Array;
 
 export interface CallZomeRequestUnsigned extends CallZomeRequest {
-  cap_secret: CapSecret;
+  cap_secret: CapSecret | null;
   nonce: Nonce256Bit;
   expires_at: number;
 }
@@ -159,6 +159,18 @@ interface CallZomeRequestUnsignedTauri
   nonce: TauriByteArray;
   expires_at: number;
 }
+
+interface CallZomeRequestSignedTauri // Tauri requires a number array instead of a Uint8Array
+  extends Omit<
+  CallZomeRequestSigned,
+    "cap_secret" | "cell_id" | "provenance" | "nonce"
+  > {
+  cell_id: [TauriByteArray, TauriByteArray];
+  provenance: TauriByteArray;
+  nonce: TauriByteArray;
+  expires_at: number;
+}
+
 
 const signingProps: Map<
   CellId,
@@ -190,20 +202,35 @@ const callZomeTransform: Transformer<
   CallZomeResponse
 > = {
   input: async (req) => {
+    // need to also check for cap secret.
     if (isLauncher) {
       const zomeCallUnsigned: CallZomeRequestUnsignedTauri = {
         provenance: Array.from(req.provenance),
         cell_id: [Array.from(req.cell_id[0]), Array.from(req.cell_id[1])],
         zome_name: req.zome_name,
         fn_name: req.fn_name,
-        payload: req.payload,
+        payload: Array.from(encode(req.payload)),
         nonce: Array.from(randomNonce()),
         expires_at: getNonceExpiration(),
       };
-      const signedZomeCall: CallZomeRequestSigned = await invoke(
+
+      let signedZomeCallTauri: CallZomeRequestSignedTauri = await invoke(
         "sign_zome_call",
         { zomeCallUnsigned }
       );
+
+      const signedZomeCall: CallZomeRequestSigned = {
+        provenance: Uint8Array.from(signedZomeCallTauri.provenance),
+        cap_secret: null,
+        cell_id: [Uint8Array.from(signedZomeCallTauri.cell_id[0]), Uint8Array.from(signedZomeCallTauri.cell_id[1])],
+        zome_name: signedZomeCallTauri.zome_name,
+        fn_name: signedZomeCallTauri.fn_name,
+        payload: Uint8Array.from(signedZomeCallTauri.payload),
+        signature: Uint8Array.from(signedZomeCallTauri.signature),
+        expires_at: signedZomeCallTauri.expires_at,
+        nonce: Uint8Array.from(signedZomeCallTauri.nonce),
+      };
+
       return signedZomeCall;
     } else {
       const signingPropsForCell = signingProps.get(req.cell_id);

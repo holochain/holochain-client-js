@@ -42,7 +42,7 @@ const randomByteArray = (length: number) => {
   }
 };
 
-export const getNonceExpiration = () => Date.now() + 5 * 60 * 1000 * 1000; // 5 mins in microseconds
+export const getNonceExpiration = () => Date.now() + 5 * 60 * 1000; // 5 mins in milliseconds
 
 export const grantSigningKey = async (
   admin: AdminWebsocket,
