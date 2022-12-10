@@ -21,7 +21,7 @@
  */
 
 import Emittery, { UnsubscribeFunction } from "emittery";
-import omit from "lodash/omit.js";
+import { omit } from "lodash-es";
 
 import { InstalledAppId } from "../../types.js";
 import {
