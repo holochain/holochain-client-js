@@ -80,7 +80,7 @@ export interface CreateLink {
 
   base_address: EntryHash;
   target_address: EntryHash;
-  zome_id: number;
+  zome_index: number;
   tag: any;
 }
 

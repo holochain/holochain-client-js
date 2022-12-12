@@ -30,6 +30,9 @@
   "files": [
     "lib"
   ],
+  "browser": {
+    "crypto": false
+  },
   "scripts": {
     "lint": "eslint --fix --ext .ts src test .eslintrc.cjs",
     "test": "RUST_LOG=error RUST_BACKTRACE=1 node --experimental-wasm-modules --loader ts-node/esm test/index.ts",
@@ -42,12 +45,12 @@
     "cross-fetch": "^3.1.5",
     "emittery": "^1.0.1",
     "isomorphic-ws": "^5.0.0",
-    "lodash": "^4.5.0",
+    "lodash-es": "^4.17.21",
     "tweetnacl": "^1.0.3"
   },
   "devDependencies": {
     "@types/js-yaml": "^3.12.7",
-    "@types/lodash": "^4.5.7",
+    "@types/lodash-es": "^4.17.6",
     "@types/tape": "^4.13.2",
     "@types/ws": "^8.5.3",
     "@typescript-eslint/eslint-plugin": "^5.27.0",
