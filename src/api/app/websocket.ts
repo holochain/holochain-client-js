@@ -156,6 +156,7 @@ interface CallZomeRequestUnsignedTauri
   > {
   cell_id: [TauriByteArray, TauriByteArray];
   provenance: TauriByteArray;
+  cap_secret: TauriByteArray | null;
   nonce: TauriByteArray;
   expires_at: number;
 }
@@ -167,6 +168,7 @@ interface CallZomeRequestSignedTauri // Tauri requires a number array instead of
   > {
   cell_id: [TauriByteArray, TauriByteArray];
   provenance: TauriByteArray;
+  cap_secret: CapSecret | null;
   nonce: TauriByteArray;
   expires_at: number;
 }
@@ -210,6 +212,7 @@ const callZomeTransform: Transformer<
         zome_name: req.zome_name,
         fn_name: req.fn_name,
         payload: Array.from(encode(req.payload)),
+        cap_secret: req.cap_secret ? Array.from(req.cap_secret!) : null,
         nonce: Array.from(randomNonce()),
         expires_at: getNonceExpiration(),
       };
@@ -221,14 +224,14 @@ const callZomeTransform: Transformer<
 
       const signedZomeCall: CallZomeRequestSigned = {
         provenance: Uint8Array.from(signedZomeCallTauri.provenance),
-        cap_secret: null,
         cell_id: [Uint8Array.from(signedZomeCallTauri.cell_id[0]), Uint8Array.from(signedZomeCallTauri.cell_id[1])],
         zome_name: signedZomeCallTauri.zome_name,
         fn_name: signedZomeCallTauri.fn_name,
         payload: Uint8Array.from(signedZomeCallTauri.payload),
         signature: Uint8Array.from(signedZomeCallTauri.signature),
-        expires_at: signedZomeCallTauri.expires_at,
+        cap_secret: signedZomeCallTauri.cap_secret ? Uint8Array.from(signedZomeCallTauri.cap_secret) : null,
         nonce: Uint8Array.from(signedZomeCallTauri.nonce),
+        expires_at: signedZomeCallTauri.expires_at,
       };
 
       return signedZomeCall;
