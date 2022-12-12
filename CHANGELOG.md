@@ -6,8 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Added
 ### Removed
 ### Changed
-- Use lodash-es instead of lodash
 ### Fixed
+
+## 2022-12-12: v0.10.3
+### Changed
+- Use lodash-es instead of lodash
 
 ## 2022-12-08: v0.10.2
 ### Fixed
