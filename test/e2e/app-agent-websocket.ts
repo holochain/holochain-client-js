@@ -29,7 +29,7 @@ test(
     const { installed_app_id, cell_id, role_name, client, admin } =
       await installAppAndDna(ADMIN_PORT);
 
-    const appAgentWs = await AppAgentWebsocket.connect(
+    const appAgentWs = new AppAgentWebsocket(
       client,
       installed_app_id
     );
@@ -99,7 +99,7 @@ test(
       ADMIN_PORT
     );
 
-    const appAgentWs = await AppAgentWebsocket.connect(
+    const appAgentWs = new AppAgentWebsocket(
       client,
       installed_app_id
     );
@@ -127,7 +127,7 @@ test(
     );
     const info = await client.appInfo({ installed_app_id });
 
-    const appAgentWs = await AppAgentWebsocket.connect(
+    const appAgentWs = new AppAgentWebsocket(
       client,
       installed_app_id
     );
@@ -171,7 +171,7 @@ test(
       ADMIN_PORT
     );
 
-    const appAgentWs = await AppAgentWebsocket.connect(
+    const appAgentWs = new AppAgentWebsocket(
       client,
       installed_app_id
     );

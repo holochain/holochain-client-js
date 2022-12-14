@@ -1,22 +1,12 @@
 [back to API.md](API.md)
 
 
-# `AppAgentWebsocket`
+# `new AppAgentWebsocket( appWs, installedAppId )`
 A class for interacting with Conductor's app API, restricted to a specific installed app.
 This is useful for simplifying zome and app info calls, and especially because it shares an interface (`AppAgentClient`) with the holo WebSdk client, meaning you can use this client to write the majority of your UI agnostic as to wether it's in a pure holochain or holo context.
 
-**Instance properties**
-
-- `<AppAgentWebsocket>.appWebsocket` - the AppWebsocket instance that all calls are forwarded to.
-- `<AppAgentWebsocket>.installedAppId` - the InstalledAppId that all calls are restricted to
-
-## `AppAgentWebsocket.connect( appWebsocket, installedAppId )`
-Factory function for creating an AppAgentWebsocket
-
 - `appWebsocket` - an instance of AppWebsocket, connecting to an app port on your conductor
-- `appappWebsocketWs` - the InstalledAppId that all calls will be restricted to
-
-Returns a promise of an instance of AppAgentWebsocket
+- `installedAppId` - an InstalledAppId to restrict all calls to
 
 **Instance properties**
 
@@ -94,6 +84,16 @@ Returns a `Promise` containing the cloned cell
 ```javascript
 {
   cell_id: CellId,
+  role_name: RoleName
+}
+```
+
+## `<AppAgentWebsocket>.archiveClonedCell({ clone_cell_id })`
+
+
+- `clone_cell_id?` - either a `CellId` (see `callZome` above) or a `RoleName` string, specifying the cell to be archived
+
+Returns a void `Promise`.
   role_name: RoleName
 }
 ```

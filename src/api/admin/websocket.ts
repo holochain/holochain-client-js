@@ -36,7 +36,7 @@ export class AdminWebsocket implements Api.AdminApi {
     defaultTimeout?: number
   ): Promise<AdminWebsocket> {
     // Check if we are in the launcher's environment, and if so, redirect the url to connect to
-    const env = await getLauncherEnvironment();
+    const env = getLauncherEnvironment();
 
     if (env) {
       url = `ws://localhost:${env.ADMIN_INTERFACE_PORT}`;

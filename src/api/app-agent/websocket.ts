@@ -50,28 +50,17 @@ export class AppAgentWebsocket implements AppAgentClient {
 
   emitter = new Emittery<AppAgentEvents>();
 
-  private constructor(
+  constructor(
     appWebsocket: AppWebsocket,
     installedAppId: InstalledAppId
   ) {
     this.appWebsocket = appWebsocket;
 
-    this.installedAppId = installedAppId;
+    const env = getLauncherEnvironment();
+    this.installedAppId = env?.INSTALLED_APP_ID || installedAppId
 
     this.appWebsocket.on("signal", (signal) =>
       this.emitter.emit("signal", signal)
-    );
-  }
-
-  static async connect(
-    appWebsocket: AppWebsocket,
-    installedAppId: InstalledAppId
-  ): Promise<AppAgentWebsocket> {
-    const env = await getLauncherEnvironment();
-
-    return new AppAgentWebsocket(
-      appWebsocket,
-      env?.INSTALLED_APP_ID || installedAppId
     );
   }
 
