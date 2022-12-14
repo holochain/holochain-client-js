@@ -6,8 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Added
 ### Removed
 ### Changed
-- Rremove fetch to launcher-env.json and replace it with `window.__HC_LAUNCHER_ENV__`.
 ### Fixed
+
+## 2022-12-14: v0.10.4
+### Changed
+- Remove fetch to launcher-env.json and replace it with `window.__HC_LAUNCHER_ENV__`.
 
 ## 2022-12-12: v0.10.3
 ### Changed
