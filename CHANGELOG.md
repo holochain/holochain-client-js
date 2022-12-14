@@ -4,10 +4,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## \[Unreleased\]
 ### Added
-- AppAgentWebsocket.connect factory function that returns a promise of an AppAgentWebsocket instance, using launchers INSTALLED_APP_ID when present.
 ### Removed
 ### Changed
-- AppAgentWebsocket constructor made private
+- AppAgentWebsocket constructor uses launcher env.INSTALLED_APP_ID when present
 ### Fixed
 
 ## 2022-12-14: v0.10.4
