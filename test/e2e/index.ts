@@ -14,7 +14,7 @@ import {
   CallZomeRequest,
   CreateCloneCellRequest,
   CloneId,
-  AppEntryDef
+  AppEntryDef,
 } from "../../src/index.js";
 import { WsClient } from "../../src/api/client.js";
 import {
@@ -772,9 +772,8 @@ test(
 test(
   "can restore an archived clone cell",
   withConductor(ADMIN_PORT, async (t: Test) => {
-    const { installed_app_id, role_name, client, admin } = await installAppAndDna(
-      ADMIN_PORT
-    );
+    const { installed_app_id, role_name, client, admin } =
+      await installAppAndDna(ADMIN_PORT);
     const createCloneCellParams: CreateCloneCellRequest = {
       app_id: installed_app_id,
       role_name,
@@ -815,9 +814,8 @@ test(
 test(
   "can delete archived clone cells of an app",
   withConductor(ADMIN_PORT, async (t: Test) => {
-    const { installed_app_id, role_name, client, admin } = await installAppAndDna(
-      ADMIN_PORT
-    );
+    const { installed_app_id, role_name, client, admin } =
+      await installAppAndDna(ADMIN_PORT);
     const createCloneCellParams: CreateCloneCellRequest = {
       app_id: installed_app_id,
       role_name,
@@ -837,7 +835,10 @@ test(
       clone_cell_id: cloneCell1.cell_id,
     });
 
-    await admin.deleteArchivedCloneCells({ app_id: installed_app_id, role_name });
+    await admin.deleteArchivedCloneCells({
+      app_id: installed_app_id,
+      role_name,
+    });
 
     try {
       await admin.restoreCloneCell({
