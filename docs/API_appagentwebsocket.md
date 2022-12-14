@@ -1,11 +1,22 @@
 [back to API.md](API.md)
 
 
-# `new AppAgentWebsocket( appWs )`
+# `AppAgentWebsocket`
 A class for interacting with Conductor's app API, restricted to a specific installed app.
 This is useful for simplifying zome and app info calls, and especially because it shares an interface (`AppAgentClient`) with the holo WebSdk client, meaning you can use this client to write the majority of your UI agnostic as to wether it's in a pure holochain or holo context.
 
-- `appWs` - an instance of AppWebsocket, connecting to an app port on your conductor
+**Instance properties**
+
+- `<AppAgentWebsocket>.appWebsocket` - the AppWebsocket instance that all calls are forwarded to.
+- `<AppAgentWebsocket>.installedAppId` - the InstalledAppId that all calls are restricted to
+
+## `AppAgentWebsocket.connect( appWebsocket, installedAppId )`
+Factory function for creating an AppAgentWebsocket
+
+- `appWebsocket` - an instance of AppWebsocket, connecting to an app port on your conductor
+- `appappWebsocketWs` - the InstalledAppId that all calls will be restricted to
+
+Returns a promise of an instance of AppAgentWebsocket
 
 **Instance properties**
 

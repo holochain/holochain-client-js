@@ -29,7 +29,10 @@ test(
     const { installed_app_id, cell_id, role_name, client, admin } =
       await installAppAndDna(ADMIN_PORT);
 
-    const appAgentWs = new AppAgentWebsocket(client, installed_app_id);
+    const appAgentWs = await AppAgentWebsocket.connect(
+      client,
+      installed_app_id
+    );
 
     let info = await appAgentWs.appInfo();
     t.deepEqual(info.cell_data[0].cell_id, cell_id);
@@ -96,7 +99,10 @@ test(
       ADMIN_PORT
     );
 
-    const appAgentWs = new AppAgentWebsocket(client, installed_app_id);
+    const appAgentWs = await AppAgentWebsocket.connect(
+      client,
+      installed_app_id
+    );
 
     appAgentWs.on("signal", signalCb);
 
@@ -121,7 +127,10 @@ test(
     );
     const info = await client.appInfo({ installed_app_id });
 
-    const appAgentWs = new AppAgentWebsocket(client, installed_app_id);
+    const appAgentWs = await AppAgentWebsocket.connect(
+      client,
+      installed_app_id
+    );
 
     const createCloneCellParams: AppCreateCloneCellRequest = {
       role_name,
@@ -162,7 +171,10 @@ test(
       ADMIN_PORT
     );
 
-    const appAgentWs = new AppAgentWebsocket(client, installed_app_id);
+    const appAgentWs = await AppAgentWebsocket.connect(
+      client,
+      installed_app_id
+    );
 
     const createCloneCellParams: AppCreateCloneCellRequest = {
       role_name,
