@@ -50,14 +50,11 @@ export class AppAgentWebsocket implements AppAgentClient {
 
   emitter = new Emittery<AppAgentEvents>();
 
-  constructor(
-    appWebsocket: AppWebsocket,
-    installedAppId: InstalledAppId
-  ) {
+  constructor(appWebsocket: AppWebsocket, installedAppId: InstalledAppId) {
     this.appWebsocket = appWebsocket;
 
     const env = getLauncherEnvironment();
-    this.installedAppId = env?.INSTALLED_APP_ID || installedAppId
+    this.installedAppId = env?.INSTALLED_APP_ID || installedAppId;
 
     this.appWebsocket.on("signal", (signal) =>
       this.emitter.emit("signal", signal)
