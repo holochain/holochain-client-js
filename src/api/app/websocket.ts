@@ -15,16 +15,14 @@
 import { hashZomeCall } from "@holochain/serialization/pkg/holochain_serialization_js.js";
 import { decode, encode } from "@msgpack/msgpack";
 import { invoke } from "@tauri-apps/api/tauri";
-import nacl from "tweetnacl";
 import Emittery from "emittery";
+import nacl from "tweetnacl";
 import {
   getLauncherEnvironment,
   isLauncher,
 } from "../../environments/launcher.js";
 import { CapSecret } from "../../hdk/capabilities.js";
-import { AgentPubKey, CellId, InstalledAppId } from "../../types.js";
-import { FunctionName, ZomeName } from "../admin/types.js";
-import { AdminWebsocket } from "../admin/websocket.js";
+import { InstalledAppId } from "../../types.js";
 import { WsClient } from "../client.js";
 import {
   catchError,
@@ -34,6 +32,7 @@ import {
   requesterTransformer,
   Transformer,
 } from "../common.js";
+import { signingProps } from "../zome-call-signing.js";
 import {
   AppApi,
   AppInfoRequest,
@@ -49,12 +48,7 @@ import {
   GossipInfoRequest,
   GossipInfoResponse,
 } from "./types.js";
-import {
-  generateSigningKeyPair,
-  getNonceExpiration,
-  grantSigningKey,
-  randomNonce,
-} from "./util.js";
+import { getNonceExpiration, randomNonce } from "./util.js";
 
 export class AppWebsocket extends Emittery implements AppApi {
   client: WsClient;
@@ -159,29 +153,6 @@ interface CallZomeRequestUnsignedTauri
   nonce: TauriByteArray;
   expires_at: number;
 }
-
-const signingProps: Map<
-  CellId,
-  {
-    capSecret: CapSecret;
-    keyPair: nacl.SignKeyPair;
-    signingKey: AgentPubKey;
-  }
-> = new Map();
-export const setSigningPops = async (
-  adminWs: AdminWebsocket,
-  cellId: CellId,
-  functions: [[ZomeName, FunctionName]]
-) => {
-  const [keyPair, signingKey] = generateSigningKeyPair();
-  const capSecret = await grantSigningKey(
-    adminWs,
-    cellId,
-    functions,
-    signingKey
-  );
-  signingProps.set(cellId, { capSecret, keyPair, signingKey });
-};
 
 const callZomeTransform: Transformer<
   CallZomeRequest,

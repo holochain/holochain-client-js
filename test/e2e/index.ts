@@ -16,7 +16,6 @@ import {
   DumpStateResponse,
   EnableAppResponse,
   InstalledAppInfoStatus,
-  setSigningPops,
 } from "../../src/index.js";
 import {
   cleanSandboxConductors,
@@ -25,6 +24,7 @@ import {
   launch,
   withConductor,
 } from "./util.js";
+import { authorizeNewKeyPair } from "../../src/api/zome-call-signing.js";
 
 const delay = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
@@ -349,7 +349,7 @@ test.only(
       payload: appEntryDef,
     };
 
-    await setSigningPops(admin, cell_id, [
+    await authorizeNewKeyPair(admin, cell_id, [
       [COORDINATOR_ZOME_NAME, "echo_app_entry_def"],
     ]);
 
