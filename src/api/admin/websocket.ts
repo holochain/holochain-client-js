@@ -36,7 +36,7 @@ export class AdminWebsocket implements Api.AdminApi {
     defaultTimeout?: number
   ): Promise<AdminWebsocket> {
     // Check if we are in the launcher's environment, and if so, redirect the url to connect to
-    const env = await getLauncherEnvironment();
+    const env = getLauncherEnvironment();
 
     if (env) {
       url = `ws://localhost:${env.ADMIN_INTERFACE_PORT}`;
@@ -97,14 +97,10 @@ export class AdminWebsocket implements Api.AdminApi {
     Api.GetDnaDefinitionRequest,
     Api.GetDnaDefinitionResponse
   > = this._requester("get_dna_definition");
-  installApp: Requester<Api.InstallAppRequest, Api.InstallAppResponse> =
-    this._requester("install_app");
   uninstallApp: Requester<Api.UninstallAppRequest, Api.UninstallAppResponse> =
     this._requester("uninstall_app");
-  installAppBundle: Requester<
-    Api.InstallAppBundleRequest,
-    Api.InstallAppBundleResponse
-  > = this._requester("install_app_bundle");
+  installApp: Requester<Api.InstallAppRequest, Api.InstallAppResponse> =
+    this._requester("install_app");
   listDnas: Requester<Api.ListDnasRequest, Api.ListDnasResponse> =
     this._requester("list_dnas");
   listCellIds: Requester<Api.ListCellIdsRequest, Api.ListCellIdsResponse> =

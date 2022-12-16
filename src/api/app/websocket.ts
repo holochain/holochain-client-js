@@ -12,7 +12,7 @@
  *        console.error('problem installing DNA:', err)
  *      });
  */
-import { hashZomeCall } from "@holochain/serialization/pkg/holochain_serialization_js.js";
+import { hashZomeCall } from "@holochain/serialization";
 import { decode, encode } from "@msgpack/msgpack";
 import { invoke } from "@tauri-apps/api/tauri";
 import Emittery from "emittery";
@@ -74,7 +74,7 @@ export class AppWebsocket extends Emittery implements AppApi {
     signalCb?: AppSignalCb
   ): Promise<AppWebsocket> {
     // Check if we are in the launcher's environment, and if so, redirect the url to connect to
-    const env = await getLauncherEnvironment();
+    const env = getLauncherEnvironment();
 
     if (env) {
       url = `ws://localhost:${env.APP_INTERFACE_PORT}`;
@@ -186,7 +186,7 @@ const callZomeTransform: Transformer<
           nonce: randomNonce(),
           expires_at: getNonceExpiration(),
         };
-        const hashedZomeCall = hashZomeCall(unsignedZomeCall);
+        const hashedZomeCall = await hashZomeCall(unsignedZomeCall);
         const signature = nacl
           .sign(hashedZomeCall, signingPropsForCell.keyPair.secretKey)
           .subarray(0, nacl.sign.signatureLength);

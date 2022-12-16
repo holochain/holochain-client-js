@@ -3,14 +3,14 @@ import {
   ArchiveCloneCellResponse,
   CreateCloneCellRequest,
   CreateCloneCellResponse,
-} from "..";
-import { RoleName } from "../..";
+} from "../index.js";
+import { RoleName } from "../../index.js";
 import {
   AppInfoResponse,
   AppSignal,
   ArchiveCloneCellRequest,
   CallZomeRequest,
-} from "../app";
+} from "../app/index.js";
 
 export type RoleNameCallZomeRequest = Omit<CallZomeRequest, "cell_id"> & {
   role_name: RoleName;

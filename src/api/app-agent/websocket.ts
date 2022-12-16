@@ -21,7 +21,8 @@
  */
 
 import Emittery, { UnsubscribeFunction } from "emittery";
-import omit from "lodash/omit.js";
+import { omit } from "lodash-es";
+import { getLauncherEnvironment } from "../../environments/launcher.js";
 
 import { InstalledAppId } from "../../types.js";
 import {
@@ -31,7 +32,7 @@ import {
   CallZomeRequest,
   CallZomeResponse,
   CreateCloneCellResponse,
-  InstalledAppInfo,
+  AppInfo,
 } from "../index.js";
 import {
   AppAgentCallZomeRequest,
@@ -45,13 +46,15 @@ import {
 export class AppAgentWebsocket implements AppAgentClient {
   appWebsocket: AppWebsocket;
   installedAppId: InstalledAppId;
-  cachedAppInfo?: InstalledAppInfo;
+  cachedAppInfo?: AppInfo;
 
   emitter = new Emittery<AppAgentEvents>();
 
   constructor(appWebsocket: AppWebsocket, installedAppId: InstalledAppId) {
     this.appWebsocket = appWebsocket;
-    this.installedAppId = installedAppId;
+
+    const env = getLauncherEnvironment();
+    this.installedAppId = env?.INSTALLED_APP_ID || installedAppId;
 
     this.appWebsocket.on("signal", (signal) =>
       this.emitter.emit("signal", signal)
@@ -75,7 +78,7 @@ export class AppAgentWebsocket implements AppAgentClient {
       .role_name;
     if (role_name) {
       const appInfo = this.cachedAppInfo || (await this.appInfo());
-      const cell_id = appInfo.cell_data.find(
+      const cell_id = appInfo.cell_info.find(
         (c) => c.role_name === role_name
       )?.cell_id;
 

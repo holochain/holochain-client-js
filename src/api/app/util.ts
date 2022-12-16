@@ -1,4 +1,4 @@
-import { hashZomeCall } from "@holochain/serialization/pkg/holochain_serialization_js.js";
+import { hashZomeCall } from "@holochain/serialization";
 import { encode } from "@msgpack/msgpack";
 import crypto from "crypto";
 import nacl from "tweetnacl";
@@ -67,7 +67,7 @@ export const grantSigningKey = async (
   return capSecret;
 };
 
-export const signZomeCall = (
+export const signZomeCall = async (
   capSecret: CapSecret,
   signingKey: AgentPubKey,
   keyPair: nacl.SignKeyPair,
@@ -83,7 +83,7 @@ export const signZomeCall = (
     nonce: randomNonce(),
     expires_at: getNonceExpiration(),
   };
-  const hashedZomeCall = hashZomeCall(unsignedZomeCallPayload);
+  const hashedZomeCall = await hashZomeCall(unsignedZomeCallPayload);
   const signature = nacl
     .sign(hashedZomeCall, keyPair.secretKey)
     .subarray(0, nacl.sign.signatureLength);

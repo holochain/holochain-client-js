@@ -13,7 +13,7 @@ import {
 import { Requester } from "../common.js";
 import {
   FunctionName,
-  InstalledAppInfo,
+  AppInfo,
   MembraneProof,
   NetworkSeed,
   ZomeName,
@@ -33,7 +33,7 @@ export type CallZomeResponseGeneric<Payload> = Payload;
 export type CallZomeResponse = CallZomeResponseGeneric<any>;
 
 export type AppInfoRequest = { installed_app_id: InstalledAppId };
-export type AppInfoResponse = InstalledAppInfo;
+export type AppInfoResponse = AppInfo;
 
 export interface CreateCloneCellRequest {
   /**

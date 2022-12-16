@@ -4,8 +4,8 @@ import {
   EntryHash,
   Signature,
   Timestamp,
-} from "../types";
-import { EntryType } from "./entry";
+} from "../types.js";
+import { EntryType } from "./entry.js";
 
 export interface CounterSigningSessionData {
   preflight_request: PreflightRequest;
