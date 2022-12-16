@@ -13,7 +13,7 @@ export const signingProps: Map<
   }
 > = new Map();
 
-export const authorizeNewKeyPair = async (
+export const authorizeNewSigningKeyPair = async (
   adminWs: AdminWebsocket,
   cellId: CellId,
   functions: [[ZomeName, FunctionName]]
