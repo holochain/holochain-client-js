@@ -3,7 +3,7 @@ import { spawn } from "node:child_process";
 import { Test } from "tape";
 import { AdminWebsocket } from "../../src/api/admin/websocket.js";
 import { AppWebsocket } from "../../src/api/app/websocket.js";
-import { CellId, InstalledAppId, RoleName } from "../../src/types.js";
+import { CellId, InstalledAppId } from "../../src/types.js";
 
 export const FIXTURE_PATH = "./test/e2e/fixture";
 
@@ -93,12 +93,10 @@ export const installAppAndDna = async (
 ): Promise<{
   installed_app_id: InstalledAppId;
   cell_id: CellId;
-  role_name: RoleName;
   client: AppWebsocket;
   admin: AdminWebsocket;
 }> => {
   const installed_app_id = "app";
-  const role_name = "mydna";
   const admin = await AdminWebsocket.connect(`ws://localhost:${adminPort}`);
   const path = `${FIXTURE_PATH}/test.happ`;
   const agent = await admin.generateAgentPubKey();
@@ -108,10 +106,16 @@ export const installAppAndDna = async (
     path,
     membrane_proofs: {},
   });
-  const cell_id = app.cell_info[0].cell_id;
+  if ("Stem" in app.cell_info.role_name[0]) {
+    throw new Error("stem cell not implemented");
+  }
+  const cell_id =
+    "Provisioned" in app.cell_info.role_name[0]
+      ? app.cell_info.role_name[0].Provisioned.cell_id
+      : app.cell_info.role_name[0].Cloned.cell_id;
   await admin.enableApp({ installed_app_id });
   // destructure to get whatever open port was assigned to the interface
   const { port: appPort } = await admin.attachAppInterface({ port: 0 });
   const client = await AppWebsocket.connect(`ws://localhost:${appPort}`, 12000);
-  return { installed_app_id, cell_id, role_name: role_name, client, admin };
+  return { installed_app_id, cell_id, client, admin };
 };
