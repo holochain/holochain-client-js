@@ -5,7 +5,7 @@ import {
   AppSignal,
   CallZomeRequest,
   CloneId,
-  AppEntryDef
+  AppEntryDef,
 } from "../../src/index.js";
 import { installAppAndDna, withConductor } from "./util.js";
 
@@ -32,8 +32,8 @@ test(
     const appAgentWs = new AppAgentWebsocket(client, installed_app_id);
 
     let info = await appAgentWs.appInfo();
-    t.deepEqual(info.cell_data[0].cell_id, cell_id);
-    t.equal(info.cell_data[0].role_name, role_name);
+    t.deepEqual(info.cell_info[0].cell_id, cell_id);
+    t.equal(info.cell_info[0].role_name, role_name);
     t.deepEqual(info.status, { running: null });
 
     const appEntryDef: AppEntryDef = {
@@ -135,7 +135,7 @@ test(
     t.equal(cloneCell.role_name, expectedCloneId, "correct clone id");
     t.deepEqual(
       cloneCell.cell_id[1],
-      info.cell_data[0].cell_id[1],
+      info.cell_info[0].cell_id[1],
       "clone cell agent key matches base cell agent key"
     );
     const params: CallZomeRequest = {
@@ -178,7 +178,7 @@ test(
 
     const appInfo = await appAgentWs.appInfo();
     t.equal(
-      appInfo.cell_data.length,
+      appInfo.cell_info.length,
       1,
       "archived clone cell is not part of app info"
     );
