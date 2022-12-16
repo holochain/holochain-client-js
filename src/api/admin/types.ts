@@ -17,7 +17,7 @@ import {
 import { DhtOp, Entry, Action, ZomeCallCapGrant } from "../../hdk/index.js";
 import { CloneId, Requester } from "../common.js";
 import {
-  ArchiveCloneCellRequest,
+  DisableCloneCellRequest,
   CreateCloneCellResponse,
 } from "../app/types.js";
 
@@ -273,13 +273,10 @@ export type AgentInfoSigned = any;
     agent_info: any,
 }*/
 
-export type RequestAgentInfoRequest = { cell_id: CellId | null };
-export type RequestAgentInfoResponse = Array<AgentInfoSigned>;
+export type AgentInfoRequest = { cell_id: CellId | null };
+export type AgentInfoResponse = Array<AgentInfoSigned>;
 export type AddAgentInfoRequest = { agent_infos: Array<AgentInfoSigned> };
 export type AddAgentInfoResponse = any;
-
-export type RestoreCloneCellRequest = ArchiveCloneCellRequest;
-export type RestoreCloneCellResponse = CreateCloneCellResponse;
 
 export interface DeleteArchivedCloneCellsRequest {
   // The app id that the clone cells belong to
@@ -332,15 +329,8 @@ export interface AdminApi {
     ListAppInterfacesRequest,
     ListAppInterfacesResponse
   >;
-  requestAgentInfo: Requester<
-    RequestAgentInfoRequest,
-    RequestAgentInfoResponse
-  >;
+  agentInfo: Requester<AgentInfoRequest, AgentInfoResponse>;
   addAgentInfo: Requester<AddAgentInfoRequest, AddAgentInfoResponse>;
-  restoreCloneCell: Requester<
-    RestoreCloneCellRequest,
-    RestoreCloneCellResponse
-  >;
   deleteArchivedCloneCells: Requester<
     DeleteArchivedCloneCellsRequest,
     DeleteArchivedCloneCellsResponse

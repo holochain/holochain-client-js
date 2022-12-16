@@ -38,13 +38,15 @@ import {
   AppInfoRequest,
   AppInfoResponse,
   AppSignalCb,
-  ArchiveCloneCellRequest,
-  ArchiveCloneCellResponse,
   CallZomeRequest,
   CallZomeResponse,
   CallZomeResponseGeneric,
   CreateCloneCellRequest,
   CreateCloneCellResponse,
+  DisableCloneCellRequest,
+  DisableCloneCellResponse,
+  EnableCloneCellRequest,
+  EnableCloneCellResponse,
   GossipInfoRequest,
   GossipInfoResponse,
 } from "./types.js";
@@ -114,17 +116,20 @@ export class AppWebsocket extends Emittery implements AppApi {
   );
 
   callZome: Requester<CallZomeRequest, CallZomeResponse> = this._requester(
-    "zome_call",
+    "call_zome",
     callZomeTransform
   );
 
   createCloneCell: Requester<CreateCloneCellRequest, CreateCloneCellResponse> =
     this._requester("create_clone_cell");
 
-  archiveCloneCell: Requester<
-    ArchiveCloneCellRequest,
-    ArchiveCloneCellResponse
-  > = this._requester("archive_clone_cell");
+  enableCloneCell: Requester<EnableCloneCellRequest, EnableCloneCellResponse> =
+    this._requester("enable_clone_cell");
+
+  disableCloneCell: Requester<
+    DisableCloneCellRequest,
+    DisableCloneCellResponse
+  > = this._requester("disable_clone_cell");
 
   gossipInfo: Requester<GossipInfoRequest, GossipInfoResponse> =
     this._requester("gossip_info");

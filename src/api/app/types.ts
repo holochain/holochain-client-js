@@ -81,13 +81,16 @@ export interface CreateCloneCellRequest {
 }
 export type CreateCloneCellResponse = InstalledCell;
 
-export interface ArchiveCloneCellRequest {
+export interface DisableCloneCellRequest {
   // The app id that the clone cell belongs to
   app_id: InstalledAppId;
   // The clone id or cell id of the clone cell
   clone_cell_id: RoleName | CellId;
 }
-export type ArchiveCloneCellResponse = void;
+export type DisableCloneCellResponse = void;
+
+export type EnableCloneCellRequest = DisableCloneCellRequest;
+export type EnableCloneCellResponse = CreateCloneCellResponse;
 
 export type AppSignal = {
   type: string;
@@ -111,4 +114,9 @@ export type SignalResponseGeneric<Payload> = Payload;
 export interface AppApi {
   appInfo: Requester<AppInfoRequest, AppInfoResponse>;
   callZome: Requester<CallZomeRequest, CallZomeResponse>;
+  enableCloneCell: Requester<EnableCloneCellRequest, EnableCloneCellResponse>;
+  disableCloneCell: Requester<
+    DisableCloneCellRequest,
+    DisableCloneCellResponse
+  >;
 }
