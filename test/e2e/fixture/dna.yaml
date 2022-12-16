@@ -4,7 +4,6 @@ name: test-dna
 integrity:
   network_seed: 9a28aac8-337c-11eb-adc1-0Z02acw20115
   origin_time: "2022-02-11T23:05:19.470323Z"
-  properties: ~
   zomes:
     - name: foo
       bundled: "zomes/foo/target/wasm32-unknown-unknown/release/test_wasm_foo.wasm"
