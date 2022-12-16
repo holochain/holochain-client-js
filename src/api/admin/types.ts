@@ -36,7 +36,7 @@ export type DeactivateAppResponse = null;
 
 export type EnableAppRequest = { installed_app_id: InstalledAppId };
 export type EnableAppResponse = {
-  app: InstalledAppInfo;
+  app: AppInfo;
   errors: Array<[CellId, string]>;
 };
 
@@ -69,9 +69,9 @@ export type InstalledAppInfoStatus =
       running: null;
     };
 
-export type InstalledAppInfo = {
+export type AppInfo = {
   installed_app_id: InstalledAppId;
-  cell_data: Array<InstalledCell>;
+  cell_info: Array<InstalledCell>;
   status: InstalledAppInfoStatus;
 };
 
@@ -128,13 +128,6 @@ export type DnaDefinition = {
 
 export type GetDnaDefinitionRequest = DnaHash;
 export type GetDnaDefinitionResponse = DnaDefinition;
-
-export type InstallAppRequest = {
-  installed_app_id: InstalledAppId;
-  agent_key: AgentPubKey;
-  dnas: Array<InstallAppDnaPayload>;
-};
-export type InstallAppResponse = InstalledAppInfo;
 
 export type UninstallAppRequest = {
   installed_app_id: InstalledAppId;
@@ -209,7 +202,7 @@ export type AppBundle = {
 export type AppBundleSource = { bundle: AppBundle } | { path: string };
 
 export type NetworkSeed = string;
-export type InstallAppBundleRequest = {
+export type InstallAppRequest = {
   /// The agent to use when creating Cells for this App.
   agent_key: AgentPubKey;
 
@@ -225,7 +218,7 @@ export type InstallAppBundleRequest = {
   network_seed?: NetworkSeed;
 } & AppBundleSource; /// The unique identifier for an installed app in this conductor.
 
-export type InstallAppBundleResponse = InstalledAppInfo;
+export type InstallAppResponse = AppInfo;
 
 export type ListDnasRequest = void;
 export type ListDnasResponse = Array<string>;
@@ -246,7 +239,7 @@ export enum AppStatusFilter {
 export type ListAppsRequest = {
   status_filter?: AppStatusFilter;
 };
-export type ListAppsResponse = Array<InstalledAppInfo>;
+export type ListAppsResponse = Array<AppInfo>;
 
 export type ListAppInterfacesRequest = void;
 export type ListAppInterfacesResponse = Array<number>;
@@ -275,14 +268,13 @@ export interface DeleteArchivedCloneCellsRequest {
 }
 export type DeleteArchivedCloneCellsResponse = void;
 
-export interface GrantZomeCallCapabilityPayload {
+export interface GrantZomeCallCapabilityRequest {
   /// Cell for which to authorize the capability.
   cell_id: CellId;
   /// Specifies the capability, consisting of zomes and functions to allow
   /// signing for as well as access level, secret and assignees.
   cap_grant: ZomeCallCapGrant;
 }
-export type GrantZomeCallCapabilityRequest = GrantZomeCallCapabilityPayload;
 export type GrantZomeCallCapabilityResponse = void;
 
 export interface AdminApi {
@@ -308,12 +300,8 @@ export interface AdminApi {
     GetDnaDefinitionRequest,
     GetDnaDefinitionResponse
   >;
-  installApp: Requester<InstallAppRequest, InstallAppResponse>;
   uninstallApp: Requester<UninstallAppRequest, UninstallAppResponse>;
-  installAppBundle: Requester<
-    InstallAppBundleRequest,
-    InstallAppBundleResponse
-  >;
+  installApp: Requester<InstallAppRequest, InstallAppResponse>;
   listDnas: Requester<ListDnasRequest, ListDnasResponse>;
   listCellIds: Requester<ListCellIdsRequest, ListCellIdsResponse>;
   // Deprecated
