@@ -1,9 +1,9 @@
-// import { hashZomeCall } from "@holochain/serialization/holochain_serialization_js.js";
 import { spawn } from "node:child_process";
 import { Test } from "tape";
 import { AdminWebsocket } from "../../src/api/admin/websocket.js";
 import { AppWebsocket } from "../../src/api/app/websocket.js";
 import { CellId, InstalledAppId } from "../../src/types.js";
+import assert from "node:assert/strict";
 
 export const FIXTURE_PATH = "./test/e2e/fixture";
 
@@ -96,6 +96,7 @@ export const installAppAndDna = async (
   client: AppWebsocket;
   admin: AdminWebsocket;
 }> => {
+  const role_name = "foo";
   const installed_app_id = "app";
   const admin = await AdminWebsocket.connect(`ws://localhost:${adminPort}`);
   const path = `${FIXTURE_PATH}/test.happ`;
@@ -106,13 +107,8 @@ export const installAppAndDna = async (
     path,
     membrane_proofs: {},
   });
-  if ("Stem" in app.cell_info.role_name[0]) {
-    throw new Error("stem cell not implemented");
-  }
-  const cell_id =
-    "Provisioned" in app.cell_info.role_name[0]
-      ? app.cell_info.role_name[0].Provisioned.cell_id
-      : app.cell_info.role_name[0].Cloned.cell_id;
+  assert("Provisioned" in app.cell_info[role_name][0]);
+  const cell_id = app.cell_info[role_name][0].Provisioned.cell_id;
   await admin.enableApp({ installed_app_id });
   // destructure to get whatever open port was assigned to the interface
   const { port: appPort } = await admin.attachAppInterface({ port: 0 });
