@@ -183,29 +183,31 @@ const callZomeTransform: Transformer<
       return signedZomeCall;
     } else {
       const signingPropsForCell = signingProps.get(req.cell_id);
-      if (signingPropsForCell) {
-        const unsignedZomeCall: CallZomeRequestUnsigned = {
-          ...req,
-          payload: encode(req.payload),
-          cap_secret: signingPropsForCell.capSecret,
-          nonce: randomNonce(),
-          expires_at: getNonceExpiration(),
-        };
-        const hashedZomeCall = await hashZomeCall(unsignedZomeCall);
-        const signature = nacl
-          .sign(hashedZomeCall, signingPropsForCell.keyPair.secretKey)
-          .subarray(0, nacl.sign.signatureLength);
-
-        const signedZomeCall: CallZomeRequestSigned = {
-          ...unsignedZomeCall,
-          signature,
-        };
-        return signedZomeCall;
-      } else {
+      console.log("signing props", signingProps);
+      if (!signingPropsForCell) {
         throw new Error(
           "cannot sign zome call: signing properties have not been set"
         );
       }
+      const unsignedZomeCall: CallZomeRequestUnsigned = {
+        ...req,
+        provenance: signingPropsForCell.signingKey,
+        payload: encode(req.payload),
+        cap_secret: signingPropsForCell.capSecret,
+        nonce: randomNonce(),
+        expires_at: getNonceExpiration(),
+      };
+      const hashedZomeCall = await hashZomeCall(unsignedZomeCall);
+      console.log("hashed zome call", hashedZomeCall);
+      const signature = nacl
+        .sign(hashedZomeCall, signingPropsForCell.keyPair.secretKey)
+        .subarray(0, nacl.sign.signatureLength);
+
+      const signedZomeCall: CallZomeRequestSigned = {
+        ...unsignedZomeCall,
+        signature,
+      };
+      return signedZomeCall;
     }
   },
   output: (res) => decode(res),

@@ -1,6 +1,6 @@
 import { UnsubscribeFunction } from "emittery";
 import {
-  ArchiveCloneCellResponse,
+  DisableCloneCellResponse,
   CreateCloneCellRequest,
   CreateCloneCellResponse,
 } from "../index.js";
@@ -8,7 +8,7 @@ import { RoleName } from "../../index.js";
 import {
   AppInfoResponse,
   AppSignal,
-  ArchiveCloneCellRequest,
+  DisableCloneCellRequest,
   CallZomeRequest,
 } from "../app/index.js";
 
@@ -21,7 +21,7 @@ export type AppAgentCallZomeRequest = CallZomeRequest | RoleNameCallZomeRequest;
 export type AppCreateCloneCellRequest = Omit<CreateCloneCellRequest, "app_id">;
 
 export type AppArchiveCloneCellRequest = Omit<
-  ArchiveCloneCellRequest,
+  DisableCloneCellRequest,
   "app_id"
 >;
 
@@ -44,5 +44,5 @@ export interface AppAgentClient {
   ): Promise<CreateCloneCellResponse>;
   archiveCloneCell(
     args: AppArchiveCloneCellRequest
-  ): Promise<ArchiveCloneCellResponse>;
+  ): Promise<DisableCloneCellResponse>;
 }

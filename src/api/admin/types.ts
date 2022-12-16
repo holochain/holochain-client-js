@@ -1,25 +1,20 @@
+import { Action, DhtOp, Entry, ZomeCallCapGrant } from "../../hdk/index.js";
 import {
+  ActionHash,
   AgentPubKey,
   CellId,
   DnaHash,
   DnaProperties,
-  ActionHash,
   HoloHash,
   InstalledAppId,
-  InstalledCell,
   KitsuneAgent,
   KitsuneSpace,
-  RoleName as RoleName,
+  RoleName,
   Signature,
   Timestamp,
   WasmHash,
 } from "../../types.js";
-import { DhtOp, Entry, Action, ZomeCallCapGrant } from "../../hdk/index.js";
-import { CloneId, Requester } from "../common.js";
-import {
-  DisableCloneCellRequest,
-  CreateCloneCellResponse,
-} from "../app/types.js";
+import { Requester } from "../common.js";
 
 export type AttachAppInterfaceRequest = { port: number };
 export type AttachAppInterfaceResponse = { port: number };

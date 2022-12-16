@@ -26,7 +26,8 @@ import {
   withConductor,
 } from "./util.js";
 import assert from "node:assert/strict";
-import { authorizeNewKeyPair } from "../../src/api/zome-call-signing.js";
+import { authorizeNewSigningKeyPair } from "../../src/api/zome-call-signing.js";
+import { grantSigningKeyAndSignZomeCall } from "../../src/api/app/util.js";
 
 const delay = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
@@ -46,7 +47,7 @@ const ROLE_NAME: RoleName = "foo";
 const TEST_ZOME_NAME = "foo";
 const COORDINATOR_ZOME_NAME = "coordinator";
 
-test.only(
+test(
   "admin smoke test: registerDna + installApp + uninstallApp",
   withConductor(ADMIN_PORT, async (t: Test) => {
     const installed_app_id = "app";
@@ -105,6 +106,7 @@ test.only(
 
     const { app, errors } = await admin.enableApp({ installed_app_id });
     t.deepEqual(app.status, { running: null });
+    t.ok(ROLE_NAME in app.cell_info);
     t.ok(Array.isArray(app.cell_info[ROLE_NAME]));
     t.equal(app.installed_app_id, installed_app_id);
     t.equal(errors.length, 0);
@@ -332,41 +334,41 @@ test(
   })
 );
 
-test(
+test.only(
   "can call a zome function and then deactivate",
   withConductor(ADMIN_PORT, async (t: Test) => {
     const { installed_app_id, cell_id, client, admin } = await installAppAndDna(
       ADMIN_PORT
     );
-    // const info = await app.appInfo({ installed_app_id }, 1000);
-    // t.deepEqual(info.cell_data[0].cell_id, cell_id);
-    // t.equal(info.cell_data[0].role_name, role_name);
-    // t.deepEqual(info.status, { running: null });
-    // const appEntryDef: AppEntryDef = {
-    //   entry_index: 0,
-    //   zome_index: 0,
-    //   visibility: { Private: null },
-    // };
+    const info = await client.appInfo({ installed_app_id }, 1000);
+    assert("Provisioned" in info.cell_info[ROLE_NAME][0]);
+    t.deepEqual(info.cell_info[ROLE_NAME][0].Provisioned.cell_id, cell_id);
+    t.ok(ROLE_NAME in info.cell_info);
+    t.deepEqual(info.status, { running: null });
+    const appEntryDef: AppEntryDef = {
+      entry_index: 0,
+      zome_index: 0,
+      visibility: { Private: null },
+    };
 
-    // const zomeCallPayload: CallZomeRequest = {
-    //   cap_secret: null,
-    //   cell_id,
-    //   zome_name: COORDINATOR_ZOME_NAME,
-    //   fn_name: "echo_app_entry_def",
-    //   provenance: cell_id[1],
-    //   payload: appEntryDef,
-    // };
+    const zomeCallPayload: CallZomeRequest = {
+      cell_id,
+      zome_name: COORDINATOR_ZOME_NAME,
+      fn_name: "echo_app_entry_def",
+      provenance: cell_id[1],
+      payload: appEntryDef,
+    };
 
-    // await authorizeNewKeyPair(admin, cell_id, [
+    // await authorizeNewSigningKeyPair(admin, cell_id, [
     //   [COORDINATOR_ZOME_NAME, "echo_app_entry_def"],
     // ]);
 
-    // // const signedZomeCall = await grantSigningKeyAndSignZomeCall(
-    // //   admin,
-    // //   unsignedZomeCallPayload
-    // // );
-    // const response = await client.callZome(zomeCallPayload, 30000);
-    // t.equal(response, null, "app entry def deserializes correctly");
+    const signedZomeCall = await grantSigningKeyAndSignZomeCall(
+      admin,
+      zomeCallPayload
+    );
+    const response = await client.callZome(zomeCallPayload, 30000);
+    t.equal(response, null, "app entry def deserializes correctly");
 
     // await admin.disableApp({ installed_app_id });
     // info = await client.appInfo({ installed_app_id }, 1000);

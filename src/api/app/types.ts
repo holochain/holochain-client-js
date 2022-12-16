@@ -20,7 +20,7 @@ import {
 } from "../admin/index.js";
 
 export type CallZomeRequestGeneric<Payload> = {
-  cap_secret: CapSecret | null;
+  // cap_secret: CapSecret | null;
   cell_id: CellId;
   zome_name: ZomeName;
   fn_name: FunctionName;
