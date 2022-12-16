@@ -15,7 +15,7 @@ import {
   WasmHash,
 } from "../../types.js";
 import { DhtOp, Entry, Action, ZomeCallCapGrant } from "../../hdk/index.js";
-import { Requester } from "../common.js";
+import { CloneId, Requester } from "../common.js";
 import {
   ArchiveCloneCellRequest,
   CreateCloneCellResponse,
@@ -69,9 +69,30 @@ export type InstalledAppInfoStatus =
       running: null;
     };
 
+export interface StemCell {
+  dna: DnaHash;
+  name?: string;
+  dna_modifiers: DnaModifiers;
+}
+
+export interface Cell {
+  cell_id: CellId;
+  clone_id?: RoleName;
+  dna_modifiers: DnaModifiers;
+  name: string;
+  enabled: boolean;
+}
+
+export type CellInfo =
+  | {
+      Provisioned: Cell;
+    }
+  | { Cloned: Cell }
+  | { Stem: StemCell };
+
 export type AppInfo = {
   installed_app_id: InstalledAppId;
-  cell_info: Array<InstalledCell>;
+  cell_info: Record<RoleName, Array<CellInfo>>;
   status: InstalledAppInfoStatus;
 };
 
