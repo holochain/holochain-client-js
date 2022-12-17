@@ -47,8 +47,8 @@ import {
   DisableCloneCellResponse,
   EnableCloneCellRequest,
   EnableCloneCellResponse,
-  GossipInfoRequest,
-  GossipInfoResponse,
+  NetworkInfoRequest,
+  NetworkInfoResponse,
 } from "./types.js";
 import { getNonceExpiration, randomNonce } from "./util.js";
 
@@ -131,8 +131,8 @@ export class AppWebsocket extends Emittery implements AppApi {
     DisableCloneCellResponse
   > = this._requester("disable_clone_cell");
 
-  gossipInfo: Requester<GossipInfoRequest, GossipInfoResponse> =
-    this._requester("gossip_info");
+  networkInfo: Requester<NetworkInfoRequest, NetworkInfoResponse> =
+    this._requester("network_info");
 }
 
 export type Nonce256Bit = Uint8Array;
