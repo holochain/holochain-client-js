@@ -14,6 +14,14 @@ const signingProps: Map<
   }
 > = new Map();
 
+/**
+ * Generate and authorize a new key pair for signing zome calls.
+ *
+ * @param adminWs - An admin websocket connection to use for granting a
+ * capability for signing.
+ * @param cellId - The cell id to create the capability grant for.
+ * @param functions - Zomes and functions to authorize the signing key for.
+ */
 export const authorizeNewSigningKeyPair = async (
   adminWs: AdminWebsocket,
   cellId: CellId,
@@ -30,6 +38,12 @@ export const authorizeNewSigningKeyPair = async (
   signingProps.set(cellIdB64, { capSecret, keyPair, signingKey });
 };
 
+/**
+ * Get properties for signing a zome call to a cell.
+ *
+ * @param cellId - Cell id to be called.
+ * @returns The keys and cap secret required for signing a zome call.
+ */
 export const getSigningPropsForCell = (cellId: CellId) => {
   const cellIdB64 = fromUint8Array(cellId[0]).concat(fromUint8Array(cellId[1]));
   return signingProps.get(cellIdB64);
