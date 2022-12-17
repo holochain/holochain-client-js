@@ -6,7 +6,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Added
 ### Removed
 ### Changed
+- AppAgentWebsocket constructor uses launcher env.INSTALLED_APP_ID when present
 ### Fixed
+
+## 2022-12-14: v0.10.4
+### Changed
+- Remove fetch to launcher-env.json and replace it with `window.__HC_LAUNCHER_ENV__`.
+
+## 2022-12-12: v0.10.3
+### Changed
+- Use lodash-es instead of lodash
 
 ## 2022-12-08: v0.10.2
 ### Fixed

@@ -22,6 +22,7 @@
 
 import Emittery, { UnsubscribeFunction } from "emittery";
 import { omit } from "lodash-es";
+import { getLauncherEnvironment } from "../../environments/launcher.js";
 
 import { InstalledAppId } from "../../types.js";
 import {
@@ -51,7 +52,9 @@ export class AppAgentWebsocket implements AppAgentClient {
 
   constructor(appWebsocket: AppWebsocket, installedAppId: InstalledAppId) {
     this.appWebsocket = appWebsocket;
-    this.installedAppId = installedAppId;
+
+    const env = getLauncherEnvironment();
+    this.installedAppId = env?.INSTALLED_APP_ID || installedAppId;
 
     this.appWebsocket.on("signal", (signal) =>
       this.emitter.emit("signal", signal)

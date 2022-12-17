@@ -80,7 +80,7 @@ export class AppWebsocket extends Emittery implements AppApi {
     signalCb?: AppSignalCb
   ): Promise<AppWebsocket> {
     // Check if we are in the launcher's environment, and if so, redirect the url to connect to
-    const env = await getLauncherEnvironment();
+    const env = getLauncherEnvironment();
 
     if (env) {
       url = `ws://localhost:${env.APP_INTERFACE_PORT}`;

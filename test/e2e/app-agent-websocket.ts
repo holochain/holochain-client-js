@@ -5,7 +5,7 @@ import {
   AppSignal,
   CallZomeRequest,
   CloneId,
-  AppEntryDef
+  AppEntryDef,
 } from "../../src/index.js";
 import { installAppAndDna, withConductor } from "./util.js";
 
