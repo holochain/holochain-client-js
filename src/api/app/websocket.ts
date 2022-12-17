@@ -161,7 +161,7 @@ interface CallZomeRequestUnsignedTauri
 
 interface CallZomeRequestSignedTauri // Tauri requires a number array instead of a Uint8Array
   extends Omit<
-  CallZomeRequestSigned,
+    CallZomeRequestSigned,
     "cap_secret" | "cell_id" | "provenance" | "nonce"
   > {
   cell_id: [TauriByteArray, TauriByteArray];
@@ -196,7 +196,10 @@ const callZomeTransform: Transformer<
       const signedZomeCall: CallZomeRequestSigned = {
         provenance: Uint8Array.from(signedZomeCallTauri.provenance),
         cap_secret: null,
-        cell_id: [Uint8Array.from(signedZomeCallTauri.cell_id[0]), Uint8Array.from(signedZomeCallTauri.cell_id[1])],
+        cell_id: [
+          Uint8Array.from(signedZomeCallTauri.cell_id[0]),
+          Uint8Array.from(signedZomeCallTauri.cell_id[1]),
+        ],
         zome_name: signedZomeCallTauri.zome_name,
         fn_name: signedZomeCallTauri.fn_name,
         payload: Uint8Array.from(signedZomeCallTauri.payload),

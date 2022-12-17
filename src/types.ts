@@ -31,12 +31,12 @@ export interface HoloHashed<T> {
 }
 
 export interface NetworkInfo {
-  fetch_queue_info: FetchQueueInfo,
+  fetch_queue_info: FetchQueueInfo;
 }
 
 export interface FetchQueueInfo {
   /// Total number of bytes expected to be received through fetches
-  op_bytes_to_fetch: number,
+  op_bytes_to_fetch: number;
   /// Total number of ops expected to be received through fetches
-  num_ops_to_fetch: number,
+  num_ops_to_fetch: number;
 }
