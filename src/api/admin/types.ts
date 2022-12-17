@@ -15,6 +15,7 @@ import {
   WasmHash,
 } from "../../types.js";
 import { Requester } from "../common.js";
+import { DisableCloneCellRequest } from "../index.js";
 
 export type AttachAppInterfaceRequest = { port: number };
 export type AttachAppInterfaceResponse = { port: number };
@@ -273,13 +274,8 @@ export type AgentInfoResponse = Array<AgentInfoSigned>;
 export type AddAgentInfoRequest = { agent_infos: Array<AgentInfoSigned> };
 export type AddAgentInfoResponse = any;
 
-export interface DeleteArchivedCloneCellsRequest {
-  // The app id that the clone cells belong to
-  app_id: InstalledAppId;
-  // The role id that the clone cells belong to
-  role_name: RoleName;
-}
-export type DeleteArchivedCloneCellsResponse = void;
+export type DeleteCloneCellRequest = DisableCloneCellRequest;
+export type DeleteCloneCellResponse = void;
 
 export interface GrantZomeCallCapabilityRequest {
   /// Cell for which to authorize the capability.
@@ -326,10 +322,7 @@ export interface AdminApi {
   >;
   agentInfo: Requester<AgentInfoRequest, AgentInfoResponse>;
   addAgentInfo: Requester<AddAgentInfoRequest, AddAgentInfoResponse>;
-  deleteArchivedCloneCells: Requester<
-    DeleteArchivedCloneCellsRequest,
-    DeleteArchivedCloneCellsResponse
-  >;
+  deleteCloneCell: Requester<DeleteCloneCellRequest, DeleteCloneCellResponse>;
   grantZomeCallCapability: Requester<
     GrantZomeCallCapabilityRequest,
     GrantZomeCallCapabilityResponse

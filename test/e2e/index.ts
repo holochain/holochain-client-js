@@ -460,33 +460,6 @@ test(
   })
 );
 
-test(
-  "callZome rejects appropriately for ZomeCallUnauthorized",
-  withConductor(ADMIN_PORT, async (t: Test) => {
-    const { cell_id, client, admin } = await installAppAndDna(ADMIN_PORT);
-    await authorizeNewSigningKeyPair(admin, cell_id, [[TEST_ZOME_NAME, "bar"]]);
-
-    try {
-      const zomeCallPayload: CallZomeRequest = {
-        cell_id,
-        zome_name: TEST_ZOME_NAME,
-        fn_name: "bar",
-        provenance: fakeAgentPubKey(),
-        payload: null,
-        // bad cap, on purpose
-        // eslint-disable-next-line
-        // @ts-ignore
-        cap_secret: new Uint8Array(64),
-      };
-      await client.callZome(zomeCallPayload, 30000);
-      t.fail("zome call was authorized");
-    } catch (e) {
-      t.equal(e.type, "error");
-      t.equal(e.data.type, "zome_call_unauthorized");
-    }
-  })
-);
-
 // no conductor
 test("error is catchable when holochain socket is unavailable", async (t: Test) => {
   const url = `ws://localhost:${ADMIN_PORT}`;
