@@ -1,8 +1,10 @@
 import { decode } from "@msgpack/msgpack";
+import assert from "node:assert/strict";
 import fs from "node:fs";
 import test, { Test } from "tape";
 import zlib from "zlib";
 import { WsClient } from "../../src/api/client.js";
+import { authorizeNewSigningKeyPair } from "../../src/api/zome-call-signing.js";
 import {
   AdminWebsocket,
   AppEntryDef,
@@ -25,9 +27,6 @@ import {
   launch,
   withConductor,
 } from "./util.js";
-import assert from "node:assert/strict";
-import { authorizeNewSigningKeyPair } from "../../src/api/zome-call-signing.js";
-import { grantSigningKeyAndSignZomeCall } from "../../src/api/app/util.js";
 
 const delay = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
@@ -334,13 +333,13 @@ test(
   })
 );
 
-test.only(
+test(
   "can call a zome function and then deactivate",
   withConductor(ADMIN_PORT, async (t: Test) => {
     const { installed_app_id, cell_id, client, admin } = await installAppAndDna(
       ADMIN_PORT
     );
-    const info = await client.appInfo({ installed_app_id }, 1000);
+    let info = await client.appInfo({ installed_app_id }, 1000);
     assert("Provisioned" in info.cell_info[ROLE_NAME][0]);
     t.deepEqual(info.cell_info[ROLE_NAME][0].Provisioned.cell_id, cell_id);
     t.ok(ROLE_NAME in info.cell_info);
@@ -359,509 +358,489 @@ test.only(
       payload: appEntryDef,
     };
 
-    // await authorizeNewSigningKeyPair(admin, cell_id, [
-    //   [COORDINATOR_ZOME_NAME, "echo_app_entry_def"],
-    // ]);
+    await authorizeNewSigningKeyPair(admin, cell_id, [
+      [COORDINATOR_ZOME_NAME, "echo_app_entry_def"],
+    ]);
 
-    const signedZomeCall = await grantSigningKeyAndSignZomeCall(
-      admin,
-      zomeCallPayload
-    );
     const response = await client.callZome(zomeCallPayload, 30000);
     t.equal(response, null, "app entry def deserializes correctly");
 
-    // await admin.disableApp({ installed_app_id });
-    // info = await client.appInfo({ installed_app_id }, 1000);
-    // t.deepEqual(info.status, { disabled: { reason: { user: null } } });
+    await admin.disableApp({ installed_app_id });
+    info = await client.appInfo({ installed_app_id }, 1000);
+    t.deepEqual(info.status, { disabled: { reason: { user: null } } });
   })
 );
 
-// test(
-//   "stateDump",
-//   withConductor(ADMIN_PORT, async (t: Test) => {
-//     const { installed_app_id, cell_id, role_name, client, admin } =
-//       await installAppAndDna(ADMIN_PORT);
-//     const info = await client.appInfo({ installed_app_id }, 1000);
-//     t.deepEqual(info.cell_data[0].cell_id, cell_id);
-//     t.equal(info.cell_data[0].role_name, role_name);
-//     t.deepEqual(info.status, { running: null });
-//     const unsignedZomeCallPayload: CallZomeRequest = {
-//       cap_secret: null,
-//       cell_id,
-//       zome_name: TEST_ZOME_NAME,
-//       fn_name: "foo",
-//       provenance: fakeAgentPubKey(),
-//       payload: null,
-//     };
-//     const signedZomeCall = await grantSigningKeyAndSignZomeCall(
-//       admin,
-//       unsignedZomeCallPayload
-//     );
-//     const response = await client.callZome(signedZomeCall, 30000);
-//     t.equal(response, "foo");
+test(
+  "stateDump",
+  withConductor(ADMIN_PORT, async (t: Test) => {
+    const { installed_app_id, cell_id, client, admin } = await installAppAndDna(
+      ADMIN_PORT
+    );
+    const info = await client.appInfo({ installed_app_id });
+    assert("Provisioned" in info.cell_info[ROLE_NAME][0]);
+    t.deepEqual(info.cell_info[ROLE_NAME][0].Provisioned.cell_id, cell_id);
+    t.ok(ROLE_NAME in info.cell_info);
+    t.deepEqual(info.status, { running: null });
+    const zomeCallPayload: CallZomeRequest = {
+      cell_id,
+      zome_name: TEST_ZOME_NAME,
+      fn_name: "foo",
+      provenance: fakeAgentPubKey(),
+      payload: null,
+    };
 
-//     const state: DumpStateResponse = await admin.dumpState({
-//       cell_id: info.cell_data[0].cell_id,
-//     });
-//     console.log("state", state[0].source_chain_dump.records);
-//     // A couple random tests to prove that things are where we expect them
-//     t.equal(state[0].source_chain_dump.records.length, 6);
-//     t.equal(state[0].source_chain_dump.records[0].action.type, "Dna");
-//   })
-// );
+    await authorizeNewSigningKeyPair(admin, cell_id, [[TEST_ZOME_NAME, "foo"]]);
 
-// test(
-//   "can handle canceled response",
-//   withConductor(ADMIN_PORT, async (t: Test) => {
-//     const client = new WsClient({
-//       send: () => {
-//         /* do nothing */
-//       },
-//     });
-//     const prom = client.request("blah");
-//     client.handleResponse({ id: 0 });
-//     try {
-//       await prom;
-//     } catch (e) {
-//       t.deepEqual(e, new Error("Response canceled by responder"));
-//     }
-//   })
-// );
+    const response = await client.callZome(zomeCallPayload);
+    t.equal(response, "foo");
 
-// test(
-//   "can receive a signal using event handler",
-//   withConductor(ADMIN_PORT, async (t: Test) => {
-//     let resolveSignalPromise: (value?: unknown) => void | undefined;
-//     const signalReceivedPromise = new Promise(
-//       (resolve) => (resolveSignalPromise = resolve)
-//     );
-//     const signalCb = (signal: AppSignal) => {
-//       t.deepEqual(signal, {
-//         type: "Signal",
-//         data: {
-//           cellId: cell_id,
-//           payload: "i am a signal",
-//         },
-//       });
-//       resolveSignalPromise();
-//     };
+    const state: DumpStateResponse = await admin.dumpState({
+      cell_id: info.cell_info[ROLE_NAME][0].Provisioned.cell_id,
+    });
+    // A couple random tests to prove that things are where we expect them
+    t.equal(state[0].source_chain_dump.records.length, 7);
+    t.equal(state[0].source_chain_dump.records[0].action.type, "Dna");
+  })
+);
 
-//     const { cell_id, client } = await installAppAndDna(ADMIN_PORT);
+test(
+  "can handle canceled response",
+  withConductor(ADMIN_PORT, async (t: Test) => {
+    const client = new WsClient({
+      send: () => {
+        /* do nothing */
+      },
+    });
+    const prom = client.request("blah");
+    client.handleResponse({ id: 0 });
+    try {
+      await prom;
+    } catch (e) {
+      t.deepEqual(e, new Error("Response canceled by responder"));
+    }
+  })
+);
 
-//     client.on("signal", signalCb);
+test(
+  "can receive a signal using event handler",
+  withConductor(ADMIN_PORT, async (t: Test) => {
+    let resolveSignalPromise: (value?: unknown) => void | undefined;
+    const signalReceivedPromise = new Promise(
+      (resolve) => (resolveSignalPromise = resolve)
+    );
+    const signalCb = (signal: AppSignal) => {
+      t.deepEqual(signal, {
+        type: "signal",
+        data: {
+          cellId: cell_id,
+          payload: "i am a signal",
+        },
+      });
+      resolveSignalPromise();
+    };
 
-//     // trigger an emit_signal
-//     await client.callZome({
-//       cap_secret: null,
-//       cell_id,
-//       zome_name: TEST_ZOME_NAME,
-//       fn_name: "emitter",
-//       provenance: fakeAgentPubKey(),
-//       payload: null,
-//     });
-//     await signalReceivedPromise;
-//   })
-// );
+    const { admin, cell_id, client } = await installAppAndDna(ADMIN_PORT);
 
-// test(
-//   "callZome rejects appropriately for ZomeCallUnauthorized",
-//   withConductor(ADMIN_PORT, async (t: Test) => {
-//     const { cell_id, client, admin } = await installAppAndDna(
-//       ADMIN_PORT
-//     );
-//     try {
-//       const [keyPair, signingKey] = generateSigningKeyPair();
-//       await grantSigningKey(
-//         admin,
-//         cell_id,
-//         [[TEST_ZOME_NAME, "bar"]],
-//         signingKey
-//       );
-//       const unsignedZomeCallPayload: CallZomeRequest = {
-//         cap_secret: null,
-//         cell_id,
-//         zome_name: TEST_ZOME_NAME,
-//         fn_name: "bar",
-//         provenance: fakeAgentPubKey(),
-//         payload: null,
-//       };
-//       // bad cap, on purpose
-//       const capSecret = new Uint8Array(64);
-//       const signedZomeCall = signZomeCall(
-//         capSecret,
-//         signingKey,
-//         keyPair,
-//         unsignedZomeCallPayload
-//       );
-//       await client.callZome(signedZomeCall, 30000);
-//     } catch (e) {
-//       t.equal(e.type, "error");
-//       t.equal(e.data.type, "zome_call_unauthorized");
-//     }
-//   })
-// );
+    await authorizeNewSigningKeyPair(admin, cell_id, [
+      [TEST_ZOME_NAME, "emitter"],
+    ]);
 
-// // no conductor
-// test("error is catchable when holochain socket is unavailable", async (t: Test) => {
-//   const url = `ws://localhost:${ADMIN_PORT}`;
-//   try {
-//     await AdminWebsocket.connect(url);
-//   } catch (e) {
-//     t.equal(
-//       e.message,
-//       `could not connect to holochain conductor, please check that a conductor service is running and available at ${url}`
-//     );
-//   }
+    client.on("signal", signalCb);
 
-//   try {
-//     await AppWebsocket.connect(url);
-//   } catch (e) {
-//     t.equal(
-//       e.message,
-//       `could not connect to holochain conductor, please check that a conductor service is running and available at ${url}`
-//     );
-//   }
-// });
+    // trigger an emit_signal
+    await client.callZome({
+      cell_id,
+      zome_name: TEST_ZOME_NAME,
+      fn_name: "emitter",
+      provenance: fakeAgentPubKey(),
+      payload: null,
+    });
+    await signalReceivedPromise;
+  })
+);
 
-// test("can inject agents", async (t: Test) => {
-//   const conductor1 = await launch(ADMIN_PORT);
-//   const conductor2 = await launch(ADMIN_PORT_1);
-//   const installed_app_id = "app";
-//   const admin1 = await AdminWebsocket.connect(`ws://localhost:${ADMIN_PORT}`);
-//   const admin2 = await AdminWebsocket.connect(`ws://localhost:${ADMIN_PORT_1}`);
-//   const agent_key_1 = await admin1.generateAgentPubKey();
-//   t.ok(agent_key_1);
-//   const agent_key_2 = await admin2.generateAgentPubKey();
-//   t.ok(agent_key_2);
-//   const role = "thedna";
-//   const path = `${FIXTURE_PATH}/test.dna`;
-//   const hash = await admin1.registerDna({ path, modifiers: {} });
-//   t.ok(hash);
-//   let result = await admin1.installApp({
-//     installed_app_id,
-//     agent_key: agent_key_1,
-//     dnas: [{ hash, role_name: role }],
-//   });
-//   t.ok(result);
-//   const app1_cell = result.cell_data[0].cell_id;
-//   const activeApp1Info = await admin1.enableApp({ installed_app_id }, 1000);
-//   t.deepEqual(activeApp1Info.app.status, { running: null });
-//   t.equal(activeApp1Info.app.cell_data[0].role_name, role);
-//   t.equal(activeApp1Info.app.installed_app_id, installed_app_id);
-//   t.equal(activeApp1Info.errors.length, 0);
+test(
+  "callZome rejects appropriately for ZomeCallUnauthorized",
+  withConductor(ADMIN_PORT, async (t: Test) => {
+    const { cell_id, client, admin } = await installAppAndDna(ADMIN_PORT);
+    await authorizeNewSigningKeyPair(admin, cell_id, [[TEST_ZOME_NAME, "bar"]]);
 
-//   await delay(500);
+    try {
+      const zomeCallPayload: CallZomeRequest = {
+        cell_id,
+        zome_name: TEST_ZOME_NAME,
+        fn_name: "bar",
+        provenance: fakeAgentPubKey(),
+        payload: null,
+        // bad cap, on purpose
+        // eslint-disable-next-line
+        // @ts-ignore
+        cap_secret: new Uint8Array(64),
+      };
+      await client.callZome(zomeCallPayload, 30000);
+      t.fail("zome call was authorized");
+    } catch (e) {
+      t.equal(e.type, "error");
+      t.equal(e.data.type, "zome_call_unauthorized");
+    }
+  })
+);
 
-//   // after activating an app requestAgentInfo should return the agentid
-//   // requesting info with null cell_id should return all agents known about.
-//   // otherwise it's just agents know about for that cell
-//   const conductor1_agentInfo = await admin1.requestAgentInfo({
-//     cell_id: null,
-//   });
-//   t.equal(conductor1_agentInfo.length, 1);
+// no conductor
+test("error is catchable when holochain socket is unavailable", async (t: Test) => {
+  const url = `ws://localhost:${ADMIN_PORT}`;
+  try {
+    await AdminWebsocket.connect(url);
+  } catch (e) {
+    t.equal(
+      e.message,
+      `could not connect to holochain conductor, please check that a conductor service is running and available at ${url}`
+    );
+  }
 
-//   // agent2 with no activated apps there are no agents
-//   let conductor2_agentInfo = await admin2.requestAgentInfo({ cell_id: null });
-//   t.equal(conductor2_agentInfo.length, 0);
+  try {
+    await AppWebsocket.connect(url);
+  } catch (e) {
+    t.equal(
+      e.message,
+      `could not connect to holochain conductor, please check that a conductor service is running and available at ${url}`
+    );
+  }
+});
 
-//   // but, after explicitly injecting an agent, we should see it
-//   await admin2.addAgentInfo({ agent_infos: conductor1_agentInfo });
-//   conductor2_agentInfo = await admin2.requestAgentInfo({ cell_id: null });
-//   t.equal(conductor2_agentInfo.length, 1);
-//   t.deepEqual(conductor1_agentInfo, conductor2_agentInfo);
+test("can inject agents", async (t: Test) => {
+  const conductor1 = await launch(ADMIN_PORT);
+  const conductor2 = await launch(ADMIN_PORT_1);
+  const installed_app_id = "app";
+  const admin1 = await AdminWebsocket.connect(`ws://localhost:${ADMIN_PORT}`);
+  const admin2 = await AdminWebsocket.connect(`ws://localhost:${ADMIN_PORT_1}`);
+  const agent_key_1 = await admin1.generateAgentPubKey();
+  t.ok(agent_key_1);
+  const agent_key_2 = await admin2.generateAgentPubKey();
+  t.ok(agent_key_2);
+  const path = `${FIXTURE_PATH}/test.dna`;
+  let result = await admin1.installApp({
+    installed_app_id,
+    agent_key: agent_key_1,
+    membrane_proofs: {},
+    path: `${FIXTURE_PATH}/test.happ`,
+  });
+  t.ok(result);
+  assert("Provisioned" in result.cell_info[ROLE_NAME][0]);
+  const app1_cell = result.cell_info[ROLE_NAME][0].Provisioned.cell_id;
+  const activeApp1Info = await admin1.enableApp({ installed_app_id }, 1000);
+  t.deepEqual(activeApp1Info.app.status, { running: null });
+  t.ok(ROLE_NAME in activeApp1Info.app.cell_info);
+  t.equal(activeApp1Info.app.installed_app_id, installed_app_id);
+  t.equal(activeApp1Info.errors.length, 0);
 
-//   // now install the app and activate it on agent 2.
-//   await admin2.registerDna({
-//     modifiers: {},
-//     path,
-//   });
-//   t.ok(hash);
-//   result = await admin2.installApp({
-//     installed_app_id,
-//     agent_key: agent_key_2,
-//     dnas: [{ hash, role_name: role }],
-//   });
-//   t.ok(result);
-//   const app2_cell = result.cell_data[0].cell_id;
-//   const activeApp2Info = await admin2.enableApp({ installed_app_id });
-//   t.deepEqual(activeApp2Info.app.status, { running: null });
-//   t.equal(activeApp2Info.app.cell_data[0].role_name, role);
-//   t.equal(activeApp2Info.app.installed_app_id, installed_app_id);
-//   t.equal(activeApp2Info.errors.length, 0);
+  await delay(500);
 
-//   await delay(500);
-//   // observe 2 agent infos
-//   conductor2_agentInfo = await admin2.requestAgentInfo({ cell_id: null });
-//   t.equal(conductor2_agentInfo.length, 2);
+  // after activating an app requestAgentInfo should return the agentid
+  // requesting info with null cell_id should return all agents known about.
+  // otherwise it's just agents know about for that cell
+  const conductor1_agentInfo = await admin1.agentInfo({
+    cell_id: null,
+  });
+  t.equal(conductor1_agentInfo.length, 1);
 
-//   // now confirm that we can ask for just one cell
-//   await admin1.addAgentInfo({ agent_infos: conductor2_agentInfo });
-//   const app1_agentInfo = await admin1.requestAgentInfo({
-//     cell_id: app1_cell,
-//   });
-//   t.equal(app1_agentInfo.length, 1);
-//   const app2_agentInfo = await admin2.requestAgentInfo({
-//     cell_id: app2_cell,
-//   });
-//   t.equal(app2_agentInfo.length, 1);
+  // agent2 with no activated apps there are no agents
+  let conductor2_agentInfo = await admin2.agentInfo({ cell_id: null });
+  t.equal(conductor2_agentInfo.length, 0);
 
-//   if (conductor1.pid) {
-//     process.kill(-conductor1.pid);
-//   }
-//   if (conductor2.pid) {
-//     process.kill(-conductor2.pid);
-//   }
-//   await cleanSandboxConductors();
-// });
+  // but, after explicitly injecting an agent, we should see it
+  await admin2.addAgentInfo({ agent_infos: conductor1_agentInfo });
+  conductor2_agentInfo = await admin2.agentInfo({ cell_id: null });
+  t.equal(conductor2_agentInfo.length, 1);
+  t.deepEqual(conductor1_agentInfo, conductor2_agentInfo);
 
-// test(
-//   "admin smoke test: listAppInterfaces + attachAppInterface",
-//   withConductor(ADMIN_PORT, async (t: Test) => {
-//     const admin = await AdminWebsocket.connect(`ws://localhost:${ADMIN_PORT}`);
+  // now install the app and activate it on agent 2.
+  await admin2.registerDna({
+    modifiers: {},
+    path,
+  });
+  result = await admin2.installApp({
+    installed_app_id,
+    agent_key: agent_key_2,
+    membrane_proofs: {},
+    path: `${FIXTURE_PATH}/test.happ`,
+  });
+  t.ok(result);
+  assert("Provisioned" in result.cell_info[ROLE_NAME][0]);
+  const app2_cell = result.cell_info[ROLE_NAME][0].Provisioned.cell_id;
+  const activeApp2Info = await admin2.enableApp({ installed_app_id });
+  t.deepEqual(activeApp2Info.app.status, { running: null });
+  t.ok(ROLE_NAME in activeApp2Info.app.cell_info);
+  t.equal(activeApp2Info.app.installed_app_id, installed_app_id);
+  t.equal(activeApp2Info.errors.length, 0);
 
-//     let interfaces = await admin.listAppInterfaces();
-//     t.equal(interfaces.length, 0);
+  await delay(500);
+  // observe 2 agent infos
+  conductor2_agentInfo = await admin2.agentInfo({ cell_id: null });
+  t.equal(conductor2_agentInfo.length, 2);
 
-//     await admin.attachAppInterface({ port: 21212 });
+  // now confirm that we can ask for just one cell
+  await admin1.addAgentInfo({ agent_infos: conductor2_agentInfo });
+  const app1_agentInfo = await admin1.agentInfo({
+    cell_id: app1_cell,
+  });
+  t.equal(app1_agentInfo.length, 1);
+  const app2_agentInfo = await admin2.agentInfo({
+    cell_id: app2_cell,
+  });
+  t.equal(app2_agentInfo.length, 1);
 
-//     interfaces = await admin.listAppInterfaces();
-//     t.equal(interfaces.length, 1);
-//   })
-// );
+  if (conductor1.pid) {
+    process.kill(-conductor1.pid);
+  }
+  if (conductor2.pid) {
+    process.kill(-conductor2.pid);
+  }
+  await cleanSandboxConductors();
+});
 
-// test(
-//   "can use some of the defined js bindings",
-//   withConductor(ADMIN_PORT, async (t: Test) => {
-//     const { installed_app_id, cell_id, role_name, client, admin } =
-//       await installAppAndDna(ADMIN_PORT);
-//     const info = await client.appInfo({ installed_app_id }, 1000);
-//     t.deepEqual(info.cell_data[0].cell_id, cell_id);
-//     t.equal(info.cell_data[0].role_name, role_name);
-//     t.deepEqual(info.status, { running: null });
-//     const unsignedZomeCallPayload: CallZomeRequest = {
-//       cap_secret: null,
-//       cell_id,
-//       zome_name: TEST_ZOME_NAME,
-//       fn_name: "foo",
-//       provenance: fakeAgentPubKey(),
-//       payload: null,
-//     };
-//     const signedZomeCall = await grantSigningKeyAndSignZomeCall(
-//       admin,
-//       unsignedZomeCallPayload
-//     );
-//     const response = await client.callZome(signedZomeCall, 30000);
-//     t.equal(response, "foo");
+test(
+  "admin smoke test: listAppInterfaces + attachAppInterface",
+  withConductor(ADMIN_PORT, async (t: Test) => {
+    const admin = await AdminWebsocket.connect(`ws://localhost:${ADMIN_PORT}`);
 
-//     await admin.disableApp({ installed_app_id });
-//     info = await client.appInfo({ installed_app_id }, 1000);
-//     t.deepEqual(info.status, { disabled: { reason: { user: null } } });
-//   })
-// );
+    let interfaces = await admin.listAppInterfaces();
+    t.equal(interfaces.length, 0);
 
-// test(
-//   "admin smoke test: install 2 hApp bundles with different network seeds",
-//   withConductor(ADMIN_PORT, async (t: Test) => {
-//     const admin = await AdminWebsocket.connect(`ws://localhost:${ADMIN_PORT}`);
-//     const agent_key = await admin.generateAgentPubKey();
+    await admin.attachAppInterface({ port: 21212 });
 
-//     const installedApp1 = await admin.installAppBundle({
-//       agent_key,
-//       installed_app_id: "test-app1",
-//       membrane_proofs: {},
-//       path: `${FIXTURE_PATH}/test.happ`,
-//       network_seed: "1",
-//     });
-//     const installedApp2 = await admin.installAppBundle({
-//       agent_key,
-//       installed_app_id: "test-app2",
-//       membrane_proofs: {},
-//       path: `${FIXTURE_PATH}/test.happ`,
-//       network_seed: "2",
-//     });
+    interfaces = await admin.listAppInterfaces();
+    t.equal(interfaces.length, 1);
+  })
+);
 
-//     t.isNotDeepEqual(
-//       installedApp1.cell_data[0].cell_id[0],
-//       installedApp2.cell_data[0].cell_id[0]
-//     );
-//   })
-// );
+test(
+  "can use some of the defined js bindings",
+  withConductor(ADMIN_PORT, async (t: Test) => {
+    const { installed_app_id, cell_id, client, admin } = await installAppAndDna(
+      ADMIN_PORT
+    );
+    let info = await client.appInfo({ installed_app_id }, 1000);
+    assert("Provisioned" in info.cell_info[ROLE_NAME][0]);
+    t.deepEqual(info.cell_info[ROLE_NAME][0].Provisioned.cell_id, cell_id);
+    t.ok(ROLE_NAME in info.cell_info);
+    t.deepEqual(info.status, { running: null });
+    await authorizeNewSigningKeyPair(admin, cell_id, [[TEST_ZOME_NAME, "foo"]]);
+    const zomeCallPayload: CallZomeRequest = {
+      cell_id,
+      zome_name: TEST_ZOME_NAME,
+      fn_name: "foo",
+      provenance: fakeAgentPubKey(),
+      payload: null,
+    };
+    const response = await client.callZome(zomeCallPayload, 30000);
+    t.equal(response, "foo");
 
-// test(
-//   "can create a callable clone cell",
-//   withConductor(ADMIN_PORT, async (t: Test) => {
-//     const { installed_app_id, role_name, client, admin } =
-//       await installAppAndDna(ADMIN_PORT);
-//     const info = await client.appInfo({ installed_app_id });
+    await admin.disableApp({ installed_app_id });
+    info = await client.appInfo({ installed_app_id }, 1000);
+    t.deepEqual(info.status, { disabled: { reason: { user: null } } });
+  })
+);
 
-//     const createCloneCellParams: CreateCloneCellRequest = {
-//       app_id: installed_app_id,
-//       role_name,
-//       modifiers: {
-//         network_seed: "clone-0",
-//       },
-//     };
-//     const cloneCell = await client.createCloneCell(createCloneCellParams);
+test(
+  "admin smoke test: install 2 hApp bundles with different network seeds",
+  withConductor(ADMIN_PORT, async (t: Test) => {
+    const admin = await AdminWebsocket.connect(`ws://localhost:${ADMIN_PORT}`);
+    const agent_key = await admin.generateAgentPubKey();
 
-//     const expectedCloneId = new CloneId(role_name, 0).toString();
-//     t.equal(cloneCell.role_name, expectedCloneId, "correct clone id");
-//     t.deepEqual(
-//       cloneCell.cell_id[1],
-//       info.cell_data[0].cell_id[1],
-//       "clone cell agent key matches base cell agent key"
-//     );
-//     const params: CallZomeRequest = {
-//       cap_secret: null,
-//       cell_id: cloneCell.cell_id,
-//       zome_name: TEST_ZOME_NAME,
-//       fn_name: "foo",
-//       provenance: fakeAgentPubKey(),
-//       payload: null,
-//     };
-//     const signedZomeCall = await grantSigningKeyAndSignZomeCall(
-//       admin,
-//       params
-//     );
-//     const response = await client.callZome(signedZomeCall);
-//     t.equal(
-//       response,
-//       "foo",
-//       "clone cell can be called with same zome call as base cell"
-//     );
-//   })
-// );
+    const installedApp1 = await admin.installApp({
+      agent_key,
+      installed_app_id: "test-app1",
+      membrane_proofs: {},
+      path: `${FIXTURE_PATH}/test.happ`,
+      network_seed: "1",
+    });
+    const installedApp2 = await admin.installApp({
+      agent_key,
+      installed_app_id: "test-app2",
+      membrane_proofs: {},
+      path: `${FIXTURE_PATH}/test.happ`,
+      network_seed: "2",
+    });
 
-// test(
-//   "can archive a clone cell",
-//   withConductor(ADMIN_PORT, async (t: Test) => {
-//     const { installed_app_id, role_name, client, admin } =
-//       await installAppAndDna(ADMIN_PORT);
-//     const createCloneCellParams: CreateCloneCellRequest = {
-//       app_id: installed_app_id,
-//       role_name,
-//       modifiers: {
-//         network_seed: "clone-0",
-//       },
-//     };
-//     const cloneCell = await client.createCloneCell(createCloneCellParams);
+    assert("Provisioned" in installedApp1.cell_info[ROLE_NAME][0]);
+    assert("Provisioned" in installedApp2.cell_info[ROLE_NAME][0]);
+    t.isNotDeepEqual(
+      installedApp1.cell_info[ROLE_NAME][0].Provisioned.cell_id[0],
+      installedApp2.cell_info[ROLE_NAME][0].Provisioned.cell_id[0]
+    );
+  })
+);
 
-//     await client.archiveCloneCell({
-//       app_id: installed_app_id,
-//       clone_cell_id: cloneCell.cell_id,
-//     });
+test(
+  "can create a callable clone cell",
+  withConductor(ADMIN_PORT, async (t: Test) => {
+    const { installed_app_id, client, admin } = await installAppAndDna(
+      ADMIN_PORT
+    );
+    const info = await client.appInfo({ installed_app_id });
 
-//     const appInfo = await client.appInfo({ installed_app_id });
-//     t.equal(
-//       appInfo.cell_data.length,
-//       1,
-//       "archived clone cell is not part of app info"
-//     );
-//     const params: CallZomeRequest = {
-//       cap_secret: null,
-//       cell_id: cloneCell.cell_id,
-//       zome_name: TEST_ZOME_NAME,
-//       fn_name: "foo",
-//       provenance: fakeAgentPubKey(),
-//       payload: null,
-//     };
-//     try {
-//       await grantSigningKeyAndSignZomeCall(admin, params);
-//       t.fail();
-//     } catch (error) {
-//       t.pass("archived clone call cannot be called");
-//     }
-//   })
-// );
+    const createCloneCellParams: CreateCloneCellRequest = {
+      app_id: installed_app_id,
+      role_name: ROLE_NAME,
+      modifiers: {
+        network_seed: "clone-0",
+      },
+    };
+    const cloneCell = await client.createCloneCell(createCloneCellParams);
 
-// test(
-//   "can restore an archived clone cell",
-//   withConductor(ADMIN_PORT, async (t: Test) => {
-//     const { installed_app_id, role_name, client, admin } =
-//       await installAppAndDna(ADMIN_PORT);
-//     const createCloneCellParams: CreateCloneCellRequest = {
-//       app_id: installed_app_id,
-//       role_name,
-//       modifiers: {
-//         network_seed: "clone-0",
-//       },
-//     };
-//     const cloneCell = await client.createCloneCell(createCloneCellParams);
-//     await client.archiveCloneCell({
-//       app_id: installed_app_id,
-//       clone_cell_id: cloneCell.cell_id,
-//     });
+    const expectedCloneId = new CloneId(ROLE_NAME, 0).toString();
+    t.equal(cloneCell.role_name, expectedCloneId, "correct clone id");
+    assert("Provisioned" in info.cell_info[ROLE_NAME][0]);
+    t.deepEqual(
+      cloneCell.cell_id[1],
+      info.cell_info[ROLE_NAME][0].Provisioned.cell_id[1],
+      "clone cell agent key matches base cell agent key"
+    );
+    const zomeCallPayload: CallZomeRequest = {
+      cell_id: cloneCell.cell_id,
+      zome_name: TEST_ZOME_NAME,
+      fn_name: "foo",
+      provenance: fakeAgentPubKey(),
+      payload: null,
+    };
+    await authorizeNewSigningKeyPair(admin, cloneCell.cell_id, [
+      [TEST_ZOME_NAME, "foo"],
+    ]);
+    const response = await client.callZome(zomeCallPayload);
+    t.equal(
+      response,
+      "foo",
+      "clone cell can be called with same zome call as base cell"
+    );
+  })
+);
 
-//     await admin.restoreCloneCell({
-//       app_id: installed_app_id,
-//       clone_cell_id: CloneId.fromRoleName(cloneCell.role_name).toString(),
-//     });
+test(
+  "can disable a clone cell",
+  withConductor(ADMIN_PORT, async (t: Test) => {
+    const { installed_app_id, client, admin } = await installAppAndDna(
+      ADMIN_PORT
+    );
+    const createCloneCellParams: CreateCloneCellRequest = {
+      app_id: installed_app_id,
+      role_name: ROLE_NAME,
+      modifiers: {
+        network_seed: "clone-0",
+      },
+    };
+    const cloneCell = await client.createCloneCell(createCloneCellParams);
 
-//     const appInfo = await client.appInfo({ installed_app_id });
-//     t.equal(
-//       appInfo.cell_data.length,
-//       2,
-//       "restored clone cell is part of app info"
-//     );
-//     const params: CallZomeRequest = {
-//       cap_secret: null,
-//       cell_id: cloneCell.cell_id,
-//       zome_name: TEST_ZOME_NAME,
-//       fn_name: "foo",
-//       provenance: fakeAgentPubKey(),
-//       payload: null,
-//     };
-//     const signedZomeCall = await grantSigningKeyAndSignZomeCall(admin, params);
-//     const resopnse = await client.callZome(signedZomeCall);
-//     t.equal(resopnse, "foo", "restored clone cell can be called");
-//   })
-// );
+    await authorizeNewSigningKeyPair(admin, cloneCell.cell_id, [
+      [TEST_ZOME_NAME, "foo"],
+    ]);
 
-// test(
-//   "can delete archived clone cells of an app",
-//   withConductor(ADMIN_PORT, async (t: Test) => {
-//     const { installed_app_id, role_name, client, admin } =
-//       await installAppAndDna(ADMIN_PORT);
-//     const createCloneCellParams: CreateCloneCellRequest = {
-//       app_id: installed_app_id,
-//       role_name,
-//       modifiers: {
-//         network_seed: "clone-0",
-//       },
-//     };
-//     const cloneCell0 = await client.createCloneCell(createCloneCellParams);
-//     createCloneCellParams.modifiers.network_seed = "clone-1";
-//     const cloneCell1 = await client.createCloneCell(createCloneCellParams);
-//     await client.archiveCloneCell({
-//       app_id: installed_app_id,
-//       clone_cell_id: cloneCell0.cell_id,
-//     });
-//     await client.archiveCloneCell({
-//       app_id: installed_app_id,
-//       clone_cell_id: cloneCell1.cell_id,
-//     });
+    await client.disableCloneCell({
+      app_id: installed_app_id,
+      clone_cell_id: cloneCell.cell_id,
+    });
 
-//     await admin.deleteArchivedCloneCells({
-//       app_id: installed_app_id,
-//       role_name,
-//     });
+    const appInfo = await client.appInfo({ installed_app_id });
+    t.equal(
+      appInfo.cell_info[ROLE_NAME].length,
+      2,
+      "disabled clone cell is still part of app info"
+    );
+    const params: CallZomeRequest = {
+      cell_id: cloneCell.cell_id,
+      zome_name: TEST_ZOME_NAME,
+      fn_name: "foo",
+      provenance: fakeAgentPubKey(),
+      payload: null,
+    };
+    try {
+      await client.callZome(params);
+      t.fail();
+    } catch (error) {
+      t.pass("disabled clone call cannot be called");
+    }
+  })
+);
 
-//     try {
-//       await admin.restoreCloneCell({
-//         app_id: installed_app_id,
-//         clone_cell_id: cloneCell0.cell_id,
-//       });
-//       t.fail();
-//     } catch (error) {
-//       t.pass("deleted clone cell 0 cannot be restored");
-//     }
-//     try {
-//       await admin.restoreCloneCell({
-//         app_id: installed_app_id,
-//         clone_cell_id: cloneCell1.cell_id,
-//       });
-//       t.fail();
-//     } catch (error) {
-//       t.pass("deleted clone cell 1 cannot be restored");
-//     }
-//   })
-// );
+test(
+  "can enable a disabled clone cell",
+  withConductor(ADMIN_PORT, async (t: Test) => {
+    const { installed_app_id, client, admin } = await installAppAndDna(
+      ADMIN_PORT
+    );
+    const createCloneCellParams: CreateCloneCellRequest = {
+      app_id: installed_app_id,
+      role_name: ROLE_NAME,
+      modifiers: {
+        network_seed: "clone-0",
+      },
+    };
+    const cloneCell = await client.createCloneCell(createCloneCellParams);
+    await client.disableCloneCell({
+      app_id: installed_app_id,
+      clone_cell_id: cloneCell.cell_id,
+    });
+
+    await client.enableCloneCell({
+      app_id: installed_app_id,
+      clone_cell_id: CloneId.fromRoleName(cloneCell.role_name).toString(),
+    });
+
+    const appInfo = await client.appInfo({ installed_app_id });
+    t.equal(
+      appInfo.cell_info[ROLE_NAME].length,
+      2,
+      "clone cell is part of app info"
+    );
+    const params: CallZomeRequest = {
+      cell_id: cloneCell.cell_id,
+      zome_name: TEST_ZOME_NAME,
+      fn_name: "foo",
+      provenance: fakeAgentPubKey(),
+      payload: null,
+    };
+    await authorizeNewSigningKeyPair(admin, cloneCell.cell_id, [
+      [TEST_ZOME_NAME, "foo"],
+    ]);
+    const resopnse = await client.callZome(params);
+    t.equal(resopnse, "foo", "enabled clone cell can be called");
+  })
+);
+
+test(
+  "can delete archived clone cells of an app",
+  withConductor(ADMIN_PORT, async (t: Test) => {
+    const { installed_app_id, client, admin } = await installAppAndDna(
+      ADMIN_PORT
+    );
+    const createCloneCellParams: CreateCloneCellRequest = {
+      app_id: installed_app_id,
+      role_name: ROLE_NAME,
+      modifiers: {
+        network_seed: "clone-0",
+      },
+    };
+    const cloneCell = await client.createCloneCell(createCloneCellParams);
+    createCloneCellParams.modifiers.network_seed = "clone-1";
+    await client.disableCloneCell({
+      app_id: installed_app_id,
+      clone_cell_id: cloneCell.cell_id,
+    });
+
+    await admin.deleteCloneCell({
+      app_id: installed_app_id,
+      clone_cell_id: cloneCell.cell_id,
+    });
+
+    try {
+      await client.enableCloneCell({
+        app_id: installed_app_id,
+        clone_cell_id: cloneCell.cell_id,
+      });
+      t.fail();
+    } catch (error) {
+      t.pass("deleted clone cell cannot be enabled");
+    }
+  })
+);
