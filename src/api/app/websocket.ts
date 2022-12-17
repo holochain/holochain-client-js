@@ -32,7 +32,7 @@ import {
   requesterTransformer,
   Transformer,
 } from "../common.js";
-import { signingProps } from "../zome-call-signing.js";
+import { getSigningPropsForCell } from "../zome-call-signing.js";
 import {
   AppApi,
   AppInfoRequest,
@@ -182,8 +182,7 @@ const callZomeTransform: Transformer<
       );
       return signedZomeCall;
     } else {
-      const signingPropsForCell = signingProps.get(req.cell_id);
-      console.log("signing props", signingProps);
+      const signingPropsForCell = getSigningPropsForCell(req.cell_id);
       if (!signingPropsForCell) {
         throw new Error(
           "cannot sign zome call: signing properties have not been set"
@@ -191,14 +190,13 @@ const callZomeTransform: Transformer<
       }
       const unsignedZomeCall: CallZomeRequestUnsigned = {
         ...req,
+        cap_secret: signingPropsForCell.capSecret,
         provenance: signingPropsForCell.signingKey,
         payload: encode(req.payload),
-        cap_secret: signingPropsForCell.capSecret,
         nonce: randomNonce(),
         expires_at: getNonceExpiration(),
       };
       const hashedZomeCall = await hashZomeCall(unsignedZomeCall);
-      console.log("hashed zome call", hashedZomeCall);
       const signature = nacl
         .sign(hashedZomeCall, signingPropsForCell.keyPair.secretKey)
         .subarray(0, nacl.sign.signatureLength);

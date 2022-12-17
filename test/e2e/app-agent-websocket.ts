@@ -1,4 +1,5 @@
 import test, { Test } from "tape";
+import assert from "node:assert";
 import {
   AppAgentWebsocket,
   AppCreateCloneCellRequest,
@@ -7,6 +8,7 @@ import {
   CloneId,
   AppEntryDef,
   RoleName,
+  authorizeNewSigningKeyPair,
 } from "../../src/index.js";
 import { installAppAndDna, withConductor } from "./util.js";
 
@@ -35,9 +37,14 @@ test(
     const appAgentWs = new AppAgentWebsocket(client, installed_app_id);
 
     let info = await appAgentWs.appInfo();
-    // t.deepEqual(info.cell_info.ROLE_NAME[0].Provisioned.cell_id, cell_id);
-    // t.equal(info.cell_info[0].role_name, role_name);
+    assert("Provisioned" in info.cell_info[ROLE_NAME][0]);
+    t.deepEqual(info.cell_info[ROLE_NAME][0].Provisioned.cell_id, cell_id);
+    t.ok(ROLE_NAME in info.cell_info);
     t.deepEqual(info.status, { running: null });
+
+    await authorizeNewSigningKeyPair(admin, cell_id, [
+      [COORDINATOR_ZOME_NAME, "echo_app_entry_def"],
+    ]);
 
     const appEntryDef: AppEntryDef = {
       entry_index: 0,
@@ -48,17 +55,23 @@ test(
     const response = await appAgentWs.callZome({
       cell_id,
       zome_name: COORDINATOR_ZOME_NAME,
-      fn_name: "echo_app_entry_type",
+      fn_name: "echo_app_entry_def",
       provenance: cell_id[1],
       payload: appEntryDef,
     });
 
     t.equal(response, null, "app entry type deserializes correctly");
 
+    const cellIdFromRoleName = appAgentWs.getCellIdFromRoleName(
+      ROLE_NAME,
+      info
+    );
+    t.deepEqual(cellIdFromRoleName, cell_id);
+
     const response_from_role_name = await appAgentWs.callZome({
       role_name: ROLE_NAME,
       zome_name: COORDINATOR_ZOME_NAME,
-      fn_name: "echo_app_entry_type",
+      fn_name: "echo_app_entry_def",
       provenance: cell_id[1],
       payload: appEntryDef,
     });
@@ -84,7 +97,7 @@ test(
     );
     const signalCb = (signal: AppSignal) => {
       t.deepEqual(signal, {
-        type: "Signal",
+        type: "signal",
         data: {
           cellId: cell_id,
           payload: "i am a signal",
@@ -93,9 +106,13 @@ test(
       resolveSignalPromise();
     };
 
-    const { cell_id, client, installed_app_id } = await installAppAndDna(
+    const { admin, cell_id, client, installed_app_id } = await installAppAndDna(
       ADMIN_PORT
     );
+
+    await authorizeNewSigningKeyPair(admin, cell_id, [
+      [TEST_ZOME_NAME, "emitter"],
+    ]);
 
     const appAgentWs = new AppAgentWebsocket(client, installed_app_id);
 
@@ -116,7 +133,9 @@ test(
 test(
   "can create a callable clone cell",
   withConductor(ADMIN_PORT, async (t: Test) => {
-    const { installed_app_id, client } = await installAppAndDna(ADMIN_PORT);
+    const { admin, installed_app_id, client } = await installAppAndDna(
+      ADMIN_PORT
+    );
     const info = await client.appInfo({ installed_app_id });
 
     const appAgentWs = new AppAgentWebsocket(client, installed_app_id);
@@ -128,14 +147,18 @@ test(
       },
     };
     const cloneCell = await appAgentWs.createCloneCell(createCloneCellParams);
+    await authorizeNewSigningKeyPair(admin, cloneCell.cell_id, [
+      [TEST_ZOME_NAME, "foo"],
+    ]);
 
     const expectedCloneId = new CloneId(ROLE_NAME, 0).toString();
     t.equal(cloneCell.role_name, expectedCloneId, "correct clone id");
-    // t.deepEqual(
-    //   cloneCell.cell_id[1],
-    //   info.cell_info.ROLE_NAME[0].Provisioned.cell_id[1],
-    //   "clone cell agent key matches base cell agent key"
-    // );
+    assert("Provisioned" in info.cell_info[ROLE_NAME][0]);
+    t.deepEqual(
+      cloneCell.cell_id[1],
+      info.cell_info[ROLE_NAME][0].Provisioned.cell_id[1],
+      "clone cell agent key matches base cell agent key"
+    );
     const params: CallZomeRequest = {
       cell_id: cloneCell.cell_id,
       zome_name: TEST_ZOME_NAME,
@@ -153,9 +176,11 @@ test(
 );
 
 test(
-  "can archive a clone cell",
+  "can disable and re-enable a clone cell",
   withConductor(ADMIN_PORT, async (t: Test) => {
-    const { installed_app_id, client } = await installAppAndDna(ADMIN_PORT);
+    const { admin, installed_app_id, client } = await installAppAndDna(
+      ADMIN_PORT
+    );
 
     const appAgentWs = new AppAgentWebsocket(client, installed_app_id);
 
@@ -166,16 +191,19 @@ test(
       },
     };
     const cloneCell = await appAgentWs.createCloneCell(createCloneCellParams);
+    await authorizeNewSigningKeyPair(admin, cloneCell.cell_id, [
+      [TEST_ZOME_NAME, "foo"],
+    ]);
 
-    await appAgentWs.archiveCloneCell({
+    await appAgentWs.disableCloneCell({
       clone_cell_id: cloneCell.cell_id,
     });
 
     const appInfo = await appAgentWs.appInfo();
     t.equal(
-      appInfo.cell_info.length,
-      1,
-      "archived clone cell is not part of app info"
+      appInfo.cell_info[ROLE_NAME].length,
+      2,
+      "disabled clone cell is part of app info"
     );
     const params: CallZomeRequest = {
       cell_id: cloneCell.cell_id,
@@ -188,7 +216,13 @@ test(
       await appAgentWs.callZome(params);
       t.fail();
     } catch (error) {
-      t.pass("archived clone call cannot be called");
+      t.pass("disabled clone call cannot be called");
     }
+
+    await appAgentWs.enableCloneCell({
+      clone_cell_id: cloneCell.cell_id,
+    });
+    await appAgentWs.callZome(params);
+    t.pass("re-enabled clone can be called");
   })
 );

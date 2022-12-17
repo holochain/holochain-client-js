@@ -66,6 +66,20 @@ export const promiseTimeout = (
   });
 };
 
+const CLONE_ID_DELIMITER = ".";
+
+export const isCloneId = (roleName: RoleName) =>
+  roleName.includes(CLONE_ID_DELIMITER);
+
+export const getBaseRoleNameFromCloneId = (roleName: RoleName) => {
+  if (!isCloneId(roleName)) {
+    throw new Error(
+      "invalid clone id: no clone id delimiter found in role name"
+    );
+  }
+  return roleName.split(CLONE_ID_DELIMITER)[0];
+};
+
 /**
  * Identifier of a clone cell, composed of the DNA's role id and the index
  * of the clone, starting at 0.

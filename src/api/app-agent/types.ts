@@ -10,6 +10,8 @@ import {
   AppSignal,
   DisableCloneCellRequest,
   CallZomeRequest,
+  EnableCloneCellRequest,
+  EnableCloneCellResponse,
 } from "../app/index.js";
 
 export type RoleNameCallZomeRequest = Omit<CallZomeRequest, "cell_id"> & {
@@ -20,7 +22,9 @@ export type AppAgentCallZomeRequest = CallZomeRequest | RoleNameCallZomeRequest;
 
 export type AppCreateCloneCellRequest = Omit<CreateCloneCellRequest, "app_id">;
 
-export type AppArchiveCloneCellRequest = Omit<
+export type AppEnableCloneCellRequest = Omit<EnableCloneCellRequest, "app_id">;
+
+export type AppDisableCloneCellRequest = Omit<
   DisableCloneCellRequest,
   "app_id"
 >;
@@ -42,7 +46,10 @@ export interface AppAgentClient {
   createCloneCell(
     args: AppCreateCloneCellRequest
   ): Promise<CreateCloneCellResponse>;
-  archiveCloneCell(
-    args: AppArchiveCloneCellRequest
+  enableCloneCell(
+    args: AppEnableCloneCellRequest
+  ): Promise<EnableCloneCellResponse>;
+  disableCloneCell(
+    args: AppDisableCloneCellRequest
   ): Promise<DisableCloneCellResponse>;
 }

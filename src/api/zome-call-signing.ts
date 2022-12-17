@@ -3,9 +3,10 @@ import { AgentPubKey, CellId } from "../types.js";
 import { FunctionName, ZomeName } from "./admin/types.js";
 import { AdminWebsocket } from "./admin/websocket.js";
 import { generateSigningKeyPair, grantSigningKey } from "./app/util.js";
+import { fromUint8Array } from "js-base64";
 
-export const signingProps: Map<
-  CellId,
+const signingProps: Map<
+  string,
   {
     capSecret: CapSecret;
     keyPair: nacl.SignKeyPair;
@@ -25,5 +26,11 @@ export const authorizeNewSigningKeyPair = async (
     functions,
     signingKey
   );
-  signingProps.set(cellId, { capSecret, keyPair, signingKey });
+  const cellIdB64 = fromUint8Array(cellId[0]).concat(fromUint8Array(cellId[1]));
+  signingProps.set(cellIdB64, { capSecret, keyPair, signingKey });
+};
+
+export const getSigningPropsForCell = (cellId: CellId) => {
+  const cellIdB64 = fromUint8Array(cellId[0]).concat(fromUint8Array(cellId[1]));
+  return signingProps.get(cellIdB64);
 };
