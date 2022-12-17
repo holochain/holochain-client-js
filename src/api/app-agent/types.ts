@@ -12,13 +12,23 @@ import {
   CallZomeRequest,
   EnableCloneCellRequest,
   EnableCloneCellResponse,
+  CallZomeRequestSigned,
 } from "../app/index.js";
 
 export type RoleNameCallZomeRequest = Omit<CallZomeRequest, "cell_id"> & {
   role_name: RoleName;
 };
 
-export type AppAgentCallZomeRequest = CallZomeRequest | RoleNameCallZomeRequest;
+export type RoleNameCallZomeRequestSigned = Omit<
+  CallZomeRequestSigned,
+  "cell_id"
+> & { role_name: RoleName };
+
+export type AppAgentCallZomeRequest =
+  | CallZomeRequest
+  | RoleNameCallZomeRequest
+  | CallZomeRequestSigned
+  | RoleNameCallZomeRequestSigned;
 
 export type AppCreateCloneCellRequest = Omit<CreateCloneCellRequest, "app_id">;
 
