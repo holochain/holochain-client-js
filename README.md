@@ -17,34 +17,39 @@ To install from NPM, run
 npm install --save-exact @holochain/client
 ```
 
-> This code is still under alpha development and npm releases are pre-releases with `dev` tags meaning they will not use full semantic versioning, and you may wish to lock to an exact version of the library for that reason, as shown in the above command.
+> This code is under beta development and you may wish to lock to an exact version of the library for that reason, as shown in the above command.
 
 ## Sample usage
 
 ### Use AdminWebsocket
 ```typescript
   const admin = await AdminWebsocket.connect(`ws://127.0.0.1:8000`, TIMEOUT)
-  await admin.generateAgentPubKey()
+  const agentPubKey = await admin.generateAgentPubKey()
 ```
 
-### Use AppWebsocket
+### Use AppWebsocket with implicit zome call signing
 ```typescript
   const signalCb = (signal: AppSignal) => {
     // impl...
     resolve()
   }
 
+  // generate and authorize new key pair for signing zome calls,
+  // specifying zomes and functions to be authorized
+  await authorizeNewSigningKeyPair(admin, cell_id, [
+    ["test_zome", "test_emitter_fn"],
+  ]);
+
   const TIMEOUT = 12000
   // default timeout is set to 12000
-  const client = await AppWebsocket.connect(`ws://127.0.0.1:${appPort}`, 12000, signalCb)
+  const client = await AppWebsocket.connect(`ws://127.0.0.1:${appPort}`, TIMEOUT, signalCb)
 
   // default timeout set here (30000) will overwrite the defaultTimeout(12000) set above
   await client.callZome({
-   cap: null,
    cell_id,
    zome_name: "test_zome",
    fn_name: 'test_emitter_fn',
-   provenance: fakeAgentPubKey('TODO'),
+   provenance: agentPubKey,
    payload: null,
   }, 30000)
 ```
@@ -56,6 +61,12 @@ npm install --save-exact @holochain/client
     resolve()
   }
 
+  // generate and authorize new key pair for signing zome calls,
+  // specifying zomes and functions to be authorized
+  await authorizeNewSigningKeyPair(admin, cell_id, [
+    ["test_zome", "test_emitter_fn"],
+  ]);
+
   const TIMEOUT = 12000
   // default timeout is set to 12000
   const appWs = await AppWebsocket.connect(`ws://127.0.0.1:${appPort}`, 12000, signalCb)
@@ -64,11 +75,10 @@ npm install --save-exact @holochain/client
 
   // default timeout set here (30000) will overwrite the defaultTimeout(12000) set above
   await client.callZome({
-   cap: null,
-   role_name: 'dnas_role_name', // role_name is unique per app, so you can unambiguously identify your dna with role_name in this client,
+   role_name: 'dnas_role_name', // role_name is unique per app, so you can unambiguously identify your dna with role_name in this client
    zome_name: "test_zome",
    fn_name: 'test_emitter_fn',
-   provenance: fakeAgentPubKey('TODO'),
+   provenance: agentPubKey,
    payload: null,
   }, 30000)
 ```
@@ -107,7 +117,7 @@ Holochain is an open source project.  We welcome all sorts of participation and 
 
  [![License: CAL 1.0](https://img.shields.io/badge/License-CAL%201.0-blue.svg)](https://github.com/holochain/cryptographic-autonomy-license)
 
-Copyright (C) 2020-2022, Holochain Foundation
+Copyright (C) 2020-2023, Holochain Foundation
 
 This program is free software: you can redistribute it and/or modify it under the terms of the license
 provided in the LICENSE file (CAL-1.0).  This program is distributed in the hope that it will be useful,

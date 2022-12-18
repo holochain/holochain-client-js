@@ -4,8 +4,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## \[Unreleased\]
 ### Added
+- Low-level functions to generate and authorize signing keys and to sign zome calls with them.
+- High-level function to handle key generation and zome call signing automatically.
 ### Removed
+- **BREAKING CHANGE**: Remove call `install_app`.
 ### Changed
+- **BREAKING CHANGE**: Upgrade to Holochain v0.1.0-beta-rc.1
+- **BREAKING CHANGE**: Require all zome calls to be signed.
+- **BREAKING CHANGE**: Rename `install_app_bundle` to `install_app`.
+- **BREAKING CHANGE**: Rename `archive_clone_cell` to `disable_clone_cell`.
+- **BREAKING CHANGE**: Rename `restore_archived_clone_cell` to `enable_clone_cell`.
+- **BREAKING CHANGE**: Move `enable_clone_cell` to App API.
+- **BREAKING CHANGE**: Refactor `delete_clone_cell` to delete a single disabled clone cell.
+- **BREAKING CHANGE**: Refactor `app_info` to return all cells and DNA modifiers.
+- **BREAKING CHANGE**: Rename `request_agent_info` to `agent_info`.
 - AppAgentWebsocket constructor uses launcher env.INSTALLED_APP_ID when present
 ### Fixed
 

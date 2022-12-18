@@ -87,7 +87,6 @@ export const getBaseRoleNameFromCloneId = (roleName: RoleName) => {
  * Example: `profiles.0`
  */
 export class CloneId {
-  private static readonly CLONE_ID_DELIMITER = ".";
   private readonly roleName: RoleName;
   private readonly index: number;
 
@@ -102,7 +101,7 @@ export class CloneId {
    * @returns A clone id instance.
    */
   static fromRoleName(roleName: RoleName) {
-    const parts = roleName.split(CloneId.CLONE_ID_DELIMITER);
+    const parts = roleName.split(CLONE_ID_DELIMITER);
     if (parts.length !== 2) {
       throw new Error(
         "Malformed clone id: must consist of {role id.clone index}"
@@ -112,7 +111,7 @@ export class CloneId {
   }
 
   toString() {
-    return `${this.roleName}${CloneId.CLONE_ID_DELIMITER}${this.index}`;
+    return `${this.roleName}${CLONE_ID_DELIMITER}${this.index}`;
   }
 
   getBaseRoleName() {

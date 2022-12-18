@@ -115,10 +115,10 @@ export class AppWebsocket extends Emittery implements AppApi {
     appInfoTransform(this)
   );
 
-  callZome: Requester<CallZomeRequest, CallZomeResponse> = this._requester(
-    "call_zome",
-    callZomeTransform
-  );
+  callZome: Requester<
+    CallZomeRequest | CallZomeRequestSigned,
+    CallZomeResponse
+  > = this._requester("call_zome", callZomeTransform);
 
   createCloneCell: Requester<CreateCloneCellRequest, CreateCloneCellResponse> =
     this._requester("create_clone_cell");
@@ -133,6 +133,18 @@ export class AppWebsocket extends Emittery implements AppApi {
 
   networkInfo: Requester<NetworkInfoRequest, NetworkInfoResponse> =
     this._requester("network_info");
+}
+
+
+interface CallZomeRequestSignedTauri // Tauri requires a number array instead of a Uint8Array
+  extends Omit<
+    CallZomeRequestSigned,
+    "cap_secret" | "cell_id" | "provenance" | "nonce"
+  > {
+  cell_id: [TauriByteArray, TauriByteArray];
+  provenance: TauriByteArray;
+  nonce: TauriByteArray;
+  expires_at: number;
 }
 
 export type Nonce256Bit = Uint8Array;
@@ -159,19 +171,10 @@ interface CallZomeRequestUnsignedTauri
   expires_at: number;
 }
 
-interface CallZomeRequestSignedTauri // Tauri requires a number array instead of a Uint8Array
-  extends Omit<
-    CallZomeRequestSigned,
-    "cap_secret" | "cell_id" | "provenance" | "nonce"
-  > {
-  cell_id: [TauriByteArray, TauriByteArray];
-  provenance: TauriByteArray;
-  nonce: TauriByteArray;
-  expires_at: number;
-}
-
 const callZomeTransform: Transformer<
-  CallZomeRequest,
+  // either an already signed zome call which is returned as is, or a zome call
+  // payload to be signed
+  CallZomeRequest | CallZomeRequestSigned,
   Promise<CallZomeRequestSigned>,
   CallZomeResponseGeneric<Uint8Array>,
   CallZomeResponse
@@ -210,30 +213,34 @@ const callZomeTransform: Transformer<
 
       return signedZomeCall;
     } else {
-      const signingPropsForCell = getSigningPropsForCell(req.cell_id);
-      if (!signingPropsForCell) {
-        throw new Error(
-          "cannot sign zome call: signing properties have not been set"
-        );
-      }
-      const unsignedZomeCall: CallZomeRequestUnsigned = {
-        ...req,
-        cap_secret: signingPropsForCell.capSecret,
-        provenance: signingPropsForCell.signingKey,
-        payload: encode(req.payload),
-        nonce: randomNonce(),
-        expires_at: getNonceExpiration(),
-      };
-      const hashedZomeCall = await hashZomeCall(unsignedZomeCall);
-      const signature = nacl
-        .sign(hashedZomeCall, signingPropsForCell.keyPair.secretKey)
-        .subarray(0, nacl.sign.signatureLength);
+      if ("signature" in req) {
+        return req;
+      } else {
+        const signingPropsForCell = getSigningPropsForCell(req.cell_id);
+        if (!signingPropsForCell) {
+          throw new Error(
+            "cannot sign zome call: signing properties have not been set"
+          );
+        }
+        const unsignedZomeCall: CallZomeRequestUnsigned = {
+          ...req,
+          cap_secret: signingPropsForCell.capSecret,
+          provenance: signingPropsForCell.signingKey,
+          payload: encode(req.payload),
+          nonce: randomNonce(),
+          expires_at: getNonceExpiration(),
+        };
+        const hashedZomeCall = await hashZomeCall(unsignedZomeCall);
+        const signature = nacl
+          .sign(hashedZomeCall, signingPropsForCell.keyPair.secretKey)
+          .subarray(0, nacl.sign.signatureLength);
 
-      const signedZomeCall: CallZomeRequestSigned = {
-        ...unsignedZomeCall,
-        signature,
-      };
-      return signedZomeCall;
+        const signedZomeCall: CallZomeRequestSigned = {
+          ...unsignedZomeCall,
+          signature,
+        };
+        return signedZomeCall;
+      }
     }
   },
   output: (res) => decode(res),

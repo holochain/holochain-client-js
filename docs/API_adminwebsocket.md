@@ -22,23 +22,6 @@ Create a new connection to the given URL.
 Returns a `Promise` for a new connected instance of `AdminWebsocket`.
 
 
-## `<AdminWebsocket>.activateApp({ installed_app_id })`
-
-| :exclamation: This method is deprecated. Please use `enableApp` instead  |
-|--------------------------------------------------------------------------|
-
-Send a request to activate an installed app.
-
-- `installed_app_id` - a `string`
-
-Returns a `Promise` for the corresponding response.
-
-### Response format
-```javascript
-null
-```
-
-
 ## `<AdminWebsocket>.attachAppInterface({ port })`
 Send a request to open the given port for `AppWebsocket` connections.
 
@@ -51,23 +34,6 @@ Returns a `Promise` for the corresponding response.
 {
     "port": number,
 }
-```
-
-
-## `<AdminWebsocket>.deactivateApp({ installed_app_id })`
-
-| :exclamation: This method is deprecated. Please use `disableApp` instead  |
-|---------------------------------------------------------------------------|
-
-Send a request to disable a running app.
-
-- `installed_app_id` - a `string`
-
-Returns a `Promise` for the corresponding response.
-
-### Response format
-```javascript
-null
 ```
 
 
@@ -161,7 +127,7 @@ Returns a `Promise` for the corresponding response.
 buffer  // hash of DNA registered
 ```
 
-## `<AdminWebsocket>.installAppBundle({ installed_app_id, source as path | bundle | hash, network_seed?, properties? })`
+## `<AdminWebsocket>.installApp({ installed_app_id, source as path | bundle | hash, network_seed?, properties? })`
 Request a hApp to be installed using the given source, and optional network seed and properties.
 - `installed_app_id` - a `string`
 - bundle source as one  of the following named properties:
@@ -197,18 +163,6 @@ installedApp `object` with properties:
     }
 }
 ```
-
-## `<AdminWebsocket>.installApp({ installed_app_id, agent_key, dnas })`
-Request a new App to be created using the given Agent and DNAs.
-
-- `installed_app_id` - a `string`
-- `agent_key` - a `buffer`
-- `dnas` - an `array` of `object` with properties
-  - `hash` - a `string`
-  - `role` - a `string`
-  - `membrane_proof` - an (optional) `buffer`
-
-Returns a `Promise` for the corresponding response.
 
 ## `<AdminWebsocket>.uninstallApp({ installed_app_id })`
 Request that an app be permanently removed from the database.
@@ -255,18 +209,7 @@ Returns a `Promise` for the corresponding response.
 ```
 
 
-## `<AdminWebsocket>.listActiveApps()`
-Request the list of actived apps that this Conductor has.
-
-Returns a `Promise` for the corresponding response.
-
-### Response format
-```javascript
-[ buffer, ... ]
-```
-
-
-## `<AdminWebsocket>.requestAgentInfo({ cell_id })`
+## `<AdminWebsocket>.agentInfo({ cell_id })`
 Request the list of stored agent information for the given cell.
 
 - `cell_id` - a 2 part `array` with

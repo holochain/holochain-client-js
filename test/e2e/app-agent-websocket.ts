@@ -9,6 +9,7 @@ import {
   AppEntryDef,
   RoleName,
   authorizeNewSigningKeyPair,
+  AppAgentCallZomeRequest,
 } from "../../src/index.js";
 import { installAppAndDna, withConductor } from "./util.js";
 
@@ -131,7 +132,7 @@ test(
 );
 
 test(
-  "can create a callable clone cell",
+  "can create a callable clone cell and call it by clone id",
   withConductor(ADMIN_PORT, async (t: Test) => {
     const { admin, installed_app_id, client } = await installAppAndDna(
       ADMIN_PORT
@@ -159,8 +160,9 @@ test(
       info.cell_info[ROLE_NAME][0].Provisioned.cell_id[1],
       "clone cell agent key matches base cell agent key"
     );
-    const params: CallZomeRequest = {
-      cell_id: cloneCell.cell_id,
+
+    const params: AppAgentCallZomeRequest = {
+      role_name: cloneCell.role_name,
       zome_name: TEST_ZOME_NAME,
       fn_name: "foo",
       provenance: fakeAgentPubKey(),
@@ -170,7 +172,7 @@ test(
     t.equal(
       response,
       "foo",
-      "clone cell can be called with same zome call as base cell"
+      "clone cell can be called with same zome call as base cell, and by clone id"
     );
   })
 );
