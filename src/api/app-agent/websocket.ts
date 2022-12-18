@@ -2,7 +2,7 @@
  * Defines AppAgentWebsocket, an easy-to-use websocket implementation of the
  * Conductor API for apps, restricted to a single app provided on initialization
  *
- *    const appWs = AppWebsocket.connect('ws://localhost:9000')
+ *    const appWs = AppWebsocket.connect('ws://127.0.0.1:9000')
  *
  *    const client = new AppAgentWebsocket(appWs, 'my_installed_app_id')
  *
@@ -24,29 +24,31 @@ import Emittery, { UnsubscribeFunction } from "emittery";
 import { omit } from "lodash-es";
 import { getLauncherEnvironment } from "../../environments/launcher.js";
 
-import { InstalledAppId } from "../../types.js";
+import { InstalledAppId, RoleName } from "../../types.js";
+import { getBaseRoleNameFromCloneId, isCloneId } from "../common.js";
 import {
+  AppInfo,
   AppInfoResponse,
   AppWebsocket,
-  ArchiveCloneCellResponse,
   CallZomeRequest,
   CallZomeResponse,
   CreateCloneCellResponse,
-  InstalledAppInfo,
+  DisableCloneCellResponse,
+  EnableCloneCellResponse,
 } from "../index.js";
 import {
   AppAgentCallZomeRequest,
   AppAgentClient,
   AppAgentEvents,
-  AppArchiveCloneCellRequest,
   AppCreateCloneCellRequest,
-  RoleNameCallZomeRequest,
+  AppDisableCloneCellRequest,
+  AppEnableCloneCellRequest,
 } from "./types.js";
 
 export class AppAgentWebsocket implements AppAgentClient {
   appWebsocket: AppWebsocket;
   installedAppId: InstalledAppId;
-  cachedAppInfo?: InstalledAppInfo;
+  cachedAppInfo?: AppInfo;
 
   emitter = new Emittery<AppAgentEvents>();
 
@@ -70,29 +72,45 @@ export class AppAgentWebsocket implements AppAgentClient {
     return appInfo;
   }
 
+  getCellIdFromRoleName(roleName: RoleName, appInfo: AppInfo) {
+    if (isCloneId(roleName)) {
+      const baseRoleName = getBaseRoleNameFromCloneId(roleName);
+      if (!(baseRoleName in appInfo.cell_info)) {
+        throw new Error(`No cell found with role_name ${roleName}`);
+      }
+      const cloneCell = appInfo.cell_info[baseRoleName].find(
+        (c) => "Cloned" in c && c.Cloned.clone_id === roleName
+      );
+      if (!cloneCell || !("Cloned" in cloneCell)) {
+        throw new Error(`No clone cell found with clone id ${roleName}`);
+      }
+      return cloneCell.Cloned.cell_id;
+    }
+
+    if (!(roleName in appInfo.cell_info)) {
+      throw new Error(`No cell found with role_name ${roleName}`);
+    }
+    const cell = appInfo.cell_info[roleName].find((c) => "Provisioned" in c);
+    if (!cell || !("Provisioned" in cell)) {
+      throw new Error(`No provisioned cell found with role_name ${roleName}`);
+    }
+    return cell.Provisioned.cell_id;
+  }
+
   async callZome(
     request: AppAgentCallZomeRequest,
     timeout?: number
   ): Promise<CallZomeResponse> {
-    const role_name: string | undefined = (request as RoleNameCallZomeRequest)
-      .role_name;
-    if (role_name) {
+    if ("role_name" in request && request.role_name) {
       const appInfo = this.cachedAppInfo || (await this.appInfo());
-      const cell_id = appInfo.cell_data.find(
-        (c) => c.role_name === role_name
-      )?.cell_id;
-
-      if (!cell_id) {
-        throw new Error(`No cell found with role_name ${role_name}`);
-      }
-
-      const callZomeRequest = {
+      const cell_id = this.getCellIdFromRoleName(request.role_name, appInfo);
+      const zomeCallPayload: CallZomeRequest = {
         ...omit(request, "role_name"),
         cell_id,
       };
-      return this.appWebsocket.callZome(callZomeRequest, timeout);
-    } else if ((request as CallZomeRequest).cell_id) {
-      return this.appWebsocket.callZome(request as CallZomeRequest, timeout);
+      return this.appWebsocket.callZome(zomeCallPayload, timeout);
+    } else if ("cell_id" in request && request.cell_id) {
+      return this.appWebsocket.callZome(request, timeout);
     } else {
       throw new Error("callZome requires a role_name or cell_id arg");
     }
@@ -111,10 +129,19 @@ export class AppAgentWebsocket implements AppAgentClient {
     return clonedCell;
   }
 
-  async archiveCloneCell(
-    args: AppArchiveCloneCellRequest
-  ): Promise<ArchiveCloneCellResponse> {
-    return this.appWebsocket.archiveCloneCell({
+  async enableCloneCell(
+    args: AppEnableCloneCellRequest
+  ): Promise<EnableCloneCellResponse> {
+    return this.appWebsocket.enableCloneCell({
+      app_id: this.installedAppId,
+      ...args,
+    });
+  }
+
+  async disableCloneCell(
+    args: AppDisableCloneCellRequest
+  ): Promise<DisableCloneCellResponse> {
+    return this.appWebsocket.disableCloneCell({
       app_id: this.installedAppId,
       ...args,
     });

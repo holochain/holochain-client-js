@@ -37,10 +37,37 @@ Returns a `Promise` for the corresponding response.
 ```javascript
 {
     "installed_app_id": string,
-    "cell_data": [
-        [ [ buffer, buffer ] , string ],
+    "cell_info": {
+        role_name: [
+          {
+            | Provisioned: {
+                cell_id: CellId;
+                clone_id?: RoleName;
+                dna_modifiers: DnaModifiers;
+                name: string;
+                enabled: boolean;
+            }
+            | Cloned: {
+              cell_id: CellId;
+              clone_id?: RoleName;
+              dna_modifiers: DnaModifiers;
+              name: string;
+              enabled: boolean;
+            }
+            | Stem: {
+              dna: DnaHash;
+              name?: string;
+              dna_modifiers: DnaModifiers;
+            }
+          },
+          ...
+        ],
         ...
-    ]
+    ],
+    "status":
+      | paused: { reason: PausedAppReason }
+      | disabled: { reason: DisabledAppReason }
+      | running: null
 }
 ```
 

@@ -2,7 +2,9 @@ import { spawn } from "node:child_process";
 import { Test } from "tape";
 import { AdminWebsocket } from "../../src/api/admin/websocket.js";
 import { AppWebsocket } from "../../src/api/app/websocket.js";
-import { CellId, InstalledAppId, RoleName } from "../../src/types.js";
+import { CellId, InstalledAppId } from "../../src/types.js";
+import assert from "node:assert/strict";
+
 export const FIXTURE_PATH = "./test/e2e/fixture";
 
 const LAIR_PASSPHRASE = "passphrase";
@@ -42,6 +44,7 @@ export const launch = async (port: number) => {
 
   const runConductorPromise = new Promise<void>((resolve) => {
     runConductorProcess.stdout.on("data", (data: Buffer) => {
+      console.log(data.toString());
       const isConductorStarted = data
         .toString()
         .includes("Connected successfully to a running holochain");
@@ -50,6 +53,9 @@ export const launch = async (port: number) => {
         resolve();
       }
     });
+  });
+  runConductorProcess.stderr.on("data", (data: Buffer) => {
+    console.log(data.toString());
   });
   await runConductorPromise;
   return runConductorProcess;
@@ -87,38 +93,25 @@ export const installAppAndDna = async (
 ): Promise<{
   installed_app_id: InstalledAppId;
   cell_id: CellId;
-  role_name: RoleName;
   client: AppWebsocket;
   admin: AdminWebsocket;
 }> => {
+  const role_name = "foo";
   const installed_app_id = "app";
-  const role_name = "mydna";
-  const admin = await AdminWebsocket.connect(`ws://localhost:${adminPort}`);
-
-  const path = `${FIXTURE_PATH}/test.dna`;
-  const hash = await admin.registerDna({
-    modifiers: {},
-    path,
-  });
-
-  console.log("THE HASH:", hash);
-
+  const admin = await AdminWebsocket.connect(`ws://127.0.0.1:${adminPort}`);
+  const path = `${FIXTURE_PATH}/test.happ`;
   const agent = await admin.generateAgentPubKey();
   const app = await admin.installApp({
     installed_app_id,
     agent_key: agent,
-    dnas: [
-      {
-        hash,
-        role_name,
-      },
-    ],
+    path,
+    membrane_proofs: {},
   });
-  console.log("THE INSTALL RESULT:", app);
-  const cell_id = app.cell_data[0].cell_id;
-  await admin.activateApp({ installed_app_id });
+  assert("Provisioned" in app.cell_info[role_name][0]);
+  const cell_id = app.cell_info[role_name][0].Provisioned.cell_id;
+  await admin.enableApp({ installed_app_id });
   // destructure to get whatever open port was assigned to the interface
   const { port: appPort } = await admin.attachAppInterface({ port: 0 });
-  const client = await AppWebsocket.connect(`ws://localhost:${appPort}`, 12000);
-  return { installed_app_id, cell_id, role_name, client, admin };
+  const client = await AppWebsocket.connect(`ws://127.0.0.1:${appPort}`, 12000);
+  return { installed_app_id, cell_id, client, admin };
 };

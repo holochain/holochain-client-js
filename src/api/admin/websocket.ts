@@ -3,7 +3,7 @@
  * Conductor Admin API
  *
  *    const client = AdminWebsocket.connect(
- *      'ws://localhost:9000'
+ *      'ws://127.0.0.1:9000'
  *    )
  *
  *    client.generateAgentPubKey()
@@ -39,7 +39,7 @@ export class AdminWebsocket implements Api.AdminApi {
     const env = getLauncherEnvironment();
 
     if (env) {
-      url = `ws://localhost:${env.ADMIN_INTERFACE_PORT}`;
+      url = `ws://127.0.0.1:${env.ADMIN_INTERFACE_PORT}`;
     }
 
     const wsClient = await WsClient.connect(url);
@@ -97,14 +97,10 @@ export class AdminWebsocket implements Api.AdminApi {
     Api.GetDnaDefinitionRequest,
     Api.GetDnaDefinitionResponse
   > = this._requester("get_dna_definition");
-  installApp: Requester<Api.InstallAppRequest, Api.InstallAppResponse> =
-    this._requester("install_app");
   uninstallApp: Requester<Api.UninstallAppRequest, Api.UninstallAppResponse> =
     this._requester("uninstall_app");
-  installAppBundle: Requester<
-    Api.InstallAppBundleRequest,
-    Api.InstallAppBundleResponse
-  > = this._requester("install_app_bundle");
+  installApp: Requester<Api.InstallAppRequest, Api.InstallAppResponse> =
+    this._requester("install_app");
   listDnas: Requester<Api.ListDnasRequest, Api.ListDnasResponse> =
     this._requester("list_dnas");
   listCellIds: Requester<Api.ListCellIdsRequest, Api.ListCellIdsResponse> =
@@ -120,20 +116,14 @@ export class AdminWebsocket implements Api.AdminApi {
     Api.ListAppInterfacesRequest,
     Api.ListAppInterfacesResponse
   > = this._requester("list_app_interfaces");
-  requestAgentInfo: Requester<
-    Api.RequestAgentInfoRequest,
-    Api.RequestAgentInfoResponse
-  > = this._requester("request_agent_info");
+  agentInfo: Requester<Api.AgentInfoRequest, Api.AgentInfoResponse> =
+    this._requester("agent_info");
   addAgentInfo: Requester<Api.AddAgentInfoRequest, Api.AddAgentInfoResponse> =
     this._requester("add_agent_info");
-  restoreCloneCell: Requester<
-    Api.RestoreCloneCellRequest,
-    Api.RestoreCloneCellResponse
-  > = this._requester("restore_clone_cell");
-  deleteArchivedCloneCells: Requester<
-    Api.DeleteArchivedCloneCellsRequest,
-    Api.DeleteArchivedCloneCellsResponse
-  > = this._requester("delete_archived_clone_cells");
+  deleteCloneCell: Requester<
+    Api.DeleteCloneCellRequest,
+    Api.DeleteCloneCellResponse
+  > = this._requester("delete_clone_cell");
   grantZomeCallCapability: Requester<
     Api.GrantZomeCallCapabilityRequest,
     Api.GrantZomeCallCapabilityResponse

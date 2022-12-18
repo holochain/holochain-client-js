@@ -42,7 +42,7 @@ export class WsClient extends Emittery {
       }
 
       const msg: any = decode(data);
-      if (msg.type === "Signal") {
+      if (msg.type === "signal") {
         const decodedMessage: SignalResponseGeneric<any> = decode(msg.data);
 
         if (!decodedMessage.App) {
@@ -62,7 +62,7 @@ export class WsClient extends Emittery {
           data: { cellId: decodedCellId, payload: decodedPayload },
         };
         this.emit("signal", signal);
-      } else if (msg.type === "Response") {
+      } else if (msg.type === "response") {
         this.handleResponse(msg);
       } else {
         console.error(`Got unrecognized Websocket message type: ${msg.type}`);
@@ -72,7 +72,7 @@ export class WsClient extends Emittery {
 
   emitSignal(data: any) {
     const encodedMsg = encode({
-      type: "Signal",
+      type: "signal",
       data: encode(data),
     });
     this.socket.send(encodedMsg);
@@ -83,7 +83,7 @@ export class WsClient extends Emittery {
     this.index += 1;
     const encodedMsg = encode({
       id,
-      type: "Request",
+      type: "request",
       data: encode(data),
     });
     const promise = new Promise((fulfill, reject) => {

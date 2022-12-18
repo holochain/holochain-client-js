@@ -1,7 +1,7 @@
 let
   holonixPath = (import ./nix/sources.nix).holonix;
   holonix = import (holonixPath) {
-    holochainVersionId = "v0_0_175";
+    holochainVersionId = "v0_1_0-beta-rc_1";
     include = {
       holochainBinaries = true;
       node = false;

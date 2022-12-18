@@ -1,25 +1,21 @@
+import { Action, DhtOp, Entry, ZomeCallCapGrant } from "../../hdk/index.js";
 import {
+  ActionHash,
   AgentPubKey,
   CellId,
   DnaHash,
   DnaProperties,
-  ActionHash,
   HoloHash,
   InstalledAppId,
-  InstalledCell,
   KitsuneAgent,
   KitsuneSpace,
-  RoleName as RoleName,
+  RoleName,
   Signature,
   Timestamp,
   WasmHash,
 } from "../../types.js";
-import { DhtOp, Entry, Action, ZomeCallCapGrant } from "../../hdk/index.js";
 import { Requester } from "../common.js";
-import {
-  ArchiveCloneCellRequest,
-  CreateCloneCellResponse,
-} from "../app/types.js";
+import { DisableCloneCellRequest } from "../index.js";
 
 export type AttachAppInterfaceRequest = { port: number };
 export type AttachAppInterfaceResponse = { port: number };
@@ -36,7 +32,7 @@ export type DeactivateAppResponse = null;
 
 export type EnableAppRequest = { installed_app_id: InstalledAppId };
 export type EnableAppResponse = {
-  app: InstalledAppInfo;
+  app: AppInfo;
   errors: Array<[CellId, string]>;
 };
 
@@ -69,9 +65,30 @@ export type InstalledAppInfoStatus =
       running: null;
     };
 
-export type InstalledAppInfo = {
+export interface StemCell {
+  dna: DnaHash;
+  name?: string;
+  dna_modifiers: DnaModifiers;
+}
+
+export interface Cell {
+  cell_id: CellId;
+  clone_id?: RoleName;
+  dna_modifiers: DnaModifiers;
+  name: string;
+  enabled: boolean;
+}
+
+export type CellInfo =
+  | {
+      Provisioned: Cell;
+    }
+  | { Cloned: Cell }
+  | { Stem: StemCell };
+
+export type AppInfo = {
   installed_app_id: InstalledAppId;
-  cell_data: Array<InstalledCell>;
+  cell_info: Record<RoleName, Array<CellInfo>>;
   status: InstalledAppInfoStatus;
 };
 
@@ -110,7 +127,7 @@ export type DnaModifiers = {
   origin_time: Timestamp;
 };
 
-export type FnName = string;
+export type FunctionName = string;
 export type ZomeName = string;
 export type ZomeDefinition = [
   ZomeName,
@@ -128,13 +145,6 @@ export type DnaDefinition = {
 
 export type GetDnaDefinitionRequest = DnaHash;
 export type GetDnaDefinitionResponse = DnaDefinition;
-
-export type InstallAppRequest = {
-  installed_app_id: InstalledAppId;
-  agent_key: AgentPubKey;
-  dnas: Array<InstallAppDnaPayload>;
-};
-export type InstallAppResponse = InstalledAppInfo;
 
 export type UninstallAppRequest = {
   installed_app_id: InstalledAppId;
@@ -209,7 +219,7 @@ export type AppBundle = {
 export type AppBundleSource = { bundle: AppBundle } | { path: string };
 
 export type NetworkSeed = string;
-export type InstallAppBundleRequest = {
+export type InstallAppRequest = {
   /// The agent to use when creating Cells for this App.
   agent_key: AgentPubKey;
 
@@ -225,7 +235,7 @@ export type InstallAppBundleRequest = {
   network_seed?: NetworkSeed;
 } & AppBundleSource; /// The unique identifier for an installed app in this conductor.
 
-export type InstallAppBundleResponse = InstalledAppInfo;
+export type InstallAppResponse = AppInfo;
 
 export type ListDnasRequest = void;
 export type ListDnasResponse = Array<string>;
@@ -246,7 +256,7 @@ export enum AppStatusFilter {
 export type ListAppsRequest = {
   status_filter?: AppStatusFilter;
 };
-export type ListAppsResponse = Array<InstalledAppInfo>;
+export type ListAppsResponse = Array<AppInfo>;
 
 export type ListAppInterfacesRequest = void;
 export type ListAppInterfacesResponse = Array<number>;
@@ -259,30 +269,21 @@ export type AgentInfoSigned = any;
     agent_info: any,
 }*/
 
-export type RequestAgentInfoRequest = { cell_id: CellId | null };
-export type RequestAgentInfoResponse = Array<AgentInfoSigned>;
+export type AgentInfoRequest = { cell_id: CellId | null };
+export type AgentInfoResponse = Array<AgentInfoSigned>;
 export type AddAgentInfoRequest = { agent_infos: Array<AgentInfoSigned> };
 export type AddAgentInfoResponse = any;
 
-export type RestoreCloneCellRequest = ArchiveCloneCellRequest;
-export type RestoreCloneCellResponse = CreateCloneCellResponse;
+export type DeleteCloneCellRequest = DisableCloneCellRequest;
+export type DeleteCloneCellResponse = void;
 
-export interface DeleteArchivedCloneCellsRequest {
-  // The app id that the clone cells belong to
-  app_id: InstalledAppId;
-  // The role id that the clone cells belong to
-  role_name: RoleName;
-}
-export type DeleteArchivedCloneCellsResponse = void;
-
-export interface GrantZomeCallCapabilityPayload {
+export interface GrantZomeCallCapabilityRequest {
   /// Cell for which to authorize the capability.
   cell_id: CellId;
   /// Specifies the capability, consisting of zomes and functions to allow
   /// signing for as well as access level, secret and assignees.
   cap_grant: ZomeCallCapGrant;
 }
-export type GrantZomeCallCapabilityRequest = GrantZomeCallCapabilityPayload;
 export type GrantZomeCallCapabilityResponse = void;
 
 export interface AdminApi {
@@ -308,12 +309,8 @@ export interface AdminApi {
     GetDnaDefinitionRequest,
     GetDnaDefinitionResponse
   >;
-  installApp: Requester<InstallAppRequest, InstallAppResponse>;
   uninstallApp: Requester<UninstallAppRequest, UninstallAppResponse>;
-  installAppBundle: Requester<
-    InstallAppBundleRequest,
-    InstallAppBundleResponse
-  >;
+  installApp: Requester<InstallAppRequest, InstallAppResponse>;
   listDnas: Requester<ListDnasRequest, ListDnasResponse>;
   listCellIds: Requester<ListCellIdsRequest, ListCellIdsResponse>;
   // Deprecated
@@ -323,19 +320,9 @@ export interface AdminApi {
     ListAppInterfacesRequest,
     ListAppInterfacesResponse
   >;
-  requestAgentInfo: Requester<
-    RequestAgentInfoRequest,
-    RequestAgentInfoResponse
-  >;
+  agentInfo: Requester<AgentInfoRequest, AgentInfoResponse>;
   addAgentInfo: Requester<AddAgentInfoRequest, AddAgentInfoResponse>;
-  restoreCloneCell: Requester<
-    RestoreCloneCellRequest,
-    RestoreCloneCellResponse
-  >;
-  deleteArchivedCloneCells: Requester<
-    DeleteArchivedCloneCellsRequest,
-    DeleteArchivedCloneCellsResponse
-  >;
+  deleteCloneCell: Requester<DeleteCloneCellRequest, DeleteCloneCellResponse>;
   grantZomeCallCapability: Requester<
     GrantZomeCallCapabilityRequest,
     GrantZomeCallCapabilityResponse

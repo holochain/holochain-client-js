@@ -1,27 +1,41 @@
-import Emittery, { UnsubscribeFunction } from "emittery";
+import { UnsubscribeFunction } from "emittery";
 import {
-  ArchiveCloneCellResponse,
+  DisableCloneCellResponse,
   CreateCloneCellRequest,
   CreateCloneCellResponse,
-} from "..";
-import { RoleName } from "../..";
+} from "../index.js";
+import { RoleName } from "../../index.js";
 import {
-  CallZomeRequest,
   AppInfoResponse,
-  ArchiveCloneCellRequest,
   AppSignal,
-} from "../app";
+  DisableCloneCellRequest,
+  CallZomeRequest,
+  EnableCloneCellRequest,
+  EnableCloneCellResponse,
+  CallZomeRequestSigned,
+} from "../app/index.js";
 
 export type RoleNameCallZomeRequest = Omit<CallZomeRequest, "cell_id"> & {
   role_name: RoleName;
 };
 
-export type AppAgentCallZomeRequest = CallZomeRequest | RoleNameCallZomeRequest;
+export type RoleNameCallZomeRequestSigned = Omit<
+  CallZomeRequestSigned,
+  "cell_id"
+> & { role_name: RoleName };
+
+export type AppAgentCallZomeRequest =
+  | CallZomeRequest
+  | RoleNameCallZomeRequest
+  | CallZomeRequestSigned
+  | RoleNameCallZomeRequestSigned;
 
 export type AppCreateCloneCellRequest = Omit<CreateCloneCellRequest, "app_id">;
 
-export type AppArchiveCloneCellRequest = Omit<
-  ArchiveCloneCellRequest,
+export type AppEnableCloneCellRequest = Omit<EnableCloneCellRequest, "app_id">;
+
+export type AppDisableCloneCellRequest = Omit<
+  DisableCloneCellRequest,
   "app_id"
 >;
 
@@ -42,7 +56,10 @@ export interface AppAgentClient {
   createCloneCell(
     args: AppCreateCloneCellRequest
   ): Promise<CreateCloneCellResponse>;
-  archiveCloneCell(
-    args: AppArchiveCloneCellRequest
-  ): Promise<ArchiveCloneCellResponse>;
+  enableCloneCell(
+    args: AppEnableCloneCellRequest
+  ): Promise<EnableCloneCellResponse>;
+  disableCloneCell(
+    args: AppDisableCloneCellRequest
+  ): Promise<DisableCloneCellResponse>;
 }

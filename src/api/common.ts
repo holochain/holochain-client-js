@@ -3,8 +3,8 @@ import { RoleName } from "../types.js";
 const ERROR_TYPE = "error";
 export const DEFAULT_TIMEOUT = 15000;
 
-export type Transformer<ReqO, ReqI, ResI, ResO> = {
-  input: (req: ReqO) => ReqI;
+export type Transformer<ReqI, ReqO, ResI, ResO> = {
+  input: (req: ReqI) => ReqO;
   output: (res: ResI) => ResO;
 };
 
@@ -18,13 +18,14 @@ export type Tagged<T> = { type: string; data: T };
  * with the optional Transformer applied to further modify the input and output.
  */
 export const requesterTransformer =
-  <ReqO, ReqI, ResI, ResO>(
-    requester: Requester<Tagged<ReqI>, Tagged<ResI>>,
+  <ReqI, ReqO, ResI, ResO>(
+    requester: Requester<Tagged<ReqO>, Tagged<ResI>>,
     tag: string,
-    transform: Transformer<ReqO, ReqI, ResI, ResO> = identityTransformer
+    transform: Transformer<ReqI, ReqO, ResI, ResO> = identityTransformer
   ) =>
-  async (req: ReqO, timeout?: number) => {
-    const input = { type: tag, data: transform.input(req) };
+  async (req: ReqI, timeout?: number) => {
+    const transformedInput = await transform.input(req);
+    const input = { type: tag, data: transformedInput };
     const response = await requester(input, timeout);
     const output = transform.output(response.data);
     return output;
@@ -65,6 +66,20 @@ export const promiseTimeout = (
   });
 };
 
+const CLONE_ID_DELIMITER = ".";
+
+export const isCloneId = (roleName: RoleName) =>
+  roleName.includes(CLONE_ID_DELIMITER);
+
+export const getBaseRoleNameFromCloneId = (roleName: RoleName) => {
+  if (!isCloneId(roleName)) {
+    throw new Error(
+      "invalid clone id: no clone id delimiter found in role name"
+    );
+  }
+  return roleName.split(CLONE_ID_DELIMITER)[0];
+};
+
 /**
  * Identifier of a clone cell, composed of the DNA's role id and the index
  * of the clone, starting at 0.
@@ -72,7 +87,6 @@ export const promiseTimeout = (
  * Example: `profiles.0`
  */
 export class CloneId {
-  private static readonly CLONE_ID_DELIMITER = ".";
   private readonly roleName: RoleName;
   private readonly index: number;
 
@@ -87,7 +101,7 @@ export class CloneId {
    * @returns A clone id instance.
    */
   static fromRoleName(roleName: RoleName) {
-    const parts = roleName.split(CloneId.CLONE_ID_DELIMITER);
+    const parts = roleName.split(CLONE_ID_DELIMITER);
     if (parts.length !== 2) {
       throw new Error(
         "Malformed clone id: must consist of {role id.clone index}"
@@ -97,7 +111,7 @@ export class CloneId {
   }
 
   toString() {
-    return `${this.roleName}${CloneId.CLONE_ID_DELIMITER}${this.index}`;
+    return `${this.roleName}${CLONE_ID_DELIMITER}${this.index}`;
   }
 
   getBaseRoleName() {

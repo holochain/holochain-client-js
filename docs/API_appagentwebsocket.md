@@ -1,12 +1,11 @@
 [back to API.md](API.md)
 
 
-# `new AppAgentWebsocket( appWs, installedAppId )`
+# `new AppAgentWebsocket( appWs )`
 A class for interacting with Conductor's app API, restricted to a specific installed app.
 This is useful for simplifying zome and app info calls, and especially because it shares an interface (`AppAgentClient`) with the holo WebSdk client, meaning you can use this client to write the majority of your UI agnostic as to wether it's in a pure holochain or holo context.
 
-- `appWebsocket` - an instance of AppWebsocket, connecting to an app port on your conductor
-- `installedAppId` - an InstalledAppId to restrict all calls to
+- `appWs` - an instance of AppWebsocket, connecting to an app port on your conductor
 
 **Instance properties**
 
@@ -24,10 +23,37 @@ Returns a `Promise` for the corresponding response.
 ```javascript
 {
     "installed_app_id": string,
-    "cell_data": [
-        [ [ buffer, buffer ] , string ],
+    "cell_info": {
+        role_name: [
+          {
+            | Provisioned: {
+                cell_id: CellId;
+                clone_id?: RoleName;
+                dna_modifiers: DnaModifiers;
+                name: string;
+                enabled: boolean;
+            }
+            | Cloned: {
+              cell_id: CellId;
+              clone_id?: RoleName;
+              dna_modifiers: DnaModifiers;
+              name: string;
+              enabled: boolean;
+            }
+            | Stem: {
+              dna: DnaHash;
+              name?: string;
+              dna_modifiers: DnaModifiers;
+            }
+          },
+          ...
+        ],
         ...
-    ]
+    ],
+    "status":
+      | paused: { reason: PausedAppReason }
+      | disabled: { reason: DisabledAppReason }
+      | running: null
 }
 ```
 
@@ -88,17 +114,7 @@ Returns a `Promise` containing the cloned cell
 }
 ```
 
-## `<AppAgentWebsocket>.archiveClonedCell({ clone_cell_id })`
-
-
-- `clone_cell_id?` - either a `CellId` (see `callZome` above) or a `RoleName` string, specifying the cell to be archived
-
-Returns a void `Promise`.
-  role_name: RoleName
-}
-```
-
-## `<AppAgentWebsocket>.archiveClonedCell({ clone_cell_id })`
+## `<AppAgentWebsocket>.disableClonedCell({ clone_cell_id })`
 
 
 - `clone_cell_id?` - either a `CellId` (see `callZome` above) or a `RoleName` string, specifying the cell to be archived

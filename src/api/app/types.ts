@@ -12,25 +12,28 @@ import {
 } from "../../types.js";
 import { Requester } from "../common.js";
 import {
-  InstalledAppInfo,
+  FunctionName,
+  AppInfo,
   MembraneProof,
   NetworkSeed,
+  ZomeName,
 } from "../admin/index.js";
 
 export type CallZomeRequestGeneric<Payload> = {
-  cap_secret: CapSecret | null;
+  // cap_secret: CapSecret | null;
   cell_id: CellId;
-  zome_name: string;
-  fn_name: string;
+  zome_name: ZomeName;
+  fn_name: FunctionName;
   payload: Payload;
   provenance: AgentPubKey;
 };
 export type CallZomeRequest = CallZomeRequestGeneric<any>;
+
 export type CallZomeResponseGeneric<Payload> = Payload;
 export type CallZomeResponse = CallZomeResponseGeneric<any>;
 
 export type AppInfoRequest = { installed_app_id: InstalledAppId };
-export type AppInfoResponse = InstalledAppInfo;
+export type AppInfoResponse = AppInfo;
 
 export interface CreateCloneCellRequest {
   /**
@@ -78,13 +81,16 @@ export interface CreateCloneCellRequest {
 }
 export type CreateCloneCellResponse = InstalledCell;
 
-export interface ArchiveCloneCellRequest {
+export interface DisableCloneCellRequest {
   // The app id that the clone cell belongs to
   app_id: InstalledAppId;
   // The clone id or cell id of the clone cell
   clone_cell_id: RoleName | CellId;
 }
-export type ArchiveCloneCellResponse = void;
+export type DisableCloneCellResponse = void;
+
+export type EnableCloneCellRequest = DisableCloneCellRequest;
+export type EnableCloneCellResponse = CreateCloneCellResponse;
 
 export type AppSignal = {
   type: string;
@@ -108,4 +114,9 @@ export type SignalResponseGeneric<Payload> = Payload;
 export interface AppApi {
   appInfo: Requester<AppInfoRequest, AppInfoResponse>;
   callZome: Requester<CallZomeRequest, CallZomeResponse>;
+  enableCloneCell: Requester<EnableCloneCellRequest, EnableCloneCellResponse>;
+  disableCloneCell: Requester<
+    DisableCloneCellRequest,
+    DisableCloneCellResponse
+  >;
 }
