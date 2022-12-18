@@ -3,7 +3,7 @@
  * Conductor Admin API
  *
  *    const client = AdminWebsocket.connect(
- *      'ws://localhost:9000'
+ *      'ws://127.0.0.1:9000'
  *    )
  *
  *    client.generateAgentPubKey()
@@ -39,7 +39,7 @@ export class AdminWebsocket implements Api.AdminApi {
     const env = getLauncherEnvironment();
 
     if (env) {
-      url = `ws://localhost:${env.ADMIN_INTERFACE_PORT}`;
+      url = `ws://127.0.0.1:${env.ADMIN_INTERFACE_PORT}`;
     }
 
     const wsClient = await WsClient.connect(url);
