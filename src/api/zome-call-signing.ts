@@ -1,9 +1,10 @@
+import { fromUint8Array } from "js-base64";
+import nacl from "tweetnacl";
 import { CapSecret } from "../hdk/capabilities.js";
 import { AgentPubKey, CellId } from "../types.js";
 import { FunctionName, ZomeName } from "./admin/types.js";
 import { AdminWebsocket } from "./admin/websocket.js";
 import { generateSigningKeyPair, grantSigningKey } from "./app/util.js";
-import { fromUint8Array } from "js-base64";
 
 const signingProps: Map<
   string,
