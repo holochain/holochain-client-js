@@ -131,7 +131,7 @@ test(
   })
 );
 
-test.only(
+test(
   "can create a callable clone cell and call it by clone id",
   withConductor(ADMIN_PORT, async (t: Test) => {
     const { admin, installed_app_id, client } = await installAppAndDna(
