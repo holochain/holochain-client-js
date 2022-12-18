@@ -23,7 +23,7 @@ npm install --save-exact @holochain/client
 
 ### Use AdminWebsocket
 ```typescript
-  const admin = await AdminWebsocket.connect(`ws://localhost:8000`, TIMEOUT)
+  const admin = await AdminWebsocket.connect(`ws://127.0.0.1:8000`, TIMEOUT)
   await admin.generateAgentPubKey()
 ```
 
@@ -36,7 +36,7 @@ npm install --save-exact @holochain/client
 
   const TIMEOUT = 12000
   // default timeout is set to 12000
-  const client = await AppWebsocket.connect(`ws://localhost:${appPort}`, 12000, signalCb)
+  const client = await AppWebsocket.connect(`ws://127.0.0.1:${appPort}`, 12000, signalCb)
 
   // default timeout set here (30000) will overwrite the defaultTimeout(12000) set above
   await client.callZome({
@@ -58,7 +58,7 @@ npm install --save-exact @holochain/client
 
   const TIMEOUT = 12000
   // default timeout is set to 12000
-  const appWs = await AppWebsocket.connect(`ws://localhost:${appPort}`, 12000, signalCb)
+  const appWs = await AppWebsocket.connect(`ws://127.0.0.1:${appPort}`, 12000, signalCb)
 
   const client = new AppAgentWebsocket(appWs, 'installed_app_id')
 

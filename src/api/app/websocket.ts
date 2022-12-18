@@ -2,7 +2,7 @@
  * Defines AppWebsocket, an easy-to-use websocket implementation of the
  * Conductor API for apps
  *
- *    const client = AppWebsocket.connect('ws://localhost:9000');
+ *    const client = AppWebsocket.connect('ws://127.0.0.1:9000');
  *
  *    client.callZome({...})
  *      .then(() => {
@@ -79,7 +79,7 @@ export class AppWebsocket extends Emittery implements AppApi {
     const env = getLauncherEnvironment();
 
     if (env) {
-      url = `ws://localhost:${env.APP_INTERFACE_PORT}`;
+      url = `ws://127.0.0.1:${env.APP_INTERFACE_PORT}`;
     }
 
     const wsClient = await WsClient.connect(url, signalCb);

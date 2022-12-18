@@ -51,7 +51,7 @@ test(
   withConductor(ADMIN_PORT, async (t: Test) => {
     const installed_app_id = "app";
     const admin = await AdminWebsocket.connect(
-      `ws://localhost:${ADMIN_PORT}`,
+      `ws://127.0.0.1:${ADMIN_PORT}`,
       12000
     );
 
@@ -182,7 +182,7 @@ test(
   withConductor(ADMIN_PORT, async (t: Test) => {
     const installed_app_id = "app";
     const admin = await AdminWebsocket.connect(
-      `ws://localhost:${ADMIN_PORT}`,
+      `ws://127.0.0.1:${ADMIN_PORT}`,
       12000
     );
 
@@ -242,7 +242,7 @@ test(
   withConductor(ADMIN_PORT, async (t: Test) => {
     const installed_app_id = "app";
     const admin = await AdminWebsocket.connect(
-      `ws://localhost:${ADMIN_PORT}`,
+      `ws://127.0.0.1:${ADMIN_PORT}`,
       12000
     );
 
@@ -462,7 +462,7 @@ test(
 
 // no conductor
 test("error is catchable when holochain socket is unavailable", async (t: Test) => {
-  const url = `ws://localhost:${ADMIN_PORT}`;
+  const url = `ws://127.0.0.1:${ADMIN_PORT}`;
   try {
     await AdminWebsocket.connect(url);
   } catch (e) {
@@ -486,8 +486,8 @@ test("can inject agents", async (t: Test) => {
   const conductor1 = await launch(ADMIN_PORT);
   const conductor2 = await launch(ADMIN_PORT_1);
   const installed_app_id = "app";
-  const admin1 = await AdminWebsocket.connect(`ws://localhost:${ADMIN_PORT}`);
-  const admin2 = await AdminWebsocket.connect(`ws://localhost:${ADMIN_PORT_1}`);
+  const admin1 = await AdminWebsocket.connect(`ws://127.0.0.1:${ADMIN_PORT}`);
+  const admin2 = await AdminWebsocket.connect(`ws://127.0.0.1:${ADMIN_PORT_1}`);
   const agent_key_1 = await admin1.generateAgentPubKey();
   t.ok(agent_key_1);
   const agent_key_2 = await admin2.generateAgentPubKey();
@@ -576,7 +576,7 @@ test("can inject agents", async (t: Test) => {
 test(
   "admin smoke test: listAppInterfaces + attachAppInterface",
   withConductor(ADMIN_PORT, async (t: Test) => {
-    const admin = await AdminWebsocket.connect(`ws://localhost:${ADMIN_PORT}`);
+    const admin = await AdminWebsocket.connect(`ws://127.0.0.1:${ADMIN_PORT}`);
 
     let interfaces = await admin.listAppInterfaces();
     t.equal(interfaces.length, 0);
@@ -619,7 +619,7 @@ test(
 test(
   "admin smoke test: install 2 hApp bundles with different network seeds",
   withConductor(ADMIN_PORT, async (t: Test) => {
-    const admin = await AdminWebsocket.connect(`ws://localhost:${ADMIN_PORT}`);
+    const admin = await AdminWebsocket.connect(`ws://127.0.0.1:${ADMIN_PORT}`);
     const agent_key = await admin.generateAgentPubKey();
 
     const installedApp1 = await admin.installApp({
