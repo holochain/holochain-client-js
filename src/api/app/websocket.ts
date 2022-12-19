@@ -72,7 +72,6 @@ export class AppWebsocket extends Emittery implements AppApi {
   static async connect(
     url: string,
     defaultTimeout?: number,
-    //** @deprecated */
     signalCb?: AppSignalCb
   ): Promise<AppWebsocket> {
     // Check if we are in the launcher's environment, and if so, redirect the url to connect to
@@ -82,6 +81,11 @@ export class AppWebsocket extends Emittery implements AppApi {
       url = `ws://127.0.0.1:${env.APP_INTERFACE_PORT}`;
     }
 
+    if (signalCb) {
+      console.warn(
+        "Providing a signal callback on client initialization is deprecated. Instead add an event handler using `.on('signal', signalCb)`."
+      );
+    }
     const wsClient = await WsClient.connect(url, signalCb);
 
     const appWebsocket = new AppWebsocket(

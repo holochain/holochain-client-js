@@ -28,7 +28,7 @@ export class WsClient extends Emittery {
 
     if (signalCb) {
       console.log(
-        "Providing a signal callback on client initialization is deprecated. Instead, add an event handler using `.on('signal', signalCb)`."
+        "Providing a signal callback on client initialization is deprecated. Instead add an event handler using `.on('signal', signalCb)`."
       );
       this.on("signal", signalCb);
     }
