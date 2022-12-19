@@ -12,16 +12,10 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest]
-        node: [14.x, 16.x]
 
     steps:
       - name: Check out source code
         uses: actions/checkout@v3
-
-      - name: Use Node.js ${{ matrix.node }}
-        uses: actions/setup-node@v1
-        with:
-          node-version: ${{ matrix.node }}
 
       - name: Install nix
         uses: cachix/install-nix-action@v16
