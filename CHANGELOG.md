@@ -8,6 +8,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Changed
 ### Fixed
 
+## 2022-12-19: v0.11.1
+### Removed
+- property `provenance` from `AppAgentCallZomeRequest`.
 
 ## 2022-12-18: v0.11.0
 ### Added
