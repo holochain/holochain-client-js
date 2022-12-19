@@ -4,24 +4,15 @@ import {
   AppAgentWebsocket,
   AppCreateCloneCellRequest,
   AppSignal,
-  CallZomeRequest,
   CloneId,
   AppEntryDef,
   RoleName,
   authorizeNewSigningKeyPair,
   AppAgentCallZomeRequest,
   NonProvenanceCallZomeRequest,
+  fakeAgentPubKey,
 } from "../../src/index.js";
 import { installAppAndDna, withConductor } from "./util.js";
-
-const fakeAgentPubKey = () =>
-  Buffer.from(
-    [0x84, 0x20, 0x24].concat(
-      "000000000000000000000000000000000000"
-        .split("")
-        .map((x) => parseInt(x, 10))
-    )
-  );
 
 const ADMIN_PORT = 33001;
 
