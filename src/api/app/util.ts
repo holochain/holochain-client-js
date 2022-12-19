@@ -30,7 +30,7 @@ export const randomCapSecret: () => CapSecret = () => randomByteArray(64);
 
 export const randomNonce: () => Nonce256Bit = () => randomByteArray(32);
 
-const randomByteArray = (length: number) => {
+export const randomByteArray = (length: number) => {
   if (
     typeof window !== "undefined" &&
     "crypto" in window &&

@@ -2,6 +2,7 @@ import { fromUint8Array } from "js-base64";
 import nacl from "tweetnacl";
 import { CapSecret } from "../hdk/capabilities.js";
 import { AgentPubKey, CellId } from "../types.js";
+import { decodeHashFromBase64, encodeHashToBase64 } from "../utils/base64.js";
 import { FunctionName, ZomeName } from "./admin/types.js";
 import { AdminWebsocket } from "./admin/websocket.js";
 import { generateSigningKeyPair, grantSigningKey } from "./app/util.js";
@@ -35,8 +36,10 @@ export const authorizeNewSigningKeyPair = async (
     functions,
     signingKey
   );
-  const cellIdB64 = fromUint8Array(cellId[0]).concat(fromUint8Array(cellId[1]));
-  signingProps.set(cellIdB64, { capSecret, keyPair, signingKey });
+  const cellIdBase64 = encodeHashToBase64(cellId[0]).concat(
+    encodeHashToBase64(cellId[1])
+  );
+  signingProps.set(cellIdBase64, { capSecret, keyPair, signingKey });
 };
 
 /**
@@ -46,6 +49,8 @@ export const authorizeNewSigningKeyPair = async (
  * @returns The keys and cap secret required for signing a zome call.
  */
 export const getSigningPropsForCell = (cellId: CellId) => {
-  const cellIdB64 = fromUint8Array(cellId[0]).concat(fromUint8Array(cellId[1]));
+  const cellIdB64 = encodeHashToBase64(cellId[0]).concat(
+    encodeHashToBase64(cellId[1])
+  );
   return signingProps.get(cellIdB64);
 };

@@ -24,7 +24,7 @@ import Emittery, { UnsubscribeFunction } from "emittery";
 import { omit } from "lodash-es";
 import { getLauncherEnvironment } from "../../environments/launcher.js";
 
-import { InstalledAppId, RoleName } from "../../types.js";
+import { AgentPubKey, InstalledAppId, RoleName } from "../../types.js";
 import { getBaseRoleNameFromCloneId, isCloneId } from "../common.js";
 import {
   AppInfo,
@@ -72,6 +72,27 @@ export class AppAgentWebsocket implements AppAgentClient {
     return appInfo;
   }
 
+  async myPubKey(): Promise<AgentPubKey> {
+    const appInfo = this.cachedAppInfo || (await this.appInfo());
+
+    // This is fine for now cause `UseExisting` as a provisioning strategy doesn't work yet.
+    // TODO: change this when AppInfo contains the `AgentPubKey` for this app, like `return appInfo.my_pub_key`
+
+    for (const cells of Object.values(appInfo.cell_info)) {
+      for (const cell of cells) {
+        if ("Provisioned" in cell) {
+          return cell.Provisioned.cell_id[1];
+        } else if ("Cloned" in cell) {
+          return cell.Cloned.cell_id[1];
+        }
+      }
+    }
+
+    throw new Error(
+      `This app doesn't have any cells, so we can't return the agent public key for it. This is a known issue, and is going to be fixed in the near future.`
+    );
+  }
+
   getCellIdFromRoleName(roleName: RoleName, appInfo: AppInfo) {
     if (isCloneId(roleName)) {
       const baseRoleName = getBaseRoleNameFromCloneId(roleName);
@@ -101,16 +122,23 @@ export class AppAgentWebsocket implements AppAgentClient {
     request: AppAgentCallZomeRequest,
     timeout?: number
   ): Promise<CallZomeResponse> {
+    if (!("provenance" in request)) {
+      request = {
+        ...request,
+        provenance: await this.myPubKey(),
+      };
+    }
     if ("role_name" in request && request.role_name) {
       const appInfo = this.cachedAppInfo || (await this.appInfo());
       const cell_id = this.getCellIdFromRoleName(request.role_name, appInfo);
       const zomeCallPayload: CallZomeRequest = {
         ...omit(request, "role_name"),
+        provenance: await this.myPubKey(),
         cell_id,
       };
       return this.appWebsocket.callZome(zomeCallPayload, timeout);
     } else if ("cell_id" in request && request.cell_id) {
-      return this.appWebsocket.callZome(request, timeout);
+      return this.appWebsocket.callZome(request as CallZomeRequest, timeout);
     } else {
       throw new Error("callZome requires a role_name or cell_id arg");
     }

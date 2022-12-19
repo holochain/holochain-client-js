@@ -78,7 +78,6 @@ npm install --save-exact @holochain/client
    role_name: 'dnas_role_name', // role_name is unique per app, so you can unambiguously identify your dna with role_name in this client
    zome_name: "test_zome",
    fn_name: 'test_emitter_fn',
-   provenance: agentPubKey,
    payload: null,
   }, 30000)
 ```
