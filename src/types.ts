@@ -9,6 +9,16 @@ export type AnyDhtHash = HoloHash;
 export type KitsuneAgent = Uint8Array;
 export type KitsuneSpace = Uint8Array;
 
+/** Base64 hash types */
+
+export type HoloHashB64 = string;
+export type AgentPubKeyB64 = HoloHashB64;
+export type DnaHashB64 = HoloHashB64;
+export type WasmHashB64 = HoloHashB64;
+export type EntryHashB64 = HoloHashB64;
+export type ActionHashB64 = HoloHashB64;
+export type AnyDhtHashB64 = HoloHashB64;
+
 export type InstalledAppId = string;
 
 export type Signature = Uint8Array;

@@ -6,6 +6,7 @@ import {
   DnaHash,
   DnaProperties,
   HoloHash,
+  HoloHashB64,
   InstalledAppId,
   KitsuneAgent,
   KitsuneSpace,
@@ -179,7 +180,6 @@ export type CellProvisioning =
       disabled: Record<string, never>;
     };
 
-export type HoloHashB64 = string;
 export type DnaVersionSpec = Array<HoloHashB64>;
 export type DnaVersionFlexible =
   | {

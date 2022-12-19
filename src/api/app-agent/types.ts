@@ -4,7 +4,7 @@ import {
   CreateCloneCellRequest,
   CreateCloneCellResponse,
 } from "../index.js";
-import { RoleName } from "../../index.js";
+import { AgentPubKey, RoleName } from "../../index.js";
 import {
   AppInfoResponse,
   AppSignal,
@@ -15,7 +15,12 @@ import {
   CallZomeRequestSigned,
 } from "../app/index.js";
 
-export type RoleNameCallZomeRequest = Omit<CallZomeRequest, "cell_id"> & {
+export type NonProvenanceCallZomeRequest = Omit<CallZomeRequest, "provenance">;
+
+export type RoleNameCallZomeRequest = Omit<
+  NonProvenanceCallZomeRequest,
+  "cell_id"
+> & {
   role_name: RoleName;
 };
 
@@ -25,7 +30,7 @@ export type RoleNameCallZomeRequestSigned = Omit<
 > & { role_name: RoleName };
 
 export type AppAgentCallZomeRequest =
-  | CallZomeRequest
+  | NonProvenanceCallZomeRequest
   | RoleNameCallZomeRequest
   | CallZomeRequestSigned
   | RoleNameCallZomeRequestSigned;
@@ -52,6 +57,8 @@ export interface AppAgentClient {
   ): UnsubscribeFunction;
 
   appInfo(): Promise<AppInfoResponse>;
+
+  myPubKey(): Promise<AgentPubKey>;
 
   createCloneCell(
     args: AppCreateCloneCellRequest

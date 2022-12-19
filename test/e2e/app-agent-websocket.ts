@@ -10,6 +10,7 @@ import {
   RoleName,
   authorizeNewSigningKeyPair,
   AppAgentCallZomeRequest,
+  NonProvenanceCallZomeRequest,
 } from "../../src/index.js";
 import { installAppAndDna, withConductor } from "./util.js";
 
@@ -57,7 +58,6 @@ test(
       cell_id,
       zome_name: COORDINATOR_ZOME_NAME,
       fn_name: "echo_app_entry_def",
-      provenance: cell_id[1],
       payload: appEntryDef,
     });
 
@@ -73,7 +73,6 @@ test(
       role_name: ROLE_NAME,
       zome_name: COORDINATOR_ZOME_NAME,
       fn_name: "echo_app_entry_def",
-      provenance: cell_id[1],
       payload: appEntryDef,
     });
 
@@ -165,7 +164,6 @@ test(
       role_name: cloneCell.role_name,
       zome_name: TEST_ZOME_NAME,
       fn_name: "foo",
-      provenance: fakeAgentPubKey(),
       payload: null,
     };
     const response = await appAgentWs.callZome(params);
@@ -207,11 +205,10 @@ test(
       2,
       "disabled clone cell is part of app info"
     );
-    const params: CallZomeRequest = {
+    const params: NonProvenanceCallZomeRequest = {
       cell_id: cloneCell.cell_id,
       zome_name: TEST_ZOME_NAME,
       fn_name: "foo",
-      provenance: fakeAgentPubKey(),
       payload: null,
     };
     try {
