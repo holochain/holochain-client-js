@@ -139,7 +139,6 @@ export class AppWebsocket extends Emittery implements AppApi {
     this._requester("network_info");
 }
 
-
 interface CallZomeRequestSignedTauri // Tauri requires a number array instead of a Uint8Array
   extends Omit<
     CallZomeRequestSigned,
