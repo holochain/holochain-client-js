@@ -4,6 +4,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## \[Unreleased\]
 ### Added
+### Removed
+### Changed
+### Fixed
+
+
+## 2022-12-18: v0.11.0
+### Added
 - Low-level functions to generate and authorize signing keys and to sign zome calls with them.
 - High-level function to handle key generation and zome call signing automatically.
 ### Removed
@@ -19,7 +26,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - **BREAKING CHANGE**: Refactor `app_info` to return all cells and DNA modifiers.
 - **BREAKING CHANGE**: Rename `request_agent_info` to `agent_info`.
 - AppAgentWebsocket constructor uses launcher env.INSTALLED_APP_ID when present
-### Fixed
 
 ## 2022-12-14: v0.10.4
 ### Changed
