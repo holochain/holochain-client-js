@@ -183,6 +183,9 @@ const callZomeTransform: Transformer<
   CallZomeResponse
 > = {
   input: async (req) => {
+    if ("signature" in req) {
+      return req;
+    }
     if (isLauncher) {
       const zomeCallUnsigned: CallZomeRequestUnsignedTauri = {
         provenance: Array.from(req.provenance),
@@ -216,34 +219,30 @@ const callZomeTransform: Transformer<
 
       return signedZomeCall;
     } else {
-      if ("signature" in req) {
-        return req;
-      } else {
-        const signingPropsForCell = getSigningPropsForCell(req.cell_id);
-        if (!signingPropsForCell) {
-          throw new Error(
-            "cannot sign zome call: signing properties have not been set"
-          );
-        }
-        const unsignedZomeCall: CallZomeRequestUnsigned = {
-          ...req,
-          cap_secret: signingPropsForCell.capSecret,
-          provenance: signingPropsForCell.signingKey,
-          payload: encode(req.payload),
-          nonce: randomNonce(),
-          expires_at: getNonceExpiration(),
-        };
-        const hashedZomeCall = await hashZomeCall(unsignedZomeCall);
-        const signature = nacl
-          .sign(hashedZomeCall, signingPropsForCell.keyPair.secretKey)
-          .subarray(0, nacl.sign.signatureLength);
-
-        const signedZomeCall: CallZomeRequestSigned = {
-          ...unsignedZomeCall,
-          signature,
-        };
-        return signedZomeCall;
+      const signingPropsForCell = getSigningPropsForCell(req.cell_id);
+      if (!signingPropsForCell) {
+        throw new Error(
+          "cannot sign zome call: signing properties have not been set"
+        );
       }
+      const unsignedZomeCall: CallZomeRequestUnsigned = {
+        ...req,
+        cap_secret: signingPropsForCell.capSecret,
+        provenance: signingPropsForCell.signingKey,
+        payload: encode(req.payload),
+        nonce: randomNonce(),
+        expires_at: getNonceExpiration(),
+      };
+      const hashedZomeCall = await hashZomeCall(unsignedZomeCall);
+      const signature = nacl
+        .sign(hashedZomeCall, signingPropsForCell.keyPair.secretKey)
+        .subarray(0, nacl.sign.signatureLength);
+
+      const signedZomeCall: CallZomeRequestSigned = {
+        ...unsignedZomeCall,
+        signature,
+      };
+      return signedZomeCall;
     }
   },
   output: (res) => decode(res),
