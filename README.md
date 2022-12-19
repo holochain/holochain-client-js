@@ -103,7 +103,6 @@ You need `holochain` and `hc` on your path, best to get them from nix with `nix-
 To perform the pre-requisite DNA compilation steps, and run the Nodejs test, run:
 ```bash
 nix-shell
-npm run build
 ./run-test.sh
 ```
 
