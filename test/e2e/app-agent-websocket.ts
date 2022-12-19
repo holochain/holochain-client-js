@@ -160,6 +160,7 @@ test(
       info.cell_info[ROLE_NAME][0].Provisioned.cell_id[1],
       "clone cell agent key matches base cell agent key"
     );
+
     const params: AppAgentCallZomeRequest = {
       role_name: cloneCell.role_name,
       zome_name: TEST_ZOME_NAME,

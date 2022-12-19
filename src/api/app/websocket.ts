@@ -47,8 +47,8 @@ import {
   DisableCloneCellResponse,
   EnableCloneCellRequest,
   EnableCloneCellResponse,
-  GossipInfoRequest,
-  GossipInfoResponse,
+  NetworkInfoRequest,
+  NetworkInfoResponse,
 } from "./types.js";
 import { getNonceExpiration, randomNonce } from "./util.js";
 
@@ -135,14 +135,25 @@ export class AppWebsocket extends Emittery implements AppApi {
     DisableCloneCellResponse
   > = this._requester("disable_clone_cell");
 
-  gossipInfo: Requester<GossipInfoRequest, GossipInfoResponse> =
-    this._requester("gossip_info");
+  networkInfo: Requester<NetworkInfoRequest, NetworkInfoResponse> =
+    this._requester("network_info");
+}
+
+interface CallZomeRequestSignedTauri // Tauri requires a number array instead of a Uint8Array
+  extends Omit<
+    CallZomeRequestSigned,
+    "cap_secret" | "cell_id" | "provenance" | "nonce"
+  > {
+  cell_id: [TauriByteArray, TauriByteArray];
+  provenance: TauriByteArray;
+  nonce: TauriByteArray;
+  expires_at: number;
 }
 
 export type Nonce256Bit = Uint8Array;
 
 export interface CallZomeRequestUnsigned extends CallZomeRequest {
-  cap_secret: CapSecret;
+  cap_secret: CapSecret | null;
   nonce: Nonce256Bit;
   expires_at: number;
 }
@@ -178,14 +189,31 @@ const callZomeTransform: Transformer<
         cell_id: [Array.from(req.cell_id[0]), Array.from(req.cell_id[1])],
         zome_name: req.zome_name,
         fn_name: req.fn_name,
-        payload: encode(req.payload),
+        payload: Array.from(encode(req.payload)),
         nonce: Array.from(randomNonce()),
         expires_at: getNonceExpiration(),
       };
-      const signedZomeCall: CallZomeRequestSigned = await invoke(
+
+      const signedZomeCallTauri: CallZomeRequestSignedTauri = await invoke(
         "sign_zome_call",
         { zomeCallUnsigned }
       );
+
+      const signedZomeCall: CallZomeRequestSigned = {
+        provenance: Uint8Array.from(signedZomeCallTauri.provenance),
+        cap_secret: null,
+        cell_id: [
+          Uint8Array.from(signedZomeCallTauri.cell_id[0]),
+          Uint8Array.from(signedZomeCallTauri.cell_id[1]),
+        ],
+        zome_name: signedZomeCallTauri.zome_name,
+        fn_name: signedZomeCallTauri.fn_name,
+        payload: Uint8Array.from(signedZomeCallTauri.payload),
+        signature: Uint8Array.from(signedZomeCallTauri.signature),
+        expires_at: signedZomeCallTauri.expires_at,
+        nonce: Uint8Array.from(signedZomeCallTauri.nonce),
+      };
+
       return signedZomeCall;
     } else {
       if ("signature" in req) {

@@ -8,7 +8,7 @@ import {
   RoleName,
   Timestamp,
   DnaHash,
-  DnaGossipInfo,
+  NetworkInfo,
 } from "../../types.js";
 import { Requester } from "../common.js";
 import {
@@ -100,12 +100,12 @@ export type AppSignal = {
   };
 };
 
-export interface GossipInfoRequest {
-  /** The DNAs for which to get gossip info */
+export interface NetworkInfoRequest {
+  /** The DNAs for which to get network info */
   dnas: DnaHash[];
 }
 
-export type GossipInfoResponse = DnaGossipInfo[];
+export type NetworkInfoResponse = NetworkInfo[];
 
 export type AppSignalCb = (signal: AppSignal) => void;
 

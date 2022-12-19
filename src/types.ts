@@ -30,18 +30,13 @@ export interface HoloHashed<T> {
   content: T;
 }
 
-export type DnaGossipInfo = {
-  total_historical_gossip_throughput: HistoricalGossipThroughput;
-};
+export interface NetworkInfo {
+  fetch_queue_info: FetchQueueInfo;
+}
 
-export type HistoricalGossipThroughput = {
-  expected_op_bytes: InOut;
-  expected_op_count: InOut;
-  op_bytes: InOut;
-  op_count: InOut;
-};
-
-export type InOut = {
-  incoming: number;
-  outgoing: number;
-};
+export interface FetchQueueInfo {
+  /// Total number of bytes expected to be received through fetches
+  op_bytes_to_fetch: number;
+  /// Total number of ops expected to be received through fetches
+  num_ops_to_fetch: number;
+}
