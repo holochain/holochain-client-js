@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Deprecated API calls.
 ### Changed
 ### Fixed
+- Type definition of functions in `authorizeNewSigningKeyPair`.
 
 ## 2022-12-19: v0.11.1
 ### Removed
