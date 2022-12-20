@@ -6,13 +6,10 @@ export interface LauncherEnvironment {
   INSTALLED_APP_ID: InstalledAppId;
 }
 
+export const __HC_LAUNCHER_ENV__ = "__HC_LAUNCHER_ENV__";
+
 export const isLauncher =
-  typeof window === "object" && "__HC_LAUNCHER_ENV__" in window;
+  typeof window === "object" && __HC_LAUNCHER_ENV__ in window;
 
 export const getLauncherEnvironment = (): LauncherEnvironment | undefined =>
-  isLauncher
-    ? (
-        window as Window &
-          typeof globalThis & { __HC_LAUNCHER_ENV__: LauncherEnvironment }
-      ).__HC_LAUNCHER_ENV__
-    : undefined;
+  isLauncher ? window.__HC_LAUNCHER_ENV__ : undefined;
