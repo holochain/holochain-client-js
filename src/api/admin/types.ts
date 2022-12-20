@@ -70,16 +70,16 @@ export interface Cell {
   enabled: boolean;
 }
 
-export const CELL_TYPE = {
-  PROVISIONED: "Provisioned",
-  CLONED: "Cloned",
-  STEM: "Stem",
-} as const;
+export enum CellType {
+  Provisioned = "Provisioned",
+  Cloned = "Cloned",
+  Stem = "Stem",
+}
 
 export type CellInfo =
-  | { [CELL_TYPE.PROVISIONED]: Cell }
-  | { [CELL_TYPE.CLONED]: Cell }
-  | { [CELL_TYPE.STEM]: StemCell };
+  | { [CellType.Provisioned]: Cell }
+  | { [CellType.Cloned]: Cell }
+  | { [CellType.Stem]: StemCell };
 
 export type AppInfo = {
   installed_app_id: InstalledAppId;
