@@ -21,16 +21,6 @@ import { DisableCloneCellRequest } from "../index.js";
 export type AttachAppInterfaceRequest = { port: number };
 export type AttachAppInterfaceResponse = { port: number };
 
-// Deprecated
-export type ActivateAppRequest = EnableAppRequest;
-// Deprecated
-export type ActivateAppResponse = EnableAppResponse;
-
-// Deprecated
-export type DeactivateAppRequest = { installed_app_id: InstalledAppId };
-// Deprecated
-export type DeactivateAppResponse = null;
-
 export type EnableAppRequest = { installed_app_id: InstalledAppId };
 export type EnableAppResponse = {
   app: AppInfo;
@@ -80,12 +70,16 @@ export interface Cell {
   enabled: boolean;
 }
 
+export const CELL_TYPE = {
+  PROVISIONED: "Provisioned",
+  CLONED: "Cloned",
+  STEM: "Stem",
+} as const;
+
 export type CellInfo =
-  | {
-      Provisioned: Cell;
-    }
-  | { Cloned: Cell }
-  | { Stem: StemCell };
+  | { [CELL_TYPE.PROVISIONED]: Cell }
+  | { [CELL_TYPE.CLONED]: Cell }
+  | { [CELL_TYPE.STEM]: StemCell };
 
 export type AppInfo = {
   installed_app_id: InstalledAppId;
@@ -291,10 +285,6 @@ export interface AdminApi {
     AttachAppInterfaceRequest,
     AttachAppInterfaceResponse
   >;
-  // Deprecated
-  activateApp: Requester<ActivateAppRequest, ActivateAppResponse>;
-  // Deprecated
-  deactivateApp: Requester<DeactivateAppRequest, DeactivateAppResponse>;
   enableApp: Requester<EnableAppRequest, EnableAppResponse>;
   disableApp: Requester<DisableAppRequest, DisableAppResponse>;
   startApp: Requester<StartAppRequest, StartAppResponse>;
@@ -313,8 +303,6 @@ export interface AdminApi {
   installApp: Requester<InstallAppRequest, InstallAppResponse>;
   listDnas: Requester<ListDnasRequest, ListDnasResponse>;
   listCellIds: Requester<ListCellIdsRequest, ListCellIdsResponse>;
-  // Deprecated
-  listActiveApps: Requester<ListActiveAppsRequest, ListActiveAppsResponse>;
   listApps: Requester<ListAppsRequest, ListAppsResponse>;
   listAppInterfaces: Requester<
     ListAppInterfacesRequest,

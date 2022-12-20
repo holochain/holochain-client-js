@@ -67,14 +67,6 @@ export class AdminWebsocket implements Api.AdminApi {
     Api.AttachAppInterfaceRequest,
     Api.AttachAppInterfaceResponse
   > = this._requester("attach_app_interface");
-  // Deprecated
-  activateApp: Requester<Api.ActivateAppRequest, Api.ActivateAppResponse> =
-    this._requester("activate_app");
-  // Deprecated
-  deactivateApp: Requester<
-    Api.DeactivateAppRequest,
-    Api.DeactivateAppResponse
-  > = this._requester("deactivate_app");
   enableApp: Requester<Api.EnableAppRequest, Api.EnableAppResponse> =
     this._requester("enable_app");
   disableApp: Requester<Api.DisableAppRequest, Api.DisableAppResponse> =
@@ -105,11 +97,6 @@ export class AdminWebsocket implements Api.AdminApi {
     this._requester("list_dnas");
   listCellIds: Requester<Api.ListCellIdsRequest, Api.ListCellIdsResponse> =
     this._requester("list_cell_ids");
-  // Deprecated
-  listActiveApps: Requester<
-    Api.ListActiveAppsRequest,
-    Api.ListActiveAppsResponse
-  > = this._requester("list_active_apps");
   listApps: Requester<Api.ListAppsRequest, Api.ListAppsResponse> =
     this._requester("list_apps", listAppsTransform);
   listAppInterfaces: Requester<
