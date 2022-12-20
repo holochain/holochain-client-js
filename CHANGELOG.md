@@ -5,10 +5,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## \[Unreleased\]
 ### Added
 ### Removed
-- Deprecated API calls.
 ### Changed
 ### Fixed
+
+## 2022-12-20: v0.11.2
+### Removed
+- Deprecated API calls.
+### Fixed
 - Type definition of functions in `authorizeNewSigningKeyPair`.
+- Problem with rolling up serialization package.
 
 ## 2022-12-19: v0.11.1
 ### Removed
