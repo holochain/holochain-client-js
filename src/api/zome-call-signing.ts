@@ -26,7 +26,7 @@ const signingProps: Map<
 export const authorizeNewSigningKeyPair = async (
   adminWs: AdminWebsocket,
   cellId: CellId,
-  functions: [[ZomeName, FunctionName]]
+  functions: [ZomeName, FunctionName][]
 ) => {
   const [keyPair, signingKey] = generateSigningKeyPair();
   const capSecret = await grantSigningKey(
