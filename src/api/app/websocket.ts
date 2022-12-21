@@ -32,7 +32,7 @@ import {
   requesterTransformer,
   Transformer,
 } from "../common.js";
-import { getSigningPropsForCell } from "../zome-call-signing.js";
+import { getSigningCredentials } from "../zome-call-signing.js";
 import {
   AppApi,
   AppInfoRequest,
@@ -50,7 +50,7 @@ import {
   NetworkInfoRequest,
   NetworkInfoResponse,
 } from "./types.js";
-import { getNonceExpiration, randomNonce } from "./util.js";
+import { getNonceExpiration, randomNonce, signZomeCall } from "./util.js";
 
 export class AppWebsocket extends Emittery implements AppApi {
   client: WsClient;
@@ -219,29 +219,35 @@ const callZomeTransform: Transformer<
 
       return signedZomeCall;
     } else {
-      const signingPropsForCell = getSigningPropsForCell(req.cell_id);
+      const signingPropsForCell = getSigningCredentials(req.cell_id);
       if (!signingPropsForCell) {
         throw new Error(
           "cannot sign zome call: signing properties have not been set"
         );
       }
-      const unsignedZomeCall: CallZomeRequestUnsigned = {
-        ...req,
-        cap_secret: signingPropsForCell.capSecret,
-        provenance: signingPropsForCell.signingKey,
-        payload: encode(req.payload),
-        nonce: randomNonce(),
-        expires_at: getNonceExpiration(),
-      };
-      const hashedZomeCall = await hashZomeCall(unsignedZomeCall);
-      const signature = nacl
-        .sign(hashedZomeCall, signingPropsForCell.keyPair.secretKey)
-        .subarray(0, nacl.sign.signatureLength);
+      // const unsignedZomeCall: CallZomeRequestUnsigned = {
+      //   ...req,
+      //   cap_secret: signingPropsForCell.capSecret,
+      //   provenance: signingPropsForCell.signingKey,
+      //   payload: encode(req.payload),
+      //   nonce: randomNonce(),
+      //   expires_at: getNonceExpiration(),
+      // };
+      // const hashedZomeCall = await hashZomeCall(unsignedZomeCall);
+      // const signature = nacl
+      //   .sign(hashedZomeCall, signingPropsForCell.keyPair.secretKey)
+      //   .subarray(0, nacl.sign.signatureLength);
 
-      const signedZomeCall: CallZomeRequestSigned = {
-        ...unsignedZomeCall,
-        signature,
-      };
+      // const signedZomeCall: CallZomeRequestSigned = {
+      //   ...unsignedZomeCall,
+      //   signature,
+      // };
+      const signedZomeCall = await signZomeCall(
+        signingPropsForCell.capSecret,
+        signingPropsForCell.signingKey,
+        signingPropsForCell.keyPair,
+        req
+      );
       return signedZomeCall;
     }
   },

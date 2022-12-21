@@ -6,6 +6,7 @@ import { CapSecret } from "../../hdk/capabilities.js";
 import { AgentPubKey, CellId } from "../../types.js";
 import { FunctionName, ZomeName } from "../admin/types.js";
 import { AdminWebsocket } from "../admin/websocket.js";
+import { CallZomeRequest } from "./types.js";
 import {
   CallZomeRequestSigned,
   CallZomeRequestUnsigned,
@@ -17,13 +18,15 @@ import {
  *
  * @returns The signing key pair and an agent pub key based on the public key.
  */
-export const generateSigningKeyPair = () => {
+export const generateSigningKeyPair: () => [
+  nacl.SignKeyPair,
+  AgentPubKey
+] = () => {
   const keyPair = nacl.sign.keyPair();
   const signingKey = new Uint8Array(
     [132, 32, 36].concat(...keyPair.publicKey).concat(...[0, 0, 0, 0])
-  ) as AgentPubKey;
-  const keys: [nacl.SignKeyPair, AgentPubKey] = [keyPair, signingKey];
-  return keys;
+  );
+  return [keyPair, signingKey];
 };
 
 export const randomCapSecret: () => CapSecret = () => randomByteArray(64);
@@ -45,7 +48,7 @@ export const randomByteArray = (length: number) => {
 export const getNonceExpiration = () => (Date.now() + 5 * 60 * 1000) * 1000; // 5 mins from now in microseconds
 
 export const grantSigningKey = async (
-  admin: AdminWebsocket,
+  admin: Pick<AdminWebsocket, "grantZomeCallCapability">,
   cellId: CellId,
   functions: Array<[ZomeName, FunctionName]>,
   signingKey: AgentPubKey
@@ -71,15 +74,15 @@ export const signZomeCall = async (
   capSecret: CapSecret,
   signingKey: AgentPubKey,
   keyPair: nacl.SignKeyPair,
-  payload: any
+  request: CallZomeRequest
 ) => {
   const unsignedZomeCallPayload: CallZomeRequestUnsigned = {
     cap_secret: capSecret,
-    cell_id: payload.cell_id,
-    zome_name: payload.zome_name,
-    fn_name: payload.fn_name,
+    cell_id: request.cell_id,
+    zome_name: request.zome_name,
+    fn_name: request.fn_name,
     provenance: signingKey,
-    payload: encode(payload.payload),
+    payload: encode(request.payload),
     nonce: randomNonce(),
     expires_at: getNonceExpiration(),
   };
