@@ -4,6 +4,7 @@ import { AdminWebsocket } from "../../src/api/admin/websocket.js";
 import { AppWebsocket } from "../../src/api/app/websocket.js";
 import { CellId, InstalledAppId } from "../../src/types.js";
 import assert from "node:assert/strict";
+import { CellType } from "../../src/index.js";
 
 export const FIXTURE_PATH = "./test/e2e/fixture";
 
@@ -107,8 +108,8 @@ export const installAppAndDna = async (
     path,
     membrane_proofs: {},
   });
-  assert("Provisioned" in app.cell_info[role_name][0]);
-  const cell_id = app.cell_info[role_name][0].Provisioned.cell_id;
+  assert(CellType.Provisioned in app.cell_info[role_name][0]);
+  const cell_id = app.cell_info[role_name][0][CellType.Provisioned].cell_id;
   await admin.enableApp({ installed_app_id });
   // destructure to get whatever open port was assigned to the interface
   const { port: appPort } = await admin.attachAppInterface({ port: 0 });

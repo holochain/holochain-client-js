@@ -10,6 +10,7 @@ import {
   AppWebsocket,
   CallZomeRequest,
   CallZomeResponse,
+  CellType,
   CreateCloneCellResponse,
   DisableCloneCellResponse,
   EnableCloneCellResponse,
@@ -29,9 +30,9 @@ function getPubKey(appInfo: AppInfo): AgentPubKey {
 
   for (const cells of Object.values(appInfo.cell_info)) {
     for (const cell of cells) {
-      if ("Provisioned" in cell) {
+      if (CellType.Provisioned in cell) {
         return cell.Provisioned.cell_id[1];
-      } else if ("Cloned" in cell) {
+      } else if (CellType.Cloned in cell) {
         return cell.Cloned.cell_id[1];
       }
     }
@@ -104,11 +105,13 @@ export class AppAgentWebsocket implements AppAgentClient {
     if (!(roleName in appInfo.cell_info)) {
       throw new Error(`No cell found with role_name ${roleName}`);
     }
-    const cell = appInfo.cell_info[roleName].find((c) => "Provisioned" in c);
-    if (!cell || !("Provisioned" in cell)) {
+    const cell = appInfo.cell_info[roleName].find(
+      (c) => CellType.Provisioned in c
+    );
+    if (!cell || !(CellType.Provisioned in cell)) {
       throw new Error(`No provisioned cell found with role_name ${roleName}`);
     }
-    return cell.Provisioned.cell_id;
+    return cell[CellType.Provisioned].cell_id;
   }
 
   async callZome(

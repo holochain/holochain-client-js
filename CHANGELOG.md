@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Added
 ### Removed
 ### Changed
+- Move signing functions to corresponding modules and simplify fn signZomeCall.
+
 ### Fixed
 
 ## 2022-12-21: v0.11.7
