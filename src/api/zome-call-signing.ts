@@ -11,7 +11,6 @@ import { CallZomeRequest } from "./app/types.js";
 import {
   CallZomeRequestSigned,
   CallZomeRequestUnsigned,
-  Nonce256Bit,
 } from "./app/websocket.js";
 
 export interface SigningCredentials {
@@ -19,6 +18,7 @@ export interface SigningCredentials {
   keyPair: nacl.SignKeyPair;
   signingKey: AgentPubKey;
 }
+export type Nonce256Bit = Uint8Array;
 
 const signingProps: Map<string, SigningCredentials> = new Map();
 
@@ -118,25 +118,26 @@ export const grantSigningKey = async (
   return capSecret;
 };
 
-export const signZomeCall = async (
-  capSecret: CapSecret,
-  signingKey: AgentPubKey,
-  keyPair: nacl.SignKeyPair,
-  request: CallZomeRequest
-) => {
+export const signZomeCall = async (request: CallZomeRequest) => {
+  const signingCredentialsForCell = getSigningCredentials(request.cell_id);
+  if (!signingCredentialsForCell) {
+    throw new Error(
+      "cannot sign zome call: signing properties have not been set"
+    );
+  }
   const unsignedZomeCallPayload: CallZomeRequestUnsigned = {
-    cap_secret: capSecret,
+    cap_secret: signingCredentialsForCell.capSecret,
     cell_id: request.cell_id,
     zome_name: request.zome_name,
     fn_name: request.fn_name,
-    provenance: signingKey,
+    provenance: signingCredentialsForCell.signingKey,
     payload: encode(request.payload),
     nonce: randomNonce(),
     expires_at: getNonceExpiration(),
   };
   const hashedZomeCall = await hashZomeCall(unsignedZomeCallPayload);
   const signature = nacl
-    .sign(hashedZomeCall, keyPair.secretKey)
+    .sign(hashedZomeCall, signingCredentialsForCell.keyPair.secretKey)
     .subarray(0, nacl.sign.signatureLength);
 
   const signedZomeCall: CallZomeRequestSigned = {

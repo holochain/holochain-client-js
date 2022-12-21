@@ -1,9 +1,9 @@
-import { decode, encode } from "@msgpack/msgpack";
-import { invoke } from "@tauri-apps/api/tauri";
+import { decode } from "@msgpack/msgpack";
 import Emittery from "emittery";
 import {
   getLauncherEnvironment,
   isLauncher,
+  signZomeCallTauri,
 } from "../../environments/launcher.js";
 import { CapSecret } from "../../hdk/capabilities.js";
 import { InstalledAppId } from "../../types.js";
@@ -16,12 +16,7 @@ import {
   requesterTransformer,
   Transformer,
 } from "../common.js";
-import {
-  getNonceExpiration,
-  getSigningCredentials,
-  randomNonce,
-  signZomeCall,
-} from "../zome-call-signing.js";
+import { Nonce256Bit, signZomeCall } from "../zome-call-signing.js";
 import {
   AppApi,
   AppInfoRequest,
@@ -127,19 +122,6 @@ export class AppWebsocket extends Emittery implements AppApi {
     this._requester("network_info");
 }
 
-interface CallZomeRequestSignedTauri // Tauri requires a number array instead of a Uint8Array
-  extends Omit<
-    CallZomeRequestSigned,
-    "cap_secret" | "cell_id" | "provenance" | "nonce"
-  > {
-  cell_id: [TauriByteArray, TauriByteArray];
-  provenance: TauriByteArray;
-  nonce: TauriByteArray;
-  expires_at: number;
-}
-
-export type Nonce256Bit = Uint8Array;
-
 export interface CallZomeRequestUnsigned extends CallZomeRequest {
   cap_secret: CapSecret | null;
   nonce: Nonce256Bit;
@@ -150,18 +132,6 @@ export interface CallZomeRequestSigned extends CallZomeRequestUnsigned {
   signature: Uint8Array;
 }
 
-type TauriByteArray = number[]; // Tauri requires a number array instead of a Uint8Array
-interface CallZomeRequestUnsignedTauri
-  extends Omit<
-    CallZomeRequestUnsigned,
-    "cap_secret" | "cell_id" | "provenance" | "nonce"
-  > {
-  cell_id: [TauriByteArray, TauriByteArray];
-  provenance: TauriByteArray;
-  nonce: TauriByteArray;
-  expires_at: number;
-}
-
 const callZomeTransform: Transformer<
   // either an already signed zome call which is returned as is, or a zome call
   // payload to be signed
@@ -170,59 +140,16 @@ const callZomeTransform: Transformer<
   CallZomeResponseGeneric<Uint8Array>,
   CallZomeResponse
 > = {
-  input: async (req) => {
-    if ("signature" in req) {
-      return req;
+  input: async (request) => {
+    if ("signature" in request) {
+      return request;
     }
-    if (isLauncher) {
-      const zomeCallUnsigned: CallZomeRequestUnsignedTauri = {
-        provenance: Array.from(req.provenance),
-        cell_id: [Array.from(req.cell_id[0]), Array.from(req.cell_id[1])],
-        zome_name: req.zome_name,
-        fn_name: req.fn_name,
-        payload: Array.from(encode(req.payload)),
-        nonce: Array.from(randomNonce()),
-        expires_at: getNonceExpiration(),
-      };
-
-      const signedZomeCallTauri: CallZomeRequestSignedTauri = await invoke(
-        "sign_zome_call",
-        { zomeCallUnsigned }
-      );
-
-      const signedZomeCall: CallZomeRequestSigned = {
-        provenance: Uint8Array.from(signedZomeCallTauri.provenance),
-        cap_secret: null,
-        cell_id: [
-          Uint8Array.from(signedZomeCallTauri.cell_id[0]),
-          Uint8Array.from(signedZomeCallTauri.cell_id[1]),
-        ],
-        zome_name: signedZomeCallTauri.zome_name,
-        fn_name: signedZomeCallTauri.fn_name,
-        payload: Uint8Array.from(signedZomeCallTauri.payload),
-        signature: Uint8Array.from(signedZomeCallTauri.signature),
-        expires_at: signedZomeCallTauri.expires_at,
-        nonce: Uint8Array.from(signedZomeCallTauri.nonce),
-      };
-
-      return signedZomeCall;
-    } else {
-      const signingPropsForCell = getSigningCredentials(req.cell_id);
-      if (!signingPropsForCell) {
-        throw new Error(
-          "cannot sign zome call: signing properties have not been set"
-        );
-      }
-      const signedZomeCall = await signZomeCall(
-        signingPropsForCell.capSecret,
-        signingPropsForCell.signingKey,
-        signingPropsForCell.keyPair,
-        req
-      );
-      return signedZomeCall;
-    }
+    const signedZomeCall = isLauncher
+      ? await signZomeCallTauri(request)
+      : await signZomeCall(request);
+    return signedZomeCall;
   },
-  output: (res) => decode(res),
+  output: (response) => decode(response),
 };
 
 const appInfoTransform = (
@@ -233,13 +160,13 @@ const appInfoTransform = (
   AppInfoResponse,
   AppInfoResponse
 > => ({
-  input: (req) => {
+  input: (request) => {
     if (appWs.overrideInstalledAppId) {
       return {
         installed_app_id: appWs.overrideInstalledAppId,
       };
     }
-    return req;
+    return request;
   },
-  output: (res) => res,
+  output: (response) => response,
 });
