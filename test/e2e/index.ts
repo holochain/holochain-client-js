@@ -178,7 +178,7 @@ test(
   })
 );
 
-test.only(
+test(
   "admin smoke test: installBundle",
   withConductor(ADMIN_PORT, async (t: Test) => {
     const installed_app_id = "app";
