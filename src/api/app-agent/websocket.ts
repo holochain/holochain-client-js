@@ -1,25 +1,3 @@
-/**
- * Defines AppAgentWebsocket, an easy-to-use websocket implementation of the
- * Conductor API for apps, restricted to a single app provided on initialization
- *
- *    const appWs = AppWebsocket.connect('ws://127.0.0.1:9000')
- *
- *    const client = new AppAgentWebsocket(appWs, 'my_installed_app_id')
- *
- *    client.callZome({
- *      role_name: 'my_role_name' // role_name is unique per app, so you can unambiguously identify your dna with role_name in this client,
- *      zome_name: 'zome',
- *      fn_name: 'fn',
- *      payload: { value: 'v' }
- *    })
- *      .then(result => {
- *        console.log('callZome returned with:', result)
- *      })
- *      .catch(err => {
- *        console.error('callZome errored with:', err)
- *      })
- */
-
 import Emittery, { UnsubscribeFunction } from "emittery";
 import { omit } from "lodash-es";
 import { getLauncherEnvironment } from "../../environments/launcher.js";
@@ -45,15 +23,38 @@ import {
   AppEnableCloneCellRequest,
 } from "./types.js";
 
+function getPubKey(appInfo: AppInfo): AgentPubKey {
+  // This is fine for now cause `UseExisting` as a provisioning strategy doesn't work yet.
+  // TODO: change this when AppInfo contains the `AgentPubKey` for this app, like `return appInfo.my_pub_key`
+
+  for (const cells of Object.values(appInfo.cell_info)) {
+    for (const cell of cells) {
+      if ("Provisioned" in cell) {
+        return cell.Provisioned.cell_id[1];
+      } else if ("Cloned" in cell) {
+        return cell.Cloned.cell_id[1];
+      }
+    }
+  }
+
+  throw new Error(
+    `This app doesn't have any cells, so we can't return the agent public key for it. This is a known issue, and is going to be fixed in the near future.`
+  );
+}
+
 export class AppAgentWebsocket implements AppAgentClient {
-  appWebsocket: AppWebsocket;
+  readonly appWebsocket: AppWebsocket;
   installedAppId: InstalledAppId;
   cachedAppInfo?: AppInfo;
+  readonly emitter: Emittery<AppAgentEvents>;
 
-  emitter = new Emittery<AppAgentEvents>();
-
-  constructor(appWebsocket: AppWebsocket, installedAppId: InstalledAppId) {
+  private constructor(
+    appWebsocket: AppWebsocket,
+    installedAppId: InstalledAppId,
+    public myPubKey: AgentPubKey
+  ) {
     this.appWebsocket = appWebsocket;
+    this.emitter = new Emittery<AppAgentEvents>();
 
     const env = getLauncherEnvironment();
     this.installedAppId = env?.INSTALLED_APP_ID || installedAppId;
@@ -72,25 +73,17 @@ export class AppAgentWebsocket implements AppAgentClient {
     return appInfo;
   }
 
-  async myPubKey(): Promise<AgentPubKey> {
-    const appInfo = this.cachedAppInfo || (await this.appInfo());
+  static async connect(
+    appWebsocket: AppWebsocket,
+    installedAppId: InstalledAppId
+  ): Promise<AppAgentWebsocket> {
+    const appInfo = await appWebsocket.appInfo({
+      installed_app_id: installedAppId,
+    });
 
-    // This is fine for now cause `UseExisting` as a provisioning strategy doesn't work yet.
-    // TODO: change this when AppInfo contains the `AgentPubKey` for this app, like `return appInfo.my_pub_key`
+    const myPubKey = getPubKey(appInfo);
 
-    for (const cells of Object.values(appInfo.cell_info)) {
-      for (const cell of cells) {
-        if ("Provisioned" in cell) {
-          return cell.Provisioned.cell_id[1];
-        } else if ("Cloned" in cell) {
-          return cell.Cloned.cell_id[1];
-        }
-      }
-    }
-
-    throw new Error(
-      `This app doesn't have any cells, so we can't return the agent public key for it. This is a known issue, and is going to be fixed in the near future.`
-    );
+    return new AppAgentWebsocket(appWebsocket, installedAppId, myPubKey);
   }
 
   getCellIdFromRoleName(roleName: RoleName, appInfo: AppInfo) {
@@ -125,7 +118,7 @@ export class AppAgentWebsocket implements AppAgentClient {
     if (!("provenance" in request)) {
       request = {
         ...request,
-        provenance: await this.myPubKey(),
+        provenance: this.myPubKey,
       };
     }
     if ("role_name" in request && request.role_name) {
@@ -133,7 +126,7 @@ export class AppAgentWebsocket implements AppAgentClient {
       const cell_id = this.getCellIdFromRoleName(request.role_name, appInfo);
       const zomeCallPayload: CallZomeRequest = {
         ...omit(request, "role_name"),
-        provenance: await this.myPubKey(),
+        provenance: this.myPubKey,
         cell_id,
       };
       return this.appWebsocket.callZome(zomeCallPayload, timeout);

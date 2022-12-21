@@ -1,22 +1,6 @@
-/**
- * Defines AppWebsocket, an easy-to-use websocket implementation of the
- * Conductor API for apps
- *
- *    const client = AppWebsocket.connect('ws://127.0.0.1:9000');
- *
- *    client.callZome({...})
- *      .then(() => {
- *        console.log('DNA successfully installed')
- *      })
- *      .catch(err => {
- *        console.error('problem installing DNA:', err)
- *      });
- */
-import { hashZomeCall } from "@holochain/serialization";
 import { decode, encode } from "@msgpack/msgpack";
 import { invoke } from "@tauri-apps/api/tauri";
 import Emittery from "emittery";
-import nacl from "tweetnacl";
 import {
   getLauncherEnvironment,
   isLauncher,
@@ -53,11 +37,11 @@ import {
 import { getNonceExpiration, randomNonce, signZomeCall } from "./util.js";
 
 export class AppWebsocket extends Emittery implements AppApi {
-  client: WsClient;
+  readonly client: WsClient;
   defaultTimeout: number;
   overrideInstalledAppId?: InstalledAppId;
 
-  constructor(
+  private constructor(
     client: WsClient,
     defaultTimeout?: number,
     overrideInstalledAppId?: InstalledAppId

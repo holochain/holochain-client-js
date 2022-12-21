@@ -27,7 +27,10 @@ test(
       ADMIN_PORT
     );
 
-    const appAgentWs = new AppAgentWebsocket(client, installed_app_id);
+    const appAgentWs = await AppAgentWebsocket.connect(
+      client,
+      installed_app_id
+    );
 
     let info = await appAgentWs.appInfo();
     assert("Provisioned" in info.cell_info[ROLE_NAME][0]);
@@ -105,7 +108,10 @@ test(
       [TEST_ZOME_NAME, "emitter"],
     ]);
 
-    const appAgentWs = new AppAgentWebsocket(client, installed_app_id);
+    const appAgentWs = await AppAgentWebsocket.connect(
+      client,
+      installed_app_id
+    );
 
     appAgentWs.on("signal", signalCb);
 
@@ -129,7 +135,10 @@ test(
     );
     const info = await client.appInfo({ installed_app_id });
 
-    const appAgentWs = new AppAgentWebsocket(client, installed_app_id);
+    const appAgentWs = await AppAgentWebsocket.connect(
+      client,
+      installed_app_id
+    );
 
     const createCloneCellParams: AppCreateCloneCellRequest = {
       role_name: ROLE_NAME,
@@ -173,7 +182,10 @@ test(
       ADMIN_PORT
     );
 
-    const appAgentWs = new AppAgentWebsocket(client, installed_app_id);
+    const appAgentWs = await AppAgentWebsocket.connect(
+      client,
+      installed_app_id
+    );
 
     const createCloneCellParams: AppCreateCloneCellRequest = {
       role_name: ROLE_NAME,
