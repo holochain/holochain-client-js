@@ -6,6 +6,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Added
 ### Removed
 ### Changed
+- Tidy up signing module & export functions for signing.
 ### Fixed
 
 ## 2022-12-20: v0.11.2
