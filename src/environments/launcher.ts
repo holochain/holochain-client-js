@@ -1,5 +1,4 @@
 import { encode } from "@msgpack/msgpack";
-import { invoke } from "@tauri-apps/api";
 import {
   CallZomeRequest,
   CallZomeRequestSigned,
@@ -63,6 +62,7 @@ export const signZomeCallTauri = async (req: CallZomeRequest) => {
     expires_at: getNonceExpiration(),
   };
 
+  const { invoke } = await import("@tauri-apps/api");
   const signedZomeCallTauri: CallZomeRequestSignedTauri = await invoke(
     "sign_zome_call",
     { zomeCallUnsigned }

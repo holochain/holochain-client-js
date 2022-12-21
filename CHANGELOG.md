@@ -8,6 +8,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Changed
 ### Fixed
 
+## 2022-12-20: v0.11.5
+### Fixed
+- tauri-apps bug which came out of the blue.
+
 ## 2022-12-20: v0.11.4
 ### Changed
 - Tidy up signing module & export functions for signing.
