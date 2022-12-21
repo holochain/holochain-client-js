@@ -12,6 +12,7 @@ import {
   AppStatusFilter,
   AppWebsocket,
   CallZomeRequest,
+  CellType,
   CloneId,
   CreateCloneCellRequest,
   DnaBundle,
@@ -177,7 +178,7 @@ test(
   })
 );
 
-test(
+test.only(
   "admin smoke test: installBundle",
   withConductor(ADMIN_PORT, async (t: Test) => {
     const installed_app_id = "app";
@@ -219,10 +220,11 @@ test(
 
     const cellIds = await admin.listCellIds();
     t.equal(cellIds.length, 1);
-    // t.deepEqual(
-    //   cellIds[0],
-    //   installedApp.cell_info[ROLE_NAME][0].Provisioned.cell_id
-    // );
+    assert(CellType.Provisioned in installedApp.cell_info[ROLE_NAME][0]);
+    t.deepEqual(
+      cellIds[0],
+      installedApp.cell_info[ROLE_NAME][0][CellType.Provisioned].cell_id
+    );
 
     await admin.attachAppInterface({ port: 0 });
     await admin.disableApp({ installed_app_id });
@@ -340,8 +342,11 @@ test(
       ADMIN_PORT
     );
     let info = await client.appInfo({ installed_app_id }, 1000);
-    assert("Provisioned" in info.cell_info[ROLE_NAME][0]);
-    t.deepEqual(info.cell_info[ROLE_NAME][0].Provisioned.cell_id, cell_id);
+    assert(CellType.Provisioned in info.cell_info[ROLE_NAME][0]);
+    t.deepEqual(
+      info.cell_info[ROLE_NAME][0][CellType.Provisioned].cell_id,
+      cell_id
+    );
     t.ok(ROLE_NAME in info.cell_info);
     t.deepEqual(info.status, { running: null });
     const appEntryDef: AppEntryDef = {
@@ -378,8 +383,11 @@ test(
       ADMIN_PORT
     );
     const info = await client.appInfo({ installed_app_id });
-    assert("Provisioned" in info.cell_info[ROLE_NAME][0]);
-    t.deepEqual(info.cell_info[ROLE_NAME][0].Provisioned.cell_id, cell_id);
+    assert(CellType.Provisioned in info.cell_info[ROLE_NAME][0]);
+    t.deepEqual(
+      info.cell_info[ROLE_NAME][0][CellType.Provisioned].cell_id,
+      cell_id
+    );
     t.ok(ROLE_NAME in info.cell_info);
     t.deepEqual(info.status, { running: null });
     const zomeCallPayload: CallZomeRequest = {
@@ -398,7 +406,7 @@ test(
     t.equal(response, "foo");
 
     const state: DumpStateResponse = await admin.dumpState({
-      cell_id: info.cell_info[ROLE_NAME][0].Provisioned.cell_id,
+      cell_id: info.cell_info[ROLE_NAME][0][CellType.Provisioned].cell_id,
     });
     // A couple random tests to prove that things are where we expect them
     t.equal(state[0].source_chain_dump.records.length, 7);
@@ -502,8 +510,9 @@ test("can inject agents", async (t: Test) => {
     path: `${FIXTURE_PATH}/test.happ`,
   });
   t.ok(result);
-  assert("Provisioned" in result.cell_info[ROLE_NAME][0]);
-  const app1_cell = result.cell_info[ROLE_NAME][0].Provisioned.cell_id;
+  assert(CellType.Provisioned in result.cell_info[ROLE_NAME][0]);
+  const app1_cell =
+    result.cell_info[ROLE_NAME][0][CellType.Provisioned].cell_id;
   const activeApp1Info = await admin1.enableApp({ installed_app_id }, 1000);
   t.deepEqual(activeApp1Info.app.status, { running: null });
   t.ok(ROLE_NAME in activeApp1Info.app.cell_info);
@@ -542,8 +551,9 @@ test("can inject agents", async (t: Test) => {
     path: `${FIXTURE_PATH}/test.happ`,
   });
   t.ok(result);
-  assert("Provisioned" in result.cell_info[ROLE_NAME][0]);
-  const app2_cell = result.cell_info[ROLE_NAME][0].Provisioned.cell_id;
+  assert(CellType.Provisioned in result.cell_info[ROLE_NAME][0]);
+  const app2_cell =
+    result.cell_info[ROLE_NAME][0][CellType.Provisioned].cell_id;
   const activeApp2Info = await admin2.enableApp({ installed_app_id });
   t.deepEqual(activeApp2Info.app.status, { running: null });
   t.ok(ROLE_NAME in activeApp2Info.app.cell_info);
@@ -597,8 +607,11 @@ test(
       ADMIN_PORT
     );
     let info = await client.appInfo({ installed_app_id }, 1000);
-    assert("Provisioned" in info.cell_info[ROLE_NAME][0]);
-    t.deepEqual(info.cell_info[ROLE_NAME][0].Provisioned.cell_id, cell_id);
+    assert(CellType.Provisioned in info.cell_info[ROLE_NAME][0]);
+    t.deepEqual(
+      info.cell_info[ROLE_NAME][0][CellType.Provisioned].cell_id,
+      cell_id
+    );
     t.ok(ROLE_NAME in info.cell_info);
     t.deepEqual(info.status, { running: null });
     await authorizeSigningCredentials(admin, cell_id, [
@@ -641,11 +654,11 @@ test(
       network_seed: "2",
     });
 
-    assert("Provisioned" in installedApp1.cell_info[ROLE_NAME][0]);
-    assert("Provisioned" in installedApp2.cell_info[ROLE_NAME][0]);
+    assert(CellType.Provisioned in installedApp1.cell_info[ROLE_NAME][0]);
+    assert(CellType.Provisioned in installedApp2.cell_info[ROLE_NAME][0]);
     t.isNotDeepEqual(
-      installedApp1.cell_info[ROLE_NAME][0].Provisioned.cell_id[0],
-      installedApp2.cell_info[ROLE_NAME][0].Provisioned.cell_id[0]
+      installedApp1.cell_info[ROLE_NAME][0][CellType.Provisioned].cell_id[0],
+      installedApp2.cell_info[ROLE_NAME][0][CellType.Provisioned].cell_id[0]
     );
   })
 );
@@ -669,10 +682,10 @@ test(
 
     const expectedCloneId = new CloneId(ROLE_NAME, 0).toString();
     t.equal(cloneCell.role_name, expectedCloneId, "correct clone id");
-    assert("Provisioned" in info.cell_info[ROLE_NAME][0]);
+    assert(CellType.Provisioned in info.cell_info[ROLE_NAME][0]);
     t.deepEqual(
       cloneCell.cell_id[1],
-      info.cell_info[ROLE_NAME][0].Provisioned.cell_id[1],
+      info.cell_info[ROLE_NAME][0][CellType.Provisioned].cell_id[1],
       "clone cell agent key matches base cell agent key"
     );
     const zomeCallPayload: CallZomeRequest = {

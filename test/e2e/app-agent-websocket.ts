@@ -11,6 +11,7 @@ import {
   AppAgentCallZomeRequest,
   NonProvenanceCallZomeRequest,
   fakeAgentPubKey,
+  CellType,
 } from "../../src/index.js";
 import { installAppAndDna, withConductor } from "./util.js";
 
@@ -33,8 +34,11 @@ test(
     );
 
     let info = await appAgentWs.appInfo();
-    assert("Provisioned" in info.cell_info[ROLE_NAME][0]);
-    t.deepEqual(info.cell_info[ROLE_NAME][0].Provisioned.cell_id, cell_id);
+    assert(CellType.Provisioned in info.cell_info[ROLE_NAME][0]);
+    t.deepEqual(
+      info.cell_info[ROLE_NAME][0][CellType.Provisioned].cell_id,
+      cell_id
+    );
     t.ok(ROLE_NAME in info.cell_info);
     t.deepEqual(info.status, { running: null });
 
@@ -153,10 +157,10 @@ test(
 
     const expectedCloneId = new CloneId(ROLE_NAME, 0).toString();
     t.equal(cloneCell.role_name, expectedCloneId, "correct clone id");
-    assert("Provisioned" in info.cell_info[ROLE_NAME][0]);
+    assert(CellType.Provisioned in info.cell_info[ROLE_NAME][0]);
     t.deepEqual(
       cloneCell.cell_id[1],
-      info.cell_info[ROLE_NAME][0].Provisioned.cell_id[1],
+      info.cell_info[ROLE_NAME][0][CellType.Provisioned].cell_id[1],
       "clone cell agent key matches base cell agent key"
     );
 
