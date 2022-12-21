@@ -58,7 +58,7 @@ export interface AppAgentClient {
 
   appInfo(): Promise<AppInfoResponse>;
 
-  myPubKey(): Promise<AgentPubKey>;
+  myPubKey: AgentPubKey;
 
   createCloneCell(
     args: AppCreateCloneCellRequest
