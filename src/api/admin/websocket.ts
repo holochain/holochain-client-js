@@ -22,10 +22,10 @@ import { Transformer, requesterTransformer, Requester } from "../common.js";
 import { getLauncherEnvironment } from "../../environments/launcher.js";
 
 export class AdminWebsocket implements Api.AdminApi {
-  client: WsClient;
+  readonly client: WsClient;
   defaultTimeout: number;
 
-  constructor(client: WsClient, defaultTimeout?: number) {
+  private constructor(client: WsClient, defaultTimeout?: number) {
     this.client = client;
     this.defaultTimeout =
       defaultTimeout === undefined ? DEFAULT_TIMEOUT : defaultTimeout;
