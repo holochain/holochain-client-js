@@ -1,4 +1,4 @@
-import { randomByteArray } from "../api/zome-call-signing.js";
+import { randomByteArray } from "../api/app/util.js";
 import { ActionHash, AgentPubKey, EntryHash } from "../types.js";
 
 /** From https://github.com/holochain/holochain/blob/develop/crates/holo_hash/src/hash_type/primitive.rs */

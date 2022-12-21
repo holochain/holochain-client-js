@@ -1,3 +1,25 @@
+/**
+ * Defines AppAgentWebsocket, an easy-to-use websocket implementation of the
+ * Conductor API for apps, restricted to a single app provided on initialization
+ *
+ *    const appWs = AppWebsocket.connect('ws://127.0.0.1:9000')
+ *
+ *    const client = new AppAgentWebsocket(appWs, 'my_installed_app_id')
+ *
+ *    client.callZome({
+ *      role_name: 'my_role_name' // role_name is unique per app, so you can unambiguously identify your dna with role_name in this client,
+ *      zome_name: 'zome',
+ *      fn_name: 'fn',
+ *      payload: { value: 'v' }
+ *    })
+ *      .then(result => {
+ *        console.log('callZome returned with:', result)
+ *      })
+ *      .catch(err => {
+ *        console.error('callZome errored with:', err)
+ *      })
+ */
+
 import Emittery, { UnsubscribeFunction } from "emittery";
 import { omit } from "lodash-es";
 import { getLauncherEnvironment } from "../../environments/launcher.js";
