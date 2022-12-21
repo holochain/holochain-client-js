@@ -1,16 +1,16 @@
-import assert from "node:assert";
 import test, { Test } from "tape";
+import assert from "node:assert";
 import {
-  AppAgentCallZomeRequest,
   AppAgentWebsocket,
   AppCreateCloneCellRequest,
-  AppEntryDef,
   AppSignal,
-  authorizeSigningCredentials,
   CloneId,
-  fakeAgentPubKey,
-  NonProvenanceCallZomeRequest,
+  AppEntryDef,
   RoleName,
+  authorizeSigningCredentials,
+  AppAgentCallZomeRequest,
+  NonProvenanceCallZomeRequest,
+  fakeAgentPubKey,
 } from "../../src/index.js";
 import { installAppAndDna, withConductor } from "./util.js";
 
