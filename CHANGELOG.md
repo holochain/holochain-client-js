@@ -6,8 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Added
 ### Removed
 ### Changed
-- AppAgentWebsocket constructor is private now and follows the same pattern to instantiate through `connect` as the other websockets. 
 ### Fixed
+
+## 2022-12-21: v0.11.7
+### Changed
+- AppAgentWebsocket constructor is private now and follows the same pattern to instantiate through `connect` as the other websockets. 
 
 ## 2022-12-21: v0.11.6
 ### Fixed
