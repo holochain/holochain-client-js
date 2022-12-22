@@ -39,7 +39,7 @@
     "build": "rimraf ./lib && tsc -p tsconfig.build.json"
   },
   "dependencies": {
-    "@holochain/serialization": "^0.1.0-beta-rc.2",
+    "@holochain/serialization": "^0.1.0-beta-rc.3",
     "@msgpack/msgpack": "^2.7.2",
     "@tauri-apps/api": "^1.2.0",
     "emittery": "^1.0.1",
