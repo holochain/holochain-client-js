@@ -1,64 +1,46 @@
-import { hashZomeCall } from "@holochain/serialization";
-import { encode } from "@msgpack/msgpack";
 import crypto from "crypto";
 import nacl from "tweetnacl";
 import { CapSecret } from "../hdk/capabilities.js";
 import { AgentPubKey, CellId } from "../types.js";
 import { encodeHashToBase64 } from "../utils/base64.js";
-import { FunctionName, ZomeName } from "./admin/types.js";
-import { AdminWebsocket } from "./admin/websocket.js";
-import { CallZomeRequest } from "./app/types.js";
-import {
-  CallZomeRequestSigned,
-  CallZomeRequestUnsigned,
-} from "./app/websocket.js";
 
-export interface SigningCredentials {
+export type Nonce256Bit = Uint8Array;
+
+interface SigningCredentials {
   capSecret: CapSecret;
   keyPair: nacl.SignKeyPair;
   signingKey: AgentPubKey;
 }
-export type Nonce256Bit = Uint8Array;
 
-const signingProps: Map<string, SigningCredentials> = new Map();
-
-/**
- * Generate and authorize a new key pair for signing zome calls.
- *
- * @param adminWs - An admin websocket connection to use for granting a
- * capability for signing.
- * @param cellId - The cell id to create the capability grant for.
- * @param functions - Zomes and functions to authorize the signing key for.
- */
-export const authorizeSigningCredentials = async (
-  adminWs: Pick<AdminWebsocket, "grantZomeCallCapability">,
-  cellId: CellId,
-  functions: [ZomeName, FunctionName][]
-) => {
-  const [keyPair, signingKey] = generateSigningKeyPair();
-  const capSecret = await grantSigningKey(
-    adminWs,
-    cellId,
-    functions,
-    signingKey
-  );
-  const cellIdBase64 = encodeHashToBase64(cellId[0]).concat(
-    encodeHashToBase64(cellId[1])
-  );
-  signingProps.set(cellIdBase64, { capSecret, keyPair, signingKey });
-};
+const signingCredentials: Map<string, SigningCredentials> = new Map();
 
 /**
- * Get properties for signing a zome call made to a cell.
+ * Get credentials for signing zome calls.
  *
- * @param cellId - Cell id to be called.
+ * @param cellId - Cell id to get credentials of.
  * @returns The keys and cap secret required for signing a zome call.
  */
 export const getSigningCredentials = (cellId: CellId) => {
   const cellIdB64 = encodeHashToBase64(cellId[0]).concat(
     encodeHashToBase64(cellId[1])
   );
-  return signingProps.get(cellIdB64);
+  return signingCredentials.get(cellIdB64);
+};
+
+/**
+ * Set credentials for signing zome calls.
+ *
+ * @param cellId - Cell id to set credentials for.
+ * @param cellId - Cell id to set credentials for.
+ */
+export const setSigningCredentials = (
+  cellId: CellId,
+  credentials: SigningCredentials
+) => {
+  const cellIdB64 = encodeHashToBase64(cellId[0]).concat(
+    encodeHashToBase64(cellId[1])
+  );
+  signingCredentials.set(cellIdB64, credentials);
 };
 
 /**
@@ -94,55 +76,3 @@ export const randomByteArray = (length: number) => {
 };
 
 export const getNonceExpiration = () => (Date.now() + 5 * 60 * 1000) * 1000; // 5 mins from now in microseconds
-
-export const grantSigningKey = async (
-  admin: Pick<AdminWebsocket, "grantZomeCallCapability">,
-  cellId: CellId,
-  functions: Array<[ZomeName, FunctionName]>,
-  signingKey: AgentPubKey
-): Promise<CapSecret> => {
-  const capSecret = randomCapSecret();
-  await admin.grantZomeCallCapability({
-    cell_id: cellId,
-    cap_grant: {
-      tag: "zome-call-signing-key",
-      functions,
-      access: {
-        Assigned: {
-          secret: capSecret,
-          assignees: [signingKey],
-        },
-      },
-    },
-  });
-  return capSecret;
-};
-
-export const signZomeCall = async (request: CallZomeRequest) => {
-  const signingCredentialsForCell = getSigningCredentials(request.cell_id);
-  if (!signingCredentialsForCell) {
-    throw new Error(
-      `cannot sign zome call: no signing credentials have been authorized for cell ${request.cell_id}`
-    );
-  }
-  const unsignedZomeCallPayload: CallZomeRequestUnsigned = {
-    cap_secret: signingCredentialsForCell.capSecret,
-    cell_id: request.cell_id,
-    zome_name: request.zome_name,
-    fn_name: request.fn_name,
-    provenance: signingCredentialsForCell.signingKey,
-    payload: encode(request.payload),
-    nonce: randomNonce(),
-    expires_at: getNonceExpiration(),
-  };
-  const hashedZomeCall = await hashZomeCall(unsignedZomeCallPayload);
-  const signature = nacl
-    .sign(hashedZomeCall, signingCredentialsForCell.keyPair.secretKey)
-    .subarray(0, nacl.sign.signatureLength);
-
-  const signedZomeCall: CallZomeRequestSigned = {
-    ...unsignedZomeCallPayload,
-    signature,
-  };
-  return signedZomeCall;
-};

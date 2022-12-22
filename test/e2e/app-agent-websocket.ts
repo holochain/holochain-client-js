@@ -7,7 +7,6 @@ import {
   CloneId,
   AppEntryDef,
   RoleName,
-  authorizeSigningCredentials,
   AppAgentCallZomeRequest,
   NonProvenanceCallZomeRequest,
   fakeAgentPubKey,
@@ -42,7 +41,7 @@ test(
     t.ok(ROLE_NAME in info.cell_info);
     t.deepEqual(info.status, { running: null });
 
-    await authorizeSigningCredentials(admin, cell_id, [
+    await admin.authorizeSigningCredentials(cell_id, [
       [COORDINATOR_ZOME_NAME, "echo_app_entry_def"],
     ]);
 
@@ -108,7 +107,7 @@ test(
       ADMIN_PORT
     );
 
-    await authorizeSigningCredentials(admin, cell_id, [
+    await admin.authorizeSigningCredentials(cell_id, [
       [TEST_ZOME_NAME, "emitter"],
     ]);
 
@@ -151,7 +150,7 @@ test(
       },
     };
     const cloneCell = await appAgentWs.createCloneCell(createCloneCellParams);
-    await authorizeSigningCredentials(admin, cloneCell.cell_id, [
+    await admin.authorizeSigningCredentials(cloneCell.cell_id, [
       [TEST_ZOME_NAME, "foo"],
     ]);
 
@@ -198,7 +197,7 @@ test(
       },
     };
     const cloneCell = await appAgentWs.createCloneCell(createCloneCellParams);
-    await authorizeSigningCredentials(admin, cloneCell.cell_id, [
+    await admin.authorizeSigningCredentials(cloneCell.cell_id, [
       [TEST_ZOME_NAME, "foo"],
     ]);
 
