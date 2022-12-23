@@ -7,7 +7,7 @@ import {
   getNonceExpiration,
   randomNonce,
 } from "../api/index.js";
-import { encode } from "js-base64";
+import { encode } from "@msgpack/msgpack";
 
 export interface LauncherEnvironment {
   APP_INTERFACE_PORT: number;
@@ -29,7 +29,9 @@ declare global {
   }
 }
 
-interface CallZomeRequestSignedTauri // Tauri requires a number array instead of a Uint8Array
+type TauriByteArray = number[]; // Tauri requires a number array instead of a Uint8Array
+
+interface CallZomeRequestSignedTauri
   extends Omit<
     CallZomeRequestSigned,
     "cap_secret" | "cell_id" | "provenance" | "nonce"
@@ -40,7 +42,6 @@ interface CallZomeRequestSignedTauri // Tauri requires a number array instead of
   expires_at: number;
 }
 
-type TauriByteArray = number[]; // Tauri requires a number array instead of a Uint8Array
 interface CallZomeRequestUnsignedTauri
   extends Omit<
     CallZomeRequestUnsigned,

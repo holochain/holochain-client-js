@@ -1,5 +1,7 @@
-import { decode } from "@msgpack/msgpack";
+import { hashZomeCall } from "@holochain/serialization";
+import { decode, encode } from "@msgpack/msgpack";
 import Emittery from "emittery";
+import nacl from "tweetnacl";
 import {
   getLauncherEnvironment,
   isLauncher,
@@ -16,7 +18,12 @@ import {
   requesterTransformer,
   Transformer,
 } from "../common.js";
-import { Nonce256Bit, signZomeCall } from "../zome-call-signing.js";
+import {
+  getNonceExpiration,
+  getSigningCredentials,
+  Nonce256Bit,
+  randomNonce,
+} from "../zome-call-signing.js";
 import {
   AppApi,
   AppInfoRequest,
@@ -170,3 +177,32 @@ const appInfoTransform = (
   },
   output: (response) => response,
 });
+
+export const signZomeCall = async (request: CallZomeRequest) => {
+  const signingCredentialsForCell = getSigningCredentials(request.cell_id);
+  if (!signingCredentialsForCell) {
+    throw new Error(
+      `cannot sign zome call: no signing credentials have been authorized for cell ${request.cell_id}`
+    );
+  }
+  const unsignedZomeCallPayload: CallZomeRequestUnsigned = {
+    cap_secret: signingCredentialsForCell.capSecret,
+    cell_id: request.cell_id,
+    zome_name: request.zome_name,
+    fn_name: request.fn_name,
+    provenance: signingCredentialsForCell.signingKey,
+    payload: encode(request.payload),
+    nonce: randomNonce(),
+    expires_at: getNonceExpiration(),
+  };
+  const hashedZomeCall = await hashZomeCall(unsignedZomeCallPayload);
+  const signature = nacl
+    .sign(hashedZomeCall, signingCredentialsForCell.keyPair.secretKey)
+    .subarray(0, nacl.sign.signatureLength);
+
+  const signedZomeCall: CallZomeRequestSigned = {
+    ...unsignedZomeCallPayload,
+    signature,
+  };
+  return signedZomeCall;
+};

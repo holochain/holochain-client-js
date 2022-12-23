@@ -26,7 +26,7 @@ fn init(_: ()) -> ExternResult<InitCallbackResult> {
         tag: "".into(),
         // empty access converts to unrestricted
         access: ().into(),
-        functions: foo_functions,
+        functions: GrantedFunctions::Listed(foo_functions),
     })?;
     // NB: ideally we want to simply create a single CapGrant with both functions exposed,
     // but there is a bug in Holochain which currently prevents this. After this bug is fixed,
@@ -38,7 +38,7 @@ fn init(_: ()) -> ExternResult<InitCallbackResult> {
         tag: "".into(),
         // empty access converts to unrestricted
         access: ().into(),
-        functions: emitter_functions,
+        functions: GrantedFunctions::Listed(emitter_functions),
     })?;
 
     Ok(InitCallbackResult::Pass)
