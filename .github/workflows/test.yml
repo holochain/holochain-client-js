@@ -38,10 +38,10 @@ jobs:
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('Cargo.lock') }}
           restore-keys: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('Cargo.lock') }}
 
-      # - name: Run all tests
-      #   id: build-and-test
-      #   run: nix-shell --run './run-test.sh'
+      - name: Run all tests
+        id: build-and-test
+        run: nix-shell --run './run-test.sh'
 
       - name: Setup tmate session if build and test run failed
-        # if: steps.build-and-test.outcome == 'failure'
+        if: steps.build-and-test.outcome == 'failure'
         uses: mxschmitt/action-tmate@v3
