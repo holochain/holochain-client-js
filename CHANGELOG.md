@@ -6,9 +6,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Added
 ### Removed
 ### Changed
-- Simplify `authorizeSigningCredentials` by making functions an optional parameter and defaulting to all zomes and functions.
 ### Fixed
 
+## 2022-12-23: v0.11.9
+### Added
+- Introduce `GrantedFunctionsType` to reflect newly added wildcard option for all zomes and functions.
+### Changed
+- Simplify `authorizeSigningCredentials` by making functions an optional parameter and defaulting to all zomes and functions.
 
 ## 2022-12-21: v0.11.8
 ### Changed
