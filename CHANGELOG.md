@@ -6,6 +6,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Added
 ### Removed
 ### Changed
+- Simplify `authorizeSigningCredentials` by making functions an optional parameter and defaulting to all zomes and functions.
 ### Fixed
 
 
