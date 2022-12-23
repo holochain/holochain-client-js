@@ -7,7 +7,7 @@ import {
   getNonceExpiration,
   randomNonce,
 } from "../api/index.js";
-import { encode } from "js-base64";
+import { encode } from "@msgpack/msgpack";
 
 export interface LauncherEnvironment {
   APP_INTERFACE_PORT: number;
