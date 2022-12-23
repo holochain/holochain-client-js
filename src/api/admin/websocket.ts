@@ -1,5 +1,9 @@
 import { getLauncherEnvironment } from "../../environments/launcher.js";
-import type { CapSecret } from "../../hdk/capabilities.js";
+import {
+  CapSecret,
+  GrantedFunctions,
+  GrantedFunctionsType,
+} from "../../hdk/capabilities.js";
 import type { AgentPubKey, CellId } from "../../types.js";
 import { WsClient } from "../client.js";
 import {
@@ -16,48 +20,46 @@ import {
   setSigningCredentials,
 } from "../zome-call-signing.js";
 import {
-  AdminApi,
-  AttachAppInterfaceRequest,
-  AttachAppInterfaceResponse,
-  EnableAppRequest,
-  EnableAppResponse,
-  DisableAppRequest,
-  DisableAppResponse,
-  StartAppRequest,
-  StartAppResponse,
-  DumpStateRequest,
-  DumpStateResponse,
-  DumpFullStateRequest,
-  DumpFullStateResponse,
-  GenerateAgentPubKeyRequest,
-  GenerateAgentPubKeyResponse,
-  RegisterDnaRequest,
-  RegisterDnaResponse,
-  GetDnaDefinitionRequest,
-  GetDnaDefinitionResponse,
-  InstallAppRequest,
-  InstallAppResponse,
-  UninstallAppRequest,
-  UninstallAppResponse,
-  ListDnasRequest,
-  ListDnasResponse,
-  ListCellIdsRequest,
-  ListCellIdsResponse,
   AddAgentInfoRequest,
   AddAgentInfoResponse,
+  AdminApi,
   AgentInfoRequest,
   AgentInfoResponse,
   AppStatusFilter,
+  AttachAppInterfaceRequest,
+  AttachAppInterfaceResponse,
   DeleteCloneCellRequest,
   DeleteCloneCellResponse,
-  FunctionName,
+  DisableAppRequest,
+  DisableAppResponse,
+  DumpFullStateRequest,
+  DumpFullStateResponse,
+  DumpStateRequest,
+  DumpStateResponse,
+  EnableAppRequest,
+  EnableAppResponse,
+  GenerateAgentPubKeyRequest,
+  GenerateAgentPubKeyResponse,
+  GetDnaDefinitionRequest,
+  GetDnaDefinitionResponse,
   GrantZomeCallCapabilityRequest,
   GrantZomeCallCapabilityResponse,
+  InstallAppRequest,
+  InstallAppResponse,
   ListAppInterfacesRequest,
   ListAppInterfacesResponse,
   ListAppsRequest,
   ListAppsResponse,
-  ZomeName,
+  ListCellIdsRequest,
+  ListCellIdsResponse,
+  ListDnasRequest,
+  ListDnasResponse,
+  RegisterDnaRequest,
+  RegisterDnaResponse,
+  StartAppRequest,
+  StartAppResponse,
+  UninstallAppRequest,
+  UninstallAppResponse,
 } from "./types.js";
 
 export class AdminWebsocket implements AdminApi {
@@ -163,11 +165,11 @@ export class AdminWebsocket implements AdminApi {
    * @param cellId - The cell to grant the capability for.
    * @param functions - The zome functions to grant the capability for.
    * @param signingKey - The assignee of the capability.
-   * @returns The cap secret to reference the created capability.
+   * @returns The cap secret of the created capability.
    */
   grantSigningKey = async (
     cellId: CellId,
-    functions: Array<[ZomeName, FunctionName]>,
+    functions: GrantedFunctions,
     signingKey: AgentPubKey
   ): Promise<CapSecret> => {
     const capSecret = randomCapSecret();
@@ -191,14 +193,20 @@ export class AdminWebsocket implements AdminApi {
    * Generate and authorize a new key pair for signing zome calls.
    *
    * @param cellId - The cell id to create the capability grant for.
-   * @param functions - Zomes and functions to authorize the signing key for.
+   * @param functions - Zomes and functions to authorize the signing key for
+   * (optional). When no functions are specified, the capability will be
+   * granted for all zomes and functions.
    */
   authorizeSigningCredentials = async (
     cellId: CellId,
-    functions: [ZomeName, FunctionName][]
+    functions?: GrantedFunctions
   ) => {
     const [keyPair, signingKey] = generateSigningKeyPair();
-    const capSecret = await this.grantSigningKey(cellId, functions, signingKey);
+    const capSecret = await this.grantSigningKey(
+      cellId,
+      functions || { [GrantedFunctionsType.All]: null },
+      signingKey
+    );
     setSigningCredentials(cellId, { capSecret, keyPair, signingKey });
   };
 }

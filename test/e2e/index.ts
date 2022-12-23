@@ -362,9 +362,7 @@ test(
       payload: appEntryDef,
     };
 
-    await admin.authorizeSigningCredentials(cell_id, [
-      [COORDINATOR_ZOME_NAME, "echo_app_entry_def"],
-    ]);
+    await admin.authorizeSigningCredentials(cell_id);
 
     const response = await client.callZome(zomeCallPayload, 30000);
     t.equal(response, null, "app entry def deserializes correctly");
@@ -397,7 +395,7 @@ test(
       payload: null,
     };
 
-    await admin.authorizeSigningCredentials(cell_id, [[TEST_ZOME_NAME, "foo"]]);
+    await admin.authorizeSigningCredentials(cell_id);
 
     const response = await client.callZome(zomeCallPayload);
     t.equal(response, "foo");
@@ -449,9 +447,7 @@ test(
 
     const { admin, cell_id, client } = await installAppAndDna(ADMIN_PORT);
 
-    await admin.authorizeSigningCredentials(cell_id, [
-      [TEST_ZOME_NAME, "emitter"],
-    ]);
+    await admin.authorizeSigningCredentials(cell_id);
 
     client.on("signal", signalCb);
 
@@ -611,7 +607,7 @@ test(
     );
     t.ok(ROLE_NAME in info.cell_info);
     t.deepEqual(info.status, { running: null });
-    await admin.authorizeSigningCredentials(cell_id, [[TEST_ZOME_NAME, "foo"]]);
+    await admin.authorizeSigningCredentials(cell_id);
     const zomeCallPayload: CallZomeRequest = {
       cell_id,
       zome_name: TEST_ZOME_NAME,
@@ -690,9 +686,7 @@ test(
       provenance: fakeAgentPubKey(),
       payload: null,
     };
-    await admin.authorizeSigningCredentials(cloneCell.cell_id, [
-      [TEST_ZOME_NAME, "foo"],
-    ]);
+    await admin.authorizeSigningCredentials(cloneCell.cell_id);
     const response = await client.callZome(zomeCallPayload);
     t.equal(
       response,
@@ -717,9 +711,7 @@ test(
     };
     const cloneCell = await client.createCloneCell(createCloneCellParams);
 
-    await admin.authorizeSigningCredentials(cloneCell.cell_id, [
-      [TEST_ZOME_NAME, "foo"],
-    ]);
+    await admin.authorizeSigningCredentials(cloneCell.cell_id);
 
     await client.disableCloneCell({
       app_id: installed_app_id,
@@ -785,9 +777,7 @@ test(
       provenance: fakeAgentPubKey(),
       payload: null,
     };
-    await admin.authorizeSigningCredentials(cloneCell.cell_id, [
-      [TEST_ZOME_NAME, "foo"],
-    ]);
+    await admin.authorizeSigningCredentials(cloneCell.cell_id);
     const response = await client.callZome(params);
     t.equal(response, "foo", "enabled clone cell can be called");
   })

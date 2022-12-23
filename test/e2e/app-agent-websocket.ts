@@ -41,9 +41,7 @@ test(
     t.ok(ROLE_NAME in info.cell_info);
     t.deepEqual(info.status, { running: null });
 
-    await admin.authorizeSigningCredentials(cell_id, [
-      [COORDINATOR_ZOME_NAME, "echo_app_entry_def"],
-    ]);
+    await admin.authorizeSigningCredentials(cell_id);
 
     const appEntryDef: AppEntryDef = {
       entry_index: 0,
@@ -107,9 +105,7 @@ test(
       ADMIN_PORT
     );
 
-    await admin.authorizeSigningCredentials(cell_id, [
-      [TEST_ZOME_NAME, "emitter"],
-    ]);
+    await admin.authorizeSigningCredentials(cell_id);
 
     const appAgentWs = await AppAgentWebsocket.connect(
       client,
@@ -150,9 +146,7 @@ test(
       },
     };
     const cloneCell = await appAgentWs.createCloneCell(createCloneCellParams);
-    await admin.authorizeSigningCredentials(cloneCell.cell_id, [
-      [TEST_ZOME_NAME, "foo"],
-    ]);
+    await admin.authorizeSigningCredentials(cloneCell.cell_id);
 
     const expectedCloneId = new CloneId(ROLE_NAME, 0).toString();
     t.equal(cloneCell.role_name, expectedCloneId, "correct clone id");
@@ -197,9 +191,7 @@ test(
       },
     };
     const cloneCell = await appAgentWs.createCloneCell(createCloneCellParams);
-    await admin.authorizeSigningCredentials(cloneCell.cell_id, [
-      [TEST_ZOME_NAME, "foo"],
-    ]);
+    await admin.authorizeSigningCredentials(cloneCell.cell_id);
 
     await appAgentWs.disableCloneCell({
       clone_cell_id: cloneCell.cell_id,
