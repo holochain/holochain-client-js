@@ -62,12 +62,12 @@ export class AppWebsocket extends Emittery implements AppApi {
   static async connect(
     url: string,
     defaultTimeout?: number,
-    signalCb?: AppSignalCb,
+    signalCb?: AppSignalCb
   ): Promise<AppWebsocket> {
     // Check if we are in the launcher's environment, and if so, redirect the url to connect to
     const env = getLauncherEnvironment();
 
-    if (env && env.APP_INTERFACE_PORT) {
+    if (env?.APP_INTERFACE_PORT) {
       url = `ws://127.0.0.1:${env.APP_INTERFACE_PORT}`;
     }
 
@@ -81,7 +81,7 @@ export class AppWebsocket extends Emittery implements AppApi {
     const appWebsocket = new AppWebsocket(
       wsClient,
       defaultTimeout,
-      env ? env.INSTALLED_APP_ID : undefined
+      env?.INSTALLED_APP_ID
     );
 
     wsClient.on("signal", (signal) => appWebsocket.emit("signal", signal));

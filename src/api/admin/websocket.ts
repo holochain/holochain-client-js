@@ -79,7 +79,7 @@ export class AdminWebsocket implements AdminApi {
     // Check if we are in the launcher's environment, and if so, redirect the url to connect to
     const env = getLauncherEnvironment();
 
-    if (env && env.ADMIN_INTERFACE_PORT) {
+    if (env?.ADMIN_INTERFACE_PORT) {
       url = `ws://127.0.0.1:${env.ADMIN_INTERFACE_PORT}`;
     }
 
