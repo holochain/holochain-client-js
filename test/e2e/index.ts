@@ -380,56 +380,46 @@ test(
     const installed_app_id = "app";
     const admin = await AdminWebsocket.connect(`ws://127.0.0.1:${ADMIN_PORT}`);
     const agent = await admin.generateAgentPubKey();
-    try {
-      const app = await admin.installApp({
-        installed_app_id,
-        agent_key: agent,
-        bundle: {
-          manifest: {
-            manifest_version: "1",
-            name: "app",
-            roles: [
-              {
-                name: role_name,
-                dna: {
-                  clone_limit: 20,
-                  modifiers: { network_seed: "network_seed" },
-                  path: fs.realpathSync("test/e2e/fixture/test.dna"),
-                },
+    const app = await admin.installApp({
+      installed_app_id,
+      agent_key: agent,
+      bundle: {
+        manifest: {
+          manifest_version: "1",
+          name: "app",
+          roles: [
+            {
+              name: role_name,
+              dna: {
+                path: fs.realpathSync("test/e2e/fixture/test.dna"),
+                modifiers: { quantum_time: { secs: 1111, nanos: 1111 } },
               },
-            ],
-          },
-          resources: {},
+            },
+          ],
         },
-        membrane_proofs: {},
-      });
-      await admin.enableApp({ installed_app_id });
-      // destructure to get whatever open port was assigned to the interface
-      const { port: appPort } = await admin.attachAppInterface({ port: 0 });
-      const client = await AppWebsocket.connect(`ws://127.0.0.1:${appPort}`);
+        resources: {},
+      },
+      membrane_proofs: {},
+    });
+    await admin.enableApp({ installed_app_id });
+    const { port: appPort } = await admin.attachAppInterface({ port: 0 });
+    const client = await AppWebsocket.connect(`ws://127.0.0.1:${appPort}`);
 
-      if (CellType.Provisioned in app.cell_info[role_name][0]) {
-        const cell_id =
-          app.cell_info[role_name][0][CellType.Provisioned].cell_id;
-        console.log("app", app.cell_info[role_name][0][CellType.Provisioned]);
+    assert(CellType.Provisioned in app.cell_info[role_name][0]);
+    const cell_id = app.cell_info[role_name][0][CellType.Provisioned].cell_id;
 
-        const zomeCallPayload: CallZomeRequest = {
-          cell_id,
-          zome_name: TEST_ZOME_NAME,
-          fn_name: "foo",
-          provenance: agent,
-          payload: null,
-        };
+    const zomeCallPayload: CallZomeRequest = {
+      cell_id,
+      zome_name: TEST_ZOME_NAME,
+      fn_name: "foo",
+      provenance: agent,
+      payload: null,
+    };
 
-        await admin.authorizeSigningCredentials(cell_id);
+    await admin.authorizeSigningCredentials(cell_id);
 
-        const response = await client.callZome(zomeCallPayload, 30000);
-        t.equal(response, "foo", "zome call succeeds");
-      }
-    } catch (error) {
-      console.log("error", error);
-    }
-    // await admin.client.close();
+    const response = await client.callZome(zomeCallPayload, 30000);
+    t.equal(response, "foo", "zome call succeeds");
   })
 );
 

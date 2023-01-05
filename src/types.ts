@@ -34,6 +34,10 @@ export type InstalledCell = {
 };
 
 export type Timestamp = number;
+export interface Duration {
+  secs: number;
+  nanos: number;
+}
 
 export interface HoloHashed<T> {
   hash: HoloHash;
