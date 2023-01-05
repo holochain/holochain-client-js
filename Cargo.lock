@@ -522,9 +522,9 @@ dependencies = [
 
 [[package]]
 name = "hdi"
-version = "0.2.0-beta-rc.0"
+version = "0.2.0-beta-rc.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ff96f39f15fd40a5185b380e820866fed12e8238d42dc4fb7c54afc5c4bb410f"
+checksum = "05839f5c3c1f9babe26efc31d80a09467546e46e55270a28f6fa7df14748bb2a"
 dependencies = [
  "hdk_derive",
  "holo_hash",
@@ -539,9 +539,9 @@ dependencies = [
 
 [[package]]
 name = "hdk"
-version = "0.1.0-beta-rc.0"
+version = "0.1.0-beta-rc.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "727ee77fb1395b46dd357b9e792ca4c1fbe5fcda3ea117627f8936a04ee395dd"
+checksum = "81e19e94cabf1db6441418586eb77135455062772148b39753b8241af24f2fb4"
 dependencies = [
  "getrandom",
  "hdi",
@@ -559,9 +559,9 @@ dependencies = [
 
 [[package]]
 name = "hdk_derive"
-version = "0.1.0-beta-rc.0"
+version = "0.1.0-beta-rc.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c48191dc8970bebb6fae47b8eb8241f194251d295bbc6625c9c53b80c53ad4c9"
+checksum = "ddc07b3c790e94e3072ede74d2fa0c5923ecb36cf7afcf582a0482454197336e"
 dependencies = [
  "darling 0.14.1",
  "heck",
@@ -606,9 +606,9 @@ dependencies = [
 
 [[package]]
 name = "holochain_integrity_types"
-version = "0.1.0-beta-rc.0"
+version = "0.1.0-beta-rc.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "de0a9bfac136bbbbf89cd9bf8855f0fa1141a70112e19f21719ee79452066b83"
+checksum = "061640a39e7e46cb050e30a987df433980700ca59c58ff90821151fc51a43a88"
 dependencies = [
  "holo_hash",
  "holochain_serialized_bytes",
@@ -674,9 +674,9 @@ dependencies = [
 
 [[package]]
 name = "holochain_zome_types"
-version = "0.1.0-beta-rc.0"
+version = "0.1.0-beta-rc.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "bcd4d7759c9d5d1e1641367a20a618bbe917d51d2e81617a64f3899d2d79cd6b"
+checksum = "41ac74310bc1f9ae89abe79dbf5b96b26cb5b0dc502ff9adbe69795a337d6d63"
 dependencies = [
  "holo_hash",
  "holochain_integrity_types",

@@ -34,12 +34,6 @@ npm install --save-exact @holochain/client
     resolve()
   }
 
-  // generate and authorize new key pair for signing zome calls,
-  // specifying zomes and functions to be authorized
-  await authorizeNewSigningKeyPair(admin, cell_id, [
-    ["test_zome", "test_emitter_fn"],
-  ]);
-
   const TIMEOUT = 12000
   // default timeout is set to 12000
   const client = await AppWebsocket.connect(`ws://127.0.0.1:${appPort}`, TIMEOUT, signalCb)
@@ -60,12 +54,6 @@ npm install --save-exact @holochain/client
     // impl...
     resolve()
   }
-
-  // generate and authorize new key pair for signing zome calls,
-  // specifying zomes and functions to be authorized
-  await authorizeNewSigningKeyPair(admin, cell_id, [
-    ["test_zome", "test_emitter_fn"],
-  ]);
 
   const TIMEOUT = 12000
   // default timeout is set to 12000

@@ -9,10 +9,19 @@ export interface CapClaim {
   secret: CapSecret;
 }
 
+export enum GrantedFunctionsType {
+  All = "All",
+  Listed = "Listed",
+}
+
+export type GrantedFunctions =
+  | { [GrantedFunctionsType.All]: null }
+  | { [GrantedFunctionsType.Listed]: [ZomeName, FunctionName][] };
+
 export interface ZomeCallCapGrant {
   tag: string;
   access: CapAccess;
-  functions: Array<[ZomeName, FunctionName]>;
+  functions: GrantedFunctions;
 }
 
 export type CapAccess =
