@@ -209,7 +209,7 @@ export type AppRoleManifest = {
   dna: AppRoleDnaManifest;
 };
 export type AppManifest = {
-  // Currently one "1" is supported
+  // Currently "1" is supported
   manifest_version: string;
 
   name: string;

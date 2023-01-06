@@ -14,7 +14,7 @@ export class WsClient extends Emittery {
   pendingRequests: Record<
     number,
     {
-      fulfill: (msg: unknown) => ReturnType<typeof decode>;
+      resolve: (msg: unknown) => ReturnType<typeof decode>;
       reject: (error: Error) => void;
     }
   >;
@@ -86,8 +86,8 @@ export class WsClient extends Emittery {
       type: "request",
       data: encode(data),
     });
-    const promise = new Promise((fulfill, reject) => {
-      this.pendingRequests[id] = { fulfill, reject };
+    const promise = new Promise((resolve, reject) => {
+      this.pendingRequests[id] = { resolve, reject };
     });
     if (this.socket.readyState === this.socket.OPEN) {
       this.socket.send(encodedMsg);
@@ -100,14 +100,14 @@ export class WsClient extends Emittery {
   handleResponse(msg: any) {
     const id = msg.id;
     if (this.pendingRequests[id]) {
-      // resolve response
       if (msg.data === null || msg.data === undefined) {
         this.pendingRequests[id].reject(
           new Error("Response canceled by responder")
         );
       } else {
-        this.pendingRequests[id].fulfill(decode(msg.data));
+        this.pendingRequests[id].resolve(decode(msg.data));
       }
+      delete this.pendingRequests[id];
     } else {
       console.error(`Got response with no matching request. id=${id}`);
     }
