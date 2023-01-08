@@ -3,6 +3,12 @@ import Websocket from "isomorphic-ws";
 import Emittery from "emittery";
 import { AppSignal, AppSignalCb, SignalResponseGeneric } from "./app/types.js";
 
+interface HolochainMessage {
+  id: number;
+  type: "response" | "signal";
+  data: any;
+}
+
 /**
  * A Websocket client which can make requests and receive responses,
  * as well as send and receive signals
@@ -20,7 +26,7 @@ export class WsClient extends Emittery {
   >;
   index: number;
 
-  constructor(socket: any, signalCb?: AppSignalCb) {
+  constructor(socket: Websocket, signalCb?: AppSignalCb) {
     super();
     this.socket = socket;
     this.pendingRequests = {};
@@ -33,15 +39,23 @@ export class WsClient extends Emittery {
       this.on("signal", signalCb);
     }
 
-    socket.onmessage = async (encodedMsg: any) => {
-      let data = encodedMsg.data;
-
+    socket.onmessage = async (encodedMsg) => {
       // If data is not a buffer (nodejs), it will be a blob (browser)
-      if (typeof Buffer === "undefined" || !Buffer.isBuffer(data)) {
-        data = await data.arrayBuffer();
+      let encodedData;
+      if (encodedMsg.data instanceof Blob) {
+        encodedData = await encodedMsg.data.arrayBuffer();
+      } else {
+        if (typeof Buffer === "undefined") {
+          throw new Error("unknown message format");
+        } else if (Buffer.isBuffer(encodedMsg.data)) {
+          encodedData = encodedMsg.data;
+        } else {
+          throw new Error("unknown message format Buffer[]");
+        }
       }
 
-      const msg: any = decode(data);
+      const msg = decode(encodedData);
+      assertHolochainMessage(msg);
       if (msg.type === "signal") {
         const decodedMessage: SignalResponseGeneric<any> = decode(msg.data);
 
@@ -68,6 +82,26 @@ export class WsClient extends Emittery {
         console.error(`Got unrecognized Websocket message type: ${msg.type}`);
       }
     };
+  }
+
+  static connect(url: string, signalCb?: AppSignalCb): Promise<WsClient> {
+    return new Promise((resolve, reject) => {
+      const socket = new Websocket(url);
+      // make sure that there are no uncaught connection
+      // errors because that causes nodejs thread to crash
+      // with uncaught exception
+      socket.onerror = () => {
+        reject(
+          new Error(
+            `could not connect to holochain conductor, please check that a conductor service is running and available at ${url}`
+          )
+        );
+      };
+      socket.onopen = () => {
+        const client = new WsClient(socket, signalCb);
+        resolve(client);
+      };
+    });
   }
 
   emitSignal(data: any) {
@@ -97,7 +131,7 @@ export class WsClient extends Emittery {
     return promise as Promise<Res>;
   }
 
-  handleResponse(msg: any) {
+  handleResponse(msg: HolochainMessage) {
     const id = msg.id;
     if (this.pendingRequests[id]) {
       if (msg.data === null || msg.data === undefined) {
@@ -121,25 +155,6 @@ export class WsClient extends Emittery {
   awaitClose(): Promise<void> {
     return new Promise((resolve) => this.socket.on("close", resolve));
   }
-
-  static connect(url: string, signalCb?: AppSignalCb): Promise<WsClient> {
-    return new Promise((resolve, reject) => {
-      const socket = new Websocket(url);
-      // make sure that there are no uncaught connection
-      // errors because that causes nodejs thread to crash
-      // with uncaught exception
-      socket.onerror = () => {
-        reject(
-          new Error(
-            `could not connect to holochain conductor, please check that a conductor service is running and available at ${url}`
-          )
-        );
-      };
-      socket.onopen = () => {
-        resolve(new WsClient(socket, signalCb));
-      };
-    });
-  }
 }
 
 const signalTransform = (
@@ -147,3 +162,17 @@ const signalTransform = (
 ): SignalResponseGeneric<any> => {
   return decode(res);
 };
+
+function assertHolochainMessage(
+  message: unknown
+): asserts message is HolochainMessage {
+  if (
+    typeof message === "object" &&
+    message !== null &&
+    "type" in message &&
+    "data" in message
+  ) {
+    return;
+  }
+  throw new Error(`unknown message format ${JSON.stringify(message, null, 4)}`);
+}

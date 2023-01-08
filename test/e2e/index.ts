@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import fs from "node:fs";
 import test, { Test } from "tape";
 import zlib from "zlib";
+import WebSocket from "isomorphic-ws";
 import { WsClient } from "../../src/api/client.js";
 import {
   AdminWebsocket,
@@ -462,13 +463,18 @@ test(
 test(
   "can handle canceled response",
   withConductor(ADMIN_PORT, async (t: Test) => {
-    const client = new WsClient({
-      send: () => {
-        /* do nothing */
-      },
+    const websocket = await new Promise<WebSocket>((resolve) => {
+      const ws = new WebSocket(`ws://127.0.0.1:${ADMIN_PORT}`);
+      ws.onopen = () => {
+        resolve(ws);
+      };
     });
+    websocket.send = () => {
+      // do nothing
+    };
+    const client = new WsClient(websocket);
     const prom = client.request("blah");
-    client.handleResponse({ id: 0 });
+    client.handleResponse({ id: 0, type: "response", data: null });
     try {
       await prom;
     } catch (e) {
@@ -480,6 +486,7 @@ test(
 test(
   "can receive a signal using event handler",
   withConductor(ADMIN_PORT, async (t: Test) => {
+    const { admin, cell_id, client } = await installAppAndDna(ADMIN_PORT);
     let resolveSignalPromise: (value?: unknown) => void | undefined;
     const signalReceivedPromise = new Promise(
       (resolve) => (resolveSignalPromise = resolve)
@@ -494,9 +501,6 @@ test(
       });
       resolveSignalPromise();
     };
-
-    const { admin, cell_id, client } = await installAppAndDna(ADMIN_PORT);
-
     await admin.authorizeSigningCredentials(cell_id);
 
     client.on("signal", signalCb);
