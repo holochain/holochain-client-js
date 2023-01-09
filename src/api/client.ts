@@ -45,12 +45,10 @@ export class WsClient extends Emittery {
       if (encodedMsg.data instanceof Blob) {
         encodedData = await encodedMsg.data.arrayBuffer();
       } else {
-        if (typeof Buffer === "undefined") {
-          throw new Error("unknown message format");
-        } else if (Buffer.isBuffer(encodedMsg.data)) {
+        if (typeof Buffer !== "undefined" && Buffer.isBuffer(encodedMsg.data)) {
           encodedData = encodedMsg.data;
         } else {
-          throw new Error("unknown message format Buffer[]");
+          throw new Error("websocket client: unknown message format");
         }
       }
 
