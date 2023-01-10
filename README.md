@@ -27,6 +27,29 @@ npm install --save-exact @holochain/client
   const agentPubKey = await admin.generateAgentPubKey()
 ```
 
+### Use AppAgentWebsocket with implicit zome call signing
+```typescript
+  const signalCb = (signal: AppSignal) => {
+    // implementation of signal handler
+    resolve()
+  }
+
+  const TIMEOUT = 12000
+  // default timeout is set to 12000
+  const appWs = await AppWebsocket.connect(`ws://127.0.0.1:${appPort}`, 12000)
+
+  const client = new AppAgentWebsocket(appWs, 'installed_app_id');
+  client.on("signal", signalCb);
+
+  // default timeout set here (30000) will overwrite the defaultTimeout(12000) set above
+  await client.callZome({
+   role_name: 'dnas_role_name', // role_name is unique per app, so you can unambiguously identify your dna with role_name in this client
+   zome_name: "test_zome",
+   fn_name: 'test_emitter_fn',
+   payload: null,
+  }, 30000)
+```
+
 ### Use AppWebsocket with implicit zome call signing
 ```typescript
   const signalCb = (signal: AppSignal) => {
@@ -48,26 +71,33 @@ npm install --save-exact @holochain/client
   }, 30000)
 ```
 
-### Use AppAgentWebsocket
+### Managing zome call signing credentials in a pure JavaScript browser application
+
+Here is a pattern to manage signing keys for signing zome calls when running pure JavaScript web hApps in a web browser:
 ```typescript
-  const signalCb = (signal: AppSignal) => {
-    // impl...
-    resolve()
-  }
+const cellIdB64 =
+    encodeHashToBase64(cell_id[0]) + encodeHashToBase64(cell_id[1]);
+// in case the zome call signing credentials are stored locally in the browser
+const signingCredentialsJson = localStorage.getItem(cellIdB64);
+let signingCredentials: SigningCredentials | null =
+  signingCredentialsJson && JSON.parse(signingCredentialsJson);
 
-  const TIMEOUT = 12000
-  // default timeout is set to 12000
-  const appWs = await AppWebsocket.connect(`ws://127.0.0.1:${appPort}`, 12000, signalCb)
-
-  const client = new AppAgentWebsocket(appWs, 'installed_app_id')
-
-  // default timeout set here (30000) will overwrite the defaultTimeout(12000) set above
-  await client.callZome({
-   role_name: 'dnas_role_name', // role_name is unique per app, so you can unambiguously identify your dna with role_name in this client
-   zome_name: "test_zome",
-   fn_name: 'test_emitter_fn',
-   payload: null,
-  }, 30000)
+if (!signingCredentials) {
+  const [keyPair, signingKey] = generateSigningKeyPair();
+  const capSecret = await admin.grantSigningKey(
+    cell_id,
+    { [GrantedFunctionsType.All]: null },
+    signingKey
+  );
+  signingCredentials = {
+    capSecret,
+    keyPair,
+    signingKey,
+  };
+}
+setSigningCredentials(cell_id, signingCredentials);
+// possibly store the zome call signing credentials locally in the browser
+localStorage.setItem(cellIdB64, JSON.stringify(signingCredentials));
 ```
 
 ## API Reference

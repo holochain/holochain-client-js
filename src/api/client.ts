@@ -1,7 +1,7 @@
 import { decode, encode } from "@msgpack/msgpack";
-import Websocket from "isomorphic-ws";
 import Emittery from "emittery";
-import { AppSignal, AppSignalCb, SignalResponseGeneric } from "./app/types.js";
+import Websocket from "isomorphic-ws";
+import { AppSignal, AppSignalCb, Signal, SignalType } from "./app/types.js";
 
 interface HolochainMessage {
   id: number;
@@ -39,45 +39,53 @@ export class WsClient extends Emittery {
       this.on("signal", signalCb);
     }
 
-    socket.onmessage = async (encodedMsg) => {
+    socket.onmessage = async (serializedMessage) => {
       // If data is not a buffer (nodejs), it will be a blob (browser)
-      let encodedData;
-      if (encodedMsg.data instanceof Blob) {
-        encodedData = await encodedMsg.data.arrayBuffer();
+      let deserializedData;
+      if (serializedMessage.data instanceof Blob) {
+        deserializedData = await serializedMessage.data.arrayBuffer();
       } else {
-        if (typeof Buffer !== "undefined" && Buffer.isBuffer(encodedMsg.data)) {
-          encodedData = encodedMsg.data;
+        if (
+          typeof Buffer !== "undefined" &&
+          Buffer.isBuffer(serializedMessage.data)
+        ) {
+          deserializedData = serializedMessage.data;
         } else {
           throw new Error("websocket client: unknown message format");
         }
       }
 
-      const msg = decode(encodedData);
-      assertHolochainMessage(msg);
-      if (msg.type === "signal") {
-        const decodedMessage: SignalResponseGeneric<any> = decode(msg.data);
+      const message = decode(deserializedData);
+      assertHolochainMessage(message);
 
-        if (!decodedMessage.App) {
+      if (message.type === "signal") {
+        const derializedSignal = decode(message.data);
+        assertHolochainSignal(derializedSignal);
+
+        if (!(SignalType.App in derializedSignal)) {
           // We have received a system signal, do nothing
           return;
         }
 
-        // Note: holochain currently returns signals as an array of two values: cellId and the serialized signal payload
+        // Holochain currently returns signals as an array of two values: cellId and the serialized signal payload
         // and this array is nested within the App key within the returned message.
-        const decodedCellId = decodedMessage.App[0];
-        // Note:In order to return readible content to the UI, the signal payload must also be decoded.
-        const decodedPayload = signalTransform(decodedMessage.App[1]);
+        const cellId = derializedSignal.App[0];
+        // In order to return readible content to the UI, the signal payload must also be deserialized.
+        const payload = decode(derializedSignal.App[1]);
+        assertHolochainSignalPayload(payload);
 
         // Return a uniform format to UI (ie: { type, data } - the same format as with callZome and appInfo...)
         const signal: AppSignal = {
-          type: msg.type,
-          data: { cellId: decodedCellId, payload: decodedPayload },
+          type: message.type,
+          data: { cellId, payload },
         };
         this.emit("signal", signal);
-      } else if (msg.type === "response") {
-        this.handleResponse(msg);
+      } else if (message.type === "response") {
+        this.handleResponse(message);
       } else {
-        console.error(`Got unrecognized Websocket message type: ${msg.type}`);
+        console.error(
+          `Got unrecognized Websocket message type: ${message.type}`
+        );
       }
     };
   }
@@ -145,21 +153,14 @@ export class WsClient extends Emittery {
     }
   }
 
-  close(): Promise<void> {
+  close() {
+    const closedPromise = new Promise<void>((resolve) =>
+      this.socket.on("close", resolve)
+    );
     this.socket.close();
-    return this.awaitClose();
-  }
-
-  awaitClose(): Promise<void> {
-    return new Promise((resolve) => this.socket.on("close", resolve));
+    return closedPromise;
   }
 }
-
-const signalTransform = (
-  res: SignalResponseGeneric<Buffer>
-): SignalResponseGeneric<any> => {
-  return decode(res);
-};
 
 function assertHolochainMessage(
   message: unknown
@@ -173,4 +174,26 @@ function assertHolochainMessage(
     return;
   }
   throw new Error(`unknown message format ${JSON.stringify(message, null, 4)}`);
+}
+
+function assertHolochainSignal(signal: unknown): asserts signal is Signal {
+  if (
+    typeof signal === "object" &&
+    signal !== null &&
+    Object.values(SignalType).some((type) => type in signal)
+  ) {
+    return;
+  }
+  throw new Error(`unknown signal format ${JSON.stringify(signal, null, 4)}`);
+}
+
+function assertHolochainSignalPayload<Type>(
+  payload: unknown
+): asserts payload is Type {
+  if (typeof payload === "object" && payload !== null) {
+    return;
+  }
+  throw new Error(
+    `unknown signal payload format ${JSON.stringify(payload, null, 4)}`
+  );
 }

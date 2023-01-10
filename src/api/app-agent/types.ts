@@ -4,7 +4,7 @@ import {
   CreateCloneCellRequest,
   CreateCloneCellResponse,
 } from "../index.js";
-import { AgentPubKey, RoleName } from "../../index.js";
+import { AgentPubKey, CellId, RoleName } from "../../index.js";
 import {
   AppInfoResponse,
   AppSignal,
@@ -53,6 +53,7 @@ export interface AppAgentClient {
 
   on<Name extends keyof AppAgentEvents>(
     eventName: Name | readonly Name[],
+    cellId: CellId,
     listener: (eventData: AppAgentEvents[Name]) => void | Promise<void>
   ): UnsubscribeFunction;
 

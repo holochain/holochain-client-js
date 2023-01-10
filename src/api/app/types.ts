@@ -92,6 +92,19 @@ export type DisableCloneCellResponse = void;
 export type EnableCloneCellRequest = DisableCloneCellRequest;
 export type EnableCloneCellResponse = CreateCloneCellResponse;
 
+export interface NetworkInfoRequest {
+  /** The DNAs for which to get network info */
+  dnas: DnaHash[];
+}
+
+export const SignalType = {
+  App: "App",
+  System: "System",
+} as const;
+export type Signal = {
+  [SignalType.App]: [CellId, any];
+  [SignalType.System]: unknown;
+};
 export type AppSignal = {
   type: string;
   data: {
@@ -99,17 +112,9 @@ export type AppSignal = {
     payload: any;
   };
 };
-
-export interface NetworkInfoRequest {
-  /** The DNAs for which to get network info */
-  dnas: DnaHash[];
-}
-
-export type NetworkInfoResponse = NetworkInfo[];
-
 export type AppSignalCb = (signal: AppSignal) => void;
 
-export type SignalResponseGeneric<Payload> = Payload;
+export type NetworkInfoResponse = NetworkInfo[];
 
 export interface AppApi {
   appInfo: Requester<AppInfoRequest, AppInfoResponse>;

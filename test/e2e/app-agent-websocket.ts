@@ -11,8 +11,11 @@ import {
   NonProvenanceCallZomeRequest,
   fakeAgentPubKey,
   CellType,
+  AppSignalCb,
+  AdminWebsocket,
+  AppWebsocket,
 } from "../../src/index.js";
-import { installAppAndDna, withConductor } from "./util.js";
+import { FIXTURE_PATH, installAppAndDna, withConductor } from "./util.js";
 
 const ADMIN_PORT = 33001;
 
@@ -90,7 +93,7 @@ test(
     const signalReceivedPromise = new Promise(
       (resolve) => (resolveSignalPromise = resolve)
     );
-    const signalCb = (signal: AppSignal) => {
+    const signalCb: AppSignalCb = (signal) => {
       t.deepEqual(signal, {
         type: "signal",
         data: {
@@ -112,7 +115,7 @@ test(
       installed_app_id
     );
 
-    appAgentWs.on("signal", signalCb);
+    appAgentWs.on("signal", cell_id, signalCb);
 
     // trigger an emit_signal
     await appAgentWs.callZome({
@@ -123,6 +126,71 @@ test(
       payload: null,
     });
     await signalReceivedPromise;
+  })
+);
+
+test.only(
+  "cells only receive its own signals",
+  withConductor(ADMIN_PORT, async (t: Test) => {
+    const role_name = "foo";
+    const admin = await AdminWebsocket.connect(`ws://127.0.0.1:${ADMIN_PORT}`);
+    const path = `${FIXTURE_PATH}/test.happ`;
+    const { port: appPort } = await admin.attachAppInterface({ port: 0 });
+
+    const app_id1 = "app1";
+    const agent1 = await admin.generateAgentPubKey();
+    const app1 = await admin.installApp({
+      installed_app_id: app_id1,
+      agent_key: agent1,
+      path,
+      membrane_proofs: {},
+    });
+    assert(CellType.Provisioned in app1.cell_info[role_name][0]);
+    const cell_id1 = app1.cell_info[role_name][0][CellType.Provisioned].cell_id;
+    await admin.enableApp({ installed_app_id: app_id1 });
+
+    let received1 = false;
+    const signalCb1: AppSignalCb = () => {
+      received1 = true;
+    };
+
+    const app_id2 = "app2";
+    const agent2 = await admin.generateAgentPubKey();
+    const app2 = await admin.installApp({
+      installed_app_id: app_id2,
+      agent_key: agent2,
+      path,
+      membrane_proofs: {},
+    });
+    assert(CellType.Provisioned in app2.cell_info[role_name][0]);
+    const cell_id2 = app2.cell_info[role_name][0][CellType.Provisioned].cell_id;
+    await admin.enableApp({ installed_app_id: app_id2 });
+
+    let received2 = false;
+    const signalCb2: AppSignalCb = () => {
+      received2 = true;
+    };
+
+    const client = await AppWebsocket.connect(`ws://127.0.0.1:${appPort}`);
+    await admin.authorizeSigningCredentials(cell_id1);
+
+    const appAgentWs = await AppAgentWebsocket.connect(client, app_id1);
+
+    appAgentWs.on("signal", cell_id1, signalCb1);
+    appAgentWs.on("signal", cell_id2, signalCb2);
+
+    // trigger an emit_signal
+    await appAgentWs.callZome({
+      cell_id: cell_id1,
+      zome_name: TEST_ZOME_NAME,
+      fn_name: "emitter",
+      provenance: fakeAgentPubKey(),
+      payload: null,
+    });
+
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    t.equal(received1, true);
+    t.equal(received2, false);
   })
 );
 

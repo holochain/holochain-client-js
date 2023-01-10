@@ -2,11 +2,13 @@ import Emittery, { UnsubscribeFunction } from "emittery";
 import { omit } from "lodash-es";
 import { getLauncherEnvironment } from "../../environments/launcher.js";
 
-import { AgentPubKey, InstalledAppId, RoleName } from "../../types.js";
+import { AgentPubKey, CellId, InstalledAppId, RoleName } from "../../types.js";
 import { getBaseRoleNameFromCloneId, isCloneId } from "../common.js";
 import {
   AppInfo,
   AppInfoResponse,
+  AppSignal,
+  AppSignalCb,
   AppWebsocket,
   CallZomeRequest,
   CallZomeResponse,
@@ -60,7 +62,7 @@ export class AppAgentWebsocket implements AppAgentClient {
     const env = getLauncherEnvironment();
     this.installedAppId = env?.INSTALLED_APP_ID || installedAppId;
 
-    this.appWebsocket.on("signal", (signal) =>
+    this.appWebsocket.on("signal", (signal: AppSignal) =>
       this.emitter.emit("signal", signal)
     );
   }
@@ -94,9 +96,9 @@ export class AppAgentWebsocket implements AppAgentClient {
         throw new Error(`No cell found with role_name ${roleName}`);
       }
       const cloneCell = appInfo.cell_info[baseRoleName].find(
-        (c) => "Cloned" in c && c.Cloned.clone_id === roleName
+        (c) => CellType.Cloned in c && c.Cloned.clone_id === roleName
       );
-      if (!cloneCell || !("Cloned" in cloneCell)) {
+      if (!cloneCell || !(CellType.Cloned in cloneCell)) {
         throw new Error(`No clone cell found with clone id ${roleName}`);
       }
       return cloneCell.Cloned.cell_id;
@@ -173,7 +175,8 @@ export class AppAgentWebsocket implements AppAgentClient {
 
   on<Name extends keyof AppAgentEvents>(
     eventName: Name | readonly Name[],
-    listener: (eventData: AppAgentEvents[Name]) => void | Promise<void>
+    cellId: CellId,
+    listener: AppSignalCb //(eventData: AppAgentEvents[Name]) => void | Promise<void>
   ): UnsubscribeFunction {
     return this.emitter.on(eventName, listener);
   }
