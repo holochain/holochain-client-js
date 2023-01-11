@@ -5,6 +5,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## \[Unreleased\]
 ### Added
 ### Removed
+### Changed
+### Fixed
+
+## 2023-01-11: v0.11.10
+### Removed
 - Deprecated parameter `signalCb` from `WsClient` and `AppWebsocket`.
 ### Changed
 - All Launcher environment properties to be optional.
