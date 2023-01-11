@@ -7,14 +7,17 @@ import {
   AppCreateCloneCellRequest,
   AppEntryDef,
   AppSignalCb,
-  AppWebsocket,
   CellType,
   CloneId,
   fakeAgentPubKey,
   NonProvenanceCallZomeRequest,
   RoleName,
 } from "../../src/index.js";
-import { FIXTURE_PATH, installAppAndDna, withConductor } from "./util.js";
+import {
+  createAppAgentWsAndInstallApp,
+  FIXTURE_PATH,
+  withConductor,
+} from "./util.js";
 
 const ADMIN_PORT = 33001;
 
@@ -25,14 +28,12 @@ const COORDINATOR_ZOME_NAME = "coordinator";
 test(
   "can call a zome function and get app info",
   withConductor(ADMIN_PORT, async (t: Test) => {
-    const { installed_app_id, cell_id, client, admin } = await installAppAndDna(
-      ADMIN_PORT
-    );
-
-    const appAgentWs = await AppAgentWebsocket.connect(
-      client,
-      installed_app_id
-    );
+    const {
+      installed_app_id,
+      cell_id,
+      client: appAgentWs,
+      admin,
+    } = await createAppAgentWsAndInstallApp(ADMIN_PORT);
 
     let info = await appAgentWs.appInfo();
     assert(CellType.Provisioned in info.cell_info[ROLE_NAME][0]);
@@ -100,16 +101,13 @@ test(
       resolveSignalPromise();
     };
 
-    const { admin, cell_id, client, installed_app_id } = await installAppAndDna(
-      ADMIN_PORT
-    );
+    const {
+      admin,
+      cell_id,
+      client: appAgentWs,
+    } = await createAppAgentWsAndInstallApp(ADMIN_PORT);
 
     await admin.authorizeSigningCredentials(cell_id);
-
-    const appAgentWs = await AppAgentWebsocket.connect(
-      client,
-      installed_app_id
-    );
 
     appAgentWs.on("signal", signalCb);
 
@@ -165,11 +163,11 @@ test(
       received2 = true;
     };
 
-    const client = await AppWebsocket.connect(`ws://127.0.0.1:${appPort}`);
     await admin.authorizeSigningCredentials(cell_id1);
 
-    const appAgentWs1 = await AppAgentWebsocket.connect(client, app_id1);
-    const appAgentWs2 = await AppAgentWebsocket.connect(client, app_id2);
+    const clientUrl = `ws://127.0.0.1:${appPort}`;
+    const appAgentWs1 = await AppAgentWebsocket.connect(clientUrl, app_id1);
+    const appAgentWs2 = await AppAgentWebsocket.connect(clientUrl, app_id2);
 
     appAgentWs1.on("signal", signalCb1);
     appAgentWs2.on("signal", signalCb2);
@@ -193,15 +191,10 @@ test(
 test(
   "can create a callable clone cell and call it by clone id",
   withConductor(ADMIN_PORT, async (t: Test) => {
-    const { admin, installed_app_id, client } = await installAppAndDna(
+    const { admin, client: appAgentWs } = await createAppAgentWsAndInstallApp(
       ADMIN_PORT
     );
-    const info = await client.appInfo({ installed_app_id });
-
-    const appAgentWs = await AppAgentWebsocket.connect(
-      client,
-      installed_app_id
-    );
+    const info = await appAgentWs.appInfo();
 
     const createCloneCellParams: AppCreateCloneCellRequest = {
       role_name: ROLE_NAME,
@@ -239,13 +232,8 @@ test(
 test(
   "can disable and re-enable a clone cell",
   withConductor(ADMIN_PORT, async (t: Test) => {
-    const { admin, installed_app_id, client } = await installAppAndDna(
+    const { admin, client: appAgentWs } = await createAppAgentWsAndInstallApp(
       ADMIN_PORT
-    );
-
-    const appAgentWs = await AppAgentWebsocket.connect(
-      client,
-      installed_app_id
     );
 
     const createCloneCellParams: AppCreateCloneCellRequest = {

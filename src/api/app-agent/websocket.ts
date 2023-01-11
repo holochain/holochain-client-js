@@ -6,7 +6,6 @@ import { AgentPubKey, CellId, InstalledAppId, RoleName } from "../../types.js";
 import { getBaseRoleNameFromCloneId, isCloneId } from "../common.js";
 import {
   AppInfo,
-  AppInfoResponse,
   AppSignal,
   AppSignalCb,
   AppWebsocket,
@@ -69,7 +68,7 @@ export class AppAgentWebsocket implements AppAgentClient {
     });
   }
 
-  async appInfo(): Promise<AppInfoResponse> {
+  async appInfo() {
     const appInfo = await this.appWebsocket.appInfo({
       installed_app_id: this.installedAppId,
     });
@@ -79,18 +78,20 @@ export class AppAgentWebsocket implements AppAgentClient {
   }
 
   static async connect(
-    appWebsocket: AppWebsocket,
-    installedAppId: InstalledAppId
-  ): Promise<AppAgentWebsocket> {
+    url: string,
+    installed_app_id: InstalledAppId,
+    defaultTimeout?: number
+  ) {
+    const appWebsocket = await AppWebsocket.connect(url, defaultTimeout);
     const appInfo = await appWebsocket.appInfo({
-      installed_app_id: installedAppId,
+      installed_app_id: installed_app_id,
     });
 
     const myPubKey = getPubKey(appInfo);
 
     const appAgentWs = new AppAgentWebsocket(
       appWebsocket,
-      installedAppId,
+      installed_app_id,
       myPubKey
     );
     appAgentWs.cachedAppInfo = appInfo;
