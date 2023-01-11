@@ -3,8 +3,6 @@
     "module": "ESNext",
     "target": "ESNext",
     "moduleResolution": "Node",
-    "sourceMap": true,
-    "declaration": true,
     "forceConsistentCasingInFileNames": true,
     "allowSyntheticDefaultImports": true,
     "useUnknownInCatchVariables": false,
