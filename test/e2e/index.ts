@@ -493,11 +493,8 @@ test(
     );
     const signalCb = (signal: AppSignal) => {
       t.deepEqual(signal, {
-        type: "signal",
-        data: {
-          cellId: cell_id,
-          payload: "i am a signal",
-        },
+        cell_id,
+        payload: "i am a signal",
       });
       resolveSignalPromise();
     };

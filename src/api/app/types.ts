@@ -1,23 +1,22 @@
-import { CapSecret } from "../../hdk/capabilities.js";
 import {
   AgentPubKey,
   CellId,
+  DnaHash,
   DnaProperties,
   InstalledAppId,
   InstalledCell,
+  NetworkInfo,
   RoleName,
   Timestamp,
-  DnaHash,
-  NetworkInfo,
 } from "../../types.js";
-import { Requester } from "../common.js";
 import {
-  FunctionName,
   AppInfo,
+  FunctionName,
   MembraneProof,
   NetworkSeed,
   ZomeName,
 } from "../admin/index.js";
+import { Requester } from "../common.js";
 
 export type CallZomeRequestGeneric<Payload> = {
   // cap_secret: CapSecret | null;
@@ -106,11 +105,8 @@ export type Signal = {
   [SignalType.System]: unknown;
 };
 export type AppSignal = {
-  type: string;
-  data: {
-    cellId: CellId;
-    payload: any;
-  };
+  cell_id: CellId;
+  payload: any;
 };
 export type AppSignalCb = (signal: AppSignal) => void;
 

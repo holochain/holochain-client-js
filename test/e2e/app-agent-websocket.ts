@@ -1,19 +1,18 @@
-import test, { Test } from "tape";
 import assert from "node:assert";
+import test, { Test } from "tape";
 import {
+  AdminWebsocket,
+  AppAgentCallZomeRequest,
   AppAgentWebsocket,
   AppCreateCloneCellRequest,
-  AppSignal,
-  CloneId,
   AppEntryDef,
-  RoleName,
-  AppAgentCallZomeRequest,
-  NonProvenanceCallZomeRequest,
-  fakeAgentPubKey,
-  CellType,
   AppSignalCb,
-  AdminWebsocket,
   AppWebsocket,
+  CellType,
+  CloneId,
+  fakeAgentPubKey,
+  NonProvenanceCallZomeRequest,
+  RoleName,
 } from "../../src/index.js";
 import { FIXTURE_PATH, installAppAndDna, withConductor } from "./util.js";
 
@@ -95,11 +94,8 @@ test(
     );
     const signalCb: AppSignalCb = (signal) => {
       t.deepEqual(signal, {
-        type: "signal",
-        data: {
-          cellId: cell_id,
-          payload: "i am a signal",
-        },
+        cell_id,
+        payload: "i am a signal",
       });
       resolveSignalPromise();
     };
@@ -115,7 +111,7 @@ test(
       installed_app_id
     );
 
-    appAgentWs.on("signal", cell_id, signalCb);
+    appAgentWs.on("signal", signalCb);
 
     // trigger an emit_signal
     await appAgentWs.callZome({
@@ -129,8 +125,8 @@ test(
   })
 );
 
-test.only(
-  "cells only receive its own signals",
+test(
+  "cells only receive their own signals",
   withConductor(ADMIN_PORT, async (t: Test) => {
     const role_name = "foo";
     const admin = await AdminWebsocket.connect(`ws://127.0.0.1:${ADMIN_PORT}`);
@@ -156,14 +152,12 @@ test.only(
 
     const app_id2 = "app2";
     const agent2 = await admin.generateAgentPubKey();
-    const app2 = await admin.installApp({
+    await admin.installApp({
       installed_app_id: app_id2,
       agent_key: agent2,
       path,
       membrane_proofs: {},
     });
-    assert(CellType.Provisioned in app2.cell_info[role_name][0]);
-    const cell_id2 = app2.cell_info[role_name][0][CellType.Provisioned].cell_id;
     await admin.enableApp({ installed_app_id: app_id2 });
 
     let received2 = false;
@@ -174,13 +168,14 @@ test.only(
     const client = await AppWebsocket.connect(`ws://127.0.0.1:${appPort}`);
     await admin.authorizeSigningCredentials(cell_id1);
 
-    const appAgentWs = await AppAgentWebsocket.connect(client, app_id1);
+    const appAgentWs1 = await AppAgentWebsocket.connect(client, app_id1);
+    const appAgentWs2 = await AppAgentWebsocket.connect(client, app_id2);
 
-    appAgentWs.on("signal", cell_id1, signalCb1);
-    appAgentWs.on("signal", cell_id2, signalCb2);
+    appAgentWs1.on("signal", signalCb1);
+    appAgentWs2.on("signal", signalCb2);
 
     // trigger an emit_signal
-    await appAgentWs.callZome({
+    await appAgentWs1.callZome({
       cell_id: cell_id1,
       zome_name: TEST_ZOME_NAME,
       fn_name: "emitter",
@@ -188,6 +183,7 @@ test.only(
       payload: null,
     });
 
+    // signals are received before the timeout step in the JS event loop is completed
     await new Promise((resolve) => setTimeout(resolve, 0));
     t.equal(received1, true);
     t.equal(received2, false);

@@ -33,7 +33,7 @@ export class WsClient extends Emittery {
     this.index = 0;
 
     if (signalCb) {
-      console.log(
+      console.warn(
         "Providing a signal callback on client initialization is deprecated. Instead add an event handler using `.on('signal', signalCb)`."
       );
       this.on("signal", signalCb);
@@ -69,16 +69,12 @@ export class WsClient extends Emittery {
 
         // Holochain currently returns signals as an array of two values: cellId and the serialized signal payload
         // and this array is nested within the App key within the returned message.
-        const cellId = derializedSignal.App[0];
+        const cell_id = derializedSignal.App[0];
         // In order to return readible content to the UI, the signal payload must also be deserialized.
         const payload = decode(derializedSignal.App[1]);
-        assertHolochainSignalPayload(payload);
 
         // Return a uniform format to UI (ie: { type, data } - the same format as with callZome and appInfo...)
-        const signal: AppSignal = {
-          type: message.type,
-          data: { cellId, payload },
-        };
+        const signal: AppSignal = { cell_id, payload };
         this.emit("signal", signal);
       } else if (message.type === "response") {
         this.handleResponse(message);
@@ -185,15 +181,4 @@ function assertHolochainSignal(signal: unknown): asserts signal is Signal {
     return;
   }
   throw new Error(`unknown signal format ${JSON.stringify(signal, null, 4)}`);
-}
-
-function assertHolochainSignalPayload<Type>(
-  payload: unknown
-): asserts payload is Type {
-  if (typeof payload === "object" && payload !== null) {
-    return;
-  }
-  throw new Error(
-    `unknown signal payload format ${JSON.stringify(payload, null, 4)}`
-  );
 }

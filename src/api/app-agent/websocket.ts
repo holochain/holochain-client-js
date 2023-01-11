@@ -62,9 +62,11 @@ export class AppAgentWebsocket implements AppAgentClient {
     const env = getLauncherEnvironment();
     this.installedAppId = env?.INSTALLED_APP_ID || installedAppId;
 
-    this.appWebsocket.on("signal", (signal: AppSignal) =>
-      this.emitter.emit("signal", signal)
-    );
+    this.appWebsocket.on("signal", (signal: AppSignal) => {
+      if (this.containsCell(signal.cell_id)) {
+        this.emitter.emit("signal", signal);
+      }
+    });
   }
 
   async appInfo(): Promise<AppInfoResponse> {
@@ -86,7 +88,14 @@ export class AppAgentWebsocket implements AppAgentClient {
 
     const myPubKey = getPubKey(appInfo);
 
-    return new AppAgentWebsocket(appWebsocket, installedAppId, myPubKey);
+    const appAgentWs = new AppAgentWebsocket(
+      appWebsocket,
+      installedAppId,
+      myPubKey
+    );
+    appAgentWs.cachedAppInfo = appInfo;
+
+    return appAgentWs;
   }
 
   getCellIdFromRoleName(roleName: RoleName, appInfo: AppInfo) {
@@ -175,9 +184,33 @@ export class AppAgentWebsocket implements AppAgentClient {
 
   on<Name extends keyof AppAgentEvents>(
     eventName: Name | readonly Name[],
-    cellId: CellId,
-    listener: AppSignalCb //(eventData: AppAgentEvents[Name]) => void | Promise<void>
+    listener: AppSignalCb
   ): UnsubscribeFunction {
     return this.emitter.on(eventName, listener);
   }
+
+  private containsCell(cellId: CellId) {
+    const appInfo = this.cachedAppInfo;
+    if (!appInfo) {
+      return false;
+    }
+    for (const roleName of Object.keys(appInfo.cell_info)) {
+      for (const cellInfo of appInfo.cell_info[roleName]) {
+        const currentCellId =
+          CellType.Provisioned in cellInfo
+            ? cellInfo[CellType.Provisioned].cell_id
+            : CellType.Cloned in cellInfo
+            ? cellInfo[CellType.Cloned].cell_id
+            : undefined;
+        if (currentCellId && isSameCell(currentCellId, cellId)) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
 }
+
+const isSameCell = (cellId1: CellId, cellId2: CellId) =>
+  cellId1[0].every((byte, index) => byte === cellId2[0][index]) &&
+  cellId1[1].every((byte, index) => byte === cellId2[1][index]);
