@@ -1,7 +1,7 @@
 import { decode, encode } from "@msgpack/msgpack";
 import Emittery from "emittery";
 import Websocket from "isomorphic-ws";
-import { AppSignal, AppSignalCb, Signal, SignalType } from "./app/types.js";
+import { AppSignal, Signal, SignalType } from "./app/types.js";
 
 interface HolochainMessage {
   id: number;
@@ -26,18 +26,11 @@ export class WsClient extends Emittery {
   >;
   index: number;
 
-  constructor(socket: Websocket, signalCb?: AppSignalCb) {
+  constructor(socket: Websocket) {
     super();
     this.socket = socket;
     this.pendingRequests = {};
     this.index = 0;
-
-    if (signalCb) {
-      console.warn(
-        "Providing a signal callback on client initialization is deprecated. Instead add an event handler using `.on('signal', signalCb)`."
-      );
-      this.on("signal", signalCb);
-    }
 
     socket.onmessage = async (serializedMessage) => {
       // If data is not a buffer (nodejs), it will be a blob (browser)
@@ -86,8 +79,8 @@ export class WsClient extends Emittery {
     };
   }
 
-  static connect(url: string, signalCb?: AppSignalCb): Promise<WsClient> {
-    return new Promise((resolve, reject) => {
+  static connect(url: string) {
+    return new Promise<WsClient>((resolve, reject) => {
       const socket = new Websocket(url);
       // make sure that there are no uncaught connection
       // errors because that causes nodejs thread to crash
@@ -100,7 +93,7 @@ export class WsClient extends Emittery {
         );
       };
       socket.onopen = () => {
-        const client = new WsClient(socket, signalCb);
+        const client = new WsClient(socket);
         resolve(client);
       };
     });

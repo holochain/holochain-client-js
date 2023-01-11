@@ -28,7 +28,6 @@ import {
   AppApi,
   AppInfoRequest,
   AppInfoResponse,
-  AppSignalCb,
   CallZomeRequest,
   CallZomeResponse,
   CallZomeResponseGeneric,
@@ -59,11 +58,7 @@ export class AppWebsocket extends Emittery implements AppApi {
     this.overrideInstalledAppId = overrideInstalledAppId;
   }
 
-  static async connect(
-    url: string,
-    defaultTimeout?: number,
-    signalCb?: AppSignalCb
-  ): Promise<AppWebsocket> {
+  static async connect(url: string, defaultTimeout?: number) {
     // Check if we are in the launcher's environment, and if so, redirect the url to connect to
     const env = getLauncherEnvironment();
 
@@ -71,12 +66,7 @@ export class AppWebsocket extends Emittery implements AppApi {
       url = `ws://127.0.0.1:${env.APP_INTERFACE_PORT}`;
     }
 
-    if (signalCb) {
-      console.warn(
-        "Providing a signal callback on client initialization is deprecated. Instead add an event handler using `.on('signal', signalCb)`."
-      );
-    }
-    const wsClient = await WsClient.connect(url, signalCb);
+    const wsClient = await WsClient.connect(url);
 
     const appWebsocket = new AppWebsocket(
       wsClient,
