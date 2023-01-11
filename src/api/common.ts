@@ -41,7 +41,7 @@ export const catchError = (res: any) => {
 };
 
 export const promiseTimeout = (
-  promise: Promise<any>,
+  promise: Promise<unknown>,
   tag: string,
   ms: number
 ) => {

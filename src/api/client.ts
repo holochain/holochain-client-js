@@ -6,7 +6,7 @@ import { AppSignal, Signal, SignalType } from "./app/types.js";
 interface HolochainMessage {
   id: number;
   type: "response" | "signal";
-  data: any;
+  data: ArrayLike<number> | null;
 }
 
 /**
@@ -52,6 +52,9 @@ export class WsClient extends Emittery {
       assertHolochainMessage(message);
 
       if (message.type === "signal") {
+        if (message.data === null) {
+          throw new Error("received a signal without data");
+        }
         const derializedSignal = decode(message.data);
         assertHolochainSignal(derializedSignal);
 
@@ -99,7 +102,7 @@ export class WsClient extends Emittery {
     });
   }
 
-  emitSignal(data: any) {
+  emitSignal(data: unknown) {
     const encodedMsg = encode({
       type: "signal",
       data: encode(data),
