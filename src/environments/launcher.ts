@@ -10,9 +10,9 @@ import {
 import { encode } from "@msgpack/msgpack";
 
 export interface LauncherEnvironment {
-  APP_INTERFACE_PORT: number;
-  ADMIN_INTERFACE_PORT: number;
-  INSTALLED_APP_ID: InstalledAppId;
+  APP_INTERFACE_PORT?: number;
+  ADMIN_INTERFACE_PORT?: number;
+  INSTALLED_APP_ID?: InstalledAppId;
 }
 
 const __HC_LAUNCHER_ENV__ = "__HC_LAUNCHER_ENV__";

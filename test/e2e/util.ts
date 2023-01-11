@@ -4,7 +4,7 @@ import { AdminWebsocket } from "../../src/api/admin/websocket.js";
 import { AppWebsocket } from "../../src/api/app/websocket.js";
 import { CellId, InstalledAppId } from "../../src/types.js";
 import assert from "node:assert/strict";
-import { CellType } from "../../src/index.js";
+import { AppAgentWebsocket, CellType } from "../../src/index.js";
 
 export const FIXTURE_PATH = "./test/e2e/fixture";
 
@@ -114,5 +114,36 @@ export const installAppAndDna = async (
   // destructure to get whatever open port was assigned to the interface
   const { port: appPort } = await admin.attachAppInterface({ port: 0 });
   const client = await AppWebsocket.connect(`ws://127.0.0.1:${appPort}`, 12000);
+  return { installed_app_id, cell_id, client, admin };
+};
+
+export const createAppAgentWsAndInstallApp = async (
+  adminPort: number
+): Promise<{
+  installed_app_id: InstalledAppId;
+  cell_id: CellId;
+  client: AppAgentWebsocket;
+  admin: AdminWebsocket;
+}> => {
+  const role_name = "foo";
+  const installed_app_id = "app";
+  const admin = await AdminWebsocket.connect(`ws://127.0.0.1:${adminPort}`);
+  const path = `${FIXTURE_PATH}/test.happ`;
+  const agent = await admin.generateAgentPubKey();
+  const app = await admin.installApp({
+    installed_app_id,
+    agent_key: agent,
+    path,
+    membrane_proofs: {},
+  });
+  assert(CellType.Provisioned in app.cell_info[role_name][0]);
+  const cell_id = app.cell_info[role_name][0][CellType.Provisioned].cell_id;
+  await admin.enableApp({ installed_app_id });
+  const { port: appPort } = await admin.attachAppInterface({ port: 0 });
+  const client = await AppAgentWebsocket.connect(
+    `ws://127.0.0.1:${appPort}`,
+    installed_app_id,
+    12000
+  );
   return { installed_app_id, cell_id, client, admin };
 };

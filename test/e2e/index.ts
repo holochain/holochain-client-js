@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import fs from "node:fs";
 import test, { Test } from "tape";
 import zlib from "zlib";
+import WebSocket from "isomorphic-ws";
 import { WsClient } from "../../src/api/client.js";
 import {
   AdminWebsocket,
@@ -374,6 +375,56 @@ test(
 );
 
 test(
+  "install app with app manifest",
+  withConductor(ADMIN_PORT, async (t: Test) => {
+    const role_name = "foo";
+    const installed_app_id = "app";
+    const admin = await AdminWebsocket.connect(`ws://127.0.0.1:${ADMIN_PORT}`);
+    const agent = await admin.generateAgentPubKey();
+    const app = await admin.installApp({
+      installed_app_id,
+      agent_key: agent,
+      bundle: {
+        manifest: {
+          manifest_version: "1",
+          name: "app",
+          roles: [
+            {
+              name: role_name,
+              dna: {
+                path: fs.realpathSync("test/e2e/fixture/test.dna"),
+                modifiers: { quantum_time: { secs: 1111, nanos: 1111 } },
+              },
+            },
+          ],
+        },
+        resources: {},
+      },
+      membrane_proofs: {},
+    });
+    await admin.enableApp({ installed_app_id });
+    const { port: appPort } = await admin.attachAppInterface({ port: 0 });
+    const client = await AppWebsocket.connect(`ws://127.0.0.1:${appPort}`);
+
+    assert(CellType.Provisioned in app.cell_info[role_name][0]);
+    const cell_id = app.cell_info[role_name][0][CellType.Provisioned].cell_id;
+
+    const zomeCallPayload: CallZomeRequest = {
+      cell_id,
+      zome_name: TEST_ZOME_NAME,
+      fn_name: "foo",
+      provenance: agent,
+      payload: null,
+    };
+
+    await admin.authorizeSigningCredentials(cell_id);
+
+    const response = await client.callZome(zomeCallPayload, 30000);
+    t.equal(response, "foo", "zome call succeeds");
+  })
+);
+
+test(
   "stateDump",
   withConductor(ADMIN_PORT, async (t: Test) => {
     const { installed_app_id, cell_id, client, admin } = await installAppAndDna(
@@ -412,13 +463,18 @@ test(
 test(
   "can handle canceled response",
   withConductor(ADMIN_PORT, async (t: Test) => {
-    const client = new WsClient({
-      send: () => {
-        /* do nothing */
-      },
+    const websocket = await new Promise<WebSocket>((resolve) => {
+      const ws = new WebSocket(`ws://127.0.0.1:${ADMIN_PORT}`);
+      ws.onopen = () => {
+        resolve(ws);
+      };
     });
+    websocket.send = () => {
+      // do nothing
+    };
+    const client = new WsClient(websocket);
     const prom = client.request("blah");
-    client.handleResponse({ id: 0 });
+    client.handleResponse({ id: 0, type: "response", data: null });
     try {
       await prom;
     } catch (e) {
@@ -430,23 +486,18 @@ test(
 test(
   "can receive a signal using event handler",
   withConductor(ADMIN_PORT, async (t: Test) => {
+    const { admin, cell_id, client } = await installAppAndDna(ADMIN_PORT);
     let resolveSignalPromise: (value?: unknown) => void | undefined;
     const signalReceivedPromise = new Promise(
       (resolve) => (resolveSignalPromise = resolve)
     );
     const signalCb = (signal: AppSignal) => {
       t.deepEqual(signal, {
-        type: "signal",
-        data: {
-          cellId: cell_id,
-          payload: "i am a signal",
-        },
+        cell_id,
+        payload: "i am a signal",
       });
       resolveSignalPromise();
     };
-
-    const { admin, cell_id, client } = await installAppAndDna(ADMIN_PORT);
-
     await admin.authorizeSigningCredentials(cell_id);
 
     client.on("signal", signalCb);

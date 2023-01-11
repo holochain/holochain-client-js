@@ -2,11 +2,12 @@ import Emittery, { UnsubscribeFunction } from "emittery";
 import { omit } from "lodash-es";
 import { getLauncherEnvironment } from "../../environments/launcher.js";
 
-import { AgentPubKey, InstalledAppId, RoleName } from "../../types.js";
+import { AgentPubKey, CellId, InstalledAppId, RoleName } from "../../types.js";
 import { getBaseRoleNameFromCloneId, isCloneId } from "../common.js";
 import {
   AppInfo,
-  AppInfoResponse,
+  AppSignal,
+  AppSignalCb,
   AppWebsocket,
   CallZomeRequest,
   CallZomeResponse,
@@ -60,12 +61,14 @@ export class AppAgentWebsocket implements AppAgentClient {
     const env = getLauncherEnvironment();
     this.installedAppId = env?.INSTALLED_APP_ID || installedAppId;
 
-    this.appWebsocket.on("signal", (signal) =>
-      this.emitter.emit("signal", signal)
-    );
+    this.appWebsocket.on("signal", (signal: AppSignal) => {
+      if (this.containsCell(signal.cell_id)) {
+        this.emitter.emit("signal", signal);
+      }
+    });
   }
 
-  async appInfo(): Promise<AppInfoResponse> {
+  async appInfo() {
     const appInfo = await this.appWebsocket.appInfo({
       installed_app_id: this.installedAppId,
     });
@@ -75,16 +78,25 @@ export class AppAgentWebsocket implements AppAgentClient {
   }
 
   static async connect(
-    appWebsocket: AppWebsocket,
-    installedAppId: InstalledAppId
-  ): Promise<AppAgentWebsocket> {
+    url: string,
+    installed_app_id: InstalledAppId,
+    defaultTimeout?: number
+  ) {
+    const appWebsocket = await AppWebsocket.connect(url, defaultTimeout);
     const appInfo = await appWebsocket.appInfo({
-      installed_app_id: installedAppId,
+      installed_app_id: installed_app_id,
     });
 
     const myPubKey = getPubKey(appInfo);
 
-    return new AppAgentWebsocket(appWebsocket, installedAppId, myPubKey);
+    const appAgentWs = new AppAgentWebsocket(
+      appWebsocket,
+      installed_app_id,
+      myPubKey
+    );
+    appAgentWs.cachedAppInfo = appInfo;
+
+    return appAgentWs;
   }
 
   getCellIdFromRoleName(roleName: RoleName, appInfo: AppInfo) {
@@ -94,9 +106,9 @@ export class AppAgentWebsocket implements AppAgentClient {
         throw new Error(`No cell found with role_name ${roleName}`);
       }
       const cloneCell = appInfo.cell_info[baseRoleName].find(
-        (c) => "Cloned" in c && c.Cloned.clone_id === roleName
+        (c) => CellType.Cloned in c && c.Cloned.clone_id === roleName
       );
-      if (!cloneCell || !("Cloned" in cloneCell)) {
+      if (!cloneCell || !(CellType.Cloned in cloneCell)) {
         throw new Error(`No clone cell found with clone id ${roleName}`);
       }
       return cloneCell.Cloned.cell_id;
@@ -173,8 +185,33 @@ export class AppAgentWebsocket implements AppAgentClient {
 
   on<Name extends keyof AppAgentEvents>(
     eventName: Name | readonly Name[],
-    listener: (eventData: AppAgentEvents[Name]) => void | Promise<void>
+    listener: AppSignalCb
   ): UnsubscribeFunction {
     return this.emitter.on(eventName, listener);
   }
+
+  private containsCell(cellId: CellId) {
+    const appInfo = this.cachedAppInfo;
+    if (!appInfo) {
+      return false;
+    }
+    for (const roleName of Object.keys(appInfo.cell_info)) {
+      for (const cellInfo of appInfo.cell_info[roleName]) {
+        const currentCellId =
+          CellType.Provisioned in cellInfo
+            ? cellInfo[CellType.Provisioned].cell_id
+            : CellType.Cloned in cellInfo
+            ? cellInfo[CellType.Cloned].cell_id
+            : undefined;
+        if (currentCellId && isSameCell(currentCellId, cellId)) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
 }
+
+const isSameCell = (cellId1: CellId, cellId2: CellId) =>
+  cellId1[0].every((byte, index) => byte === cellId2[0][index]) &&
+  cellId1[1].every((byte, index) => byte === cellId2[1][index]);

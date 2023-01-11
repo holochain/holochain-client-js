@@ -5,6 +5,7 @@ import {
   CellId,
   DnaHash,
   DnaProperties,
+  Duration,
   HoloHash,
   HoloHashB64,
   InstalledAppId,
@@ -120,6 +121,7 @@ export type DnaModifiers = {
   network_seed: NetworkSeed;
   properties: DnaProperties;
   origin_time: Timestamp;
+  quantum_time: Duration;
 };
 
 export type FunctionName = string;
@@ -146,32 +148,46 @@ export type UninstallAppRequest = {
 };
 export type UninstallAppResponse = null;
 
-export type ResourceBytes = Buffer;
+export type ResourceBytes = number[];
 export type ResourceMap = { [key: string]: ResourceBytes };
 export type CellProvisioning =
   | {
-      /// Always create a new Cell when installing this App
+      // Always create a new Cell when installing this App
       create: { deferred: boolean };
     }
   | {
-      /// Always create a new Cell when installing the App,
-      /// and use a unique UID to ensure a distinct DHT network
+      // Always create a new Cell when installing the App,
+      // and use a unique UID to ensure a distinct DHT network
       create_clone: { deferred: boolean };
     }
   | {
-      /// Require that a Cell is already installed which matches the DNA version
-      /// spec, and which has an Agent that's associated with this App's agent
-      /// via DPKI. If no such Cell exists, *app installation fails*.
+      // Require that a Cell is already installed which matches the DNA version
+      // spec, and which has an Agent that's associated with this App's agent
+      // via DPKI. If no such Cell exists, *app installation fails*.
       use_existing: { deferred: boolean };
     }
   | {
-      /// Try `UseExisting`, and if that fails, fallback to `Create`
+      // Try `UseExisting`, and if that fails, fallback to `Create`
       create_if_no_exists: { deferred: boolean };
     }
   | {
-      /// Disallow provisioning altogether. In this case, we expect
-      /// `clone_limit > 0`: otherwise, no Cells will ever be created.
+      // Disallow provisioning altogether. In this case, we expect
+      // `clone_limit > 0`: otherwise, no Cells will ever be created.
       disabled: Record<string, never>;
+    };
+
+export type Location =
+  | {
+      // Expect file to be part of this bundle
+      bundled: string;
+    }
+  | {
+      // Get file from local filesystem (not bundled)
+      path: string;
+    }
+  | {
+      // Get file from URL
+      url: string;
     };
 
 export type DnaVersionSpec = Array<HoloHashB64>;
@@ -183,18 +199,17 @@ export type DnaVersionFlexible =
       multiple: DnaVersionSpec;
     };
 export type AppRoleDnaManifest = {
-  location?: Location;
-  properties?: DnaProperties;
-  network_seed?: NetworkSeed;
+  clone_limit?: number;
+  modifiers?: Partial<DnaModifiers>;
   version?: DnaVersionFlexible;
-};
+} & Location;
 export type AppRoleManifest = {
   name: RoleName;
   provisioning?: CellProvisioning;
   dna: AppRoleDnaManifest;
 };
 export type AppManifest = {
-  /// Currently one "1" is supported
+  // Currently "1" is supported
   manifest_version: string;
 
   name: string;
@@ -204,9 +219,9 @@ export type AppManifest = {
 export type AppBundle = {
   manifest: AppManifest;
 
-  /// The full or partial resource data. Each entry must correspond to one
-  /// of the Bundled Locations specified by the Manifest. Bundled Locations
-  /// are always relative paths (relative to the root_dir).
+  // The full or partial resource data. Each entry must correspond to one
+  // of the Bundled Locations specified by the Manifest. Bundled Locations
+  // are always relative paths (relative to the root_dir).
   resources: ResourceMap;
 };
 
@@ -214,20 +229,20 @@ export type AppBundleSource = { bundle: AppBundle } | { path: string };
 
 export type NetworkSeed = string;
 export type InstallAppRequest = {
-  /// The agent to use when creating Cells for this App.
+  // The agent to use when creating Cells for this App.
   agent_key: AgentPubKey;
 
-  /// The unique identifier for an installed app in this conductor.
-  /// If not specified, it will be derived from the app name in the bundle manifest.
+  // The unique identifier for an installed app in this conductor.
+  // If not specified, it will be derived from the app name in the bundle manifest.
   installed_app_id?: InstalledAppId;
 
-  /// Include proof-of-membrane-membership data for cells that require it,
-  /// keyed by the CellNick specified in the app bundle manifest.
+  // Include proof-of-membrane-membership data for cells that require it,
+  // keyed by the CellNick specified in the app bundle manifest.
   membrane_proofs: { [key: string]: MembraneProof };
 
-  /// Optional global network seed override.  If set will override the network seed value for all DNAs in the bundle.
+  // Optional global network seed override.  If set will override the network seed value for all DNAs in the bundle.
   network_seed?: NetworkSeed;
-} & AppBundleSource; /// The unique identifier for an installed app in this conductor.
+} & AppBundleSource; // The unique identifier for an installed app in this conductor.
 
 export type InstallAppResponse = AppInfo;
 
@@ -272,10 +287,10 @@ export type DeleteCloneCellRequest = DisableCloneCellRequest;
 export type DeleteCloneCellResponse = void;
 
 export interface GrantZomeCallCapabilityRequest {
-  /// Cell for which to authorize the capability.
+  // Cell for which to authorize the capability.
   cell_id: CellId;
-  /// Specifies the capability, consisting of zomes and functions to allow
-  /// signing for as well as access level, secret and assignees.
+  // Specifies the capability, consisting of zomes and functions to allow
+  // signing for as well as access level, secret and assignees.
   cap_grant: ZomeCallCapGrant;
 }
 export type GrantZomeCallCapabilityResponse = void;
@@ -323,19 +338,7 @@ export type InstallAppDnaPayload = {
   membrane_proof?: MembraneProof;
 };
 
-export type ZomeLocation =
-  | {
-      /// Expect file to be part of this bundle
-      bundled: string;
-    }
-  | {
-      /// Get file from local filesystem (not bundled)
-      path: string;
-    }
-  | {
-      /// Get file from URL
-      url: string;
-    };
+export type ZomeLocation = Location;
 
 export type ZomeManifest = {
   name: string;
@@ -343,20 +346,20 @@ export type ZomeManifest = {
 } & ZomeLocation;
 
 export type DnaManifest = {
-  /// Currently one "1" is supported
+  // Currently one "1" is supported
   manifest_version: string;
 
-  /// The friendly "name" of a Holochain DNA.
+  // The friendly "name" of a Holochain DNA.
   name: string;
 
-  /// A network seed for uniquifying this DNA.
+  // A network seed for uniquifying this DNA.
   network_seed?: NetworkSeed;
 
-  /// Any arbitrary application properties can be included in this object.
+  // Any arbitrary application properties can be included in this object.
   properties?: DnaProperties;
 
-  /// An array of zomes associated with your DNA.
-  /// The order is significant: it determines initialization order.
+  // An array of zomes associated with your DNA.
+  // The order is significant: it determines initialization order.
   zomes: Array<ZomeManifest>;
 };
 
@@ -386,13 +389,13 @@ export interface AgentInfoDump {
 }
 
 export interface P2pAgentsDump {
-  /// The info of this agent's cell.
+  // The info of this agent's cell.
   this_agent_info: AgentInfoDump | undefined;
-  /// The dna as a [`DnaHash`] and [`kitsune_p2p::KitsuneSpace`].
+  // The dna as a [`DnaHash`] and [`kitsune_p2p::KitsuneSpace`].
   this_dna: [DnaHash, KitsuneSpace] | undefined;
-  /// The agent as [`AgentPubKey`] and [`kitsune_p2p::KitsuneAgent`].
+  // The agent as [`AgentPubKey`] and [`kitsune_p2p::KitsuneAgent`].
   this_agent: [AgentPubKey, KitsuneAgent] | undefined;
-  /// All other agent info.
+  // All other agent info.
   peers: Array<AgentInfoDump>;
 }
 

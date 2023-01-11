@@ -6,7 +6,7 @@ import { encodeHashToBase64 } from "../utils/base64.js";
 
 export type Nonce256Bit = Uint8Array;
 
-interface SigningCredentials {
+export interface SigningCredentials {
   capSecret: CapSecret;
   keyPair: nacl.SignKeyPair;
   signingKey: AgentPubKey;

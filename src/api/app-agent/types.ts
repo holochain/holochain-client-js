@@ -1,19 +1,20 @@
 import { UnsubscribeFunction } from "emittery";
-import {
-  DisableCloneCellResponse,
-  CreateCloneCellRequest,
-  CreateCloneCellResponse,
-} from "../index.js";
 import { AgentPubKey, RoleName } from "../../index.js";
 import {
   AppInfoResponse,
   AppSignal,
-  DisableCloneCellRequest,
+  AppSignalCb,
   CallZomeRequest,
+  CallZomeRequestSigned,
+  DisableCloneCellRequest,
   EnableCloneCellRequest,
   EnableCloneCellResponse,
-  CallZomeRequestSigned,
 } from "../app/index.js";
+import {
+  CreateCloneCellRequest,
+  CreateCloneCellResponse,
+  DisableCloneCellResponse,
+} from "../index.js";
 
 export type NonProvenanceCallZomeRequest = Omit<CallZomeRequest, "provenance">;
 
@@ -53,7 +54,7 @@ export interface AppAgentClient {
 
   on<Name extends keyof AppAgentEvents>(
     eventName: Name | readonly Name[],
-    listener: (eventData: AppAgentEvents[Name]) => void | Promise<void>
+    listener: AppSignalCb
   ): UnsubscribeFunction;
 
   appInfo(): Promise<AppInfoResponse>;

@@ -1,23 +1,22 @@
-import { CapSecret } from "../../hdk/capabilities.js";
 import {
   AgentPubKey,
   CellId,
+  DnaHash,
   DnaProperties,
   InstalledAppId,
   InstalledCell,
+  NetworkInfo,
   RoleName,
   Timestamp,
-  DnaHash,
-  NetworkInfo,
 } from "../../types.js";
-import { Requester } from "../common.js";
 import {
-  FunctionName,
   AppInfo,
+  FunctionName,
   MembraneProof,
   NetworkSeed,
   ZomeName,
 } from "../admin/index.js";
+import { Requester } from "../common.js";
 
 export type CallZomeRequestGeneric<Payload> = {
   // cap_secret: CapSecret | null;
@@ -92,24 +91,26 @@ export type DisableCloneCellResponse = void;
 export type EnableCloneCellRequest = DisableCloneCellRequest;
 export type EnableCloneCellResponse = CreateCloneCellResponse;
 
-export type AppSignal = {
-  type: string;
-  data: {
-    cellId: CellId;
-    payload: any;
-  };
-};
-
 export interface NetworkInfoRequest {
   /** The DNAs for which to get network info */
   dnas: DnaHash[];
 }
 
-export type NetworkInfoResponse = NetworkInfo[];
-
+export const SignalType = {
+  App: "App",
+  System: "System",
+} as const;
+export type Signal = {
+  [SignalType.App]: [CellId, any];
+  [SignalType.System]: unknown;
+};
+export type AppSignal = {
+  cell_id: CellId;
+  payload: any;
+};
 export type AppSignalCb = (signal: AppSignal) => void;
 
-export type SignalResponseGeneric<Payload> = Payload;
+export type NetworkInfoResponse = NetworkInfo[];
 
 export interface AppApi {
   appInfo: Requester<AppInfoRequest, AppInfoResponse>;

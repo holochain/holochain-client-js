@@ -35,7 +35,8 @@
   },
   "scripts": {
     "lint": "eslint --fix --ext .ts src test .eslintrc.cjs",
-    "test": "RUST_LOG=error RUST_BACKTRACE=1 node --experimental-wasm-modules --loader ts-node/esm test/index.ts",
+    "test:app-agent": "RUST_LOG=error RUST_BACKTRACE=1 node --loader ts-node/esm test/e2e/app-agent-websocket.ts",
+    "test": "RUST_LOG=error RUST_BACKTRACE=1 node --loader ts-node/esm test/index.ts",
     "build": "rimraf ./lib && tsc -p tsconfig.build.json"
   },
   "dependencies": {

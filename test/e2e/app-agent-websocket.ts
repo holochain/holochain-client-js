@@ -1,18 +1,23 @@
-import test, { Test } from "tape";
 import assert from "node:assert";
+import test, { Test } from "tape";
 import {
+  AdminWebsocket,
+  AppAgentCallZomeRequest,
   AppAgentWebsocket,
   AppCreateCloneCellRequest,
-  AppSignal,
-  CloneId,
   AppEntryDef,
-  RoleName,
-  AppAgentCallZomeRequest,
-  NonProvenanceCallZomeRequest,
-  fakeAgentPubKey,
+  AppSignalCb,
   CellType,
+  CloneId,
+  fakeAgentPubKey,
+  NonProvenanceCallZomeRequest,
+  RoleName,
 } from "../../src/index.js";
-import { installAppAndDna, withConductor } from "./util.js";
+import {
+  createAppAgentWsAndInstallApp,
+  FIXTURE_PATH,
+  withConductor,
+} from "./util.js";
 
 const ADMIN_PORT = 33001;
 
@@ -23,14 +28,12 @@ const COORDINATOR_ZOME_NAME = "coordinator";
 test(
   "can call a zome function and get app info",
   withConductor(ADMIN_PORT, async (t: Test) => {
-    const { installed_app_id, cell_id, client, admin } = await installAppAndDna(
-      ADMIN_PORT
-    );
-
-    const appAgentWs = await AppAgentWebsocket.connect(
-      client,
-      installed_app_id
-    );
+    const {
+      installed_app_id,
+      cell_id,
+      client: appAgentWs,
+      admin,
+    } = await createAppAgentWsAndInstallApp(ADMIN_PORT);
 
     let info = await appAgentWs.appInfo();
     assert(CellType.Provisioned in info.cell_info[ROLE_NAME][0]);
@@ -90,27 +93,21 @@ test(
     const signalReceivedPromise = new Promise(
       (resolve) => (resolveSignalPromise = resolve)
     );
-    const signalCb = (signal: AppSignal) => {
+    const signalCb: AppSignalCb = (signal) => {
       t.deepEqual(signal, {
-        type: "signal",
-        data: {
-          cellId: cell_id,
-          payload: "i am a signal",
-        },
+        cell_id,
+        payload: "i am a signal",
       });
       resolveSignalPromise();
     };
 
-    const { admin, cell_id, client, installed_app_id } = await installAppAndDna(
-      ADMIN_PORT
-    );
+    const {
+      admin,
+      cell_id,
+      client: appAgentWs,
+    } = await createAppAgentWsAndInstallApp(ADMIN_PORT);
 
     await admin.authorizeSigningCredentials(cell_id);
-
-    const appAgentWs = await AppAgentWebsocket.connect(
-      client,
-      installed_app_id
-    );
 
     appAgentWs.on("signal", signalCb);
 
@@ -127,17 +124,77 @@ test(
 );
 
 test(
+  "cells only receive their own signals",
+  withConductor(ADMIN_PORT, async (t: Test) => {
+    const role_name = "foo";
+    const admin = await AdminWebsocket.connect(`ws://127.0.0.1:${ADMIN_PORT}`);
+    const path = `${FIXTURE_PATH}/test.happ`;
+    const { port: appPort } = await admin.attachAppInterface({ port: 0 });
+
+    const app_id1 = "app1";
+    const agent1 = await admin.generateAgentPubKey();
+    const app1 = await admin.installApp({
+      installed_app_id: app_id1,
+      agent_key: agent1,
+      path,
+      membrane_proofs: {},
+    });
+    assert(CellType.Provisioned in app1.cell_info[role_name][0]);
+    const cell_id1 = app1.cell_info[role_name][0][CellType.Provisioned].cell_id;
+    await admin.enableApp({ installed_app_id: app_id1 });
+
+    let received1 = false;
+    const signalCb1: AppSignalCb = () => {
+      received1 = true;
+    };
+
+    const app_id2 = "app2";
+    const agent2 = await admin.generateAgentPubKey();
+    await admin.installApp({
+      installed_app_id: app_id2,
+      agent_key: agent2,
+      path,
+      membrane_proofs: {},
+    });
+    await admin.enableApp({ installed_app_id: app_id2 });
+
+    let received2 = false;
+    const signalCb2: AppSignalCb = () => {
+      received2 = true;
+    };
+
+    await admin.authorizeSigningCredentials(cell_id1);
+
+    const clientUrl = `ws://127.0.0.1:${appPort}`;
+    const appAgentWs1 = await AppAgentWebsocket.connect(clientUrl, app_id1);
+    const appAgentWs2 = await AppAgentWebsocket.connect(clientUrl, app_id2);
+
+    appAgentWs1.on("signal", signalCb1);
+    appAgentWs2.on("signal", signalCb2);
+
+    // trigger an emit_signal
+    await appAgentWs1.callZome({
+      cell_id: cell_id1,
+      zome_name: TEST_ZOME_NAME,
+      fn_name: "emitter",
+      provenance: fakeAgentPubKey(),
+      payload: null,
+    });
+
+    // signals are received before the timeout step in the JS event loop is completed
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    t.equal(received1, true);
+    t.equal(received2, false);
+  })
+);
+
+test(
   "can create a callable clone cell and call it by clone id",
   withConductor(ADMIN_PORT, async (t: Test) => {
-    const { admin, installed_app_id, client } = await installAppAndDna(
+    const { admin, client: appAgentWs } = await createAppAgentWsAndInstallApp(
       ADMIN_PORT
     );
-    const info = await client.appInfo({ installed_app_id });
-
-    const appAgentWs = await AppAgentWebsocket.connect(
-      client,
-      installed_app_id
-    );
+    const info = await appAgentWs.appInfo();
 
     const createCloneCellParams: AppCreateCloneCellRequest = {
       role_name: ROLE_NAME,
@@ -175,13 +232,8 @@ test(
 test(
   "can disable and re-enable a clone cell",
   withConductor(ADMIN_PORT, async (t: Test) => {
-    const { admin, installed_app_id, client } = await installAppAndDna(
+    const { admin, client: appAgentWs } = await createAppAgentWsAndInstallApp(
       ADMIN_PORT
-    );
-
-    const appAgentWs = await AppAgentWebsocket.connect(
-      client,
-      installed_app_id
     );
 
     const createCloneCellParams: AppCreateCloneCellRequest = {
