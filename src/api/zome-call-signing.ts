@@ -1,4 +1,3 @@
-import crypto from "crypto";
 import nacl from "tweetnacl";
 import { CapSecret } from "../hdk/capabilities.js";
 import { AgentPubKey, CellId } from "../types.js";
@@ -59,11 +58,13 @@ export const generateSigningKeyPair: () => [
   return [keyPair, signingKey];
 };
 
-export const randomCapSecret: () => CapSecret = () => randomByteArray(64);
+export const randomCapSecret: () => Promise<CapSecret> = () =>
+  randomByteArray(64);
 
-export const randomNonce: () => Nonce256Bit = () => randomByteArray(32);
+export const randomNonce: () => Promise<Nonce256Bit> = async () =>
+  randomByteArray(32);
 
-export const randomByteArray = (length: number) => {
+export const randomByteArray = async (length: number) => {
   if (
     typeof window !== "undefined" &&
     "crypto" in window &&
@@ -71,6 +72,7 @@ export const randomByteArray = (length: number) => {
   ) {
     return window.crypto.getRandomValues(new Uint8Array(length));
   } else {
+    const crypto = await import("node:crypto");
     return new Uint8Array(crypto.randomBytes(length));
   }
 };

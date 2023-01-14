@@ -182,7 +182,7 @@ export const signZomeCall = async (request: CallZomeRequest) => {
     fn_name: request.fn_name,
     provenance: signingCredentialsForCell.signingKey,
     payload: encode(request.payload),
-    nonce: randomNonce(),
+    nonce: await randomNonce(),
     expires_at: getNonceExpiration(),
   };
   const hashedZomeCall = await hashZomeCall(unsignedZomeCallPayload);
