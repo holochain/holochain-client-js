@@ -8,6 +8,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Changed
 ### Fixed
 
+## 2023-01-11: v0.11.11
+### Changed
+- Refactor util functions that depend on crypto to async import.
+
 ## 2023-01-11: v0.11.10
 ### Removed
 - Deprecated parameter `signalCb` from `WsClient` and `AppWebsocket`.
