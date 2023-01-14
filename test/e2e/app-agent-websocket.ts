@@ -116,7 +116,7 @@ test(
       cell_id,
       zome_name: TEST_ZOME_NAME,
       fn_name: "emitter",
-      provenance: fakeAgentPubKey(),
+      provenance: await fakeAgentPubKey(),
       payload: null,
     });
     await signalReceivedPromise;
@@ -177,7 +177,7 @@ test(
       cell_id: cell_id1,
       zome_name: TEST_ZOME_NAME,
       fn_name: "emitter",
-      provenance: fakeAgentPubKey(),
+      provenance: await fakeAgentPubKey(),
       payload: null,
     });
 
