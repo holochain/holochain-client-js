@@ -72,7 +72,7 @@ export const randomByteArray = async (length: number) => {
   ) {
     return window.crypto.getRandomValues(new Uint8Array(length));
   } else {
-    const crypto = await import("node:crypto");
+    const crypto = await import("crypto");
     return new Uint8Array(crypto.randomBytes(length));
   }
 };
