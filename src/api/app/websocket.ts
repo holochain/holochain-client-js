@@ -9,6 +9,7 @@ import {
 } from "../../environments/launcher.js";
 import { CapSecret } from "../../hdk/capabilities.js";
 import { InstalledAppId } from "../../types.js";
+import { encodeHashToBase64 } from "../../utils/base64.js";
 import { WsClient } from "../client.js";
 import {
   catchError,
@@ -172,7 +173,9 @@ export const signZomeCall = async (request: CallZomeRequest) => {
   const signingCredentialsForCell = getSigningCredentials(request.cell_id);
   if (!signingCredentialsForCell) {
     throw new Error(
-      `cannot sign zome call: no signing credentials have been authorized for cell ${request.cell_id}`
+      `cannot sign zome call: no signing credentials have been authorized for cell [${encodeHashToBase64(
+        request.cell_id[0]
+      )}, ${encodeHashToBase64(request.cell_id[1])}]`
     );
   }
   const unsignedZomeCallPayload: CallZomeRequestUnsigned = {
