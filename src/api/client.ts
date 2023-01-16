@@ -35,7 +35,10 @@ export class WsClient extends Emittery {
     socket.onmessage = async (serializedMessage) => {
       // If data is not a buffer (nodejs), it will be a blob (browser)
       let deserializedData;
-      if (serializedMessage.data instanceof Blob) {
+      if (
+        typeof window === "object" &&
+        serializedMessage.data instanceof window.Blob
+      ) {
         deserializedData = await serializedMessage.data.arrayBuffer();
       } else {
         if (
