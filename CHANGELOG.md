@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Removed
 ### Changed
 ### Fixed
+- Cell id log when no signing credentials are present for a cell.
 
 ## 2023-01-11: v0.11.11
 ### Changed
