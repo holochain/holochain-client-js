@@ -42,6 +42,12 @@ import {
   NetworkInfoResponse,
 } from "./types.js";
 
+/**
+ * A class to establish a websocket connection to an App interface of a
+ * Holochain conductor.
+ *
+ * @public
+ */
 export class AppWebsocket extends Emittery implements AppApi {
   readonly client: WsClient;
   defaultTimeout: number;
@@ -120,12 +126,18 @@ export class AppWebsocket extends Emittery implements AppApi {
     this._requester("network_info");
 }
 
+/**
+ * @public
+ */
 export interface CallZomeRequestUnsigned extends CallZomeRequest {
   cap_secret: CapSecret | null;
   nonce: Nonce256Bit;
   expires_at: number;
 }
 
+/**
+ * @public
+ */
 export interface CallZomeRequestSigned extends CallZomeRequestUnsigned {
   signature: Uint8Array;
 }
@@ -169,6 +181,9 @@ const appInfoTransform = (
   output: (response) => response,
 });
 
+/**
+ * @public
+ */
 export const signZomeCall = async (request: CallZomeRequest) => {
   const signingCredentialsForCell = getSigningCredentials(request.cell_id);
   if (!signingCredentialsForCell) {

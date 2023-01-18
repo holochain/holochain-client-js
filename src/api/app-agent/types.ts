@@ -16,8 +16,14 @@ import {
   DisableCloneCellResponse,
 } from "../index.js";
 
+/**
+ * @public
+ */
 export type NonProvenanceCallZomeRequest = Omit<CallZomeRequest, "provenance">;
 
+/**
+ * @public
+ */
 export type RoleNameCallZomeRequest = Omit<
   NonProvenanceCallZomeRequest,
   "cell_id"
@@ -25,30 +31,51 @@ export type RoleNameCallZomeRequest = Omit<
   role_name: RoleName;
 };
 
+/**
+ * @public
+ */
 export type RoleNameCallZomeRequestSigned = Omit<
   CallZomeRequestSigned,
   "cell_id"
 > & { role_name: RoleName };
 
+/**
+ * @public
+ */
 export type AppAgentCallZomeRequest =
   | NonProvenanceCallZomeRequest
   | RoleNameCallZomeRequest
   | CallZomeRequestSigned
   | RoleNameCallZomeRequestSigned;
 
+/**
+ * @public
+ */
 export type AppCreateCloneCellRequest = Omit<CreateCloneCellRequest, "app_id">;
 
+/**
+ * @public
+ */
 export type AppEnableCloneCellRequest = Omit<EnableCloneCellRequest, "app_id">;
 
+/**
+ * @public
+ */
 export type AppDisableCloneCellRequest = Omit<
   DisableCloneCellRequest,
   "app_id"
 >;
 
+/**
+ * @public
+ */
 export interface AppAgentEvents {
   signal: AppSignal;
 }
 
+/**
+ * @public
+ */
 export interface AppAgentClient {
   callZome(args: AppAgentCallZomeRequest, timeout?: number): Promise<any>;
 

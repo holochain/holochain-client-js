@@ -19,24 +19,45 @@ import {
 import { Requester } from "../common.js";
 import { DisableCloneCellRequest } from "../index.js";
 
+/**
+ * @public
+ */
 export type AttachAppInterfaceRequest = { port: number };
+/**
+ * @public
+ */
 export type AttachAppInterfaceResponse = { port: number };
 
+/**
+ * @public
+ */
 export type EnableAppRequest = { installed_app_id: InstalledAppId };
+/**
+ * @public
+ */
 export type EnableAppResponse = {
   app: AppInfo;
   errors: Array<[CellId, string]>;
 };
 
+/**
+ * @public
+ */
 export type DeactivationReason =
   | { never_activated: null }
   | { normal: null }
   | { quarantined: { error: string } };
 
+/**
+ * @public
+ */
 export type PausedAppReason = {
   error: string;
 };
 
+/**
+ * @public
+ */
 export type DisabledAppReason =
   | {
       never_started: null;
@@ -44,6 +65,9 @@ export type DisabledAppReason =
   | { user: null }
   | { error: string };
 
+/**
+ * @public
+ */
 export type InstalledAppInfoStatus =
   | {
       paused: { reason: PausedAppReason };
@@ -57,12 +81,18 @@ export type InstalledAppInfoStatus =
       running: null;
     };
 
+/**
+ * @public
+ */
 export interface StemCell {
   dna: DnaHash;
   name?: string;
   dna_modifiers: DnaModifiers;
 }
 
+/**
+ * @public
+ */
 export interface Cell {
   cell_id: CellId;
   clone_id?: RoleName;
@@ -71,43 +101,88 @@ export interface Cell {
   enabled: boolean;
 }
 
+/**
+ * @public
+ */
 export enum CellType {
   Provisioned = "Provisioned",
   Cloned = "Cloned",
   Stem = "Stem",
 }
 
+/**
+ * @public
+ */
 export type CellInfo =
   | { [CellType.Provisioned]: Cell }
   | { [CellType.Cloned]: Cell }
   | { [CellType.Stem]: StemCell };
 
+/**
+ * @public
+ */
 export type AppInfo = {
   installed_app_id: InstalledAppId;
   cell_info: Record<RoleName, Array<CellInfo>>;
   status: InstalledAppInfoStatus;
 };
 
+/**
+ * @public
+ */
 export type MembraneProof = Buffer;
 
+/**
+ * @public
+ */
 export type DisableAppRequest = { installed_app_id: InstalledAppId };
+/**
+ * @public
+ */
 export type DisableAppResponse = null;
 
+/**
+ * @public
+ */
 export type StartAppRequest = { installed_app_id: InstalledAppId };
+/**
+ * @public
+ */
 export type StartAppResponse = boolean;
 
+/**
+ * @public
+ */
 export type DumpStateRequest = { cell_id: CellId };
+/**
+ * @public
+ */
 export type DumpStateResponse = any;
 
+/**
+ * @public
+ */
 export type DumpFullStateRequest = {
   cell_id: CellId;
   dht_ops_cursor: number | undefined;
 };
+/**
+ * @public
+ */
 export type DumpFullStateResponse = FullStateDump;
 
+/**
+ * @public
+ */
 export type GenerateAgentPubKeyRequest = void;
+/**
+ * @public
+ */
 export type GenerateAgentPubKeyResponse = AgentPubKey;
 
+/**
+ * @public
+ */
 export type RegisterDnaRequest = {
   modifiers?: {
     network_seed?: string;
@@ -115,8 +190,14 @@ export type RegisterDnaRequest = {
   };
 } & DnaSource;
 
+/**
+ * @public
+ */
 export type RegisterDnaResponse = HoloHash;
 
+/**
+ * @public
+ */
 export type DnaModifiers = {
   network_seed: NetworkSeed;
   properties: DnaProperties;
@@ -124,15 +205,33 @@ export type DnaModifiers = {
   quantum_time: Duration;
 };
 
+/**
+ * @public
+ */
 export type FunctionName = string;
+/**
+ * @public
+ */
 export type ZomeName = string;
+/**
+ * @public
+ */
 export type ZomeDefinition = [
   ZomeName,
   { wasm_hash: WasmHash; dependencies: ZomeName[] }
 ];
+/**
+ * @public
+ */
 export type IntegrityZome = ZomeDefinition;
+/**
+ * @public
+ */
 export type CoordinatorZome = ZomeDefinition;
 
+/**
+ * @public
+ */
 export type DnaDefinition = {
   name: string;
   modifiers: DnaModifiers;
@@ -140,57 +239,103 @@ export type DnaDefinition = {
   coordinator_zomes: CoordinatorZome[];
 };
 
+/**
+ * @public
+ */
 export type GetDnaDefinitionRequest = DnaHash;
+/**
+ * @public
+ */
 export type GetDnaDefinitionResponse = DnaDefinition;
 
+/**
+ * @public
+ */
 export type UninstallAppRequest = {
   installed_app_id: InstalledAppId;
 };
+/**
+ * @public
+ */
 export type UninstallAppResponse = null;
 
+/**
+ * @public
+ */
 export type ResourceBytes = number[];
+/**
+ * @public
+ */
 export type ResourceMap = { [key: string]: ResourceBytes };
+/**
+ * @public
+ */
 export type CellProvisioning =
   | {
-      // Always create a new Cell when installing this App
+      /**
+       * Always create a new Cell when installing this App
+       */
       create: { deferred: boolean };
     }
   | {
-      // Always create a new Cell when installing the App,
-      // and use a unique UID to ensure a distinct DHT network
+      /**
+       * Always create a new Cell when installing the App,
+       * and use a unique network seed to ensure a distinct DHT network.
+       */
       create_clone: { deferred: boolean };
     }
   | {
-      // Require that a Cell is already installed which matches the DNA version
-      // spec, and which has an Agent that's associated with this App's agent
-      // via DPKI. If no such Cell exists, *app installation fails*.
+      /**
+       * Require that a Cell is already installed which matches the DNA version
+       * spec, and which has an Agent that's associated with this App's agent
+       * via DPKI. If no such Cell exists, *app installation fails*.
+       */
       use_existing: { deferred: boolean };
     }
   | {
-      // Try `UseExisting`, and if that fails, fallback to `Create`
+      /**
+       * Try `UseExisting`, and if that fails, fallback to `Create`
+       */
       create_if_no_exists: { deferred: boolean };
     }
   | {
-      // Disallow provisioning altogether. In this case, we expect
-      // `clone_limit > 0`: otherwise, no Cells will ever be created.
+      /**
+       * Disallow provisioning altogether. In this case, we expect
+       * `clone_limit > 0`: otherwise, no Cells will ever be created.
+       */
       disabled: Record<string, never>;
     };
 
+/**
+ * @public
+ */
 export type Location =
   | {
-      // Expect file to be part of this bundle
+      /**
+       * Expect file to be part of this bundle
+       */
       bundled: string;
     }
   | {
-      // Get file from local filesystem (not bundled)
+      /**
+       * Get file from local filesystem (not bundled)
+       */
       path: string;
     }
   | {
-      // Get file from URL
+      /**
+       * Get file from URL
+       */
       url: string;
     };
 
+/**
+ * @public
+ */
 export type DnaVersionSpec = Array<HoloHashB64>;
+/**
+ * @public
+ */
 export type DnaVersionFlexible =
   | {
       singleton: HoloHashB64;
@@ -198,16 +343,25 @@ export type DnaVersionFlexible =
   | {
       multiple: DnaVersionSpec;
     };
+/**
+ * @public
+ */
 export type AppRoleDnaManifest = {
   clone_limit?: number;
   modifiers?: Partial<DnaModifiers>;
   version?: DnaVersionFlexible;
 } & Location;
+/**
+ * @public
+ */
 export type AppRoleManifest = {
   name: RoleName;
   provisioning?: CellProvisioning;
   dna: AppRoleDnaManifest;
 };
+/**
+ * @public
+ */
 export type AppManifest = {
   // Currently "1" is supported
   manifest_version: string;
@@ -216,6 +370,9 @@ export type AppManifest = {
   description?: string;
   roles: Array<AppRoleManifest>;
 };
+/**
+ * @public
+ */
 export type AppBundle = {
   manifest: AppManifest;
 
@@ -225,9 +382,18 @@ export type AppBundle = {
   resources: ResourceMap;
 };
 
+/**
+ * @public
+ */
 export type AppBundleSource = { bundle: AppBundle } | { path: string };
 
+/**
+ * @public
+ */
 export type NetworkSeed = string;
+/**
+ * @public
+ */
 export type InstallAppRequest = {
   // The agent to use when creating Cells for this App.
   agent_key: AgentPubKey;
@@ -244,17 +410,44 @@ export type InstallAppRequest = {
   network_seed?: NetworkSeed;
 } & AppBundleSource; // The unique identifier for an installed app in this conductor.
 
+/**
+ * @public
+ */
 export type InstallAppResponse = AppInfo;
 
+/**
+ * @public
+ */
 export type ListDnasRequest = void;
+
+/**
+ * @public
+ */
 export type ListDnasResponse = Array<string>;
 
+/**
+ * @public
+ */
 export type ListCellIdsRequest = void;
+
+/**
+ * @public
+ */
 export type ListCellIdsResponse = Array<CellId>;
 
+/**
+ * @public
+ */
 export type ListActiveAppsRequest = void;
+
+/**
+ * @public
+ */
 export type ListActiveAppsResponse = Array<InstalledAppId>;
 
+/**
+ * @public
+ */
 export enum AppStatusFilter {
   Enabled = "enabled",
   Disabled = "disabled",
@@ -262,39 +455,247 @@ export enum AppStatusFilter {
   Stopped = "stopped",
   Paused = "paused",
 }
+
+/**
+ * @public
+ */
 export type ListAppsRequest = {
   status_filter?: AppStatusFilter;
 };
+
+/**
+ * @public
+ */
 export type ListAppsResponse = Array<AppInfo>;
 
+/**
+ * @public
+ */
 export type ListAppInterfacesRequest = void;
+
+/**
+ * @public
+ */
 export type ListAppInterfacesResponse = Array<number>;
 
-// this type is meant to be opaque
-export type AgentInfoSigned = any;
-/*{
-    agent: any,
-    signature: any,
-    agent_info: any,
-}*/
+/**
+ * This type is meant to be opaque
+ *
+ * @public
+ */
+/*
+ * agent: any,
+ * signature: any,
+ * agent_info: any,
+ */
+export type AgentInfoSigned = unknown;
 
+/**
+ * @public
+ */
 export type AgentInfoRequest = { cell_id: CellId | null };
+
+/**
+ * @public
+ */
 export type AgentInfoResponse = Array<AgentInfoSigned>;
+
+/**
+ * @public
+ */
 export type AddAgentInfoRequest = { agent_infos: Array<AgentInfoSigned> };
+
+/**
+ * @public
+ */
 export type AddAgentInfoResponse = any;
 
+/**
+ * @public
+ */
 export type DeleteCloneCellRequest = DisableCloneCellRequest;
+
+/**
+ * @public
+ */
 export type DeleteCloneCellResponse = void;
 
+/**
+ * @public
+ */
 export interface GrantZomeCallCapabilityRequest {
-  // Cell for which to authorize the capability.
+  /**
+   * Cell for which to authorize the capability.
+   */
   cell_id: CellId;
-  // Specifies the capability, consisting of zomes and functions to allow
-  // signing for as well as access level, secret and assignees.
+  /**
+   * Specifies the capability, consisting of zomes and functions to allow
+   * signing for as well as access level, secret and assignees.
+   */
   cap_grant: ZomeCallCapGrant;
 }
+
+/**
+ * @public
+ */
 export type GrantZomeCallCapabilityResponse = void;
 
+/**
+ * @public
+ */
+export type InstallAppDnaPayload = {
+  hash: HoloHash;
+  role_name: RoleName;
+  membrane_proof?: MembraneProof;
+};
+
+/**
+ * @public
+ */
+export type ZomeLocation = Location;
+
+/**
+ * @public
+ */
+export type ZomeManifest = {
+  name: string;
+  hash?: string;
+} & ZomeLocation;
+
+/**
+ * @public
+ */
+export type DnaManifest = {
+  /**
+   * Currently one "1" is supported
+   */
+  manifest_version: string;
+
+  /**
+   * The friendly "name" of a Holochain DNA.
+   */
+  name: string;
+
+  /**
+   * A network seed for uniquifying this DNA.
+   */
+  network_seed?: NetworkSeed;
+
+  /**
+   * Any arbitrary application properties can be included in this object.
+   */
+  properties?: DnaProperties;
+
+  /**
+   * An array of zomes associated with your DNA.
+   * The order is significant: it determines initialization order.
+   */
+  zomes: Array<ZomeManifest>;
+};
+
+/**
+ * @public
+ */
+export type DnaBundle = {
+  manifest: DnaManifest;
+  resources: ResourceMap;
+};
+
+/**
+ * @public
+ */
+export type DnaSource =
+  | {
+      hash: HoloHash;
+    }
+  | {
+      path: string;
+    }
+  | {
+      bundle: DnaBundle;
+    };
+
+/**
+ * @public
+ */
+export type Zomes = Array<[string, { wasm_hash: Array<HoloHash> }]>;
+/**
+ * @public
+ */
+export type WasmCode = [HoloHash, { code: Array<number> }];
+
+/**
+ * @public
+ */
+export interface AgentInfoDump {
+  kitsune_agent: KitsuneAgent;
+  kitsune_space: KitsuneSpace;
+  dump: string;
+}
+
+/**
+ * @public
+ */
+export interface P2pAgentsDump {
+  /**
+   * The info of this agent's cell.
+   */
+  this_agent_info: AgentInfoDump | undefined;
+  /**
+   * The dna as a [`DnaHash`] and [`kitsune_p2p::KitsuneSpace`].
+   */
+  this_dna: [DnaHash, KitsuneSpace] | undefined;
+  /**
+   * The agent as [`AgentPubKey`] and [`kitsune_p2p::KitsuneAgent`].
+   */
+  this_agent: [AgentPubKey, KitsuneAgent] | undefined;
+  /**
+   * All other agent info.
+   */
+  peers: Array<AgentInfoDump>;
+}
+
+/**
+ * @public
+ */
+export interface FullIntegrationStateDump {
+  validation_limbo: Array<DhtOp>;
+  integration_limbo: Array<DhtOp>;
+  integrated: Array<DhtOp>;
+
+  dht_ops_cursor: number;
+}
+
+/**
+ * @public
+ */
+export interface SourceChainJsonRecord {
+  signature: Signature;
+  action_address: ActionHash;
+  action: Action;
+  entry: Entry | undefined;
+}
+
+/**
+ * @public
+ */
+export interface SourceChainJsonDump {
+  records: Array<SourceChainJsonRecord>;
+  published_ops_count: number;
+}
+
+/**
+ * @public
+ */
+export interface FullStateDump {
+  peer_dump: P2pAgentsDump;
+  source_chain_dump: SourceChainJsonDump;
+  integration_dump: FullIntegrationStateDump;
+}
+
+/**
+ * @public
+ */
 export interface AdminApi {
   attachAppInterface: Requester<
     AttachAppInterfaceRequest,
@@ -330,97 +731,4 @@ export interface AdminApi {
     GrantZomeCallCapabilityRequest,
     GrantZomeCallCapabilityResponse
   >;
-}
-
-export type InstallAppDnaPayload = {
-  hash: HoloHash;
-  role_name: RoleName;
-  membrane_proof?: MembraneProof;
-};
-
-export type ZomeLocation = Location;
-
-export type ZomeManifest = {
-  name: string;
-  hash?: string;
-} & ZomeLocation;
-
-export type DnaManifest = {
-  // Currently one "1" is supported
-  manifest_version: string;
-
-  // The friendly "name" of a Holochain DNA.
-  name: string;
-
-  // A network seed for uniquifying this DNA.
-  network_seed?: NetworkSeed;
-
-  // Any arbitrary application properties can be included in this object.
-  properties?: DnaProperties;
-
-  // An array of zomes associated with your DNA.
-  // The order is significant: it determines initialization order.
-  zomes: Array<ZomeManifest>;
-};
-
-export type DnaBundle = {
-  manifest: DnaManifest;
-  resources: ResourceMap;
-};
-
-export type DnaSource =
-  | {
-      hash: HoloHash;
-    }
-  | {
-      path: string;
-    }
-  | {
-      bundle: DnaBundle;
-    };
-
-export type Zomes = Array<[string, { wasm_hash: Array<HoloHash> }]>;
-export type WasmCode = [HoloHash, { code: Array<number> }];
-
-export interface AgentInfoDump {
-  kitsune_agent: KitsuneAgent;
-  kitsune_space: KitsuneSpace;
-  dump: string;
-}
-
-export interface P2pAgentsDump {
-  // The info of this agent's cell.
-  this_agent_info: AgentInfoDump | undefined;
-  // The dna as a [`DnaHash`] and [`kitsune_p2p::KitsuneSpace`].
-  this_dna: [DnaHash, KitsuneSpace] | undefined;
-  // The agent as [`AgentPubKey`] and [`kitsune_p2p::KitsuneAgent`].
-  this_agent: [AgentPubKey, KitsuneAgent] | undefined;
-  // All other agent info.
-  peers: Array<AgentInfoDump>;
-}
-
-export interface FullIntegrationStateDump {
-  validation_limbo: Array<DhtOp>;
-  integration_limbo: Array<DhtOp>;
-  integrated: Array<DhtOp>;
-
-  dht_ops_cursor: number;
-}
-
-export interface SourceChainJsonRecord {
-  signature: Signature;
-  action_address: ActionHash;
-  action: Action;
-  entry: Entry | undefined;
-}
-
-export interface SourceChainJsonDump {
-  records: Array<SourceChainJsonRecord>;
-  published_ops_count: number;
-}
-
-export interface FullStateDump {
-  peer_dump: P2pAgentsDump;
-  source_chain_dump: SourceChainJsonDump;
-  integration_dump: FullIntegrationStateDump;
 }

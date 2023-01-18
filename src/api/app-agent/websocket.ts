@@ -44,6 +44,12 @@ function getPubKey(appInfo: AppInfo): AgentPubKey {
   );
 }
 
+/**
+ * A class to establish a websocket connection to an App interface, for a
+ * specific agent and app.
+ *
+ * @public
+ */
 export class AppAgentWebsocket implements AppAgentClient {
   readonly appWebsocket: AppWebsocket;
   installedAppId: InstalledAppId;

@@ -14,6 +14,8 @@ interface HolochainMessage {
  * as well as send and receive signals
  *
  * Uses Holochain's websocket WireMessage for communication.
+ *
+ * @public
  */
 export class WsClient extends Emittery {
   socket: Websocket;
@@ -129,7 +131,7 @@ export class WsClient extends Emittery {
     return promise as Promise<Res>;
   }
 
-  handleResponse(msg: HolochainMessage) {
+  private handleResponse(msg: HolochainMessage) {
     const id = msg.id;
     if (this.pendingRequests[id]) {
       if (msg.data === null || msg.data === undefined) {

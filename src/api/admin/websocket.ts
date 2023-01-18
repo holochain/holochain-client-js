@@ -62,8 +62,19 @@ import {
   UninstallAppResponse,
 } from "./types.js";
 
+/**
+ * A class for interacting with a conductor's Admin API.
+ *
+ * @public
+ */
 export class AdminWebsocket implements AdminApi {
+  /**
+   * The websocket client used for transporting requests and responses.
+   */
   readonly client: WsClient;
+  /**
+   * Default timeout for any request made over the websocket.
+   */
   defaultTimeout: number;
 
   private constructor(client: WsClient, defaultTimeout?: number) {
@@ -72,6 +83,13 @@ export class AdminWebsocket implements AdminApi {
       defaultTimeout === undefined ? DEFAULT_TIMEOUT : defaultTimeout;
   }
 
+  /**
+   * Factory mehtod to create a new instance connected to the given URL.
+   *
+   * @param url - A `ws://` URL used as the connection address.
+   * @param defaultTimeout - The default timeout for any request.
+   * @returns A promise for a new connected instance.
+   */
   static async connect(
     url: string,
     defaultTimeout?: number
@@ -87,11 +105,11 @@ export class AdminWebsocket implements AdminApi {
     return new AdminWebsocket(wsClient, defaultTimeout);
   }
 
-  _requester = <ReqO, ReqI, ResI, ResO>(
+  _requester<ReqI, ReqO, ResI, ResO>(
     tag: string,
-    transformer?: Transformer<ReqO, ReqI, ResI, ResO>
-  ) =>
-    requesterTransformer(
+    transformer?: Transformer<ReqI, ReqO, ResI, ResO>
+  ) {
+    return requesterTransformer(
       (req, timeout) =>
         promiseTimeout(
           this.client.request(req),
@@ -101,57 +119,135 @@ export class AdminWebsocket implements AdminApi {
       tag,
       transformer
     );
+  }
 
-  // the specific request/response types come from the Interface
-  // which this class implements
+  /**
+   * Send a request to open the given port for {@link AppWebsocket} connections.
+   */
   attachAppInterface: Requester<
     AttachAppInterfaceRequest,
     AttachAppInterfaceResponse
   > = this._requester("attach_app_interface");
+
+  /**
+   * Enable a stopped app.
+   */
   enableApp: Requester<EnableAppRequest, EnableAppResponse> =
     this._requester("enable_app");
+
+  /**
+   * Disable a running app.
+   */
   disableApp: Requester<DisableAppRequest, DisableAppResponse> =
     this._requester("disable_app");
+
+  /**
+   * Start an app.
+   */
   startApp: Requester<StartAppRequest, StartAppResponse> =
     this._requester("start_app");
+
+  /**
+   * Dump the state of the specified cell, including its source chain, as JSON.
+   */
   dumpState: Requester<DumpStateRequest, DumpStateResponse> = this._requester(
     "dump_state",
     dumpStateTransform
   );
+
+  /**
+   * Dump the full state of the specified cell, including its chain and DHT
+   * shard, as JSON.
+   */
   dumpFullState: Requester<DumpFullStateRequest, DumpFullStateResponse> =
     this._requester("dump_full_state");
+
+  /**
+   * Generate a new agent pub key.
+   */
   generateAgentPubKey: Requester<
     GenerateAgentPubKeyRequest,
     GenerateAgentPubKeyResponse
   > = this._requester("generate_agent_pub_key");
+
+  /**
+   * Register a DNA for later app installation.
+   *
+   * Stores the given DNA into the Holochain DNA database and returns the hash of it.
+   */
   registerDna: Requester<RegisterDnaRequest, RegisterDnaResponse> =
     this._requester("register_dna");
+
+  /**
+   * Get the DNA definition for the specified DNA hash.
+   */
   getDnaDefinition: Requester<
     GetDnaDefinitionRequest,
     GetDnaDefinitionResponse
   > = this._requester("get_dna_definition");
+
+  /**
+   * Uninstall the specified app from Holochain.
+   */
   uninstallApp: Requester<UninstallAppRequest, UninstallAppResponse> =
     this._requester("uninstall_app");
+
+  /**
+   * Install the specified app into Holochain.
+   */
   installApp: Requester<InstallAppRequest, InstallAppResponse> =
     this._requester("install_app");
+
+  /**
+   * List all registered DNAs.
+   */
   listDnas: Requester<ListDnasRequest, ListDnasResponse> =
     this._requester("list_dnas");
+
+  /**
+   * List all installed cell ids.
+   */
   listCellIds: Requester<ListCellIdsRequest, ListCellIdsResponse> =
     this._requester("list_cell_ids");
+
+  /**
+   * List all installed apps.
+   */
   listApps: Requester<ListAppsRequest, ListAppsResponse> = this._requester(
     "list_apps",
     listAppsTransform
   );
+
+  /**
+   * List all attached app interfaces.
+   */
   listAppInterfaces: Requester<
     ListAppInterfacesRequest,
     ListAppInterfacesResponse
   > = this._requester("list_app_interfaces");
+
+  /**
+   * Request all available info about an agent.
+   */
   agentInfo: Requester<AgentInfoRequest, AgentInfoResponse> =
     this._requester("agent_info");
+
+  /**
+   * Add an existing agent to Holochain.
+   */
   addAgentInfo: Requester<AddAgentInfoRequest, AddAgentInfoResponse> =
     this._requester("add_agent_info");
+
+  /**
+   * Delete a disabled clone cell.
+   */
   deleteCloneCell: Requester<DeleteCloneCellRequest, DeleteCloneCellResponse> =
     this._requester("delete_clone_cell");
+
+  /**
+   * Grant a zome call capability for an agent, to be used for signing zome
+   * calls.
+   */
   grantZomeCallCapability: Requester<
     GrantZomeCallCapabilityRequest,
     GrantZomeCallCapabilityResponse
