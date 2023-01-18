@@ -96,6 +96,7 @@ test(
     const signalCb: AppSignalCb = (signal) => {
       t.deepEqual(signal, {
         cell_id,
+        zome_name: "foo",
         payload: "i am a signal",
       });
       resolveSignalPromise();

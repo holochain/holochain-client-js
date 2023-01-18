@@ -101,11 +101,17 @@ export const SignalType = {
   System: "System",
 } as const;
 export type Signal = {
-  [SignalType.App]: [CellId, any];
+  [SignalType.App]: EncodedAppSignal;
   [SignalType.System]: unknown;
+};
+export type EncodedAppSignal = {
+  cell_id: CellId;
+  zome_name: string;
+  signal: Uint8Array;
 };
 export type AppSignal = {
   cell_id: CellId;
+  zome_name: string;
   payload: any;
 };
 export type AppSignalCb = (signal: AppSignal) => void;

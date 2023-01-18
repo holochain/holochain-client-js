@@ -65,15 +65,16 @@ export class WsClient extends Emittery {
           // We have received a system signal, do nothing
           return;
         }
+        const encodedAppSignal = derializedSignal["App"];
 
-        // Holochain currently returns signals as an array of two values: cellId and the serialized signal payload
-        // and this array is nested within the App key within the returned message.
-        const cell_id = derializedSignal.App[0];
         // In order to return readible content to the UI, the signal payload must also be deserialized.
-        const payload = decode(derializedSignal.App[1]);
+        const payload = decode(encodedAppSignal.signal);
 
-        // Return a uniform format to UI (ie: { type, data } - the same format as with callZome and appInfo...)
-        const signal: AppSignal = { cell_id, payload };
+        const signal: AppSignal = {
+          cell_id: encodedAppSignal.cell_id,
+          zome_name: encodedAppSignal.zome_name,
+          payload,
+        };
         this.emit("signal", signal);
       } else if (message.type === "response") {
         this.handleResponse(message);
