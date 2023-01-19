@@ -4,6 +4,8 @@
 
 ## WsClient.close() method
 
+Close the websocket connection.
+
 <b>Signature:</b>
 
 ```typescript

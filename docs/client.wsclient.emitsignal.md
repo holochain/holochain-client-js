@@ -4,6 +4,8 @@
 
 ## WsClient.emitSignal() method
 
+Sends data as a signal.
+
 <b>Signature:</b>
 
 ```typescript
@@ -14,7 +16,7 @@ emitSignal(data: unknown): void;
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  data | unknown |  |
+|  data | unknown | Data to send. |
 
 <b>Returns:</b>
 

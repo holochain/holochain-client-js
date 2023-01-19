@@ -4,6 +4,8 @@
 
 ## AppAgentWebsocket.createCloneCell() method
 
+Clone an existing provisioned cell.
+
 <b>Signature:</b>
 
 ```typescript
@@ -14,9 +16,11 @@ createCloneCell(args: AppCreateCloneCellRequest): Promise<CreateCloneCellRespons
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  args | [AppCreateCloneCellRequest](./client.appcreateclonecellrequest.md) |  |
+|  args | [AppCreateCloneCellRequest](./client.appcreateclonecellrequest.md) | Specify the cell to clone. |
 
 <b>Returns:</b>
 
 Promise&lt;[CreateCloneCellResponse](./client.createclonecellresponse.md)<!-- -->&gt;
+
+The created clone cell.
 

@@ -4,6 +4,8 @@
 
 ## AppWebsocket.networkInfo property
 
+Request network info about gossip status.
+
 <b>Signature:</b>
 
 ```typescript

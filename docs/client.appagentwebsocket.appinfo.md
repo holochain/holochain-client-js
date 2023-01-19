@@ -4,6 +4,8 @@
 
 ## AppAgentWebsocket.appInfo() method
 
+Request the app's info, including all cell infos.
+
 <b>Signature:</b>
 
 ```typescript
@@ -12,4 +14,6 @@ appInfo(): Promise<AppInfo>;
 <b>Returns:</b>
 
 Promise&lt;[AppInfo](./client.appinfo.md)<!-- -->&gt;
+
+The app's [AppInfo](./client.appinfo.md)<!-- -->.
 

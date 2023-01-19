@@ -4,7 +4,7 @@
 
 ## WsClient class
 
-A Websocket client which can make requests and receive responses, as well as send and receive signals
+A Websocket client which can make requests and receive responses, as well as send and receive signals.
 
 Uses Holochain's websocket WireMessage for communication.
 
@@ -33,8 +33,8 @@ export declare class WsClient extends Emittery
 
 |  Method | Modifiers | Description |
 |  --- | --- | --- |
-|  [close()](./client.wsclient.close.md) |  |  |
-|  [connect(url)](./client.wsclient.connect.md) | <code>static</code> |  |
-|  [emitSignal(data)](./client.wsclient.emitsignal.md) |  |  |
-|  [request(data)](./client.wsclient.request.md) |  |  |
+|  [close()](./client.wsclient.close.md) |  | Close the websocket connection. |
+|  [connect(url)](./client.wsclient.connect.md) | <code>static</code> | Instance factory for creating WsClients. |
+|  [emitSignal(data)](./client.wsclient.emitsignal.md) |  | Sends data as a signal. |
+|  [request(request)](./client.wsclient.request.md) |  | Send requests to the connected websocket. |
 

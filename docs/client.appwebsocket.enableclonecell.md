@@ -4,6 +4,8 @@
 
 ## AppWebsocket.enableCloneCell property
 
+Enable a disabled clone cell.
+
 <b>Signature:</b>
 
 ```typescript

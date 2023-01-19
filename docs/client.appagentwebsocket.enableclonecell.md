@@ -4,6 +4,8 @@
 
 ## AppAgentWebsocket.enableCloneCell() method
 
+Enable a disabled clone cell.
+
 <b>Signature:</b>
 
 ```typescript
@@ -14,9 +16,11 @@ enableCloneCell(args: AppEnableCloneCellRequest): Promise<EnableCloneCellRespons
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  args | [AppEnableCloneCellRequest](./client.appenableclonecellrequest.md) |  |
+|  args | [AppEnableCloneCellRequest](./client.appenableclonecellrequest.md) | Specify the clone cell to enable. |
 
 <b>Returns:</b>
 
 Promise&lt;[EnableCloneCellResponse](./client.enableclonecellresponse.md)<!-- -->&gt;
+
+The enabled clone cell.
 

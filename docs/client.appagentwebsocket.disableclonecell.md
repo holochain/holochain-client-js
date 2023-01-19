@@ -4,6 +4,8 @@
 
 ## AppAgentWebsocket.disableCloneCell() method
 
+Disable an enabled clone cell.
+
 <b>Signature:</b>
 
 ```typescript
@@ -14,7 +16,7 @@ disableCloneCell(args: AppDisableCloneCellRequest): Promise<DisableCloneCellResp
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  args | [AppDisableCloneCellRequest](./client.appdisableclonecellrequest.md) |  |
+|  args | [AppDisableCloneCellRequest](./client.appdisableclonecellrequest.md) | Specify the clone cell to disable. |
 
 <b>Returns:</b>
 

@@ -4,6 +4,8 @@
 
 ## AppWebsocket.callZome property
 
+Call a zome.
+
 <b>Signature:</b>
 
 ```typescript

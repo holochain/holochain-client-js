@@ -4,6 +4,8 @@
 
 ## AppAgentWebsocket.callZome() method
 
+Call a zome.
+
 <b>Signature:</b>
 
 ```typescript
@@ -14,10 +16,12 @@ callZome(request: AppAgentCallZomeRequest, timeout?: number): Promise<CallZomeRe
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  request | [AppAgentCallZomeRequest](./client.appagentcallzomerequest.md) |  |
-|  timeout | number | <i>(Optional)</i> |
+|  request | [AppAgentCallZomeRequest](./client.appagentcallzomerequest.md) | The zome call arguments. |
+|  timeout | number | <i>(Optional)</i> A timeout to override the default. |
 
 <b>Returns:</b>
 
 Promise&lt;[CallZomeResponse](./client.callzomeresponse.md)<!-- -->&gt;
+
+The zome call's response.
 

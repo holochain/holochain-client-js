@@ -4,19 +4,22 @@
 
 ## WsClient.request() method
 
+Send requests to the connected websocket.
+
 <b>Signature:</b>
 
 ```typescript
-request<Req, Res>(data: Req): Promise<Res>;
+request<Req, Res>(request: Req): Promise<Res>;
 ```
 
 ## Parameters
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  data | Req |  |
+|  request | Req | The request to send over the websocket. |
 
 <b>Returns:</b>
 
 Promise&lt;Res&gt;
+
 

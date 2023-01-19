@@ -4,6 +4,8 @@
 
 ## AppWebsocket.connect() method
 
+Instance factory for creating AppWebsockets.
+
 <b>Signature:</b>
 
 ```typescript
@@ -14,10 +16,12 @@ static connect(url: string, defaultTimeout?: number): Promise<AppWebsocket>;
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  url | string |  |
-|  defaultTimeout | number | <i>(Optional)</i> |
+|  url | string | The <code>ws://</code> URL of the App API to connect to. |
+|  defaultTimeout | number | <i>(Optional)</i> Timeout to default to for all operations. |
 
 <b>Returns:</b>
 
 Promise&lt;[AppWebsocket](./client.appwebsocket.md)<!-- -->&gt;
+
+A new instance of an AppWebsocket.
 

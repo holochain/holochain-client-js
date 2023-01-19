@@ -4,6 +4,8 @@
 
 ## AppAgentWebsocket.on() method
 
+Register an event listener for signals.
+
 <b>Signature:</b>
 
 ```typescript
@@ -14,10 +16,12 @@ on<Name extends keyof AppAgentEvents>(eventName: Name | readonly Name[], listene
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  eventName | Name \| readonly Name\[\] |  |
-|  listener | [AppSignalCb](./client.appsignalcb.md) |  |
+|  eventName | Name \| readonly Name\[\] | Event name to listen to (currently only "signal"). |
+|  listener | [AppSignalCb](./client.appsignalcb.md) | The function to call when event is triggered. |
 
 <b>Returns:</b>
 
 UnsubscribeFunction
+
+A function to unsubscribe the event listener.
 

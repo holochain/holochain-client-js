@@ -4,6 +4,8 @@
 
 ## AppAgentWebsocket.getCellIdFromRoleName() method
 
+Get a cell id by its role name or clone id.
+
 <b>Signature:</b>
 
 ```typescript
@@ -14,10 +16,12 @@ getCellIdFromRoleName(roleName: RoleName, appInfo: AppInfo): CellId;
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  roleName | [RoleName](./client.rolename.md) |  |
-|  appInfo | [AppInfo](./client.appinfo.md) |  |
+|  roleName | [RoleName](./client.rolename.md) | The role name or clone id of the cell. |
+|  appInfo | [AppInfo](./client.appinfo.md) | The app info containing all cell infos. |
 
 <b>Returns:</b>
 
 [CellId](./client.cellid.md)
+
+The cell id or throws an error if not found.
 

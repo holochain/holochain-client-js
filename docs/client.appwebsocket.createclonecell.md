@@ -4,6 +4,8 @@
 
 ## AppWebsocket.createCloneCell property
 
+Clone an existing provisioned cell.
+
 <b>Signature:</b>
 
 ```typescript

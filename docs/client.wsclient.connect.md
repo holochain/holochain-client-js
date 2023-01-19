@@ -4,6 +4,8 @@
 
 ## WsClient.connect() method
 
+Instance factory for creating WsClients.
+
 <b>Signature:</b>
 
 ```typescript
@@ -14,9 +16,11 @@ static connect(url: string): Promise<WsClient>;
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  url | string |  |
+|  url | string | The <code>ws://</code> URL to connect to. |
 
 <b>Returns:</b>
 
 Promise&lt;[WsClient](./client.wsclient.md)<!-- -->&gt;
+
+An new instance of the WsClient.
 
