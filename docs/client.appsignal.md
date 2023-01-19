@@ -11,7 +11,7 @@
 export declare type AppSignal = {
     cell_id: CellId;
     zome_name: string;
-    payload: any;
+    payload: unknown;
 };
 ```
 <b>References:</b> [CellId](./client.cellid.md)

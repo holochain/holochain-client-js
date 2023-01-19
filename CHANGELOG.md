@@ -4,6 +4,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## \[Unreleased\]
 ### Added
+### Changed
+### Fixed
+### Removed
+
+## 2023-01-19: v0.11.14
+### Added
 - API generation, available under ./docs
 ### Changed
 ### Fixed
