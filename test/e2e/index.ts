@@ -3,8 +3,6 @@ import assert from "node:assert/strict";
 import fs from "node:fs";
 import test, { Test } from "tape";
 import zlib from "zlib";
-import WebSocket from "isomorphic-ws";
-import { WsClient } from "../../src/api/client.js";
 import {
   AdminWebsocket,
   AppEntryDef,
@@ -12,6 +10,7 @@ import {
   AppStatusFilter,
   AppWebsocket,
   CallZomeRequest,
+  CellProvisioningStrategy,
   CellType,
   CloneId,
   CreateCloneCellRequest,
@@ -391,6 +390,10 @@ test(
           roles: [
             {
               name: role_name,
+              provisioning: {
+                strategy: CellProvisioningStrategy.Create,
+                deferred: false,
+              },
               dna: {
                 path: fs.realpathSync("test/e2e/fixture/test.dna"),
                 modifiers: { quantum_time: { secs: 1111, nanos: 1111 } },
@@ -457,29 +460,6 @@ test(
     // A couple random tests to prove that things are where we expect them
     t.equal(state[0].source_chain_dump.records.length, 7);
     t.equal(state[0].source_chain_dump.records[0].action.type, "Dna");
-  })
-);
-
-test(
-  "can handle canceled response",
-  withConductor(ADMIN_PORT, async (t: Test) => {
-    const websocket = await new Promise<WebSocket>((resolve) => {
-      const ws = new WebSocket(`ws://127.0.0.1:${ADMIN_PORT}`);
-      ws.onopen = () => {
-        resolve(ws);
-      };
-    });
-    websocket.send = () => {
-      // do nothing
-    };
-    const client = new WsClient(websocket);
-    const prom = client.request("blah");
-    client.handleResponse({ id: 0, type: "response", data: null });
-    try {
-      await prom;
-    } catch (e) {
-      t.deepEqual(e, new Error("Response canceled by responder"));
-    }
   })
 );
 

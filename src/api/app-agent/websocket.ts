@@ -44,6 +44,12 @@ function getPubKey(appInfo: AppInfo): AgentPubKey {
   );
 }
 
+/**
+ * A class to establish a websocket connection to an App interface, for a
+ * specific agent and app.
+ *
+ * @public
+ */
 export class AppAgentWebsocket implements AppAgentClient {
   readonly appWebsocket: AppWebsocket;
   installedAppId: InstalledAppId;
@@ -68,6 +74,11 @@ export class AppAgentWebsocket implements AppAgentClient {
     });
   }
 
+  /**
+   * Request the app's info, including all cell infos.
+   *
+   * @returns The app's {@link AppInfo}.
+   */
   async appInfo() {
     const appInfo = await this.appWebsocket.appInfo({
       installed_app_id: this.installedAppId,
@@ -77,6 +88,14 @@ export class AppAgentWebsocket implements AppAgentClient {
     return appInfo;
   }
 
+  /**
+   * Instance factory for creating AppAgentWebsockets.
+   *
+   * @param url - The `ws://` URL of the App API to connect to.
+   * @param installed_app_id - ID of the App to link to.
+   * @param defaultTimeout - Timeout to default to for all operations.
+   * @returns A new instance of an AppAgentWebsocket.
+   */
   static async connect(
     url: string,
     installed_app_id: InstalledAppId,
@@ -99,6 +118,13 @@ export class AppAgentWebsocket implements AppAgentClient {
     return appAgentWs;
   }
 
+  /**
+   * Get a cell id by its role name or clone id.
+   *
+   * @param roleName - The role name or clone id of the cell.
+   * @param appInfo - The app info containing all cell infos.
+   * @returns The cell id or throws an error if not found.
+   */
   getCellIdFromRoleName(roleName: RoleName, appInfo: AppInfo) {
     if (isCloneId(roleName)) {
       const baseRoleName = getBaseRoleNameFromCloneId(roleName);
@@ -126,6 +152,13 @@ export class AppAgentWebsocket implements AppAgentClient {
     return cell[CellType.Provisioned].cell_id;
   }
 
+  /**
+   * Call a zome.
+   *
+   * @param request - The zome call arguments.
+   * @param timeout - A timeout to override the default.
+   * @returns The zome call's response.
+   */
   async callZome(
     request: AppAgentCallZomeRequest,
     timeout?: number
@@ -152,6 +185,12 @@ export class AppAgentWebsocket implements AppAgentClient {
     }
   }
 
+  /**
+   * Clone an existing provisioned cell.
+   *
+   * @param args - Specify the cell to clone.
+   * @returns The created clone cell.
+   */
   async createCloneCell(
     args: AppCreateCloneCellRequest
   ): Promise<CreateCloneCellResponse> {
@@ -165,6 +204,12 @@ export class AppAgentWebsocket implements AppAgentClient {
     return clonedCell;
   }
 
+  /**
+   * Enable a disabled clone cell.
+   *
+   * @param args - Specify the clone cell to enable.
+   * @returns The enabled clone cell.
+   */
   async enableCloneCell(
     args: AppEnableCloneCellRequest
   ): Promise<EnableCloneCellResponse> {
@@ -174,6 +219,11 @@ export class AppAgentWebsocket implements AppAgentClient {
     });
   }
 
+  /**
+   * Disable an enabled clone cell.
+   *
+   * @param args - Specify the clone cell to disable.
+   */
   async disableCloneCell(
     args: AppDisableCloneCellRequest
   ): Promise<DisableCloneCellResponse> {
@@ -183,6 +233,13 @@ export class AppAgentWebsocket implements AppAgentClient {
     });
   }
 
+  /**
+   * Register an event listener for signals.
+   *
+   * @param eventName - Event name to listen to (currently only "signal").
+   * @param listener - The function to call when event is triggered.
+   * @returns A function to unsubscribe the event listener.
+   */
   on<Name extends keyof AppAgentEvents>(
     eventName: Name | readonly Name[],
     listener: AppSignalCb

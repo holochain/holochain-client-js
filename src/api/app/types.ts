@@ -18,22 +18,42 @@ import {
 } from "../admin/index.js";
 import { Requester } from "../common.js";
 
+/**
+ * @public
+ */
 export type CallZomeRequestGeneric<Payload> = {
-  // cap_secret: CapSecret | null;
   cell_id: CellId;
   zome_name: ZomeName;
   fn_name: FunctionName;
   payload: Payload;
   provenance: AgentPubKey;
 };
+/**
+ * @public
+ */
 export type CallZomeRequest = CallZomeRequestGeneric<any>;
 
+/**
+ * @public
+ */
 export type CallZomeResponseGeneric<Payload> = Payload;
+/**
+ * @public
+ */
 export type CallZomeResponse = CallZomeResponseGeneric<any>;
 
+/**
+ * @public
+ */
 export type AppInfoRequest = { installed_app_id: InstalledAppId };
+/**
+ * @public
+ */
 export type AppInfoResponse = AppInfo;
 
+/**
+ * @public
+ */
 export interface CreateCloneCellRequest {
   /**
    * The app id that the DNA to clone belongs to
@@ -78,40 +98,82 @@ export interface CreateCloneCellRequest {
    */
   name?: string;
 }
+/**
+ * @public
+ */
 export type CreateCloneCellResponse = InstalledCell;
 
+/**
+ * @public
+ */
 export interface DisableCloneCellRequest {
-  // The app id that the clone cell belongs to
+  /**
+   * The app id that the clone cell belongs to
+   */
   app_id: InstalledAppId;
-  // The clone id or cell id of the clone cell
+  /**
+   * The clone id or cell id of the clone cell
+   */
   clone_cell_id: RoleName | CellId;
 }
+/**
+ * @public
+ */
 export type DisableCloneCellResponse = void;
 
+/**
+ * @public
+ */
 export type EnableCloneCellRequest = DisableCloneCellRequest;
+/**
+ * @public
+ */
 export type EnableCloneCellResponse = CreateCloneCellResponse;
 
+/**
+ * @public
+ */
 export interface NetworkInfoRequest {
-  /** The DNAs for which to get network info */
+  /**
+   * The DNAs for which to get network info
+   */
   dnas: DnaHash[];
 }
 
+/**
+ * @public
+ */
 export const SignalType = {
   App: "App",
   System: "System",
 } as const;
+/**
+ * @public
+ */
 export type Signal = {
   [SignalType.App]: [CellId, any];
   [SignalType.System]: unknown;
 };
+/**
+ * @public
+ */
 export type AppSignal = {
   cell_id: CellId;
   payload: any;
 };
+/**
+ * @public
+ */
 export type AppSignalCb = (signal: AppSignal) => void;
 
+/**
+ * @public
+ */
 export type NetworkInfoResponse = NetworkInfo[];
 
+/**
+ * @public
+ */
 export interface AppApi {
   appInfo: Requester<AppInfoRequest, AppInfoResponse>;
   callZome: Requester<CallZomeRequest, CallZomeResponse>;

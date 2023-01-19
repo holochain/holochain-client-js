@@ -4,8 +4,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## \[Unreleased\]
 ### Added
-### Removed
+- API generation, available under ./docs
 ### Changed
+### Fixed
+- Cell provisioning strategy type in AppBundle.
+### Removed
+- TypeScript source maps.
 
 ## 2023-01-16: v0.11.13
 ### Fixed

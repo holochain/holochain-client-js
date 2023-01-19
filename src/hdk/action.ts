@@ -9,13 +9,22 @@ import {
 } from "../types.js";
 import { EntryType } from "./entry.js";
 
+/**
+ * @public
+ */
 export interface SignedActionHashed<H extends Action = Action> {
   hashed: HoloHashed<H>;
   signature: Signature;
 }
 
+/**
+ * @public
+ */
 export type ActionHashed = HoloHashed<Action>;
 
+/**
+ * @public
+ */
 export enum ActionType {
   Dna = "Dna",
   AgentValidationPkg = "AgentValidationPkg",
@@ -29,6 +38,9 @@ export enum ActionType {
   Delete = "Delete",
 }
 
+/**
+ * @public
+ */
 export type Action =
   | Dna
   | AgentValidationPkg
@@ -40,8 +52,14 @@ export type Action =
   | Delete
   | NewEntryAction;
 
+/**
+ * @public
+ */
 export type NewEntryAction = Create | Update;
 
+/**
+ * @public
+ */
 export interface Dna {
   type: ActionType.Dna;
 
@@ -50,6 +68,9 @@ export interface Dna {
   hash: DnaHash;
 }
 
+/**
+ * @public
+ */
 export interface AgentValidationPkg {
   type: ActionType.AgentValidationPkg;
 
@@ -61,6 +82,9 @@ export interface AgentValidationPkg {
   membrane_proof: any;
 }
 
+/**
+ * @public
+ */
 export interface InitZomesComplete {
   type: ActionType.InitZomesComplete;
 
@@ -70,6 +94,9 @@ export interface InitZomesComplete {
   prev_action: ActionHash;
 }
 
+/**
+ * @public
+ */
 export interface CreateLink {
   type: ActionType.CreateLink;
 
@@ -84,6 +111,9 @@ export interface CreateLink {
   tag: any;
 }
 
+/**
+ * @public
+ */
 export interface DeleteLink {
   type: ActionType.DeleteLink;
 
@@ -96,6 +126,9 @@ export interface DeleteLink {
   link_add_address: ActionHash;
 }
 
+/**
+ * @public
+ */
 export interface OpenChain {
   type: ActionType.OpenChain;
 
@@ -107,6 +140,9 @@ export interface OpenChain {
   prev_dna_hash: DnaHash;
 }
 
+/**
+ * @public
+ */
 export interface CloseChain {
   type: ActionType.CloseChain;
 
@@ -118,6 +154,9 @@ export interface CloseChain {
   new_dna_hash: DnaHash;
 }
 
+/**
+ * @public
+ */
 export interface Update {
   type: ActionType.Update;
 
@@ -133,6 +172,9 @@ export interface Update {
   entry_hash: EntryHash;
 }
 
+/**
+ * @public
+ */
 export interface Delete {
   type: ActionType.Delete;
 
@@ -145,6 +187,9 @@ export interface Delete {
   deletes_entry_address: EntryHash;
 }
 
+/**
+ * @public
+ */
 export interface Create {
   type: ActionType.Create;
 
