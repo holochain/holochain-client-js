@@ -9,9 +9,10 @@
 
 ```typescript
 export declare type Signal = {
-    [SignalType.App]: [CellId, any];
+    [SignalType.App]: EncodedAppSignal;
+} | {
     [SignalType.System]: unknown;
 };
 ```
-<b>References:</b> [CellId](./client.cellid.md)
+<b>References:</b> [EncodedAppSignal](./client.encodedappsignal.md)
 

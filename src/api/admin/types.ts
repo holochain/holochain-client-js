@@ -267,6 +267,9 @@ export type ResourceBytes = number[];
  * @public
  */
 export type ResourceMap = { [key: string]: ResourceBytes };
+/**
+ * @public
+ */
 export enum CellProvisioningStrategy {
   /**
    * Always create a new Cell when installing this App

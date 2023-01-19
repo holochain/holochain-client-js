@@ -150,16 +150,28 @@ export const SignalType = {
 /**
  * @public
  */
-export type Signal = {
-  [SignalType.App]: [CellId, any];
-  [SignalType.System]: unknown;
+export type Signal =
+  | {
+      [SignalType.App]: EncodedAppSignal;
+    }
+  | {
+      [SignalType.System]: unknown;
+    };
+/**
+ * @public
+ */
+export type EncodedAppSignal = {
+  cell_id: CellId;
+  zome_name: string;
+  signal: Uint8Array;
 };
 /**
  * @public
  */
 export type AppSignal = {
   cell_id: CellId;
-  payload: any;
+  zome_name: string;
+  payload: unknown;
 };
 /**
  * @public

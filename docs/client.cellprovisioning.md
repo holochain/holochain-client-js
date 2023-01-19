@@ -2,29 +2,19 @@
 
 [Home](./index.md) &gt; [@holochain/client](./client.md) &gt; [CellProvisioning](./client.cellprovisioning.md)
 
-## CellProvisioning type
+## CellProvisioning interface
 
 
 <b>Signature:</b>
 
 ```typescript
-export declare type CellProvisioning = {
-    create: {
-        deferred: boolean;
-    };
-} | {
-    create_clone: {
-        deferred: boolean;
-    };
-} | {
-    use_existing: {
-        deferred: boolean;
-    };
-} | {
-    create_if_no_exists: {
-        deferred: boolean;
-    };
-} | {
-    disabled: Record<string, never>;
-};
+export interface CellProvisioning 
 ```
+
+## Properties
+
+|  Property | Modifiers | Type | Description |
+|  --- | --- | --- | --- |
+|  [deferred?](./client.cellprovisioning.deferred.md) |  | boolean | <i>(Optional)</i> |
+|  [strategy](./client.cellprovisioning.strategy.md) |  | [CellProvisioningStrategy](./client.cellprovisioningstrategy.md) |  |
+
