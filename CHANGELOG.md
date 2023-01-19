@@ -4,7 +4,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## \[Unreleased\]
 ### Added
+- API generation, available under ./docs
 ### Removed
+- TypeScript source maps.
 ### Changed
 ### Fixed
 - Cell id log when no signing credentials are present for a cell.

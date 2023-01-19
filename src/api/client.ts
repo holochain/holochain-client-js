@@ -11,7 +11,7 @@ interface HolochainMessage {
 
 /**
  * A Websocket client which can make requests and receive responses,
- * as well as send and receive signals
+ * as well as send and receive signals.
  *
  * Uses Holochain's websocket WireMessage for communication.
  *
@@ -84,6 +84,12 @@ export class WsClient extends Emittery {
     };
   }
 
+  /**
+   * Instance factory for creating WsClients.
+   *
+   * @param url - The `ws://` URL to connect to.
+   * @returns An new instance of the WsClient.
+   */
   static connect(url: string) {
     return new Promise<WsClient>((resolve, reject) => {
       const socket = new Websocket(url);
@@ -104,6 +110,11 @@ export class WsClient extends Emittery {
     });
   }
 
+  /**
+   * Sends data as a signal.
+   *
+   * @param data - Data to send.
+   */
   emitSignal(data: unknown) {
     const encodedMsg = encode({
       type: "signal",
@@ -112,13 +123,19 @@ export class WsClient extends Emittery {
     this.socket.send(encodedMsg);
   }
 
-  request<Req, Res>(data: Req): Promise<Res> {
+  /**
+   * Send requests to the connected websocket.
+   *
+   * @param request - The request to send over the websocket.
+   * @returns
+   */
+  request<Req, Res>(request: Req): Promise<Res> {
     const id = this.index;
     this.index += 1;
     const encodedMsg = encode({
       id,
       type: "request",
-      data: encode(data),
+      data: encode(request),
     });
     const promise = new Promise((resolve, reject) => {
       this.pendingRequests[id] = { resolve, reject };
@@ -147,6 +164,9 @@ export class WsClient extends Emittery {
     }
   }
 
+  /**
+   * Close the websocket connection.
+   */
   close() {
     const closedPromise = new Promise<void>((resolve) =>
       this.socket.on("close", resolve)
