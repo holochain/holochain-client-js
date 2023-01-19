@@ -171,7 +171,7 @@ export type EncodedAppSignal = {
 export type AppSignal = {
   cell_id: CellId;
   zome_name: string;
-  payload: any;
+  payload: unknown;
 };
 /**
  * @public
