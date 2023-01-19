@@ -373,7 +373,7 @@ test(
   })
 );
 
-test.only(
+test(
   "install app with app manifest",
   withConductor(ADMIN_PORT, async (t: Test) => {
     const role_name = "foo";
