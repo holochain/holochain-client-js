@@ -7,11 +7,17 @@ import {
 } from "../types.js";
 import { EntryType } from "./entry.js";
 
+/**
+ * @public
+ */
 export interface CounterSigningSessionData {
   preflight_request: PreflightRequest;
   responses: Array<[CountersigningAgentState, Signature]>;
 }
 
+/**
+ * @public
+ */
 export interface PreflightRequest {
   /// The hash of the app entry, as if it were not countersigned.
   /// The final entry hash will include the countersigning session.
@@ -31,28 +37,52 @@ export interface PreflightRequest {
   preflight_bytes: PreflightBytes;
 }
 
+/**
+ * @public
+ */
 export interface CounterSigningSessionTimes {
   start: Timestamp;
   end: Timestamp;
 }
 
+/**
+ * @public
+ */
 export type ActionBase = { Create: CreateBase } | { Update: UpdateBase };
 
+/**
+ * @public
+ */
 export interface CreateBase {
   entry_type: EntryType;
 }
 
+/**
+ * @public
+ */
 export interface UpdateBase {
   original_action_address: ActionHash;
   original_entry_address: EntryHash;
   entry_type: EntryType;
 }
 
+/**
+ * @public
+ */
 export type CounterSigningAgents = Array<[AgentPubKey, Array<Role>]>;
 
+/**
+ * @public
+ */
 export type PreflightBytes = Uint8Array;
+/**
+ * @public
+ */
 export type Role = number;
 
+/**
+ * @public
+ */
 export interface CountersigningAgentState {
   agent_index: number;
   chain_top: ActionHash;

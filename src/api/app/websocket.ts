@@ -42,6 +42,12 @@ import {
   NetworkInfoResponse,
 } from "./types.js";
 
+/**
+ * A class to establish a websocket connection to an App interface of a
+ * Holochain conductor.
+ *
+ * @public
+ */
 export class AppWebsocket extends Emittery implements AppApi {
   readonly client: WsClient;
   defaultTimeout: number;
@@ -59,6 +65,13 @@ export class AppWebsocket extends Emittery implements AppApi {
     this.overrideInstalledAppId = overrideInstalledAppId;
   }
 
+  /**
+   * Instance factory for creating AppWebsockets.
+   *
+   * @param url - The `ws://` URL of the App API to connect to.
+   * @param defaultTimeout - Timeout to default to for all operations.
+   * @returns A new instance of an AppWebsocket.
+   */
   static async connect(url: string, defaultTimeout?: number) {
     // Check if we are in the launcher's environment, and if so, redirect the url to connect to
     const env = getLauncherEnvironment();
@@ -95,37 +108,75 @@ export class AppWebsocket extends Emittery implements AppApi {
       transformer
     );
 
+  /**
+   * Request the app's info, including all cell infos.
+   *
+   * @returns The app's {@link AppInfo}.
+   */
   appInfo: Requester<AppInfoRequest, AppInfoResponse> = this._requester(
     "app_info",
     appInfoTransform(this)
   );
 
+  /**
+   * Call a zome.
+   *
+   * @param request - The zome call arguments.
+   * @param timeout - A timeout to override the default.
+   * @returns The zome call's response.
+   */
   callZome: Requester<
     CallZomeRequest | CallZomeRequestSigned,
     CallZomeResponse
   > = this._requester("call_zome", callZomeTransform);
 
+  /**
+   * Clone an existing provisioned cell.
+   *
+   * @param args - Specify the cell to clone.
+   * @returns The created clone cell.
+   */
   createCloneCell: Requester<CreateCloneCellRequest, CreateCloneCellResponse> =
     this._requester("create_clone_cell");
 
+  /**
+   * Enable a disabled clone cell.
+   *
+   * @param args - Specify the clone cell to enable.
+   * @returns The enabled clone cell.
+   */
   enableCloneCell: Requester<EnableCloneCellRequest, EnableCloneCellResponse> =
     this._requester("enable_clone_cell");
 
+  /**
+   * Disable an enabled clone cell.
+   *
+   * @param args - Specify the clone cell to disable.
+   */
   disableCloneCell: Requester<
     DisableCloneCellRequest,
     DisableCloneCellResponse
   > = this._requester("disable_clone_cell");
 
+  /**
+   * Request network info about gossip status.
+   */
   networkInfo: Requester<NetworkInfoRequest, NetworkInfoResponse> =
     this._requester("network_info");
 }
 
+/**
+ * @public
+ */
 export interface CallZomeRequestUnsigned extends CallZomeRequest {
   cap_secret: CapSecret | null;
   nonce: Nonce256Bit;
   expires_at: number;
 }
 
+/**
+ * @public
+ */
 export interface CallZomeRequestSigned extends CallZomeRequestUnsigned {
   signature: Uint8Array;
 }
@@ -169,6 +220,9 @@ const appInfoTransform = (
   output: (response) => response,
 });
 
+/**
+ * @public
+ */
 export const signZomeCall = async (request: CallZomeRequest) => {
   const signingCredentialsForCell = getSigningCredentials(request.cell_id);
   if (!signingCredentialsForCell) {

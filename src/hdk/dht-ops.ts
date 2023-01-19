@@ -11,6 +11,9 @@ import {
 
 // https://github.com/holochain/holochain/blob/develop/crates/types/src/dht_op.rs
 
+/**
+ * @public
+ */
 export enum DhtOpType {
   StoreRecord = "StoreRecord",
   StoreEntry = "StoreEntry",
@@ -23,6 +26,9 @@ export enum DhtOpType {
   RegisterRemoveLink = "RegisterRemoveLink",
 }
 
+/**
+ * @public
+ */
 export type DhtOp =
   | { [DhtOpType.StoreRecord]: [Signature, Action, Entry | undefined] }
   | { [DhtOpType.StoreEntry]: [Signature, NewEntryAction, Entry] }
@@ -42,10 +48,16 @@ export type DhtOp =
   | { [DhtOpType.RegisterAddLink]: [Signature, CreateLink] }
   | { [DhtOpType.RegisterRemoveLink]: [Signature, DeleteLink] };
 
+/**
+ * @public
+ */
 export function getDhtOpType(op: DhtOp): DhtOpType {
   return Object.keys(op)[0] as DhtOpType;
 }
 
+/**
+ * @public
+ */
 export function getDhtOpAction(op: DhtOp): Action {
   const opType = getDhtOpType(op);
   const action = Object.values(op)[0][1];
@@ -76,10 +88,16 @@ export function getDhtOpAction(op: DhtOp): Action {
   }
 }
 
+/**
+ * @public
+ */
 export function getDhtOpEntry(op: DhtOp): Entry | undefined {
   return Object.values(op)[0][2];
 }
 
+/**
+ * @public
+ */
 export function getDhtOpSignature(op: DhtOp): Signature {
   return Object.values(op)[0][1];
 }

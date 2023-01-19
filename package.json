@@ -37,7 +37,8 @@
     "lint": "eslint --fix --ext .ts src test .eslintrc.cjs",
     "test:app-agent": "RUST_LOG=error RUST_BACKTRACE=1 node --loader ts-node/esm test/e2e/app-agent-websocket.ts",
     "test": "RUST_LOG=error RUST_BACKTRACE=1 node --loader ts-node/esm test/index.ts",
-    "build": "rimraf ./lib && tsc -p tsconfig.build.json"
+    "build:docs": "api-extractor run --local && api-documenter markdown -i docs/temp -o docs",
+    "build": "rimraf ./lib && tsc -p tsconfig.build.json && npm run build:docs"
   },
   "dependencies": {
     "@holochain/serialization": "^0.1.0-beta-rc.3",
@@ -50,6 +51,8 @@
     "tweetnacl": "^1.0.3"
   },
   "devDependencies": {
+    "@microsoft/api-documenter": "^7.19.27",
+    "@microsoft/api-extractor": "^7.33.7",
     "@types/js-yaml": "^3.12.7",
     "@types/lodash-es": "^4.17.6",
     "@types/tape": "^4.13.2",
