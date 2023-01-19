@@ -10,6 +10,7 @@ import {
   AppStatusFilter,
   AppWebsocket,
   CallZomeRequest,
+  CellProvisioningStrategy,
   CellType,
   CloneId,
   CreateCloneCellRequest,
@@ -372,7 +373,7 @@ test(
   })
 );
 
-test(
+test.only(
   "install app with app manifest",
   withConductor(ADMIN_PORT, async (t: Test) => {
     const role_name = "foo";
@@ -389,6 +390,10 @@ test(
           roles: [
             {
               name: role_name,
+              provisioning: {
+                strategy: CellProvisioningStrategy.Create,
+                deferred: false,
+              },
               dna: {
                 path: fs.realpathSync("test/e2e/fixture/test.dna"),
                 modifiers: { quantum_time: { secs: 1111, nanos: 1111 } },

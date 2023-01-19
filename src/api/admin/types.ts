@@ -267,44 +267,43 @@ export type ResourceBytes = number[];
  * @public
  */
 export type ResourceMap = { [key: string]: ResourceBytes };
+export enum CellProvisioningStrategy {
+  /**
+   * Always create a new Cell when installing this App
+   */
+  Create = "create",
+  /**
+   * Always create a new Cell when installing the App,
+   * and use a unique network seed to ensure a distinct DHT network.
+   *
+   * Not implemented
+   */
+  // CreateClone = "create_clone",
+  /**
+   * Require that a Cell is already installed which matches the DNA version
+   * spec, and which has an Agent that's associated with this App's agent
+   * via DPKI. If no such Cell exists, *app installation fails*.
+   */
+  UseExisting = "use_existing",
+  /**
+   * Try `UseExisting`, and if that fails, fallback to `Create`
+   */
+  CreateIfNoExists = "create_if_no_exists",
+  /**
+   * Disallow provisioning altogether. In this case, we expect
+   * `clone_limit > 0`: otherwise, no Cells will ever be created.
+   *
+   * Not implemented
+   */
+  // Disabled = "disabled",
+}
 /**
  * @public
  */
-export type CellProvisioning =
-  | {
-      /**
-       * Always create a new Cell when installing this App
-       */
-      create: { deferred: boolean };
-    }
-  | {
-      /**
-       * Always create a new Cell when installing the App,
-       * and use a unique network seed to ensure a distinct DHT network.
-       */
-      create_clone: { deferred: boolean };
-    }
-  | {
-      /**
-       * Require that a Cell is already installed which matches the DNA version
-       * spec, and which has an Agent that's associated with this App's agent
-       * via DPKI. If no such Cell exists, *app installation fails*.
-       */
-      use_existing: { deferred: boolean };
-    }
-  | {
-      /**
-       * Try `UseExisting`, and if that fails, fallback to `Create`
-       */
-      create_if_no_exists: { deferred: boolean };
-    }
-  | {
-      /**
-       * Disallow provisioning altogether. In this case, we expect
-       * `clone_limit > 0`: otherwise, no Cells will ever be created.
-       */
-      disabled: Record<string, never>;
-    };
+export interface CellProvisioning {
+  strategy: CellProvisioningStrategy;
+  deferred?: boolean;
+}
 
 /**
  * @public
