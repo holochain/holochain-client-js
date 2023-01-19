@@ -8,7 +8,7 @@
 
 A JavaScript client for the Holochain Conductor API (works with browsers as well as Nodejs).
 
-> Holochain's Conductor API is under active development. This client package tracks that development fairly closely but sometimes gets behind.
+[Complete API reference](./docs/client.md)
 
 ## Installation
 
