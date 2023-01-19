@@ -8,6 +8,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Removed
 - TypeScript source maps.
 ### Changed
+
+## 2023-01-16: v0.11.13
+### Fixed
+- Access `Blob` from window for browser apps (fixes error with Nodejs v16).
+
+## 2023-01-16: v0.11.12
 ### Fixed
 - Cell id log when no signing credentials are present for a cell.
 
