@@ -8,6 +8,8 @@
 
 A JavaScript client for the Holochain Conductor API (works with browsers as well as Nodejs).
 
+## API Reference
+
 [Complete API reference](./docs/client.md)
 
 ## Installation
@@ -20,12 +22,6 @@ npm install --save-exact @holochain/client
 > This code is under beta development and you may wish to lock to an exact version of the library for that reason, as shown in the above command.
 
 ## Sample usage
-
-### Use AdminWebsocket
-```typescript
-  const admin = await AdminWebsocket.connect(`ws://127.0.0.1:8000`, TIMEOUT)
-  const agentPubKey = await admin.generateAgentPubKey()
-```
 
 ### Use AppAgentWebsocket with implicit zome call signing
 ```typescript
@@ -100,17 +96,12 @@ setSigningCredentials(cell_id, signingCredentials);
 localStorage.setItem(cellIdB64, JSON.stringify(signingCredentials));
 ```
 
-## API Reference
-
-See [docs/API.md](docs/API.md)
-
-
 # Holochain Compatibility
 
 See [default.nix](./default.nix) for the Holochain version this package is compatible with.
 
 If updating the Holochain version included in holonix, please use `niv update` as explained in the
-[Holochain Installation Guide](https://developer.holochain.org/install/#upgrading-the-holochain-version).
+[Holochain Installation Guide](https://developer.holochain.org/install-advanced/#upgrading-the-holochain-version).
 
 ## Running tests
 
