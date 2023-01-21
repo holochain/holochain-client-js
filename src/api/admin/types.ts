@@ -105,9 +105,9 @@ export interface Cell {
  * @public
  */
 export enum CellType {
-  Provisioned = "Provisioned",
-  Cloned = "Cloned",
-  Stem = "Stem",
+  Provisioned = "provisioned",
+  Cloned = "cloned",
+  Stem = "stem",
 }
 
 /**
