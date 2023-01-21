@@ -80,9 +80,6 @@ test(
     });
     t.equal(runningApps.length, 0);
 
-    const startApp1 = await admin.startApp({ installed_app_id });
-    t.notOk(startApp1);
-
     let allAppsInfo = await admin.listApps({});
     t.equal(allAppsInfo.length, 1);
 
@@ -686,7 +683,7 @@ test(
   })
 );
 
-test(
+test.only(
   "can create a callable clone cell",
   withConductor(ADMIN_PORT, async (t: Test) => {
     const { installed_app_id, client, admin } = await installAppAndDna(

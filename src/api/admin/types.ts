@@ -705,7 +705,6 @@ export interface AdminApi {
   >;
   enableApp: Requester<EnableAppRequest, EnableAppResponse>;
   disableApp: Requester<DisableAppRequest, DisableAppResponse>;
-  startApp: Requester<StartAppRequest, StartAppResponse>;
   dumpState: Requester<DumpStateRequest, DumpStateResponse>;
   dumpFullState: Requester<DumpFullStateRequest, DumpFullStateResponse>;
   generateAgentPubKey: Requester<
