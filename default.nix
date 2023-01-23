@@ -7,6 +7,7 @@ let
       node = false;
       happs = false;
       scaffolding = false;
+      launcher = false;
     };
   };
   nixpkgs = holonix.pkgs;
