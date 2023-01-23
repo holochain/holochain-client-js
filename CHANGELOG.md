@@ -4,7 +4,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## \[Unreleased\]
 ### Added
+- Return additional field `agent_pub_key` in `AppInfo`.
 ### Changed
+- **BREAKING CHANGE**: The resources field of bundles was changed from `Array<number>` to `Uint8Array`.
+- **BREAKING CHANGE**: `CreateCloneCell` returns `ClonedCell` instead of `InstalledCell`.
+- **BREAKING CHANGE**: `EnableCloneCell` returns `ClonedCell` instead of `InstalledCell`.
+- **BREAKING CHANGE**: Remove unused call `AdminRequest::StartApp`.
+- **BREAKING CHANGE**: `Cell` is split up into `ProvisionedCell` and `ClonedCell`.
+- **BREAKING CHANGE**: `CellInfo` variants are renamed to snake case during serde.
 ### Fixed
 ### Removed
 

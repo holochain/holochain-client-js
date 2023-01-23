@@ -56,8 +56,6 @@ import {
   ListDnasResponse,
   RegisterDnaRequest,
   RegisterDnaResponse,
-  StartAppRequest,
-  StartAppResponse,
   UninstallAppRequest,
   UninstallAppResponse,
 } from "./types.js";
@@ -140,12 +138,6 @@ export class AdminWebsocket implements AdminApi {
    */
   disableApp: Requester<DisableAppRequest, DisableAppResponse> =
     this._requester("disable_app");
-
-  /**
-   * Start an app.
-   */
-  startApp: Requester<StartAppRequest, StartAppResponse> =
-    this._requester("start_app");
 
   /**
    * Dump the state of the specified cell, including its source chain, as JSON.

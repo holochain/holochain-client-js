@@ -93,9 +93,19 @@ export interface StemCell {
 /**
  * @public
  */
-export interface Cell {
+export interface ProvisionedCell {
   cell_id: CellId;
-  clone_id?: RoleName;
+  dna_modifiers: DnaModifiers;
+  name: string;
+}
+
+/**
+ * @public
+ */
+export interface ClonedCell {
+  cell_id: CellId;
+  clone_id: RoleName;
+  original_dna_hash: DnaHash;
   dna_modifiers: DnaModifiers;
   name: string;
   enabled: boolean;
@@ -105,23 +115,24 @@ export interface Cell {
  * @public
  */
 export enum CellType {
-  Provisioned = "Provisioned",
-  Cloned = "Cloned",
-  Stem = "Stem",
+  Provisioned = "provisioned",
+  Cloned = "cloned",
+  Stem = "stem",
 }
 
 /**
  * @public
  */
 export type CellInfo =
-  | { [CellType.Provisioned]: Cell }
-  | { [CellType.Cloned]: Cell }
+  | { [CellType.Provisioned]: ProvisionedCell }
+  | { [CellType.Cloned]: ClonedCell }
   | { [CellType.Stem]: StemCell };
 
 /**
  * @public
  */
 export type AppInfo = {
+  agent_pub_key: AgentPubKey;
   installed_app_id: InstalledAppId;
   cell_info: Record<RoleName, Array<CellInfo>>;
   status: InstalledAppInfoStatus;
@@ -262,7 +273,7 @@ export type UninstallAppResponse = null;
 /**
  * @public
  */
-export type ResourceBytes = number[];
+export type ResourceBytes = Uint8Array;
 /**
  * @public
  */
@@ -705,7 +716,6 @@ export interface AdminApi {
   >;
   enableApp: Requester<EnableAppRequest, EnableAppResponse>;
   disableApp: Requester<DisableAppRequest, DisableAppResponse>;
-  startApp: Requester<StartAppRequest, StartAppResponse>;
   dumpState: Requester<DumpStateRequest, DumpStateResponse>;
   dumpFullState: Requester<DumpFullStateRequest, DumpFullStateResponse>;
   generateAgentPubKey: Requester<

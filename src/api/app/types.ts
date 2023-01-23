@@ -4,13 +4,13 @@ import {
   DnaHash,
   DnaProperties,
   InstalledAppId,
-  InstalledCell,
   NetworkInfo,
   RoleName,
   Timestamp,
 } from "../../types.js";
 import {
   AppInfo,
+  ClonedCell,
   FunctionName,
   MembraneProof,
   NetworkSeed,
@@ -101,7 +101,7 @@ export interface CreateCloneCellRequest {
 /**
  * @public
  */
-export type CreateCloneCellResponse = InstalledCell;
+export type CreateCloneCellResponse = ClonedCell;
 
 /**
  * @public

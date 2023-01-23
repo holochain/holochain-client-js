@@ -32,9 +32,9 @@ function getPubKey(appInfo: AppInfo): AgentPubKey {
   for (const cells of Object.values(appInfo.cell_info)) {
     for (const cell of cells) {
       if (CellType.Provisioned in cell) {
-        return cell.Provisioned.cell_id[1];
+        return cell[CellType.Provisioned].cell_id[1];
       } else if (CellType.Cloned in cell) {
-        return cell.Cloned.cell_id[1];
+        return cell[CellType.Cloned].cell_id[1];
       }
     }
   }
@@ -132,12 +132,12 @@ export class AppAgentWebsocket implements AppAgentClient {
         throw new Error(`No cell found with role_name ${roleName}`);
       }
       const cloneCell = appInfo.cell_info[baseRoleName].find(
-        (c) => CellType.Cloned in c && c.Cloned.clone_id === roleName
+        (c) => CellType.Cloned in c && c[CellType.Cloned].clone_id === roleName
       );
       if (!cloneCell || !(CellType.Cloned in cloneCell)) {
         throw new Error(`No clone cell found with clone id ${roleName}`);
       }
-      return cloneCell.Cloned.cell_id;
+      return cloneCell[CellType.Cloned].cell_id;
     }
 
     if (!(roleName in appInfo.cell_info)) {
