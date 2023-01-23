@@ -132,6 +132,7 @@ export type CellInfo =
  * @public
  */
 export type AppInfo = {
+  agent_pub_key: AgentPubKey;
   installed_app_id: InstalledAppId;
   cell_info: Record<RoleName, Array<CellInfo>>;
   status: InstalledAppInfoStatus;
@@ -272,7 +273,7 @@ export type UninstallAppResponse = null;
 /**
  * @public
  */
-export type ResourceBytes = number[];
+export type ResourceBytes = Uint8Array;
 /**
  * @public
  */
