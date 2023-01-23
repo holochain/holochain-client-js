@@ -9,12 +9,12 @@
 
 ```typescript
 export declare type CellInfo = {
-    [CellType.Provisioned]: Cell;
+    [CellType.Provisioned]: ProvisionedCell;
 } | {
-    [CellType.Cloned]: Cell;
+    [CellType.Cloned]: ClonedCell;
 } | {
     [CellType.Stem]: StemCell;
 };
 ```
-<b>References:</b> [CellType.Provisioned](./client.celltype.md)<!-- -->, [Cell](./client.cell.md)<!-- -->, [CellType.Cloned](./client.celltype.md)<!-- -->, [CellType.Stem](./client.celltype.md)<!-- -->, [StemCell](./client.stemcell.md)
+<b>References:</b> [CellType.Provisioned](./client.celltype.md)<!-- -->, [ProvisionedCell](./client.provisionedcell.md)<!-- -->, [CellType.Cloned](./client.celltype.md)<!-- -->, [ClonedCell](./client.clonedcell.md)<!-- -->, [CellType.Stem](./client.celltype.md)<!-- -->, [StemCell](./client.stemcell.md)
 

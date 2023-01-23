@@ -15,7 +15,7 @@ export declare enum CellType
 
 |  Member | Value | Description |
 |  --- | --- | --- |
-|  Cloned | <code>&quot;Cloned&quot;</code> |  |
-|  Provisioned | <code>&quot;Provisioned&quot;</code> |  |
-|  Stem | <code>&quot;Stem&quot;</code> |  |
+|  Cloned | <code>&quot;cloned&quot;</code> |  |
+|  Provisioned | <code>&quot;provisioned&quot;</code> |  |
+|  Stem | <code>&quot;stem&quot;</code> |  |
 

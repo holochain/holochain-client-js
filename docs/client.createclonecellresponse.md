@@ -8,7 +8,7 @@
 <b>Signature:</b>
 
 ```typescript
-export declare type CreateCloneCellResponse = InstalledCell;
+export declare type CreateCloneCellResponse = ClonedCell;
 ```
-<b>References:</b> [InstalledCell](./client.installedcell.md)
+<b>References:</b> [ClonedCell](./client.clonedcell.md)
 

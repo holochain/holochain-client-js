@@ -8,5 +8,5 @@
 <b>Signature:</b>
 
 ```typescript
-export declare type ResourceBytes = number[];
+export declare type ResourceBytes = Uint8Array;
 ```
