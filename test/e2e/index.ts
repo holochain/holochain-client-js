@@ -689,7 +689,8 @@ test.only(
     const { installed_app_id, client, admin } = await installAppAndDna(
       ADMIN_PORT
     );
-    const info = await client.appInfo({ installed_app_id });
+    const appInfo = await client.appInfo({ installed_app_id });
+    console.log("info", appInfo);
 
     const createCloneCellParams: CreateCloneCellRequest = {
       app_id: installed_app_id,
@@ -701,11 +702,11 @@ test.only(
     const cloneCell = await client.createCloneCell(createCloneCellParams);
 
     const expectedCloneId = new CloneId(ROLE_NAME, 0).toString();
-    t.equal(cloneCell.role_name, expectedCloneId, "correct clone id");
-    assert(CellType.Provisioned in info.cell_info[ROLE_NAME][0]);
+    t.equal(cloneCell.clone_id, expectedCloneId, "correct clone id");
+    assert(CellType.Provisioned in appInfo.cell_info[ROLE_NAME][0]);
     t.deepEqual(
       cloneCell.cell_id[1],
-      info.cell_info[ROLE_NAME][0][CellType.Provisioned].cell_id[1],
+      appInfo.cell_info[ROLE_NAME][0][CellType.Provisioned].cell_id[1],
       "clone cell agent key matches base cell agent key"
     );
     const zomeCallPayload: CallZomeRequest = {
@@ -788,9 +789,9 @@ test(
       clone_cell_id: cloneCell.cell_id,
     });
 
-    await client.enableCloneCell({
+    const enabledCloneCell = await client.enableCloneCell({
       app_id: installed_app_id,
-      clone_cell_id: CloneId.fromRoleName(cloneCell.role_name).toString(),
+      clone_cell_id: CloneId.fromRoleName(cloneCell.clone_id).toString(),
     });
 
     const appInfo = await client.appInfo({ installed_app_id });
@@ -800,7 +801,7 @@ test(
       "clone cell is part of app info"
     );
     const params: CallZomeRequest = {
-      cell_id: cloneCell.cell_id,
+      cell_id: enabledCloneCell.cell_id,
       zome_name: TEST_ZOME_NAME,
       fn_name: "foo",
       provenance: fakeAgentPubKey(),

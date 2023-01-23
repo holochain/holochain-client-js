@@ -207,7 +207,7 @@ test(
     await admin.authorizeSigningCredentials(cloneCell.cell_id);
 
     const expectedCloneId = new CloneId(ROLE_NAME, 0).toString();
-    t.equal(cloneCell.role_name, expectedCloneId, "correct clone id");
+    t.equal(cloneCell.clone_id, expectedCloneId, "correct clone id");
     assert(CellType.Provisioned in info.cell_info[ROLE_NAME][0]);
     t.deepEqual(
       cloneCell.cell_id[1],
@@ -216,7 +216,7 @@ test(
     );
 
     const params: AppAgentCallZomeRequest = {
-      role_name: cloneCell.role_name,
+      role_name: cloneCell.clone_id,
       zome_name: TEST_ZOME_NAME,
       fn_name: "foo",
       payload: null,

@@ -93,9 +93,19 @@ export interface StemCell {
 /**
  * @public
  */
-export interface Cell {
+export interface ProvisionedCell {
   cell_id: CellId;
-  clone_id?: RoleName;
+  dna_modifiers: DnaModifiers;
+  name: string;
+}
+
+/**
+ * @public
+ */
+export interface ClonedCell {
+  cell_id: CellId;
+  clone_id: RoleName;
+  original_dna_hash: DnaHash;
   dna_modifiers: DnaModifiers;
   name: string;
   enabled: boolean;
@@ -114,8 +124,8 @@ export enum CellType {
  * @public
  */
 export type CellInfo =
-  | { [CellType.Provisioned]: Cell }
-  | { [CellType.Cloned]: Cell }
+  | { [CellType.Provisioned]: ProvisionedCell }
+  | { [CellType.Cloned]: ClonedCell }
   | { [CellType.Stem]: StemCell };
 
 /**
