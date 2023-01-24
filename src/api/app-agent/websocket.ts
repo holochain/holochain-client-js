@@ -25,25 +25,6 @@ import {
   AppEnableCloneCellRequest,
 } from "./types.js";
 
-function getPubKey(appInfo: AppInfo): AgentPubKey {
-  // This is fine for now cause `UseExisting` as a provisioning strategy doesn't work yet.
-  // TODO: change this when AppInfo contains the `AgentPubKey` for this app, like `return appInfo.my_pub_key`
-
-  for (const cells of Object.values(appInfo.cell_info)) {
-    for (const cell of cells) {
-      if (CellType.Provisioned in cell) {
-        return cell[CellType.Provisioned].cell_id[1];
-      } else if (CellType.Cloned in cell) {
-        return cell[CellType.Cloned].cell_id[1];
-      }
-    }
-  }
-
-  throw new Error(
-    `This app doesn't have any cells, so we can't return the agent public key for it. This is a known issue, and is going to be fixed in the near future.`
-  );
-}
-
 /**
  * A class to establish a websocket connection to an App interface, for a
  * specific agent and app.
@@ -54,18 +35,21 @@ export class AppAgentWebsocket implements AppAgentClient {
   readonly appWebsocket: AppWebsocket;
   installedAppId: InstalledAppId;
   cachedAppInfo?: AppInfo;
+  myPubKey: AgentPubKey;
   readonly emitter: Emittery<AppAgentEvents>;
 
   private constructor(
     appWebsocket: AppWebsocket,
     installedAppId: InstalledAppId,
-    public myPubKey: AgentPubKey
+    myPubKey: AgentPubKey
   ) {
     this.appWebsocket = appWebsocket;
     this.emitter = new Emittery<AppAgentEvents>();
 
     const env = getLauncherEnvironment();
     this.installedAppId = env?.INSTALLED_APP_ID || installedAppId;
+
+    this.myPubKey = myPubKey;
 
     this.appWebsocket.on("signal", (signal: AppSignal) => {
       if (this.containsCell(signal.cell_id)) {
@@ -106,12 +90,10 @@ export class AppAgentWebsocket implements AppAgentClient {
       installed_app_id: installed_app_id,
     });
 
-    const myPubKey = getPubKey(appInfo);
-
     const appAgentWs = new AppAgentWebsocket(
       appWebsocket,
       installed_app_id,
-      myPubKey
+      appInfo.agent_pub_key
     );
     appAgentWs.cachedAppInfo = appInfo;
 
