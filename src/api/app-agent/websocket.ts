@@ -35,18 +35,21 @@ export class AppAgentWebsocket implements AppAgentClient {
   readonly appWebsocket: AppWebsocket;
   installedAppId: InstalledAppId;
   cachedAppInfo?: AppInfo;
+  myPubKey: AgentPubKey;
   readonly emitter: Emittery<AppAgentEvents>;
 
   private constructor(
     appWebsocket: AppWebsocket,
     installedAppId: InstalledAppId,
-    public myPubKey: AgentPubKey
+    myPubKey: AgentPubKey
   ) {
     this.appWebsocket = appWebsocket;
     this.emitter = new Emittery<AppAgentEvents>();
 
     const env = getLauncherEnvironment();
     this.installedAppId = env?.INSTALLED_APP_ID || installedAppId;
+
+    this.myPubKey = myPubKey;
 
     this.appWebsocket.on("signal", (signal: AppSignal) => {
       if (this.containsCell(signal.cell_id)) {
