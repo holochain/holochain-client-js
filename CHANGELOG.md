@@ -8,6 +8,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Fixed
 ### Removed
 
+## 2023-01-25: v0.11.16
+### Changed
+- Refactor AppAgentWebsocket to directly get the agent pub key from app info.
+
 ## 2023-01-23: v0.11.15
 ### Added
 - Return additional field `agent_pub_key` in `AppInfo`.
