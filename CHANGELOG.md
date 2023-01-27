@@ -8,6 +8,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Fixed
 ### Removed
 
+## 2023-01-27: v0.12.0
+Compatible with Holochain v0.1.0
+
+- No changes; minor version bump.
+
 ## 2023-01-25: v0.11.16
 ### Changed
 - Refactor AppAgentWebsocket to directly get the agent pub key from app info.
