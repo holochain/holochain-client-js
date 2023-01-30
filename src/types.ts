@@ -123,13 +123,13 @@ export interface HoloHashed<T> {
  * @public
  */
 export interface NetworkInfo {
-  fetch_queue_info: FetchQueueInfo;
+  fetch_pool_info: FetchPoolInfo;
 }
 
 /**
  * @public
  */
-export interface FetchQueueInfo {
+export interface FetchPoolInfo {
   /// Total number of bytes expected to be received through fetches
   op_bytes_to_fetch: number;
   /// Total number of ops expected to be received through fetches

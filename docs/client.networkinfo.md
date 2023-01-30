@@ -15,5 +15,5 @@ export interface NetworkInfo
 
 |  Property | Modifiers | Type | Description |
 |  --- | --- | --- | --- |
-|  [fetch\_queue\_info](./client.networkinfo.fetch_queue_info.md) |  | [FetchQueueInfo](./client.fetchqueueinfo.md) |  |
+|  [fetch\_pool\_info](./client.networkinfo.fetch_pool_info.md) |  | [FetchPoolInfo](./client.fetchpoolinfo.md) |  |
 
