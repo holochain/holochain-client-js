@@ -51,7 +51,7 @@ const identityTransformer = {
 };
 
 export const catchError = (res: any) => {
-  return res.type === ERROR_TYPE ? Promise.reject(res) : Promise.resolve(res);
+  return res.type === ERROR_TYPE ? Promise.reject(JSON.stringify(res)) : Promise.resolve(res);
 };
 
 export const promiseTimeout = (
