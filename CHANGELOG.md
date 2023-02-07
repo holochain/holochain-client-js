@@ -5,9 +5,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## \[Unreleased\]
 ### Added
 ### Changed
-- Update `NetworkInfo` types.
 ### Fixed
 ### Removed
+
+## 2023-02-07: v0.12.1
+### Changed
+- Update `NetworkInfo` types.
 
 ## 2023-01-27: v0.12.0
 Compatible with Holochain v0.1.0
