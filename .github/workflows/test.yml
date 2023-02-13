@@ -4,7 +4,7 @@ on:
   pull_request:
   push:
     branches:
-      - "develop"
+      - "main"
 
 jobs:
   test:
@@ -42,7 +42,7 @@ jobs:
 
       - name: Run all tests
         id: build-and-test
-        run: nix-shell --run './run-test.sh'
+        run: nix develop -c './run-test.sh'
 
       - name: Setup tmate session if build and test run failed
         if: steps.build-and-test.outcome == 'failure'
