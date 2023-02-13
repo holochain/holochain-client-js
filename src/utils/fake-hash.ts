@@ -40,7 +40,7 @@ export async function fakeActionHash(): Promise<ActionHash> {
 }
 
 /**
- * Generate a valid hash of a non-existing Dna.
+ * Generate a valid hash of a non-existing DNA.
  *
  * @returns A {@link DnaHash}.
  *

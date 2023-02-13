@@ -4,7 +4,7 @@
 
 ## fakeDnaHash() function
 
-Generate a valid hash of a non-existing Dna.
+Generate a valid hash of a non-existing DNA.
 
 <b>Signature:</b>
 
