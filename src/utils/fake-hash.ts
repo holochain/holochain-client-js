@@ -1,5 +1,5 @@
 import { randomByteArray } from "../api/zome-call-signing.js";
-import { ActionHash, AgentPubKey, EntryHash } from "../types.js";
+import { DnaHash, ActionHash, AgentPubKey, EntryHash } from "../types.js";
 
 /**
  * Generate a valid hash of a non-existing entry.
