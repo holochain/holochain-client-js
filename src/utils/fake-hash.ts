@@ -1,5 +1,5 @@
 import { randomByteArray } from "../api/zome-call-signing.js";
-import { ActionHash, AgentPubKey, EntryHash } from "../types.js";
+import { DnaHash, ActionHash, AgentPubKey, EntryHash } from "../types.js";
 
 /**
  * Generate a valid hash of a non-existing entry.
@@ -37,4 +37,16 @@ export async function fakeAgentPubKey(): Promise<AgentPubKey> {
 export async function fakeActionHash(): Promise<ActionHash> {
   const randomBytes = await randomByteArray(36);
   return new Uint8Array([0x84, 0x29, 0x24, ...randomBytes]);
+}
+
+/**
+ * Generate a valid hash of a non-existing DNA.
+ *
+ * @returns A {@link DnaHash}.
+ *
+ * @public
+ */
+export async function fakeDnaHash(): Promise<DnaHash> {
+  const randomBytes = await randomByteArray(36);
+  return new Uint8Array([0x84, 0x2d, 0x24, ...randomBytes]);
 }
