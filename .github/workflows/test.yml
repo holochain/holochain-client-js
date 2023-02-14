@@ -35,7 +35,7 @@ jobs:
       - name: Cache test zome build
         uses: actions/cache@v3
         env:
-          cache-name: cache-test-zome
+          cache-name: test-zome
         with:
           path: |
             .cargo
@@ -47,6 +47,6 @@ jobs:
         id: build-and-test
         run: nix develop -c './run-test.sh'
 
-      - name: Setup tmate session if build and test run failed
+      - name: Setup tmate session if a previous step failed
         if: ${{ failure() }}
         uses: mxschmitt/action-tmate@v3
