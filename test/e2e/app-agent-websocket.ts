@@ -23,7 +23,6 @@ const ADMIN_PORT = 33001;
 
 const ROLE_NAME: RoleName = "foo";
 const TEST_ZOME_NAME = "foo";
-const COORDINATOR_ZOME_NAME = "coordinator";
 
 test(
   "can call a zome function and get app info",
@@ -54,7 +53,7 @@ test(
 
     const response = await appAgentWs.callZome({
       cell_id,
-      zome_name: COORDINATOR_ZOME_NAME,
+      zome_name: TEST_ZOME_NAME,
       fn_name: "echo_app_entry_def",
       payload: appEntryDef,
     });
@@ -69,7 +68,7 @@ test(
 
     const response_from_role_name = await appAgentWs.callZome({
       role_name: ROLE_NAME,
-      zome_name: COORDINATOR_ZOME_NAME,
+      zome_name: TEST_ZOME_NAME,
       fn_name: "echo_app_entry_def",
       payload: appEntryDef,
     });
