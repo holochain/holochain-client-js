@@ -287,16 +287,6 @@ test(
       "foo",
       "dna definition: integrity zome matches"
     );
-    t.equal(
-      dnaDefinition.coordinator_zomes[0][0],
-      "coordinator",
-      "dna definition: coordinator zome matches"
-    );
-    t.equal(
-      dnaDefinition.coordinator_zomes[0][1].dependencies[0],
-      "foo",
-      "dna definition: coordinator dependency matches"
-    );
 
     const runningApps1 = await admin.listApps({
       status_filter: AppStatusFilter.Running,

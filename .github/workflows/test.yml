@@ -51,5 +51,5 @@ jobs:
         run: echo test went ${{ steps.build-and-test.outcome }}
 
       - name: Setup tmate session if build and test run failed
-        if: steps.build-and-test.outcome == 'failure'
+        if: ${{ failure() }}
         uses: mxschmitt/action-tmate@v3
