@@ -47,9 +47,6 @@ jobs:
         id: build-and-test
         run: nix develop -c './run-test.sh'
 
-      - name: Output result
-        run: echo test went ${{ steps.build-and-test.outcome }}
-
       - name: Setup tmate session if build and test run failed
         if: ${{ failure() }}
         uses: mxschmitt/action-tmate@v3
