@@ -4,46 +4,49 @@ on:
   pull_request:
   push:
     branches:
-      - "develop"
+      - "main"
+
+concurrency: 
+  group: ${{ github.head_ref }}
+  cancel-in-progress: true
 
 jobs:
   test:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest]
-        # os: [ubuntu-latest, macos-latest]
+        os: [ubuntu-latest, macos-latest]
 
     steps:
       - name: Check out source code
         uses: actions/checkout@v3
 
       - name: Install nix
-        uses: cachix/install-nix-action@v18
+        uses: cachix/install-nix-action@v19
         with:
           extra_nix_config: |
             experimental-features = flakes nix-command
 
       - name: Set up cachix
-        uses: cachix/cachix-action@v10
+        uses: cachix/cachix-action@v12
         with:
           name: holochain-ci
 
       - name: Cache test zome build
         uses: actions/cache@v3
         env:
-          cache-name: cache-test-zome
+          cache-name: test-zome
         with:
           path: |
             .cargo
-            target
+            test/e2e/fixture/zomes/foo/target
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('Cargo.lock') }}
           restore-keys: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('Cargo.lock') }}
 
       - name: Run all tests
         id: build-and-test
-        run: nix-shell --run './run-test.sh'
+        run: nix develop -c './run-test.sh'
 
-      - name: Setup tmate session if build and test run failed
-        if: steps.build-and-test.outcome == 'failure'
+      - name: Setup tmate session if a previous step failed
+        if: ${{ failure() }}
         uses: mxschmitt/action-tmate@v3

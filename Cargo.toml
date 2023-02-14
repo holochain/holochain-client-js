@@ -1,8 +1,5 @@
 [workspace]
-members = [
-  "test/e2e/fixture/zomes/foo",
-  "test/e2e/fixture/zomes/coordinator",
-]
+members = ["test/e2e/fixture/zomes/foo"]
 
 [profile.dev]
 opt-level = "z"

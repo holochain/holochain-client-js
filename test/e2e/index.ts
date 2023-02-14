@@ -44,7 +44,6 @@ const ADMIN_PORT_1 = 33002;
 
 const ROLE_NAME: RoleName = "foo";
 const TEST_ZOME_NAME = "foo";
-const COORDINATOR_ZOME_NAME = "coordinator";
 
 test(
   "admin smoke test: registerDna + installApp + uninstallApp",
@@ -288,16 +287,6 @@ test(
       "foo",
       "dna definition: integrity zome matches"
     );
-    t.equal(
-      dnaDefinition.coordinator_zomes[0][0],
-      "coordinator",
-      "dna definition: coordinator zome matches"
-    );
-    t.equal(
-      dnaDefinition.coordinator_zomes[0][1].dependencies[0],
-      "foo",
-      "dna definition: coordinator dependency matches"
-    );
 
     const runningApps1 = await admin.listApps({
       status_filter: AppStatusFilter.Running,
@@ -353,7 +342,7 @@ test(
 
     const zomeCallPayload: CallZomeRequest = {
       cell_id,
-      zome_name: COORDINATOR_ZOME_NAME,
+      zome_name: TEST_ZOME_NAME,
       fn_name: "echo_app_entry_def",
       provenance: cell_id[1],
       payload: appEntryDef,
