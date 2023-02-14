@@ -119,7 +119,7 @@ nix-shell
 
 Holochain is an open source project.  We welcome all sorts of participation and are actively working on increasing surface area to accept it.  Please see our [contribution guidelines](/CONTRIBUTING.md) for our general practices and protocols on participating in the community, as well as specific expectations around things like code formatting, testing practices, continuous integration, etc.
 
-* Connect with us on our [forum](https://forum.holochain.org)
+* Connect with us on [Discord](https://discord.gg/k55DS5dmPH)
 
 ## License
 
