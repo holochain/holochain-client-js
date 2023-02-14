@@ -18,13 +18,13 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Install nix
-        uses: cachix/install-nix-action@v18
+        uses: cachix/install-nix-action@v19
         with:
           extra_nix_config: |
             experimental-features = flakes nix-command
 
       - name: Set up cachix
-        uses: cachix/cachix-action@v10
+        uses: cachix/cachix-action@v12
         with:
           name: holochain-ci
 
@@ -35,13 +35,16 @@ jobs:
         with:
           path: |
             .cargo
-            target
+            test/e2e/fixture/zomes/foo/target
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('Cargo.lock') }}
           restore-keys: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('Cargo.lock') }}
 
       - name: Run all tests
         id: build-and-test
         run: nix develop -c './run-test.sh'
+
+      - name: Output result
+        run: echo test went ${{ steps.build-and-test.outcome }}
 
       - name: Setup tmate session if build and test run failed
         if: steps.build-and-test.outcome == 'failure'
