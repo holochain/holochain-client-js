@@ -7,15 +7,15 @@ on:
       - "main"
 
 concurrency: 
-  group: ${{ github.head_ref }}
+  group: ${{ github.ref_name }}
   cancel-in-progress: true
 
 jobs:
   test:
-    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
 
     steps:
       - name: Check out source code

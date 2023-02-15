@@ -4,11 +4,10 @@
   inputs = {
     holonix.url = "github:holochain/holochain";
     nixpkgs.follows = "holonix/nixpkgs";
-    flake-parts.url = "github:hercules-ci/flake-parts";
   };
 
-  outputs = inputs@{ flake-parts, holonix, ... }:
-    flake-parts.lib.mkFlake { inherit inputs; } {
+  outputs = inputs@{ holonix, ... }:
+    holonix.inputs.flake-parts.lib.mkFlake { inherit inputs; } {
       # provide a dev shell for all systems that the holonix flake supports
       systems = builtins.attrNames holonix.devShells;
 
