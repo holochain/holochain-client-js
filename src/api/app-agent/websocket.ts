@@ -152,6 +152,11 @@ export class AppAgentWebsocket implements AppAgentClient {
       };
     }
     if ("role_name" in request && request.role_name) {
+      if ("provenance" in request) {
+        throw new Error(
+          "Cannot find other agent's cells based on role name. Use cell id when providing a provenance."
+        );
+      }
       const appInfo = this.cachedAppInfo || (await this.appInfo());
       const cell_id = this.getCellIdFromRoleName(request.role_name, appInfo);
       const zomeCallPayload: CallZomeRequest = {
