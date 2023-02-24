@@ -23,9 +23,6 @@ jobs:
 
       - name: Install nix
         uses: cachix/install-nix-action@v19
-        with:
-          extra_nix_config: |
-            experimental-features = flakes nix-command
 
       - name: Set up cachix
         uses: cachix/cachix-action@v12
