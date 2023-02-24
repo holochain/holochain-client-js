@@ -5,9 +5,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## \[Unreleased\]
 ### Added
 ### Changed
-- Throw an error when calling zome with role name and provenance from `AppAgentWebsocket`. Role names can only be used with own agent, not for other agents.
 ### Fixed
 ### Removed
+
+## 2023-02-24: v0.12.3
+### Changed
+- Throw an error when calling zome with role name and provenance from `AppAgentWebsocket`. Role names can only be used with own agent, not for other agents.
 
 ## 2023-02-13: v0.12.2
 ### Added
