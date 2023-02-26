@@ -34,11 +34,8 @@ jobs:
         env:
           cache-name: test-zome
         with:
-          path: |
-            .cargo
-            test/e2e/fixture/zomes/foo/target
+          path: test/e2e/fixture/zomes/foo/target
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('Cargo.lock') }}
-          restore-keys: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('Cargo.lock') }}
 
       - name: Run all tests
         id: build-and-test
