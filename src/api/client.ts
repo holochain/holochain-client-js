@@ -86,6 +86,21 @@ export class WsClient extends Emittery {
         );
       }
     };
+
+    socket.onclose = async (event) => {
+      const pendingRequestIds = Object.keys(this.pendingRequests).map((id) =>
+        parseInt(id)
+      );
+      if (pendingRequestIds.length) {
+        const error = new Error(
+          `Websocket closed with pending requests. Close event: ${event}`
+        );
+        pendingRequestIds.forEach((id) => {
+          this.pendingRequests[id].reject(error);
+          delete this.pendingRequests[id];
+        });
+      }
+    };
   }
 
   /**
