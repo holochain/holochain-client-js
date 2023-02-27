@@ -34,6 +34,12 @@ export class WsClient extends Emittery {
     this.pendingRequests = {};
     this.index = 0;
 
+    socket.onclose = (e) => {
+      for (const r of Object.values(this.pendingRequests)) {
+        r.reject(new Error(`Websocket connection was closed while waiting request: ${JSON.stringify(e)}`))
+      }
+    }
+
     socket.onmessage = async (serializedMessage) => {
       // If data is not a buffer (nodejs), it will be a blob (browser)
       let deserializedData;
@@ -69,7 +75,7 @@ export class WsClient extends Emittery {
         }
         const encodedAppSignal = deserializedSignal[SignalType.App];
 
-        // In order to return readible content to the UI, the signal payload must also be deserialized.
+        // In order to return readable content to the UI, the signal payload must also be deserialized.
         const payload = decode(encodedAppSignal.signal);
 
         const signal: AppSignal = {
@@ -141,15 +147,16 @@ export class WsClient extends Emittery {
       type: "request",
       data: encode(request),
     });
-    const promise = new Promise((resolve, reject) => {
-      this.pendingRequests[id] = { resolve, reject };
-    });
+
     if (this.socket.readyState === this.socket.OPEN) {
+      const promise = new Promise((resolve, reject) => {
+        this.pendingRequests[id] = { resolve, reject };
+      });
       this.socket.send(encodedMsg);
+      return promise as Promise<Res>;
     } else {
       return Promise.reject(new Error("Socket is not open"));
     }
-    return promise as Promise<Res>;
   }
 
   private handleResponse(msg: HolochainMessage) {
