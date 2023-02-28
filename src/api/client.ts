@@ -87,7 +87,7 @@ export class WsClient extends Emittery {
       }
     };
 
-    socket.on("close", async (event) => {
+    socket.on("close", (event) => {
       const pendingRequestIds = Object.keys(this.pendingRequests).map((id) =>
         parseInt(id)
       );
