@@ -897,3 +897,50 @@ test(
     }
   })
 );
+
+test(
+  "requests get canceled if the websocket closes while waiting for a response",
+  withConductor(ADMIN_PORT, async (t: Test) => {
+    const { installed_app_id, cell_id, client, admin } = await installAppAndDna(
+      ADMIN_PORT
+    );
+    let info = await client.appInfo({ installed_app_id }, 1000);
+    assert(CellType.Provisioned in info.cell_info[ROLE_NAME][0]);
+    t.deepEqual(
+      info.cell_info[ROLE_NAME][0][CellType.Provisioned].cell_id,
+      cell_id
+    );
+    t.ok(ROLE_NAME in info.cell_info);
+    t.deepEqual(info.status, { running: null });
+
+    await admin.authorizeSigningCredentials(cell_id);
+
+    const call1 = client.callZome({
+      cell_id,
+      zome_name: TEST_ZOME_NAME,
+      fn_name: "delay",
+      provenance: cell_id[1],
+      payload: 10000,
+    }, 30000);
+
+    const call2 = client.callZome({
+      cell_id,
+      zome_name: TEST_ZOME_NAME,
+      fn_name: "delay",
+      provenance: cell_id[1],
+      payload: 20000,
+    }, 30000);
+
+    rejects(t, call1, new Error("todo, get proper error"));
+    rejects(t, call2, new Error("todo, get proper error"));
+  })
+);
+
+const rejects = async (t: Test, p: PromiseLike<any>, e: Error) => {
+  try {
+    await p;
+    t.fail("Promise was expected to reject, but didn't.");
+  } catch (err) {
+    t.equal(e, err)
+  }
+}
