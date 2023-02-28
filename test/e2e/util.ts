@@ -1,10 +1,10 @@
-import { spawn, ChildProcessWithoutNullStreams } from "node:child_process";
+import assert from "node:assert/strict";
+import { spawn } from "node:child_process";
 import { Test } from "tape";
 import { AdminWebsocket } from "../../src/api/admin/websocket.js";
 import { AppWebsocket } from "../../src/api/app/websocket.js";
-import { CellId, InstalledAppId } from "../../src/types.js";
-import assert from "node:assert/strict";
 import { AppAgentWebsocket, CellType } from "../../src/index.js";
+import { CellId, InstalledAppId } from "../../src/types.js";
 
 export const FIXTURE_PATH = "./test/e2e/fixture";
 
@@ -73,10 +73,10 @@ export const cleanSandboxConductors = () => {
 };
 
 export const withConductor =
-  (port: number, f: (t: Test, c?: ChildProcessWithoutNullStreams) => Promise<void>) => async (t: Test) => {
+  (port: number, f: (t: Test) => Promise<void>) => async (t: Test) => {
     const conductorProcess = await launch(port);
     try {
-      await f(t, conductorProcess);
+      await f(t);
     } catch (e) {
       console.error("Test caught exception: ", e);
       throw e;

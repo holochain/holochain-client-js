@@ -149,19 +149,18 @@ export class WsClient extends Emittery {
    * @returns
    */
   request<Req, Res>(request: Req): Promise<Res> {
-    const id = this.index;
-    this.index += 1;
-    const encodedMsg = encode({
-      id,
-      type: "request",
-      data: encode(request),
-    });
-
     if (this.socket.readyState === this.socket.OPEN) {
+      const id = this.index;
+      const encodedMsg = encode({
+        id,
+        type: "request",
+        data: encode(request),
+      });
       const promise = new Promise((resolve, reject) => {
         this.pendingRequests[id] = { resolve, reject };
       });
       this.socket.send(encodedMsg);
+      this.index += 1;
       return promise as Promise<Res>;
     } else {
       return Promise.reject(new Error("Socket is not open"));
@@ -187,11 +186,11 @@ export class WsClient extends Emittery {
   /**
    * Close the websocket connection.
    */
-  close() {
+  close(code?: number) {
     const closedPromise = new Promise<void>((resolve) =>
       this.socket.on("close", resolve)
     );
-    this.socket.close();
+    this.socket.close(code);
     return closedPromise;
   }
 }

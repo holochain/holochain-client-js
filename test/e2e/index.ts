@@ -28,7 +28,7 @@ import {
   withConductor,
 } from "./util.js";
 
-const delay = (ms: number) => new Promise((r) => setTimeout(r, ms));
+const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 const fakeAgentPubKey = () =>
   Buffer.from(
@@ -900,74 +900,53 @@ test(
 
 test(
   "requests get canceled if the websocket closes while waiting for a response",
-  withConductor(ADMIN_PORT, async (t: Test, conductorProcess) => {
-    const { installed_app_id, cell_id, client, admin } = await installAppAndDna(
-      ADMIN_PORT
-    );
-    const info = await client.appInfo({ installed_app_id }, 1000);
-    assert(CellType.Provisioned in info.cell_info[ROLE_NAME][0]);
-    t.deepEqual(
-      info.cell_info[ROLE_NAME][0][CellType.Provisioned].cell_id,
-      cell_id
-    );
-    t.ok(ROLE_NAME in info.cell_info);
-    t.deepEqual(info.status, { running: null });
+  withConductor(ADMIN_PORT, async (t: Test) => {
+    const { cell_id, client, admin } = await installAppAndDna(ADMIN_PORT);
 
     await admin.authorizeSigningCredentials(cell_id);
 
-    const call1 = client.callZome(
-      {
-        cell_id,
-        zome_name: TEST_ZOME_NAME,
-        fn_name: "waste_some_time",
-        provenance: cell_id[1],
-        payload: null,
-      },
-      1000
+    const call1 = client.callZome({
+      cell_id,
+      zome_name: TEST_ZOME_NAME,
+      fn_name: "waste_some_time",
+      provenance: cell_id[1],
+      payload: null,
+    });
+    const call2 = client.callZome({
+      cell_id,
+      zome_name: TEST_ZOME_NAME,
+      fn_name: "waste_some_time",
+      provenance: cell_id[1],
+      payload: null,
+    });
+
+    await delay(100);
+
+    const closeEventCode = 1000;
+    client.client.close(closeEventCode);
+    t.ok(
+      client.client.socket.readyState !== client.client.socket.OPEN,
+      "ws is not open"
     );
 
-    await delay(10);
-
-    const call2 = client.callZome(
-      {
-        cell_id,
-        zome_name: TEST_ZOME_NAME,
-        fn_name: "waste_some_time",
-        provenance: cell_id[1],
-        payload: null,
-      },
-      1000
+    const [res1, res2] = await Promise.allSettled([call1, call2]);
+    assert(res1.status === "rejected");
+    t.ok(
+      res1.reason
+        .toString()
+        .startsWith(
+          `Error: Websocket closed with pending requests. Close event: ${closeEventCode}, request id:`
+        ),
+      "pending request was rejected with correct close event code"
     );
-
-    await delay(10);
-
-    const cp = conductorProcess;
-    if (!cp) {
-      t.fail("no conductor process");
-      return;
-    }
-    cp.kill("SIGINT");
-    t.ok(!cp.connected);
-    t.ok(cp.killed);
-
-    try {
-      const res1 = await call1;
-      t.fail(`call failed to fail. output = ${res1}`);
-    } catch (err) {
-      t.equal(
-        err.toString(),
-        "Error: Websocket closed with pending requests. Close event: 1006, request id: 2"
-      );
-    }
-
-    try {
-      const res2 = await call2;
-      t.fail(`call failed to fail. output = ${res2}`);
-    } catch (err) {
-      t.equal(
-        err.toString(),
-        "Error: Websocket closed with pending requests. Close event: 1006, request id: 1"
-      );
-    }
+    assert(res2.status === "rejected");
+    t.ok(
+      res2.reason
+        .toString()
+        .startsWith(
+          `Error: Websocket closed with pending requests. Close event: ${closeEventCode}, request id:`
+        ),
+      "pending request was rejected with correct close event code"
+    );
   })
 );
