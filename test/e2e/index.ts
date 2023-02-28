@@ -926,6 +926,8 @@ test(
       1000
     );
 
+    await delay(10);
+
     const call2 = client.callZome(
       {
         cell_id,
