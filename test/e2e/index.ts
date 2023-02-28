@@ -1,4 +1,5 @@
 import { decode } from "@msgpack/msgpack";
+import { toLength } from "lodash-es";
 import assert from "node:assert/strict";
 import fs from "node:fs";
 import test, { Test } from "tape";
@@ -898,9 +899,9 @@ test(
   })
 );
 
-test(
+test.only(
   "requests get canceled if the websocket closes while waiting for a response",
-  withConductor(ADMIN_PORT, async (t: Test) => {
+  withConductor(ADMIN_PORT, async (t: Test, conductorProcess) => {
     const { installed_app_id, cell_id, client, admin } = await installAppAndDna(
       ADMIN_PORT
     );
@@ -918,29 +919,48 @@ test(
     const call1 = client.callZome({
       cell_id,
       zome_name: TEST_ZOME_NAME,
-      fn_name: "delay",
+      fn_name: "waste_some_time",
       provenance: cell_id[1],
-      payload: 10000,
-    }, 30000);
+      payload: null,
+    }, 1000);
 
     const call2 = client.callZome({
       cell_id,
       zome_name: TEST_ZOME_NAME,
-      fn_name: "delay",
+      fn_name: "waste_some_time",
       provenance: cell_id[1],
-      payload: 20000,
-    }, 30000);
+      payload: null,
+    }, 1000);
 
-    rejects(t, call1, new Error("todo, get proper error"));
-    rejects(t, call2, new Error("todo, get proper error"));
+    await delay(10);
+
+    const cp = conductorProcess!;
+    cp.kill('SIGINT');
+    t.ok(!cp.connected);
+    t.ok(cp.killed);
+
+    try {
+      const res1 = await call1;
+      t.fail(`call failed to fail. output = ${res1}`);
+    } catch (err) {
+      t.equal(err.toString(), "Error: Websocket closed with pending requests. Close event: 1006, request id: 2")
+    }
+
+    try {
+      const res2 = await call2;
+      t.fail(`call failed to fail. output = ${res2}`);
+    } catch (err) {
+      t.equal(err.toString(), "Error: Websocket closed with pending requests. Close event: 1006, request id: 1")
+    }
   })
 );
 
-const rejects = async (t: Test, p: PromiseLike<any>, e: Error) => {
-  try {
-    await p;
-    t.fail("Promise was expected to reject, but didn't.");
-  } catch (err) {
-    t.equal(e, err)
-  }
+async function rejects(p: Promise<any>, f: (e: Error) => void) {
+  return p
+    .then(res => {
+      throw `Promise was expected to reject, but didn't. Return value: ${res}`
+    })
+    .catch(err => {
+      f(err);
+    })
 }

@@ -69,7 +69,10 @@ pub fn echo_app_entry_def(entry_def: AppEntryDef) -> ExternResult<()> {
 }
 
 #[hdk_extern]
-pub fn delay(ms: u16) -> ExternResult<()> {
-    sleep(std::time::Duration::from_millis(ms as u64))?;
-    Ok(())
+pub fn waste_some_time(_: ()) -> ExternResult<TestString> {
+    let mut x: u64 = 3;
+    for _ in 0..999999 {
+        x = x.wrapping_pow(x as u32);
+    }
+    Ok(TestString(x.to_string()))
 }

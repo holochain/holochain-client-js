@@ -1,4 +1,4 @@
-import { spawn } from "node:child_process";
+import { spawn, ChildProcessWithoutNullStreams } from "node:child_process";
 import { Test } from "tape";
 import { AdminWebsocket } from "../../src/api/admin/websocket.js";
 import { AppWebsocket } from "../../src/api/app/websocket.js";
@@ -73,15 +73,15 @@ export const cleanSandboxConductors = () => {
 };
 
 export const withConductor =
-  (port: number, f: (t: Test) => Promise<void>) => async (t: Test) => {
+  (port: number, f: (t: Test, c?: ChildProcessWithoutNullStreams) => Promise<void>) => async (t: Test) => {
     const conductorProcess = await launch(port);
     try {
-      await f(t);
+      await f(t, conductorProcess);
     } catch (e) {
       console.error("Test caught exception: ", e);
       throw e;
     } finally {
-      if (conductorProcess.pid) {
+      if (conductorProcess.pid && !conductorProcess.killed) {
         process.kill(-conductorProcess.pid);
       }
       await cleanSandboxConductors();
