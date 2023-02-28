@@ -969,13 +969,3 @@ test.only(
     }
   })
 );
-
-async function rejects(p: Promise<any>, f: (e: Error) => void) {
-  return p
-    .then((res) => {
-      throw `Promise was expected to reject, but didn't. Return value: ${res}`;
-    })
-    .catch((err) => {
-      f(err);
-    });
-}
