@@ -1,5 +1,4 @@
 import { decode } from "@msgpack/msgpack";
-import { toLength } from "lodash-es";
 import assert from "node:assert/strict";
 import fs from "node:fs";
 import test, { Test } from "tape";
@@ -905,7 +904,7 @@ test.only(
     const { installed_app_id, cell_id, client, admin } = await installAppAndDna(
       ADMIN_PORT
     );
-    let info = await client.appInfo({ installed_app_id }, 1000);
+    const info = await client.appInfo({ installed_app_id }, 1000);
     assert(CellType.Provisioned in info.cell_info[ROLE_NAME][0]);
     t.deepEqual(
       info.cell_info[ROLE_NAME][0][CellType.Provisioned].cell_id,
@@ -916,26 +915,36 @@ test.only(
 
     await admin.authorizeSigningCredentials(cell_id);
 
-    const call1 = client.callZome({
-      cell_id,
-      zome_name: TEST_ZOME_NAME,
-      fn_name: "waste_some_time",
-      provenance: cell_id[1],
-      payload: null,
-    }, 1000);
+    const call1 = client.callZome(
+      {
+        cell_id,
+        zome_name: TEST_ZOME_NAME,
+        fn_name: "waste_some_time",
+        provenance: cell_id[1],
+        payload: null,
+      },
+      1000
+    );
 
-    const call2 = client.callZome({
-      cell_id,
-      zome_name: TEST_ZOME_NAME,
-      fn_name: "waste_some_time",
-      provenance: cell_id[1],
-      payload: null,
-    }, 1000);
+    const call2 = client.callZome(
+      {
+        cell_id,
+        zome_name: TEST_ZOME_NAME,
+        fn_name: "waste_some_time",
+        provenance: cell_id[1],
+        payload: null,
+      },
+      1000
+    );
 
     await delay(10);
 
-    const cp = conductorProcess!;
-    cp.kill('SIGINT');
+    const cp = conductorProcess;
+    if (!cp) {
+      t.fail("no conductor process");
+      return;
+    }
+    cp.kill("SIGINT");
     t.ok(!cp.connected);
     t.ok(cp.killed);
 
@@ -943,24 +952,30 @@ test.only(
       const res1 = await call1;
       t.fail(`call failed to fail. output = ${res1}`);
     } catch (err) {
-      t.equal(err.toString(), "Error: Websocket closed with pending requests. Close event: 1006, request id: 2")
+      t.equal(
+        err.toString(),
+        "Error: Websocket closed with pending requests. Close event: 1006, request id: 2"
+      );
     }
 
     try {
       const res2 = await call2;
       t.fail(`call failed to fail. output = ${res2}`);
     } catch (err) {
-      t.equal(err.toString(), "Error: Websocket closed with pending requests. Close event: 1006, request id: 1")
+      t.equal(
+        err.toString(),
+        "Error: Websocket closed with pending requests. Close event: 1006, request id: 1"
+      );
     }
   })
 );
 
 async function rejects(p: Promise<any>, f: (e: Error) => void) {
   return p
-    .then(res => {
-      throw `Promise was expected to reject, but didn't. Return value: ${res}`
+    .then((res) => {
+      throw `Promise was expected to reject, but didn't. Return value: ${res}`;
     })
-    .catch(err => {
+    .catch((err) => {
       f(err);
-    })
+    });
 }
