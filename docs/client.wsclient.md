@@ -33,7 +33,7 @@ export declare class WsClient extends Emittery
 
 |  Method | Modifiers | Description |
 |  --- | --- | --- |
-|  [close()](./client.wsclient.close.md) |  | Close the websocket connection. |
+|  [close(code)](./client.wsclient.close.md) |  | Close the websocket connection. |
 |  [connect(url)](./client.wsclient.connect.md) | <code>static</code> | Instance factory for creating WsClients. |
 |  [emitSignal(data)](./client.wsclient.emitsignal.md) |  | Sends data as a signal. |
 |  [request(request)](./client.wsclient.request.md) |  | Send requests to the connected websocket. |
