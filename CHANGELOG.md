@@ -8,6 +8,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Fixed
 ### Removed
 
+## 2023-03-01: v0.12.5
+### Fixed
+- Replace event listener method `.on("close")` by `.onclose`. `.on` is not compatible with Web API's WebSocket.
+
 ## 2023-03-01: v0.12.4
 ### Fixed
 - When app websocket closes, reject pending requests.
