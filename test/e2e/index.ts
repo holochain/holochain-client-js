@@ -935,7 +935,7 @@ test(
       res1.reason
         .toString()
         .startsWith(
-          `Error: Websocket closed with pending requests. Close event: ${closeEventCode}, request id:`
+          `Error: Websocket closed with pending requests. Close event code: ${closeEventCode}, request id:`
         ),
       "pending request was rejected with correct close event code"
     );
@@ -944,7 +944,7 @@ test(
       res2.reason
         .toString()
         .startsWith(
-          `Error: Websocket closed with pending requests. Close event: ${closeEventCode}, request id:`
+          `Error: Websocket closed with pending requests. Close event code: ${closeEventCode}, request id:`
         ),
       "pending request was rejected with correct close event code"
     );
