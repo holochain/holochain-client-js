@@ -1,3 +1,5 @@
+use std::{thread, time};
+
 use hdk::prelude::*;
 
 #[derive(Clone, Debug, Serialize, Deserialize, SerializedBytes)]
@@ -66,4 +68,16 @@ fn emitter(_: ()) -> ExternResult<TestString> {
 pub fn echo_app_entry_def(entry_def: AppEntryDef) -> ExternResult<()> {
     debug!("echo_app_entry_def() called: {:?}", entry_def);
     Ok(())
+}
+
+#[hdk_extern]
+pub fn waste_some_time(_: ()) -> ExternResult<TestString> {
+    let mut x: u32 = 3;
+    for _ in 0..2 {
+        for _ in 0..99999999 {
+            x = x.wrapping_pow(x);
+        }
+    }
+    // thread::sleep(time::Duration::from_secs(5));
+    Ok(TestString(x.to_string()))
 }

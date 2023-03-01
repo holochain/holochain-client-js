@@ -1,10 +1,10 @@
+import assert from "node:assert/strict";
 import { spawn } from "node:child_process";
 import { Test } from "tape";
 import { AdminWebsocket } from "../../src/api/admin/websocket.js";
 import { AppWebsocket } from "../../src/api/app/websocket.js";
-import { CellId, InstalledAppId } from "../../src/types.js";
-import assert from "node:assert/strict";
 import { AppAgentWebsocket, CellType } from "../../src/index.js";
+import { CellId, InstalledAppId } from "../../src/types.js";
 
 export const FIXTURE_PATH = "./test/e2e/fixture";
 
@@ -81,7 +81,7 @@ export const withConductor =
       console.error("Test caught exception: ", e);
       throw e;
     } finally {
-      if (conductorProcess.pid) {
+      if (conductorProcess.pid && !conductorProcess.killed) {
         process.kill(-conductorProcess.pid);
       }
       await cleanSandboxConductors();

@@ -69,7 +69,7 @@ export class WsClient extends Emittery {
         }
         const encodedAppSignal = deserializedSignal[SignalType.App];
 
-        // In order to return readible content to the UI, the signal payload must also be deserialized.
+        // In order to return readable content to the UI, the signal payload must also be deserialized.
         const payload = decode(encodedAppSignal.signal);
 
         const signal: AppSignal = {
@@ -86,6 +86,21 @@ export class WsClient extends Emittery {
         );
       }
     };
+
+    socket.on("close", (event) => {
+      const pendingRequestIds = Object.keys(this.pendingRequests).map((id) =>
+        parseInt(id)
+      );
+      if (pendingRequestIds.length) {
+        pendingRequestIds.forEach((id) => {
+          const error = new Error(
+            `Websocket closed with pending requests. Close event: ${event}, request id: ${id}`
+          );
+          this.pendingRequests[id].reject(error);
+          delete this.pendingRequests[id];
+        });
+      }
+    });
   }
 
   /**
@@ -134,22 +149,22 @@ export class WsClient extends Emittery {
    * @returns
    */
   request<Req, Res>(request: Req): Promise<Res> {
-    const id = this.index;
-    this.index += 1;
-    const encodedMsg = encode({
-      id,
-      type: "request",
-      data: encode(request),
-    });
-    const promise = new Promise((resolve, reject) => {
-      this.pendingRequests[id] = { resolve, reject };
-    });
     if (this.socket.readyState === this.socket.OPEN) {
+      const id = this.index;
+      const encodedMsg = encode({
+        id,
+        type: "request",
+        data: encode(request),
+      });
+      const promise = new Promise((resolve, reject) => {
+        this.pendingRequests[id] = { resolve, reject };
+      });
       this.socket.send(encodedMsg);
+      this.index += 1;
+      return promise as Promise<Res>;
     } else {
       return Promise.reject(new Error("Socket is not open"));
     }
-    return promise as Promise<Res>;
   }
 
   private handleResponse(msg: HolochainMessage) {
@@ -171,11 +186,11 @@ export class WsClient extends Emittery {
   /**
    * Close the websocket connection.
    */
-  close() {
+  close(code?: number) {
     const closedPromise = new Promise<void>((resolve) =>
       this.socket.on("close", resolve)
     );
-    this.socket.close();
+    this.socket.close(code);
     return closedPromise;
   }
 }
