@@ -9,4 +9,4 @@ crate-type = ["cdylib", "rlib"]
 name = "coordinator2"
 
 [dependencies]
-hdk = "0.1.0-beta-rc.3"
+hdk = "0.1"
