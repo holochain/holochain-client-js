@@ -55,6 +55,8 @@
 |  [CellProvisioning](./client.cellprovisioning.md) |  |
 |  [ClonedCell](./client.clonedcell.md) |  |
 |  [CloseChain](./client.closechain.md) |  |
+|  [CoordinatorBundle](./client.coordinatorbundle.md) |  |
+|  [CoordinatorManifest](./client.coordinatormanifest.md) |  |
 |  [CountersigningAgentState](./client.countersigningagentstate.md) |  |
 |  [CounterSigningSessionData](./client.countersigningsessiondata.md) |  |
 |  [CounterSigningSessionTimes](./client.countersigningsessiontimes.md) |  |
@@ -88,6 +90,7 @@
 |  [Update](./client.update.md) |  |
 |  [UpdateBase](./client.updatebase.md) |  |
 |  [ZomeCallCapGrant](./client.zomecallcapgrant.md) |  |
+|  [ZomeDependency](./client.zomedependency.md) |  |
 
 ## Variables
 
@@ -147,6 +150,7 @@
 |  [CapSecret](./client.capsecret.md) |  |
 |  [CellId](./client.cellid.md) |  |
 |  [CellInfo](./client.cellinfo.md) |  |
+|  [CoordinatorSource](./client.coordinatorsource.md) |  |
 |  [CoordinatorZome](./client.coordinatorzome.md) |  |
 |  [CounterSigningAgents](./client.countersigningagents.md) |  |
 |  [CreateCloneCellResponse](./client.createclonecellresponse.md) |  |
@@ -238,6 +242,8 @@
 |  [Transformer\_2](./client.transformer_2.md) |  |
 |  [UninstallAppRequest](./client.uninstallapprequest.md) |  |
 |  [UninstallAppResponse](./client.uninstallappresponse.md) |  |
+|  [UpdateCoordinatorsRequest](./client.updatecoordinatorsrequest.md) |  |
+|  [UpdateCoordinatorsResponse](./client.updatecoordinatorsresponse.md) |  |
 |  [WasmCode](./client.wasmcode.md) |  |
 |  [WasmHash](./client.wasmhash.md) |  |
 |  [WasmHashB64](./client.wasmhashb64.md) |  |

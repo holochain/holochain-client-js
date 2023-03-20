@@ -2,6 +2,7 @@
 members = [
   "test/e2e/fixture/zomes/foo",
   "test/e2e/fixture/zomes/coordinator",
+  "test/e2e/fixture2/coordinator2",
 ]
 
 [profile.dev]

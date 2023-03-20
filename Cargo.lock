@@ -246,6 +246,13 @@ dependencies = [
 ]
 
 [[package]]
+name = "coordinator2"
+version = "0.0.1"
+dependencies = [
+ "hdk",
+]
+
+[[package]]
 name = "core-foundation-sys"
 version = "0.8.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"

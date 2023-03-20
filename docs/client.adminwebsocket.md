@@ -39,6 +39,7 @@ export declare class AdminWebsocket implements AdminApi
 |  [listDnas](./client.adminwebsocket.listdnas.md) |  | [Requester](./client.requester.md)<!-- -->&lt;[ListDnasRequest](./client.listdnasrequest.md)<!-- -->, [ListDnasResponse](./client.listdnasresponse.md)<!-- -->&gt; | List all registered DNAs. |
 |  [registerDna](./client.adminwebsocket.registerdna.md) |  | [Requester](./client.requester.md)<!-- -->&lt;[RegisterDnaRequest](./client.registerdnarequest.md)<!-- -->, [RegisterDnaResponse](./client.registerdnaresponse.md)<!-- -->&gt; | <p>Register a DNA for later app installation.</p><p>Stores the given DNA into the Holochain DNA database and returns the hash of it.</p> |
 |  [uninstallApp](./client.adminwebsocket.uninstallapp.md) |  | [Requester](./client.requester.md)<!-- -->&lt;[UninstallAppRequest](./client.uninstallapprequest.md)<!-- -->, [UninstallAppResponse](./client.uninstallappresponse.md)<!-- -->&gt; | Uninstall the specified app from Holochain. |
+|  [updateCoordinators](./client.adminwebsocket.updatecoordinators.md) |  | [Requester](./client.requester.md)<!-- -->&lt;[UpdateCoordinatorsRequest](./client.updatecoordinatorsrequest.md)<!-- -->, [UpdateCoordinatorsResponse](./client.updatecoordinatorsresponse.md)<!-- -->&gt; | Update coordinators for an installed app. |
 
 ## Methods
 

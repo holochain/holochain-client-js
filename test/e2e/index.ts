@@ -25,6 +25,7 @@ import {
   FIXTURE_PATH,
   installAppAndDna,
   launch,
+  makeCoordinatorZomeBundle,
   withConductor,
 } from "./util.js";
 
@@ -45,6 +46,7 @@ const ADMIN_PORT_1 = 33002;
 const ROLE_NAME: RoleName = "foo";
 const TEST_ZOME_NAME = "foo";
 const COORDINATOR_ZOME_NAME = "coordinator";
+const COORDINATOR_ZOME2_NAME = "coordinator2";
 
 test(
   "admin smoke test: registerDna + installApp + uninstallApp",
@@ -906,5 +908,39 @@ test(
     } catch (error) {
       t.pass("deleted clone cell cannot be enabled");
     }
+  })
+);
+
+test(
+  "can update coordinators of an app",
+  withConductor(ADMIN_PORT, async (t: Test) => {
+    const { client, admin, cell_id } = await installAppAndDna(ADMIN_PORT);
+
+    const bundle = await makeCoordinatorZomeBundle();
+
+    await admin.updateCoordinators({
+      dna_hash: cell_id[0],
+      bundle,
+    });
+
+    const dnaDef = await admin.getDnaDefinition(cell_id[0]);
+    const zomeNames = dnaDef.coordinator_zomes.map((x) => x[0]);
+
+    t.ok(
+      zomeNames.includes(COORDINATOR_ZOME2_NAME),
+      "coordinator zomes can be updated"
+    );
+
+    await admin.authorizeSigningCredentials(cell_id);
+
+    const response = await client.callZome({
+      cell_id,
+      zome_name: `${COORDINATOR_ZOME2_NAME}`,
+      fn_name: "echo_hi",
+      provenance: cell_id[1],
+      payload: null,
+    });
+
+    t.equal(response, "hi", "updated coordinator zomes can be called");
   })
 );

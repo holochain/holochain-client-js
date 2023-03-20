@@ -273,6 +273,18 @@ export type UninstallAppResponse = null;
 /**
  * @public
  */
+export type UpdateCoordinatorsRequest = {
+  dna_hash: DnaHash;
+} & CoordinatorSource;
+
+/**
+ * @public
+ */
+export type UpdateCoordinatorsResponse = void;
+
+/**
+ * @public
+ */
 export type ResourceBytes = Uint8Array;
 /**
  * @public
@@ -570,10 +582,44 @@ export type ZomeLocation = Location;
 /**
  * @public
  */
+export interface ZomeDependency {
+  name: ZomeName;
+}
+
+/**
+ * @public
+ */
 export type ZomeManifest = {
   name: string;
   hash?: string;
+  dependencies?: ZomeDependency[];
 } & ZomeLocation;
+
+/**
+ * @public
+ */
+export interface CoordinatorManifest {
+  zomes: Array<ZomeManifest>;
+}
+
+/**
+ * @public
+ */
+export interface CoordinatorBundle {
+  manifest: CoordinatorManifest;
+  resources: ResourceMap;
+}
+
+/**
+ * @public
+ */
+export type CoordinatorSource =
+  | {
+      path: string;
+    }
+  | {
+      bundle: CoordinatorBundle;
+    };
 
 /**
  * @public
