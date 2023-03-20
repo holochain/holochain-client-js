@@ -29,7 +29,7 @@ import {
   withConductor,
 } from "./util.js";
 
-const delay = (ms: number) => new Promise((r) => setTimeout(r, ms));
+const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 const fakeAgentPubKey = () =>
   Buffer.from(
@@ -45,8 +45,6 @@ const ADMIN_PORT_1 = 33002;
 
 const ROLE_NAME: RoleName = "foo";
 const TEST_ZOME_NAME = "foo";
-const COORDINATOR_ZOME_NAME = "coordinator";
-const COORDINATOR_ZOME2_NAME = "coordinator2";
 
 test(
   "admin smoke test: registerDna + installApp + uninstallApp",
@@ -290,16 +288,6 @@ test(
       "foo",
       "dna definition: integrity zome matches"
     );
-    t.equal(
-      dnaDefinition.coordinator_zomes[0][0],
-      "coordinator",
-      "dna definition: coordinator zome matches"
-    );
-    t.equal(
-      dnaDefinition.coordinator_zomes[0][1].dependencies[0],
-      "foo",
-      "dna definition: coordinator dependency matches"
-    );
 
     const runningApps1 = await admin.listApps({
       status_filter: AppStatusFilter.Running,
@@ -355,7 +343,7 @@ test(
 
     const zomeCallPayload: CallZomeRequest = {
       cell_id,
-      zome_name: COORDINATOR_ZOME_NAME,
+      zome_name: TEST_ZOME_NAME,
       fn_name: "echo_app_entry_def",
       provenance: cell_id[1],
       payload: appEntryDef,
@@ -912,6 +900,59 @@ test(
 );
 
 test(
+  "requests get canceled if the websocket closes while waiting for a response",
+  withConductor(ADMIN_PORT, async (t: Test) => {
+    const { cell_id, client, admin } = await installAppAndDna(ADMIN_PORT);
+
+    await admin.authorizeSigningCredentials(cell_id);
+
+    const call1 = client.callZome({
+      cell_id,
+      zome_name: TEST_ZOME_NAME,
+      fn_name: "waste_some_time",
+      provenance: cell_id[1],
+      payload: null,
+    });
+    const call2 = client.callZome({
+      cell_id,
+      zome_name: TEST_ZOME_NAME,
+      fn_name: "waste_some_time",
+      provenance: cell_id[1],
+      payload: null,
+    });
+
+    await delay(100);
+
+    const closeEventCode = 1000;
+    client.client.close(closeEventCode);
+    t.ok(
+      client.client.socket.readyState !== client.client.socket.OPEN,
+      "ws is not open"
+    );
+
+    const [res1, res2] = await Promise.allSettled([call1, call2]);
+    assert(res1.status === "rejected");
+    t.ok(
+      res1.reason
+        .toString()
+        .startsWith(
+          `Error: Websocket closed with pending requests. Close event code: ${closeEventCode}, request id:`
+        ),
+      "pending request was rejected with correct close event code"
+    );
+    assert(res2.status === "rejected");
+    t.ok(
+      res2.reason
+        .toString()
+        .startsWith(
+          `Error: Websocket closed with pending requests. Close event code: ${closeEventCode}, request id:`
+        ),
+      "pending request was rejected with correct close event code"
+    );
+  })
+);
+
+test(
   "can update coordinators of an app",
   withConductor(ADMIN_PORT, async (t: Test) => {
     const { client, admin, cell_id } = await installAppAndDna(ADMIN_PORT);
@@ -927,7 +968,7 @@ test(
     const zomeNames = dnaDef.coordinator_zomes.map((x) => x[0]);
 
     t.ok(
-      zomeNames.includes(COORDINATOR_ZOME2_NAME),
+      zomeNames.includes("coordinator2"),
       "coordinator zomes can be updated"
     );
 
@@ -935,7 +976,7 @@ test(
 
     const response = await client.callZome({
       cell_id,
-      zome_name: `${COORDINATOR_ZOME2_NAME}`,
+      zome_name: "coordinator2",
       fn_name: "echo_hi",
       provenance: cell_id[1],
       payload: null,

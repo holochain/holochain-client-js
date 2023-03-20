@@ -25,46 +25,99 @@ npm install --save-exact @holochain/client
 
 ### Use AppAgentWebsocket with implicit zome call signing
 ```typescript
-  const signalCb = (signal: AppSignal) => {
-    // implementation of signal handler
-    resolve()
-  }
+import { AdminWebsocket, AppAgentWebsocket, CellType } from "@holochain/client";
 
-  const TIMEOUT = 12000
-  // default timeout is set to 12000
-  const appWs = await AppWebsocket.connect(`ws://127.0.0.1:${appPort}`, 12000)
+const adminWs = await AdminWebsocket.connect("ws://127.0.0.1:65000");
+const agent_key = await adminWs.generateAgentPubKey();
+const role_name = "role";
+const installed_app_id = "test-app";
+const appInfo = await adminWs.installApp({
+  agent_key,
+  path: "path/to/happ/file",
+  installed_app_id,
+  membrane_proofs: {},
+});
+await adminWs.enableApp({ installed_app_id });
+if (!(CellType.Provisioned in appInfo.cell_info[role_name][0])) {
+  process.exit();
+}
+const { cell_id } = appInfo.cell_info[role_name][0][CellType.Provisioned];
+await adminWs.authorizeSigningCredentials(cell_id);
+await adminWs.attachAppInterface({ port: 65001 });
+const appAgentWs = await AppAgentWebsocket.connect(
+  "ws://127.0.0.1:65001",
+  installed_app_id
+);
 
-  const client = new AppAgentWebsocket(appWs, 'installed_app_id');
-  client.on("signal", signalCb);
+let signalCb;
+const signalReceived = new Promise<void>((resolve) => {
+  signalCb = (signal) => {
+    console.log("signal received", signal);
+    // act on signal
+    resolve();
+  };
+});
 
-  // default timeout set here (30000) will overwrite the defaultTimeout(12000) set above
-  await client.callZome({
-   role_name: 'dnas_role_name', // role_name is unique per app, so you can unambiguously identify your dna with role_name in this client
-   zome_name: "test_zome",
-   fn_name: 'test_emitter_fn',
-   payload: null,
-  }, 30000)
+appAgentWs.on("signal", signalCb);
+
+// trigger an emit_signal
+await appAgentWs.callZome({
+  role_name,
+  zome_name: "zome",
+  fn_name: "emitter",
+  payload: null,
+});
+await signalReceived;
+
+await appAgentWs.appWebsocket.client.close();
+await adminWs.client.close();
 ```
 
 ### Use AppWebsocket with implicit zome call signing
 ```typescript
-  const signalCb = (signal: AppSignal) => {
-    // impl...
-    resolve()
-  }
+import { AdminWebsocket, AppWebsocket, CellType } from "@holochain/client";
 
-  const TIMEOUT = 12000
-  // default timeout is set to 12000
-  const client = await AppWebsocket.connect(`ws://127.0.0.1:${appPort}`, TIMEOUT, signalCb)
+const adminWs = await AdminWebsocket.connect("ws://127.0.0.1:65000");
+const agent_key = await adminWs.generateAgentPubKey();
+const installed_app_id = "test-app";
+const appInfo = await adminWs.installApp({
+  agent_key,
+  path: "path/to/happ/file",
+  installed_app_id,
+  membrane_proofs: {},
+});
+await adminWs.enableApp({ installed_app_id });
+if (!(CellType.Provisioned in appInfo.cell_info["role"][0])) {
+  process.exit();
+}
+const { cell_id } = appInfo.cell_info["role"][0][CellType.Provisioned];
+await adminWs.authorizeSigningCredentials(cell_id);
+await adminWs.attachAppInterface({ port: 65001 });
+const appWs = await AppWebsocket.connect("ws://127.0.0.1:65001");
 
-  // default timeout set here (30000) will overwrite the defaultTimeout(12000) set above
-  await client.callZome({
-   cell_id,
-   zome_name: "test_zome",
-   fn_name: 'test_emitter_fn',
-   provenance: agentPubKey,
-   payload: null,
-  }, 30000)
+let signalCb;
+const signalReceived = new Promise<void>((resolve) => {
+  signalCb = (signal) => {
+    console.log("signal received", signal);
+    // act on signal
+    resolve();
+  };
+});
+
+appWs.on("signal", signalCb);
+
+// trigger an emit_signal
+await appWs.callZome({
+  cell_id,
+  zome_name: "zome",
+  fn_name: "emitter",
+  provenance: agent_key,
+  payload: null,
+});
+await signalReceived;
+
+await appWs.client.close();
+await adminWs.client.close();
 ```
 
 ### Managing zome call signing credentials in a pure JavaScript browser application
@@ -119,7 +172,7 @@ nix-shell
 
 Holochain is an open source project.  We welcome all sorts of participation and are actively working on increasing surface area to accept it.  Please see our [contribution guidelines](/CONTRIBUTING.md) for our general practices and protocols on participating in the community, as well as specific expectations around things like code formatting, testing practices, continuous integration, etc.
 
-* Connect with us on our [forum](https://forum.holochain.org)
+* Connect with us on [Discord](https://discord.gg/k55DS5dmPH)
 
 ## License
 

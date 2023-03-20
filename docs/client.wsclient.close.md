@@ -9,8 +9,15 @@ Close the websocket connection.
 <b>Signature:</b>
 
 ```typescript
-close(): Promise<void>;
+close(code?: number): Promise<void>;
 ```
+
+## Parameters
+
+|  Parameter | Type | Description |
+|  --- | --- | --- |
+|  code | number | <i>(Optional)</i> |
+
 <b>Returns:</b>
 
 Promise&lt;void&gt;

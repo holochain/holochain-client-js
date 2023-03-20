@@ -8,6 +8,28 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Fixed
 ### Removed
 
+## 2023-03-01: v0.12.5
+### Fixed
+- Replace event listener method `.on("close")` by `.onclose`. `.on` is not compatible with Web API's WebSocket.
+
+## 2023-03-01: v0.12.4
+### Fixed
+- When app websocket closes, reject pending requests.
+
+## 2023-02-24: v0.12.3
+### Changed
+- Throw an error when calling zome with role name and provenance from `AppAgentWebsocket`. Role names can only be used with own agent, not for other agents.
+
+## 2023-02-13: v0.12.2
+### Added
+- Function to generate a fake DNA hash.
+### Changed
+- Switch to Nix flake for develop environment. Run `nix develop` from now on instead of `nix-shell`. Pass on `--extra-experimental-features nix-command --extra-experimental-features flakes` or enable these features for your user in [`~/.config/nix/nix.conf`](https://nixos.org/manual/nix/stable/command-ref/conf-file.html#conf-experimental-features).
+
+## 2023-02-07: v0.12.1
+### Changed
+- Update `NetworkInfo` types.
+
 ## 2023-01-27: v0.12.0
 Compatible with Holochain v0.1.0
 

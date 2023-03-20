@@ -145,7 +145,13 @@ export class AppAgentWebsocket implements AppAgentClient {
     request: AppAgentCallZomeRequest,
     timeout?: number
   ): Promise<CallZomeResponse> {
-    if (!("provenance" in request)) {
+    if ("provenance" in request) {
+      if ("role_name" in request && request.role_name) {
+        throw new Error(
+          "Cannot find other agent's cells based on role name. Use cell id when providing a provenance."
+        );
+      }
+    } else {
       request = {
         ...request,
         provenance: this.myPubKey,
@@ -162,9 +168,8 @@ export class AppAgentWebsocket implements AppAgentClient {
       return this.appWebsocket.callZome(zomeCallPayload, timeout);
     } else if ("cell_id" in request && request.cell_id) {
       return this.appWebsocket.callZome(request as CallZomeRequest, timeout);
-    } else {
-      throw new Error("callZome requires a role_name or cell_id arg");
     }
+    throw new Error("callZome requires a role_name or cell_id arg");
   }
 
   /**
