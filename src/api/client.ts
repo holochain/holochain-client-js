@@ -186,7 +186,7 @@ export class WsClient extends Emittery {
   /**
    * Close the websocket connection.
    */
-  close(code?: number) {
+  close(code = 1000) {
     const closedPromise = new Promise<void>((resolve) =>
       this.socket.on("close", resolve)
     );
