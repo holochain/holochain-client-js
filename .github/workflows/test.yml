@@ -6,7 +6,7 @@ on:
     branches:
       - "main"
 
-concurrency: 
+concurrency:
   group: ${{ github.ref_name }}
   cancel-in-progress: true
 
@@ -15,6 +15,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest]
+      fail-fast: false
     runs-on: ${{ matrix.os }}
 
     steps:
@@ -39,9 +40,17 @@ jobs:
           path: test/e2e/fixture/zomes/foo/target
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('Cargo.lock') }}
 
-      - name: Run all tests
-        id: build-and-test
-        run: nix develop -c './run-test.sh'
+      - name: Install nix packages
+        run: nix develop -c $SHELL -c "echo Nix packages installed"
+
+      - name: Install JS packages
+        run: nix develop -c $SHELL -c "npm ci"
+
+      - name: Build test fixture
+        run: nix develop -c $SHELL -c "./build-fixture.sh"
+
+      - name: Run tests
+        run: nix develop -c $SHELL -c "npm t"
 
       - name: Setup tmate session if a previous step failed
         if: ${{ failure() }}
