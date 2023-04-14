@@ -746,6 +746,16 @@ export type StorageInfoResponse = StorageInfo;
 /**
  * @public
  */
+export type DumpNetworkStatsRequest = void;
+
+/**
+ * @public
+ */
+export type DumpNetworkStatsResponse = string;
+
+/**
+ * @public
+ */
 export interface AdminApi {
   attachAppInterface: Requester<
     AttachAppInterfaceRequest,
@@ -781,4 +791,8 @@ export interface AdminApi {
     GrantZomeCallCapabilityResponse
   >;
   storageInfo: Requester<StorageInfoRequest, StorageInfoResponse>;
+  dumpNetworkStats: Requester<
+    DumpNetworkStatsRequest,
+    DumpNetworkStatsResponse
+  >;
 }
