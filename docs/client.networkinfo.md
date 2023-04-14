@@ -15,5 +15,10 @@ export interface NetworkInfo
 
 |  Property | Modifiers | Type | Description |
 |  --- | --- | --- | --- |
+|  [arc\_size](./client.networkinfo.arc_size.md) |  | number |  |
+|  [bytes\_since\_last\_time\_queried](./client.networkinfo.bytes_since_last_time_queried.md) |  | number |  |
+|  [completed\_rounds\_since\_last\_time\_queried](./client.networkinfo.completed_rounds_since_last_time_queried.md) |  | number |  |
+|  [current\_number\_of\_peers](./client.networkinfo.current_number_of_peers.md) |  | number |  |
 |  [fetch\_pool\_info](./client.networkinfo.fetch_pool_info.md) |  | [FetchPoolInfo](./client.fetchpoolinfo.md) |  |
+|  [total\_network\_peers](./client.networkinfo.total_network_peers.md) |  | number |  |
 
