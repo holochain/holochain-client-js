@@ -6,7 +6,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Added
 - New Admin API endpoint `storageInfo`.
+- New Admin API endpoint `dumpNetworkStats`.
 ### Changed
+- Updated response type `NetworkInfo`.
 ### Fixed
 ### Removed
 
