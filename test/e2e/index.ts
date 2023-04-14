@@ -950,3 +950,15 @@ test(
     );
   })
 );
+
+test(
+  "can fetch storage info",
+  withConductor(ADMIN_PORT, async (t: Test) => {
+    const { installed_app_id, admin } = await installAppAndDna(ADMIN_PORT);
+
+    const response = await admin.storageInfo();
+
+    t.equal(response.blobs.length, 1);
+    t.equal(response.blobs[0].Dna.used_by.indexOf(installed_app_id), 0);
+  })
+);

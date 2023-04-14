@@ -3,6 +3,7 @@
 
   inputs = {
     holonix.url = "github:holochain/holochain";
+    holonix.inputs.holochain.url = "github:holochain/holochain/holochain-0.2.0-beta-rc.4";
     nixpkgs.follows = "holonix/nixpkgs";
   };
 
