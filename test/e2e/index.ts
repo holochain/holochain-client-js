@@ -951,7 +951,7 @@ test(
   })
 );
 
-test.only(
+test(
   "can fetch storage info",
   withConductor(ADMIN_PORT, async (t: Test) => {
     const { installed_app_id, admin } = await installAppAndDna(ADMIN_PORT);
