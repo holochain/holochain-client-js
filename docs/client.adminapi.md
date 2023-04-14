@@ -32,5 +32,6 @@ export interface AdminApi
 |  [listCellIds](./client.adminapi.listcellids.md) |  | [Requester](./client.requester.md)<!-- -->&lt;[ListCellIdsRequest](./client.listcellidsrequest.md)<!-- -->, [ListCellIdsResponse](./client.listcellidsresponse.md)<!-- -->&gt; |  |
 |  [listDnas](./client.adminapi.listdnas.md) |  | [Requester](./client.requester.md)<!-- -->&lt;[ListDnasRequest](./client.listdnasrequest.md)<!-- -->, [ListDnasResponse](./client.listdnasresponse.md)<!-- -->&gt; |  |
 |  [registerDna](./client.adminapi.registerdna.md) |  | [Requester](./client.requester.md)<!-- -->&lt;[RegisterDnaRequest](./client.registerdnarequest.md)<!-- -->, [RegisterDnaResponse](./client.registerdnaresponse.md)<!-- -->&gt; |  |
+|  [storageInfo](./client.adminapi.storageinfo.md) |  | [Requester](./client.requester.md)<!-- -->&lt;[StorageInfoRequest](./client.storageinforequest.md)<!-- -->, [StorageInfoResponse](./client.storageinforesponse.md)<!-- -->&gt; |  |
 |  [uninstallApp](./client.adminapi.uninstallapp.md) |  | [Requester](./client.requester.md)<!-- -->&lt;[UninstallAppRequest](./client.uninstallapprequest.md)<!-- -->, [UninstallAppResponse](./client.uninstallappresponse.md)<!-- -->&gt; |  |
 
