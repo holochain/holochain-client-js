@@ -723,7 +723,7 @@ export interface DnaStorageInfo {
  * @public
  */
 export interface DnaStorageBlob {
-  dna: DnaStorageInfo;
+  Dna: DnaStorageInfo;
 }
 
 /**
