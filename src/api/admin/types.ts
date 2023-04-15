@@ -755,6 +755,43 @@ export interface FullStateDump {
 /**
  * @public
  */
+export interface DnaStorageInfo {
+  authored_data_size: number;
+  authored_data_size_on_disk: number;
+  dht_data_size: number;
+  dht_data_size_on_disk: number;
+  cache_data_size: number;
+  cache_data_size_on_disk: number;
+  used_by: Array<InstalledAppId>;
+}
+
+/**
+ * @public
+ */
+export interface DnaStorageBlob {
+  Dna: DnaStorageInfo;
+}
+
+/**
+ * @public
+ */
+export interface StorageInfo {
+  blobs: Array<DnaStorageBlob>;
+}
+
+/**
+ * @public
+ */
+export type StorageInfoRequest = void;
+
+/**
+ * @public
+ */
+export type StorageInfoResponse = StorageInfo;
+
+/**
+ * @public
+ */
 export interface AdminApi {
   attachAppInterface: Requester<
     AttachAppInterfaceRequest,
@@ -789,4 +826,5 @@ export interface AdminApi {
     GrantZomeCallCapabilityRequest,
     GrantZomeCallCapabilityResponse
   >;
+  storageInfo: Requester<StorageInfoRequest, StorageInfoResponse>;
 }

@@ -12,11 +12,3 @@ echo "Built fixture"
 cd ../fixture2/coordinator2
 cargo build --release --target wasm32-unknown-unknown --target-dir ./target
 echo "Built fixture 2"
-
-# install npm dependencies
-cd ../../../../ # into root folder
-pwd
-npm install
-echo "Installed npm packages"
-
-npm run test

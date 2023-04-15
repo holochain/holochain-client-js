@@ -56,6 +56,8 @@ import {
   ListDnasResponse,
   RegisterDnaRequest,
   RegisterDnaResponse,
+  StorageInfoRequest,
+  StorageInfoResponse,
   UninstallAppRequest,
   UninstallAppResponse,
   UpdateCoordinatorsRequest,
@@ -254,6 +256,9 @@ export class AdminWebsocket implements AdminApi {
     GrantZomeCallCapabilityRequest,
     GrantZomeCallCapabilityResponse
   > = this._requester("grant_zome_call_capability");
+
+  storageInfo: Requester<StorageInfoRequest, StorageInfoResponse> =
+    this._requester("storage_info");
 
   // zome call signing related methods
 
