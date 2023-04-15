@@ -968,6 +968,20 @@ test(
   "can update coordinators of an app",
   withConductor(ADMIN_PORT, async (t: Test) => {
     const { client, admin, cell_id } = await installAppAndDna(ADMIN_PORT);
+    await admin.authorizeSigningCredentials(cell_id);
+
+    try {
+      await client.callZome({
+        cell_id,
+        zome_name: "coordinator2",
+        fn_name: "echo_hi",
+        provenance: cell_id[1],
+        payload: null,
+      });
+      t.fail();
+    } catch (error) {
+      t.pass("coordinator2 zome does not exist yet");
+    }
 
     const bundle = await makeCoordinatorZomeBundle();
 
@@ -983,8 +997,6 @@ test(
       zomeNames.includes("coordinator2"),
       "coordinator zomes can be updated"
     );
-
-    await admin.authorizeSigningCredentials(cell_id);
 
     const response = await client.callZome({
       cell_id,
