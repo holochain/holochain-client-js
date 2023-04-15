@@ -25,6 +25,7 @@ import {
   FIXTURE_PATH,
   installAppAndDna,
   launch,
+  makeCoordinatorZomeBundle,
   withConductor,
 } from "./util.js";
 
@@ -973,5 +974,51 @@ test(
 
     t.ok(typeof response === "string", "response is string");
     t.ok(JSON.parse(response), "response is valid JSON");
+  })
+);
+
+test(
+  "can update coordinators of an app",
+  withConductor(ADMIN_PORT, async (t: Test) => {
+    const { client, admin, cell_id } = await installAppAndDna(ADMIN_PORT);
+    await admin.authorizeSigningCredentials(cell_id);
+
+    try {
+      await client.callZome({
+        cell_id,
+        zome_name: "coordinator2",
+        fn_name: "echo_hi",
+        provenance: cell_id[1],
+        payload: null,
+      });
+      t.fail();
+    } catch (error) {
+      t.pass("coordinator2 zome does not exist yet");
+    }
+
+    const bundle = await makeCoordinatorZomeBundle();
+
+    await admin.updateCoordinators({
+      dna_hash: cell_id[0],
+      bundle,
+    });
+
+    const dnaDef = await admin.getDnaDefinition(cell_id[0]);
+    const zomeNames = dnaDef.coordinator_zomes.map((x) => x[0]);
+
+    t.ok(
+      zomeNames.includes("coordinator2"),
+      "coordinator zomes can be updated"
+    );
+
+    const response = await client.callZome({
+      cell_id,
+      zome_name: "coordinator2",
+      fn_name: "echo_hi",
+      provenance: cell_id[1],
+      payload: null,
+    });
+
+    t.equal(response, "hi", "updated coordinator zomes can be called");
   })
 );

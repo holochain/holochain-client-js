@@ -1,0 +1,12 @@
+[package]
+authors = ["Holochain Foundation"]
+edition = "2021"
+name = "coordinator2"
+version = "0.0.1"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+name = "coordinator2"
+
+[dependencies]
+hdk = "0.2.0-beta-rc.4"

@@ -3,8 +3,13 @@ import { spawn } from "node:child_process";
 import { Test } from "tape";
 import { AdminWebsocket } from "../../src/api/admin/websocket.js";
 import { AppWebsocket } from "../../src/api/app/websocket.js";
-import { AppAgentWebsocket, CellType } from "../../src/index.js";
 import { CellId, InstalledAppId } from "../../src/types.js";
+import {
+  AppAgentWebsocket,
+  CellType,
+  CoordinatorBundle,
+} from "../../src/index.js";
+import fs from "fs";
 
 export const FIXTURE_PATH = "./test/e2e/fixture";
 
@@ -147,3 +152,25 @@ export const createAppAgentWsAndInstallApp = async (
   );
   return { installed_app_id, cell_id, client, admin };
 };
+
+export async function makeCoordinatorZomeBundle(): Promise<CoordinatorBundle> {
+  const wasm = fs.readFileSync(
+    `${process.cwd()}/test/e2e/fixture2/coordinator2/target/wasm32-unknown-unknown/release/coordinator2.wasm`,
+    null
+  );
+
+  return {
+    manifest: {
+      zomes: [
+        {
+          bundled: "coordinator2",
+          name: "coordinator2",
+          dependencies: [],
+        },
+      ],
+    },
+    resources: {
+      coordinator2: new Uint8Array(wasm.buffer),
+    },
+  };
+}
