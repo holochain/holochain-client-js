@@ -11,7 +11,8 @@
 export declare type ZomeManifest = {
     name: string;
     hash?: string;
+    dependencies?: ZomeDependency[];
 } & ZomeLocation;
 ```
-<b>References:</b> [ZomeLocation](./client.zomelocation.md)
+<b>References:</b> [ZomeDependency](./client.zomedependency.md)<!-- -->, [ZomeLocation](./client.zomelocation.md)
 

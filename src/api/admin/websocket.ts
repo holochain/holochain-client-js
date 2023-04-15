@@ -60,6 +60,8 @@ import {
   StorageInfoResponse,
   UninstallAppRequest,
   UninstallAppResponse,
+  UpdateCoordinatorsRequest,
+  UpdateCoordinatorsResponse,
 } from "./types.js";
 
 /**
@@ -191,6 +193,14 @@ export class AdminWebsocket implements AdminApi {
    */
   installApp: Requester<InstallAppRequest, InstallAppResponse> =
     this._requester("install_app");
+
+  /**
+   * Update coordinators for an installed app.
+   */
+  updateCoordinators: Requester<
+    UpdateCoordinatorsRequest,
+    UpdateCoordinatorsResponse
+  > = this._requester("update_coordinators");
 
   /**
    * List all registered DNAs.
