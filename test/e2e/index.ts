@@ -278,7 +278,7 @@ test(
       new Date("2022-02-11T23:05:19.470323Z").getTime(),
       "dna definition: origin time matches"
     );
-    assert(Array.isArray(dnaDefinition.modifiers.properties));
+    assert(Buffer.isBuffer(dnaDefinition.modifiers.properties));
     t.equal(
       decode(dnaDefinition.modifiers.properties),
       null,
