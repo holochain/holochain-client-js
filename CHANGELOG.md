@@ -5,13 +5,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## \[Unreleased\]
 
 ### Added
-- New Admin API endpoint `storageInfo`.
-- New Admin API endpoint `dumpNetworkStats`.
-- New Admin API endpoint `updateCoordinators` to update coordinator zomes in an already installed hApp.
 ### Changed
-- Updated response type `NetworkInfo`.
 ### Fixed
 ### Removed
+
+## 2023-04-15: v0.13.0
+### Added
+- Add new Admin API endpoint `storageInfo`.
+- Add new Admin API endpoint `dumpNetworkStats`.
+- Add new Admin API endpoint `updateCoordinators` to update coordinator zomes in an already installed hApp.
+### Changed
+- Update response type `NetworkInfo`.
 
 ## 2023-03-01: v0.12.5
 ### Fixed
