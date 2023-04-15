@@ -6,8 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Added
 - New Admin API endpoint `storageInfo`.
-- New Admin API endpoint 'updateCoordinators' to update coordinator zomes in an already installed hApp.
+- New Admin API endpoint `dumpNetworkStats`.
+- New Admin API endpoint `updateCoordinators` to update coordinator zomes in an already installed hApp.
 ### Changed
+- Updated response type `NetworkInfo`.
 ### Fixed
 ### Removed
 

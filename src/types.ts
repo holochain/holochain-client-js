@@ -85,7 +85,7 @@ export type CellId = [DnaHash, AgentPubKey];
 /**
  * @public
  */
-export type DnaProperties = any;
+export type DnaProperties = unknown;
 /**
  * @public
  */
@@ -124,6 +124,11 @@ export interface HoloHashed<T> {
  */
 export interface NetworkInfo {
   fetch_pool_info: FetchPoolInfo;
+  current_number_of_peers: number;
+  arc_size: number;
+  total_network_peers: number;
+  bytes_since_last_time_queried: number;
+  completed_rounds_since_last_time_queried: number;
 }
 
 /**

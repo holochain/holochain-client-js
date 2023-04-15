@@ -8,5 +8,5 @@
 <b>Signature:</b>
 
 ```typescript
-export declare type DnaProperties = any;
+export declare type DnaProperties = unknown;
 ```

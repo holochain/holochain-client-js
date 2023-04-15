@@ -278,6 +278,7 @@ test(
       new Date("2022-02-11T23:05:19.470323Z").getTime(),
       "dna definition: origin time matches"
     );
+    assert(Buffer.isBuffer(dnaDefinition.modifiers.properties));
     t.equal(
       decode(dnaDefinition.modifiers.properties),
       null,
@@ -961,6 +962,18 @@ test(
 
     t.equal(response.blobs.length, 1);
     t.equal(response.blobs[0].Dna.used_by.indexOf(installed_app_id), 0);
+  })
+);
+
+test(
+  "can fetch network stats",
+  withConductor(ADMIN_PORT, async (t: Test) => {
+    const { admin } = await installAppAndDna(ADMIN_PORT);
+
+    const response = await admin.dumpNetworkStats();
+
+    t.ok(typeof response === "string", "response is string");
+    t.ok(JSON.parse(response), "response is valid JSON");
   })
 );
 
