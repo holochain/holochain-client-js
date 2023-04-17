@@ -40,6 +40,7 @@ jobs:
           path: |
             .cargo
             test/e2e/fixture/zomes/foo/target
+            test/e2e/fixture2/coordinator2/target
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('Cargo.lock') }}
 
       - name: Build Nix packages
