@@ -37,17 +37,20 @@ jobs:
         env:
           cache-name: test-zome
         with:
-          path: test/e2e/fixture/zomes/foo/target
+          path: |
+            .cargo
+            test/e2e/fixture/zomes/foo/target
+            test/e2e/fixture2/coordinator2/target
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('Cargo.lock') }}
 
-      - name: Install nix packages
-        run: nix develop -c $SHELL -c "echo Nix packages installed"
-
-      - name: Install JS packages
-        run: nix develop -c $SHELL -c "npm ci"
+      - name: Build Nix packages
+        run: nix develop -c $SHELL -c "echo Nix packages built"
 
       - name: Build test fixture
         run: nix develop -c $SHELL -c "./build-fixture.sh"
+
+      - name: Install JS packages
+        run: nix develop -c $SHELL -c "npm ci"
 
       - name: Run tests
         run: nix develop -c $SHELL -c "npm t"
@@ -55,3 +58,4 @@ jobs:
       - name: Setup tmate session if a previous step failed
         if: ${{ failure() }}
         uses: mxschmitt/action-tmate@v3
+        timeout-minutes: 10

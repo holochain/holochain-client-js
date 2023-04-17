@@ -93,11 +93,11 @@ export class AppWebsocket extends Emittery implements AppApi {
     return appWebsocket;
   }
 
-  _requester = <ReqI, ReqO, ResI, ResO>(
+  _requester<ReqI, ReqO, ResI, ResO>(
     tag: string,
     transformer?: Transformer<ReqI, ReqO, ResI, ResO>
-  ) =>
-    requesterTransformer(
+  ) {
+    return requesterTransformer(
       (req, timeout) =>
         promiseTimeout(
           this.client.request(req),
@@ -107,6 +107,7 @@ export class AppWebsocket extends Emittery implements AppApi {
       tag,
       transformer
     );
+  }
 
   /**
    * Request the app's info, including all cell infos.

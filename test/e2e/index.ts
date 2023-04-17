@@ -565,6 +565,27 @@ test("error is catchable when holochain socket is unavailable", async (t: Test) 
   }
 });
 
+test(
+  "zome call timeout can be overridden",
+  withConductor(ADMIN_PORT, async (t: Test) => {
+    const { client, admin, cell_id } = await installAppAndDna(ADMIN_PORT);
+    await admin.authorizeSigningCredentials(cell_id);
+    const zomeCallPayload: CallZomeRequest = {
+      cell_id,
+      zome_name: TEST_ZOME_NAME,
+      fn_name: "foo",
+      provenance: fakeAgentPubKey(),
+      payload: null,
+    };
+    try {
+      await client.callZome(zomeCallPayload, 1);
+      t.fail();
+    } catch (error) {
+      t.pass("zome call timed out");
+    }
+  })
+);
+
 test("can inject agents", async (t: Test) => {
   const conductor1 = await launch(ADMIN_PORT);
   const conductor2 = await launch(ADMIN_PORT_1);

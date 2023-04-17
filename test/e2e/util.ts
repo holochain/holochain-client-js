@@ -118,7 +118,7 @@ export const installAppAndDna = async (
   await admin.enableApp({ installed_app_id });
   // destructure to get whatever open port was assigned to the interface
   const { port: appPort } = await admin.attachAppInterface({ port: 0 });
-  const client = await AppWebsocket.connect(`ws://127.0.0.1:${appPort}`, 12000);
+  const client = await AppWebsocket.connect(`ws://127.0.0.1:${appPort}`);
   return { installed_app_id, cell_id, client, admin };
 };
 
