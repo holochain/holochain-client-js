@@ -95,11 +95,11 @@ export const randomNonce: () => Promise<Nonce256Bit> = async () =>
  */
 export const randomByteArray = async (length: number) => {
   if (
-    typeof window !== "undefined" &&
-    "crypto" in window &&
-    "getRandomValues" in window.crypto
+    globalThis.window &&
+    "crypto" in globalThis.window &&
+    "getRandomValues" in globalThis.window.crypto
   ) {
-    return window.crypto.getRandomValues(new Uint8Array(length));
+    return globalThis.window.crypto.getRandomValues(new Uint8Array(length));
   } else {
     const crypto = await import("node:crypto");
     return new Uint8Array(crypto.randomBytes(length));
