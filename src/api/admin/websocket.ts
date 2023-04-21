@@ -34,6 +34,8 @@ import {
   DisableAppResponse,
   DumpFullStateRequest,
   DumpFullStateResponse,
+  DumpNetworkStatsRequest,
+  DumpNetworkStatsResponse,
   DumpStateRequest,
   DumpStateResponse,
   EnableAppRequest,
@@ -60,6 +62,8 @@ import {
   StorageInfoResponse,
   UninstallAppRequest,
   UninstallAppResponse,
+  UpdateCoordinatorsRequest,
+  UpdateCoordinatorsResponse,
 } from "./types.js";
 
 /**
@@ -193,6 +197,14 @@ export class AdminWebsocket implements AdminApi {
     this._requester("install_app");
 
   /**
+   * Update coordinators for an installed app.
+   */
+  updateCoordinators: Requester<
+    UpdateCoordinatorsRequest,
+    UpdateCoordinatorsResponse
+  > = this._requester("update_coordinators");
+
+  /**
    * List all registered DNAs.
    */
   listDnas: Requester<ListDnasRequest, ListDnasResponse> =
@@ -249,6 +261,11 @@ export class AdminWebsocket implements AdminApi {
 
   storageInfo: Requester<StorageInfoRequest, StorageInfoResponse> =
     this._requester("storage_info");
+
+  dumpNetworkStats: Requester<
+    DumpNetworkStatsRequest,
+    DumpNetworkStatsResponse
+  > = this._requester("dump_network_stats");
 
   // zome call signing related methods
 

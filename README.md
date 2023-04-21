@@ -12,6 +12,11 @@ A JavaScript client for the Holochain Conductor API (works with browsers as well
 
 [Complete API reference](./docs/client.md)
 
+## Compatibility
+
+**JS client v0.12.x** is compatible with **Holochain v0.1.x**.  
+**JS client v0.13.x** is compatible with **Holochain v0.2.x**.
+
 ## Installation
 
 To install from NPM, run

@@ -25,6 +25,7 @@ import {
   FIXTURE_PATH,
   installAppAndDna,
   launch,
+  makeCoordinatorZomeBundle,
   withConductor,
 } from "./util.js";
 
@@ -277,6 +278,7 @@ test(
       new Date("2022-02-11T23:05:19.470323Z").getTime(),
       "dna definition: origin time matches"
     );
+    assert(Buffer.isBuffer(dnaDefinition.modifiers.properties));
     t.equal(
       decode(dnaDefinition.modifiers.properties),
       null,
@@ -562,6 +564,27 @@ test("error is catchable when holochain socket is unavailable", async (t: Test) 
     );
   }
 });
+
+test(
+  "zome call timeout can be overridden",
+  withConductor(ADMIN_PORT, async (t: Test) => {
+    const { client, admin, cell_id } = await installAppAndDna(ADMIN_PORT);
+    await admin.authorizeSigningCredentials(cell_id);
+    const zomeCallPayload: CallZomeRequest = {
+      cell_id,
+      zome_name: TEST_ZOME_NAME,
+      fn_name: "foo",
+      provenance: fakeAgentPubKey(),
+      payload: null,
+    };
+    try {
+      await client.callZome(zomeCallPayload, 1);
+      t.fail();
+    } catch (error) {
+      t.pass("zome call timed out");
+    }
+  })
+);
 
 test("can inject agents", async (t: Test) => {
   const conductor1 = await launch(ADMIN_PORT);
@@ -960,5 +983,63 @@ test(
 
     t.equal(response.blobs.length, 1);
     t.equal(response.blobs[0].Dna.used_by.indexOf(installed_app_id), 0);
+  })
+);
+
+test(
+  "can fetch network stats",
+  withConductor(ADMIN_PORT, async (t: Test) => {
+    const { admin } = await installAppAndDna(ADMIN_PORT);
+
+    const response = await admin.dumpNetworkStats();
+
+    t.ok(typeof response === "string", "response is string");
+    t.ok(JSON.parse(response), "response is valid JSON");
+  })
+);
+
+test(
+  "can update coordinators of an app",
+  withConductor(ADMIN_PORT, async (t: Test) => {
+    const { client, admin, cell_id } = await installAppAndDna(ADMIN_PORT);
+    await admin.authorizeSigningCredentials(cell_id);
+
+    try {
+      await client.callZome({
+        cell_id,
+        zome_name: "coordinator2",
+        fn_name: "echo_hi",
+        provenance: cell_id[1],
+        payload: null,
+      });
+      t.fail();
+    } catch (error) {
+      t.pass("coordinator2 zome does not exist yet");
+    }
+
+    const bundle = await makeCoordinatorZomeBundle();
+
+    await admin.updateCoordinators({
+      dna_hash: cell_id[0],
+      bundle,
+    });
+
+    const dnaDef = await admin.getDnaDefinition(cell_id[0]);
+    const zomeNames = dnaDef.coordinator_zomes.map((x) => x[0]);
+
+    t.ok(
+      zomeNames.includes("coordinator2"),
+      "coordinator zomes can be updated"
+    );
+
+    const response = await client.callZome({
+      cell_id,
+      zome_name: "coordinator2",
+      fn_name: "echo_hi",
+      provenance: cell_id[1],
+      payload: null,
+    });
+
+    t.equal(response, "hi", "updated coordinator zomes can be called");
   })
 );
