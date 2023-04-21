@@ -1,4 +1,4 @@
-import nacl from "tweetnacl";
+import * as ed25519 from "@noble/ed25519";
 import { CapSecret } from "../hdk/capabilities.js";
 import { AgentPubKey, CellId } from "../types.js";
 import { encodeHashToBase64 } from "../utils/base64.js";
@@ -11,9 +11,17 @@ export type Nonce256Bit = Uint8Array;
 /**
  * @public
  */
+export interface KeyPair {
+  privateKey: Uint8Array;
+  publicKey: Uint8Array;
+}
+
+/**
+ * @public
+ */
 export interface SigningCredentials {
   capSecret: CapSecret;
-  keyPair: nacl.SignKeyPair;
+  keyPair: KeyPair;
   signingKey: AgentPubKey;
 }
 
@@ -58,13 +66,14 @@ export const setSigningCredentials = (
  *
  * @public
  */
-export const generateSigningKeyPair: () => [
-  nacl.SignKeyPair,
-  AgentPubKey
-] = () => {
-  const keyPair = nacl.sign.keyPair();
+export const generateSigningKeyPair: () => Promise<
+  [KeyPair, AgentPubKey]
+> = async () => {
+  const privateKey = ed25519.utils.randomPrivateKey();
+  const publicKey = await ed25519.getPublicKeyAsync(privateKey);
+  const keyPair: KeyPair = { privateKey, publicKey };
   const signingKey = new Uint8Array(
-    [132, 32, 36].concat(...keyPair.publicKey).concat(...[0, 0, 0, 0])
+    [132, 32, 36].concat(...publicKey).concat(...[0, 0, 0, 0])
   );
   return [keyPair, signingKey];
 };
@@ -92,7 +101,7 @@ export const randomByteArray = async (length: number) => {
   ) {
     return window.crypto.getRandomValues(new Uint8Array(length));
   } else {
-    const crypto = await import("crypto");
+    const crypto = await import("node:crypto");
     return new Uint8Array(crypto.randomBytes(length));
   }
 };

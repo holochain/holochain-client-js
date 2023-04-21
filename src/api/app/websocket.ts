@@ -1,7 +1,7 @@
 import { hashZomeCall } from "@holochain/serialization";
 import { decode, encode } from "@msgpack/msgpack";
+import * as ed25519 from "@noble/ed25519";
 import Emittery from "emittery";
-import nacl from "tweetnacl";
 import {
   getLauncherEnvironment,
   isLauncher,
@@ -12,17 +12,17 @@ import { InstalledAppId } from "../../types.js";
 import { encodeHashToBase64 } from "../../utils/base64.js";
 import { WsClient } from "../client.js";
 import {
-  catchError,
   DEFAULT_TIMEOUT,
-  promiseTimeout,
   Requester,
-  requesterTransformer,
   Transformer,
+  catchError,
+  promiseTimeout,
+  requesterTransformer,
 } from "../common.js";
 import {
+  Nonce256Bit,
   getNonceExpiration,
   getSigningCredentials,
-  Nonce256Bit,
   randomNonce,
 } from "../zome-call-signing.js";
 import {
@@ -243,9 +243,10 @@ export const signZomeCall = async (request: CallZomeRequest) => {
     expires_at: getNonceExpiration(),
   };
   const hashedZomeCall = await hashZomeCall(unsignedZomeCallPayload);
-  const signature = nacl
-    .sign(hashedZomeCall, signingCredentialsForCell.keyPair.secretKey)
-    .subarray(0, nacl.sign.signatureLength);
+  const signature = await ed25519.signAsync(
+    hashedZomeCall,
+    signingCredentialsForCell.keyPair.privateKey
+  );
 
   const signedZomeCall: CallZomeRequestSigned = {
     ...unsignedZomeCallPayload,
