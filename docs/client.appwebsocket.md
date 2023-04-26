@@ -19,7 +19,6 @@ export declare class AppWebsocket extends Emittery implements AppApi
 
 |  Property | Modifiers | Type | Description |
 |  --- | --- | --- | --- |
-|  [\_requester](./client.appwebsocket._requester.md) |  | &lt;ReqI, ReqO, ResI, ResO&gt;(tag: string, transformer?: [Transformer](./client.transformer_2.md)<!-- -->&lt;ReqI, ReqO, ResI, ResO&gt; \| undefined) =&gt; (req: ReqI, timeout?: number \| undefined) =&gt; Promise&lt;ResO&gt; |  |
 |  [appInfo](./client.appwebsocket.appinfo.md) |  | [Requester](./client.requester.md)<!-- -->&lt;[AppInfoRequest](./client.appinforequest.md)<!-- -->, [AppInfoResponse](./client.appinforesponse.md)<!-- -->&gt; | Request the app's info, including all cell infos. |
 |  [callZome](./client.appwebsocket.callzome.md) |  | [Requester](./client.requester.md)<!-- -->&lt;[CallZomeRequest](./client.callzomerequest.md) \| [CallZomeRequestSigned](./client.callzomerequestsigned.md)<!-- -->, [CallZomeResponse](./client.callzomeresponse.md)<!-- -->&gt; | Call a zome. |
 |  [client](./client.appwebsocket.client.md) | <code>readonly</code> | [WsClient](./client.wsclient.md) |  |
@@ -34,5 +33,6 @@ export declare class AppWebsocket extends Emittery implements AppApi
 
 |  Method | Modifiers | Description |
 |  --- | --- | --- |
+|  [\_requester(tag, transformer)](./client.appwebsocket._requester.md) |  |  |
 |  [connect(url, defaultTimeout)](./client.appwebsocket.connect.md) | <code>static</code> | Instance factory for creating AppWebsockets. |
 

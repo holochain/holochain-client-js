@@ -4,7 +4,7 @@
 
 ## NetworkInfoRequest.dnas property
 
-The DNAs for which to get network info
+Get network info for these DNAs
 
 <b>Signature:</b>
 
