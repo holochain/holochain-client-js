@@ -7,5 +7,5 @@
 <b>Signature:</b>
 
 ```typescript
-keyPair: nacl.SignKeyPair;
+keyPair: KeyPair;
 ```

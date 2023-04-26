@@ -46,13 +46,13 @@
     "@noble/ed25519": "^2.0.0",
     "@tauri-apps/api": "^1.2.0",
     "emittery": "^1.0.1",
-    "isomorphic-ws": "^5.0.0",
     "js-base64": "^3.7.3",
-    "lodash-es": "^4.17.21"
+    "lodash-es": "^4.17.21",
+    "ws": "^8.13.0"
   },
   "devDependencies": {
-    "@microsoft/api-documenter": "^7.19.27",
-    "@microsoft/api-extractor": "^7.33.7",
+    "@microsoft/api-documenter": "^7.21.7",
+    "@microsoft/api-extractor": "^7.34.4",
     "@types/js-yaml": "^3.12.7",
     "@types/lodash-es": "^4.17.6",
     "@types/tape": "^4.13.2",
@@ -67,7 +67,7 @@
     "prettier": "^2.6.2",
     "rimraf": "^3.0.2",
     "tape": "^5.5.3",
-    "ts-node": "^10.8.1",
-    "typescript": "^4.7.2"
+    "ts-node": "^10.9.1",
+    "typescript": "^4.9.5"
   }
 }

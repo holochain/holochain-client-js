@@ -9,12 +9,12 @@ Constructs a new instance of the `WsClient` class
 <b>Signature:</b>
 
 ```typescript
-constructor(socket: Websocket);
+constructor(socket: IsoWebSocket);
 ```
 
 ## Parameters
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  socket | Websocket |  |
+|  socket | IsoWebSocket |  |
 

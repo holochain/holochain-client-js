@@ -7,5 +7,5 @@
 <b>Signature:</b>
 
 ```typescript
-socket: Websocket;
+socket: IsoWebSocket;
 ```

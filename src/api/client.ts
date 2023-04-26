@@ -1,6 +1,6 @@
 import { decode, encode } from "@msgpack/msgpack";
 import Emittery from "emittery";
-import Websocket from "isomorphic-ws";
+import { IsoWebSocket } from "../iso-web-socket/index.js";
 import { AppSignal, Signal, SignalType } from "./app/types.js";
 
 interface HolochainMessage {
@@ -18,7 +18,7 @@ interface HolochainMessage {
  * @public
  */
 export class WsClient extends Emittery {
-  socket: Websocket;
+  socket: IsoWebSocket;
   pendingRequests: Record<
     number,
     {
@@ -28,13 +28,13 @@ export class WsClient extends Emittery {
   >;
   index: number;
 
-  constructor(socket: Websocket) {
+  constructor(socket: IsoWebSocket) {
     super();
     this.socket = socket;
     this.pendingRequests = {};
     this.index = 0;
 
-    socket.onmessage = async (serializedMessage) => {
+    socket.onmessage = async (serializedMessage: MessageEvent) => {
       // If data is not a buffer (nodejs), it will be a blob (browser)
       let deserializedData;
       if (
@@ -87,7 +87,7 @@ export class WsClient extends Emittery {
       }
     };
 
-    socket.onclose = (event) => {
+    socket.onclose = (event: CloseEvent) => {
       const pendingRequestIds = Object.keys(this.pendingRequests).map((id) =>
         parseInt(id)
       );
@@ -111,7 +111,7 @@ export class WsClient extends Emittery {
    */
   static connect(url: string) {
     return new Promise<WsClient>((resolve, reject) => {
-      const socket = new Websocket(url);
+      const socket = new WebSocket(url);
       // make sure that there are no uncaught connection
       // errors because that causes nodejs thread to crash
       // with uncaught exception
@@ -187,8 +187,8 @@ export class WsClient extends Emittery {
    * Close the websocket connection.
    */
   close(code = 1000) {
-    const closedPromise = new Promise<void>((resolve) =>
-      this.socket.on("close", resolve)
+    const closedPromise = new Promise<void>(
+      (resolve) => (this.socket.onclose = () => resolve())
     );
     this.socket.close(code);
     return closedPromise;
@@ -219,3 +219,5 @@ function assertHolochainSignal(signal: unknown): asserts signal is Signal {
   }
   throw new Error(`unknown signal format ${JSON.stringify(signal, null, 4)}`);
 }
+
+export { IsoWebSocket };
