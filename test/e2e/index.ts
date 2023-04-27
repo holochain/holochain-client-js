@@ -988,7 +988,7 @@ test(
     const response = await admin.storageInfo();
 
     t.equal(response.blobs.length, 1);
-    t.equal(response.blobs[0].Dna.used_by.indexOf(installed_app_id), 0);
+    t.equal(response.blobs[0].dna.used_by.indexOf(installed_app_id), 0);
   })
 );
 
