@@ -3,6 +3,10 @@ import { CapSecret } from "../hdk/capabilities.js";
 import { AgentPubKey, CellId } from "../types.js";
 import { encodeHashToBase64 } from "../utils/base64.js";
 
+// shim for Nodejs <= v18
+import { webcrypto } from "node:crypto";
+if (!globalThis.crypto) globalThis.crypto = webcrypto as unknown as Crypto;
+
 /**
  * @public
  */

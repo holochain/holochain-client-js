@@ -928,20 +928,26 @@ test(
 
     await admin.authorizeSigningCredentials(cell_id);
 
-    const call1 = client.callZome({
-      cell_id,
-      zome_name: TEST_ZOME_NAME,
-      fn_name: "waste_some_time",
-      provenance: cell_id[1],
-      payload: null,
-    });
-    const call2 = client.callZome({
-      cell_id,
-      zome_name: TEST_ZOME_NAME,
-      fn_name: "waste_some_time",
-      provenance: cell_id[1],
-      payload: null,
-    });
+    const call1 = client.callZome(
+      {
+        cell_id,
+        zome_name: TEST_ZOME_NAME,
+        fn_name: "waste_some_time",
+        provenance: cell_id[1],
+        payload: null,
+      },
+      1000
+    );
+    const call2 = client.callZome(
+      {
+        cell_id,
+        zome_name: TEST_ZOME_NAME,
+        fn_name: "waste_some_time",
+        provenance: cell_id[1],
+        payload: null,
+      },
+      1000
+    );
 
     await delay(100);
 

@@ -10,7 +10,7 @@ interface HolochainMessage {
 }
 
 /**
- * A Websocket client which can make requests and receive responses,
+ * A WebSocket client which can make requests and receive responses,
  * as well as send and receive signals.
  *
  * Uses Holochain's websocket WireMessage for communication.
@@ -111,7 +111,7 @@ export class WsClient extends Emittery {
    */
   static connect(url: string) {
     return new Promise<WsClient>((resolve, reject) => {
-      const socket = new WebSocket(url);
+      const socket = new IsoWebSocket(url);
       // make sure that there are no uncaught connection
       // errors because that causes nodejs thread to crash
       // with uncaught exception
@@ -187,9 +187,18 @@ export class WsClient extends Emittery {
    * Close the websocket connection.
    */
   close(code = 1000) {
-    const closedPromise = new Promise<void>(
-      (resolve) => (this.socket.onclose = () => resolve())
-    );
+    const closedPromise = new Promise<CloseEvent>((resolve) => {
+      // for an unknown reason "addEventListener" gives a ts2345 error
+      // type narrowing works around that
+      if ("on" in this.socket) {
+        this.socket.on("close", (event: CloseEvent) => resolve(event));
+      } else {
+        this.socket.addEventListener("close", (event: CloseEvent) =>
+          resolve(event)
+        );
+      }
+    });
+
     this.socket.close(code);
     return closedPromise;
   }
