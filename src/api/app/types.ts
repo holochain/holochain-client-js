@@ -135,9 +135,17 @@ export type EnableCloneCellResponse = CreateCloneCellResponse;
  */
 export interface NetworkInfoRequest {
   /**
-   * The DNAs for which to get network info
+   * The calling agent
+   */
+  agent_pub_key: AgentPubKey;
+  /**
+   * Get network info for these DNAs
    */
   dnas: DnaHash[];
+  /**
+   * Timestamp in ms since which received amount of bytes from peers will be returned. Defaults to UNIX_EPOCH.
+   */
+  last_time_queried?: number;
 }
 
 /**
