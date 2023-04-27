@@ -6,7 +6,7 @@
 
 The dna as a \[`DnaHash`<!-- -->\] and \[`kitsune_p2p::KitsuneSpace`<!-- -->\].
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 this_dna: [DnaHash, KitsuneSpace] | undefined;

@@ -4,7 +4,7 @@
 
 ## CellProvisioning.deferred property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 deferred?: boolean;

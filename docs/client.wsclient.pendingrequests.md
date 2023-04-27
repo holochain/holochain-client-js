@@ -4,7 +4,7 @@
 
 ## WsClient.pendingRequests property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 pendingRequests: Record<number, {

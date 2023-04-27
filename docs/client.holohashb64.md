@@ -5,8 +5,8 @@
 ## HoloHashB64 type
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-export declare type HoloHashB64 = string;
+export type HoloHashB64 = string;
 ```

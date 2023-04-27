@@ -5,8 +5,8 @@
 ## Requester type
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-export declare type Requester<Req, Res> = (req: Req, timeout?: number) => Promise<Res>;
+export type Requester<Req, Res> = (req: Req, timeout?: number) => Promise<Res>;
 ```

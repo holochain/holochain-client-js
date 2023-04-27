@@ -4,7 +4,7 @@
 
 ## PreflightRequest.signing\_agents property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 signing_agents: CounterSigningAgents;

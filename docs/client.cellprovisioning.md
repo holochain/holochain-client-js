@@ -5,7 +5,7 @@
 ## CellProvisioning interface
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 export interface CellProvisioning 
@@ -15,6 +15,6 @@ export interface CellProvisioning
 
 |  Property | Modifiers | Type | Description |
 |  --- | --- | --- | --- |
-|  [deferred?](./client.cellprovisioning.deferred.md) |  | boolean | <i>(Optional)</i> |
+|  [deferred?](./client.cellprovisioning.deferred.md) |  | boolean | _(Optional)_ |
 |  [strategy](./client.cellprovisioning.strategy.md) |  | [CellProvisioningStrategy](./client.cellprovisioningstrategy.md) |  |
 

@@ -4,7 +4,7 @@
 
 ## PreflightRequest.preflight\_bytes property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 preflight_bytes: PreflightBytes;

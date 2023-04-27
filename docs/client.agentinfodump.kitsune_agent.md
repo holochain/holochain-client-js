@@ -4,7 +4,7 @@
 
 ## AgentInfoDump.kitsune\_agent property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 kitsune_agent: KitsuneAgent;

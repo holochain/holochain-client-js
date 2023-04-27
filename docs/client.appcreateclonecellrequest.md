@@ -5,10 +5,10 @@
 ## AppCreateCloneCellRequest type
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-export declare type AppCreateCloneCellRequest = Omit<CreateCloneCellRequest, "app_id">;
+export type AppCreateCloneCellRequest = Omit<CreateCloneCellRequest, "app_id">;
 ```
-<b>References:</b> [CreateCloneCellRequest](./client.createclonecellrequest.md)
+**References:** [CreateCloneCellRequest](./client.createclonecellrequest.md)
 

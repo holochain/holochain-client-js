@@ -4,7 +4,7 @@
 
 ## CreateLink.tag property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 tag: any;

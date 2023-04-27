@@ -6,19 +6,19 @@
 
 A class to establish a websocket connection to an App interface, for a specific agent and app.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 export declare class AppAgentWebsocket implements AppAgentClient 
 ```
-<b>Implements:</b> [AppAgentClient](./client.appagentclient.md)
+**Implements:** [AppAgentClient](./client.appagentclient.md)
 
 ## Properties
 
 |  Property | Modifiers | Type | Description |
 |  --- | --- | --- | --- |
 |  [appWebsocket](./client.appagentwebsocket.appwebsocket.md) | <code>readonly</code> | [AppWebsocket](./client.appwebsocket.md) |  |
-|  [cachedAppInfo?](./client.appagentwebsocket.cachedappinfo.md) |  | [AppInfo](./client.appinfo.md) | <i>(Optional)</i> |
+|  [cachedAppInfo?](./client.appagentwebsocket.cachedappinfo.md) |  | [AppInfo](./client.appinfo.md) | _(Optional)_ |
 |  [emitter](./client.appagentwebsocket.emitter.md) | <code>readonly</code> | Emittery&lt;[AppAgentEvents](./client.appagentevents.md)<!-- -->&gt; |  |
 |  [installedAppId](./client.appagentwebsocket.installedappid.md) |  | [InstalledAppId](./client.installedappid.md) |  |
 |  [myPubKey](./client.appagentwebsocket.mypubkey.md) |  | [AgentPubKey](./client.agentpubkey.md) |  |

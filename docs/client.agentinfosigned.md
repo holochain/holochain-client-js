@@ -6,8 +6,8 @@
 
 This type is meant to be opaque
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-export declare type AgentInfoSigned = unknown;
+export type AgentInfoSigned = unknown;
 ```

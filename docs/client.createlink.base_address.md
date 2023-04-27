@@ -4,7 +4,7 @@
 
 ## CreateLink.base\_address property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 base_address: EntryHash;

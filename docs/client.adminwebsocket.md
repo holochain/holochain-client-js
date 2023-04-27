@@ -6,12 +6,12 @@
 
 A class for interacting with a conductor's Admin API.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 export declare class AdminWebsocket implements AdminApi 
 ```
-<b>Implements:</b> [AdminApi](./client.adminapi.md)
+**Implements:** [AdminApi](./client.adminapi.md)
 
 ## Properties
 

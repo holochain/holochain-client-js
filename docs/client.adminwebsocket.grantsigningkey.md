@@ -6,7 +6,7 @@
 
 Grant a capability for signing zome calls.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 grantSigningKey: (cellId: CellId, functions: GrantedFunctions, signingKey: AgentPubKey) => Promise<CapSecret>;

@@ -5,12 +5,12 @@
 ## EntryType type
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-export declare type EntryType = "Agent" | {
+export type EntryType = "Agent" | {
     App: AppEntryDef;
 } | "CapClaim" | "CapGrant";
 ```
-<b>References:</b> [AppEntryDef](./client.appentrydef.md)
+**References:** [AppEntryDef](./client.appentrydef.md)
 

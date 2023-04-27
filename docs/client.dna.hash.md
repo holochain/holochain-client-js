@@ -4,7 +4,7 @@
 
 ## Dna.hash property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 hash: DnaHash;

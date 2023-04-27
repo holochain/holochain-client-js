@@ -6,7 +6,7 @@
 
 List all installed apps.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 listApps: Requester<ListAppsRequest, ListAppsResponse>;

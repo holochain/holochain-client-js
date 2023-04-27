@@ -6,7 +6,7 @@
 
 Instance factory for creating WsClients.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 static connect(url: string): Promise<WsClient>;
@@ -18,7 +18,7 @@ static connect(url: string): Promise<WsClient>;
 |  --- | --- | --- |
 |  url | string | The <code>ws://</code> URL to connect to. |
 
-<b>Returns:</b>
+**Returns:**
 
 Promise&lt;[WsClient](./client.wsclient.md)<!-- -->&gt;
 

@@ -6,7 +6,7 @@
 
 Add an existing agent to Holochain.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 addAgentInfo: Requester<AddAgentInfoRequest, AddAgentInfoResponse>;

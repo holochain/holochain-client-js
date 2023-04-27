@@ -4,7 +4,7 @@
 
 ## AdminApi.attachAppInterface property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 attachAppInterface: Requester<AttachAppInterfaceRequest, AttachAppInterfaceResponse>;

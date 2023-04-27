@@ -6,7 +6,7 @@
 
 Encode a byte array hash to a Base64 string.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 export declare function encodeHashToBase64(hash: HoloHash): HoloHashB64;
@@ -18,7 +18,7 @@ export declare function encodeHashToBase64(hash: HoloHash): HoloHashB64;
 |  --- | --- | --- |
 |  hash | [HoloHash](./client.holohash.md) | The hash to encode to a Base64 string. |
 
-<b>Returns:</b>
+**Returns:**
 
 [HoloHashB64](./client.holohashb64.md)
 

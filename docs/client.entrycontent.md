@@ -5,7 +5,7 @@
 ## EntryContent interface
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 export interface EntryContent<E extends string, C> 

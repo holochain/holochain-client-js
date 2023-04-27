@@ -5,12 +5,12 @@
 ## CallZomeRequestSigned interface
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 export interface CallZomeRequestSigned extends CallZomeRequestUnsigned 
 ```
-<b>Extends:</b> [CallZomeRequestUnsigned](./client.callzomerequestunsigned.md)
+**Extends:** [CallZomeRequestUnsigned](./client.callzomerequestunsigned.md)
 
 ## Properties
 

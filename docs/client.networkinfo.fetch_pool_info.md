@@ -4,7 +4,7 @@
 
 ## NetworkInfo.fetch\_pool\_info property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 fetch_pool_info: FetchPoolInfo;

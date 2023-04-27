@@ -4,7 +4,7 @@
 
 ## CallZomeRequestSigned.signature property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 signature: Uint8Array;

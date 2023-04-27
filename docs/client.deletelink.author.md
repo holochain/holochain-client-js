@@ -4,7 +4,7 @@
 
 ## DeleteLink.author property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 author: AgentPubKey;

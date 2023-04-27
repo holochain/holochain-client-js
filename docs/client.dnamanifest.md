@@ -5,10 +5,10 @@
 ## DnaManifest type
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-export declare type DnaManifest = {
+export type DnaManifest = {
     manifest_version: string;
     name: string;
     network_seed?: NetworkSeed;
@@ -16,5 +16,5 @@ export declare type DnaManifest = {
     zomes: Array<ZomeManifest>;
 };
 ```
-<b>References:</b> [NetworkSeed](./client.networkseed.md)<!-- -->, [DnaProperties](./client.dnaproperties.md)<!-- -->, [ZomeManifest](./client.zomemanifest.md)
+**References:** [NetworkSeed](./client.networkseed.md)<!-- -->, [DnaProperties](./client.dnaproperties.md)<!-- -->, [ZomeManifest](./client.zomemanifest.md)
 

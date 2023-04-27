@@ -4,7 +4,7 @@
 
 ## AdminWebsocket.dumpNetworkStats property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 dumpNetworkStats: Requester<DumpNetworkStatsRequest, DumpNetworkStatsResponse>;

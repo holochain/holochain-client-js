@@ -6,7 +6,7 @@
 
 Clone an existing provisioned cell.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 createCloneCell: Requester<CreateCloneCellRequest, CreateCloneCellResponse>;

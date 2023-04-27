@@ -6,7 +6,7 @@
 
 Factory mehtod to create a new instance connected to the given URL.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 static connect(url: string, defaultTimeout?: number): Promise<AdminWebsocket>;
@@ -17,9 +17,9 @@ static connect(url: string, defaultTimeout?: number): Promise<AdminWebsocket>;
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  url | string | A <code>ws://</code> URL used as the connection address. |
-|  defaultTimeout | number | <i>(Optional)</i> The default timeout for any request. |
+|  defaultTimeout | number | _(Optional)_ The default timeout for any request. |
 
-<b>Returns:</b>
+**Returns:**
 
 Promise&lt;[AdminWebsocket](./client.adminwebsocket.md)<!-- -->&gt;
 

@@ -4,7 +4,7 @@
 
 ## DnaStorageInfo.authored\_data\_size property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 authored_data_size: number;

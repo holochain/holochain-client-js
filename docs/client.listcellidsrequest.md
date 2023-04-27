@@ -5,8 +5,8 @@
 ## ListCellIdsRequest type
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-export declare type ListCellIdsRequest = void;
+export type ListCellIdsRequest = void;
 ```

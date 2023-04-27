@@ -1,6 +1,6 @@
 import { decode, encode } from "@msgpack/msgpack";
 import Emittery from "emittery";
-import Websocket from "isomorphic-ws";
+import { IsoWebSocket } from "../iso-web-socket/index.js";
 import { AppSignal, Signal, SignalType } from "./app/types.js";
 
 interface HolochainMessage {
@@ -10,7 +10,7 @@ interface HolochainMessage {
 }
 
 /**
- * A Websocket client which can make requests and receive responses,
+ * A WebSocket client which can make requests and receive responses,
  * as well as send and receive signals.
  *
  * Uses Holochain's websocket WireMessage for communication.
@@ -18,7 +18,7 @@ interface HolochainMessage {
  * @public
  */
 export class WsClient extends Emittery {
-  socket: Websocket;
+  socket: IsoWebSocket;
   pendingRequests: Record<
     number,
     {
@@ -28,18 +28,18 @@ export class WsClient extends Emittery {
   >;
   index: number;
 
-  constructor(socket: Websocket) {
+  constructor(socket: IsoWebSocket) {
     super();
     this.socket = socket;
     this.pendingRequests = {};
     this.index = 0;
 
-    socket.onmessage = async (serializedMessage) => {
+    socket.onmessage = async (serializedMessage: MessageEvent) => {
       // If data is not a buffer (nodejs), it will be a blob (browser)
       let deserializedData;
       if (
-        typeof window === "object" &&
-        serializedMessage.data instanceof window.Blob
+        globalThis.window &&
+        serializedMessage.data instanceof globalThis.window.Blob
       ) {
         deserializedData = await serializedMessage.data.arrayBuffer();
       } else {
@@ -87,7 +87,7 @@ export class WsClient extends Emittery {
       }
     };
 
-    socket.onclose = (event) => {
+    socket.onclose = (event: CloseEvent) => {
       const pendingRequestIds = Object.keys(this.pendingRequests).map((id) =>
         parseInt(id)
       );
@@ -111,7 +111,7 @@ export class WsClient extends Emittery {
    */
   static connect(url: string) {
     return new Promise<WsClient>((resolve, reject) => {
-      const socket = new Websocket(url);
+      const socket = new IsoWebSocket(url);
       // make sure that there are no uncaught connection
       // errors because that causes nodejs thread to crash
       // with uncaught exception
@@ -186,10 +186,19 @@ export class WsClient extends Emittery {
   /**
    * Close the websocket connection.
    */
-  close(code?: number) {
-    const closedPromise = new Promise<void>((resolve) =>
-      this.socket.on("close", resolve)
-    );
+  close(code = 1000) {
+    const closedPromise = new Promise<CloseEvent>((resolve) => {
+      // for an unknown reason "addEventListener" gives a ts2345 error
+      // type narrowing works around that
+      if ("on" in this.socket) {
+        this.socket.on("close", (event: CloseEvent) => resolve(event));
+      } else {
+        this.socket.addEventListener("close", (event: CloseEvent) =>
+          resolve(event)
+        );
+      }
+    });
+
     this.socket.close(code);
     return closedPromise;
   }
@@ -219,3 +228,5 @@ function assertHolochainSignal(signal: unknown): asserts signal is Signal {
   }
   throw new Error(`unknown signal format ${JSON.stringify(signal, null, 4)}`);
 }
+
+export { IsoWebSocket };

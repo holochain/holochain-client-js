@@ -5,14 +5,14 @@
 ## AppEntryDef type
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-export declare type AppEntryDef = {
+export type AppEntryDef = {
     entry_index: number;
     zome_index: number;
     visibility: EntryVisibility;
 };
 ```
-<b>References:</b> [EntryVisibility](./client.entryvisibility.md)
+**References:** [EntryVisibility](./client.entryvisibility.md)
 

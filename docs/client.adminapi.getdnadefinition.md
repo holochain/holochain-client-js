@@ -4,7 +4,7 @@
 
 ## AdminApi.getDnaDefinition property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getDnaDefinition: Requester<GetDnaDefinitionRequest, GetDnaDefinitionResponse>;

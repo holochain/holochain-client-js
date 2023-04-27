@@ -5,14 +5,14 @@
 ## EncodedAppSignal type
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-export declare type EncodedAppSignal = {
+export type EncodedAppSignal = {
     cell_id: CellId;
     zome_name: string;
     signal: Uint8Array;
 };
 ```
-<b>References:</b> [CellId](./client.cellid.md)
+**References:** [CellId](./client.cellid.md)
 

@@ -4,7 +4,7 @@
 
 ## SourceChainJsonRecord.entry property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 entry: Entry | undefined;

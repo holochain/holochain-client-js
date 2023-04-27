@@ -4,7 +4,7 @@
 
 ## SourceChainJsonRecord.action property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 action: Action;

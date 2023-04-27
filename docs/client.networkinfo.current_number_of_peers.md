@@ -4,7 +4,7 @@
 
 ## NetworkInfo.current\_number\_of\_peers property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 current_number_of_peers: number;

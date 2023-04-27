@@ -4,7 +4,7 @@
 
 ## AppAgentClient.disableCloneCell() method
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 disableCloneCell(args: AppDisableCloneCellRequest): Promise<DisableCloneCellResponse>;
@@ -16,7 +16,7 @@ disableCloneCell(args: AppDisableCloneCellRequest): Promise<DisableCloneCellResp
 |  --- | --- | --- |
 |  args | [AppDisableCloneCellRequest](./client.appdisableclonecellrequest.md) |  |
 
-<b>Returns:</b>
+**Returns:**
 
 Promise&lt;[DisableCloneCellResponse](./client.disableclonecellresponse.md)<!-- -->&gt;
 

@@ -5,7 +5,7 @@
 ## getNonceExpiration variable
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getNonceExpiration: () => number

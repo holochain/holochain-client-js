@@ -4,7 +4,7 @@
 
 ## AdminApi.grantZomeCallCapability property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 grantZomeCallCapability: Requester<GrantZomeCallCapabilityRequest, GrantZomeCallCapabilityResponse>;

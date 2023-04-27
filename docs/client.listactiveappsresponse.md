@@ -5,10 +5,10 @@
 ## ListActiveAppsResponse type
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-export declare type ListActiveAppsResponse = Array<InstalledAppId>;
+export type ListActiveAppsResponse = Array<InstalledAppId>;
 ```
-<b>References:</b> [InstalledAppId](./client.installedappid.md)
+**References:** [InstalledAppId](./client.installedappid.md)
 

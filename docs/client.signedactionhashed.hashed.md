@@ -4,7 +4,7 @@
 
 ## SignedActionHashed.hashed property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 hashed: HoloHashed<H>;

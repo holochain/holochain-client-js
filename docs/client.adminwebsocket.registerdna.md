@@ -8,7 +8,7 @@ Register a DNA for later app installation.
 
 Stores the given DNA into the Holochain DNA database and returns the hash of it.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 registerDna: Requester<RegisterDnaRequest, RegisterDnaResponse>;

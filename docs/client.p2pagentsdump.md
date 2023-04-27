@@ -5,7 +5,7 @@
 ## P2pAgentsDump interface
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 export interface P2pAgentsDump 

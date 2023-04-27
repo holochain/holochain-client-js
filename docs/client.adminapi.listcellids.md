@@ -4,7 +4,7 @@
 
 ## AdminApi.listCellIds property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 listCellIds: Requester<ListCellIdsRequest, ListCellIdsResponse>;

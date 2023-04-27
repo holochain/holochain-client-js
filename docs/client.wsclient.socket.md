@@ -4,8 +4,8 @@
 
 ## WsClient.socket property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-socket: Websocket;
+socket: IsoWebSocket;
 ```

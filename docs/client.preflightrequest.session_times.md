@@ -4,7 +4,7 @@
 
 ## PreflightRequest.session\_times property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 session_times: CounterSigningSessionTimes;

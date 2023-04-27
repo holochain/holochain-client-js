@@ -5,8 +5,8 @@
 ## ListAppInterfacesRequest type
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-export declare type ListAppInterfacesRequest = void;
+export type ListAppInterfacesRequest = void;
 ```

@@ -6,7 +6,7 @@
 
 Optionally set a proof of membership for the new cell.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 membrane_proof?: MembraneProof;

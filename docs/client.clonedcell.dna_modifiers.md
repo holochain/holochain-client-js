@@ -4,7 +4,7 @@
 
 ## ClonedCell.dna\_modifiers property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 dna_modifiers: DnaModifiers;

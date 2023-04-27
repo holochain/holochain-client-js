@@ -4,7 +4,7 @@
 
 ## AppAgentWebsocket.appWebsocket property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 readonly appWebsocket: AppWebsocket;

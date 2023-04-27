@@ -5,8 +5,8 @@
 ## CallZomeResponseGeneric type
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-export declare type CallZomeResponseGeneric<Payload> = Payload;
+export type CallZomeResponseGeneric<Payload> = Payload;
 ```

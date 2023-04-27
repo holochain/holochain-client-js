@@ -5,8 +5,8 @@
 ## Timestamp type
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-export declare type Timestamp = number;
+export type Timestamp = number;
 ```

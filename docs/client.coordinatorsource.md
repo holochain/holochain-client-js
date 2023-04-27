@@ -5,14 +5,14 @@
 ## CoordinatorSource type
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-export declare type CoordinatorSource = {
+export type CoordinatorSource = {
     path: string;
 } | {
     bundle: CoordinatorBundle;
 };
 ```
-<b>References:</b> [CoordinatorBundle](./client.coordinatorbundle.md)
+**References:** [CoordinatorBundle](./client.coordinatorbundle.md)
 

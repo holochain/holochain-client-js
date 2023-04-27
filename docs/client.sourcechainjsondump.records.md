@@ -4,7 +4,7 @@
 
 ## SourceChainJsonDump.records property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 records: Array<SourceChainJsonRecord>;

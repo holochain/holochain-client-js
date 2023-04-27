@@ -5,14 +5,14 @@
 ## CapGrant type
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-export declare type CapGrant = {
+export type CapGrant = {
     ChainAuthor: AgentPubKey;
 } | {
     RemoteAgent: ZomeCallCapGrant;
 };
 ```
-<b>References:</b> [AgentPubKey](./client.agentpubkey.md)<!-- -->, [ZomeCallCapGrant](./client.zomecallcapgrant.md)
+**References:** [AgentPubKey](./client.agentpubkey.md)<!-- -->, [ZomeCallCapGrant](./client.zomecallcapgrant.md)
 

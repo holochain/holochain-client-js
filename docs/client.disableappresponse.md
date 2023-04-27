@@ -5,8 +5,8 @@
 ## DisableAppResponse type
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-export declare type DisableAppResponse = null;
+export type DisableAppResponse = null;
 ```

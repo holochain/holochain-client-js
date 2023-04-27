@@ -34,6 +34,7 @@ jobs:
 
       - name: Cache test zome build
         uses: actions/cache@v3
+        if: always()
         env:
           cache-name: test-zome
         with:

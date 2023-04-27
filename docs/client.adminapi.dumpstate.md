@@ -4,7 +4,7 @@
 
 ## AdminApi.dumpState property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 dumpState: Requester<DumpStateRequest, DumpStateResponse>;

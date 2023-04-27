@@ -6,7 +6,7 @@
 
 Disable an enabled clone cell.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 disableCloneCell(args: AppDisableCloneCellRequest): Promise<DisableCloneCellResponse>;
@@ -18,7 +18,7 @@ disableCloneCell(args: AppDisableCloneCellRequest): Promise<DisableCloneCellResp
 |  --- | --- | --- |
 |  args | [AppDisableCloneCellRequest](./client.appdisableclonecellrequest.md) | Specify the clone cell to disable. |
 
-<b>Returns:</b>
+**Returns:**
 
 Promise&lt;[DisableCloneCellResponse](./client.disableclonecellresponse.md)<!-- -->&gt;
 

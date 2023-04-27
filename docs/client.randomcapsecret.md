@@ -5,7 +5,7 @@
 ## randomCapSecret variable
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 randomCapSecret: () => Promise<CapSecret>

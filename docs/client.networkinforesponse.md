@@ -5,10 +5,10 @@
 ## NetworkInfoResponse type
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-export declare type NetworkInfoResponse = NetworkInfo[];
+export type NetworkInfoResponse = NetworkInfo[];
 ```
-<b>References:</b> [NetworkInfo](./client.networkinfo.md)
+**References:** [NetworkInfo](./client.networkinfo.md)
 

@@ -5,8 +5,8 @@
 ## UpdateCoordinatorsResponse type
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-export declare type UpdateCoordinatorsResponse = void;
+export type UpdateCoordinatorsResponse = void;
 ```

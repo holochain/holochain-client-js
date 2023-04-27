@@ -5,14 +5,14 @@
 ## AppRoleDnaManifest type
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-export declare type AppRoleDnaManifest = {
+export type AppRoleDnaManifest = {
     clone_limit?: number;
     modifiers?: Partial<DnaModifiers>;
     version?: DnaVersionFlexible;
 } & Location;
 ```
-<b>References:</b> [DnaModifiers](./client.dnamodifiers.md)<!-- -->, [DnaVersionFlexible](./client.dnaversionflexible.md)<!-- -->, [Location](./client.location_2.md)
+**References:** [DnaModifiers](./client.dnamodifiers.md)<!-- -->, [DnaVersionFlexible](./client.dnaversionflexible.md)<!-- -->, [Location](./client.location_2.md)
 

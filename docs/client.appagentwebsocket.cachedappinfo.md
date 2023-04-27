@@ -4,7 +4,7 @@
 
 ## AppAgentWebsocket.cachedAppInfo property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 cachedAppInfo?: AppInfo;

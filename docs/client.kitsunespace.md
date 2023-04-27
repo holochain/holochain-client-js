@@ -5,8 +5,8 @@
 ## KitsuneSpace type
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-export declare type KitsuneSpace = Uint8Array;
+export type KitsuneSpace = Uint8Array;
 ```

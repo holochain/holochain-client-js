@@ -5,8 +5,8 @@
 ## StartAppResponse type
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-export declare type StartAppResponse = boolean;
+export type StartAppResponse = boolean;
 ```

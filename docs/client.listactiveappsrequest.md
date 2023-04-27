@@ -5,8 +5,8 @@
 ## ListActiveAppsRequest type
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-export declare type ListActiveAppsRequest = void;
+export type ListActiveAppsRequest = void;
 ```

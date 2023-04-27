@@ -5,10 +5,10 @@
 ## DnaVersionSpec type
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-export declare type DnaVersionSpec = Array<HoloHashB64>;
+export type DnaVersionSpec = Array<HoloHashB64>;
 ```
-<b>References:</b> [HoloHashB64](./client.holohashb64.md)
+**References:** [HoloHashB64](./client.holohashb64.md)
 

@@ -6,7 +6,7 @@
 
 Enable a stopped app.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 enableApp: Requester<EnableAppRequest, EnableAppResponse>;

@@ -6,7 +6,7 @@
 
 Install the specified app into Holochain.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 installApp: Requester<InstallAppRequest, InstallAppResponse>;

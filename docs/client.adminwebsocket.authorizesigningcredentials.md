@@ -6,7 +6,7 @@
 
 Generate and authorize a new key pair for signing zome calls.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 authorizeSigningCredentials: (cellId: CellId, functions?: GrantedFunctions) => Promise<void>;

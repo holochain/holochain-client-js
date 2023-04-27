@@ -4,7 +4,7 @@
 
 ## AdminApi.deleteCloneCell property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 deleteCloneCell: Requester<DeleteCloneCellRequest, DeleteCloneCellResponse>;

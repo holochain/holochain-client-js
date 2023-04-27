@@ -4,7 +4,7 @@
 
 ## CellProvisioning.strategy property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 strategy: CellProvisioningStrategy;

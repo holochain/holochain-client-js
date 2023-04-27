@@ -6,7 +6,7 @@
 
 Get a cell id by its role name or clone id.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getCellIdFromRoleName(roleName: RoleName, appInfo: AppInfo): CellId;
@@ -19,7 +19,7 @@ getCellIdFromRoleName(roleName: RoleName, appInfo: AppInfo): CellId;
 |  roleName | [RoleName](./client.rolename.md) | The role name or clone id of the cell. |
 |  appInfo | [AppInfo](./client.appinfo.md) | The app info containing all cell infos. |
 
-<b>Returns:</b>
+**Returns:**
 
 [CellId](./client.cellid.md)
 

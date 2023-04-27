@@ -5,10 +5,10 @@
 ## NonProvenanceCallZomeRequest type
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-export declare type NonProvenanceCallZomeRequest = Omit<CallZomeRequest, "provenance">;
+export type NonProvenanceCallZomeRequest = Omit<CallZomeRequest, "provenance">;
 ```
-<b>References:</b> [CallZomeRequest](./client.callzomerequest.md)
+**References:** [CallZomeRequest](./client.callzomerequest.md)
 

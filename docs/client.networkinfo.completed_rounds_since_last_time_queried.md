@@ -4,7 +4,7 @@
 
 ## NetworkInfo.completed\_rounds\_since\_last\_time\_queried property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 completed_rounds_since_last_time_queried: number;

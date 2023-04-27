@@ -5,15 +5,15 @@
 ## AppManifest type
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-export declare type AppManifest = {
+export type AppManifest = {
     manifest_version: string;
     name: string;
     description?: string;
     roles: Array<AppRoleManifest>;
 };
 ```
-<b>References:</b> [AppRoleManifest](./client.approlemanifest.md)
+**References:** [AppRoleManifest](./client.approlemanifest.md)
 

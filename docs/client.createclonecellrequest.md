@@ -5,7 +5,7 @@
 ## CreateCloneCellRequest interface
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 export interface CreateCloneCellRequest 
@@ -16,8 +16,8 @@ export interface CreateCloneCellRequest
 |  Property | Modifiers | Type | Description |
 |  --- | --- | --- | --- |
 |  [app\_id](./client.createclonecellrequest.app_id.md) |  | [InstalledAppId](./client.installedappid.md) | The app id that the DNA to clone belongs to |
-|  [membrane\_proof?](./client.createclonecellrequest.membrane_proof.md) |  | [MembraneProof](./client.membraneproof.md) | <i>(Optional)</i> Optionally set a proof of membership for the new cell. |
+|  [membrane\_proof?](./client.createclonecellrequest.membrane_proof.md) |  | [MembraneProof](./client.membraneproof.md) | _(Optional)_ Optionally set a proof of membership for the new cell. |
 |  [modifiers](./client.createclonecellrequest.modifiers.md) |  | { network\_seed?: [NetworkSeed](./client.networkseed.md)<!-- -->; properties?: [DnaProperties](./client.dnaproperties.md)<!-- -->; origin\_time?: [Timestamp](./client.timestamp.md)<!-- -->; } | Modifiers to set for the new cell. At least one of the modifiers must be set to obtain a distinct hash for the clone cell's DNA. |
-|  [name?](./client.createclonecellrequest.name.md) |  | string | <i>(Optional)</i> Optionally a name for the DNA clone. |
+|  [name?](./client.createclonecellrequest.name.md) |  | string | _(Optional)_ Optionally a name for the DNA clone. |
 |  [role\_name](./client.createclonecellrequest.role_name.md) |  | [RoleName](./client.rolename.md) | The DNA's role id to clone. |
 

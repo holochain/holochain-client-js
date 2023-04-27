@@ -4,7 +4,7 @@
 
 ## CallZomeRequestUnsigned.cap\_secret property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 cap_secret: CapSecret | null;
