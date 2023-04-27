@@ -5,7 +5,9 @@ import { encodeHashToBase64 } from "../utils/base64.js";
 
 // shim for Nodejs <= v18
 import { webcrypto } from "node:crypto";
-if (!globalThis.crypto) globalThis.crypto = webcrypto as unknown as Crypto;
+if (!globalThis.crypto) {
+  globalThis.crypto = webcrypto as unknown as Crypto;
+}
 
 /**
  * @public

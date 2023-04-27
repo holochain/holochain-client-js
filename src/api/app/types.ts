@@ -15,7 +15,7 @@ import {
   MembraneProof,
   NetworkSeed,
   ZomeName,
-} from "../admin/index.js";
+} from "../admin/types.js";
 import { Requester } from "../common.js";
 
 /**

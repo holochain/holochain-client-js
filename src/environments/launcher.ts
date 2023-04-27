@@ -1,13 +1,12 @@
-import { InstalledAppId } from "../types.js";
+import { encode } from "@msgpack/msgpack";
 import { invoke } from "@tauri-apps/api/tauri";
+import { CallZomeRequest } from "../api/app/types.js";
 import {
-  CallZomeRequest,
   CallZomeRequestSigned,
   CallZomeRequestUnsigned,
-  getNonceExpiration,
-  randomNonce,
-} from "../api/index.js";
-import { encode } from "@msgpack/msgpack";
+} from "../api/app/websocket.js";
+import { getNonceExpiration, randomNonce } from "../api/zome-call-signing.js";
+import { InstalledAppId } from "../types.js";
 
 export interface LauncherEnvironment {
   APP_INTERFACE_PORT?: number;
