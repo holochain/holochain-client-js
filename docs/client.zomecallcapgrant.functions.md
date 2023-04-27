@@ -4,7 +4,7 @@
 
 ## ZomeCallCapGrant.functions property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 functions: GrantedFunctions;

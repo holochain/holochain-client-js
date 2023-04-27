@@ -5,10 +5,10 @@
 ## CallZomeRequestGeneric type
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-export declare type CallZomeRequestGeneric<Payload> = {
+export type CallZomeRequestGeneric<Payload> = {
     cell_id: CellId;
     zome_name: ZomeName;
     fn_name: FunctionName;
@@ -16,5 +16,5 @@ export declare type CallZomeRequestGeneric<Payload> = {
     provenance: AgentPubKey;
 };
 ```
-<b>References:</b> [CellId](./client.cellid.md)<!-- -->, [ZomeName](./client.zomename.md)<!-- -->, [FunctionName](./client.functionname.md)<!-- -->, [AgentPubKey](./client.agentpubkey.md)
+**References:** [CellId](./client.cellid.md)<!-- -->, [ZomeName](./client.zomename.md)<!-- -->, [FunctionName](./client.functionname.md)<!-- -->, [AgentPubKey](./client.agentpubkey.md)
 

@@ -5,14 +5,14 @@
 ## ActionBase type
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-export declare type ActionBase = {
+export type ActionBase = {
     Create: CreateBase;
 } | {
     Update: UpdateBase;
 };
 ```
-<b>References:</b> [CreateBase](./client.createbase.md)<!-- -->, [UpdateBase](./client.updatebase.md)
+**References:** [CreateBase](./client.createbase.md)<!-- -->, [UpdateBase](./client.updatebase.md)
 

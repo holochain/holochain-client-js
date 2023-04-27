@@ -6,12 +6,12 @@
 
 Generate a valid agent key of a non-existing agent.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 export declare function fakeAgentPubKey(): Promise<AgentPubKey>;
 ```
-<b>Returns:</b>
+**Returns:**
 
 Promise&lt;[AgentPubKey](./client.agentpubkey.md)<!-- -->&gt;
 

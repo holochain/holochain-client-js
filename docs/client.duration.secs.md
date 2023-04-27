@@ -4,7 +4,7 @@
 
 ## Duration.secs property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 secs: number;

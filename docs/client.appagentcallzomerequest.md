@@ -5,10 +5,10 @@
 ## AppAgentCallZomeRequest type
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-export declare type AppAgentCallZomeRequest = NonProvenanceCallZomeRequest | RoleNameCallZomeRequest | CallZomeRequestSigned | RoleNameCallZomeRequestSigned;
+export type AppAgentCallZomeRequest = NonProvenanceCallZomeRequest | RoleNameCallZomeRequest | CallZomeRequestSigned | RoleNameCallZomeRequestSigned;
 ```
-<b>References:</b> [NonProvenanceCallZomeRequest](./client.nonprovenancecallzomerequest.md)<!-- -->, [RoleNameCallZomeRequest](./client.rolenamecallzomerequest.md)<!-- -->, [CallZomeRequestSigned](./client.callzomerequestsigned.md)<!-- -->, [RoleNameCallZomeRequestSigned](./client.rolenamecallzomerequestsigned.md)
+**References:** [NonProvenanceCallZomeRequest](./client.nonprovenancecallzomerequest.md)<!-- -->, [RoleNameCallZomeRequest](./client.rolenamecallzomerequest.md)<!-- -->, [CallZomeRequestSigned](./client.callzomerequestsigned.md)<!-- -->, [RoleNameCallZomeRequestSigned](./client.rolenamecallzomerequestsigned.md)
 

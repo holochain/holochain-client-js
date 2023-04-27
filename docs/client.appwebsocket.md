@@ -6,14 +6,14 @@
 
 A class to establish a websocket connection to an App interface of a Holochain conductor.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 export declare class AppWebsocket extends Emittery implements AppApi 
 ```
-<b>Extends:</b> Emittery
+**Extends:** Emittery
 
-<b>Implements:</b> [AppApi](./client.appapi.md)
+**Implements:** [AppApi](./client.appapi.md)
 
 ## Properties
 
@@ -27,7 +27,7 @@ export declare class AppWebsocket extends Emittery implements AppApi
 |  [disableCloneCell](./client.appwebsocket.disableclonecell.md) |  | [Requester](./client.requester.md)<!-- -->&lt;[DisableCloneCellRequest](./client.disableclonecellrequest.md)<!-- -->, [DisableCloneCellResponse](./client.disableclonecellresponse.md)<!-- -->&gt; | Disable an enabled clone cell. |
 |  [enableCloneCell](./client.appwebsocket.enableclonecell.md) |  | [Requester](./client.requester.md)<!-- -->&lt;[EnableCloneCellRequest](./client.enableclonecellrequest.md)<!-- -->, [EnableCloneCellResponse](./client.enableclonecellresponse.md)<!-- -->&gt; | Enable a disabled clone cell. |
 |  [networkInfo](./client.appwebsocket.networkinfo.md) |  | [Requester](./client.requester.md)<!-- -->&lt;[NetworkInfoRequest](./client.networkinforequest.md)<!-- -->, [NetworkInfoResponse](./client.networkinforesponse.md)<!-- -->&gt; | Request network info about gossip status. |
-|  [overrideInstalledAppId?](./client.appwebsocket.overrideinstalledappid.md) |  | [InstalledAppId](./client.installedappid.md) | <i>(Optional)</i> |
+|  [overrideInstalledAppId?](./client.appwebsocket.overrideinstalledappid.md) |  | [InstalledAppId](./client.installedappid.md) | _(Optional)_ |
 
 ## Methods
 

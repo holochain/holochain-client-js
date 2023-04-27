@@ -4,7 +4,7 @@
 
 ## AppWebsocket.client property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 readonly client: WsClient;

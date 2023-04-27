@@ -4,7 +4,7 @@
 
 ## AgentInfoDump.dump property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 dump: string;

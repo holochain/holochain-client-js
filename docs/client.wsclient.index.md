@@ -4,7 +4,7 @@
 
 ## WsClient.index property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 index: number;

@@ -4,7 +4,7 @@
 
 ## CallZomeRequestUnsigned.nonce property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 nonce: Nonce256Bit;

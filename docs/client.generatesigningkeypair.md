@@ -6,7 +6,7 @@
 
 Generates a key pair for signing zome calls.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 generateSigningKeyPair: () => Promise<[

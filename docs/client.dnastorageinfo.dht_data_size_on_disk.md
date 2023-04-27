@@ -4,7 +4,7 @@
 
 ## DnaStorageInfo.dht\_data\_size\_on\_disk property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 dht_data_size_on_disk: number;

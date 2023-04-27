@@ -5,8 +5,8 @@
 ## FunctionName type
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-export declare type FunctionName = string;
+export type FunctionName = string;
 ```

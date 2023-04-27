@@ -6,7 +6,7 @@
 
 The websocket client used for transporting requests and responses.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 readonly client: WsClient;

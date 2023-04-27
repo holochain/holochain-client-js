@@ -5,8 +5,8 @@
 ## AddAgentInfoResponse type
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-export declare type AddAgentInfoResponse = any;
+export type AddAgentInfoResponse = any;
 ```

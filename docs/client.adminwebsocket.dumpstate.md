@@ -6,7 +6,7 @@
 
 Dump the state of the specified cell, including its source chain, as JSON.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 dumpState: Requester<DumpStateRequest, DumpStateResponse>;

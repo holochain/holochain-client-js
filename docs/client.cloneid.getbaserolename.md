@@ -4,12 +4,12 @@
 
 ## CloneId.getBaseRoleName() method
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getBaseRoleName(): string;
 ```
-<b>Returns:</b>
+**Returns:**
 
 string
 

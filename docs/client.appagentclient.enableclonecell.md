@@ -4,7 +4,7 @@
 
 ## AppAgentClient.enableCloneCell() method
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 enableCloneCell(args: AppEnableCloneCellRequest): Promise<EnableCloneCellResponse>;
@@ -16,7 +16,7 @@ enableCloneCell(args: AppEnableCloneCellRequest): Promise<EnableCloneCellRespons
 |  --- | --- | --- |
 |  args | [AppEnableCloneCellRequest](./client.appenableclonecellrequest.md) |  |
 
-<b>Returns:</b>
+**Returns:**
 
 Promise&lt;[EnableCloneCellResponse](./client.enableclonecellresponse.md)<!-- -->&gt;
 

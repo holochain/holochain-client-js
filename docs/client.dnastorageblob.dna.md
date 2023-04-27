@@ -4,7 +4,7 @@
 
 ## DnaStorageBlob.Dna property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 Dna: DnaStorageInfo;

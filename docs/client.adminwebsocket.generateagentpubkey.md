@@ -6,7 +6,7 @@
 
 Generate a new agent pub key.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 generateAgentPubKey: Requester<GenerateAgentPubKeyRequest, GenerateAgentPubKeyResponse>;

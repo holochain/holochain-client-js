@@ -4,7 +4,7 @@
 
 ## AppAgentEvents.signal property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 signal: AppSignal;

@@ -4,7 +4,7 @@
 
 ## ClonedCell.clone\_id property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 clone_id: RoleName;

@@ -5,10 +5,10 @@
 ## DumpFullStateResponse type
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-export declare type DumpFullStateResponse = FullStateDump;
+export type DumpFullStateResponse = FullStateDump;
 ```
-<b>References:</b> [FullStateDump](./client.fullstatedump.md)
+**References:** [FullStateDump](./client.fullstatedump.md)
 

@@ -6,7 +6,7 @@
 
 Request network info about gossip status.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 networkInfo: Requester<NetworkInfoRequest, NetworkInfoResponse>;

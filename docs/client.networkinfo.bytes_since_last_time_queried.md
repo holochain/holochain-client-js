@@ -4,7 +4,7 @@
 
 ## NetworkInfo.bytes\_since\_last\_time\_queried property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 bytes_since_last_time_queried: number;

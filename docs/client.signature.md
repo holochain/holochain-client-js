@@ -5,8 +5,8 @@
 ## Signature type
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-export declare type Signature = Uint8Array;
+export type Signature = Uint8Array;
 ```

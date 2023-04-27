@@ -4,7 +4,7 @@
 
 ## FullIntegrationStateDump.validation\_limbo property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 validation_limbo: Array<DhtOp>;

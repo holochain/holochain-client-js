@@ -5,10 +5,10 @@
 ## EntryVisibility type
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-export declare type EntryVisibility = {
+export type EntryVisibility = {
     Public: null;
 } | {
     Private: null;

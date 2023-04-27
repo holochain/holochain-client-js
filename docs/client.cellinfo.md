@@ -5,10 +5,10 @@
 ## CellInfo type
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-export declare type CellInfo = {
+export type CellInfo = {
     [CellType.Provisioned]: ProvisionedCell;
 } | {
     [CellType.Cloned]: ClonedCell;
@@ -16,5 +16,5 @@ export declare type CellInfo = {
     [CellType.Stem]: StemCell;
 };
 ```
-<b>References:</b> [CellType.Provisioned](./client.celltype.md)<!-- -->, [ProvisionedCell](./client.provisionedcell.md)<!-- -->, [CellType.Cloned](./client.celltype.md)<!-- -->, [ClonedCell](./client.clonedcell.md)<!-- -->, [CellType.Stem](./client.celltype.md)<!-- -->, [StemCell](./client.stemcell.md)
+**References:** [CellType.Provisioned](./client.celltype.md)<!-- -->, [ProvisionedCell](./client.provisionedcell.md)<!-- -->, [CellType.Cloned](./client.celltype.md)<!-- -->, [ClonedCell](./client.clonedcell.md)<!-- -->, [CellType.Stem](./client.celltype.md)<!-- -->, [StemCell](./client.stemcell.md)
 

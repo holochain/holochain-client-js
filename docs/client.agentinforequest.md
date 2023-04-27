@@ -5,12 +5,12 @@
 ## AgentInfoRequest type
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-export declare type AgentInfoRequest = {
+export type AgentInfoRequest = {
     cell_id: CellId | null;
 };
 ```
-<b>References:</b> [CellId](./client.cellid.md)
+**References:** [CellId](./client.cellid.md)
 

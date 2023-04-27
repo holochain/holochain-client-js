@@ -4,7 +4,7 @@
 
 ## AdminWebsocket.storageInfo property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 storageInfo: Requester<StorageInfoRequest, StorageInfoResponse>;

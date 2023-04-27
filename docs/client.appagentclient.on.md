@@ -4,7 +4,7 @@
 
 ## AppAgentClient.on() method
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 on<Name extends keyof AppAgentEvents>(eventName: Name | readonly Name[], listener: AppSignalCb): UnsubscribeFunction;
@@ -17,7 +17,7 @@ on<Name extends keyof AppAgentEvents>(eventName: Name | readonly Name[], listene
 |  eventName | Name \| readonly Name\[\] |  |
 |  listener | [AppSignalCb](./client.appsignalcb.md) |  |
 
-<b>Returns:</b>
+**Returns:**
 
 UnsubscribeFunction
 

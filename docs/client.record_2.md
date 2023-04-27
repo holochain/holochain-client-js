@@ -5,13 +5,13 @@
 ## Record\_2 type
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-export declare type Record = {
+export type Record = {
     signed_action: SignedActionHashed;
     entry: RecordEntry;
 };
 ```
-<b>References:</b> [SignedActionHashed](./client.signedactionhashed.md)<!-- -->, [RecordEntry](./client.recordentry.md)
+**References:** [SignedActionHashed](./client.signedactionhashed.md)<!-- -->, [RecordEntry](./client.recordentry.md)
 

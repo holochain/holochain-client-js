@@ -4,7 +4,7 @@
 
 ## AdminApi.listAppInterfaces property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 listAppInterfaces: Requester<ListAppInterfacesRequest, ListAppInterfacesResponse>;

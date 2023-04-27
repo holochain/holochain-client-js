@@ -5,14 +5,14 @@
 ## InstallAppDnaPayload type
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-export declare type InstallAppDnaPayload = {
+export type InstallAppDnaPayload = {
     hash: HoloHash;
     role_name: RoleName;
     membrane_proof?: MembraneProof;
 };
 ```
-<b>References:</b> [HoloHash](./client.holohash.md)<!-- -->, [RoleName](./client.rolename.md)<!-- -->, [MembraneProof](./client.membraneproof.md)
+**References:** [HoloHash](./client.holohash.md)<!-- -->, [RoleName](./client.rolename.md)<!-- -->, [MembraneProof](./client.membraneproof.md)
 

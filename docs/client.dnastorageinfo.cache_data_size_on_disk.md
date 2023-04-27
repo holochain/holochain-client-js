@@ -4,7 +4,7 @@
 
 ## DnaStorageInfo.cache\_data\_size\_on\_disk property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 cache_data_size_on_disk: number;

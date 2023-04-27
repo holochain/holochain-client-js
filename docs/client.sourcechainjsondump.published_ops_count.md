@@ -4,7 +4,7 @@
 
 ## SourceChainJsonDump.published\_ops\_count property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 published_ops_count: number;

@@ -5,10 +5,10 @@
 ## RecordEntry type
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-export declare type RecordEntry = {
+export type RecordEntry = {
     Present: Entry;
 } | {
     Hidden: void;
@@ -18,5 +18,5 @@ export declare type RecordEntry = {
     NotStored: void;
 };
 ```
-<b>References:</b> [Entry](./client.entry.md)
+**References:** [Entry](./client.entry.md)
 

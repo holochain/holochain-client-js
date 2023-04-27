@@ -5,13 +5,13 @@
 ## DnaBundle type
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-export declare type DnaBundle = {
+export type DnaBundle = {
     manifest: DnaManifest;
     resources: ResourceMap;
 };
 ```
-<b>References:</b> [DnaManifest](./client.dnamanifest.md)<!-- -->, [ResourceMap](./client.resourcemap.md)
+**References:** [DnaManifest](./client.dnamanifest.md)<!-- -->, [ResourceMap](./client.resourcemap.md)
 

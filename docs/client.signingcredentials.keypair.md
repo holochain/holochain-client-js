@@ -4,7 +4,7 @@
 
 ## SigningCredentials.keyPair property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 keyPair: KeyPair;

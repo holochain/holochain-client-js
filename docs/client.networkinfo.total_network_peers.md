@@ -4,7 +4,7 @@
 
 ## NetworkInfo.total\_network\_peers property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 total_network_peers: number;

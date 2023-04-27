@@ -6,7 +6,7 @@
 
 Sends data as a signal.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 emitSignal(data: unknown): void;
@@ -18,7 +18,7 @@ emitSignal(data: unknown): void;
 |  --- | --- | --- |
 |  data | unknown | Data to send. |
 
-<b>Returns:</b>
+**Returns:**
 
 void
 

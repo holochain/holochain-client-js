@@ -4,7 +4,7 @@
 
 ## Create.entry\_hash property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 entry_hash: EntryHash;

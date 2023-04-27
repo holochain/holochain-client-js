@@ -5,10 +5,10 @@
 ## InstallAppResponse type
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-export declare type InstallAppResponse = AppInfo;
+export type InstallAppResponse = AppInfo;
 ```
-<b>References:</b> [AppInfo](./client.appinfo.md)
+**References:** [AppInfo](./client.appinfo.md)
 

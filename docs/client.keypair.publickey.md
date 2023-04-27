@@ -4,7 +4,7 @@
 
 ## KeyPair.publicKey property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 publicKey: Uint8Array;

@@ -5,10 +5,10 @@
 ## GetDnaDefinitionRequest type
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-export declare type GetDnaDefinitionRequest = DnaHash;
+export type GetDnaDefinitionRequest = DnaHash;
 ```
-<b>References:</b> [DnaHash](./client.dnahash.md)
+**References:** [DnaHash](./client.dnahash.md)
 

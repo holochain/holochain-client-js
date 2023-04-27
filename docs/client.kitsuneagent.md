@@ -5,8 +5,8 @@
 ## KitsuneAgent type
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-export declare type KitsuneAgent = Uint8Array;
+export type KitsuneAgent = Uint8Array;
 ```

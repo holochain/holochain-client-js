@@ -5,8 +5,8 @@
 ## HoloHash type
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-export declare type HoloHash = Uint8Array;
+export type HoloHash = Uint8Array;
 ```

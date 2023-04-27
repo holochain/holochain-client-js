@@ -5,8 +5,8 @@
 ## Role type
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-export declare type Role = number;
+export type Role = number;
 ```

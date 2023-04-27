@@ -4,7 +4,7 @@
 
 ## PreflightRequest.action\_base property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 action_base: ActionBase;

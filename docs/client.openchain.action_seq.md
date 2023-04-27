@@ -4,7 +4,7 @@
 
 ## OpenChain.action\_seq property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 action_seq: number;

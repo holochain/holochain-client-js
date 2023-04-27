@@ -4,7 +4,7 @@
 
 ## DnaStorageInfo.used\_by property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 used_by: Array<InstalledAppId>;

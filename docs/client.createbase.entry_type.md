@@ -4,7 +4,7 @@
 
 ## CreateBase.entry\_type property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 entry_type: EntryType;

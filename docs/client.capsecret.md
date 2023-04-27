@@ -5,8 +5,8 @@
 ## CapSecret type
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-export declare type CapSecret = Uint8Array;
+export type CapSecret = Uint8Array;
 ```

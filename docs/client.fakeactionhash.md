@@ -6,12 +6,12 @@
 
 Generate a valid hash of a non-existing action.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 export declare function fakeActionHash(): Promise<ActionHash>;
 ```
-<b>Returns:</b>
+**Returns:**
 
 Promise&lt;[ActionHash](./client.actionhash.md)<!-- -->&gt;
 

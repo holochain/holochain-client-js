@@ -5,10 +5,10 @@
 ## GenerateAgentPubKeyResponse type
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-export declare type GenerateAgentPubKeyResponse = AgentPubKey;
+export type GenerateAgentPubKeyResponse = AgentPubKey;
 ```
-<b>References:</b> [AgentPubKey](./client.agentpubkey.md)
+**References:** [AgentPubKey](./client.agentpubkey.md)
 

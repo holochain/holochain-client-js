@@ -5,10 +5,10 @@
 ## CellId type
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-export declare type CellId = [DnaHash, AgentPubKey];
+export type CellId = [DnaHash, AgentPubKey];
 ```
-<b>References:</b> [DnaHash](./client.dnahash.md)<!-- -->, [AgentPubKey](./client.agentpubkey.md)
+**References:** [DnaHash](./client.dnahash.md)<!-- -->, [AgentPubKey](./client.agentpubkey.md)
 

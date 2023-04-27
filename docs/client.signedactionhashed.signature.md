@@ -4,7 +4,7 @@
 
 ## SignedActionHashed.signature property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 signature: Signature;

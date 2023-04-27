@@ -4,7 +4,7 @@
 
 ## NetworkInfo.arc\_size property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 arc_size: number;

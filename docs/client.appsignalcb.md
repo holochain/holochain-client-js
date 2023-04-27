@@ -5,10 +5,10 @@
 ## AppSignalCb type
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-export declare type AppSignalCb = (signal: AppSignal) => void;
+export type AppSignalCb = (signal: AppSignal) => void;
 ```
-<b>References:</b> [AppSignal](./client.appsignal.md)
+**References:** [AppSignal](./client.appsignal.md)
 

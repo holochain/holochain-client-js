@@ -6,7 +6,7 @@
 
 The DNAs for which to get network info
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 dnas: DnaHash[];

@@ -6,7 +6,7 @@
 
 Enable a disabled clone cell.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 enableCloneCell: Requester<EnableCloneCellRequest, EnableCloneCellResponse>;

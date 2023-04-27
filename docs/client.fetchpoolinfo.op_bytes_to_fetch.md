@@ -4,7 +4,7 @@
 
 ## FetchPoolInfo.op\_bytes\_to\_fetch property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 op_bytes_to_fetch: number;

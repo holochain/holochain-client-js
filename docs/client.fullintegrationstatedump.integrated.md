@@ -4,7 +4,7 @@
 
 ## FullIntegrationStateDump.integrated property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 integrated: Array<DhtOp>;

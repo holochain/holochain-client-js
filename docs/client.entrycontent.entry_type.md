@@ -4,7 +4,7 @@
 
 ## EntryContent.entry\_type property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 entry_type: E;

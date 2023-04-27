@@ -6,7 +6,7 @@
 
 Disable an enabled clone cell.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 disableCloneCell: Requester<DisableCloneCellRequest, DisableCloneCellResponse>;

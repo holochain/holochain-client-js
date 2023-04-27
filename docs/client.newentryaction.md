@@ -5,10 +5,10 @@
 ## NewEntryAction type
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-export declare type NewEntryAction = Create | Update;
+export type NewEntryAction = Create | Update;
 ```
-<b>References:</b> [Create](./client.create.md)<!-- -->, [Update](./client.update.md)
+**References:** [Create](./client.create.md)<!-- -->, [Update](./client.update.md)
 

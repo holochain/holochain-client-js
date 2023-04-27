@@ -6,7 +6,7 @@
 
 Update coordinators for an installed app.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 updateCoordinators: Requester<UpdateCoordinatorsRequest, UpdateCoordinatorsResponse>;

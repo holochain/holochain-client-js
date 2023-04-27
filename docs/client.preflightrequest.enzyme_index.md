@@ -4,7 +4,7 @@
 
 ## PreflightRequest.enzyme\_index property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 enzyme_index: number | undefined;

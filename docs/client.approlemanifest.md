@@ -5,14 +5,14 @@
 ## AppRoleManifest type
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-export declare type AppRoleManifest = {
+export type AppRoleManifest = {
     name: RoleName;
     provisioning?: CellProvisioning;
     dna: AppRoleDnaManifest;
 };
 ```
-<b>References:</b> [RoleName](./client.rolename.md)<!-- -->, [CellProvisioning](./client.cellprovisioning.md)<!-- -->, [AppRoleDnaManifest](./client.approlednamanifest.md)
+**References:** [RoleName](./client.rolename.md)<!-- -->, [CellProvisioning](./client.cellprovisioning.md)<!-- -->, [AppRoleDnaManifest](./client.approlednamanifest.md)
 

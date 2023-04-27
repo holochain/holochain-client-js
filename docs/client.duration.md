@@ -5,7 +5,7 @@
 ## Duration interface
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 export interface Duration 

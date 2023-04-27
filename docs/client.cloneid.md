@@ -8,7 +8,7 @@ Identifier of a clone cell, composed of the DNA's role id and the index of the c
 
 Example: `profiles.0`
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 export declare class CloneId 

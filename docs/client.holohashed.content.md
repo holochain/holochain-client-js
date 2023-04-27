@@ -4,7 +4,7 @@
 
 ## HoloHashed.content property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 content: T;

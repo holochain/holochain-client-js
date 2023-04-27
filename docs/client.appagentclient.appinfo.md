@@ -4,12 +4,12 @@
 
 ## AppAgentClient.appInfo() method
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 appInfo(): Promise<AppInfoResponse>;
 ```
-<b>Returns:</b>
+**Returns:**
 
 Promise&lt;[AppInfoResponse](./client.appinforesponse.md)<!-- -->&gt;
 

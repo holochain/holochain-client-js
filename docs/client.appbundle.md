@@ -5,13 +5,13 @@
 ## AppBundle type
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-export declare type AppBundle = {
+export type AppBundle = {
     manifest: AppManifest;
     resources: ResourceMap;
 };
 ```
-<b>References:</b> [AppManifest](./client.appmanifest.md)<!-- -->, [ResourceMap](./client.resourcemap.md)
+**References:** [AppManifest](./client.appmanifest.md)<!-- -->, [ResourceMap](./client.resourcemap.md)
 

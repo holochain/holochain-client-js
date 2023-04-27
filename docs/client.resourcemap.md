@@ -5,12 +5,12 @@
 ## ResourceMap type
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-export declare type ResourceMap = {
+export type ResourceMap = {
     [key: string]: ResourceBytes;
 };
 ```
-<b>References:</b> [ResourceBytes](./client.resourcebytes.md)
+**References:** [ResourceBytes](./client.resourcebytes.md)
 

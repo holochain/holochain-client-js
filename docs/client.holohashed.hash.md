@@ -4,7 +4,7 @@
 
 ## HoloHashed.hash property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 hash: HoloHash;

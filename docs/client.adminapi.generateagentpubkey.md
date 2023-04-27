@@ -4,7 +4,7 @@
 
 ## AdminApi.generateAgentPubKey property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 generateAgentPubKey: Requester<GenerateAgentPubKeyRequest, GenerateAgentPubKeyResponse>;

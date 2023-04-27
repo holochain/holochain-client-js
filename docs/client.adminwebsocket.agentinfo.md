@@ -6,7 +6,7 @@
 
 Request all available info about an agent.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 agentInfo: Requester<AgentInfoRequest, AgentInfoResponse>;

@@ -5,7 +5,7 @@
 ## randomNonce variable
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 randomNonce: () => Promise<Nonce256Bit>

@@ -5,7 +5,7 @@
 ## StemCell interface
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 export interface StemCell 
@@ -17,5 +17,5 @@ export interface StemCell
 |  --- | --- | --- | --- |
 |  [dna\_modifiers](./client.stemcell.dna_modifiers.md) |  | [DnaModifiers](./client.dnamodifiers.md) |  |
 |  [dna](./client.stemcell.dna.md) |  | [DnaHash](./client.dnahash.md) |  |
-|  [name?](./client.stemcell.name.md) |  | string | <i>(Optional)</i> |
+|  [name?](./client.stemcell.name.md) |  | string | _(Optional)_ |
 

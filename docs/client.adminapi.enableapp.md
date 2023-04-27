@@ -4,7 +4,7 @@
 
 ## AdminApi.enableApp property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 enableApp: Requester<EnableAppRequest, EnableAppResponse>;

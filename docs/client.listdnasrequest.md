@@ -5,8 +5,8 @@
 ## ListDnasRequest type
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-export declare type ListDnasRequest = void;
+export type ListDnasRequest = void;
 ```

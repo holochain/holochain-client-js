@@ -6,7 +6,7 @@
 
 Send requests to the connected websocket.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 request<Req, Res>(request: Req): Promise<Res>;
@@ -18,7 +18,7 @@ request<Req, Res>(request: Req): Promise<Res>;
 |  --- | --- | --- |
 |  request | Req | The request to send over the websocket. |
 
-<b>Returns:</b>
+**Returns:**
 
 Promise&lt;Res&gt;
 

@@ -5,10 +5,10 @@
 ## AppDisableCloneCellRequest type
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-export declare type AppDisableCloneCellRequest = Omit<DisableCloneCellRequest, "app_id">;
+export type AppDisableCloneCellRequest = Omit<DisableCloneCellRequest, "app_id">;
 ```
-<b>References:</b> [DisableCloneCellRequest](./client.disableclonecellrequest.md)
+**References:** [DisableCloneCellRequest](./client.disableclonecellrequest.md)
 

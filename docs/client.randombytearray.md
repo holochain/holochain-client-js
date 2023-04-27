@@ -5,7 +5,7 @@
 ## randomByteArray variable
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 randomByteArray: (length: number) => Promise<Uint8Array>
