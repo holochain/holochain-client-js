@@ -1005,6 +1005,29 @@ test(
 );
 
 test(
+  "can fetch network info",
+  withConductor(ADMIN_PORT, async (t: Test) => {
+    const { client, cell_id } = await installAppAndDna(ADMIN_PORT);
+
+    const response = await client.networkInfo({
+      agent_pub_key: cell_id[1],
+      dnas: [cell_id[0]],
+    });
+
+    t.deepEqual(response, [
+      {
+        fetch_pool_info: { op_bytes_to_fetch: 0, num_ops_to_fetch: 0 },
+        current_number_of_peers: 1,
+        arc_size: 1,
+        total_network_peers: 1,
+        bytes_since_last_time_queried: 1844,
+        completed_rounds_since_last_time_queried: 0,
+      },
+    ]);
+  })
+);
+
+test(
   "can update coordinators of an app",
   withConductor(ADMIN_PORT, async (t: Test) => {
     const { client, admin, cell_id } = await installAppAndDna(ADMIN_PORT);
