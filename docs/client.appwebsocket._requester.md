@@ -2,10 +2,22 @@
 
 [Home](./index.md) &gt; [@holochain/client](./client.md) &gt; [AppWebsocket](./client.appwebsocket.md) &gt; [\_requester](./client.appwebsocket._requester.md)
 
-## AppWebsocket.\_requester property
+## AppWebsocket.\_requester() method
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-_requester: <ReqI, ReqO, ResI, ResO>(tag: string, transformer?: Transformer<ReqI, ReqO, ResI, ResO> | undefined) => (req: ReqI, timeout?: number | undefined) => Promise<ResO>;
+_requester<ReqI, ReqO, ResI, ResO>(tag: string, transformer?: Transformer<ReqI, ReqO, ResI, ResO>): (req: ReqI, timeout?: number | undefined) => Promise<ResO>;
 ```
+
+## Parameters
+
+|  Parameter | Type | Description |
+|  --- | --- | --- |
+|  tag | string |  |
+|  transformer | [Transformer](./client.transformer_2.md)<!-- -->&lt;ReqI, ReqO, ResI, ResO&gt; | _(Optional)_ |
+
+**Returns:**
+
+(req: ReqI, timeout?: number \| undefined) =&gt; Promise&lt;ResO&gt;
+

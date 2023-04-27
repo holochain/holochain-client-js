@@ -5,8 +5,8 @@
 ## ListDnasResponse type
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-export declare type ListDnasResponse = Array<string>;
+export type ListDnasResponse = Array<string>;
 ```

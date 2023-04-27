@@ -4,7 +4,7 @@
 
 ## CreateLink.zome\_id property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 zome_id: number;

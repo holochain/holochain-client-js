@@ -4,7 +4,7 @@
 
 ## CounterSigningSessionData.responses property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 responses: Array<[CountersigningAgentState, Signature]>;

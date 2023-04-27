@@ -5,10 +5,10 @@
 ## WasmHashB64 type
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-export declare type WasmHashB64 = HoloHashB64;
+export type WasmHashB64 = HoloHashB64;
 ```
-<b>References:</b> [HoloHashB64](./client.holohashb64.md)
+**References:** [HoloHashB64](./client.holohashb64.md)
 

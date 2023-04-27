@@ -6,7 +6,7 @@
 
 Send a request to open the given port for [AppWebsocket](./client.appwebsocket.md) connections.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 attachAppInterface: Requester<AttachAppInterfaceRequest, AttachAppInterfaceResponse>;

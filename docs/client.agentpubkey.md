@@ -5,10 +5,10 @@
 ## AgentPubKey type
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-export declare type AgentPubKey = HoloHash;
+export type AgentPubKey = HoloHash;
 ```
-<b>References:</b> [HoloHash](./client.holohash.md)
+**References:** [HoloHash](./client.holohash.md)
 

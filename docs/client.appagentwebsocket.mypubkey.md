@@ -4,7 +4,7 @@
 
 ## AppAgentWebsocket.myPubKey property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 myPubKey: AgentPubKey;

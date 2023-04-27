@@ -4,7 +4,7 @@
 
 ## AgentInfoDump.kitsune\_space property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 kitsune_space: KitsuneSpace;

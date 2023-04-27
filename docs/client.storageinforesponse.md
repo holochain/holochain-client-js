@@ -5,10 +5,10 @@
 ## StorageInfoResponse type
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-export declare type StorageInfoResponse = StorageInfo;
+export type StorageInfoResponse = StorageInfo;
 ```
-<b>References:</b> [StorageInfo](./client.storageinfo.md)
+**References:** [StorageInfo](./client.storageinfo.md)
 

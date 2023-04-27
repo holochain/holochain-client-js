@@ -5,7 +5,7 @@
 ## getDhtOpType() function
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 export declare function getDhtOpType(op: DhtOp): DhtOpType;
@@ -17,7 +17,7 @@ export declare function getDhtOpType(op: DhtOp): DhtOpType;
 |  --- | --- | --- |
 |  op | [DhtOp](./client.dhtop.md) |  |
 
-<b>Returns:</b>
+**Returns:**
 
 [DhtOpType](./client.dhtoptype.md)
 

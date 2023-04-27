@@ -4,7 +4,7 @@
 
 ## AdminApi.uninstallApp property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 uninstallApp: Requester<UninstallAppRequest, UninstallAppResponse>;

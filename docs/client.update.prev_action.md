@@ -4,7 +4,7 @@
 
 ## Update.prev\_action property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 prev_action: ActionHash;

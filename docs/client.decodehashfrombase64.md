@@ -6,7 +6,7 @@
 
 Decodes a Base64 encoded string to a byte array hash.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 export declare function decodeHashFromBase64(hash: HoloHashB64): HoloHash;
@@ -18,7 +18,7 @@ export declare function decodeHashFromBase64(hash: HoloHashB64): HoloHash;
 |  --- | --- | --- |
 |  hash | [HoloHashB64](./client.holohashb64.md) | The Base64 encoded string to decode. |
 
-<b>Returns:</b>
+**Returns:**
 
 [HoloHash](./client.holohash.md)
 

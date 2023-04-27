@@ -5,10 +5,10 @@
 ## CreateCloneCellResponse type
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-export declare type CreateCloneCellResponse = ClonedCell;
+export type CreateCloneCellResponse = ClonedCell;
 ```
-<b>References:</b> [ClonedCell](./client.clonedcell.md)
+**References:** [ClonedCell](./client.clonedcell.md)
 

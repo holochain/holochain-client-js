@@ -5,8 +5,8 @@
 ## DumpNetworkStatsResponse type
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-export declare type DumpNetworkStatsResponse = string;
+export type DumpNetworkStatsResponse = string;
 ```

@@ -5,7 +5,7 @@
 ## HoloHashed interface
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 export interface HoloHashed<T> 

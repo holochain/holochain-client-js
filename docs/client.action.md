@@ -5,10 +5,10 @@
 ## Action type
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-export declare type Action = Dna | AgentValidationPkg | InitZomesComplete | CreateLink | DeleteLink | OpenChain | CloseChain | Delete | NewEntryAction;
+export type Action = Dna | AgentValidationPkg | InitZomesComplete | CreateLink | DeleteLink | OpenChain | CloseChain | Delete | NewEntryAction;
 ```
-<b>References:</b> [Dna](./client.dna.md)<!-- -->, [AgentValidationPkg](./client.agentvalidationpkg.md)<!-- -->, [InitZomesComplete](./client.initzomescomplete.md)<!-- -->, [CreateLink](./client.createlink.md)<!-- -->, [DeleteLink](./client.deletelink.md)<!-- -->, [OpenChain](./client.openchain.md)<!-- -->, [CloseChain](./client.closechain.md)<!-- -->, [Delete](./client.delete.md)<!-- -->, [NewEntryAction](./client.newentryaction.md)
+**References:** [Dna](./client.dna.md)<!-- -->, [AgentValidationPkg](./client.agentvalidationpkg.md)<!-- -->, [InitZomesComplete](./client.initzomescomplete.md)<!-- -->, [CreateLink](./client.createlink.md)<!-- -->, [DeleteLink](./client.deletelink.md)<!-- -->, [OpenChain](./client.openchain.md)<!-- -->, [CloseChain](./client.closechain.md)<!-- -->, [Delete](./client.delete.md)<!-- -->, [NewEntryAction](./client.newentryaction.md)
 

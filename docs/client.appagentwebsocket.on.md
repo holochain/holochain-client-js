@@ -6,7 +6,7 @@
 
 Register an event listener for signals.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 on<Name extends keyof AppAgentEvents>(eventName: Name | readonly Name[], listener: AppSignalCb): UnsubscribeFunction;
@@ -19,7 +19,7 @@ on<Name extends keyof AppAgentEvents>(eventName: Name | readonly Name[], listene
 |  eventName | Name \| readonly Name\[\] | Event name to listen to (currently only "signal"). |
 |  listener | [AppSignalCb](./client.appsignalcb.md) | The function to call when event is triggered. |
 
-<b>Returns:</b>
+**Returns:**
 
 UnsubscribeFunction
 

@@ -5,8 +5,8 @@
 ## Nonce256Bit type
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-export declare type Nonce256Bit = Uint8Array;
+export type Nonce256Bit = Uint8Array;
 ```

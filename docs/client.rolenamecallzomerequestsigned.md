@@ -5,12 +5,12 @@
 ## RoleNameCallZomeRequestSigned type
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-export declare type RoleNameCallZomeRequestSigned = Omit<CallZomeRequestSigned, "cell_id"> & {
+export type RoleNameCallZomeRequestSigned = Omit<CallZomeRequestSigned, "cell_id"> & {
     role_name: RoleName;
 };
 ```
-<b>References:</b> [CallZomeRequestSigned](./client.callzomerequestsigned.md)<!-- -->, [RoleName](./client.rolename.md)
+**References:** [CallZomeRequestSigned](./client.callzomerequestsigned.md)<!-- -->, [RoleName](./client.rolename.md)
 

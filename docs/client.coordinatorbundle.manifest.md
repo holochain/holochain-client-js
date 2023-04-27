@@ -4,7 +4,7 @@
 
 ## CoordinatorBundle.manifest property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 manifest: CoordinatorManifest;

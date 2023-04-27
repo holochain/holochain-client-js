@@ -4,7 +4,7 @@
 
 ## FullIntegrationStateDump.integration\_limbo property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 integration_limbo: Array<DhtOp>;

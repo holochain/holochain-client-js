@@ -6,7 +6,7 @@
 
 Request the app's info, including all cell infos.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 appInfo: Requester<AppInfoRequest, AppInfoResponse>;

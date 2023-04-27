@@ -4,7 +4,7 @@
 
 ## AdminApi.listDnas property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 listDnas: Requester<ListDnasRequest, ListDnasResponse>;

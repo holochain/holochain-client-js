@@ -4,7 +4,7 @@
 
 ## AdminApi.registerDna property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 registerDna: Requester<RegisterDnaRequest, RegisterDnaResponse>;

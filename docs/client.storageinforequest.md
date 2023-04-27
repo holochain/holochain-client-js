@@ -5,8 +5,8 @@
 ## StorageInfoRequest type
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-export declare type StorageInfoRequest = void;
+export type StorageInfoRequest = void;
 ```

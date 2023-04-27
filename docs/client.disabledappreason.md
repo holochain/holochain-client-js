@@ -5,10 +5,10 @@
 ## DisabledAppReason type
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-export declare type DisabledAppReason = {
+export type DisabledAppReason = {
     never_started: null;
 } | {
     user: null;

@@ -4,7 +4,7 @@
 
 ## FullStateDump.integration\_dump property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 integration_dump: FullIntegrationStateDump;

@@ -6,15 +6,15 @@
 
 Constructs a new instance of the `WsClient` class
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-constructor(socket: Websocket);
+constructor(socket: IsoWebSocket);
 ```
 
 ## Parameters
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  socket | Websocket |  |
+|  socket | [IsoWebSocket](./client.isowebsocket.md) |  |
 

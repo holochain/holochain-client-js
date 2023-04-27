@@ -4,7 +4,7 @@
 
 ## AgentValidationPkg.membrane\_proof property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 membrane_proof: any;

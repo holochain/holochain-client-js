@@ -4,7 +4,7 @@
 
 ## AdminApi.disableApp property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 disableApp: Requester<DisableAppRequest, DisableAppResponse>;

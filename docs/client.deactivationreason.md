@@ -5,10 +5,10 @@
 ## DeactivationReason type
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-export declare type DeactivationReason = {
+export type DeactivationReason = {
     never_activated: null;
 } | {
     normal: null;

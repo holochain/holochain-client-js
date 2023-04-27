@@ -4,7 +4,7 @@
 
 ## StemCell.dna property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 dna: DnaHash;

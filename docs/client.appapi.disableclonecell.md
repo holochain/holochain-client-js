@@ -4,7 +4,7 @@
 
 ## AppApi.disableCloneCell property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 disableCloneCell: Requester<DisableCloneCellRequest, DisableCloneCellResponse>;

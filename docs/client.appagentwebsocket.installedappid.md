@@ -4,7 +4,7 @@
 
 ## AppAgentWebsocket.installedAppId property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 installedAppId: InstalledAppId;

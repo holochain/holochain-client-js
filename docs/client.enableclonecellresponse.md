@@ -5,10 +5,10 @@
 ## EnableCloneCellResponse type
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-export declare type EnableCloneCellResponse = CreateCloneCellResponse;
+export type EnableCloneCellResponse = CreateCloneCellResponse;
 ```
-<b>References:</b> [CreateCloneCellResponse](./client.createclonecellresponse.md)
+**References:** [CreateCloneCellResponse](./client.createclonecellresponse.md)
 

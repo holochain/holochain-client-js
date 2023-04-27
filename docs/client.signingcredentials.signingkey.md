@@ -4,7 +4,7 @@
 
 ## SigningCredentials.signingKey property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 signingKey: AgentPubKey;

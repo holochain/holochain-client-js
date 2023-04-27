@@ -4,7 +4,7 @@
 
 ## CapClaim.grantor property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 grantor: AgentPubKey;

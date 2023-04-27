@@ -4,7 +4,7 @@
 
 ## CallZomeRequestUnsigned.expires\_at property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 expires_at: number;

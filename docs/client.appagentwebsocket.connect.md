@@ -6,7 +6,7 @@
 
 Instance factory for creating AppAgentWebsockets.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 static connect(url: string, installed_app_id: InstalledAppId, defaultTimeout?: number): Promise<AppAgentWebsocket>;
@@ -18,9 +18,9 @@ static connect(url: string, installed_app_id: InstalledAppId, defaultTimeout?: n
 |  --- | --- | --- |
 |  url | string | The <code>ws://</code> URL of the App API to connect to. |
 |  installed\_app\_id | [InstalledAppId](./client.installedappid.md) | ID of the App to link to. |
-|  defaultTimeout | number | <i>(Optional)</i> Timeout to default to for all operations. |
+|  defaultTimeout | number | _(Optional)_ Timeout to default to for all operations. |
 
-<b>Returns:</b>
+**Returns:**
 
 Promise&lt;[AppAgentWebsocket](./client.appagentwebsocket.md)<!-- -->&gt;
 

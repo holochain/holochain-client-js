@@ -5,10 +5,10 @@
 ## CounterSigningAgents type
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-export declare type CounterSigningAgents = Array<[AgentPubKey, Array<Role>]>;
+export type CounterSigningAgents = Array<[AgentPubKey, Array<Role>]>;
 ```
-<b>References:</b> [AgentPubKey](./client.agentpubkey.md)<!-- -->, [Role](./client.role.md)
+**References:** [AgentPubKey](./client.agentpubkey.md)<!-- -->, [Role](./client.role.md)
 

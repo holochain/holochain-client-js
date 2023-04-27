@@ -4,7 +4,7 @@
 
 ## Update.original\_entry\_address property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 original_entry_address: EntryHash;

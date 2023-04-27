@@ -5,12 +5,12 @@
 ## DumpStateRequest type
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-export declare type DumpStateRequest = {
+export type DumpStateRequest = {
     cell_id: CellId;
 };
 ```
-<b>References:</b> [CellId](./client.cellid.md)
+**References:** [CellId](./client.cellid.md)
 

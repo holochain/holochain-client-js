@@ -5,7 +5,7 @@
 ## SignedActionHashed interface
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 export interface SignedActionHashed<H extends Action = Action> 

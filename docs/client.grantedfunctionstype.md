@@ -5,7 +5,7 @@
 ## GrantedFunctionsType enum
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 export declare enum GrantedFunctionsType 

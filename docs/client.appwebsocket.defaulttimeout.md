@@ -4,7 +4,7 @@
 
 ## AppWebsocket.defaultTimeout property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 defaultTimeout: number;

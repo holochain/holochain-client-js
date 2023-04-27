@@ -26,6 +26,10 @@ export type ActionHash = HoloHash;
  * @public
  */
 export type AnyDhtHash = HoloHash;
+/**
+ * @public
+ */
+export type ExternalHash = HoloHash;
 
 /**
  * @public

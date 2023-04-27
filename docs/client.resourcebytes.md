@@ -5,8 +5,8 @@
 ## ResourceBytes type
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-export declare type ResourceBytes = Uint8Array;
+export type ResourceBytes = Uint8Array;
 ```

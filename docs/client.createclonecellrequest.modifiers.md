@@ -6,7 +6,7 @@
 
 Modifiers to set for the new cell. At least one of the modifiers must be set to obtain a distinct hash for the clone cell's DNA.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 modifiers: {

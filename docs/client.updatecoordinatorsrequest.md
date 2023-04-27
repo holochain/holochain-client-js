@@ -5,12 +5,12 @@
 ## UpdateCoordinatorsRequest type
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-export declare type UpdateCoordinatorsRequest = {
+export type UpdateCoordinatorsRequest = {
     dna_hash: DnaHash;
 } & CoordinatorSource;
 ```
-<b>References:</b> [DnaHash](./client.dnahash.md)<!-- -->, [CoordinatorSource](./client.coordinatorsource.md)
+**References:** [DnaHash](./client.dnahash.md)<!-- -->, [CoordinatorSource](./client.coordinatorsource.md)
 

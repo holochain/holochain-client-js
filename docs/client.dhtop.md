@@ -5,10 +5,10 @@
 ## DhtOp type
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-export declare type DhtOp = {
+export type DhtOp = {
     [DhtOpType.StoreRecord]: [Signature, Action, Entry | undefined];
 } | {
     [DhtOpType.StoreEntry]: [Signature, NewEntryAction, Entry];
@@ -32,5 +32,5 @@ export declare type DhtOp = {
     [DhtOpType.RegisterRemoveLink]: [Signature, DeleteLink];
 };
 ```
-<b>References:</b> [DhtOpType.StoreRecord](./client.dhtoptype.md)<!-- -->, [Signature](./client.signature.md)<!-- -->, [Action](./client.action.md)<!-- -->, [Entry](./client.entry.md)<!-- -->, [DhtOpType.StoreEntry](./client.dhtoptype.md)<!-- -->, [NewEntryAction](./client.newentryaction.md)<!-- -->, [DhtOpType.RegisterAgentActivity](./client.dhtoptype.md)<!-- -->, [DhtOpType.RegisterUpdatedContent](./client.dhtoptype.md)<!-- -->, [Update](./client.update.md)<!-- -->, [DhtOpType.RegisterUpdatedRecord](./client.dhtoptype.md)<!-- -->, [DhtOpType.RegisterDeletedBy](./client.dhtoptype.md)<!-- -->, [Delete](./client.delete.md)<!-- -->, [DhtOpType.RegisterDeletedEntryAction](./client.dhtoptype.md)<!-- -->, [DhtOpType.RegisterAddLink](./client.dhtoptype.md)<!-- -->, [CreateLink](./client.createlink.md)<!-- -->, [DhtOpType.RegisterRemoveLink](./client.dhtoptype.md)<!-- -->, [DeleteLink](./client.deletelink.md)
+**References:** [DhtOpType.StoreRecord](./client.dhtoptype.md)<!-- -->, [Signature](./client.signature.md)<!-- -->, [Action](./client.action.md)<!-- -->, [Entry](./client.entry.md)<!-- -->, [DhtOpType.StoreEntry](./client.dhtoptype.md)<!-- -->, [NewEntryAction](./client.newentryaction.md)<!-- -->, [DhtOpType.RegisterAgentActivity](./client.dhtoptype.md)<!-- -->, [DhtOpType.RegisterUpdatedContent](./client.dhtoptype.md)<!-- -->, [Update](./client.update.md)<!-- -->, [DhtOpType.RegisterUpdatedRecord](./client.dhtoptype.md)<!-- -->, [DhtOpType.RegisterDeletedBy](./client.dhtoptype.md)<!-- -->, [Delete](./client.delete.md)<!-- -->, [DhtOpType.RegisterDeletedEntryAction](./client.dhtoptype.md)<!-- -->, [DhtOpType.RegisterAddLink](./client.dhtoptype.md)<!-- -->, [CreateLink](./client.createlink.md)<!-- -->, [DhtOpType.RegisterRemoveLink](./client.dhtoptype.md)<!-- -->, [DeleteLink](./client.deletelink.md)
 

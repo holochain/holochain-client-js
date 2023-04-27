@@ -6,7 +6,7 @@
 
 Optionally a name for the DNA clone.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 name?: string;

@@ -4,7 +4,7 @@
 
 ## AdminApi.listApps property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 listApps: Requester<ListAppsRequest, ListAppsResponse>;

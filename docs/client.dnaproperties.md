@@ -5,8 +5,8 @@
 ## DnaProperties type
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-export declare type DnaProperties = unknown;
+export type DnaProperties = unknown;
 ```

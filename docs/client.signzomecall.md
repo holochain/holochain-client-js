@@ -5,7 +5,7 @@
 ## signZomeCall variable
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 signZomeCall: (request: CallZomeRequest) => Promise<CallZomeRequestSigned>

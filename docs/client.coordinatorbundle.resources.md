@@ -4,7 +4,7 @@
 
 ## CoordinatorBundle.resources property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 resources: ResourceMap;

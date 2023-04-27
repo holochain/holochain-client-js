@@ -6,7 +6,7 @@
 
 The app id that the clone cell belongs to
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 app_id: InstalledAppId;

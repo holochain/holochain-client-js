@@ -4,7 +4,7 @@
 
 ## DeleteLink.link\_add\_address property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 link_add_address: ActionHash;

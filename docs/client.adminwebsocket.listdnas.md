@@ -6,7 +6,7 @@
 
 List all registered DNAs.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 listDnas: Requester<ListDnasRequest, ListDnasResponse>;

@@ -4,7 +4,7 @@
 
 ## ProvisionedCell.cell\_id property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 cell_id: CellId;

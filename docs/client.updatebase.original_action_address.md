@@ -4,7 +4,7 @@
 
 ## UpdateBase.original\_action\_address property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 original_action_address: ActionHash;

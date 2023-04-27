@@ -5,13 +5,13 @@
 ## EnableAppResponse type
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-export declare type EnableAppResponse = {
+export type EnableAppResponse = {
     app: AppInfo;
     errors: Array<[CellId, string]>;
 };
 ```
-<b>References:</b> [AppInfo](./client.appinfo.md)<!-- -->, [CellId](./client.cellid.md)
+**References:** [AppInfo](./client.appinfo.md)<!-- -->, [CellId](./client.cellid.md)
 

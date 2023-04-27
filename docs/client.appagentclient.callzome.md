@@ -4,7 +4,7 @@
 
 ## AppAgentClient.callZome() method
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 callZome(args: AppAgentCallZomeRequest, timeout?: number): Promise<any>;
@@ -15,9 +15,9 @@ callZome(args: AppAgentCallZomeRequest, timeout?: number): Promise<any>;
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  args | [AppAgentCallZomeRequest](./client.appagentcallzomerequest.md) |  |
-|  timeout | number | <i>(Optional)</i> |
+|  timeout | number | _(Optional)_ |
 
-<b>Returns:</b>
+**Returns:**
 
 Promise&lt;any&gt;
 

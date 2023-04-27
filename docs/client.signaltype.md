@@ -5,7 +5,7 @@
 ## SignalType variable
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 SignalType: {

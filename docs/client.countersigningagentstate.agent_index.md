@@ -4,7 +4,7 @@
 
 ## CountersigningAgentState.agent\_index property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 agent_index: number;

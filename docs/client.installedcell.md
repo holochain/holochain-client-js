@@ -5,13 +5,13 @@
 ## InstalledCell type
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-export declare type InstalledCell = {
+export type InstalledCell = {
     cell_id: CellId;
     role_name: RoleName;
 };
 ```
-<b>References:</b> [CellId](./client.cellid.md)<!-- -->, [RoleName](./client.rolename.md)
+**References:** [CellId](./client.cellid.md)<!-- -->, [RoleName](./client.rolename.md)
 

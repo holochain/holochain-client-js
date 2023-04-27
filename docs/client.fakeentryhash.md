@@ -8,12 +8,12 @@ Generate a valid hash of a non-existing entry.
 
 From https://github.com/holochain/holochain/blob/develop/crates/holo\_hash/src/hash\_type/primitive.rs
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 export declare function fakeEntryHash(): Promise<EntryHash>;
 ```
-<b>Returns:</b>
+**Returns:**
 
 Promise&lt;[EntryHash](./client.entryhash.md)<!-- -->&gt;
 

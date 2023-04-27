@@ -4,7 +4,7 @@
 
 ## FullStateDump.source\_chain\_dump property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 source_chain_dump: SourceChainJsonDump;

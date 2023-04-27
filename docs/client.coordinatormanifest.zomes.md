@@ -4,7 +4,7 @@
 
 ## CoordinatorManifest.zomes property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 zomes: Array<ZomeManifest>;

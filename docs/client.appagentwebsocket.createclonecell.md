@@ -6,7 +6,7 @@
 
 Clone an existing provisioned cell.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 createCloneCell(args: AppCreateCloneCellRequest): Promise<CreateCloneCellResponse>;
@@ -18,7 +18,7 @@ createCloneCell(args: AppCreateCloneCellRequest): Promise<CreateCloneCellRespons
 |  --- | --- | --- |
 |  args | [AppCreateCloneCellRequest](./client.appcreateclonecellrequest.md) | Specify the cell to clone. |
 
-<b>Returns:</b>
+**Returns:**
 
 Promise&lt;[CreateCloneCellResponse](./client.createclonecellresponse.md)<!-- -->&gt;
 

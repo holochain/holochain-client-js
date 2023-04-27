@@ -311,7 +311,7 @@ export class AdminWebsocket implements AdminApi {
     cellId: CellId,
     functions?: GrantedFunctions
   ) => {
-    const [keyPair, signingKey] = generateSigningKeyPair();
+    const [keyPair, signingKey] = await generateSigningKeyPair();
     const capSecret = await this.grantSigningKey(
       cellId,
       functions || { [GrantedFunctionsType.All]: null },

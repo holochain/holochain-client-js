@@ -5,10 +5,10 @@
 ## PausedAppReason type
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-export declare type PausedAppReason = {
+export type PausedAppReason = {
     error: string;
 };
 ```

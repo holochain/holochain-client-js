@@ -4,7 +4,7 @@
 
 ## Duration.nanos property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 nanos: number;

@@ -4,7 +4,7 @@
 
 ## FullIntegrationStateDump.dht\_ops\_cursor property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 dht_ops_cursor: number;

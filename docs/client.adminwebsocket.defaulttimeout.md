@@ -6,7 +6,7 @@
 
 Default timeout for any request made over the websocket.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 defaultTimeout: number;

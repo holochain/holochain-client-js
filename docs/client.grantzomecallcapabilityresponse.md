@@ -5,8 +5,8 @@
 ## GrantZomeCallCapabilityResponse type
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-export declare type GrantZomeCallCapabilityResponse = void;
+export type GrantZomeCallCapabilityResponse = void;
 ```

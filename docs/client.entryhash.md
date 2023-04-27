@@ -5,10 +5,10 @@
 ## EntryHash type
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-export declare type EntryHash = HoloHash;
+export type EntryHash = HoloHash;
 ```
-<b>References:</b> [HoloHash](./client.holohash.md)
+**References:** [HoloHash](./client.holohash.md)
 

@@ -4,7 +4,7 @@
 
 ## AdminApi.agentInfo property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 agentInfo: Requester<AgentInfoRequest, AgentInfoResponse>;

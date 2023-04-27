@@ -5,10 +5,10 @@
 ## IntegrityZome type
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-export declare type IntegrityZome = ZomeDefinition;
+export type IntegrityZome = ZomeDefinition;
 ```
-<b>References:</b> [ZomeDefinition](./client.zomedefinition.md)
+**References:** [ZomeDefinition](./client.zomedefinition.md)
 

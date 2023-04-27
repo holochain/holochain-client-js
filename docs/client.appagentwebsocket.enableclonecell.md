@@ -6,7 +6,7 @@
 
 Enable a disabled clone cell.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 enableCloneCell(args: AppEnableCloneCellRequest): Promise<EnableCloneCellResponse>;
@@ -18,7 +18,7 @@ enableCloneCell(args: AppEnableCloneCellRequest): Promise<EnableCloneCellRespons
 |  --- | --- | --- |
 |  args | [AppEnableCloneCellRequest](./client.appenableclonecellrequest.md) | Specify the clone cell to enable. |
 
-<b>Returns:</b>
+**Returns:**
 
 Promise&lt;[EnableCloneCellResponse](./client.enableclonecellresponse.md)<!-- -->&gt;
 

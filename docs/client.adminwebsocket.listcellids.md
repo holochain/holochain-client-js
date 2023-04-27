@@ -6,7 +6,7 @@
 
 List all installed cell ids.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 listCellIds: Requester<ListCellIdsRequest, ListCellIdsResponse>;

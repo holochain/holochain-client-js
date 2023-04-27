@@ -5,10 +5,10 @@
 ## ZomeLocation type
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-export declare type ZomeLocation = Location;
+export type ZomeLocation = Location;
 ```
-<b>References:</b> [Location](./client.location_2.md)
+**References:** [Location](./client.location_2.md)
 

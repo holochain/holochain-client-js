@@ -4,7 +4,7 @@
 
 ## StorageInfo.blobs property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 blobs: Array<DnaStorageBlob>;

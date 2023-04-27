@@ -6,20 +6,19 @@
 
 A class to establish a websocket connection to an App interface of a Holochain conductor.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 export declare class AppWebsocket extends Emittery implements AppApi 
 ```
-<b>Extends:</b> Emittery
+**Extends:** Emittery
 
-<b>Implements:</b> [AppApi](./client.appapi.md)
+**Implements:** [AppApi](./client.appapi.md)
 
 ## Properties
 
 |  Property | Modifiers | Type | Description |
 |  --- | --- | --- | --- |
-|  [\_requester](./client.appwebsocket._requester.md) |  | &lt;ReqI, ReqO, ResI, ResO&gt;(tag: string, transformer?: [Transformer](./client.transformer_2.md)<!-- -->&lt;ReqI, ReqO, ResI, ResO&gt; \| undefined) =&gt; (req: ReqI, timeout?: number \| undefined) =&gt; Promise&lt;ResO&gt; |  |
 |  [appInfo](./client.appwebsocket.appinfo.md) |  | [Requester](./client.requester.md)<!-- -->&lt;[AppInfoRequest](./client.appinforequest.md)<!-- -->, [AppInfoResponse](./client.appinforesponse.md)<!-- -->&gt; | Request the app's info, including all cell infos. |
 |  [callZome](./client.appwebsocket.callzome.md) |  | [Requester](./client.requester.md)<!-- -->&lt;[CallZomeRequest](./client.callzomerequest.md) \| [CallZomeRequestSigned](./client.callzomerequestsigned.md)<!-- -->, [CallZomeResponse](./client.callzomeresponse.md)<!-- -->&gt; | Call a zome. |
 |  [client](./client.appwebsocket.client.md) | <code>readonly</code> | [WsClient](./client.wsclient.md) |  |
@@ -28,11 +27,12 @@ export declare class AppWebsocket extends Emittery implements AppApi
 |  [disableCloneCell](./client.appwebsocket.disableclonecell.md) |  | [Requester](./client.requester.md)<!-- -->&lt;[DisableCloneCellRequest](./client.disableclonecellrequest.md)<!-- -->, [DisableCloneCellResponse](./client.disableclonecellresponse.md)<!-- -->&gt; | Disable an enabled clone cell. |
 |  [enableCloneCell](./client.appwebsocket.enableclonecell.md) |  | [Requester](./client.requester.md)<!-- -->&lt;[EnableCloneCellRequest](./client.enableclonecellrequest.md)<!-- -->, [EnableCloneCellResponse](./client.enableclonecellresponse.md)<!-- -->&gt; | Enable a disabled clone cell. |
 |  [networkInfo](./client.appwebsocket.networkinfo.md) |  | [Requester](./client.requester.md)<!-- -->&lt;[NetworkInfoRequest](./client.networkinforequest.md)<!-- -->, [NetworkInfoResponse](./client.networkinforesponse.md)<!-- -->&gt; | Request network info about gossip status. |
-|  [overrideInstalledAppId?](./client.appwebsocket.overrideinstalledappid.md) |  | [InstalledAppId](./client.installedappid.md) | <i>(Optional)</i> |
+|  [overrideInstalledAppId?](./client.appwebsocket.overrideinstalledappid.md) |  | [InstalledAppId](./client.installedappid.md) | _(Optional)_ |
 
 ## Methods
 
 |  Method | Modifiers | Description |
 |  --- | --- | --- |
+|  [\_requester(tag, transformer)](./client.appwebsocket._requester.md) |  |  |
 |  [connect(url, defaultTimeout)](./client.appwebsocket.connect.md) | <code>static</code> | Instance factory for creating AppWebsockets. |
 

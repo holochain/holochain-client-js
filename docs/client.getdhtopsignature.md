@@ -5,7 +5,7 @@
 ## getDhtOpSignature() function
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 export declare function getDhtOpSignature(op: DhtOp): Signature;
@@ -17,7 +17,7 @@ export declare function getDhtOpSignature(op: DhtOp): Signature;
 |  --- | --- | --- |
 |  op | [DhtOp](./client.dhtop.md) |  |
 
-<b>Returns:</b>
+**Returns:**
 
 [Signature](./client.signature.md)
 

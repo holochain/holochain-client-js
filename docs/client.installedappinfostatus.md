@@ -5,10 +5,10 @@
 ## InstalledAppInfoStatus type
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-export declare type InstalledAppInfoStatus = {
+export type InstalledAppInfoStatus = {
     paused: {
         reason: PausedAppReason;
     };
@@ -20,5 +20,5 @@ export declare type InstalledAppInfoStatus = {
     running: null;
 };
 ```
-<b>References:</b> [PausedAppReason](./client.pausedappreason.md)<!-- -->, [DisabledAppReason](./client.disabledappreason.md)
+**References:** [PausedAppReason](./client.pausedappreason.md)<!-- -->, [DisabledAppReason](./client.disabledappreason.md)
 

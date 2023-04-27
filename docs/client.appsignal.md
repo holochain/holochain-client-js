@@ -5,14 +5,14 @@
 ## AppSignal type
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-export declare type AppSignal = {
+export type AppSignal = {
     cell_id: CellId;
     zome_name: string;
     payload: unknown;
 };
 ```
-<b>References:</b> [CellId](./client.cellid.md)
+**References:** [CellId](./client.cellid.md)
 

@@ -4,7 +4,7 @@
 
 ## Delete.deletes\_entry\_address property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 deletes_entry_address: EntryHash;

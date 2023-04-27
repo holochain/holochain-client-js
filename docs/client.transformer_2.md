@@ -5,10 +5,10 @@
 ## Transformer\_2 type
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-export declare type Transformer<ReqI, ReqO, ResI, ResO> = {
+export type Transformer<ReqI, ReqO, ResI, ResO> = {
     input: (req: ReqI) => ReqO;
     output: (res: ResI) => ResO;
 };

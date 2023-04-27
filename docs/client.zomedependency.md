@@ -5,7 +5,7 @@
 ## ZomeDependency interface
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 export interface ZomeDependency 

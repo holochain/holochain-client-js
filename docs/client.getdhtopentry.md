@@ -5,7 +5,7 @@
 ## getDhtOpEntry() function
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 export declare function getDhtOpEntry(op: DhtOp): Entry | undefined;
@@ -17,7 +17,7 @@ export declare function getDhtOpEntry(op: DhtOp): Entry | undefined;
 |  --- | --- | --- |
 |  op | [DhtOp](./client.dhtop.md) |  |
 
-<b>Returns:</b>
+**Returns:**
 
 [Entry](./client.entry.md) \| undefined
 
