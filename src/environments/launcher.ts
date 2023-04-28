@@ -59,7 +59,7 @@ export const signZomeCallTauri = async (request: CallZomeRequest) => {
     zome_name: request.zome_name,
     fn_name: request.fn_name,
     payload: Array.from(encode(request.payload)),
-    nonce: Array.from(await randomNonce()),
+    nonce: Array.from(randomNonce()),
     expires_at: getNonceExpiration(),
   };
 

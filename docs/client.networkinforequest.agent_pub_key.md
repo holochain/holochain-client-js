@@ -6,7 +6,7 @@
 
 The calling agent
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 agent_pub_key: AgentPubKey;

@@ -1,6 +1,6 @@
 import { decode, encode } from "@msgpack/msgpack";
 import Emittery from "emittery";
-import { IsoWebSocket } from "../iso-web-socket/index.js";
+import IsoWebSocket from "isomorphic-ws";
 import { AppSignal, Signal, SignalType } from "./app/types.js";
 
 interface HolochainMessage {
@@ -34,7 +34,7 @@ export class WsClient extends Emittery {
     this.pendingRequests = {};
     this.index = 0;
 
-    socket.onmessage = async (serializedMessage: MessageEvent) => {
+    socket.onmessage = async (serializedMessage) => {
       // If data is not a buffer (nodejs), it will be a blob (browser)
       let deserializedData;
       if (
@@ -87,7 +87,7 @@ export class WsClient extends Emittery {
       }
     };
 
-    socket.onclose = (event: CloseEvent) => {
+    socket.onclose = (event) => {
       const pendingRequestIds = Object.keys(this.pendingRequests).map((id) =>
         parseInt(id)
       );
@@ -187,17 +187,17 @@ export class WsClient extends Emittery {
    * Close the websocket connection.
    */
   close(code = 1000) {
-    const closedPromise = new Promise<CloseEvent>((resolve) => {
-      // for an unknown reason "addEventListener" gives a ts2345 error
-      // type narrowing works around that
-      if ("on" in this.socket) {
-        this.socket.on("close", (event: CloseEvent) => resolve(event));
-      } else {
-        this.socket.addEventListener("close", (event: CloseEvent) =>
-          resolve(event)
-        );
-      }
-    });
+    const closedPromise = new Promise<CloseEvent>(
+      (resolve) =>
+        // for an unknown reason "addEventListener" is seen as a non-callable
+        // property and gives a ts2349 error
+        // type assertion as workaround
+        (this.socket as unknown as WebSocket).addEventListener(
+          "close",
+          (event) => resolve(event)
+        )
+      // }
+    );
 
     this.socket.close(code);
     return closedPromise;

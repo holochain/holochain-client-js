@@ -17,5 +17,5 @@ export interface NetworkInfoRequest
 |  --- | --- | --- | --- |
 |  [agent\_pub\_key](./client.networkinforequest.agent_pub_key.md) |  | [AgentPubKey](./client.agentpubkey.md) | The calling agent |
 |  [dnas](./client.networkinforequest.dnas.md) |  | [DnaHash](./client.dnahash.md)<!-- -->\[\] | Get network info for these DNAs |
-|  [last\_time\_queried?](./client.networkinforequest.last_time_queried.md) |  | number | <i>(Optional)</i> Timestamp in ms since which received amount of bytes from peers will be returned. Defaults to UNIX\_EPOCH. |
+|  [last\_time\_queried?](./client.networkinforequest.last_time_queried.md) |  | number | _(Optional)_ Timestamp in ms since which received amount of bytes from peers will be returned. Defaults to UNIX\_EPOCH. |
 

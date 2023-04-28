@@ -16,5 +16,5 @@ constructor(socket: IsoWebSocket);
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  socket | [IsoWebSocket](./client.isowebsocket.md) |  |
+|  socket | IsoWebSocket |  |
 

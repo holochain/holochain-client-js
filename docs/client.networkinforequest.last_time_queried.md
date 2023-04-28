@@ -6,7 +6,7 @@
 
 Timestamp in ms since which received amount of bytes from peers will be returned. Defaults to UNIX\_EPOCH.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 last_time_queried?: number;

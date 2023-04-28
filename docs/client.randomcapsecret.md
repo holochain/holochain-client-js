@@ -8,5 +8,5 @@
 **Signature:**
 
 ```typescript
-randomCapSecret: () => Promise<CapSecret>
+randomCapSecret: () => CapSecret
 ```
