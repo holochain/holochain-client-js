@@ -69,7 +69,7 @@ jobs:
           node-version: ${{ matrix.node }}
 
       - name: Create a Vite project from template
-        run: npm create vite@latest test-app -- --template vanilla
+        run: npm create vite@latest test-app -- --template vanilla-ts
 
       - name: Add JS client to project
         run: |
