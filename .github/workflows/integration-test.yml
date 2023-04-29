@@ -11,7 +11,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  test:
+  integration-test:
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest]
