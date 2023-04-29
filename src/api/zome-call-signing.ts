@@ -2,6 +2,11 @@ import * as ed25519 from "@noble/ed25519";
 import { CapSecret } from "../hdk/capabilities.js";
 import { AgentPubKey, CellId } from "../types.js";
 import { encodeHashToBase64 } from "../utils/base64.js";
+import { webcrypto } from "crypto";
+
+if (!globalThis.crypto) {
+  globalThis.crypto = webcrypto as unknown as Crypto;
+}
 
 /**
  * @public
