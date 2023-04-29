@@ -15,6 +15,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest]
+        node: [16, 18]
       fail-fast: false
     runs-on: ${{ matrix.os }}
 
@@ -25,7 +26,7 @@ jobs:
       - name: Install Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: ${{ matrix.node }}
 
       - name: Install NPM packages
         run: npm ci
@@ -75,17 +76,17 @@ jobs:
           npm i $(ls ../holochain-client-*.tgz)
 
       - name: Write Vite config to set build target to ES2020
-        run : |
+        run: |
           cd test-app
           echo 'export default { build:{ target: "es2020" } }' > vite.config.js
 
       - name: Write client import to main.js
-        run : |
+        run: |
           cd test-app
           echo 'import * as client from "@holochain/client";' > main.js
 
       - name: Bundle app for production
-        run : |
+        run: |
           cd test-app
           npm run build
 
