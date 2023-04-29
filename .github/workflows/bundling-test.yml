@@ -1,0 +1,48 @@
+name: Bundling Test
+
+on:
+  pull_request:
+  push:
+    branches:
+      - "main"
+
+concurrency:
+  group: ${{ github.ref_name }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [ubuntu-latest] #, macos-latest]
+      fail-fast: false
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Check out source code
+        uses: actions/checkout@v3
+
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
+      - name: Install NPM packages
+        run: npm ci
+
+      - name: Build client library
+        run: npm run build
+
+      - name: Create package tarball
+        run: npm pack
+
+      - name: Archive package tarball
+        uses: actions/upload-artifact@v3
+        with:
+          name: package-tarball
+          path: holochain-client-*.tgz
+
+      - name: Setup tmate session if a previous step failed
+        if: ${{ failure() }}
+        uses: mxschmitt/action-tmate@v3
+        timeout-minutes: 10
