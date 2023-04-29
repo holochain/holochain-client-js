@@ -82,7 +82,7 @@ jobs:
       - name: Write client import to main.js
         run : |
           cd test-app
-          echo 'import * as client from "@holochain/client";' > main.js
+          echo 'import * a client from "@holochain/client";' > main.js
 
       - name: Bundle app for production
         run : |
