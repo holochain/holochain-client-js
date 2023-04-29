@@ -58,8 +58,8 @@ jobs:
     steps:
       - name: Download package tarball
         uses: actions/download-artifact@v3
-        with:
-          name: holochain-client-*.tgz
+        # with:
+        #   name: holochain-client-*.tgz
 
       - name: Install Node.js
         uses: actions/setup-node@v3
