@@ -48,6 +48,7 @@ jobs:
         timeout-minutes: 10
 
   test-bundle:
+    needs: build
     strategy:
       matrix:
         os: [ubuntu-latest]
