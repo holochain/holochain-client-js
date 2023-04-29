@@ -36,7 +36,7 @@ jobs:
       - name: Create package tarball
         run: npm pack
 
-      - name: Archive package tarball
+      - name: Upload package tarball
         uses: actions/upload-artifact@v3
         with:
           name: package-tarball
@@ -44,5 +44,34 @@ jobs:
 
       - name: Setup tmate session if a previous step failed
         if: ${{ failure() }}
+        uses: mxschmitt/action-tmate@v3
+        timeout-minutes: 10
+
+  test-bundle:
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+      fail-fast: false
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Download package tarball
+        uses: actions/download-artifact@v3
+        with:
+          name: holochain-client-*.tgz
+
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
+      - name: Create a Vite project from template
+        run: npm create vite@latest test-app -- --template ts-vanilla
+
+      - name: Add JS client to project
+        run: npm i ./$(ls holochain-client-*.tgz)
+
+      - name: Setup tmate session if a previous step failed
+        # if: ${{ failure() }}
         uses: mxschmitt/action-tmate@v3
         timeout-minutes: 10
