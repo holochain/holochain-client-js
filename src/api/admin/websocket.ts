@@ -282,7 +282,7 @@ export class AdminWebsocket implements AdminApi {
     functions: GrantedFunctions,
     signingKey: AgentPubKey
   ): Promise<CapSecret> => {
-    const capSecret = await randomCapSecret();
+    const capSecret = randomCapSecret();
     await this.grantZomeCallCapability({
       cell_id: cellId,
       cap_grant: {

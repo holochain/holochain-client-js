@@ -210,7 +210,6 @@
 |  [InstalledAppInfoStatus](./client.installedappinfostatus.md) |  |
 |  [InstalledCell](./client.installedcell.md) |  |
 |  [IntegrityZome](./client.integrityzome.md) |  |
-|  [IsoWebSocket](./client.isowebsocket.md) | Isomorphic wrapper around WebSocket for compatiblity with Nodejs and Web API. |
 |  [KitsuneAgent](./client.kitsuneagent.md) |  |
 |  [KitsuneSpace](./client.kitsunespace.md) |  |
 |  [ListActiveAppsRequest](./client.listactiveappsrequest.md) |  |

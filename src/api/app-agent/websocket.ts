@@ -3,19 +3,18 @@ import { omit } from "lodash-es";
 import { getLauncherEnvironment } from "../../environments/launcher.js";
 
 import { AgentPubKey, CellId, InstalledAppId, RoleName } from "../../types.js";
-import { getBaseRoleNameFromCloneId, isCloneId } from "../common.js";
+import { AppInfo, CellType } from "../admin/types.js";
 import {
-  AppInfo,
   AppSignal,
   AppSignalCb,
-  AppWebsocket,
   CallZomeRequest,
   CallZomeResponse,
-  CellType,
   CreateCloneCellResponse,
   DisableCloneCellResponse,
   EnableCloneCellResponse,
-} from "../index.js";
+} from "../app/types.js";
+import { AppWebsocket } from "../app/websocket.js";
+import { getBaseRoleNameFromCloneId, isCloneId } from "../common.js";
 import {
   AppAgentCallZomeRequest,
   AppAgentClient,

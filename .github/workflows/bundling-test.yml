@@ -1,0 +1,97 @@
+name: Bundling Test
+
+on:
+  pull_request:
+  push:
+    branches:
+      - "main"
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref_name }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+        node: [16, 18]
+      fail-fast: false
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Check out source code
+        uses: actions/checkout@v3
+
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node }}
+
+      - name: Install NPM packages
+        run: npm ci
+
+      - name: Build client library
+        run: npm run build
+
+      - name: Create package tarball
+        run: npm pack
+
+      - name: Upload package tarball
+        uses: actions/upload-artifact@v3
+        with:
+          name: client-${{ matrix.node }}.tgz
+          path: holochain-client-*.tgz
+
+      - name: Setup tmate session if a previous step failed
+        if: ${{ failure() }}
+        uses: mxschmitt/action-tmate@v3
+        timeout-minutes: 10
+
+  bundle-test:
+    needs: build
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+        node: [16, 18]
+      fail-fast: false
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Download package tarball
+        uses: actions/download-artifact@v3
+        with:
+          name: client-${{ matrix.node }}.tgz
+
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node }}
+
+      - name: Create a Vite project from template
+        run: npm create vite@latest test-app -- --template vanilla-ts
+
+      - name: Add JS client to project
+        run: |
+          cd test-app
+          npm i $(ls ../holochain-client-*.tgz)
+
+      - name: Write Vite config to set build target to ES2020
+        run: |
+          cd test-app
+          echo 'export default { build:{ target: "es2020" } }' > vite.config.js
+
+      - name: Write client import to main.js
+        run: |
+          cd test-app
+          echo 'import * as client from "@holochain/client";' > main.js
+
+      - name: Bundle app for production
+        run: |
+          cd test-app
+          npm run build
+
+      - name: Setup tmate session if a previous step failed
+        if: ${{ failure() }}
+        uses: mxschmitt/action-tmate@v3
+        timeout-minutes: 10
