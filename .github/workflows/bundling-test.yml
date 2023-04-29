@@ -39,7 +39,7 @@ jobs:
       - name: Upload package tarball
         uses: actions/upload-artifact@v3
         with:
-          name: package-tarball
+          name: client.tgz
           path: holochain-client-*.tgz
 
       - name: Setup tmate session if a previous step failed
@@ -58,8 +58,8 @@ jobs:
     steps:
       - name: Download package tarball
         uses: actions/download-artifact@v3
-        # with:
-        #   name: holochain-client-*.tgz
+        with:
+          name: client.tgz
 
       - name: Install Node.js
         uses: actions/setup-node@v3
@@ -70,7 +70,7 @@ jobs:
         run: npm create vite@latest test-app -- --template vanilla
 
       - name: Add JS client to project
-        run: npm i ./$(ls holochain-client-*.tgz)
+        run: npm i ./client.tgz
 
       - name: Setup tmate session if a previous step failed
         # if: ${{ failure() }}
