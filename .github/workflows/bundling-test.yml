@@ -40,7 +40,7 @@ jobs:
       - name: Upload package tarball
         uses: actions/upload-artifact@v3
         with:
-          name: client.tgz
+          name: client-${{ matrix.node }}.tgz
           path: holochain-client-*.tgz
 
       - name: Setup tmate session if a previous step failed
@@ -48,11 +48,12 @@ jobs:
         uses: mxschmitt/action-tmate@v3
         timeout-minutes: 10
 
-  test-bundle:
+  bundle-test:
     needs: build
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest]
+        node: [16, 18]
       fail-fast: false
     runs-on: ${{ matrix.os }}
 
@@ -60,12 +61,12 @@ jobs:
       - name: Download package tarball
         uses: actions/download-artifact@v3
         with:
-          name: client.tgz
+          name: client-${{ matrix.node }}.tgz
 
       - name: Install Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: ${{ matrix.node }}
 
       - name: Create a Vite project from template
         run: npm create vite@latest test-app -- --template vanilla
