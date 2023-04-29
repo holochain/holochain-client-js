@@ -67,7 +67,7 @@ jobs:
           node-version: 16
 
       - name: Create a Vite project from template
-        run: npm create vite@latest test-app -- --template vanilla-js
+        run: npm create vite@latest test-app -- --template vanilla
 
       - name: Add JS client to project
         run: npm i ./$(ls holochain-client-*.tgz)
