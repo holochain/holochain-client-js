@@ -73,6 +73,6 @@ jobs:
         run: npm i ./client.tgz
 
       - name: Setup tmate session if a previous step failed
-        # if: ${{ failure() }}
+        if: ${{ failure() }}
         uses: mxschmitt/action-tmate@v3
         timeout-minutes: 10
