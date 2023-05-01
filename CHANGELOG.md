@@ -6,9 +6,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Added
 ### Changed
-- Set default timeout for API calls to 60 seconds.
 ### Fixed
 ### Removed
+
+## 2023-04-15: v0.14.0
+### Changed
+- Set default timeout for API calls to 60 seconds, formerly 15 seconds.
+- **BREAKING CHANGE**: Replace NPM package "tweetnacl" with "@noble/ed25519". "tweetnacl" produced errors with bundlers and hasn't been updated in a longer time.
+### Fixed
+- **BREAKING CHANGE**: Update params of `NetworkInfoRequest`.
 
 ## 2023-04-15: v0.13.0
 ### Added
