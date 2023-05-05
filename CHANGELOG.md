@@ -9,7 +9,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Fixed
 ### Removed
 
-## 2023-04-15: v0.14.0
+## 2023-05-04: v0.14.1
+### Fixed
+- Import crypto module conditionally when in Node.js environment. For browsers and bundlers no module import is required and the Web API module is used.
+
+## 2023-05-01: v0.14.0
 ### Changed
 - Set default timeout for API calls to 60 seconds, formerly 15 seconds.
 - **BREAKING CHANGE**: Replace NPM package "tweetnacl" with "@noble/ed25519". "tweetnacl" produced errors with bundlers and hasn't been updated in a longer time.
