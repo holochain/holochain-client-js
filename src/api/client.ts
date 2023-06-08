@@ -111,6 +111,9 @@ export class WsClient extends Emittery {
    */
   static connect(url: string) {
     return new Promise<WsClient>((resolve, reject) => {
+      if (url.includes("localhost")) {
+        throw new Error('localhost is not supported in the url. Use "127.0.0.1" instead.');
+      }
       const socket = new IsoWebSocket(url);
       // make sure that there are no uncaught connection
       // errors because that causes nodejs thread to crash
