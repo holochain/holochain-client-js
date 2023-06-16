@@ -28,6 +28,7 @@ import {
   makeCoordinatorZomeBundle,
   withConductor,
 } from "./util.js";
+import { HolochainError } from "../../src/api/common.js";
 
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -46,14 +47,13 @@ const ADMIN_PORT_1 = 33002;
 const ROLE_NAME: RoleName = "foo";
 const TEST_ZOME_NAME = "foo";
 
+export const adminWsUrl = new URL(`ws://127.0.0.1:${ADMIN_PORT}`);
+
 test(
   "admin smoke test: registerDna + installApp + uninstallApp",
   withConductor(ADMIN_PORT, async (t: Test) => {
     const installed_app_id = "app";
-    const admin = await AdminWebsocket.connect(
-      `ws://127.0.0.1:${ADMIN_PORT}`,
-      12000
-    );
+    const admin = await AdminWebsocket.connect(adminWsUrl, 12000);
 
     const agent_key = await admin.generateAgentPubKey();
     t.ok(agent_key);
@@ -178,10 +178,7 @@ test(
   "admin smoke test: installBundle",
   withConductor(ADMIN_PORT, async (t: Test) => {
     const installed_app_id = "app";
-    const admin = await AdminWebsocket.connect(
-      `ws://127.0.0.1:${ADMIN_PORT}`,
-      12000
-    );
+    const admin = await AdminWebsocket.connect(adminWsUrl, 12000);
 
     const agent_key = await admin.generateAgentPubKey();
     t.ok(agent_key);
@@ -239,10 +236,7 @@ test(
   "admin register dna with full binary bundle + get dna def",
   withConductor(ADMIN_PORT, async (t: Test) => {
     const installed_app_id = "app";
-    const admin = await AdminWebsocket.connect(
-      `ws://127.0.0.1:${ADMIN_PORT}`,
-      12000
-    );
+    const admin = await AdminWebsocket.connect(adminWsUrl, 12000);
 
     const agent_key = await admin.generateAgentPubKey();
     t.ok(agent_key);
@@ -362,11 +356,43 @@ test(
 );
 
 test(
+  "client errors are HolochainErrors",
+  withConductor(ADMIN_PORT, async (t: Test) => {
+    const { installed_app_id, cell_id, client, admin } = await installAppAndDna(
+      ADMIN_PORT
+    );
+    const info = await client.appInfo({ installed_app_id }, 1000);
+    assert(CellType.Provisioned in info.cell_info[ROLE_NAME][0]);
+
+    const zomeCallPayload: CallZomeRequest = {
+      cell_id,
+      zome_name: TEST_ZOME_NAME,
+      fn_name: "fn_that_does_not_exist",
+      provenance: cell_id[1],
+      payload: null,
+    };
+
+    await admin.authorizeSigningCredentials(cell_id);
+
+    try {
+      await client.callZome(zomeCallPayload);
+    } catch (error) {
+      t.ok(
+        error instanceof HolochainError,
+        "error is an instance of HolochainError"
+      );
+      assert(error instanceof HolochainError);
+      t.equal(error.name, "ribosome_error", "error has correct name");
+    }
+  })
+);
+
+test(
   "install app with app manifest from path",
   withConductor(ADMIN_PORT, async (t: Test) => {
     const role_name = "foo";
     const installed_app_id = "app";
-    const admin = await AdminWebsocket.connect(`ws://127.0.0.1:${ADMIN_PORT}`);
+    const admin = await AdminWebsocket.connect(adminWsUrl);
     const agent = await admin.generateAgentPubKey();
 
     const app = await admin.installApp({
@@ -396,7 +422,9 @@ test(
     });
     await admin.enableApp({ installed_app_id });
     const { port: appPort } = await admin.attachAppInterface({ port: 0 });
-    const client = await AppWebsocket.connect(`ws://127.0.0.1:${appPort}`);
+    const client = await AppWebsocket.connect(
+      new URL(`ws://127.0.0.1:${appPort}`)
+    );
 
     assert(CellType.Provisioned in app.cell_info[role_name][0]);
     const cell_id = app.cell_info[role_name][0][CellType.Provisioned].cell_id;
@@ -421,7 +449,7 @@ test(
   withConductor(ADMIN_PORT, async (t: Test) => {
     const role_name = "foo";
     const installed_app_id = "app";
-    const admin = await AdminWebsocket.connect(`ws://127.0.0.1:${ADMIN_PORT}`);
+    const admin = await AdminWebsocket.connect(adminWsUrl);
     const agent = await admin.generateAgentPubKey();
 
     const dnaPath = `${FIXTURE_PATH}/test.dna`;
@@ -455,7 +483,9 @@ test(
     });
     await admin.enableApp({ installed_app_id });
     const { port: appPort } = await admin.attachAppInterface({ port: 0 });
-    const client = await AppWebsocket.connect(`ws://127.0.0.1:${appPort}`);
+    const client = await AppWebsocket.connect(
+      new URL(`ws://127.0.0.1:${appPort}`)
+    );
 
     assert(CellType.Provisioned in app.cell_info[role_name][0]);
     const cell_id = app.cell_info[role_name][0][CellType.Provisioned].cell_id;
@@ -545,22 +575,21 @@ test(
 
 // no conductor
 test("error is catchable when holochain socket is unavailable", async (t: Test) => {
-  const url = `ws://127.0.0.1:${ADMIN_PORT}`;
   try {
-    await AdminWebsocket.connect(url);
+    await AdminWebsocket.connect(adminWsUrl);
   } catch (e) {
     t.equal(
       e.message,
-      `could not connect to holochain conductor, please check that a conductor service is running and available at ${url}`
+      `could not connect to holochain conductor, please check that a conductor service is running and available at ${adminWsUrl}`
     );
   }
 
   try {
-    await AppWebsocket.connect(url);
+    await AppWebsocket.connect(adminWsUrl);
   } catch (e) {
     t.equal(
       e.message,
-      `could not connect to holochain conductor, please check that a conductor service is running and available at ${url}`
+      `could not connect to holochain conductor, please check that a conductor service is running and available at ${adminWsUrl}`
     );
   }
 });
@@ -590,8 +619,10 @@ test("can inject agents", async (t: Test) => {
   const conductor1 = await launch(ADMIN_PORT);
   const conductor2 = await launch(ADMIN_PORT_1);
   const installed_app_id = "app";
-  const admin1 = await AdminWebsocket.connect(`ws://127.0.0.1:${ADMIN_PORT}`);
-  const admin2 = await AdminWebsocket.connect(`ws://127.0.0.1:${ADMIN_PORT_1}`);
+  const admin1 = await AdminWebsocket.connect(adminWsUrl);
+  const admin2 = await AdminWebsocket.connect(
+    new URL(`ws://127.0.0.1:${ADMIN_PORT_1}`)
+  );
   const agent_key_1 = await admin1.generateAgentPubKey();
   t.ok(agent_key_1);
   const agent_key_2 = await admin2.generateAgentPubKey();
@@ -682,7 +713,7 @@ test("can inject agents", async (t: Test) => {
 test(
   "admin smoke test: listAppInterfaces + attachAppInterface",
   withConductor(ADMIN_PORT, async (t: Test) => {
-    const admin = await AdminWebsocket.connect(`ws://127.0.0.1:${ADMIN_PORT}`);
+    const admin = await AdminWebsocket.connect(adminWsUrl);
 
     let interfaces = await admin.listAppInterfaces();
     t.equal(interfaces.length, 0);
@@ -728,7 +759,7 @@ test(
 test(
   "admin smoke test: install 2 hApp bundles with different network seeds",
   withConductor(ADMIN_PORT, async (t: Test) => {
-    const admin = await AdminWebsocket.connect(`ws://127.0.0.1:${ADMIN_PORT}`);
+    const admin = await AdminWebsocket.connect(adminWsUrl);
     const agent_key = await admin.generateAgentPubKey();
 
     const installedApp1 = await admin.installApp({
@@ -1072,3 +1103,31 @@ test(
     t.equal(response, "hi", "updated coordinator zomes can be called");
   })
 );
+
+test("client reconnects WebSocket if closed before making a zome call", async (t: Test) => {
+  const port = ADMIN_PORT;
+  const conductorProcess = await launch(port);
+  const { cell_id, client, admin } = await installAppAndDna(port);
+  await admin.authorizeSigningCredentials(cell_id);
+
+  await client.client.close();
+
+  const call = client.callZome({
+    cell_id,
+    zome_name: TEST_ZOME_NAME,
+    fn_name: "bar",
+    provenance: cell_id[1],
+    payload: null,
+  });
+
+  try {
+    await call;
+    t.pass("websocket was reconnected successfully");
+  } catch (error) {
+    t.fail("websocket was not reconnected");
+  }
+
+  assert(conductorProcess.pid && !conductorProcess.killed);
+  process.kill(-conductorProcess.pid);
+  await cleanSandboxConductors();
+});

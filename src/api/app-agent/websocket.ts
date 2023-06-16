@@ -80,7 +80,7 @@ export class AppAgentWebsocket implements AppAgentClient {
    * @returns A new instance of an AppAgentWebsocket.
    */
   static async connect(
-    url: string,
+    url: URL,
     installed_app_id: InstalledAppId,
     defaultTimeout?: number
   ) {

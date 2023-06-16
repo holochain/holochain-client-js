@@ -95,14 +95,14 @@ export class AdminWebsocket implements AdminApi {
    * @returns A promise for a new connected instance.
    */
   static async connect(
-    url: string,
+    url: URL,
     defaultTimeout?: number
   ): Promise<AdminWebsocket> {
     // Check if we are in the launcher's environment, and if so, redirect the url to connect to
     const env = getLauncherEnvironment();
 
     if (env?.ADMIN_INTERFACE_PORT) {
-      url = `ws://127.0.0.1:${env.ADMIN_INTERFACE_PORT}`;
+      url = new URL(`ws://127.0.0.1:${env.ADMIN_INTERFACE_PORT}`);
     }
 
     const wsClient = await WsClient.connect(url);

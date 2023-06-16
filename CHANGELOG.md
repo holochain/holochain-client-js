@@ -5,7 +5,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## \[Unreleased\]
 
 ### Added
+- When making a WsClient request, reconnect websocket in case it's closed.
 ### Changed
+- **BREAKING CHANGE**: Refactor client and websocket classes to use URLs instead of strings.
+- **BREAKING CHANGE**: Error responses from Holochain are thrown as instance of new class `HolochainError` which extends `Error`.
 ### Fixed
 ### Removed
 

@@ -9,32 +9,40 @@ interface HolochainMessage {
   data: ArrayLike<number> | null;
 }
 
+type RequestResolver = (msg: unknown) => ReturnType<typeof decode>;
+type RequestRejecter = (error: Error) => void;
+
+interface HolochainRequest {
+  resolve: RequestResolver;
+  reject: RequestRejecter;
+}
+
 /**
  * A WebSocket client which can make requests and receive responses,
  * as well as send and receive signals.
  *
- * Uses Holochain's websocket WireMessage for communication.
+ * Uses Holochain's WireMessage for communication.
  *
  * @public
  */
 export class WsClient extends Emittery {
   socket: IsoWebSocket;
-  pendingRequests: Record<
-    number,
-    {
-      resolve: (msg: unknown) => ReturnType<typeof decode>;
-      reject: (error: Error) => void;
-    }
-  >;
+  url: URL | undefined;
+  pendingRequests: Record<number, HolochainRequest>;
   index: number;
 
-  constructor(socket: IsoWebSocket) {
+  constructor(socket: IsoWebSocket, url: URL) {
     super();
     this.socket = socket;
+    this.url = url;
     this.pendingRequests = {};
     this.index = 0;
 
-    socket.onmessage = async (serializedMessage) => {
+    this.setupSocket();
+  }
+
+  private setupSocket() {
+    this.socket.onmessage = async (serializedMessage) => {
       // If data is not a buffer (nodejs), it will be a blob (browser)
       let deserializedData;
       if (
@@ -87,7 +95,7 @@ export class WsClient extends Emittery {
       }
     };
 
-    socket.onclose = (event) => {
+    this.socket.onclose = (event) => {
       const pendingRequestIds = Object.keys(this.pendingRequests).map((id) =>
         parseInt(id)
       );
@@ -106,15 +114,12 @@ export class WsClient extends Emittery {
   /**
    * Instance factory for creating WsClients.
    *
-   * @param url - The `ws://` URL to connect to.
+   * @param url - The WebSocket URL to connect to.
    * @returns An new instance of the WsClient.
    */
-  static connect(url: string) {
+  static connect(url: URL) {
     return new Promise<WsClient>((resolve, reject) => {
       const socket = new IsoWebSocket(url);
-      // make sure that there are no uncaught connection
-      // errors because that causes nodejs thread to crash
-      // with uncaught exception
       socket.onerror = () => {
         reject(
           new Error(
@@ -123,7 +128,7 @@ export class WsClient extends Emittery {
         );
       };
       socket.onopen = () => {
-        const client = new WsClient(socket);
+        const client = new WsClient(socket, url);
         resolve(client);
       };
     });
@@ -148,23 +153,50 @@ export class WsClient extends Emittery {
    * @param request - The request to send over the websocket.
    * @returns
    */
-  request<Req, Res>(request: Req): Promise<Res> {
+  async request<Response>(request: unknown): Promise<Response> {
     if (this.socket.readyState === this.socket.OPEN) {
-      const id = this.index;
-      const encodedMsg = encode({
-        id,
-        type: "request",
-        data: encode(request),
-      });
       const promise = new Promise((resolve, reject) => {
-        this.pendingRequests[id] = { resolve, reject };
+        this.sendMessage(request, resolve, reject);
       });
-      this.socket.send(encodedMsg);
-      this.index += 1;
-      return promise as Promise<Res>;
+      return promise as Promise<Response>;
+    } else if (this.url) {
+      const response = new Promise<unknown>((resolve, reject) => {
+        // typescript forgets in this promise scope that this.url is not undefined
+        const socket = new IsoWebSocket(this.url as URL);
+        this.socket = socket;
+        socket.onerror = () => {
+          reject(
+            new Error(
+              `could not connect to Holochain conductor, please check that a conductor service is running and available at ${this.url}`
+            )
+          );
+        };
+        socket.onopen = () => {
+          this.sendMessage(request, resolve, reject);
+        };
+
+        this.setupSocket();
+      });
+      return response as Response;
     } else {
       return Promise.reject(new Error("Socket is not open"));
     }
+  }
+
+  private sendMessage(
+    request: unknown,
+    resolve: RequestResolver,
+    reject: RequestRejecter
+  ) {
+    const id = this.index;
+    const encodedMsg = encode({
+      id,
+      type: "request",
+      data: encode(request),
+    });
+    this.socket.send(encodedMsg);
+    this.pendingRequests[id] = { resolve, reject };
+    this.index += 1;
   }
 
   private handleResponse(msg: HolochainMessage) {

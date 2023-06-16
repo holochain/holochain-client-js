@@ -127,7 +127,9 @@ test(
   "cells only receive their own signals",
   withConductor(ADMIN_PORT, async (t: Test) => {
     const role_name = "foo";
-    const admin = await AdminWebsocket.connect(`ws://127.0.0.1:${ADMIN_PORT}`);
+    const admin = await AdminWebsocket.connect(
+      new URL(`ws://127.0.0.1:${ADMIN_PORT}`)
+    );
     const path = `${FIXTURE_PATH}/test.happ`;
     const { port: appPort } = await admin.attachAppInterface({ port: 0 });
 
@@ -165,7 +167,7 @@ test(
 
     await admin.authorizeSigningCredentials(cell_id1);
 
-    const clientUrl = `ws://127.0.0.1:${appPort}`;
+    const clientUrl = new URL(`ws://127.0.0.1:${appPort}`);
     const appAgentWs1 = await AppAgentWebsocket.connect(clientUrl, app_id1);
     const appAgentWs2 = await AppAgentWebsocket.connect(clientUrl, app_id2);
 
