@@ -76,6 +76,5 @@ pub fn waste_some_time(_: ()) -> ExternResult<TestString> {
             x = x.wrapping_pow(x);
         }
     }
-    // thread::sleep(time::Duration::from_secs(5));
     Ok(TestString(x.to_string()))
 }

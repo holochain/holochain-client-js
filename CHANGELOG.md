@@ -6,6 +6,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Added
 ### Changed
+- **BREAKING CHANGE**: Refactor client and websocket classes to use URLs instead of strings.
 ### Fixed
 ### Removed
 
