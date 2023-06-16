@@ -44,14 +44,34 @@ export const requesterTransformer =
     const output = transform.output(response.data);
     return output;
   };
+
 const identity = (x: any) => x;
 const identityTransformer = {
   input: identity,
   output: identity,
 };
 
+/**
+ * Error thrown when response from Holochain is an error.
+ *
+ * @public
+ */
+export class HolochainError extends Error {
+  constructor(name: string, message: string) {
+    super();
+    this.name = name;
+    this.message = message;
+  }
+}
+
+// this determines the error format of all error responses
 export const catchError = (res: any) => {
-  return res.type === ERROR_TYPE ? Promise.reject(res) : Promise.resolve(res);
+  if (res.type === ERROR_TYPE) {
+    const error = new HolochainError(res.data.type, res.data.data);
+    return Promise.reject(error);
+  } else {
+    return Promise.resolve(res);
+  }
 };
 
 export const promiseTimeout = (
@@ -62,10 +82,10 @@ export const promiseTimeout = (
   let id: NodeJS.Timeout;
 
   const timeout = new Promise((_, reject) => {
-    id = setTimeout(() => {
-      clearTimeout(id);
-      reject(new Error(`Timed out in ${ms}ms: ${tag}`));
-    }, ms);
+    id = setTimeout(
+      () => reject(new Error(`Timed out in ${ms}ms: ${tag}`)),
+      ms
+    );
   });
 
   return new Promise((res, rej) => {

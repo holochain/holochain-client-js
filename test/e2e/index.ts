@@ -28,6 +28,7 @@ import {
   makeCoordinatorZomeBundle,
   withConductor,
 } from "./util.js";
+import { HolochainError } from "../../src/api/common.js";
 
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -358,6 +359,38 @@ test(
     await admin.disableApp({ installed_app_id });
     info = await client.appInfo({ installed_app_id }, 1000);
     t.deepEqual(info.status, { disabled: { reason: { user: null } } });
+  })
+);
+
+test(
+  "client errors are HolochainErrors",
+  withConductor(ADMIN_PORT, async (t: Test) => {
+    const { installed_app_id, cell_id, client, admin } = await installAppAndDna(
+      ADMIN_PORT
+    );
+    const info = await client.appInfo({ installed_app_id }, 1000);
+    assert(CellType.Provisioned in info.cell_info[ROLE_NAME][0]);
+
+    const zomeCallPayload: CallZomeRequest = {
+      cell_id,
+      zome_name: TEST_ZOME_NAME,
+      fn_name: "fn_that_does_not_exist",
+      provenance: cell_id[1],
+      payload: null,
+    };
+
+    await admin.authorizeSigningCredentials(cell_id);
+
+    try {
+      await client.callZome(zomeCallPayload);
+    } catch (error) {
+      t.ok(
+        error instanceof HolochainError,
+        "error is an instance of HolochainError"
+      );
+      assert(error instanceof HolochainError);
+      t.equal(error.name, "ribosome_error", "error has correct name");
+    }
   })
 );
 
