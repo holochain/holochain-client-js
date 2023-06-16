@@ -1,13 +1,13 @@
 [package]
+authors = ["thedavidmeister", "thedavidmeister@gmail.com"]
+edition = "2021"
 name = "test_wasm_foo"
 version = "0.0.1"
-authors = [ "thedavidmeister", "thedavidmeister@gmail.com" ]
-edition = "2021"
 
 [lib]
+crate-type = ["cdylib", "rlib"]
 name = "test_wasm_foo"
-crate-type = [ "cdylib", "rlib" ]
 
 [dependencies]
+hdk = {workspace = true}
 serde = "1"
-hdk = "0.2.0-beta-rc.6"

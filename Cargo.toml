@@ -6,3 +6,6 @@ members = [
 
 [profile.dev]
 opt-level = "z"
+
+[workspace.dependencies]
+hdk = "0.2.0"
