@@ -9,14 +9,14 @@ Instance factory for creating AppWebsockets.
 **Signature:**
 
 ```typescript
-static connect(url: string, defaultTimeout?: number): Promise<AppWebsocket>;
+static connect(url: URL, defaultTimeout?: number): Promise<AppWebsocket>;
 ```
 
 ## Parameters
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  url | string | The <code>ws://</code> URL of the App API to connect to. |
+|  url | URL | The <code>ws://</code> URL of the App API to connect to. |
 |  defaultTimeout | number | _(Optional)_ Timeout to default to for all operations. |
 
 **Returns:**

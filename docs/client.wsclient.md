@@ -6,7 +6,7 @@
 
 A WebSocket client which can make requests and receive responses, as well as send and receive signals.
 
-Uses Holochain's websocket WireMessage for communication.
+Uses Holochain's WireMessage for communication.
 
 **Signature:**
 
@@ -19,15 +19,15 @@ export declare class WsClient extends Emittery
 
 |  Constructor | Modifiers | Description |
 |  --- | --- | --- |
-|  [(constructor)(socket)](./client.wsclient._constructor_.md) |  | Constructs a new instance of the <code>WsClient</code> class |
+|  [(constructor)(socket, url)](./client.wsclient._constructor_.md) |  | Constructs a new instance of the <code>WsClient</code> class |
 
 ## Properties
 
 |  Property | Modifiers | Type | Description |
 |  --- | --- | --- | --- |
 |  [index](./client.wsclient.index.md) |  | number |  |
-|  [pendingRequests](./client.wsclient.pendingrequests.md) |  | Record&lt;number, { resolve: (msg: unknown) =&gt; ReturnType&lt;typeof decode&gt;; reject: (error: Error) =&gt; void; }&gt; |  |
 |  [socket](./client.wsclient.socket.md) |  | IsoWebSocket |  |
+|  [url](./client.wsclient.url.md) |  | URL \| undefined |  |
 
 ## Methods
 

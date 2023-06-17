@@ -28,8 +28,8 @@ interface HolochainRequest {
 export class WsClient extends Emittery {
   socket: IsoWebSocket;
   url: URL | undefined;
-  pendingRequests: Record<number, HolochainRequest>;
-  index: number;
+  private pendingRequests: Record<number, HolochainRequest>;
+  private index: number;
 
   constructor(socket: IsoWebSocket, url: URL) {
     super();

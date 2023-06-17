@@ -9,17 +9,17 @@ Send requests to the connected websocket.
 **Signature:**
 
 ```typescript
-request<Req, Res>(request: Req): Promise<Res>;
+request<Response>(request: unknown): Promise<Response>;
 ```
 
 ## Parameters
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  request | Req | The request to send over the websocket. |
+|  request | unknown | The request to send over the websocket. |
 
 **Returns:**
 
-Promise&lt;Res&gt;
+Promise&lt;Response&gt;
 
 

@@ -9,14 +9,14 @@ Instance factory for creating WsClients.
 **Signature:**
 
 ```typescript
-static connect(url: string): Promise<WsClient>;
+static connect(url: URL): Promise<WsClient>;
 ```
 
 ## Parameters
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  url | string | The <code>ws://</code> URL to connect to. |
+|  url | URL | The WebSocket URL to connect to. |
 
 **Returns:**
 

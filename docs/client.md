@@ -12,7 +12,7 @@
 |  [AppAgentWebsocket](./client.appagentwebsocket.md) | A class to establish a websocket connection to an App interface, for a specific agent and app. |
 |  [AppWebsocket](./client.appwebsocket.md) | A class to establish a websocket connection to an App interface of a Holochain conductor. |
 |  [CloneId](./client.cloneid.md) | <p>Identifier of a clone cell, composed of the DNA's role id and the index of the clone, starting at 0.</p><p>Example: <code>profiles.0</code></p> |
-|  [WsClient](./client.wsclient.md) | <p>A WebSocket client which can make requests and receive responses, as well as send and receive signals.</p><p>Uses Holochain's websocket WireMessage for communication.</p> |
+|  [WsClient](./client.wsclient.md) | <p>A WebSocket client which can make requests and receive responses, as well as send and receive signals.</p><p>Uses Holochain's WireMessage for communication.</p> |
 
 ## Enumerations
 
