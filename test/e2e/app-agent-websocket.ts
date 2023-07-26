@@ -124,7 +124,7 @@ test(
 );
 
 test(
-  "can receive a signal when proxied",
+  "can receive a signal when emitter is proxied",
   withConductor(ADMIN_PORT, async (t: Test) => {
     let resolveSignalPromise: (value?: unknown) => void | undefined;
     const signalReceivedPromise = new Promise(
@@ -152,12 +152,9 @@ test(
 
     appAgentWs.on("signal", signalCb);
 
-    // trigger an emit_signal
-    await appAgentWs.callZome({
+    appAgentWs.emitter.emit('signal', {
       cell_id,
       zome_name: TEST_ZOME_NAME,
-      fn_name: "emitter",
-      provenance: await fakeAgentPubKey(),
       payload: null,
     });
     await signalReceivedPromise;
