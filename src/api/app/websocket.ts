@@ -59,6 +59,15 @@ export class AppWebsocket extends Emittery implements AppApi {
     overrideInstalledAppId?: InstalledAppId
   ) {
     super();
+    // Ensure all super methods are bound to this instance because Emittery relies on `this` being the instance.
+    // Please retain until the upstream is fixed https://github.com/sindresorhus/emittery/issues/86.
+    Object.getOwnPropertyNames(Emittery.prototype).forEach((name) => {
+      const to_bind = (this as unknown as {[key: string]: unknown})[name];
+      if (typeof to_bind === 'function') {
+        (this as unknown as {[key: string]: unknown})[name] = to_bind.bind(this);
+      }
+    });
+
     this.client = client;
     this.defaultTimeout =
       defaultTimeout === undefined ? DEFAULT_TIMEOUT : defaultTimeout;

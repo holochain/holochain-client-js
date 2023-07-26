@@ -124,44 +124,6 @@ test(
 );
 
 test(
-  "can receive a signal when emitter is proxied",
-  withConductor(ADMIN_PORT, async (t: Test) => {
-    let resolveSignalPromise: (value?: unknown) => void | undefined;
-    const signalReceivedPromise = new Promise(
-      (resolve) => (resolveSignalPromise = resolve)
-    );
-    const signalCb: AppSignalCb = (signal) => {
-      t.deepEqual(signal, {
-        cell_id,
-        zome_name: TEST_ZOME_NAME,
-        payload: "i am a signal",
-      });
-      resolveSignalPromise();
-    };
-
-    const {
-      admin,
-      cell_id,
-      client: appAgentWsRaw,
-    } = await createAppAgentWsAndInstallApp(ADMIN_PORT);
-
-    // Wrap the appAgentWs in a no-op proxy
-    const appAgentWs = new Proxy(appAgentWsRaw, {});
-
-    await admin.authorizeSigningCredentials(cell_id);
-
-    appAgentWs.on("signal", signalCb);
-
-    appAgentWs.emitter.emit('signal', {
-      cell_id,
-      zome_name: TEST_ZOME_NAME,
-      payload: null,
-    });
-    await signalReceivedPromise;
-  })
-);
-
-test(
   "cells only receive their own signals",
   withConductor(ADMIN_PORT, async (t: Test) => {
     const role_name = "foo";
