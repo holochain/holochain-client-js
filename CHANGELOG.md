@@ -9,6 +9,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Fixed
 ### Removed
 
+## 2023-08-02: v0.15.1
+### Added
+- Export functions to check if a role name is a clone id.
+### Fixed
+- In Vue projects reactivity broke signal functionality provided by Emittery. A pointer to `this` which Emittery relies on becomes undefined. Until the bug is fixed upstream in Emittery, the workaround is to bind all its methods manually after instantiating an agent websocket.
+
 ## 2023-06-16: v0.15.0
 ### Added
 - When making a WsClient request, reconnect websocket in case it's closed.

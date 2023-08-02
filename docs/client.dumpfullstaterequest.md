@@ -10,7 +10,7 @@
 ```typescript
 export type DumpFullStateRequest = {
     cell_id: CellId;
-    dht_ops_cursor: number | undefined;
+    dht_ops_cursor?: number;
 };
 ```
 **References:** [CellId](./client.cellid.md)

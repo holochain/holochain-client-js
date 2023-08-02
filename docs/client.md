@@ -102,8 +102,10 @@
 |  Variable | Description |
 |  --- | --- |
 |  [generateSigningKeyPair](./client.generatesigningkeypair.md) | Generates a key pair for signing zome calls. |
+|  [getBaseRoleNameFromCloneId](./client.getbaserolenamefromcloneid.md) | Parse a clone id and get the role name part of it. |
 |  [getNonceExpiration](./client.getnonceexpiration.md) |  |
 |  [getSigningCredentials](./client.getsigningcredentials.md) | Get credentials for signing zome calls. |
+|  [isCloneId](./client.iscloneid.md) | Check if a cell's role name is a valid clone id. |
 |  [randomByteArray](./client.randombytearray.md) |  |
 |  [randomCapSecret](./client.randomcapsecret.md) |  |
 |  [randomNonce](./client.randomnonce.md) |  |

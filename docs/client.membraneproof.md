@@ -8,5 +8,5 @@
 **Signature:**
 
 ```typescript
-export type MembraneProof = Buffer;
+export type MembraneProof = Uint8Array;
 ```

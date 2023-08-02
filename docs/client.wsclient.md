@@ -25,7 +25,6 @@ export declare class WsClient extends Emittery
 
 |  Property | Modifiers | Type | Description |
 |  --- | --- | --- | --- |
-|  [index](./client.wsclient.index.md) |  | number |  |
 |  [socket](./client.wsclient.socket.md) |  | IsoWebSocket |  |
 |  [url](./client.wsclient.url.md) |  | URL \| undefined |  |
 
