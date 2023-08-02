@@ -45,6 +45,15 @@ export class AppAgentWebsocket implements AppAgentClient {
     this.appWebsocket = appWebsocket;
     this.emitter = new Emittery<AppAgentEvents>();
 
+    // Ensure all super methods are bound to this instance because Emittery relies on `this` being the instance.
+    // Please retain until the upstream is fixed https://github.com/sindresorhus/emittery/issues/86.
+    Object.getOwnPropertyNames(Emittery.prototype).forEach((name) => {
+        const to_bind = (this.emitter as unknown as {[key: string]: unknown})[name];
+        if (typeof to_bind === 'function') {
+          (this.emitter as unknown as {[key: string]: unknown})[name] = to_bind.bind(this.emitter);
+        }
+    });
+
     const env = getLauncherEnvironment();
     this.installedAppId = env?.INSTALLED_APP_ID || installedAppId;
 
