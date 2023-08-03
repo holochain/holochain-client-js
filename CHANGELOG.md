@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Added
 ### Changed
+- **BREAKING CHANGE**: Swap cryptographic package from `noble/ed25519` to `libsodium`. This lead to helper functions become async and some type changes.
+- **BREAKING CHANGE**: Set type of `Memproof` to `Uint8array` instead of `Buffer` which is specific to Node.js.
 ### Fixed
 ### Removed
 
