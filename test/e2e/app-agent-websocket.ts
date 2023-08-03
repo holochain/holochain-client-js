@@ -26,7 +26,7 @@ const TEST_ZOME_NAME = "foo";
 
 test(
   "can call a zome function and get app info",
-  withConductor(ADMIN_PORT, async (t: Test) => {
+  withConductor(ADMIN_PORT, async (t) => {
     const {
       installed_app_id,
       cell_id,
@@ -87,7 +87,7 @@ test(
 
 test(
   "can receive a signal",
-  withConductor(ADMIN_PORT, async (t: Test) => {
+  withConductor(ADMIN_PORT, async (t) => {
     let resolveSignalPromise: (value?: unknown) => void | undefined;
     const signalReceivedPromise = new Promise(
       (resolve) => (resolveSignalPromise = resolve)
@@ -125,7 +125,7 @@ test(
 
 test(
   "cells only receive their own signals",
-  withConductor(ADMIN_PORT, async (t: Test) => {
+  withConductor(ADMIN_PORT, async (t) => {
     const role_name = "foo";
     const admin = await AdminWebsocket.connect(
       new URL(`ws://127.0.0.1:${ADMIN_PORT}`)
@@ -192,7 +192,7 @@ test(
 
 test(
   "can create a callable clone cell and call it by clone id",
-  withConductor(ADMIN_PORT, async (t: Test) => {
+  withConductor(ADMIN_PORT, async (t) => {
     const { admin, client: appAgentWs } = await createAppAgentWsAndInstallApp(
       ADMIN_PORT
     );
@@ -233,7 +233,7 @@ test(
 
 test(
   "can disable and re-enable a clone cell",
-  withConductor(ADMIN_PORT, async (t: Test) => {
+  withConductor(ADMIN_PORT, async (t) => {
     const { admin, client: appAgentWs } = await createAppAgentWsAndInstallApp(
       ADMIN_PORT
     );

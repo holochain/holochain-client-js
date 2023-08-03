@@ -1,6 +1,6 @@
 import { hashZomeCall } from "@holochain/serialization";
 import { decode, encode } from "@msgpack/msgpack";
-import * as ed25519 from "@noble/ed25519";
+import _sodium from "libsodium-wrappers";
 import Emittery from "emittery";
 import {
   getLauncherEnvironment,
@@ -62,9 +62,10 @@ export class AppWebsocket extends Emittery implements AppApi {
     // Ensure all super methods are bound to this instance because Emittery relies on `this` being the instance.
     // Please retain until the upstream is fixed https://github.com/sindresorhus/emittery/issues/86.
     Object.getOwnPropertyNames(Emittery.prototype).forEach((name) => {
-      const to_bind = (this as unknown as {[key: string]: unknown})[name];
-      if (typeof to_bind === 'function') {
-        (this as unknown as {[key: string]: unknown})[name] = to_bind.bind(this);
+      const to_bind = (this as unknown as { [key: string]: unknown })[name];
+      if (typeof to_bind === "function") {
+        (this as unknown as { [key: string]: unknown })[name] =
+          to_bind.bind(this);
       }
     });
 
@@ -249,14 +250,15 @@ export const signZomeCall = async (request: CallZomeRequest) => {
     fn_name: request.fn_name,
     provenance: signingCredentialsForCell.signingKey,
     payload: encode(request.payload),
-    nonce: randomNonce(),
+    nonce: await randomNonce(),
     expires_at: getNonceExpiration(),
   };
   const hashedZomeCall = await hashZomeCall(unsignedZomeCallPayload);
-  const signature = await ed25519.signAsync(
-    hashedZomeCall,
-    signingCredentialsForCell.keyPair.privateKey
-  );
+  await _sodium.ready;
+  const sodium = _sodium;
+  const signature = sodium
+    .crypto_sign(hashedZomeCall, signingCredentialsForCell.keyPair.privateKey)
+    .subarray(0, sodium.crypto_sign_BYTES);
 
   const signedZomeCall: CallZomeRequestSigned = {
     ...unsignedZomeCallPayload,

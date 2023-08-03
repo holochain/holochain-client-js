@@ -8,4 +8,4 @@ members = [
 opt-level = "z"
 
 [workspace.dependencies]
-hdk = "0.2.0"
+hdk = "0.2"
