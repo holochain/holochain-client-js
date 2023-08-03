@@ -5,6 +5,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## \[Unreleased\]
 
 ### Added
+- When generating a signing key pair, a new optional argument can be passed in to copy the last 4 bytes (= DHT location bytes) of the original agent pub key.
 ### Changed
 - **BREAKING CHANGE**: Swap cryptographic package from `noble/ed25519` to `libsodium`. This lead to helper functions become async and some type changes.
 - **BREAKING CHANGE**: Set type of `Memproof` to `Uint8array` instead of `Buffer` which is specific to Node.js.

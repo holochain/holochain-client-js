@@ -54,18 +54,21 @@ export const setSigningCredentials = (
 /**
  * Generates a key pair for signing zome calls.
  *
+ * @param agentPubKey - The agent pub key to take 4 last bytes (= DHT location)
+ * from (optional).
  * @returns The signing key pair and an agent pub key based on the public key.
  *
  * @public
  */
-export const generateSigningKeyPair: () => Promise<
-  [KeyPair, AgentPubKey]
-> = async () => {
+export const generateSigningKeyPair: (
+  agentPubKey?: AgentPubKey
+) => Promise<[KeyPair, AgentPubKey]> = async (agentPubKey?: AgentPubKey) => {
   await _sodium.ready;
   const sodium = _sodium;
   const keyPair = sodium.crypto_sign_keypair();
+  const locationBytes = agentPubKey ? agentPubKey.subarray(35) : [0, 0, 0, 0];
   const signingKey = new Uint8Array(
-    [132, 32, 36].concat(...keyPair.publicKey).concat(...[0, 0, 0, 0])
+    [132, 32, 36].concat(...keyPair.publicKey).concat(...locationBytes)
   );
   return [keyPair, signingKey];
 };
