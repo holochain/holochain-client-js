@@ -76,11 +76,6 @@ jobs:
           cd test-app
           npm i $(ls ../holochain-client-*.tgz)
 
-      - name: Write Vite config to set build target to ES2020
-        run: |
-          cd test-app
-          echo 'export default { build:{ target: "es2020" } }' > vite.config.js
-
       - name: Write client import to main.js
         run: |
           cd test-app
