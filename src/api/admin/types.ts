@@ -141,7 +141,7 @@ export type AppInfo = {
 /**
  * @public
  */
-export type MembraneProof = Buffer;
+export type MembraneProof = Uint8Array;
 
 /**
  * @public
@@ -175,7 +175,7 @@ export type DumpStateResponse = any;
  */
 export type DumpFullStateRequest = {
   cell_id: CellId;
-  dht_ops_cursor: number | undefined;
+  dht_ops_cursor?: number;
 };
 /**
  * @public

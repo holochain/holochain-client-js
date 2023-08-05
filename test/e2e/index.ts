@@ -19,6 +19,7 @@ import {
   EnableAppResponse,
   InstalledAppInfoStatus,
   RoleName,
+  generateSigningKeyPair,
 } from "../../src/index.js";
 import {
   cleanSandboxConductors,
@@ -47,13 +48,13 @@ const ADMIN_PORT_1 = 33002;
 const ROLE_NAME: RoleName = "foo";
 const TEST_ZOME_NAME = "foo";
 
-export const adminWsUrl = new URL(`ws://127.0.0.1:${ADMIN_PORT}`);
+export const ADMIN_WS_URL = new URL(`ws://127.0.0.1:${ADMIN_PORT}`);
 
 test(
   "admin smoke test: registerDna + installApp + uninstallApp",
-  withConductor(ADMIN_PORT, async (t: Test) => {
+  withConductor(ADMIN_PORT, async (t) => {
     const installed_app_id = "app";
-    const admin = await AdminWebsocket.connect(adminWsUrl, 12000);
+    const admin = await AdminWebsocket.connect(ADMIN_WS_URL, 12000);
 
     const agent_key = await admin.generateAgentPubKey();
     t.ok(agent_key);
@@ -176,9 +177,9 @@ test(
 
 test(
   "admin smoke test: installBundle",
-  withConductor(ADMIN_PORT, async (t: Test) => {
+  withConductor(ADMIN_PORT, async (t) => {
     const installed_app_id = "app";
-    const admin = await AdminWebsocket.connect(adminWsUrl, 12000);
+    const admin = await AdminWebsocket.connect(ADMIN_WS_URL, 12000);
 
     const agent_key = await admin.generateAgentPubKey();
     t.ok(agent_key);
@@ -234,9 +235,9 @@ test(
 
 test(
   "admin register dna with full binary bundle + get dna def",
-  withConductor(ADMIN_PORT, async (t: Test) => {
+  withConductor(ADMIN_PORT, async (t) => {
     const installed_app_id = "app";
-    const admin = await AdminWebsocket.connect(adminWsUrl, 12000);
+    const admin = await AdminWebsocket.connect(ADMIN_WS_URL, 12000);
 
     const agent_key = await admin.generateAgentPubKey();
     t.ok(agent_key);
@@ -318,7 +319,7 @@ test(
 
 test(
   "can call a zome function and then deactivate",
-  withConductor(ADMIN_PORT, async (t: Test) => {
+  withConductor(ADMIN_PORT, async (t) => {
     const { installed_app_id, cell_id, client, admin } = await installAppAndDna(
       ADMIN_PORT
     );
@@ -357,7 +358,7 @@ test(
 
 test(
   "client errors are HolochainErrors",
-  withConductor(ADMIN_PORT, async (t: Test) => {
+  withConductor(ADMIN_PORT, async (t) => {
     const { installed_app_id, cell_id, client, admin } = await installAppAndDna(
       ADMIN_PORT
     );
@@ -388,11 +389,21 @@ test(
 );
 
 test(
+  "generated signing key has same location bytes as original agent pub key",
+  withConductor(ADMIN_PORT, async (t) => {
+    const admin = await AdminWebsocket.connect(ADMIN_WS_URL);
+    const agent = await admin.generateAgentPubKey();
+    const [, signingKey] = await generateSigningKeyPair(agent);
+    t.deepEqual(signingKey.subarray(35), Uint8Array.from(agent.subarray(35)));
+  })
+);
+
+test(
   "install app with app manifest from path",
-  withConductor(ADMIN_PORT, async (t: Test) => {
+  withConductor(ADMIN_PORT, async (t) => {
     const role_name = "foo";
     const installed_app_id = "app";
-    const admin = await AdminWebsocket.connect(adminWsUrl);
+    const admin = await AdminWebsocket.connect(ADMIN_WS_URL);
     const agent = await admin.generateAgentPubKey();
 
     const app = await admin.installApp({
@@ -446,10 +457,10 @@ test(
 
 test(
   "install app with app manifest and resource map",
-  withConductor(ADMIN_PORT, async (t: Test) => {
+  withConductor(ADMIN_PORT, async (t) => {
     const role_name = "foo";
     const installed_app_id = "app";
-    const admin = await AdminWebsocket.connect(adminWsUrl);
+    const admin = await AdminWebsocket.connect(ADMIN_WS_URL);
     const agent = await admin.generateAgentPubKey();
 
     const dnaPath = `${FIXTURE_PATH}/test.dna`;
@@ -507,7 +518,7 @@ test(
 
 test(
   "stateDump",
-  withConductor(ADMIN_PORT, async (t: Test) => {
+  withConductor(ADMIN_PORT, async (t) => {
     const { installed_app_id, cell_id, client, admin } = await installAppAndDna(
       ADMIN_PORT
     );
@@ -543,7 +554,7 @@ test(
 
 test(
   "can receive a signal using event handler",
-  withConductor(ADMIN_PORT, async (t: Test) => {
+  withConductor(ADMIN_PORT, async (t) => {
     const { admin, cell_id, client } = await installAppAndDna(ADMIN_PORT);
     let resolveSignalPromise: (value?: unknown) => void | undefined;
     const signalReceivedPromise = new Promise(
@@ -574,29 +585,29 @@ test(
 );
 
 // no conductor
-test("error is catchable when holochain socket is unavailable", async (t: Test) => {
+test("error is catchable when holochain socket is unavailable", async (t) => {
   try {
-    await AdminWebsocket.connect(adminWsUrl);
+    await AdminWebsocket.connect(ADMIN_WS_URL);
   } catch (e) {
     t.equal(
       e.message,
-      `could not connect to holochain conductor, please check that a conductor service is running and available at ${adminWsUrl}`
+      `could not connect to holochain conductor, please check that a conductor service is running and available at ${ADMIN_WS_URL}`
     );
   }
 
   try {
-    await AppWebsocket.connect(adminWsUrl);
+    await AppWebsocket.connect(ADMIN_WS_URL);
   } catch (e) {
     t.equal(
       e.message,
-      `could not connect to holochain conductor, please check that a conductor service is running and available at ${adminWsUrl}`
+      `could not connect to holochain conductor, please check that a conductor service is running and available at ${ADMIN_WS_URL}`
     );
   }
 });
 
 test(
   "zome call timeout can be overridden",
-  withConductor(ADMIN_PORT, async (t: Test) => {
+  withConductor(ADMIN_PORT, async (t) => {
     const { client, admin, cell_id } = await installAppAndDna(ADMIN_PORT);
     await admin.authorizeSigningCredentials(cell_id);
     const zomeCallPayload: CallZomeRequest = {
@@ -615,11 +626,11 @@ test(
   })
 );
 
-test("can inject agents", async (t: Test) => {
+test("can inject agents", async (t) => {
   const conductor1 = await launch(ADMIN_PORT);
   const conductor2 = await launch(ADMIN_PORT_1);
   const installed_app_id = "app";
-  const admin1 = await AdminWebsocket.connect(adminWsUrl);
+  const admin1 = await AdminWebsocket.connect(ADMIN_WS_URL);
   const admin2 = await AdminWebsocket.connect(
     new URL(`ws://127.0.0.1:${ADMIN_PORT_1}`)
   );
@@ -712,8 +723,8 @@ test("can inject agents", async (t: Test) => {
 
 test(
   "admin smoke test: listAppInterfaces + attachAppInterface",
-  withConductor(ADMIN_PORT, async (t: Test) => {
-    const admin = await AdminWebsocket.connect(adminWsUrl);
+  withConductor(ADMIN_PORT, async (t) => {
+    const admin = await AdminWebsocket.connect(ADMIN_WS_URL);
 
     let interfaces = await admin.listAppInterfaces();
     t.equal(interfaces.length, 0);
@@ -727,7 +738,7 @@ test(
 
 test(
   "can use some of the defined js bindings",
-  withConductor(ADMIN_PORT, async (t: Test) => {
+  withConductor(ADMIN_PORT, async (t) => {
     const { installed_app_id, cell_id, client, admin } = await installAppAndDna(
       ADMIN_PORT
     );
@@ -758,8 +769,8 @@ test(
 
 test(
   "admin smoke test: install 2 hApp bundles with different network seeds",
-  withConductor(ADMIN_PORT, async (t: Test) => {
-    const admin = await AdminWebsocket.connect(adminWsUrl);
+  withConductor(ADMIN_PORT, async (t) => {
+    const admin = await AdminWebsocket.connect(ADMIN_WS_URL);
     const agent_key = await admin.generateAgentPubKey();
 
     const installedApp1 = await admin.installApp({
@@ -788,7 +799,7 @@ test(
 
 test(
   "can create a callable clone cell",
-  withConductor(ADMIN_PORT, async (t: Test) => {
+  withConductor(ADMIN_PORT, async (t) => {
     const { installed_app_id, client, admin } = await installAppAndDna(
       ADMIN_PORT
     );
@@ -830,7 +841,7 @@ test(
 
 test(
   "can disable a clone cell",
-  withConductor(ADMIN_PORT, async (t: Test) => {
+  withConductor(ADMIN_PORT, async (t) => {
     const { installed_app_id, client, admin } = await installAppAndDna(
       ADMIN_PORT
     );
@@ -874,7 +885,7 @@ test(
 
 test(
   "can enable a disabled clone cell",
-  withConductor(ADMIN_PORT, async (t: Test) => {
+  withConductor(ADMIN_PORT, async (t) => {
     const { installed_app_id, client, admin } = await installAppAndDna(
       ADMIN_PORT
     );
@@ -917,7 +928,7 @@ test(
 
 test(
   "can delete archived clone cells of an app",
-  withConductor(ADMIN_PORT, async (t: Test) => {
+  withConductor(ADMIN_PORT, async (t) => {
     const { installed_app_id, client, admin } = await installAppAndDna(
       ADMIN_PORT
     );
@@ -954,7 +965,7 @@ test(
 
 test(
   "requests get canceled if the websocket closes while waiting for a response",
-  withConductor(ADMIN_PORT, async (t: Test) => {
+  withConductor(ADMIN_PORT, async (t) => {
     const { cell_id, client, admin } = await installAppAndDna(ADMIN_PORT);
 
     await admin.authorizeSigningCredentials(cell_id);
@@ -1013,7 +1024,7 @@ test(
 
 test(
   "can fetch storage info",
-  withConductor(ADMIN_PORT, async (t: Test) => {
+  withConductor(ADMIN_PORT, async (t) => {
     const { installed_app_id, admin } = await installAppAndDna(ADMIN_PORT);
 
     const response = await admin.storageInfo();
@@ -1025,7 +1036,7 @@ test(
 
 test(
   "can fetch network stats",
-  withConductor(ADMIN_PORT, async (t: Test) => {
+  withConductor(ADMIN_PORT, async (t) => {
     const { admin } = await installAppAndDna(ADMIN_PORT);
 
     const response = await admin.dumpNetworkStats();
@@ -1037,7 +1048,7 @@ test(
 
 test(
   "can fetch network info",
-  withConductor(ADMIN_PORT, async (t: Test) => {
+  withConductor(ADMIN_PORT, async (t) => {
     const { client, cell_id } = await installAppAndDna(ADMIN_PORT);
 
     const response = await client.networkInfo({
@@ -1060,7 +1071,7 @@ test(
 
 test(
   "can update coordinators of an app",
-  withConductor(ADMIN_PORT, async (t: Test) => {
+  withConductor(ADMIN_PORT, async (t) => {
     const { client, admin, cell_id } = await installAppAndDna(ADMIN_PORT);
     await admin.authorizeSigningCredentials(cell_id);
 
@@ -1104,7 +1115,7 @@ test(
   })
 );
 
-test("client reconnects WebSocket if closed before making a zome call", async (t: Test) => {
+test("client reconnects WebSocket if closed before making a zome call", async (t) => {
   const port = ADMIN_PORT;
   const conductorProcess = await launch(port);
   const { cell_id, client, admin } = await installAppAndDna(port);

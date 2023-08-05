@@ -1,26 +1,12 @@
-import * as ed25519 from "@noble/ed25519";
-import { CapSecret } from "../hdk/capabilities.js";
-import { AgentPubKey, CellId } from "../types.js";
+import _sodium, { type KeyPair } from "libsodium-wrappers";
+import type { CapSecret } from "../hdk/capabilities.js";
+import type { AgentPubKey, CellId } from "../types.js";
 import { encodeHashToBase64 } from "../utils/base64.js";
-
-if (!globalThis.crypto) {
-  import("node:crypto").then(
-    (webcrypto) => (globalThis.crypto = webcrypto as unknown as Crypto)
-  );
-}
 
 /**
  * @public
  */
 export type Nonce256Bit = Uint8Array;
-
-/**
- * @public
- */
-export interface KeyPair {
-  privateKey: Uint8Array;
-  publicKey: Uint8Array;
-}
 
 /**
  * @public
@@ -68,18 +54,21 @@ export const setSigningCredentials = (
 /**
  * Generates a key pair for signing zome calls.
  *
+ * @param agentPubKey - The agent pub key to take 4 last bytes (= DHT location)
+ * from (optional).
  * @returns The signing key pair and an agent pub key based on the public key.
  *
  * @public
  */
-export const generateSigningKeyPair: () => Promise<
-  [KeyPair, AgentPubKey]
-> = async () => {
-  const privateKey = ed25519.utils.randomPrivateKey();
-  const publicKey = await ed25519.getPublicKeyAsync(privateKey);
-  const keyPair: KeyPair = { privateKey, publicKey };
+export const generateSigningKeyPair: (
+  agentPubKey?: AgentPubKey
+) => Promise<[KeyPair, AgentPubKey]> = async (agentPubKey?: AgentPubKey) => {
+  await _sodium.ready;
+  const sodium = _sodium;
+  const keyPair = sodium.crypto_sign_keypair();
+  const locationBytes = agentPubKey ? agentPubKey.subarray(35) : [0, 0, 0, 0];
   const signingKey = new Uint8Array(
-    [132, 32, 36].concat(...publicKey).concat(...[0, 0, 0, 0])
+    [132, 32, 36].concat(...keyPair.publicKey).concat(...locationBytes)
   );
   return [keyPair, signingKey];
 };
@@ -87,18 +76,26 @@ export const generateSigningKeyPair: () => Promise<
 /**
  * @public
  */
-export const randomCapSecret: () => CapSecret = () => randomByteArray(64);
+export const randomCapSecret: () => Promise<CapSecret> = async () =>
+  randomByteArray(64);
 
 /**
  * @public
  */
-export const randomNonce: () => Nonce256Bit = () => randomByteArray(32);
+export const randomNonce: () => Promise<Nonce256Bit> = async () =>
+  randomByteArray(32);
 
 /**
  * @public
  */
-export const randomByteArray = (length: number) =>
-  globalThis.crypto.getRandomValues(new Uint8Array(length));
+export const randomByteArray = async (length: number) => {
+  if (globalThis.crypto && "getRandomValues" in globalThis.crypto) {
+    return globalThis.crypto.getRandomValues(new Uint8Array(length));
+  }
+  await _sodium.ready;
+  const sodium = _sodium;
+  return sodium.randombytes_buf(length);
+};
 
 /**
  * @public
