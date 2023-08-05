@@ -16,6 +16,6 @@ export interface SigningCredentials
 |  Property | Modifiers | Type | Description |
 |  --- | --- | --- | --- |
 |  [capSecret](./client.signingcredentials.capsecret.md) |  | [CapSecret](./client.capsecret.md) |  |
-|  [keyPair](./client.signingcredentials.keypair.md) |  | [KeyPair](./client.keypair.md) |  |
+|  [keyPair](./client.signingcredentials.keypair.md) |  | KeyPair |  |
 |  [signingKey](./client.signingcredentials.signingkey.md) |  | [AgentPubKey](./client.agentpubkey.md) |  |
 

@@ -8,5 +8,5 @@
 **Signature:**
 
 ```typescript
-randomByteArray: (length: number) => Uint8Array
+randomByteArray: (length: number) => Promise<Uint8Array>
 ```

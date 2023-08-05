@@ -9,8 +9,5 @@ Generates a key pair for signing zome calls.
 **Signature:**
 
 ```typescript
-generateSigningKeyPair: () => Promise<[
-    KeyPair,
-    AgentPubKey
-]>
+generateSigningKeyPair: (agentPubKey?: AgentPubKey) => Promise<[KeyPair, AgentPubKey]>
 ```
