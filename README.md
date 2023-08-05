@@ -159,10 +159,10 @@ localStorage.setItem(cellIdB64, JSON.stringify(signingCredentials));
 
 # Holochain Compatibility
 
-See [default.nix](./default.nix) for the Holochain version this package is compatible with.
+See [flake.nix](./flake.nix) for the Holochain version this package is compatible with.
 
-If updating the Holochain version included in holonix, please use `niv update` as explained in the
-[Holochain Installation Guide](https://developer.holochain.org/install-advanced/#upgrading-the-holochain-version).
+If updating the Holochain version included in holonix, please use `nix flake update` as explained in the
+[Holochain Installation Guide](https://developer.holochain.org/get-building/install-advanced//#upgrading-the-holochain-version).
 
 ## Running tests
 
