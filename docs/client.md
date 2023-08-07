@@ -79,7 +79,6 @@
 |  [GrantZomeCallCapabilityRequest](./client.grantzomecallcapabilityrequest.md) |  |
 |  [HoloHashed](./client.holohashed.md) |  |
 |  [InitZomesComplete](./client.initzomescomplete.md) |  |
-|  [KeyPair](./client.keypair.md) |  |
 |  [NetworkInfo](./client.networkinfo.md) |  |
 |  [NetworkInfoRequest](./client.networkinforequest.md) |  |
 |  [OpenChain](./client.openchain.md) |  |

@@ -13,14 +13,11 @@ A JavaScript client for the Holochain Conductor API (works with browsers as well
 
 [Complete API reference](./docs/client.md)
 
-## Compatibility
+## Installation
 
 **JS client v0.12.x** is compatible with **Holochain v0.1.x**.  
 
-**JS client v0.14.x** is compatible with **Holochain v0.2.x**.
-*As target, ES2020 or higher is required when bundling for production*.
-
-## Installation
+**JS client v0.16.x** are compatible with **Holochain v0.2.x**.
 
 To install from NPM, run
 ```bash
@@ -156,13 +153,6 @@ setSigningCredentials(cell_id, signingCredentials);
 // possibly store the zome call signing credentials locally in the browser
 localStorage.setItem(cellIdB64, JSON.stringify(signingCredentials));
 ```
-
-# Holochain Compatibility
-
-See [flake.nix](./flake.nix) for the Holochain version this package is compatible with.
-
-If updating the Holochain version included in holonix, please use `nix flake update` as explained in the
-[Holochain Installation Guide](https://developer.holochain.org/get-building/install-advanced//#upgrading-the-holochain-version).
 
 ## Running tests
 

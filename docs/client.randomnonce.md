@@ -8,5 +8,5 @@
 **Signature:**
 
 ```typescript
-randomNonce: () => Nonce256Bit
+randomNonce: () => Promise<Nonce256Bit>
 ```
