@@ -30,7 +30,7 @@ npm install --save-exact @holochain/client
 
 ### Use AppAgentWebsocket with implicit zome call signing
 ```typescript
-import { AdminWebsocket, AppAgentWebsocket, CellType } from "@holochain/client";
+import { ActionHash, AdminWebsocket, AppAgentWebsocket, CellType } from "@holochain/client";
 
 const adminWs = await AdminWebsocket.connect("ws://127.0.0.1:65000");
 const agent_key = await adminWs.generateAgentPubKey();
@@ -54,25 +54,15 @@ const appAgentWs = await AppAgentWebsocket.connect(
   installed_app_id
 );
 
-let signalCb;
-const signalReceived = new Promise<void>((resolve) => {
-  signalCb = (signal) => {
-    console.log("signal received", signal);
-    // act on signal
-    resolve();
-  };
-});
+const zomeCallPayload: CallZomeRequest = {
+  cell_id,
+  zome_name: "zome_name",
+  fn_name: "create_entry",
+  provenance: agent_key,
+  payload: "some_content",
+};
 
-appAgentWs.on("signal", signalCb);
-
-// trigger an emit_signal
-await appAgentWs.callZome({
-  role_name,
-  zome_name: "zome",
-  fn_name: "emitter",
-  payload: null,
-});
-await signalReceived;
+const response: ActionHash = await appAgentWs.callZome(zomeCallPayload, 30000);
 
 await appAgentWs.appWebsocket.client.close();
 await adminWs.client.close();

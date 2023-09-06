@@ -420,19 +420,35 @@ export type NetworkSeed = string;
  * @public
  */
 export type InstallAppRequest = {
-  // The agent to use when creating Cells for this App.
+  /**
+   * The agent to use when creating Cells for this App.
+   */
   agent_key: AgentPubKey;
 
-  // The unique identifier for an installed app in this conductor.
-  // If not specified, it will be derived from the app name in the bundle manifest.
+  /**
+   * The unique identifier for an installed app in this conductor.
+   * If not specified, it will be derived from the app name in the bundle manifest.
+   */
   installed_app_id?: InstalledAppId;
 
-  // Include proof-of-membrane-membership data for cells that require it,
-  // keyed by the CellNick specified in the app bundle manifest.
+  /**
+   * Include proof-of-membrane-membership data for cells that require it,
+   * keyed by the CellNick specified in the app bundle manifest.
+   */
   membrane_proofs: { [key: string]: MembraneProof };
 
-  // Optional global network seed override.  If set will override the network seed value for all DNAs in the bundle.
+  /**
+   * Optional global network seed override.  If set will override the network seed value for all
+   * DNAs in the bundle.
+   */
   network_seed?: NetworkSeed;
+
+  /**
+   * Optional: If app installation fails due to genesis failure, normally the app will be immediately uninstalled.
+   * When this flag is set, the app is left installed with empty cells intact. This can be useful for
+   * using graft_records_onto_source_chain, or for diagnostics.
+   */
+  ignore_genesis_failure?: boolean;
 } & AppBundleSource; // The unique identifier for an installed app in this conductor.
 
 /**

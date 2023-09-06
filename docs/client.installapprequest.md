@@ -15,6 +15,7 @@ export type InstallAppRequest = {
         [key: string]: MembraneProof;
     };
     network_seed?: NetworkSeed;
+    ignore_genesis_failure?: boolean;
 } & AppBundleSource;
 ```
 **References:** [AgentPubKey](./client.agentpubkey.md)<!-- -->, [InstalledAppId](./client.installedappid.md)<!-- -->, [MembraneProof](./client.membraneproof.md)<!-- -->, [NetworkSeed](./client.networkseed.md)<!-- -->, [AppBundleSource](./client.appbundlesource.md)

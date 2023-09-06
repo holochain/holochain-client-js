@@ -1,8 +1,9 @@
 import { decode } from "@msgpack/msgpack";
 import assert from "node:assert/strict";
 import fs from "node:fs";
-import test, { Test } from "tape";
+import test from "tape";
 import zlib from "zlib";
+import { HolochainError } from "../../src/api/common.js";
 import {
   AdminWebsocket,
   AppEntryDef,
@@ -22,14 +23,13 @@ import {
   generateSigningKeyPair,
 } from "../../src/index.js";
 import {
-  cleanSandboxConductors,
   FIXTURE_PATH,
+  cleanSandboxConductors,
   installAppAndDna,
   launch,
   makeCoordinatorZomeBundle,
   withConductor,
 } from "./util.js";
-import { HolochainError } from "../../src/api/common.js";
 
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
