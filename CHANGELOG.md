@@ -9,6 +9,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Fixed
 ### Removed
 
+## 2023-09-05: v0.16.1
+### Changed
+- Update `InstallAppRequest` with new optional field `ignore_genesis_failure`.
+
 ## 2023-08-07: v0.16.0
 ### Added
 - When generating a signing key pair, a new optional argument can be passed in to copy the last 4 bytes (= DHT location bytes) of the original agent pub key.
