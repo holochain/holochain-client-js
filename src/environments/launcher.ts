@@ -16,11 +16,11 @@ export interface LauncherEnvironment {
 
 const __HC_LAUNCHER_ENV__ = "__HC_LAUNCHER_ENV__";
 
-export const isLauncher =
+export const isLauncher = () =>
   globalThis.window && __HC_LAUNCHER_ENV__ in globalThis.window;
 
 export const getLauncherEnvironment = (): LauncherEnvironment | undefined =>
-  isLauncher ? globalThis.window[__HC_LAUNCHER_ENV__] : undefined;
+  isLauncher() ? globalThis.window[__HC_LAUNCHER_ENV__] : undefined;
 
 declare global {
   interface Window {

@@ -204,7 +204,7 @@ const callZomeTransform: Transformer<
     if ("signature" in request) {
       return request;
     }
-    const signedZomeCall = isLauncher
+    const signedZomeCall = isLauncher()
       ? await signZomeCallTauri(request)
       : await signZomeCall(request);
     return signedZomeCall;
