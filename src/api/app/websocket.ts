@@ -4,8 +4,8 @@ import _sodium from "libsodium-wrappers";
 import Emittery from "emittery";
 import {
   getLauncherEnvironment,
-  isLauncher,
   signZomeCallTauri,
+  signZomeCallElectron,
 } from "../../environments/launcher.js";
 import { CapSecret } from "../../hdk/capabilities.js";
 import { InstalledAppId } from "../../types.js";
@@ -204,9 +204,19 @@ const callZomeTransform: Transformer<
     if ("signature" in request) {
       return request;
     }
-    const signedZomeCall = isLauncher()
-      ? await signZomeCallTauri(request)
-      : await signZomeCall(request);
+    const env = getLauncherEnvironment();
+
+    let signedZomeCall;
+    if (!env) {
+      signedZomeCall = await signZomeCall(request);
+    } else if (env.FRAMEWORK === "electron") {
+      signedZomeCall = await signZomeCallElectron(request);
+    } else if (env.FRAMEWORK === "tauri" || !env.FRAMEWORK) {
+      signedZomeCall = await signZomeCallTauri(request);
+    } else {
+      signedZomeCall = await signZomeCallTauri(request);
+    }
+
     return signedZomeCall;
   },
   output: (response) => decode(response),
