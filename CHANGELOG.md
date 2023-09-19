@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## \[Unreleased\]
 
 ### Added
+- Support for signing zome calls in electron via `window.electronAPI.signZomeCall` when `__HC_LAUNCHER_ENV__.ENVIRONMENT == 'electron'`. 
+
 ### Changed
 ### Fixed
 ### Removed
