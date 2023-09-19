@@ -211,7 +211,7 @@ export type RegisterDnaResponse = HoloHash;
  */
 export type DnaModifiers = {
   network_seed: NetworkSeed;
-  properties: DnaProperties;
+  properties: Uint8Array;
   origin_time: Timestamp;
   quantum_time: Duration;
 };
