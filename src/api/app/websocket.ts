@@ -206,12 +206,12 @@ const callZomeTransform: Transformer<
     }
     const env = getLauncherEnvironment();
 
-if (!env) {
-  return signZomeCall(request);
-} else if (env.FRAMEWORK === "electron") {
-  return signZomeCallElectron(request);
-}
-return signZomeCallTauri(request);
+    if (!env) {
+      return signZomeCall(request);
+    } else if (env.FRAMEWORK === "electron") {
+      return signZomeCallElectron(request);
+    }
+    return signZomeCallTauri(request);
   },
   output: (response) => decode(response),
 };

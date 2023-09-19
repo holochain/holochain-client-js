@@ -5,12 +5,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## \[Unreleased\]
 
 ### Added
-- Support for signing zome calls in electron via `window.electronAPI.signZomeCall` when `__HC_LAUNCHER_ENV__.ENVIRONMENT == 'electron'`. 
-
 ### Changed
 ### Fixed
-- `DnaProperties` in `DnaModifiers` changed to `Uint8array` as it comes back serialized from Holochain.
 ### Removed
+
+## 2023-09-19: v0.16.2
+### Added
+- Support for signing zome calls in electron via `window.electronAPI.signZomeCall` when `__HC_LAUNCHER_ENV__.ENVIRONMENT == 'electron'`. 
+### Fixed
+- `DnaProperties` in `DnaModifiers` changed to `Uint8array` as it comes back serialized from Holochain.
 
 ## 2023-09-05: v0.16.1
 ### Changed
