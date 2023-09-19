@@ -9,6 +9,8 @@ import {
   DisableCloneCellRequest,
   EnableCloneCellRequest,
   EnableCloneCellResponse,
+  NetworkInfoRequest,
+  NetworkInfoResponse,
 } from "../app/index.js";
 import {
   CreateCloneCellRequest,
@@ -69,6 +71,14 @@ export type AppDisableCloneCellRequest = Omit<
 /**
  * @public
  */
+export type AppAgentNetworkInfoRequest = Omit<
+  NetworkInfoRequest,
+  "agent_pub_key"
+>;
+
+/**
+ * @public
+ */
 export interface AppAgentEvents {
   signal: AppSignal;
 }
@@ -97,4 +107,5 @@ export interface AppAgentClient {
   disableCloneCell(
     args: AppDisableCloneCellRequest
   ): Promise<DisableCloneCellResponse>;
+  networkInfo(args: AppAgentNetworkInfoRequest): Promise<NetworkInfoResponse>;
 }

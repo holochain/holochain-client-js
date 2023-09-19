@@ -131,6 +131,7 @@
 |  [AnyDhtHash](./client.anydhthash.md) |  |
 |  [AnyDhtHashB64](./client.anydhthashb64.md) |  |
 |  [AppAgentCallZomeRequest](./client.appagentcallzomerequest.md) |  |
+|  [AppAgentNetworkInfoRequest](./client.appagentnetworkinforequest.md) |  |
 |  [AppBundle](./client.appbundle.md) |  |
 |  [AppBundleSource](./client.appbundlesource.md) |  |
 |  [AppCreateCloneCellRequest](./client.appcreateclonecellrequest.md) |  |

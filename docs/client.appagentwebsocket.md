@@ -34,5 +34,6 @@ export declare class AppAgentWebsocket implements AppAgentClient
 |  [disableCloneCell(args)](./client.appagentwebsocket.disableclonecell.md) |  | Disable an enabled clone cell. |
 |  [enableCloneCell(args)](./client.appagentwebsocket.enableclonecell.md) |  | Enable a disabled clone cell. |
 |  [getCellIdFromRoleName(roleName, appInfo)](./client.appagentwebsocket.getcellidfromrolename.md) |  | Get a cell id by its role name or clone id. |
+|  [networkInfo(args)](./client.appagentwebsocket.networkinfo.md) |  | Request network info about gossip status. |
 |  [on(eventName, listener)](./client.appagentwebsocket.on.md) |  | Register an event listener for signals. |
 

@@ -26,5 +26,6 @@ export interface AppAgentClient
 |  [createCloneCell(args)](./client.appagentclient.createclonecell.md) |  |
 |  [disableCloneCell(args)](./client.appagentclient.disableclonecell.md) |  |
 |  [enableCloneCell(args)](./client.appagentclient.enableclonecell.md) |  |
+|  [networkInfo(args)](./client.appagentclient.networkinfo.md) |  |
 |  [on(eventName, listener)](./client.appagentclient.on.md) |  |
 

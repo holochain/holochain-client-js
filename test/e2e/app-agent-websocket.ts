@@ -277,3 +277,27 @@ test(
     t.pass("re-enabled clone can be called");
   })
 );
+
+test(
+  "can fetch network info",
+  withConductor(ADMIN_PORT, async (t) => {
+    const { client: appAgentWs, cell_id } = await createAppAgentWsAndInstallApp(
+      ADMIN_PORT
+    );
+
+    const response = await appAgentWs.networkInfo({
+      dnas: [cell_id[0]],
+    });
+
+    t.deepEqual(response, [
+      {
+        fetch_pool_info: { op_bytes_to_fetch: 0, num_ops_to_fetch: 0 },
+        current_number_of_peers: 1,
+        arc_size: 1,
+        total_network_peers: 1,
+        bytes_since_last_time_queried: 1844,
+        completed_rounds_since_last_time_queried: 0,
+      },
+    ]);
+  })
+);

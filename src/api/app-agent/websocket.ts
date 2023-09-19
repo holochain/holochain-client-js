@@ -12,6 +12,7 @@ import {
   CreateCloneCellResponse,
   DisableCloneCellResponse,
   EnableCloneCellResponse,
+  NetworkInfoResponse,
 } from "../app/types.js";
 import { AppWebsocket } from "../app/websocket.js";
 import { getBaseRoleNameFromCloneId, isCloneId } from "../common.js";
@@ -19,6 +20,7 @@ import {
   AppAgentCallZomeRequest,
   AppAgentClient,
   AppAgentEvents,
+  AppAgentNetworkInfoRequest,
   AppCreateCloneCellRequest,
   AppDisableCloneCellRequest,
   AppEnableCloneCellRequest,
@@ -222,6 +224,20 @@ export class AppAgentWebsocket implements AppAgentClient {
     return this.appWebsocket.disableCloneCell({
       app_id: this.installedAppId,
       ...args,
+    });
+  }
+
+  /**
+   * Request network info about gossip status.
+   *  @param args - Specify the DNAs for which you want network info
+   *  @returns Network info for the specified DNAs
+   */
+  async networkInfo(
+    args: AppAgentNetworkInfoRequest
+  ): Promise<NetworkInfoResponse> {
+    return this.appWebsocket.networkInfo({
+      ...args,
+      agent_pub_key: this.myPubKey,
     });
   }
 
