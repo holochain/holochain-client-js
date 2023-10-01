@@ -1,7 +1,7 @@
 import { decode, encode } from "@msgpack/msgpack";
 import { blake2b } from "blakejs";
+import { ed25519 } from "@noble/curves/ed25519";
 import Emittery from "emittery";
-import _sodium from "libsodium-wrappers";
 import {
   getLauncherEnvironment,
   signZomeCallElectron,
@@ -301,11 +301,10 @@ export const signZomeCall = async (request: CallZomeRequest) => {
     expires_at: getNonceExpiration(),
   };
   const hashedZomeCall = hashZomeCall(unsignedZomeCallPayload);
-  await _sodium.ready;
-  const sodium = _sodium;
-  const signature = sodium
-    .crypto_sign(hashedZomeCall, signingCredentialsForCell.keyPair.privateKey)
-    .subarray(0, sodium.crypto_sign_BYTES);
+  const signature = ed25519.sign(
+    hashedZomeCall,
+    signingCredentialsForCell.keyPair.privateKey
+  );
 
   const signedZomeCall: CallZomeRequestSigned = {
     ...unsignedZomeCallPayload,

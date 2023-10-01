@@ -1,4 +1,5 @@
-import _sodium, { type KeyPair } from "libsodium-wrappers";
+import { ed25519 } from "@noble/curves/ed25519";
+import { randomBytes } from "@noble/hashes/utils";
 import type { CapSecret } from "../hdk/capabilities.js";
 import type { AgentPubKey, CellId } from "../types.js";
 import { encodeHashToBase64 } from "../utils/base64.js";
@@ -7,6 +8,11 @@ import { encodeHashToBase64 } from "../utils/base64.js";
  * @public
  */
 export type Nonce256Bit = Uint8Array;
+
+export interface KeyPair {
+  privateKey: Uint8Array;
+  publicKey: Uint8Array;
+}
 
 /**
  * @public
@@ -63,9 +69,9 @@ export const setSigningCredentials = (
 export const generateSigningKeyPair: (
   agentPubKey?: AgentPubKey
 ) => Promise<[KeyPair, AgentPubKey]> = async (agentPubKey?: AgentPubKey) => {
-  await _sodium.ready;
-  const sodium = _sodium;
-  const keyPair = sodium.crypto_sign_keypair();
+  const privateKey = ed25519.utils.randomPrivateKey();
+  const publicKey = ed25519.getPublicKey(privateKey);
+  const keyPair: KeyPair = { privateKey, publicKey };
   const locationBytes = agentPubKey ? agentPubKey.subarray(35) : [0, 0, 0, 0];
   const signingKey = new Uint8Array(
     [132, 32, 36].concat(...keyPair.publicKey).concat(...locationBytes)
@@ -89,12 +95,7 @@ export const randomNonce: () => Promise<Nonce256Bit> = async () =>
  * @public
  */
 export const randomByteArray = async (length: number) => {
-  if (globalThis.crypto && "getRandomValues" in globalThis.crypto) {
-    return globalThis.crypto.getRandomValues(new Uint8Array(length));
-  }
-  await _sodium.ready;
-  const sodium = _sodium;
-  return sodium.randombytes_buf(length);
+  return randomBytes(length);
 };
 
 /**
