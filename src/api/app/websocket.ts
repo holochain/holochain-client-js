@@ -266,6 +266,12 @@ const ZOME_CALL_KEY_ORDER = [
   "expires_at",
 ];
 
+/**
+ * @param input - The unsigned zome call payload.
+ * @returns The hash of serialized zome call payload.
+ *
+ * @public
+ */
 export const hashZomeCall = (input: CallZomeRequestUnsigned) => {
   const serializedInput = serializeKeyOrder(input, ZOME_CALL_KEY_ORDER);
   const hashedInput = blake2b(serializedInput, undefined, 32);
