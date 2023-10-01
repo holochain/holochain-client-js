@@ -1,11 +1,11 @@
-import { hashZomeCall } from "@holochain/serialization";
 import { decode, encode } from "@msgpack/msgpack";
-import _sodium from "libsodium-wrappers";
+import { blake2b } from "blakejs";
 import Emittery from "emittery";
+import _sodium from "libsodium-wrappers";
 import {
   getLauncherEnvironment,
-  signZomeCallTauri,
   signZomeCallElectron,
+  signZomeCallTauri,
 } from "../../environments/launcher.js";
 import { CapSecret } from "../../hdk/capabilities.js";
 import { InstalledAppId } from "../../types.js";
@@ -235,6 +235,43 @@ const appInfoTransform = (
   output: (response) => response,
 });
 
+function serializeKeyOrder(input: unknown, key_order: Array<string>) {
+  if (input === null) {
+    throw new Error("serialize: input is null");
+  }
+  if (typeof input !== "object") {
+    throw new Error("serialize: input not an object");
+  }
+  if (!Object.keys(input).every((k) => typeof k === "string")) {
+    throw new Error("serialize: number keys in input not allowed");
+  }
+  const input_object = input as Record<string, unknown>;
+  const ordered_input: Record<string, unknown> = {};
+
+  for (const key of key_order) {
+    ordered_input[key] = input_object[key];
+  }
+
+  return encode(ordered_input);
+}
+
+const ZOME_CALL_KEY_ORDER = [
+  "provenance",
+  "cell_id",
+  "zome_name",
+  "fn_name",
+  "cap_secret",
+  "payload",
+  "nonce",
+  "expires_at",
+];
+
+export const hashZomeCall = (input: CallZomeRequestUnsigned) => {
+  const serializedInput = serializeKeyOrder(input, ZOME_CALL_KEY_ORDER);
+  const hashedInput = blake2b(serializedInput, undefined, 32);
+  return hashedInput;
+};
+
 /**
  * @public
  */
@@ -257,7 +294,7 @@ export const signZomeCall = async (request: CallZomeRequest) => {
     nonce: await randomNonce(),
     expires_at: getNonceExpiration(),
   };
-  const hashedZomeCall = await hashZomeCall(unsignedZomeCallPayload);
+  const hashedZomeCall = hashZomeCall(unsignedZomeCallPayload);
   await _sodium.ready;
   const sodium = _sodium;
   const signature = sodium
