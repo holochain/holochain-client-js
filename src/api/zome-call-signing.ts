@@ -9,6 +9,9 @@ import { encodeHashToBase64 } from "../utils/base64.js";
  */
 export type Nonce256Bit = Uint8Array;
 
+/**
+ * @public
+ */
 export interface KeyPair {
   privateKey: Uint8Array;
   publicKey: Uint8Array;
