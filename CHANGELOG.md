@@ -7,6 +7,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Added
 ### Changed
 ### Fixed
+### Removed
+
+## 2023-10-17: v0.16.3
+### Fixed
 - `CapAccess` types `Unrestricted` and `Transferable` were not correctly implemented. Both need to be nested objects containing a single property with a Pascal cased name, e. g. `{ access: { Unrestricted: null } }`.
 - `AttachAppInterfaceRequest` took a mandatory property `port`. The property is optional now.
 ### Removed

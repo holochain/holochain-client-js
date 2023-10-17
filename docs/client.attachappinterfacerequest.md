@@ -9,6 +9,6 @@
 
 ```typescript
 export type AttachAppInterfaceRequest = {
-    port: number;
+    port?: number;
 };
 ```

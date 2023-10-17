@@ -20,6 +20,7 @@
 |  --- | --- |
 |  [ActionType](./client.actiontype.md) |  |
 |  [AppStatusFilter](./client.appstatusfilter.md) |  |
+|  [CapAccessType](./client.capaccesstype.md) |  |
 |  [CellProvisioningStrategy](./client.cellprovisioningstrategy.md) |  |
 |  [CellType](./client.celltype.md) |  |
 |  [DhtOpType](./client.dhtoptype.md) |  |
