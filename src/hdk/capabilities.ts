@@ -42,12 +42,23 @@ export interface ZomeCallCapGrant {
 /**
  * @public
  */
+export enum CapAccessType {
+  Unrestricted = "Unrestricted",
+  Transferable = "Transferable",
+  Assigned = "Assigned",
+}
+
+/**
+ * @public
+ */
 export type CapAccess =
-  | "Unrestricted"
+  | { [CapAccessType.Unrestricted]: null }
   | {
-      Transferable: { secret: CapSecret };
+      [CapAccessType.Transferable]: { secret: CapSecret };
     }
-  | { Assigned: { secret: CapSecret; assignees: AgentPubKey[] } };
+  | {
+      [CapAccessType.Assigned]: { secret: CapSecret; assignees: AgentPubKey[] };
+    };
 
 /**
  * @public

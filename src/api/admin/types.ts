@@ -22,7 +22,7 @@ import { DisableCloneCellRequest } from "../index.js";
 /**
  * @public
  */
-export type AttachAppInterfaceRequest = { port: number };
+export type AttachAppInterfaceRequest = { port?: number };
 /**
  * @public
  */

@@ -6,4 +6,4 @@ integrity:
   origin_time: "2022-02-11T23:05:19.470323Z"
   zomes:
     - name: foo
-      bundled: "zomes/foo/target/wasm32-unknown-unknown/release/test_wasm_foo.wasm"
+      bundled: "../../../target/wasm32-unknown-unknown/release/test_wasm_foo.wasm"

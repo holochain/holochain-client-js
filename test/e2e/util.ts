@@ -161,7 +161,7 @@ export const createAppAgentWsAndInstallApp = async (
 
 export async function makeCoordinatorZomeBundle(): Promise<CoordinatorBundle> {
   const wasm = fs.readFileSync(
-    `${process.cwd()}/test/e2e/fixture2/coordinator2/target/wasm32-unknown-unknown/release/coordinator2.wasm`,
+    `${process.cwd()}/target/wasm32-unknown-unknown/release/coordinator2.wasm`,
     null
   );
 
