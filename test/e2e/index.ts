@@ -557,8 +557,7 @@ test(
     const state: DumpStateResponse = await admin.dumpState({
       cell_id: info.cell_info[ROLE_NAME][0][CellType.Provisioned].cell_id,
     });
-    // A couple random tests to prove that things are where we expect them
-    t.equal(state[0].source_chain_dump.records.length, 7);
+    t.equal(state[0].source_chain_dump.records.length, 5);
     t.equal(state[0].source_chain_dump.records[0].action.type, "Dna");
   })
 );
