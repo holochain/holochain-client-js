@@ -19,27 +19,27 @@ impl From<&str> for TestString {
 
 #[hdk_extern]
 fn init(_: ()) -> ExternResult<InitCallbackResult> {
-    // grant unrestricted access to accept_cap_claim so other agents can send us claims
-    let mut foo_functions = BTreeSet::new();
-    foo_functions.insert((zome_info()?.name, "foo".into()));
-    create_cap_grant(CapGrantEntry {
-        tag: "".into(),
-        // empty access converts to unrestricted
-        access: ().into(),
-        functions: GrantedFunctions::Listed(foo_functions),
-    })?;
-    // NB: ideally we want to simply create a single CapGrant with both functions exposed,
-    // but there is a bug in Holochain which currently prevents this. After this bug is fixed,
-    // this can be collapsed to a single CapGrantEntry with two functions.
-    // see: https://github.com/holochain/holochain/issues/418
-    let mut emitter_functions = BTreeSet::new();
-    emitter_functions.insert((zome_info()?.name, "emitter".into()));
-    create_cap_grant(CapGrantEntry {
-        tag: "".into(),
-        // empty access converts to unrestricted
-        access: ().into(),
-        functions: GrantedFunctions::Listed(emitter_functions),
-    })?;
+    // // grant unrestricted access to accept_cap_claim so other agents can send us claims
+    // let mut foo_functions = BTreeSet::new();
+    // foo_functions.insert((zome_info()?.name, "foo".into()));
+    // create_cap_grant(CapGrantEntry {
+    //     tag: "".into(),
+    //     // empty access converts to unrestricted
+    //     access: ().into(),
+    //     functions: GrantedFunctions::Listed(foo_functions),
+    // })?;
+    // // NB: ideally we want to simply create a single CapGrant with both functions exposed,
+    // // but there is a bug in Holochain which currently prevents this. After this bug is fixed,
+    // // this can be collapsed to a single CapGrantEntry with two functions.
+    // // see: https://github.com/holochain/holochain/issues/418
+    // let mut emitter_functions = BTreeSet::new();
+    // emitter_functions.insert((zome_info()?.name, "emitter".into()));
+    // create_cap_grant(CapGrantEntry {
+    //     tag: "".into(),
+    //     // empty access converts to unrestricted
+    //     access: ().into(),
+    //     functions: GrantedFunctions::Listed(emitter_functions),
+    // })?;
 
     Ok(InitCallbackResult::Pass)
 }

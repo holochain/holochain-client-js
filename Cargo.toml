@@ -4,6 +4,8 @@ members = [
   "test/e2e/fixture2/coordinator2",
 ]
 
+resolver = "2"
+
 [profile.dev]
 opt-level = "z"
 
