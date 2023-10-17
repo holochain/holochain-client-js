@@ -357,6 +357,17 @@ test(
 );
 
 test(
+  "can call attachAppInterface without specific port",
+  withConductor(ADMIN_PORT, async (t) => {
+    const { admin } = await installAppAndDna(ADMIN_PORT);
+    const { port } = await admin.attachAppInterface({});
+    t.assert(typeof port === "number", "returned a valid app port");
+    await AppWebsocket.connect(new URL(`ws://127.0.0.1:${port}`));
+    t.pass("can connect an app websocket to attached port");
+  })
+);
+
+test(
   "client errors are HolochainErrors",
   withConductor(ADMIN_PORT, async (t) => {
     const { installed_app_id, cell_id, client, admin } = await installAppAndDna(
