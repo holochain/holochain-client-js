@@ -7,7 +7,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Added
 ### Changed
 ### Fixed
+- `CapAccess` types `Unrestricted` and `Transferable` were not correctly implemented. Both need to be nested objects containing a single property with a Pascal cased name, e. g. `{ access: { Unrestricted: null } }`.
+- `AttachAppInterfaceRequest` took a mandatory property `port`. The property is optional now.
 ### Removed
+- Dropped support for Node.js v16 after its end-of-life.
 
 ## 2023-09-19: v0.16.2
 ### Added
