@@ -188,6 +188,14 @@ export class WsClient extends Emittery {
     resolve: RequestResolver,
     reject: RequestRejecter
   ) {
+    function toHexString(byteArray: number[]) {
+      return Array.from(byteArray, function(byte) {
+        return ('0' + (byte & 0xFF).toString(16)).slice(-2);
+      }).join(', ')
+    }
+
+    console.log("sending message", request, toHexString(encode(request) as unknown as number[]))
+
     const id = this.index;
     const encodedMsg = encode({
       id,
@@ -200,6 +208,12 @@ export class WsClient extends Emittery {
   }
 
   private handleResponse(msg: HolochainMessage) {
+    function toHexString(byteArray: number[]) {
+      return Array.from(byteArray, function(byte) {
+        return ('0' + (byte & 0xFF).toString(16)).slice(-2);
+      }).join(', ')
+    }
+
     const id = msg.id;
     if (this.pendingRequests[id]) {
       if (msg.data === null || msg.data === undefined) {
@@ -207,6 +221,7 @@ export class WsClient extends Emittery {
           new Error("Response canceled by responder")
         );
       } else {
+        console.log('got a response back', msg.data, toHexString(msg.data as unknown as number[]));
         this.pendingRequests[id].resolve(decode(msg.data));
       }
       delete this.pendingRequests[id];

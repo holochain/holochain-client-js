@@ -22,7 +22,7 @@ export type RequesterUnit<Res> = () => Promise<Res>;
 /**
  * @public
  */
-export type Tagged<T> = { type: string; data: T };
+export type Tagged<T> = { type: { [tag: string]: null }; data: T };
 
 /**
  * Take a Requester function which deals with tagged requests and responses,
@@ -39,7 +39,7 @@ export const requesterTransformer =
   ) =>
   async (req: ReqI, timeout?: number) => {
     const transformedInput = await transform.input(req);
-    const input = { type: tag, data: transformedInput };
+    const input = { type: { [tag]: null }, data: transformedInput };
     const response = await requester(input, timeout);
     const output = transform.output(response.data);
     return output;
