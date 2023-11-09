@@ -66,8 +66,9 @@ export class HolochainError extends Error {
 
 // this determines the error format of all error responses
 export const catchError = (res: any) => {
-  if (res.type === ERROR_TYPE) {
-    const error = new HolochainError(res.data.type, res.data.data);
+  if (ERROR_TYPE in res.type) {
+    const errorName = Object.keys(res.data.type)[0];
+    const error = new HolochainError(errorName, res.data.data);
     return Promise.reject(error);
   } else {
     return Promise.resolve(res);
