@@ -9,6 +9,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Fixed
 ### Removed
 
+## 2023-11-08: v0.17.0-dev.0
+### Changed
+- **BREAKING CHANGE**: Conductor API ser/deserialization has changed on Holochain side. Tags are serialized like `{ type: { app_info: null } }` now, when before it was `{ type: "app_info" }` for requests and responses.
+
 ## 2023-10-17: v0.16.3
 ### Fixed
 - `CapAccess` types `Unrestricted` and `Transferable` were not correctly implemented. Both need to be nested objects containing a single property with a Pascal cased name, e. g. `{ access: { Unrestricted: null } }`.
