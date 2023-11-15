@@ -4,6 +4,7 @@ import fs from "node:fs";
 import test from "tape";
 import zlib from "zlib";
 import { HolochainError } from "../../src/api/common.js";
+import { Link } from "../../src/hdk/link.js";
 import {
   AdminWebsocket,
   AppEntryDef,
@@ -730,6 +731,35 @@ test("can inject agents", async (t) => {
   }
   await cleanSandboxConductors();
 });
+
+test(
+  "create link",
+  withConductor(ADMIN_PORT, async (t) => {
+    const { cell_id, client, admin } = await installAppAndDna(ADMIN_PORT);
+    await admin.authorizeSigningCredentials(cell_id);
+
+    const tag = "test_tag";
+    const link: Link = await client.callZome({
+      cap_secret: null,
+      cell_id,
+      provenance: cell_id[1],
+      zome_name: TEST_ZOME_NAME,
+      fn_name: "create_and_get_link",
+      payload: Array.from(Buffer.from(tag)),
+    });
+
+    t.deepEqual(link.author, cell_id[1], "link author is correct");
+    t.deepEqual(
+      Array.from(link.create_link_hash.subarray(0, 3)),
+      [132, 41, 36],
+      "create link hash is valid"
+    );
+    t.deepEqual(link.link_type, 0, "link type is correct");
+    t.deepEqual(link.zome_index, 0, "zome index is correct");
+    t.ok("BYTES_PER_ELEMENT" in link.tag, "tag is a byte array");
+    t.deepEqual(link.tag.toString(), tag, "tag is correct");
+  })
+);
 
 test(
   "admin smoke test: listAppInterfaces + attachAppInterface",
