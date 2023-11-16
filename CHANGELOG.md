@@ -9,6 +9,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Fixed
 ### Removed
 
+## 2023-11-16: v0.16.5
+### Added
+- Type `Link` to HDK and a confirmatory test.
+
+## 2023-11-16: v0.16.4
+--erroneously published lib for Holochain v0.3.0--
+
 ## 2023-10-17: v0.16.3
 ### Fixed
 - `CapAccess` types `Unrestricted` and `Transferable` were not correctly implemented. Both need to be nested objects containing a single property with a Pascal cased name, e. g. `{ access: { Unrestricted: null } }`.
