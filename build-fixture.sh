@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 # build fixture
 cd test/e2e/fixture/zomes/foo
