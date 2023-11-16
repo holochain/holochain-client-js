@@ -238,16 +238,15 @@
         ]
       },
       "locked": {
-        "lastModified": 1700133205,
+        "lastModified": 1700152081,
         "narHash": "sha256-S9B0gqAqySbonGHAv6Cie+iknkjqaDK/OzJ+U1T0FTA=",
         "owner": "holochain",
         "repo": "holochain",
-        "rev": "fa94e86e2e8aaccc118e704e9cf741246a61cfcc",
+        "rev": "26868caba8a7d3864370737b9e0d32bf191af0f1",
         "type": "github"
       },
       "original": {
         "owner": "holochain",
-        "ref": "pr_fix_rustdev_compile_wasm32",
         "repo": "holochain",
         "type": "github"
       }
@@ -462,11 +461,11 @@
       },
       "locked": {
         "dir": "versions/0_2",
-        "lastModified": 1700117228,
-        "narHash": "sha256-2nwlaib/qfJu8GXJ6gwo4XpMxyBtYBxtrf/FHAn74kc=",
+        "lastModified": 1700152081,
+        "narHash": "sha256-S9B0gqAqySbonGHAv6Cie+iknkjqaDK/OzJ+U1T0FTA=",
         "owner": "holochain",
         "repo": "holochain",
-        "rev": "fe462ec7d9305ea7cb60811c458d5e2e6d6e6a3e",
+        "rev": "26868caba8a7d3864370737b9e0d32bf191af0f1",
         "type": "github"
       },
       "original": {

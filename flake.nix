@@ -4,7 +4,7 @@
   inputs = {
     nixpkgs.follows = "holonix/nixpkgs";
     versions.url = "github:holochain/holochain?dir=versions/0_2";
-    holonix.url = "github:holochain/holochain/pr_fix_rustdev_compile_wasm32";
+    holonix.url = "github:holochain/holochain";
     holonix.inputs.versions.follows = "versions";
     holonix.inputs.holochain.url = "github:holochain/holochain/holochain-0.2.3-rc.1";
   };
