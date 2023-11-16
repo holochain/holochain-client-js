@@ -17,30 +17,14 @@ impl From<&str> for TestString {
     }
 }
 
+#[hdk_link_types]
+// #[derive]
+enum LinkTypes {
+    A,
+}
+
 #[hdk_extern]
 fn init(_: ()) -> ExternResult<InitCallbackResult> {
-    // // grant unrestricted access to accept_cap_claim so other agents can send us claims
-    // let mut foo_functions = BTreeSet::new();
-    // foo_functions.insert((zome_info()?.name, "foo".into()));
-    // create_cap_grant(CapGrantEntry {
-    //     tag: "".into(),
-    //     // empty access converts to unrestricted
-    //     access: ().into(),
-    //     functions: GrantedFunctions::Listed(foo_functions),
-    // })?;
-    // // NB: ideally we want to simply create a single CapGrant with both functions exposed,
-    // // but there is a bug in Holochain which currently prevents this. After this bug is fixed,
-    // // this can be collapsed to a single CapGrantEntry with two functions.
-    // // see: https://github.com/holochain/holochain/issues/418
-    // let mut emitter_functions = BTreeSet::new();
-    // emitter_functions.insert((zome_info()?.name, "emitter".into()));
-    // create_cap_grant(CapGrantEntry {
-    //     tag: "".into(),
-    //     // empty access converts to unrestricted
-    //     access: ().into(),
-    //     functions: GrantedFunctions::Listed(emitter_functions),
-    // })?;
-
     Ok(InitCallbackResult::Pass)
 }
 
@@ -77,4 +61,21 @@ pub fn waste_some_time(_: ()) -> ExternResult<TestString> {
         }
     }
     Ok(TestString(x.to_string()))
+}
+
+#[hdk_extern]
+pub fn create_and_get_link(tag: Vec<u8>) -> ExternResult<Link> {
+    let link_base = agent_info()?.agent_latest_pubkey;
+    let link_target = link_base.clone();
+    let create_link_action_hash = create_link(
+        link_base.clone(),
+        link_target,
+        LinkTypes::A,
+        LinkTag::from(tag),
+    )?;
+    let links = get_links(link_base, LinkTypes::A, None)?;
+    links
+        .into_iter()
+        .find(|link| link.create_link_hash == create_link_action_hash)
+        .ok_or_else(|| wasm_error!("link not found"))
 }

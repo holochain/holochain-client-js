@@ -20,10 +20,10 @@ jobs:
 
     steps:
       - name: Check out source code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Install nix
-        uses: cachix/install-nix-action@v22
+        uses: cachix/install-nix-action@v23
         with:
           install_url: https://releases.nixos.org/nix/nix-2.17.0/install
 
@@ -45,7 +45,7 @@ jobs:
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('Cargo.lock') }}
 
       - name: Build Nix packages
-        run: nix develop -c $SHELL -c "echo Nix packages built"
+        run: nix develop -c $SHELL -c "holochain --version"
 
       - name: Build test fixture
         run: nix develop -c $SHELL -c "./build-fixture.sh"
