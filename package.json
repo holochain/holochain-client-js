@@ -39,6 +39,7 @@
     "build": "npm run build:lib && npm run build:docs"
   },
   "dependencies": {
+    "@bitgo/blake2b": "^3.2.4",
     "@holochain/serialization": "^0.1.0-beta-rc.3",
     "@msgpack/msgpack": "^2.8.0",
     "@tauri-apps/api": "^1.4.0",
