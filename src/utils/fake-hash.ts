@@ -3,7 +3,7 @@ import { DnaHash, ActionHash, AgentPubKey, EntryHash } from "../types.js";
 import blake2b from "@bitgo/blake2b";
 
 function holoDhtLocationBytes(core: Uint8Array): Uint8Array {
-  const hash = new Uint8Array(64);
+  const hash = new Uint8Array(16);
   blake2b(hash.length).update(core).digest(hash);
 
   const out = hash.slice(0, 4);
