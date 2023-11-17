@@ -20,7 +20,7 @@ function holoDhtLocationBytes(core: Uint8Array): Uint8Array {
 async function fakeValidHash<T extends Uint8Array>(
   prefix: number[]
 ): Promise<Uint8Array> {
-  const core = await randomByteArray(36);
+  const core = await randomByteArray(32);
   const checksum = holoDhtLocationBytes(core);
 
   return new Uint8Array([...prefix, ...core, ...Array.from(checksum)]) as T;
