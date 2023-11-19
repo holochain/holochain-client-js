@@ -82,7 +82,7 @@ export function dhtLocationFrom32(hashCore: Uint8Array): Uint8Array {
   blake2b(hash.length).update(hashCore).digest(hash);
 
   const out = hash.slice(0, 4);
-  [4, 8, 12, 16].forEach((i) => {
+  [4, 8, 12].forEach((i) => {
     out[0] ^= hash[i];
     out[1] ^= hash[i + 1];
     out[2] ^= hash[i + 2];
