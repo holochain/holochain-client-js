@@ -11,11 +11,8 @@ import blake2b from "@bitgo/blake2b";
 export const hashTypePrefix = {
   Agent: Uint8Array.from([132, 32, 36]),
   Entry: Uint8Array.from([132, 33, 36]),
-  DhtOp: Uint8Array.from([132, 36, 36]),
   Dna: Uint8Array.from([132, 45, 36]),
-  NetId: Uint8Array.from([132, 34, 36]),
   Action: Uint8Array.from([132, 41, 36]),
-  Wasm: Uint8Array.from([132, 42, 36]),
   External: Uint8Array.from([132, 47, 36]),
 };
 
