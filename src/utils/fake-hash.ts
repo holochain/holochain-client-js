@@ -2,7 +2,7 @@ import { randomByteArray } from "../api/zome-call-signing.js";
 import { DnaHash, ActionHash, AgentPubKey, EntryHash } from "../types.js";
 import blake2b from "@bitgo/blake2b";
 
-function holoDhtLocationBytes(core: Uint8Array): Uint8Array {
+function dhtLocationBytes(core: Uint8Array): Uint8Array {
   const hash = new Uint8Array(16);
   blake2b(hash.length).update(core).digest(hash);
 
@@ -21,7 +21,7 @@ async function fakeValidHash<T extends Uint8Array>(
   prefix: number[]
 ): Promise<Uint8Array> {
   const core = await randomByteArray(32);
-  const checksum = holoDhtLocationBytes(core);
+  const checksum = dhtLocationBytes(core);
 
   return new Uint8Array([...prefix, ...core, ...Array.from(checksum)]) as T;
 }
