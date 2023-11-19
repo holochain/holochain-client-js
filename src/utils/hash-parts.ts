@@ -1,7 +1,7 @@
 import { ActionHash, AgentPubKey, EntryHash } from "../types.js";
 
 /**
- * Get dht location 4 bytes from a hash
+ * Get dht location (last 4 bytes) from a hash
  *
  * From https://github.com/holochain/holochain/blob/develop/crates/holo_hash/src/hash_type/primitive.rs
  *
@@ -17,7 +17,7 @@ export async function sliceDhtLocation(
 }
 
 /**
- * Get core 32 bytes from a hash
+ * Get core (center 32 bytes) from a hash
  *
  * From https://github.com/holochain/holochain/blob/develop/crates/holo_hash/src/hash_type/primitive.rs
  *
@@ -33,7 +33,7 @@ export async function sliceCore32(
 }
 
 /**
- * Get hash type 3 bytes from a hash
+ * Get hash type (initial 3 bytes) from a hash
  *
  * From https://github.com/holochain/holochain/blob/develop/crates/holo_hash/src/hash_type/primitive.rs
  *
