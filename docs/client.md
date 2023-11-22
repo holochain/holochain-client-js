@@ -12,6 +12,7 @@
 |  [AppAgentWebsocket](./client.appagentwebsocket.md) | A class to establish a websocket connection to an App interface, for a specific agent and app. |
 |  [AppWebsocket](./client.appwebsocket.md) | A class to establish a websocket connection to an App interface of a Holochain conductor. |
 |  [CloneId](./client.cloneid.md) | <p>Identifier of a clone cell, composed of the DNA's role id and the index of the clone, starting at 0.</p><p>Example: <code>profiles.0</code></p> |
+|  [HolochainError](./client.holochainerror.md) | Error thrown when response from Holochain is an error. |
 |  [WsClient](./client.wsclient.md) | <p>A WebSocket client which can make requests and receive responses, as well as send and receive signals.</p><p>Uses Holochain's WireMessage for communication.</p> |
 
 ## Enumerations
@@ -80,12 +81,15 @@
 |  [GrantZomeCallCapabilityRequest](./client.grantzomecallcapabilityrequest.md) |  |
 |  [HoloHashed](./client.holohashed.md) |  |
 |  [InitZomesComplete](./client.initzomescomplete.md) |  |
+|  [Link](./client.link.md) |  |
 |  [NetworkInfo](./client.networkinfo.md) |  |
 |  [NetworkInfoRequest](./client.networkinforequest.md) |  |
 |  [OpenChain](./client.openchain.md) |  |
 |  [P2pAgentsDump](./client.p2pagentsdump.md) |  |
 |  [PreflightRequest](./client.preflightrequest.md) |  |
 |  [ProvisionedCell](./client.provisionedcell.md) |  |
+|  [RateWeight](./client.rateweight.md) |  |
+|  [RegisterAgentActivity](./client.registeragentactivity.md) |  |
 |  [SignedActionHashed](./client.signedactionhashed.md) |  |
 |  [SigningCredentials](./client.signingcredentials.md) |  |
 |  [SourceChainJsonDump](./client.sourcechainjsondump.md) |  |
@@ -131,6 +135,7 @@
 |  [AgentPubKeyB64](./client.agentpubkeyb64.md) |  |
 |  [AnyDhtHash](./client.anydhthash.md) |  |
 |  [AnyDhtHashB64](./client.anydhthashb64.md) |  |
+|  [AnyLinkableHash](./client.anylinkablehash.md) |  |
 |  [AppAgentCallZomeRequest](./client.appagentcallzomerequest.md) |  |
 |  [AppAgentNetworkInfoRequest](./client.appagentnetworkinforequest.md) |  |
 |  [AppBundle](./client.appbundle.md) |  |
@@ -215,6 +220,8 @@
 |  [IntegrityZome](./client.integrityzome.md) |  |
 |  [KitsuneAgent](./client.kitsuneagent.md) |  |
 |  [KitsuneSpace](./client.kitsunespace.md) |  |
+|  [LinkTag](./client.linktag.md) |  |
+|  [LinkType](./client.linktype.md) | An internal link type index within the DNA, from 0 to 255. |
 |  [ListActiveAppsRequest](./client.listactiveappsrequest.md) |  |
 |  [ListActiveAppsResponse](./client.listactiveappsresponse.md) |  |
 |  [ListAppInterfacesRequest](./client.listappinterfacesrequest.md) |  |
@@ -234,6 +241,8 @@
 |  [NonProvenanceCallZomeRequest](./client.nonprovenancecallzomerequest.md) |  |
 |  [PausedAppReason](./client.pausedappreason.md) |  |
 |  [PreflightBytes](./client.preflightbytes.md) |  |
+|  [RateBucketId](./client.ratebucketid.md) |  |
+|  [RateUnits](./client.rateunits.md) |  |
 |  [Record\_2](./client.record_2.md) |  |
 |  [RecordEntry](./client.recordentry.md) |  |
 |  [RegisterDnaRequest](./client.registerdnarequest.md) |  |
@@ -261,6 +270,7 @@
 |  [WasmHash](./client.wasmhash.md) |  |
 |  [WasmHashB64](./client.wasmhashb64.md) |  |
 |  [ZomeDefinition](./client.zomedefinition.md) |  |
+|  [ZomeIndex](./client.zomeindex.md) | An internal zome index within the DNA, from 0 to 255. |
 |  [ZomeLocation](./client.zomelocation.md) |  |
 |  [ZomeManifest](./client.zomemanifest.md) |  |
 |  [ZomeName](./client.zomename.md) |  |
