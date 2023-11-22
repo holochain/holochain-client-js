@@ -28,6 +28,29 @@ export type LinkType = number;
 /**
  * @public
  */
+export type LinkTag = Uint8Array;
+
+/**
+ * @public
+ */
+export interface RateWeight {
+  bucket_id: RateBucketId;
+  units: RateUnits;
+}
+
+/**
+ * @public
+ */
+export type RateBucketId = number;
+
+/**
+ * @public
+ */
+export type RateUnits = number;
+
+/**
+ * @public
+ */
 export interface Link {
   author: AgentPubKey;
   target: AnyLinkableHash;
