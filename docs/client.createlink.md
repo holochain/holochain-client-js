@@ -18,10 +18,12 @@ export interface CreateLink
 |  [action\_seq](./client.createlink.action_seq.md) |  | number |  |
 |  [author](./client.createlink.author.md) |  | [AgentPubKey](./client.agentpubkey.md) |  |
 |  [base\_address](./client.createlink.base_address.md) |  | [EntryHash](./client.entryhash.md) |  |
+|  [link\_type](./client.createlink.link_type.md) |  | [LinkType](./client.linktype.md) |  |
 |  [prev\_action](./client.createlink.prev_action.md) |  | [ActionHash](./client.actionhash.md) |  |
-|  [tag](./client.createlink.tag.md) |  | any |  |
+|  [tag](./client.createlink.tag.md) |  | [LinkTag](./client.linktag.md) |  |
 |  [target\_address](./client.createlink.target_address.md) |  | [EntryHash](./client.entryhash.md) |  |
 |  [timestamp](./client.createlink.timestamp.md) |  | [Timestamp](./client.timestamp.md) |  |
 |  [type](./client.createlink.type.md) |  | [ActionType.CreateLink](./client.actiontype.md) |  |
-|  [zome\_id](./client.createlink.zome_id.md) |  | number |  |
+|  [weight](./client.createlink.weight.md) |  | [RateWeight](./client.rateweight.md) |  |
+|  [zome\_index](./client.createlink.zome_index.md) |  | number |  |
 

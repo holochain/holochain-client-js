@@ -7,5 +7,5 @@
 **Signature:**
 
 ```typescript
-tag: any;
+tag: LinkTag;
 ```

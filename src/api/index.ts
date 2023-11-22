@@ -5,6 +5,7 @@ export * from "./app/index.js";
 export { IsoWebSocket, WsClient } from "./client.js";
 export {
   CloneId,
+  HolochainError,
   Requester,
   Transformer,
   getBaseRoleNameFromCloneId,

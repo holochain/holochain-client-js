@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Added
 ### Changed
 ### Fixed
+- Action type `CreateLink`: Add field `link_type`.
 ### Removed
 
 ## 2023-11-16: v0.16.5
