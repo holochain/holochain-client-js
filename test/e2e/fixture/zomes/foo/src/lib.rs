@@ -1,4 +1,4 @@
-use hdk::prelude::*;
+use hdk::prelude::{holo_hash::DnaHash, *};
 
 #[derive(Clone, Debug, Serialize, Deserialize, SerializedBytes)]
 #[repr(transparent)]
@@ -77,4 +77,25 @@ pub fn waste_some_time(_: ()) -> ExternResult<TestString> {
         }
     }
     Ok(TestString(x.to_string()))
+}
+
+#[hdk_extern]
+pub fn decode_as_agentpubkey(bytes: Vec<u8>) -> ExternResult<AgentPubKey> {
+    AgentPubKey::from_raw_39(bytes)
+        .map_err(|e| wasm_error!(WasmErrorInner::Guest(format!("{}", e))))
+}
+
+#[hdk_extern]
+pub fn decode_as_entryhash(bytes: Vec<u8>) -> ExternResult<EntryHash> {
+    EntryHash::from_raw_39(bytes).map_err(|e| wasm_error!(WasmErrorInner::Guest(format!("{}", e))))
+}
+
+#[hdk_extern]
+pub fn decode_as_actionhash(bytes: Vec<u8>) -> ExternResult<ActionHash> {
+    ActionHash::from_raw_39(bytes).map_err(|e| wasm_error!(WasmErrorInner::Guest(format!("{}", e))))
+}
+
+#[hdk_extern]
+pub fn decode_as_dnahash(bytes: Vec<u8>) -> ExternResult<DnaHash> {
+    DnaHash::from_raw_39(bytes).map_err(|e| wasm_error!(WasmErrorInner::Guest(format!("{}", e))))
 }

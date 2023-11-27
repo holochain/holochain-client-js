@@ -101,15 +101,7 @@ export function dhtLocationFrom32(hashCore: Uint8Array): Uint8Array {
  */
 export function hashFrom32AndType(
   hashCore: AgentPubKey | EntryHash | ActionHash,
-  hashType:
-    | "Agent"
-    | "Entry"
-    | "DhtOp"
-    | "Dna"
-    | "NetId"
-    | "Action"
-    | "Wasm"
-    | "External"
+  hashType: "Agent" | "Entry" | "Dna" | "Action" | "External"
 ): Uint8Array {
   return Uint8Array.from([
     ...hashTypePrefix[hashType],

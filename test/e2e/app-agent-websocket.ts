@@ -17,7 +17,7 @@ import {
   createAppAgentWsAndInstallApp,
   FIXTURE_PATH,
   withConductor,
-} from "./util.js";
+} from "./common.js";
 
 const ADMIN_PORT = 33001;
 
