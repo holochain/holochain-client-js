@@ -26,9 +26,9 @@ export const hashTypePrefix = {
  *
  * @public
  */
-export async function sliceDhtLocation(
+export function sliceDhtLocation(
   hash: AgentPubKey | EntryHash | ActionHash
-): Promise<Uint8Array> {
+): Uint8Array {
   return Uint8Array.from(hash.slice(36, 40));
 }
 
@@ -42,9 +42,9 @@ export async function sliceDhtLocation(
  *
  * @public
  */
-export async function sliceCore32(
+export function sliceCore32(
   hash: AgentPubKey | EntryHash | ActionHash
-): Promise<Uint8Array> {
+): Uint8Array {
   return Uint8Array.from(hash.slice(3, 36));
 }
 
@@ -58,9 +58,9 @@ export async function sliceCore32(
  *
  * @public
  */
-export async function sliceHashType(
+export function sliceHashType(
   hash: AgentPubKey | EntryHash | ActionHash
-): Promise<Uint8Array> {
+): Uint8Array {
   return Uint8Array.from(hash.slice(0, 3));
 }
 

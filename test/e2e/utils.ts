@@ -4,8 +4,13 @@ import {
   fakeAgentPubKey,
   fakeDnaHash,
   fakeEntryHash,
+  hashFrom32AndType,
+  sliceCore32,
+  sliceDhtLocation,
+  sliceHashType,
 } from "../../src/index.js";
 import { installAppAndDna, withConductor } from "./common.js";
+import { range } from "lodash-es";
 
 const ADMIN_PORT = 33001;
 
@@ -198,3 +203,30 @@ test(
     );
   })
 );
+
+test("sliceDhtLocation, sliceCore32, sliceHashType extract components of a hash", async (t) => {
+  const fakeHash = await fakeDnaHash(1);
+  const prefix = sliceHashType(fakeHash);
+  const core = sliceCore32(fakeHash);
+  const postfix = sliceDhtLocation(fakeHash);
+
+  t.deepEqual(
+    fakeHash,
+    Uint8Array.from([...prefix, ...core, ...postfix]),
+    "extracted prefix, core, and postfix components of a hash concat back into the original hash"
+  );
+});
+
+test("hashFrom32AndType generates valid hash with type and 32 core bytes", async (t) => {
+  const core = Uint8Array.from(range(0, 32).map(() => 1));
+  const fullHash = hashFrom32AndType(core, "Agent");
+
+  t.deepEqual(
+    fullHash,
+    Uint8Array.from([
+      132, 32, 36, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+      1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 126, 207, 206, 190,
+    ]),
+    "generated full valid hash"
+  );
+});

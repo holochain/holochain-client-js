@@ -11,7 +11,7 @@ From https://github.com/holochain/holochain/blob/develop/crates/holo\_hash/src/h
 **Signature:**
 
 ```typescript
-export declare function sliceDhtLocation(hash: AgentPubKey | EntryHash | ActionHash): Promise<Uint8Array>;
+export declare function sliceDhtLocation(hash: AgentPubKey | EntryHash | ActionHash): Uint8Array;
 ```
 
 ## Parameters
@@ -22,7 +22,7 @@ export declare function sliceDhtLocation(hash: AgentPubKey | EntryHash | ActionH
 
 **Returns:**
 
-Promise&lt;Uint8Array&gt;
+Uint8Array
 
 The last 4 bytes of the hash.
 
