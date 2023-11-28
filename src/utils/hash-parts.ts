@@ -21,8 +21,8 @@ export const hashTypePrefix = {
  *
  * From https://github.com/holochain/holochain/blob/develop/crates/holo_hash/src/hash_type/primitive.rs
  *
- * @param A {@link Uint8Array}
- * @returns A {@link Uint8Array}.
+ * @param hash - The full 39 byte hash.
+ * @returns The last 4 bytes of the hash.
  *
  * @public
  */
@@ -37,8 +37,8 @@ export async function sliceDhtLocation(
  *
  * From https://github.com/holochain/holochain/blob/develop/crates/holo_hash/src/hash_type/primitive.rs
  *
- * @param A {@link Uint8Array}
- * @returns A {@link Uint8Array}.
+ * @param hash - The full 39 byte hash.
+ * @returns The core 32 bytes of the hash.
  *
  * @public
  */
@@ -53,8 +53,8 @@ export async function sliceCore32(
  *
  * From https://github.com/holochain/holochain/blob/develop/crates/holo_hash/src/hash_type/primitive.rs
  *
- * @param A {@link Uint8Array}
- * @returns A {@link Uint8Array}.
+ * @param hash - The full 39 byte hash.
+ * @returns The initial 3 bytes of the hash.
  *
  * @public
  */
@@ -69,8 +69,8 @@ export async function sliceHashType(
  *
  * From https://github.com/holochain/holochain/blob/develop/crates/holo_hash/src/hash_type/primitive.rs
  *
- * @param A {@link Uint8Array}
- * @returns A {@link Uint8Array}.
+ * @param hashCore - The core 32 bytes of the hash.
+ * @returns The last 4 bytes of the hash.
  *
  * @public
  */
@@ -94,8 +94,9 @@ export function dhtLocationFrom32(hashCore: Uint8Array): Uint8Array {
  *
  * From https://github.com/holochain/holochain/blob/develop/crates/holo_hash/src/hash_type/primitive.rs
  *
- * @param A {@link Uint8Array}
- * @returns A {@link Uint8Array}.
+ * @param hashCore - The core 32 bytes of the hash.
+ * @param hashType - The type of the hash.
+ * @returns The full 39 byte hash.
  *
  * @public
  */
