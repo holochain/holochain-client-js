@@ -98,3 +98,103 @@ test(
     );
   })
 );
+
+test(
+  "fakeAgentPubKey generates determanistic valid AgentPubKey when coreByte defined",
+  withConductor(ADMIN_PORT, async (t) => {
+    const { client, admin, cell_id } = await installAppAndDna(ADMIN_PORT);
+    await admin.authorizeSigningCredentials(cell_id);
+
+    const fakeHash = await fakeAgentPubKey(1);
+    const response = await client.callZome({
+      cell_id,
+      zome_name: TEST_ZOME_NAME,
+      fn_name: "decode_as_agentpubkey",
+      payload: Array.from(fakeHash),
+      provenance: cell_id[0],
+    });
+    t.deepEqual(
+      response,
+      Buffer.from([
+        132, 32, 36, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 126, 207, 206, 190,
+      ]),
+      "fakeAgentPubKey with coreByte set generates determanistic valid hash that decodes to AgentPubKey"
+    );
+  })
+);
+
+test(
+  "fakeEntryHash generates determanistic valid EntryHash when coreByte defined",
+  withConductor(ADMIN_PORT, async (t) => {
+    const { client, admin, cell_id } = await installAppAndDna(ADMIN_PORT);
+    await admin.authorizeSigningCredentials(cell_id);
+
+    const fakeHash = await fakeEntryHash(1);
+    const response = await client.callZome({
+      cell_id,
+      zome_name: TEST_ZOME_NAME,
+      fn_name: "decode_as_entryhash",
+      payload: Array.from(fakeHash),
+      provenance: cell_id[0],
+    });
+    t.deepEqual(
+      response,
+      Buffer.from([
+        132, 33, 36, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 126, 207, 206, 190,
+      ]),
+      "fakeEntryHash with coreByte set generates determanistic valid hash that decodes to EntryHash"
+    );
+  })
+);
+
+test(
+  "fakeActionHash generates determanistic valid ActionHash  when coreByte defined",
+  withConductor(ADMIN_PORT, async (t) => {
+    const { client, admin, cell_id } = await installAppAndDna(ADMIN_PORT);
+    await admin.authorizeSigningCredentials(cell_id);
+
+    const fakeHash = await fakeActionHash(1);
+    const response = await client.callZome({
+      cell_id,
+      zome_name: TEST_ZOME_NAME,
+      fn_name: "decode_as_actionhash",
+      payload: Array.from(fakeHash),
+      provenance: cell_id[0],
+    });
+    t.deepEqual(
+      response,
+      Buffer.from([
+        132, 41, 36, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 126, 207, 206, 190,
+      ]),
+      "fakeActionHash with coreByte set generates determanistic valid hash that decodes to ActionHash"
+    );
+  })
+);
+
+test(
+  "fakeDnaHash generates determanistic valid DnaHash when coreByte defined",
+  withConductor(ADMIN_PORT, async (t) => {
+    const { client, admin, cell_id } = await installAppAndDna(ADMIN_PORT);
+    await admin.authorizeSigningCredentials(cell_id);
+
+    const fakeHash = await fakeDnaHash(1);
+    const response = await client.callZome({
+      cell_id,
+      zome_name: TEST_ZOME_NAME,
+      fn_name: "decode_as_dnahash",
+      payload: Array.from(fakeHash),
+      provenance: cell_id[0],
+    });
+    t.deepEqual(
+      response,
+      Buffer.from([
+        132, 45, 36, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 126, 207, 206, 190,
+      ]),
+      "fakeDnaHash with coreByte set generates determanistic valid hash that decodes to DnaHash"
+    );
+  })
+);

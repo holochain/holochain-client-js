@@ -11,8 +11,15 @@ From https://github.com/holochain/holochain/blob/develop/crates/holo\_hash/src/h
 **Signature:**
 
 ```typescript
-export declare function fakeEntryHash(): Promise<EntryHash>;
+export declare function fakeEntryHash(coreByte?: number | undefined): Promise<EntryHash>;
 ```
+
+## Parameters
+
+|  Parameter | Type | Description |
+|  --- | --- | --- |
+|  coreByte | number \| undefined | _(Optional)_ Optionally specify a byte to repeat for all core 32 bytes. If undefined will generate random core 32 bytes. |
+
 **Returns:**
 
 Promise&lt;[EntryHash](./client.entryhash.md)<!-- -->&gt;

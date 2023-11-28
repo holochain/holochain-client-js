@@ -33,10 +33,10 @@
 |  [decodeHashFromBase64(hash)](./client.decodehashfrombase64.md) | Decodes a Base64 encoded string to a byte array hash. |
 |  [dhtLocationFrom32(hashCore)](./client.dhtlocationfrom32.md) | <p>Generate dht location (last 4 bytes) from a core hash (middle 32 bytes)</p><p>From https://github.com/holochain/holochain/blob/develop/crates/holo\_hash/src/hash\_type/primitive.rs</p> |
 |  [encodeHashToBase64(hash)](./client.encodehashtobase64.md) | Encode a byte array hash to a Base64 string. |
-|  [fakeActionHash()](./client.fakeactionhash.md) | Generate a valid hash of a non-existing action. |
-|  [fakeAgentPubKey()](./client.fakeagentpubkey.md) | Generate a valid agent key of a non-existing agent. |
-|  [fakeDnaHash()](./client.fakednahash.md) | Generate a valid hash of a non-existing DNA. |
-|  [fakeEntryHash()](./client.fakeentryhash.md) | <p>Generate a valid hash of a non-existing entry.</p><p>From https://github.com/holochain/holochain/blob/develop/crates/holo\_hash/src/hash\_type/primitive.rs</p> |
+|  [fakeActionHash(coreByte)](./client.fakeactionhash.md) | Generate a valid hash of a non-existing action. |
+|  [fakeAgentPubKey(coreByte)](./client.fakeagentpubkey.md) | Generate a valid agent key of a non-existing agent. |
+|  [fakeDnaHash(coreByte)](./client.fakednahash.md) | Generate a valid hash of a non-existing DNA. |
+|  [fakeEntryHash(coreByte)](./client.fakeentryhash.md) | <p>Generate a valid hash of a non-existing entry.</p><p>From https://github.com/holochain/holochain/blob/develop/crates/holo\_hash/src/hash\_type/primitive.rs</p> |
 |  [getDhtOpAction(op)](./client.getdhtopaction.md) |  |
 |  [getDhtOpEntry(op)](./client.getdhtopentry.md) |  |
 |  [getDhtOpSignature(op)](./client.getdhtopsignature.md) |  |
