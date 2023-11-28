@@ -3,8 +3,9 @@ import assert from "node:assert/strict";
 import fs from "node:fs";
 import test from "tape";
 import zlib from "zlib";
-import { HolochainError } from "../../src/api/common.js";
 import {
+  ActionHash,
+  ActionType,
   AdminWebsocket,
   AppEntryDef,
   AppSignal,
@@ -18,7 +19,10 @@ import {
   DnaBundle,
   DumpStateResponse,
   EnableAppResponse,
+  HolochainError,
   InstalledAppInfoStatus,
+  Link,
+  RegisterAgentActivity,
   RoleName,
   generateSigningKeyPair,
 } from "../../src/index.js";
@@ -730,6 +734,80 @@ test("can inject agents", async (t) => {
   }
   await cleanSandboxConductors();
 });
+
+test(
+  "create link",
+  withConductor(ADMIN_PORT, async (t) => {
+    const { cell_id, client, admin } = await installAppAndDna(ADMIN_PORT);
+    await admin.authorizeSigningCredentials(cell_id);
+
+    const tag = "test_tag";
+    const link: Link = await client.callZome({
+      cap_secret: null,
+      cell_id,
+      provenance: cell_id[1],
+      zome_name: TEST_ZOME_NAME,
+      fn_name: "create_and_get_link",
+      payload: Array.from(Buffer.from(tag)),
+    });
+
+    t.deepEqual(link.author, cell_id[1], "link author is correct");
+    t.deepEqual(
+      Array.from(link.create_link_hash.subarray(0, 3)),
+      [132, 41, 36],
+      "create link hash is valid"
+    );
+    t.deepEqual(link.link_type, 0, "link type is correct");
+    t.deepEqual(link.zome_index, 0, "zome index is correct");
+    t.ok("BYTES_PER_ELEMENT" in link.tag, "tag is a byte array");
+    t.deepEqual(link.tag.toString(), tag, "tag is correct");
+  })
+);
+
+test.only(
+  "create and delete link",
+  withConductor(ADMIN_PORT, async (t) => {
+    const { cell_id, client, admin } = await installAppAndDna(ADMIN_PORT);
+    await admin.authorizeSigningCredentials(cell_id);
+
+    const linkHash: ActionHash = await client.callZome({
+      cap_secret: null,
+      cell_id,
+      provenance: cell_id[1],
+      zome_name: TEST_ZOME_NAME,
+      fn_name: "create_and_delete_link",
+      payload: null,
+    });
+    const activity: RegisterAgentActivity[] = await client.callZome({
+      cap_secret: null,
+      cell_id,
+      provenance: cell_id[1],
+      zome_name: TEST_ZOME_NAME,
+      fn_name: "get_agent_activity",
+      payload: linkHash,
+    });
+    const lastAction = activity[0];
+    t.equal(
+      lastAction.action.hashed.content.type,
+      ActionType.DeleteLink,
+      "last action is DeleteLink"
+    );
+    const secondLastAction = activity[1];
+    t.equal(
+      secondLastAction.action.hashed.content.type,
+      ActionType.CreateLink,
+      "second last action is CreateLink"
+    );
+    assert(
+      secondLastAction.action.hashed.content.type === ActionType.CreateLink
+    );
+    t.equal(
+      secondLastAction.action.hashed.content.link_type,
+      0,
+      "link type is 0"
+    );
+  })
+);
 
 test(
   "admin smoke test: listAppInterfaces + attachAppInterface",
