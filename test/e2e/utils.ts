@@ -105,7 +105,7 @@ test(
 );
 
 test(
-  "fakeAgentPubKey generates determanistic valid AgentPubKey when coreByte defined",
+  "fakeAgentPubKey generates deterministic valid AgentPubKey when coreByte defined",
   withConductor(ADMIN_PORT, async (t) => {
     const { client, admin, cell_id } = await installAppAndDna(ADMIN_PORT);
     await admin.authorizeSigningCredentials(cell_id);
@@ -124,13 +124,13 @@ test(
         132, 32, 36, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
         1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 126, 207, 206, 190,
       ]),
-      "fakeAgentPubKey with coreByte set generates determanistic valid hash that decodes to AgentPubKey"
+      "fakeAgentPubKey with coreByte set generates deterministic valid hash that decodes to AgentPubKey"
     );
   })
 );
 
 test(
-  "fakeEntryHash generates determanistic valid EntryHash when coreByte defined",
+  "fakeEntryHash generates deterministic valid EntryHash when coreByte defined",
   withConductor(ADMIN_PORT, async (t) => {
     const { client, admin, cell_id } = await installAppAndDna(ADMIN_PORT);
     await admin.authorizeSigningCredentials(cell_id);
@@ -149,13 +149,13 @@ test(
         132, 33, 36, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
         1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 126, 207, 206, 190,
       ]),
-      "fakeEntryHash with coreByte set generates determanistic valid hash that decodes to EntryHash"
+      "fakeEntryHash with coreByte set generates deterministic valid hash that decodes to EntryHash"
     );
   })
 );
 
 test(
-  "fakeActionHash generates determanistic valid ActionHash  when coreByte defined",
+  "fakeActionHash generates deterministic valid ActionHash  when coreByte defined",
   withConductor(ADMIN_PORT, async (t) => {
     const { client, admin, cell_id } = await installAppAndDna(ADMIN_PORT);
     await admin.authorizeSigningCredentials(cell_id);
@@ -174,13 +174,13 @@ test(
         132, 41, 36, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
         1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 126, 207, 206, 190,
       ]),
-      "fakeActionHash with coreByte set generates determanistic valid hash that decodes to ActionHash"
+      "fakeActionHash with coreByte set generates deterministic valid hash that decodes to ActionHash"
     );
   })
 );
 
 test(
-  "fakeDnaHash generates determanistic valid DnaHash when coreByte defined",
+  "fakeDnaHash generates deterministic valid DnaHash when coreByte defined",
   withConductor(ADMIN_PORT, async (t) => {
     const { client, admin, cell_id } = await installAppAndDna(ADMIN_PORT);
     await admin.authorizeSigningCredentials(cell_id);
@@ -199,7 +199,7 @@ test(
         132, 45, 36, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
         1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 126, 207, 206, 190,
       ]),
-      "fakeDnaHash with coreByte set generates determanistic valid hash that decodes to DnaHash"
+      "fakeDnaHash with coreByte set generates deterministic valid hash that decodes to DnaHash"
     );
   })
 );
