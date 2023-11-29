@@ -7,9 +7,10 @@
     "allowSyntheticDefaultImports": true,
     "useUnknownInCatchVariables": false,
     "skipLibCheck": true,
-    "strict": true
+    "strict": true,
+    "typeRoots": ["./node_modules/@types", "./typings"]
   },
   "include": [
-    "src/**/*"
-  ]
+    "./src/**/*", "./typings"
+  ],
 }
