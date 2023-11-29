@@ -8,7 +8,7 @@ import blake2b from "@bitgo/blake2b";
  *
  * @public
  */
-export const hashTypePrefix = {
+export const HASH_TYPE_PREFIX = {
   Agent: Uint8Array.from([132, 32, 36]),
   Entry: Uint8Array.from([132, 33, 36]),
   Dna: Uint8Array.from([132, 45, 36]),
@@ -105,7 +105,7 @@ export function hashFrom32AndType(
   hashType: "Agent" | "Entry" | "Dna" | "Action" | "External"
 ): Uint8Array {
   return Uint8Array.from([
-    ...hashTypePrefix[hashType],
+    ...HASH_TYPE_PREFIX[hashType],
     ...hashCore,
     ...dhtLocationFrom32(hashCore),
   ]);

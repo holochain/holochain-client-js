@@ -114,7 +114,7 @@
 |  [getBaseRoleNameFromCloneId](./client.getbaserolenamefromcloneid.md) | Parse a clone id and get the role name part of it. |
 |  [getNonceExpiration](./client.getnonceexpiration.md) |  |
 |  [getSigningCredentials](./client.getsigningcredentials.md) | Get credentials for signing zome calls. |
-|  [hashTypePrefix](./client.hashtypeprefix.md) | <p>Hash type labels and their 3 byte values (forming the first 3 bytes of hash)</p><p>From https://github.com/holochain/holochain/blob/develop/crates/holo\_hash/src/hash\_type/primitive.rs</p> |
+|  [HASH\_TYPE\_PREFIX](./client.hash_type_prefix.md) | <p>Hash type labels and their 3 byte values (forming the first 3 bytes of hash)</p><p>From https://github.com/holochain/holochain/blob/develop/crates/holo\_hash/src/hash\_type/primitive.rs</p> |
 |  [isCloneId](./client.iscloneid.md) | Check if a cell's role name is a valid clone id. |
 |  [randomByteArray](./client.randombytearray.md) |  |
 |  [randomCapSecret](./client.randomcapsecret.md) |  |
