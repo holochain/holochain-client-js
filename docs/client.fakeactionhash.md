@@ -9,8 +9,15 @@ Generate a valid hash of a non-existing action.
 **Signature:**
 
 ```typescript
-export declare function fakeActionHash(): Promise<ActionHash>;
+export declare function fakeActionHash(coreByte?: number | undefined): Promise<ActionHash>;
 ```
+
+## Parameters
+
+|  Parameter | Type | Description |
+|  --- | --- | --- |
+|  coreByte | number \| undefined | _(Optional)_ Optionally specify a byte to repeat for all core 32 bytes. If undefined will generate random core 32 bytes. |
+
 **Returns:**
 
 Promise&lt;[ActionHash](./client.actionhash.md)<!-- -->&gt;

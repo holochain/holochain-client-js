@@ -9,8 +9,15 @@ Generate a valid agent key of a non-existing agent.
 **Signature:**
 
 ```typescript
-export declare function fakeAgentPubKey(): Promise<AgentPubKey>;
+export declare function fakeAgentPubKey(coreByte?: number | undefined): Promise<AgentPubKey>;
 ```
+
+## Parameters
+
+|  Parameter | Type | Description |
+|  --- | --- | --- |
+|  coreByte | number \| undefined | _(Optional)_ Optionally specify a byte to repeat for all core 32 bytes. If undefined will generate random core 32 bytes. |
+
 **Returns:**
 
 Promise&lt;[AgentPubKey](./client.agentpubkey.md)<!-- -->&gt;

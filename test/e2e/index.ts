@@ -33,7 +33,7 @@ import {
   launch,
   makeCoordinatorZomeBundle,
   withConductor,
-} from "./util.js";
+} from "./common.js";
 
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
