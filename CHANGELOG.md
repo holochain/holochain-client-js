@@ -5,13 +5,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## \[Unreleased\]
 
 ### Added
+### Changed
+### Fixed
+### Removed
+
+## 2023-11-29: v0.17.0-dev.3
+### Added
 - Utility functions for slicing hashes into their components: `sliceHashType`, `sliceCore32`, `sliceDhtLocation`
 - Utility functions for generating hashes from components: `dhtLocationFrom32`, `hashFrom32AndType`: 
 ### Changed
 - Utility functions fakeAgentPubKey, fakeEntryHash, fakeActionHash and fakeDnaHash now generate *valid* hashes with a valid final 4 bytes
 - Utility functions fakeAgentPubKey, fakeEntryHash, fakeActionHash and fakeDnaHash now optionally take a single parameter `coreByte` which if defined will be repeated for all core 32 bytes of the hash
-### Fixed
-### Removed
 
 ## 2023-11-22: v0.17.0-dev.2
 ### Fixed
