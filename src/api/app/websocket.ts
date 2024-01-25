@@ -6,6 +6,7 @@ import {
   getLauncherEnvironment,
   signZomeCallTauri,
   signZomeCallElectron,
+  getHostZomeCallSigner,
 } from "../../environments/launcher.js";
 import { CapSecret } from "../../hdk/capabilities.js";
 import { InstalledAppId } from "../../types.js";
@@ -204,14 +205,19 @@ const callZomeTransform: Transformer<
     if ("signature" in request) {
       return request;
     }
-    const env = getLauncherEnvironment();
-
-    if (!env) {
-      return signZomeCall(request);
-    } else if (env.FRAMEWORK === "electron") {
-      return signZomeCallElectron(request);
+    const hostSigner = getHostZomeCallSigner();
+    if (hostSigner) {
+      return hostSigner.signZomeCall(request);
+    } else {
+      const env = getLauncherEnvironment();
+      if (!env) {
+        return signZomeCall(request);
+      }
+      if (env.FRAMEWORK === "electron") {
+        return signZomeCallElectron(request);
+      }
+      return signZomeCallTauri(request);
     }
-    return signZomeCallTauri(request);
   },
   output: (response) => decode(response),
 };
