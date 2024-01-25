@@ -15,7 +15,12 @@ export interface LauncherEnvironment {
   FRAMEWORK?: "tauri" | "electron";
 }
 
+export interface HostZomeCallSigner {
+  signZomeCall: (request: CallZomeRequest) => Promise<CallZomeRequestSigned>;
+}
+
 const __HC_LAUNCHER_ENV__ = "__HC_LAUNCHER_ENV__";
+const __HC_ZOME_CALL_SIGNER__ = "__HC_ZOME_CALL_SIGNER__";
 
 export const isLauncher = () =>
   globalThis.window && __HC_LAUNCHER_ENV__ in globalThis.window;
@@ -23,9 +28,13 @@ export const isLauncher = () =>
 export const getLauncherEnvironment = (): LauncherEnvironment | undefined =>
   isLauncher() ? globalThis.window[__HC_LAUNCHER_ENV__] : undefined;
 
+export const getHostZomeCallSigner = (): HostZomeCallSigner | undefined =>
+  globalThis.window && globalThis.window[__HC_ZOME_CALL_SIGNER__];
+
 declare global {
   interface Window {
     [__HC_LAUNCHER_ENV__]?: LauncherEnvironment;
+    [__HC_ZOME_CALL_SIGNER__]?: HostZomeCallSigner;
     electronAPI?: {
       signZomeCall: (
         data: CallZomeRequestUnsignedElectron
