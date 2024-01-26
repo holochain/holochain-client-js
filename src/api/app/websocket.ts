@@ -3,6 +3,7 @@ import { decode, encode } from "@msgpack/msgpack";
 import Emittery from "emittery";
 import nacl from "tweetnacl";
 import {
+  getHostZomeCallSigner,
   getLauncherEnvironment,
   isLauncher,
   signZomeCallTauri,
@@ -193,10 +194,13 @@ const callZomeTransform: Transformer<
     if ("signature" in request) {
       return request;
     }
-    const signedZomeCall = isLauncher
-      ? await signZomeCallTauri(request)
-      : await signZomeCall(request);
-    return signedZomeCall;
+    const hostSigner = getHostZomeCallSigner();
+    if (hostSigner) {
+      return hostSigner.signZomeCall(request);
+    } else if (isLauncher) {
+      return signZomeCallTauri(request);
+    }
+    return signZomeCall(request);
   },
   output: (response) => decode(response),
 };
