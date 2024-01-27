@@ -9,6 +9,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Fixed
 ### Removed
 
+## 2024-01-27: v0.17.0-dev.4
+### Changed
+- Decouple host zome call signer from environment. Now a zome call signer can be provided separatedly from the environment that the client is used in.
+
 ## 2023-11-29: v0.17.0-dev.3
 ### Added
 - Utility functions for slicing hashes into their components: `sliceHashType`, `sliceCore32`, `sliceDhtLocation`
