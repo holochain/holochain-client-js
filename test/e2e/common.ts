@@ -25,9 +25,9 @@ export const launch = async (port: number) => {
   let conductorDir = "";
   const createConductorPromise = new Promise<void>((resolve) => {
     createConductorProcess.stdout.on("data", (data) => {
-      const tmpDirMatches = data.toString().match(/Created (\[".+"])/);
+      const tmpDirMatches = data.toString().match(/Created.+"(.+)"/);
       if (tmpDirMatches) {
-        conductorDir = JSON.parse(tmpDirMatches[1])[0];
+        conductorDir = tmpDirMatches[1];
       }
     });
     createConductorProcess.stdout.on("end", () => {
