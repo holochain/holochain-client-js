@@ -773,7 +773,7 @@ test(
   })
 );
 
-test.only(
+test(
   "create and delete link",
   withConductor(ADMIN_PORT, async (t) => {
     const { cell_id, client, admin } = await installAppAndDna(ADMIN_PORT);
