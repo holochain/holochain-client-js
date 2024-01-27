@@ -6,7 +6,7 @@
 
 Set credentials for signing zome calls.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 setSigningCredentials: (cellId: CellId, credentials: SigningCredentials) => void

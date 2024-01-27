@@ -5,10 +5,10 @@
 ## ListCellIdsResponse type
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-export declare type ListCellIdsResponse = Array<CellId>;
+export type ListCellIdsResponse = Array<CellId>;
 ```
-<b>References:</b> [CellId](./client.cellid.md)
+**References:** [CellId](./client.cellid.md)
 

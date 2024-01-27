@@ -4,7 +4,7 @@
 
 ## CloseChain.new\_dna\_hash property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 new_dna_hash: DnaHash;

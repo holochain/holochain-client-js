@@ -4,7 +4,7 @@
 
 ## AdminApi.dumpFullState property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 dumpFullState: Requester<DumpFullStateRequest, DumpFullStateResponse>;

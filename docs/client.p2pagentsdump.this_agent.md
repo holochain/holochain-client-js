@@ -6,7 +6,7 @@
 
 The agent as \[`AgentPubKey`<!-- -->\] and \[`kitsune_p2p::KitsuneAgent`<!-- -->\].
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 this_agent: [AgentPubKey, KitsuneAgent] | undefined;

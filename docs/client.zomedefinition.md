@@ -5,10 +5,10 @@
 ## ZomeDefinition type
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-export declare type ZomeDefinition = [
+export type ZomeDefinition = [
     ZomeName,
     {
         wasm_hash: WasmHash;
@@ -16,5 +16,5 @@ export declare type ZomeDefinition = [
     }
 ];
 ```
-<b>References:</b> [ZomeName](./client.zomename.md)<!-- -->, [WasmHash](./client.wasmhash.md)
+**References:** [ZomeName](./client.zomename.md)<!-- -->, [WasmHash](./client.wasmhash.md)
 

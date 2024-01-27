@@ -5,8 +5,8 @@
 ## GenerateAgentPubKeyRequest type
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-export declare type GenerateAgentPubKeyRequest = void;
+export type GenerateAgentPubKeyRequest = void;
 ```

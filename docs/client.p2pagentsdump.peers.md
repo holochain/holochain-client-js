@@ -6,7 +6,7 @@
 
 All other agent info.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 peers: Array<AgentInfoDump>;

@@ -4,7 +4,7 @@
 
 ## ClonedCell.original\_dna\_hash property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 original_dna_hash: DnaHash;

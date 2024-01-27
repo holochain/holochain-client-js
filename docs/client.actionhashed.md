@@ -5,10 +5,10 @@
 ## ActionHashed type
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-export declare type ActionHashed = HoloHashed<Action>;
+export type ActionHashed = HoloHashed<Action>;
 ```
-<b>References:</b> [HoloHashed](./client.holohashed.md)<!-- -->, [Action](./client.action.md)
+**References:** [HoloHashed](./client.holohashed.md)<!-- -->, [Action](./client.action.md)
 

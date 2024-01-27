@@ -4,7 +4,7 @@
 
 ## CountersigningAgentState.chain\_top property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 chain_top: ActionHash;

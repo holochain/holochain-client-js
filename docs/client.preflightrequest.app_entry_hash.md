@@ -4,7 +4,7 @@
 
 ## PreflightRequest.app\_entry\_hash property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 app_entry_hash: EntryHash;

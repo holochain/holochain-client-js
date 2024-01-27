@@ -5,8 +5,8 @@
 ## InstalledAppId type
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-export declare type InstalledAppId = string;
+export type InstalledAppId = string;
 ```

@@ -4,7 +4,7 @@
 
 ## ZomeCallCapGrant.access property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 access: CapAccess;

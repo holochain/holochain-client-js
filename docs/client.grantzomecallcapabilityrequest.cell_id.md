@@ -6,7 +6,7 @@
 
 Cell for which to authorize the capability.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 cell_id: CellId;

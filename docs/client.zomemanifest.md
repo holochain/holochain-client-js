@@ -5,13 +5,13 @@
 ## ZomeManifest type
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-export declare type ZomeManifest = {
+export type ZomeManifest = {
     name: string;
     hash?: string;
 } & ZomeLocation;
 ```
-<b>References:</b> [ZomeLocation](./client.zomelocation.md)
+**References:** [ZomeLocation](./client.zomelocation.md)
 

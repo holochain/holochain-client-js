@@ -5,10 +5,10 @@
 ## AttachAppInterfaceResponse type
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-export declare type AttachAppInterfaceResponse = {
+export type AttachAppInterfaceResponse = {
     port: number;
 };
 ```

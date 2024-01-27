@@ -5,8 +5,8 @@
 ## PreflightBytes type
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-export declare type PreflightBytes = Uint8Array;
+export type PreflightBytes = Uint8Array;
 ```

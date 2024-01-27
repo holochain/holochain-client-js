@@ -5,7 +5,7 @@
 ## Delete interface
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 export interface Delete 

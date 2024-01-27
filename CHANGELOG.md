@@ -8,6 +8,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Fixed
 ### Removed
 
+## 2024-01-27: v0.12.6
+### Changed
+- Decouple host zome call signer from environment. Now a zome call signer can be provided separatedly from the environment that the client is used in.
+
 ## 2023-03-01: v0.12.5
 ### Fixed
 - Replace event listener method `.on("close")` by `.onclose`. `.on` is not compatible with Web API's WebSocket.

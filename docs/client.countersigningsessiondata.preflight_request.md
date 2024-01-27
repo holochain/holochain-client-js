@@ -4,7 +4,7 @@
 
 ## CounterSigningSessionData.preflight\_request property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 preflight_request: PreflightRequest;

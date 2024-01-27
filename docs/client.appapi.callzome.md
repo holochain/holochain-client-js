@@ -4,7 +4,7 @@
 
 ## AppApi.callZome property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 callZome: Requester<CallZomeRequest, CallZomeResponse>;

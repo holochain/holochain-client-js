@@ -6,12 +6,12 @@
 
 Generate a valid hash of a non-existing DNA.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 export declare function fakeDnaHash(): Promise<DnaHash>;
 ```
-<b>Returns:</b>
+**Returns:**
 
 Promise&lt;[DnaHash](./client.dnahash.md)<!-- -->&gt;
 

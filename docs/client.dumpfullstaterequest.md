@@ -5,13 +5,13 @@
 ## DumpFullStateRequest type
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-export declare type DumpFullStateRequest = {
+export type DumpFullStateRequest = {
     cell_id: CellId;
     dht_ops_cursor: number | undefined;
 };
 ```
-<b>References:</b> [CellId](./client.cellid.md)
+**References:** [CellId](./client.cellid.md)
 

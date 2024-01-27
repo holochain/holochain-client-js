@@ -4,7 +4,7 @@
 
 ## SigningCredentials.capSecret property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 capSecret: CapSecret;

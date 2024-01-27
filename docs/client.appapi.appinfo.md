@@ -4,7 +4,7 @@
 
 ## AppApi.appInfo property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 appInfo: Requester<AppInfoRequest, AppInfoResponse>;

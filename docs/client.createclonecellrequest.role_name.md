@@ -6,7 +6,7 @@
 
 The DNA's role id to clone.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 role_name: RoleName;

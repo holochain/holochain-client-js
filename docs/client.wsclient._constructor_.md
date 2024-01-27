@@ -6,7 +6,7 @@
 
 Constructs a new instance of the `WsClient` class
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 constructor(socket: Websocket);

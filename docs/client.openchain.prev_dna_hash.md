@@ -4,7 +4,7 @@
 
 ## OpenChain.prev\_dna\_hash property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 prev_dna_hash: DnaHash;

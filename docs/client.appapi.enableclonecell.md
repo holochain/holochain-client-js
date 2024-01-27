@@ -4,7 +4,7 @@
 
 ## AppApi.enableCloneCell property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 enableCloneCell: Requester<EnableCloneCellRequest, EnableCloneCellResponse>;

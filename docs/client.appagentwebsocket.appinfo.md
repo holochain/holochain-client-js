@@ -6,12 +6,12 @@
 
 Request the app's info, including all cell infos.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 appInfo(): Promise<AppInfo>;
 ```
-<b>Returns:</b>
+**Returns:**
 
 Promise&lt;[AppInfo](./client.appinfo.md)<!-- -->&gt;
 

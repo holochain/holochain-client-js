@@ -6,7 +6,7 @@
 
 Call a zome.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 callZome(request: AppAgentCallZomeRequest, timeout?: number): Promise<CallZomeResponse>;
@@ -17,9 +17,9 @@ callZome(request: AppAgentCallZomeRequest, timeout?: number): Promise<CallZomeRe
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  request | [AppAgentCallZomeRequest](./client.appagentcallzomerequest.md) | The zome call arguments. |
-|  timeout | number | <i>(Optional)</i> A timeout to override the default. |
+|  timeout | number | _(Optional)_ A timeout to override the default. |
 
-<b>Returns:</b>
+**Returns:**
 
 Promise&lt;[CallZomeResponse](./client.callzomeresponse.md)<!-- -->&gt;
 

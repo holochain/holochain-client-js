@@ -6,7 +6,7 @@
 
 The info of this agent's cell.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 this_agent_info: AgentInfoDump | undefined;

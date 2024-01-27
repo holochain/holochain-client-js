@@ -4,7 +4,7 @@
 
 ## Update.timestamp property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 timestamp: Timestamp;

@@ -5,10 +5,10 @@
 ## CoordinatorZome type
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-export declare type CoordinatorZome = ZomeDefinition;
+export type CoordinatorZome = ZomeDefinition;
 ```
-<b>References:</b> [ZomeDefinition](./client.zomedefinition.md)
+**References:** [ZomeDefinition](./client.zomedefinition.md)
 

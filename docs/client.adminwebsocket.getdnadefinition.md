@@ -6,7 +6,7 @@
 
 Get the DNA definition for the specified DNA hash.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getDnaDefinition: Requester<GetDnaDefinitionRequest, GetDnaDefinitionResponse>;

@@ -4,7 +4,7 @@
 
 ## FetchPoolInfo.num\_ops\_to\_fetch property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 num_ops_to_fetch: number;

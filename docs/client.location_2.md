@@ -5,10 +5,10 @@
 ## Location\_2 type
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-export declare type Location = {
+export type Location = {
     bundled: string;
 } | {
     path: string;

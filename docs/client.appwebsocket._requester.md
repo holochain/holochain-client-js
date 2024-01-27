@@ -4,7 +4,7 @@
 
 ## AppWebsocket.\_requester property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 _requester: <ReqI, ReqO, ResI, ResO>(tag: string, transformer?: Transformer<ReqI, ReqO, ResI, ResO> | undefined) => (req: ReqI, timeout?: number | undefined) => Promise<ResO>;

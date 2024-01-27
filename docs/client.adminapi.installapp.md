@@ -4,7 +4,7 @@
 
 ## AdminApi.installApp property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 installApp: Requester<InstallAppRequest, InstallAppResponse>;

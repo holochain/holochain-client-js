@@ -6,7 +6,7 @@
 
 Close the websocket connection.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 close(code?: number): Promise<void>;
@@ -16,9 +16,9 @@ close(code?: number): Promise<void>;
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  code | number | <i>(Optional)</i> |
+|  code | number | _(Optional)_ |
 
-<b>Returns:</b>
+**Returns:**
 
 Promise&lt;void&gt;
 

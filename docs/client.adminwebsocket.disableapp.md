@@ -6,7 +6,7 @@
 
 Disable a running app.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 disableApp: Requester<DisableAppRequest, DisableAppResponse>;

@@ -5,8 +5,8 @@
 ## MembraneProof type
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-export declare type MembraneProof = Buffer;
+export type MembraneProof = Buffer;
 ```

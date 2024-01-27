@@ -6,7 +6,7 @@
 
 Call a zome.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 callZome: Requester<CallZomeRequest | CallZomeRequestSigned, CallZomeResponse>;

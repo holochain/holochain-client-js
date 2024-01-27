@@ -5,14 +5,14 @@
 ## DnaVersionFlexible type
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-export declare type DnaVersionFlexible = {
+export type DnaVersionFlexible = {
     singleton: HoloHashB64;
 } | {
     multiple: DnaVersionSpec;
 };
 ```
-<b>References:</b> [HoloHashB64](./client.holohashb64.md)<!-- -->, [DnaVersionSpec](./client.dnaversionspec.md)
+**References:** [HoloHashB64](./client.holohashb64.md)<!-- -->, [DnaVersionSpec](./client.dnaversionspec.md)
 

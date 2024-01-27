@@ -4,7 +4,7 @@
 
 ## AppWebsocket.overrideInstalledAppId property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 overrideInstalledAppId?: InstalledAppId;

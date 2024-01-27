@@ -4,7 +4,7 @@
 
 ## FullStateDump.peer\_dump property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 peer_dump: P2pAgentsDump;

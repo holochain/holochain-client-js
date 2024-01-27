@@ -8,12 +8,12 @@ A Websocket client which can make requests and receive responses, as well as sen
 
 Uses Holochain's websocket WireMessage for communication.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 export declare class WsClient extends Emittery 
 ```
-<b>Extends:</b> Emittery
+**Extends:** Emittery
 
 ## Constructors
 

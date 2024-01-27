@@ -4,7 +4,7 @@
 
 ## SourceChainJsonRecord.action\_address property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 action_address: ActionHash;

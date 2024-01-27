@@ -4,7 +4,7 @@
 
 ## CapClaim.secret property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 secret: CapSecret;

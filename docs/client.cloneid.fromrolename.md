@@ -6,7 +6,7 @@
 
 Parse a role id of a clone cell to obtain a clone id instance.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 static fromRoleName(roleName: RoleName): CloneId;
@@ -18,7 +18,7 @@ static fromRoleName(roleName: RoleName): CloneId;
 |  --- | --- | --- |
 |  roleName | [RoleName](./client.rolename.md) | Role id to parse. |
 
-<b>Returns:</b>
+**Returns:**
 
 [CloneId](./client.cloneid.md)
 

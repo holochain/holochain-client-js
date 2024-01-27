@@ -6,7 +6,7 @@
 
 Dump the full state of the specified cell, including its chain and DHT shard, as JSON.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 dumpFullState: Requester<DumpFullStateRequest, DumpFullStateResponse>;

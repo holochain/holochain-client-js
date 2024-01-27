@@ -5,12 +5,12 @@
 ## ListAppsRequest type
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-export declare type ListAppsRequest = {
+export type ListAppsRequest = {
     status_filter?: AppStatusFilter;
 };
 ```
-<b>References:</b> [AppStatusFilter](./client.appstatusfilter.md)
+**References:** [AppStatusFilter](./client.appstatusfilter.md)
 

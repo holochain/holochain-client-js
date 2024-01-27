@@ -5,12 +5,12 @@
 ## AppInfoRequest type
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-export declare type AppInfoRequest = {
+export type AppInfoRequest = {
     installed_app_id: InstalledAppId;
 };
 ```
-<b>References:</b> [InstalledAppId](./client.installedappid.md)
+**References:** [InstalledAppId](./client.installedappid.md)
 

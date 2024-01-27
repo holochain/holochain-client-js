@@ -6,7 +6,7 @@
 
 Specifies the capability, consisting of zomes and functions to allow signing for as well as access level, secret and assignees.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 cap_grant: ZomeCallCapGrant;

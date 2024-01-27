@@ -6,7 +6,7 @@
 
 List all attached app interfaces.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 listAppInterfaces: Requester<ListAppInterfacesRequest, ListAppInterfacesResponse>;

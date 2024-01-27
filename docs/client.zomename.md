@@ -5,8 +5,8 @@
 ## ZomeName type
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-export declare type ZomeName = string;
+export type ZomeName = string;
 ```

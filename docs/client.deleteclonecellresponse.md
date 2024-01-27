@@ -5,8 +5,8 @@
 ## DeleteCloneCellResponse type
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-export declare type DeleteCloneCellResponse = void;
+export type DeleteCloneCellResponse = void;
 ```

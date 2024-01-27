@@ -6,7 +6,7 @@
 
 Get credentials for signing zome calls.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 getSigningCredentials: (cellId: CellId) => SigningCredentials | undefined

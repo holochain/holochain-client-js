@@ -5,10 +5,10 @@
 ## CallZomeRequest type
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-export declare type CallZomeRequest = CallZomeRequestGeneric<any>;
+export type CallZomeRequest = CallZomeRequestGeneric<any>;
 ```
-<b>References:</b> [CallZomeRequestGeneric](./client.callzomerequestgeneric.md)
+**References:** [CallZomeRequestGeneric](./client.callzomerequestgeneric.md)
 

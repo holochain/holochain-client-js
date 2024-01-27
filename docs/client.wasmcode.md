@@ -5,12 +5,12 @@
 ## WasmCode type
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-export declare type WasmCode = [HoloHash, {
+export type WasmCode = [HoloHash, {
     code: Array<number>;
 }];
 ```
-<b>References:</b> [HoloHash](./client.holohash.md)
+**References:** [HoloHash](./client.holohash.md)
 

@@ -4,7 +4,7 @@
 
 ## Delete.deletes\_address property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 deletes_address: ActionHash;

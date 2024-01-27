@@ -5,12 +5,12 @@
 ## Zomes type
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-export declare type Zomes = Array<[string, {
+export type Zomes = Array<[string, {
     wasm_hash: Array<HoloHash>;
 }]>;
 ```
-<b>References:</b> [HoloHash](./client.holohash.md)
+**References:** [HoloHash](./client.holohash.md)
 

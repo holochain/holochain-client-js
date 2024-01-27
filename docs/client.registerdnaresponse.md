@@ -5,10 +5,10 @@
 ## RegisterDnaResponse type
 
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
-export declare type RegisterDnaResponse = HoloHash;
+export type RegisterDnaResponse = HoloHash;
 ```
-<b>References:</b> [HoloHash](./client.holohash.md)
+**References:** [HoloHash](./client.holohash.md)
 

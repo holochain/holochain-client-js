@@ -4,7 +4,7 @@
 
 ## EntryContent.entry property
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 entry: C;

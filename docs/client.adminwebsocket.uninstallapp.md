@@ -6,7 +6,7 @@
 
 Uninstall the specified app from Holochain.
 
-<b>Signature:</b>
+**Signature:**
 
 ```typescript
 uninstallApp: Requester<UninstallAppRequest, UninstallAppResponse>;
