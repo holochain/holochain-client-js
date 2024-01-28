@@ -88,14 +88,14 @@ export class AppAgentWebsocket implements AppAgentClient {
   /**
    * Instance factory for creating AppAgentWebsockets.
    *
-   * @param url - The `ws://` URL of the App API to connect to.
    * @param installed_app_id - ID of the App to link to.
+   * @param url - The `ws://` URL of the App API to connect to.
    * @param defaultTimeout - Timeout to default to for all operations.
    * @returns A new instance of an AppAgentWebsocket.
    */
   static async connect(
-    url: URL,
     installed_app_id: InstalledAppId,
+    url?: URL,
     defaultTimeout?: number
   ) {
     const appWebsocket = await AppWebsocket.connect(url, defaultTimeout);

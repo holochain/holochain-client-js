@@ -83,12 +83,18 @@ export class AppWebsocket extends Emittery implements AppApi {
    * @param defaultTimeout - Timeout to default to for all operations.
    * @returns A new instance of an AppWebsocket.
    */
-  static async connect(url: URL, defaultTimeout?: number) {
+  static async connect(url?: URL, defaultTimeout?: number) {
     // Check if we are in the launcher's environment, and if so, redirect the url to connect to
     const env = getLauncherEnvironment();
 
     if (env?.APP_INTERFACE_PORT) {
       url = new URL(`ws://127.0.0.1:${env.APP_INTERFACE_PORT}`);
+    }
+
+    if (!url) {
+      throw new Error(
+        "Unable to connect to App Websocket: No url provided and not in a Launcher environment."
+      );
     }
 
     const wsClient = await WsClient.connect(url);

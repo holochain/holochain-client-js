@@ -95,7 +95,7 @@ export class AdminWebsocket implements AdminApi {
    * @returns A promise for a new connected instance.
    */
   static async connect(
-    url: URL,
+    url?: URL,
     defaultTimeout?: number
   ): Promise<AdminWebsocket> {
     // Check if we are in the launcher's environment, and if so, redirect the url to connect to
@@ -103,6 +103,12 @@ export class AdminWebsocket implements AdminApi {
 
     if (env?.ADMIN_INTERFACE_PORT) {
       url = new URL(`ws://127.0.0.1:${env.ADMIN_INTERFACE_PORT}`);
+    }
+
+    if (!url) {
+      throw new Error(
+        "Unable to connect to Admin Websocket: No url provided and not in a Launcher environment."
+      );
     }
 
     const wsClient = await WsClient.connect(url);
