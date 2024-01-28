@@ -29,7 +29,7 @@ export declare class AppAgentWebsocket implements AppAgentClient
 |  --- | --- | --- |
 |  [appInfo()](./client.appagentwebsocket.appinfo.md) |  | Request the app's info, including all cell infos. |
 |  [callZome(request, timeout)](./client.appagentwebsocket.callzome.md) |  | Call a zome. |
-|  [connect(url, installed\_app\_id, defaultTimeout)](./client.appagentwebsocket.connect.md) | <code>static</code> | Instance factory for creating AppAgentWebsockets. |
+|  [connect(installed\_app\_id, url, defaultTimeout)](./client.appagentwebsocket.connect.md) | <code>static</code> | Instance factory for creating AppAgentWebsockets. |
 |  [createCloneCell(args)](./client.appagentwebsocket.createclonecell.md) |  | Clone an existing provisioned cell. |
 |  [disableCloneCell(args)](./client.appagentwebsocket.disableclonecell.md) |  | Disable an enabled clone cell. |
 |  [enableCloneCell(args)](./client.appagentwebsocket.enableclonecell.md) |  | Enable a disabled clone cell. |

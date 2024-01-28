@@ -9,15 +9,15 @@ Instance factory for creating AppAgentWebsockets.
 **Signature:**
 
 ```typescript
-static connect(url: URL, installed_app_id: InstalledAppId, defaultTimeout?: number): Promise<AppAgentWebsocket>;
+static connect(installed_app_id: InstalledAppId, url?: URL, defaultTimeout?: number): Promise<AppAgentWebsocket>;
 ```
 
 ## Parameters
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  url | URL | The <code>ws://</code> URL of the App API to connect to. |
 |  installed\_app\_id | [InstalledAppId](./client.installedappid.md) | ID of the App to link to. |
+|  url | URL | _(Optional)_ The <code>ws://</code> URL of the App API to connect to. |
 |  defaultTimeout | number | _(Optional)_ Timeout to default to for all operations. |
 
 **Returns:**

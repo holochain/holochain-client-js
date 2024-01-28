@@ -9,14 +9,14 @@ Factory mehtod to create a new instance connected to the given URL.
 **Signature:**
 
 ```typescript
-static connect(url: URL, defaultTimeout?: number): Promise<AdminWebsocket>;
+static connect(url?: URL, defaultTimeout?: number): Promise<AdminWebsocket>;
 ```
 
 ## Parameters
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  url | URL | A <code>ws://</code> URL used as the connection address. |
+|  url | URL | _(Optional)_ A <code>ws://</code> URL used as the connection address. |
 |  defaultTimeout | number | _(Optional)_ The default timeout for any request. |
 
 **Returns:**
