@@ -79,7 +79,7 @@ export class AppWebsocket extends Emittery implements AppApi {
   /**
    * Instance factory for creating AppWebsockets.
    *
-   * @param url - The `ws://` URL of the App API to connect to.
+   * @param url - The `ws://` URL of the App API to connect to. Not required when running from a Launcher or Kangaroo environment.
    * @param defaultTimeout - Timeout to default to for all operations.
    * @returns A new instance of an AppWebsocket.
    */

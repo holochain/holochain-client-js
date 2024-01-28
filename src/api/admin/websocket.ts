@@ -90,7 +90,7 @@ export class AdminWebsocket implements AdminApi {
   /**
    * Factory mehtod to create a new instance connected to the given URL.
    *
-   * @param url - A `ws://` URL used as the connection address.
+   * @param url - The `ws://` URL of the Admin API to connect to. Not required when running from a Launcher or Kangaroo environment.
    * @param defaultTimeout - The default timeout for any request.
    * @returns A promise for a new connected instance.
    */

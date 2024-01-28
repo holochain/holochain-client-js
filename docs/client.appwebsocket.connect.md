@@ -16,7 +16,7 @@ static connect(url?: URL, defaultTimeout?: number): Promise<AppWebsocket>;
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  url | URL | _(Optional)_ The <code>ws://</code> URL of the App API to connect to. |
+|  url | URL | _(Optional)_ The <code>ws://</code> URL of the App API to connect to. Not required when running from a Launcher or Kangaroo environment. |
 |  defaultTimeout | number | _(Optional)_ Timeout to default to for all operations. |
 
 **Returns:**

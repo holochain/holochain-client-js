@@ -16,7 +16,7 @@ static connect(url?: URL, defaultTimeout?: number): Promise<AdminWebsocket>;
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  url | URL | _(Optional)_ A <code>ws://</code> URL used as the connection address. |
+|  url | URL | _(Optional)_ The <code>ws://</code> URL of the Admin API to connect to. Not required when running from a Launcher or Kangaroo environment. |
 |  defaultTimeout | number | _(Optional)_ The default timeout for any request. |
 
 **Returns:**

@@ -89,7 +89,7 @@ export class AppAgentWebsocket implements AppAgentClient {
    * Instance factory for creating AppAgentWebsockets.
    *
    * @param installed_app_id - ID of the App to link to.
-   * @param url - The `ws://` URL of the App API to connect to.
+   * @param url - The `ws://` URL of the App API to connect to. Not required when running from a Launcher or Kangaroo environment.
    * @param defaultTimeout - Timeout to default to for all operations.
    * @returns A new instance of an AppAgentWebsocket.
    */
