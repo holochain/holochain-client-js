@@ -29,7 +29,7 @@ export const getLauncherEnvironment = (): LauncherEnvironment | undefined =>
   isLauncher() ? globalThis.window[__HC_LAUNCHER_ENV__] : undefined;
 
 export const getHostZomeCallSigner = (): HostZomeCallSigner | undefined =>
-  globalThis.window ? globalThis.window[__HC_ZOME_CALL_SIGNER__] : undefined;
+  globalThis.window && globalThis.window[__HC_ZOME_CALL_SIGNER__];
 
 declare global {
   interface Window {
