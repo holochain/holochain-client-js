@@ -9,6 +9,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Fixed
 ### Removed
 
+## 2024-02-02: v0.17.0-dev.5
+### Fixed
+- Work around cell_id being a proxy object in Vue.
+
 ## 2024-01-27: v0.17.0-dev.4
 ### Changed
 - Decouple host zome call signer from environment. Now a zome call signer can be provided separatedly from the environment that the client is used in.
