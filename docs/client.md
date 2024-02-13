@@ -103,6 +103,7 @@
 |  [StorageInfo](./client.storageinfo.md) |  |
 |  [Update](./client.update.md) |  |
 |  [UpdateBase](./client.updatebase.md) |  |
+|  [WebsocketConnectionOptions](./client.websocketconnectionoptions.md) | Options for a Websocket connection. |
 |  [ZomeCallCapGrant](./client.zomecallcapgrant.md) |  |
 |  [ZomeDependency](./client.zomedependency.md) |  |
 

@@ -9,7 +9,7 @@ Instance factory for creating AppAgentWebsockets.
 **Signature:**
 
 ```typescript
-static connect(installed_app_id: InstalledAppId, url?: URL, defaultTimeout?: number): Promise<AppAgentWebsocket>;
+static connect(installed_app_id: InstalledAppId, options?: WebsocketConnectionOptions): Promise<AppAgentWebsocket>;
 ```
 
 ## Parameters
@@ -17,8 +17,7 @@ static connect(installed_app_id: InstalledAppId, url?: URL, defaultTimeout?: num
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  installed\_app\_id | [InstalledAppId](./client.installedappid.md) | ID of the App to link to. |
-|  url | URL | _(Optional)_ The <code>ws://</code> URL of the App API to connect to. Not required when running from a Launcher or Kangaroo environment. |
-|  defaultTimeout | number | _(Optional)_ Timeout to default to for all operations. |
+|  options | [WebsocketConnectionOptions](./client.websocketconnectionoptions.md) | _(Optional)_ [WebsocketConnectionOptions](./client.websocketconnectionoptions.md) |
 
 **Returns:**
 

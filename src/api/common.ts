@@ -168,3 +168,20 @@ export class CloneId {
     return this.roleName;
   }
 }
+
+/**
+ * Options for a Websocket connection.
+ *
+ * @public
+ */
+export interface WebsocketConnectionOptions {
+  /**
+   * The `ws://` URL of the Websocket server to connect to. Not required when connecting to App API from a Launcher or Kangaroo environment.
+   */
+  url?: URL;
+
+  /**
+   * Timeout to default to for all operations.
+   */
+  defaultTimeout?: number;
+}

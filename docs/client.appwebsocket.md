@@ -34,5 +34,5 @@ export declare class AppWebsocket extends Emittery implements AppApi
 |  Method | Modifiers | Description |
 |  --- | --- | --- |
 |  [\_requester(tag, transformer)](./client.appwebsocket._requester.md) |  |  |
-|  [connect(url, defaultTimeout)](./client.appwebsocket.connect.md) | <code>static</code> | Instance factory for creating AppWebsockets. |
+|  [connect(options)](./client.appwebsocket.connect.md) | <code>static</code> | Instance factory for creating AppWebsockets. |
 

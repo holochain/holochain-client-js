@@ -8,6 +8,7 @@ export {
   HolochainError,
   Requester,
   Transformer,
+  WebsocketConnectionOptions,
   getBaseRoleNameFromCloneId,
   isCloneId,
 } from "./common.js";

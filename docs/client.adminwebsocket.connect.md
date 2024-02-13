@@ -9,15 +9,14 @@ Factory mehtod to create a new instance connected to the given URL.
 **Signature:**
 
 ```typescript
-static connect(url?: URL, defaultTimeout?: number): Promise<AdminWebsocket>;
+static connect(options?: WebsocketConnectionOptions): Promise<AdminWebsocket>;
 ```
 
 ## Parameters
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  url | URL | _(Optional)_ The <code>ws://</code> URL of the Admin API to connect to. Not required when running from a Launcher or Kangaroo environment. |
-|  defaultTimeout | number | _(Optional)_ The default timeout for any request. |
+|  options | [WebsocketConnectionOptions](./client.websocketconnectionoptions.md) | _(Optional)_ [WebsocketConnectionOptions](./client.websocketconnectionoptions.md) |
 
 **Returns:**
 
