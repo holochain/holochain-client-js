@@ -104,9 +104,9 @@ export const installAppAndDna = async (
 }> => {
   const role_name = "foo";
   const installed_app_id = "app";
-  const admin = await AdminWebsocket.connect(
-    new URL(`ws://127.0.0.1:${adminPort}`)
-  );
+  const admin = await AdminWebsocket.connect({
+    url: new URL(`ws://127.0.0.1:${adminPort}`),
+  });
   const path = `${FIXTURE_PATH}/test.happ`;
   const agent = await admin.generateAgentPubKey();
   const app = await admin.installApp({
@@ -120,9 +120,9 @@ export const installAppAndDna = async (
   await admin.enableApp({ installed_app_id });
   // destructure to get whatever open port was assigned to the interface
   const { port: appPort } = await admin.attachAppInterface({ port: 0 });
-  const client = await AppWebsocket.connect(
-    new URL(`ws://127.0.0.1:${appPort}`)
-  );
+  const client = await AppWebsocket.connect({
+    url: new URL(`ws://127.0.0.1:${appPort}`),
+  });
   return { installed_app_id, cell_id, client, admin };
 };
 
@@ -136,9 +136,9 @@ export const createAppAgentWsAndInstallApp = async (
 }> => {
   const role_name = "foo";
   const installed_app_id = "app";
-  const admin = await AdminWebsocket.connect(
-    new URL(`ws://127.0.0.1:${adminPort}`)
-  );
+  const admin = await AdminWebsocket.connect({
+    url: new URL(`ws://127.0.0.1:${adminPort}`),
+  });
   const path = `${FIXTURE_PATH}/test.happ`;
   const agent = await admin.generateAgentPubKey();
   const app = await admin.installApp({
@@ -151,11 +151,10 @@ export const createAppAgentWsAndInstallApp = async (
   const cell_id = app.cell_info[role_name][0][CellType.Provisioned].cell_id;
   await admin.enableApp({ installed_app_id });
   const { port: appPort } = await admin.attachAppInterface({ port: 0 });
-  const client = await AppAgentWebsocket.connect(
-    new URL(`ws://127.0.0.1:${appPort}`),
-    installed_app_id,
-    12000
-  );
+  const client = await AppAgentWebsocket.connect(installed_app_id, {
+    url: new URL(`ws://127.0.0.1:${appPort}`),
+    defaultTimeout: 12000,
+  });
   return { installed_app_id, cell_id, client, admin };
 };
 
