@@ -172,7 +172,7 @@ export class AppAgentWebsocket implements AppAgentClient {
       const zomeCallPayload: CallZomeRequest = {
         ...omit(request, "role_name"),
         provenance: this.myPubKey,
-        cell_id,
+        cell_id: [cell_id[0], cell_id[1]],
       };
       return this.appWebsocket.callZome(zomeCallPayload, timeout);
     } else if ("cell_id" in request && request.cell_id) {
