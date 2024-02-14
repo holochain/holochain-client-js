@@ -2,7 +2,7 @@
 
 [Home](./index.md) &gt; [@holochain/client](./client.md) &gt; [AppAgentWebsocket](./client.appagentwebsocket.md) &gt; [connect](./client.appagentwebsocket.connect.md)
 
-## AppAgentWebsocket.connect({url: ) method
+## AppAgentWebsocket.connect() method
 
 Instance factory for creating AppAgentWebsockets.
 

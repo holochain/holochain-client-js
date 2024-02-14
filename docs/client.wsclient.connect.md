@@ -2,7 +2,7 @@
 
 [Home](./index.md) &gt; [@holochain/client](./client.md) &gt; [WsClient](./client.wsclient.md) &gt; [connect](./client.wsclient.connect.md)
 
-## WsClient.connect({url: ) method
+## WsClient.connect() method
 
 Instance factory for creating WsClients.
 
