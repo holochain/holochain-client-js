@@ -7,6 +7,7 @@ import {
 import type { AgentPubKey, CellId } from "../../types.js";
 import { WsClient } from "../client.js";
 import {
+  WebsocketConnectionOptions,
   catchError,
   DEFAULT_TIMEOUT,
   promiseTimeout,
@@ -90,23 +91,27 @@ export class AdminWebsocket implements AdminApi {
   /**
    * Factory mehtod to create a new instance connected to the given URL.
    *
-   * @param url - A `ws://` URL used as the connection address.
-   * @param defaultTimeout - The default timeout for any request.
+   * @param options - {@link (WebsocketConnectionOptions:interface)}
    * @returns A promise for a new connected instance.
    */
   static async connect(
-    url: URL,
-    defaultTimeout?: number
+    options: WebsocketConnectionOptions = {}
   ): Promise<AdminWebsocket> {
     // Check if we are in the launcher's environment, and if so, redirect the url to connect to
     const env = getLauncherEnvironment();
 
     if (env?.ADMIN_INTERFACE_PORT) {
-      url = new URL(`ws://127.0.0.1:${env.ADMIN_INTERFACE_PORT}`);
+      options.url = new URL(`ws://127.0.0.1:${env.ADMIN_INTERFACE_PORT}`);
     }
 
-    const wsClient = await WsClient.connect(url);
-    return new AdminWebsocket(wsClient, defaultTimeout);
+    if (!options.url) {
+      throw new Error(
+        "Unable to connect to Admin Websocket: No url provided and not in a Launcher environment."
+      );
+    }
+
+    const wsClient = await WsClient.connect(options.url);
+    return new AdminWebsocket(wsClient, options.defaultTimeout);
   }
 
   _requester<ReqI, ReqO, ResI, ResO>(

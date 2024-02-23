@@ -13,6 +13,7 @@ import { InstalledAppId } from "../../types.js";
 import { encodeHashToBase64 } from "../../utils/base64.js";
 import { WsClient } from "../client.js";
 import {
+  WebsocketConnectionOptions,
   DEFAULT_TIMEOUT,
   Requester,
   Transformer,
@@ -79,23 +80,28 @@ export class AppWebsocket extends Emittery implements AppApi {
   /**
    * Instance factory for creating AppWebsockets.
    *
-   * @param url - The `ws://` URL of the App API to connect to.
-   * @param defaultTimeout - Timeout to default to for all operations.
+   * @param options - {@link (WebsocketConnectionOptions:interface)}
    * @returns A new instance of an AppWebsocket.
    */
-  static async connect(url: URL, defaultTimeout?: number) {
+  static async connect(options: WebsocketConnectionOptions = {}) {
     // Check if we are in the launcher's environment, and if so, redirect the url to connect to
     const env = getLauncherEnvironment();
 
     if (env?.APP_INTERFACE_PORT) {
-      url = new URL(`ws://127.0.0.1:${env.APP_INTERFACE_PORT}`);
+      options.url = new URL(`ws://127.0.0.1:${env.APP_INTERFACE_PORT}`);
     }
 
-    const wsClient = await WsClient.connect(url);
+    if (!options.url) {
+      throw new Error(
+        "Unable to connect to App Websocket: No url provided and not in a Launcher environment."
+      );
+    }
+
+    const wsClient = await WsClient.connect(options.url);
 
     const appWebsocket = new AppWebsocket(
       wsClient,
-      defaultTimeout,
+      options.defaultTimeout,
       env?.INSTALLED_APP_ID
     );
 

@@ -15,7 +15,11 @@ import {
   NetworkInfoResponse,
 } from "../app/types.js";
 import { AppWebsocket } from "../app/websocket.js";
-import { getBaseRoleNameFromCloneId, isCloneId } from "../common.js";
+import {
+  WebsocketConnectionOptions,
+  getBaseRoleNameFromCloneId,
+  isCloneId,
+} from "../common.js";
 import {
   AppAgentCallZomeRequest,
   AppAgentClient,
@@ -88,17 +92,15 @@ export class AppAgentWebsocket implements AppAgentClient {
   /**
    * Instance factory for creating AppAgentWebsockets.
    *
-   * @param url - The `ws://` URL of the App API to connect to.
    * @param installed_app_id - ID of the App to link to.
-   * @param defaultTimeout - Timeout to default to for all operations.
+   * @param options - {@link (WebsocketConnectionOptions:interface)}
    * @returns A new instance of an AppAgentWebsocket.
    */
   static async connect(
-    url: URL,
     installed_app_id: InstalledAppId,
-    defaultTimeout?: number
+    options: WebsocketConnectionOptions = {}
   ) {
-    const appWebsocket = await AppWebsocket.connect(url, defaultTimeout);
+    const appWebsocket = await AppWebsocket.connect(options);
     const appInfo = await appWebsocket.appInfo({
       installed_app_id: installed_app_id,
     });

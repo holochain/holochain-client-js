@@ -48,5 +48,5 @@ export declare class AdminWebsocket implements AdminApi
 |  Method | Modifiers | Description |
 |  --- | --- | --- |
 |  [\_requester(tag, transformer)](./client.adminwebsocket._requester.md) |  |  |
-|  [connect(url, defaultTimeout)](./client.adminwebsocket.connect.md) | <code>static</code> | Factory mehtod to create a new instance connected to the given URL. |
+|  [connect(options)](./client.adminwebsocket.connect.md) | <code>static</code> | Factory mehtod to create a new instance connected to the given URL. |
 

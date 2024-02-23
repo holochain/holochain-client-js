@@ -1,5 +1,5 @@
 import assert from "node:assert";
-import test, { Test } from "tape";
+import test from "tape";
 import {
   AdminWebsocket,
   AppAgentCallZomeRequest,
@@ -127,9 +127,9 @@ test(
   "cells only receive their own signals",
   withConductor(ADMIN_PORT, async (t) => {
     const role_name = "foo";
-    const admin = await AdminWebsocket.connect(
-      new URL(`ws://127.0.0.1:${ADMIN_PORT}`)
-    );
+    const admin = await AdminWebsocket.connect({
+      url: new URL(`ws://127.0.0.1:${ADMIN_PORT}`),
+    });
     const path = `${FIXTURE_PATH}/test.happ`;
     const { port: appPort } = await admin.attachAppInterface({ port: 0 });
 
@@ -168,8 +168,12 @@ test(
     await admin.authorizeSigningCredentials(cell_id1);
 
     const clientUrl = new URL(`ws://127.0.0.1:${appPort}`);
-    const appAgentWs1 = await AppAgentWebsocket.connect(clientUrl, app_id1);
-    const appAgentWs2 = await AppAgentWebsocket.connect(clientUrl, app_id2);
+    const appAgentWs1 = await AppAgentWebsocket.connect(app_id1, {
+      url: clientUrl,
+    });
+    const appAgentWs2 = await AppAgentWebsocket.connect(app_id2, {
+      url: clientUrl,
+    });
 
     appAgentWs1.on("signal", signalCb1);
     appAgentWs2.on("signal", signalCb2);

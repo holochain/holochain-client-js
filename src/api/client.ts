@@ -31,7 +31,7 @@ export class WsClient extends Emittery {
   private pendingRequests: Record<number, HolochainRequest>;
   private index: number;
 
-  constructor(socket: IsoWebSocket, url: URL) {
+  constructor(socket: IsoWebSocket, url?: URL) {
     super();
     this.socket = socket;
     this.url = url;

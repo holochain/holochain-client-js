@@ -58,7 +58,10 @@ test(
   "admin smoke test: registerDna + installApp + uninstallApp",
   withConductor(ADMIN_PORT, async (t) => {
     const installed_app_id = "app";
-    const admin = await AdminWebsocket.connect(ADMIN_WS_URL, 12000);
+    const admin = await AdminWebsocket.connect({
+      url: ADMIN_WS_URL,
+      defaultTimeout: 12000,
+    });
 
     const agent_key = await admin.generateAgentPubKey();
     t.ok(agent_key);
@@ -183,7 +186,10 @@ test(
   "admin smoke test: installBundle",
   withConductor(ADMIN_PORT, async (t) => {
     const installed_app_id = "app";
-    const admin = await AdminWebsocket.connect(ADMIN_WS_URL, 12000);
+    const admin = await AdminWebsocket.connect({
+      url: ADMIN_WS_URL,
+      defaultTimeout: 12000,
+    });
 
     const agent_key = await admin.generateAgentPubKey();
     t.ok(agent_key);
@@ -241,7 +247,10 @@ test(
   "admin register dna with full binary bundle + get dna def",
   withConductor(ADMIN_PORT, async (t) => {
     const installed_app_id = "app";
-    const admin = await AdminWebsocket.connect(ADMIN_WS_URL, 12000);
+    const admin = await AdminWebsocket.connect({
+      url: ADMIN_WS_URL,
+      defaultTimeout: 12000,
+    });
 
     const agent_key = await admin.generateAgentPubKey();
     t.ok(agent_key);
@@ -366,7 +375,7 @@ test(
     const { admin } = await installAppAndDna(ADMIN_PORT);
     const { port } = await admin.attachAppInterface({});
     t.assert(typeof port === "number", "returned a valid app port");
-    await AppWebsocket.connect(new URL(`ws://127.0.0.1:${port}`));
+    await AppWebsocket.connect({ url: new URL(`ws://127.0.0.1:${port}`) });
     t.pass("can connect an app websocket to attached port");
   })
 );
@@ -406,7 +415,7 @@ test(
 test(
   "generated signing key has same location bytes as original agent pub key",
   withConductor(ADMIN_PORT, async (t) => {
-    const admin = await AdminWebsocket.connect(ADMIN_WS_URL);
+    const admin = await AdminWebsocket.connect({ url: ADMIN_WS_URL });
     const agent = await admin.generateAgentPubKey();
     const [, signingKey] = await generateSigningKeyPair(agent);
     t.deepEqual(signingKey.subarray(35), Uint8Array.from(agent.subarray(35)));
@@ -418,7 +427,7 @@ test(
   withConductor(ADMIN_PORT, async (t) => {
     const role_name = "foo";
     const installed_app_id = "app";
-    const admin = await AdminWebsocket.connect(ADMIN_WS_URL);
+    const admin = await AdminWebsocket.connect({ url: ADMIN_WS_URL });
     const agent = await admin.generateAgentPubKey();
 
     const app = await admin.installApp({
@@ -448,9 +457,9 @@ test(
     });
     await admin.enableApp({ installed_app_id });
     const { port: appPort } = await admin.attachAppInterface({ port: 0 });
-    const client = await AppWebsocket.connect(
-      new URL(`ws://127.0.0.1:${appPort}`)
-    );
+    const client = await AppWebsocket.connect({
+      url: new URL(`ws://127.0.0.1:${appPort}`),
+    });
 
     assert(CellType.Provisioned in app.cell_info[role_name][0]);
     const cell_id = app.cell_info[role_name][0][CellType.Provisioned].cell_id;
@@ -475,7 +484,7 @@ test(
   withConductor(ADMIN_PORT, async (t) => {
     const role_name = "foo";
     const installed_app_id = "app";
-    const admin = await AdminWebsocket.connect(ADMIN_WS_URL);
+    const admin = await AdminWebsocket.connect({ url: ADMIN_WS_URL });
     const agent = await admin.generateAgentPubKey();
 
     const dnaPath = `${FIXTURE_PATH}/test.dna`;
@@ -509,9 +518,9 @@ test(
     });
     await admin.enableApp({ installed_app_id });
     const { port: appPort } = await admin.attachAppInterface({ port: 0 });
-    const client = await AppWebsocket.connect(
-      new URL(`ws://127.0.0.1:${appPort}`)
-    );
+    const client = await AppWebsocket.connect({
+      url: new URL(`ws://127.0.0.1:${appPort}`),
+    });
 
     assert(CellType.Provisioned in app.cell_info[role_name][0]);
     const cell_id = app.cell_info[role_name][0][CellType.Provisioned].cell_id;
@@ -601,7 +610,7 @@ test(
 // no conductor
 test("error is catchable when holochain socket is unavailable", async (t) => {
   try {
-    await AdminWebsocket.connect(ADMIN_WS_URL);
+    await AdminWebsocket.connect({ url: ADMIN_WS_URL });
   } catch (e) {
     t.equal(
       e.message,
@@ -610,7 +619,7 @@ test("error is catchable when holochain socket is unavailable", async (t) => {
   }
 
   try {
-    await AppWebsocket.connect(ADMIN_WS_URL);
+    await AppWebsocket.connect({ url: ADMIN_WS_URL });
   } catch (e) {
     t.equal(
       e.message,
@@ -644,10 +653,10 @@ test("can inject agents", async (t) => {
   const conductor1 = await launch(ADMIN_PORT);
   const conductor2 = await launch(ADMIN_PORT_1);
   const installed_app_id = "app";
-  const admin1 = await AdminWebsocket.connect(ADMIN_WS_URL);
-  const admin2 = await AdminWebsocket.connect(
-    new URL(`ws://127.0.0.1:${ADMIN_PORT_1}`)
-  );
+  const admin1 = await AdminWebsocket.connect({ url: ADMIN_WS_URL });
+  const admin2 = await AdminWebsocket.connect({
+    url: new URL(`ws://127.0.0.1:${ADMIN_PORT_1}`),
+  });
   const agent_key_1 = await admin1.generateAgentPubKey();
   t.ok(agent_key_1);
   const agent_key_2 = await admin2.generateAgentPubKey();
@@ -812,7 +821,7 @@ test.only(
 test(
   "admin smoke test: listAppInterfaces + attachAppInterface",
   withConductor(ADMIN_PORT, async (t) => {
-    const admin = await AdminWebsocket.connect(ADMIN_WS_URL);
+    const admin = await AdminWebsocket.connect({ url: ADMIN_WS_URL });
 
     let interfaces = await admin.listAppInterfaces();
     t.equal(interfaces.length, 0);
@@ -858,7 +867,7 @@ test(
 test(
   "admin smoke test: install 2 hApp bundles with different network seeds",
   withConductor(ADMIN_PORT, async (t) => {
-    const admin = await AdminWebsocket.connect(ADMIN_WS_URL);
+    const admin = await AdminWebsocket.connect({ url: ADMIN_WS_URL });
     const agent_key = await admin.generateAgentPubKey();
 
     const installedApp1 = await admin.installApp({
