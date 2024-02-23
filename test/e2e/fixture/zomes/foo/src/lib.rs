@@ -84,6 +84,7 @@ pub fn decode_as_dnahash(bytes: Vec<u8>) -> ExternResult<DnaHash> {
     DnaHash::from_raw_39(bytes).map_err(|e| wasm_error!(WasmErrorInner::Guest(format!("{}", e))))
 }
 
+#[hdk_extern]
 pub fn create_and_get_link(tag: Vec<u8>) -> ExternResult<Link> {
     let link_base = agent_info()?.agent_latest_pubkey;
     let link_target = link_base.clone();
