@@ -2,7 +2,7 @@
 
 [Home](./index.md) &gt; [@holochain/client](./client.md) &gt; [isCloneId](./client.iscloneid.md)
 
-## isCloneId variable
+## isCloneId() function
 
 Check if a cell's role name is a valid clone id.
 
@@ -11,3 +11,14 @@ Check if a cell's role name is a valid clone id.
 ```typescript
 isCloneId: (roleName: RoleName) => boolean
 ```
+
+## Parameters
+
+|  Parameter | Type | Description |
+|  --- | --- | --- |
+|  roleName | [RoleName](./client.rolename.md) | The role name to check. |
+
+**Returns:**
+
+boolean
+

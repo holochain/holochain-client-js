@@ -38,11 +38,21 @@
 |  [fakeAgentPubKey(coreByte)](./client.fakeagentpubkey.md) | Generate a valid agent key of a non-existing agent. |
 |  [fakeDnaHash(coreByte)](./client.fakednahash.md) | Generate a valid hash of a non-existing DNA. |
 |  [fakeEntryHash(coreByte)](./client.fakeentryhash.md) | <p>Generate a valid hash of a non-existing entry.</p><p>From https://github.com/holochain/holochain/blob/develop/crates/holo\_hash/src/hash\_type/primitive.rs</p> |
+|  [generateSigningKeyPair(agentPubKey)](./client.generatesigningkeypair.md) | Generates a key pair for signing zome calls. |
+|  [getBaseRoleNameFromCloneId(roleName)](./client.getbaserolenamefromcloneid.md) | Parse a clone id and get the role name part of it. |
 |  [getDhtOpAction(op)](./client.getdhtopaction.md) |  |
 |  [getDhtOpEntry(op)](./client.getdhtopentry.md) |  |
 |  [getDhtOpSignature(op)](./client.getdhtopsignature.md) |  |
 |  [getDhtOpType(op)](./client.getdhtoptype.md) |  |
+|  [getNonceExpiration()](./client.getnonceexpiration.md) |  |
+|  [getSigningCredentials(cellId)](./client.getsigningcredentials.md) | Get credentials for signing zome calls. |
 |  [hashFrom32AndType(hashCore, hashType)](./client.hashfrom32andtype.md) | <p>Generate full hash from a core hash (middle 32 bytes) and hash type label</p><p>From https://github.com/holochain/holochain/blob/develop/crates/holo\_hash/src/hash\_type/primitive.rs</p> |
+|  [isCloneId(roleName)](./client.iscloneid.md) | Check if a cell's role name is a valid clone id. |
+|  [randomByteArray(length)](./client.randombytearray.md) |  |
+|  [randomCapSecret()](./client.randomcapsecret.md) |  |
+|  [randomNonce()](./client.randomnonce.md) |  |
+|  [setSigningCredentials(cellId, credentials)](./client.setsigningcredentials.md) | Set credentials for signing zome calls. |
+|  [signZomeCall(request)](./client.signzomecall.md) |  |
 |  [sliceCore32(hash)](./client.slicecore32.md) | <p>Get core (center 32 bytes) from a hash</p><p>From https://github.com/holochain/holochain/blob/develop/crates/holo\_hash/src/hash\_type/primitive.rs</p> |
 |  [sliceDhtLocation(hash)](./client.slicedhtlocation.md) | <p>Get dht location (last 4 bytes) from a hash</p><p>From https://github.com/holochain/holochain/blob/develop/crates/holo\_hash/src/hash\_type/primitive.rs</p> |
 |  [sliceHashType(hash)](./client.slicehashtype.md) | <p>Get hash type (initial 3 bytes) from a hash</p><p>From https://github.com/holochain/holochain/blob/develop/crates/holo\_hash/src/hash\_type/primitive.rs</p> |
@@ -111,18 +121,8 @@
 
 |  Variable | Description |
 |  --- | --- |
-|  [generateSigningKeyPair](./client.generatesigningkeypair.md) | Generates a key pair for signing zome calls. |
-|  [getBaseRoleNameFromCloneId](./client.getbaserolenamefromcloneid.md) | Parse a clone id and get the role name part of it. |
-|  [getNonceExpiration](./client.getnonceexpiration.md) |  |
-|  [getSigningCredentials](./client.getsigningcredentials.md) | Get credentials for signing zome calls. |
 |  [HASH\_TYPE\_PREFIX](./client.hash_type_prefix.md) | <p>Hash type labels and their 3 byte values (forming the first 3 bytes of hash)</p><p>From https://github.com/holochain/holochain/blob/develop/crates/holo\_hash/src/hash\_type/primitive.rs</p> |
-|  [isCloneId](./client.iscloneid.md) | Check if a cell's role name is a valid clone id. |
-|  [randomByteArray](./client.randombytearray.md) |  |
-|  [randomCapSecret](./client.randomcapsecret.md) |  |
-|  [randomNonce](./client.randomnonce.md) |  |
-|  [setSigningCredentials](./client.setsigningcredentials.md) | Set credentials for signing zome calls. |
 |  [SignalType](./client.signaltype.md) |  |
-|  [signZomeCall](./client.signzomecall.md) |  |
 
 ## Type Aliases
 

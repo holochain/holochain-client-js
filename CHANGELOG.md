@@ -9,6 +9,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Fixed
 ### Removed
 
+## 2024-02-27: v0.17.0-dev.7
+### Fixed
+- Type: `AppInfoResponse` can be `null` if the requested app is not found.
+
 ## 2024-02-23: v0.17.0-dev.6
 ### Changed
 - **BREAKING**: `Websocket.connect()` functions' mandatory `url` parameter is replaced by an optional options object, which contains optional properties `url` and `defaultTimeout`. Calling `connect` if the url is not defined by parameter, nor by launcher environment will throw an error. Order of parameters in the `AppAgentWebsocket.connect` function is changed, so the required parameter goes first.

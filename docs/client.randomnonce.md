@@ -2,7 +2,7 @@
 
 [Home](./index.md) &gt; [@holochain/client](./client.md) &gt; [randomNonce](./client.randomnonce.md)
 
-## randomNonce variable
+## randomNonce() function
 
 
 **Signature:**
@@ -10,3 +10,7 @@
 ```typescript
 randomNonce: () => Promise<Nonce256Bit>
 ```
+**Returns:**
+
+Promise&lt;[Nonce256Bit](./client.nonce256bit.md)<!-- -->&gt;
+

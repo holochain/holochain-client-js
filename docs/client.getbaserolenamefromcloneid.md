@@ -2,7 +2,7 @@
 
 [Home](./index.md) &gt; [@holochain/client](./client.md) &gt; [getBaseRoleNameFromCloneId](./client.getbaserolenamefromcloneid.md)
 
-## getBaseRoleNameFromCloneId variable
+## getBaseRoleNameFromCloneId() function
 
 Parse a clone id and get the role name part of it.
 
@@ -11,3 +11,14 @@ Parse a clone id and get the role name part of it.
 ```typescript
 getBaseRoleNameFromCloneId: (roleName: RoleName) => string
 ```
+
+## Parameters
+
+|  Parameter | Type | Description |
+|  --- | --- | --- |
+|  roleName | [RoleName](./client.rolename.md) | The role name to parse. |
+
+**Returns:**
+
+string
+
