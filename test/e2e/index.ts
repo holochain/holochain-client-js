@@ -1,7 +1,6 @@
 import { decode } from "@msgpack/msgpack";
 import assert from "node:assert/strict";
 import fs from "node:fs";
-// import test from "node:test";
 import test from "tape";
 import zlib from "zlib";
 import {
