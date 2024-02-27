@@ -9,6 +9,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Fixed
 ### Removed
 
+## 2024-02-27: v0.16.10
+### Fixed
+- Type: `AppInfoResponse` can be `null` if the requested app is not found.
+
 ## 2024-02-02: v0.16.9
 ### Fixed
 - Work around cell_id being a proxy object in Vue

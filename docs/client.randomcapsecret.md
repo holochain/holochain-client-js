@@ -2,7 +2,7 @@
 
 [Home](./index.md) &gt; [@holochain/client](./client.md) &gt; [randomCapSecret](./client.randomcapsecret.md)
 
-## randomCapSecret variable
+## randomCapSecret() function
 
 
 **Signature:**
@@ -10,3 +10,7 @@
 ```typescript
 randomCapSecret: () => Promise<CapSecret>
 ```
+**Returns:**
+
+Promise&lt;[CapSecret](./client.capsecret.md)<!-- -->&gt;
+

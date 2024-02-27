@@ -2,7 +2,7 @@
 
 [Home](./index.md) &gt; [@holochain/client](./client.md) &gt; [setSigningCredentials](./client.setsigningcredentials.md)
 
-## setSigningCredentials variable
+## setSigningCredentials() function
 
 Set credentials for signing zome calls.
 
@@ -11,3 +11,15 @@ Set credentials for signing zome calls.
 ```typescript
 setSigningCredentials: (cellId: CellId, credentials: SigningCredentials) => void
 ```
+
+## Parameters
+
+|  Parameter | Type | Description |
+|  --- | --- | --- |
+|  cellId | [CellId](./client.cellid.md) | Cell id to set credentials for. |
+|  credentials | [SigningCredentials](./client.signingcredentials.md) |  |
+
+**Returns:**
+
+void
+

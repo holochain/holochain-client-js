@@ -2,7 +2,7 @@
 
 [Home](./index.md) &gt; [@holochain/client](./client.md) &gt; [getSigningCredentials](./client.getsigningcredentials.md)
 
-## getSigningCredentials variable
+## getSigningCredentials() function
 
 Get credentials for signing zome calls.
 
@@ -11,3 +11,16 @@ Get credentials for signing zome calls.
 ```typescript
 getSigningCredentials: (cellId: CellId) => SigningCredentials | undefined
 ```
+
+## Parameters
+
+|  Parameter | Type | Description |
+|  --- | --- | --- |
+|  cellId | [CellId](./client.cellid.md) | Cell id to get credentials of. |
+
+**Returns:**
+
+[SigningCredentials](./client.signingcredentials.md) \| undefined
+
+The keys and cap secret required for signing a zome call.
+

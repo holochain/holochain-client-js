@@ -2,7 +2,7 @@
 
 [Home](./index.md) &gt; [@holochain/client](./client.md) &gt; [generateSigningKeyPair](./client.generatesigningkeypair.md)
 
-## generateSigningKeyPair variable
+## generateSigningKeyPair() function
 
 Generates a key pair for signing zome calls.
 
@@ -11,3 +11,16 @@ Generates a key pair for signing zome calls.
 ```typescript
 generateSigningKeyPair: (agentPubKey?: AgentPubKey) => Promise<[KeyPair, AgentPubKey]>
 ```
+
+## Parameters
+
+|  Parameter | Type | Description |
+|  --- | --- | --- |
+|  agentPubKey | [AgentPubKey](./client.agentpubkey.md) | _(Optional)_ The agent pub key to take 4 last bytes (= DHT location) from (optional). |
+
+**Returns:**
+
+Promise&lt;\[KeyPair, [AgentPubKey](./client.agentpubkey.md)<!-- -->\]&gt;
+
+The signing key pair and an agent pub key based on the public key.
+
