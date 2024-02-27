@@ -15,7 +15,11 @@ import {
   NetworkInfoResponse,
 } from "../app/types.js";
 import { AppWebsocket } from "../app/websocket.js";
-import { getBaseRoleNameFromCloneId, isCloneId } from "../common.js";
+import {
+  HolochainError,
+  getBaseRoleNameFromCloneId,
+  isCloneId,
+} from "../common.js";
 import {
   AppAgentCallZomeRequest,
   AppAgentClient,
@@ -35,7 +39,7 @@ import {
 export class AppAgentWebsocket implements AppAgentClient {
   readonly appWebsocket: AppWebsocket;
   installedAppId: InstalledAppId;
-  cachedAppInfo?: AppInfo;
+  cachedAppInfo?: AppInfo | null;
   myPubKey: AgentPubKey;
   readonly emitter: Emittery<AppAgentEvents>;
 
@@ -45,6 +49,7 @@ export class AppAgentWebsocket implements AppAgentClient {
     myPubKey: AgentPubKey
   ) {
     this.appWebsocket = appWebsocket;
+    this.cachedAppInfo = null;
     this.emitter = new Emittery<AppAgentEvents>();
 
     // Ensure all super methods are bound to this instance because Emittery relies on `this` being the instance.
@@ -80,6 +85,12 @@ export class AppAgentWebsocket implements AppAgentClient {
     const appInfo = await this.appWebsocket.appInfo({
       installed_app_id: this.installedAppId,
     });
+    if (!appInfo) {
+      throw new HolochainError(
+        "AppNotFound",
+        `App info not found for the provided id "${this.installedAppId}". App needs to be installed and enabled.`
+      );
+    }
 
     this.cachedAppInfo = appInfo;
     return appInfo;
@@ -99,9 +110,13 @@ export class AppAgentWebsocket implements AppAgentClient {
     defaultTimeout?: number
   ) {
     const appWebsocket = await AppWebsocket.connect(url, defaultTimeout);
-    const appInfo = await appWebsocket.appInfo({
-      installed_app_id: installed_app_id,
-    });
+    const appInfo = await appWebsocket.appInfo({ installed_app_id });
+    if (!appInfo) {
+      throw new HolochainError(
+        "AppNotFound",
+        `App info not found for the provided id "${installed_app_id}". App needs to be installed and enabled.`
+      );
+    }
 
     const appAgentWs = new AppAgentWebsocket(
       appWebsocket,

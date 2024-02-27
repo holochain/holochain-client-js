@@ -7,5 +7,5 @@
 **Signature:**
 
 ```typescript
-cachedAppInfo?: AppInfo;
+cachedAppInfo?: AppInfo | null;
 ```

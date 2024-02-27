@@ -8,7 +8,7 @@
 **Signature:**
 
 ```typescript
-export type AppInfoResponse = AppInfo;
+export type AppInfoResponse = AppInfo | null;
 ```
 **References:** [AppInfo](./client.appinfo.md)
 

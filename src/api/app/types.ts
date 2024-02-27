@@ -49,7 +49,7 @@ export type AppInfoRequest = { installed_app_id: InstalledAppId };
 /**
  * @public
  */
-export type AppInfoResponse = AppInfo;
+export type AppInfoResponse = AppInfo | null;
 
 /**
  * @public
