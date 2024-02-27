@@ -1,6 +1,7 @@
 import { decode } from "@msgpack/msgpack";
 import assert from "node:assert/strict";
 import fs from "node:fs";
+// import test from "node:test";
 import test from "tape";
 import zlib from "zlib";
 import {
@@ -328,6 +329,7 @@ test(
       ADMIN_PORT
     );
     let info = await client.appInfo({ installed_app_id }, 1000);
+    assert(info);
     assert(CellType.Provisioned in info.cell_info[ROLE_NAME][0]);
     t.deepEqual(
       info.cell_info[ROLE_NAME][0][CellType.Provisioned].cell_id,
@@ -356,6 +358,7 @@ test(
 
     await admin.disableApp({ installed_app_id });
     info = await client.appInfo({ installed_app_id }, 1000);
+    assert(info);
     t.deepEqual(info.status, { disabled: { reason: { user: null } } });
   })
 );
@@ -378,6 +381,7 @@ test(
       ADMIN_PORT
     );
     const info = await client.appInfo({ installed_app_id }, 1000);
+    assert(info);
     assert(CellType.Provisioned in info.cell_info[ROLE_NAME][0]);
 
     const zomeCallPayload: CallZomeRequest = {
@@ -538,6 +542,7 @@ test(
       ADMIN_PORT
     );
     const info = await client.appInfo({ installed_app_id });
+    assert(info);
     assert(CellType.Provisioned in info.cell_info[ROLE_NAME][0]);
     t.deepEqual(
       info.cell_info[ROLE_NAME][0][CellType.Provisioned].cell_id,
@@ -831,6 +836,7 @@ test(
       ADMIN_PORT
     );
     let info = await client.appInfo({ installed_app_id }, 1000);
+    assert(info);
     assert(CellType.Provisioned in info.cell_info[ROLE_NAME][0]);
     t.deepEqual(
       info.cell_info[ROLE_NAME][0][CellType.Provisioned].cell_id,
@@ -851,6 +857,7 @@ test(
 
     await admin.disableApp({ installed_app_id });
     info = await client.appInfo({ installed_app_id }, 1000);
+    assert(info);
     t.deepEqual(info.status, { disabled: { reason: { user: null } } });
   })
 );
@@ -892,6 +899,7 @@ test(
       ADMIN_PORT
     );
     const appInfo = await client.appInfo({ installed_app_id });
+    assert(appInfo);
 
     const createCloneCellParams: CreateCloneCellRequest = {
       app_id: installed_app_id,
@@ -950,6 +958,7 @@ test(
     });
 
     const appInfo = await client.appInfo({ installed_app_id });
+    assert(appInfo);
     t.equal(
       appInfo.cell_info[ROLE_NAME].length,
       2,
@@ -996,6 +1005,7 @@ test(
     });
 
     const appInfo = await client.appInfo({ installed_app_id });
+    assert(appInfo);
     t.equal(
       appInfo.cell_info[ROLE_NAME].length,
       2,

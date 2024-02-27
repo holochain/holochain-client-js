@@ -1,5 +1,5 @@
 import assert from "node:assert";
-import test, { Test } from "tape";
+import test from "tape";
 import {
   AdminWebsocket,
   AppAgentCallZomeRequest,
