@@ -18,7 +18,7 @@ export declare class AppAgentWebsocket implements AppAgentClient
 |  Property | Modifiers | Type | Description |
 |  --- | --- | --- | --- |
 |  [appWebsocket](./client.appagentwebsocket.appwebsocket.md) | <code>readonly</code> | [AppWebsocket](./client.appwebsocket.md) |  |
-|  [cachedAppInfo?](./client.appagentwebsocket.cachedappinfo.md) |  | [AppInfo](./client.appinfo.md) | _(Optional)_ |
+|  [cachedAppInfo?](./client.appagentwebsocket.cachedappinfo.md) |  | [AppInfo](./client.appinfo.md) \| null | _(Optional)_ |
 |  [emitter](./client.appagentwebsocket.emitter.md) | <code>readonly</code> | Emittery&lt;[AppAgentEvents](./client.appagentevents.md)<!-- -->&gt; |  |
 |  [installedAppId](./client.appagentwebsocket.installedappid.md) |  | [InstalledAppId](./client.installedappid.md) |  |
 |  [myPubKey](./client.appagentwebsocket.mypubkey.md) |  | [AgentPubKey](./client.agentpubkey.md) |  |
