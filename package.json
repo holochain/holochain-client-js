@@ -31,6 +31,7 @@
     "lib"
   ],
   "scripts": {
+    "prepublishOnly": "npm run build",
     "lint": "eslint --fix --ext .ts src test .eslintrc.cjs",
     "test:app-agent": "RUST_LOG=error RUST_BACKTRACE=1 node --loader ts-node/esm test/e2e/app-agent-websocket.ts",
     "test:utils": "RUST_LOG=error RUST_BACKTRACE=1 node --loader ts-node/esm test/e2e/utils.ts",
