@@ -1,5 +1,4 @@
 import { RoleName } from "../types.js";
-import { IsoWebSocket } from "./client.js";
 
 const ERROR_TYPE = "error";
 export const DEFAULT_TIMEOUT = 60000;
