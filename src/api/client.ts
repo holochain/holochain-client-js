@@ -2,6 +2,7 @@ import { decode, encode } from "@msgpack/msgpack";
 import Emittery from "emittery";
 import IsoWebSocket from "isomorphic-ws";
 import { AppSignal, Signal, SignalType } from "./app/types.js";
+import { WsClientOptions } from "./common.js";
 
 interface HolochainMessage {
   id: number;
@@ -117,7 +118,7 @@ export class WsClient extends Emittery {
    * @param url - The WebSocket URL to connect to.
    * @returns An new instance of the WsClient.
    */
-  static connect(url: URL, options?: IsoWebSocket.ClientOptions) {
+  static connect(url: URL, options?: WsClientOptions) {
     return new Promise<WsClient>((resolve, reject) => {
       const socket = new IsoWebSocket(url, options);
       socket.onerror = () => {

@@ -183,10 +183,14 @@ export interface WebsocketConnectionOptions {
   /**
    * Options to pass to the underlying websocket connection.
    */
-  options?: { origin: string | undefined };
+  options?: WsClientOptions;
 
   /**
    * Timeout to default to for all operations.
    */
   defaultTimeout?: number;
+}
+
+export interface WsClientOptions {
+  origin: string | undefined;
 }

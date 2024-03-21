@@ -9,7 +9,5 @@ Options to pass to the underlying websocket connection.
 **Signature:**
 
 ```typescript
-options?: {
-        origin: string | undefined;
-    };
+options?: WsClientOptions;
 ```
