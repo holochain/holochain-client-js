@@ -184,7 +184,7 @@ export interface WebsocketConnectionOptions {
   /**
    * Options to pass to the underlying websocket connection.
    */
-  options?: IsoWebSocket.ClientOptions;
+  options?: { origin: string | undefined };
 
   /**
    * Timeout to default to for all operations.
