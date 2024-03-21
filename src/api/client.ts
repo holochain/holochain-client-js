@@ -117,9 +117,9 @@ export class WsClient extends Emittery {
    * @param url - The WebSocket URL to connect to.
    * @returns An new instance of the WsClient.
    */
-  static connect(url: URL) {
+  static connect(url: URL, options?: IsoWebSocket.ClientOptions) {
     return new Promise<WsClient>((resolve, reject) => {
-      const socket = new IsoWebSocket(url);
+      const socket = new IsoWebSocket(url, options);
       socket.onerror = () => {
         reject(
           new Error(

@@ -1,4 +1,5 @@
 import { RoleName } from "../types.js";
+import { IsoWebSocket } from "./client.js";
 
 const ERROR_TYPE = "error";
 export const DEFAULT_TIMEOUT = 60000;
@@ -179,6 +180,11 @@ export interface WebsocketConnectionOptions {
    * The `ws://` URL of the Websocket server to connect to. Not required when connecting to App API from a Launcher or Kangaroo environment.
    */
   url?: URL;
+
+  /**
+   * Options to pass to the underlying websocket connection.
+   */
+  options?: IsoWebSocket.ClientOptions;
 
   /**
    * Timeout to default to for all operations.
