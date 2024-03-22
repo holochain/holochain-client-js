@@ -131,7 +131,10 @@ test(
       url: new URL(`ws://127.0.0.1:${ADMIN_PORT}`),
     });
     const path = `${FIXTURE_PATH}/test.happ`;
-    const { port: appPort } = await admin.attachAppInterface({ port: 0 });
+    const { port: appPort } = await admin.attachAppInterface({
+      port: 0,
+      allowed_origins: "*",
+    });
 
     const app_id1 = "app1";
     const agent1 = await admin.generateAgentPubKey();

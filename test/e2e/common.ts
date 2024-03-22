@@ -119,7 +119,10 @@ export const installAppAndDna = async (
   const cell_id = app.cell_info[role_name][0][CellType.Provisioned].cell_id;
   await admin.enableApp({ installed_app_id });
   // destructure to get whatever open port was assigned to the interface
-  const { port: appPort } = await admin.attachAppInterface({ port: 0 });
+  const { port: appPort } = await admin.attachAppInterface({
+    port: 0,
+    allowed_origins: "*",
+  });
   const client = await AppWebsocket.connect({
     url: new URL(`ws://127.0.0.1:${appPort}`),
   });
@@ -150,7 +153,10 @@ export const createAppAgentWsAndInstallApp = async (
   assert(CellType.Provisioned in app.cell_info[role_name][0]);
   const cell_id = app.cell_info[role_name][0][CellType.Provisioned].cell_id;
   await admin.enableApp({ installed_app_id });
-  const { port: appPort } = await admin.attachAppInterface({ port: 0 });
+  const { port: appPort } = await admin.attachAppInterface({
+    port: 0,
+    allowed_origins: "*",
+  });
   const client = await AppAgentWebsocket.connect(installed_app_id, {
     url: new URL(`ws://127.0.0.1:${appPort}`),
     defaultTimeout: 12000,

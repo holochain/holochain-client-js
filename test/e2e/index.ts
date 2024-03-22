@@ -136,7 +136,10 @@ test(
     t.equal(runningAppsInfo2[0].cell_info[ROLE_NAME].length, 1);
     t.deepEqual(runningAppsInfo2[0].status, { running: null });
 
-    await admin.attachAppInterface({ port: 0 });
+    await admin.attachAppInterface({
+      port: 0,
+      allowed_origins: "*",
+    });
     await admin.disableApp({ installed_app_id });
 
     const runningAppsInfo3 = await admin.listApps({
@@ -230,7 +233,7 @@ test(
       installedApp.cell_info[ROLE_NAME][0][CellType.Provisioned].cell_id
     );
 
-    await admin.attachAppInterface({ port: 0 });
+    await admin.attachAppInterface({ port: 0, allowed_origins: "*" });
     await admin.disableApp({ installed_app_id });
 
     const dnas = await admin.listDnas();
@@ -317,7 +320,7 @@ test(
     t.equal(runningApps2.length, 1);
     t.equal(runningApps2[0].installed_app_id, installed_app_id);
 
-    await admin.attachAppInterface({ port: 0 });
+    await admin.attachAppInterface({ port: 0, allowed_origins: "*" });
     await admin.disableApp({ installed_app_id });
 
     const dnas = await admin.listDnas();
@@ -375,10 +378,31 @@ test(
   "can call attachAppInterface without specific port",
   withConductor(ADMIN_PORT, async (t) => {
     const { admin } = await installAppAndDna(ADMIN_PORT);
-    const { port } = await admin.attachAppInterface({});
+    const { port } = await admin.attachAppInterface({ allowed_origins: "*" });
     t.assert(typeof port === "number", "returned a valid app port");
     await AppWebsocket.connect({ url: new URL(`ws://127.0.0.1:${port}`) });
     t.pass("can connect an app websocket to attached port");
+  })
+);
+
+test(
+  "request from disallowed origin is rejected",
+  withConductor(ADMIN_PORT, async (t) => {
+    const { admin } = await installAppAndDna(ADMIN_PORT);
+    const { port } = await admin.attachAppInterface({
+      allowed_origins: "http://localhost:0",
+    });
+    t.notEquals(port, 0, "port 0 must not be assigned");
+    const appWs = await AppWebsocket.connect({
+      url: new URL(`ws://127.0.0.1:${port}`),
+    });
+    try {
+      await appWs.appInfo({ installed_app_id: "" });
+      t.fail();
+    } catch (error) {
+      t.assert(error instanceof HolochainError, "expected a HolochainError");
+      t.pass();
+    }
   })
 );
 
@@ -459,7 +483,10 @@ test(
       membrane_proofs: {},
     });
     await admin.enableApp({ installed_app_id });
-    const { port: appPort } = await admin.attachAppInterface({ port: 0 });
+    const { port: appPort } = await admin.attachAppInterface({
+      port: 0,
+      allowed_origins: "*",
+    });
     const client = await AppWebsocket.connect({
       url: new URL(`ws://127.0.0.1:${appPort}`),
     });
@@ -520,7 +547,10 @@ test(
       membrane_proofs: {},
     });
     await admin.enableApp({ installed_app_id });
-    const { port: appPort } = await admin.attachAppInterface({ port: 0 });
+    const { port: appPort } = await admin.attachAppInterface({
+      port: 0,
+      allowed_origins: "*",
+    });
     const client = await AppWebsocket.connect({
       url: new URL(`ws://127.0.0.1:${appPort}`),
     });
@@ -830,7 +860,10 @@ test(
     let interfaces = await admin.listAppInterfaces();
     t.equal(interfaces.length, 0);
 
-    await admin.attachAppInterface({ port: 21212 });
+    await admin.attachAppInterface({
+      port: 21212,
+      allowed_origins: "http://localhost:21212",
+    });
 
     interfaces = await admin.listAppInterfaces();
     t.equal(interfaces.length, 1);
