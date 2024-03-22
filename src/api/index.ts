@@ -9,6 +9,7 @@ export {
   Requester,
   Transformer,
   WebsocketConnectionOptions,
+  WsClientOptions,
   getBaseRoleNameFromCloneId,
   isCloneId,
 } from "./common.js";

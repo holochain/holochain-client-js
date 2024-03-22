@@ -10,5 +10,6 @@
 ```typescript
 export type AttachAppInterfaceRequest = {
     port?: number;
+    allowed_origins: string;
 };
 ```
