@@ -17,7 +17,7 @@ static connect(url: URL, options?: WsClientOptions): Promise<WsClient>;
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  url | URL | The WebSocket URL to connect to. |
-|  options | WsClientOptions | _(Optional)_ |
+|  options | [WsClientOptions](./client.wsclientoptions.md) | _(Optional)_ |
 
 **Returns:**
 

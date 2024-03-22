@@ -18,5 +18,5 @@ export interface WebsocketConnectionOptions
 |  --- | --- | --- | --- |
 |  [defaultTimeout?](./client.websocketconnectionoptions.defaulttimeout.md) |  | number | _(Optional)_ Timeout to default to for all operations. |
 |  [url?](./client.websocketconnectionoptions.url.md) |  | URL | _(Optional)_ The <code>ws://</code> URL of the Websocket server to connect to. Not required when connecting to App API from a Launcher or Kangaroo environment. |
-|  [wsClientOptions?](./client.websocketconnectionoptions.wsclientoptions.md) |  | WsClientOptions | _(Optional)_ Options to pass to the underlying websocket connection. |
+|  [wsClientOptions?](./client.websocketconnectionoptions.wsclientoptions.md) |  | [WsClientOptions](./client.wsclientoptions.md) | _(Optional)_ Options to pass to the underlying websocket connection. |
 

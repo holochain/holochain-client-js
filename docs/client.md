@@ -276,6 +276,7 @@
 |  [WasmCode](./client.wasmcode.md) |  |
 |  [WasmHash](./client.wasmhash.md) |  |
 |  [WasmHashB64](./client.wasmhashb64.md) |  |
+|  [WsClientOptions](./client.wsclientoptions.md) |  |
 |  [ZomeDefinition](./client.zomedefinition.md) |  |
 |  [ZomeIndex](./client.zomeindex.md) | An internal zome index within the DNA, from 0 to 255. |
 |  [ZomeLocation](./client.zomelocation.md) |  |
