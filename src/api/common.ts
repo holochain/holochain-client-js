@@ -183,7 +183,7 @@ export interface WebsocketConnectionOptions {
   /**
    * Options to pass to the underlying websocket connection.
    */
-  options?: WsClientOptions;
+  wsClientOptions?: WsClientOptions;
 
   /**
    * Timeout to default to for all operations.
