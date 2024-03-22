@@ -110,7 +110,10 @@ export class AdminWebsocket implements AdminApi {
       );
     }
 
-    const wsClient = await WsClient.connect(options.url, options.options);
+    const wsClient = await WsClient.connect(
+      options.url,
+      options.wsClientOptions
+    );
     return new AdminWebsocket(wsClient, options.defaultTimeout);
   }
 

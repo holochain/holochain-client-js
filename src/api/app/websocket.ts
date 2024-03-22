@@ -97,7 +97,10 @@ export class AppWebsocket extends Emittery implements AppApi {
       );
     }
 
-    const wsClient = await WsClient.connect(options.url, options.options);
+    const wsClient = await WsClient.connect(
+      options.url,
+      options.wsClientOptions
+    );
 
     const appWebsocket = new AppWebsocket(
       wsClient,
