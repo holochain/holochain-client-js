@@ -2,7 +2,7 @@ import { decode, encode } from "@msgpack/msgpack";
 import Emittery from "emittery";
 import IsoWebSocket from "isomorphic-ws";
 import { AppSignal, Signal, SignalType } from "./app/types.js";
-import { WsClientOptions } from "./common.js";
+import { HolochainError, WsClientOptions } from "./common.js";
 
 interface HolochainMessage {
   id: number;
@@ -121,10 +121,11 @@ export class WsClient extends Emittery {
   static connect(url: URL, options?: WsClientOptions) {
     return new Promise<WsClient>((resolve, reject) => {
       const socket = new IsoWebSocket(url, options);
-      socket.onerror = () => {
+      socket.onerror = (errorEvent) => {
         reject(
-          new Error(
-            `could not connect to holochain conductor, please check that a conductor service is running and available at ${url}`
+          new HolochainError(
+            errorEvent.message,
+            `Could not connect to Holochain Conductor API at ${url} - ${errorEvent.error}`
           )
         );
       };

@@ -97,6 +97,7 @@ export class AppWebsocket extends Emittery implements AppApi {
       );
     }
 
+    console.log("passed in origin", options.wsClientOptions?.origin);
     const wsClient = await WsClient.connect(
       options.url,
       options.wsClientOptions
