@@ -122,8 +122,9 @@ export const isCloneId = (roleName: RoleName) =>
  */
 export const getBaseRoleNameFromCloneId = (roleName: RoleName) => {
   if (!isCloneId(roleName)) {
-    throw new Error(
-      "invalid clone id: no clone id delimiter found in role name"
+    throw new HolochainError(
+      "MissingCloneIdDelimiter",
+      `invalid clone id - no clone id delimiter found in role name ${roleName}`
     );
   }
   return roleName.split(CLONE_ID_DELIMITER)[0];
@@ -154,8 +155,9 @@ export class CloneId {
   static fromRoleName(roleName: RoleName) {
     const parts = roleName.split(CLONE_ID_DELIMITER);
     if (parts.length !== 2) {
-      throw new Error(
-        "Malformed clone id: must consist of {role id.clone index}"
+      throw new HolochainError(
+        "MalformedCloneId",
+        `clone id must consist of 'role_id.clone_index', but got ${roleName}`
       );
     }
     return new CloneId(parts[0], parseInt(parts[1]));

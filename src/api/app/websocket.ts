@@ -20,6 +20,7 @@ import {
   catchError,
   promiseTimeout,
   requesterTransformer,
+  HolochainError,
 } from "../common.js";
 import {
   Nonce256Bit,
@@ -92,12 +93,12 @@ export class AppWebsocket extends Emittery implements AppApi {
     }
 
     if (!options.url) {
-      throw new Error(
-        "Unable to connect to App Websocket: No url provided and not in a Launcher environment."
+      throw new HolochainError(
+        "ConnectionUrlMissing",
+        `unable to connect to Conductor API - no url provided and not in a launcher environment.`
       );
     }
 
-    console.log("passed in origin", options.wsClientOptions?.origin);
     const wsClient = await WsClient.connect(
       options.url,
       options.wsClientOptions
@@ -258,8 +259,9 @@ const appInfoTransform = (
 export const signZomeCall = async (request: CallZomeRequest) => {
   const signingCredentialsForCell = getSigningCredentials(request.cell_id);
   if (!signingCredentialsForCell) {
-    throw new Error(
-      `cannot sign zome call: no signing credentials have been authorized for cell [${encodeHashToBase64(
+    throw new HolochainError(
+      "NoSigningCredentialsForCell",
+      `no signing credentials have been authorized for cell [${encodeHashToBase64(
         request.cell_id[0]
       )}, ${encodeHashToBase64(request.cell_id[1])}]`
     );

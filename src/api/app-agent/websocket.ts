@@ -138,25 +138,37 @@ export class AppAgentWebsocket implements AppAgentClient {
     if (isCloneId(roleName)) {
       const baseRoleName = getBaseRoleNameFromCloneId(roleName);
       if (!(baseRoleName in appInfo.cell_info)) {
-        throw new Error(`No cell found with role_name ${roleName}`);
+        throw new HolochainError(
+          "NoCellForRoleName",
+          `no cell found with role_name ${roleName}`
+        );
       }
       const cloneCell = appInfo.cell_info[baseRoleName].find(
         (c) => CellType.Cloned in c && c[CellType.Cloned].clone_id === roleName
       );
       if (!cloneCell || !(CellType.Cloned in cloneCell)) {
-        throw new Error(`No clone cell found with clone id ${roleName}`);
+        throw new HolochainError(
+          "NoCellForCloneId",
+          `no clone cell found with clone id ${roleName}`
+        );
       }
       return cloneCell[CellType.Cloned].cell_id;
     }
 
     if (!(roleName in appInfo.cell_info)) {
-      throw new Error(`No cell found with role_name ${roleName}`);
+      throw new HolochainError(
+        "NoCellForRoleName",
+        `no cell found with role_name ${roleName}`
+      );
     }
     const cell = appInfo.cell_info[roleName].find(
       (c) => CellType.Provisioned in c
     );
     if (!cell || !(CellType.Provisioned in cell)) {
-      throw new Error(`No provisioned cell found with role_name ${roleName}`);
+      throw new HolochainError(
+        "NoProvisionedCellForRoleName",
+        `no provisioned cell found with role_name ${roleName}`
+      );
     }
     return cell[CellType.Provisioned].cell_id;
   }
@@ -190,7 +202,10 @@ export class AppAgentWebsocket implements AppAgentClient {
     } else if ("cell_id" in request && request.cell_id) {
       return this.appWebsocket.callZome(request as CallZomeRequest, timeout);
     }
-    throw new Error("callZome requires a role_name or cell_id arg");
+    throw new HolochainError(
+      "MissingRoleNameOrCellId",
+      "callZome requires a role_name or cell_id argument"
+    );
   }
 
   /**

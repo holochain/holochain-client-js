@@ -1308,7 +1308,7 @@ test(
   })
 );
 
-test("client reconnects WebSocket if closed before making a zome call", async (t) => {
+test("client reconnects websocket if closed before making a zome call", async (t) => {
   const port = ADMIN_PORT;
   const conductorProcess = await launch(port);
   const { cell_id, client, admin } = await installAppAndDna(port);
