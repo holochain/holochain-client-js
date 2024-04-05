@@ -22,7 +22,15 @@ import { DisableCloneCellRequest } from "../index.js";
 /**
  * @public
  */
-export type AttachAppInterfaceRequest = { port?: number };
+export type AttachAppInterfaceRequest = {
+  port?: number;
+  /**
+   * Comma separated list of origins, or `*` to allow any origin.
+   * For example: `http://localhost:3000,http://localhost:3001`
+   */
+  allowed_origins: string;
+};
+
 /**
  * @public
  */

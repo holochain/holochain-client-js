@@ -129,9 +129,12 @@ test(
     const role_name = "foo";
     const admin = await AdminWebsocket.connect({
       url: new URL(`ws://127.0.0.1:${ADMIN_PORT}`),
+      wsClientOptions: { origin: "client-test-admin" },
     });
     const path = `${FIXTURE_PATH}/test.happ`;
-    const { port: appPort } = await admin.attachAppInterface({ port: 0 });
+    const { port: appPort } = await admin.attachAppInterface({
+      allowed_origins: "client-test-app",
+    });
 
     const app_id1 = "app1";
     const agent1 = await admin.generateAgentPubKey();
@@ -170,9 +173,11 @@ test(
     const clientUrl = new URL(`ws://127.0.0.1:${appPort}`);
     const appAgentWs1 = await AppAgentWebsocket.connect(app_id1, {
       url: clientUrl,
+      wsClientOptions: { origin: "client-test-app" },
     });
     const appAgentWs2 = await AppAgentWebsocket.connect(app_id2, {
       url: clientUrl,
+      wsClientOptions: { origin: "client-test-app" },
     });
 
     appAgentWs1.on("signal", signalCb1);

@@ -14,6 +14,7 @@ import {
   Requester,
   requesterTransformer,
   Transformer,
+  HolochainError,
 } from "../common.js";
 import {
   generateSigningKeyPair,
@@ -105,12 +106,16 @@ export class AdminWebsocket implements AdminApi {
     }
 
     if (!options.url) {
-      throw new Error(
-        "Unable to connect to Admin Websocket: No url provided and not in a Launcher environment."
+      throw new HolochainError(
+        "ConnectionUrlMissing",
+        `unable to connect to Conductor API - no url provided and not in a launcher environment.`
       );
     }
 
-    const wsClient = await WsClient.connect(options.url);
+    const wsClient = await WsClient.connect(
+      options.url,
+      options.wsClientOptions
+    );
     return new AdminWebsocket(wsClient, options.defaultTimeout);
   }
 

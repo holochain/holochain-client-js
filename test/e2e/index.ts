@@ -60,7 +60,7 @@ test(
     const installed_app_id = "app";
     const admin = await AdminWebsocket.connect({
       url: ADMIN_WS_URL,
-      defaultTimeout: 12000,
+      wsClientOptions: { origin: "client-test-admin" },
     });
 
     const agent_key = await admin.generateAgentPubKey();
@@ -136,7 +136,10 @@ test(
     t.equal(runningAppsInfo2[0].cell_info[ROLE_NAME].length, 1);
     t.deepEqual(runningAppsInfo2[0].status, { running: null });
 
-    await admin.attachAppInterface({ port: 0 });
+    await admin.attachAppInterface({
+      port: 0,
+      allowed_origins: "client-test-app",
+    });
     await admin.disableApp({ installed_app_id });
 
     const runningAppsInfo3 = await admin.listApps({
@@ -188,7 +191,7 @@ test(
     const installed_app_id = "app";
     const admin = await AdminWebsocket.connect({
       url: ADMIN_WS_URL,
-      defaultTimeout: 12000,
+      wsClientOptions: { origin: "client-test-admin" },
     });
 
     const agent_key = await admin.generateAgentPubKey();
@@ -230,7 +233,9 @@ test(
       installedApp.cell_info[ROLE_NAME][0][CellType.Provisioned].cell_id
     );
 
-    await admin.attachAppInterface({ port: 0 });
+    await admin.attachAppInterface({
+      allowed_origins: "client-test-app",
+    });
     await admin.disableApp({ installed_app_id });
 
     const dnas = await admin.listDnas();
@@ -249,7 +254,7 @@ test(
     const installed_app_id = "app";
     const admin = await AdminWebsocket.connect({
       url: ADMIN_WS_URL,
-      defaultTimeout: 12000,
+      wsClientOptions: { origin: "client-test-admin" },
     });
 
     const agent_key = await admin.generateAgentPubKey();
@@ -317,7 +322,10 @@ test(
     t.equal(runningApps2.length, 1);
     t.equal(runningApps2[0].installed_app_id, installed_app_id);
 
-    await admin.attachAppInterface({ port: 0 });
+    await admin.attachAppInterface({
+      port: 0,
+      allowed_origins: "client-test-app",
+    });
     await admin.disableApp({ installed_app_id });
 
     const dnas = await admin.listDnas();
@@ -375,10 +383,61 @@ test(
   "can call attachAppInterface without specific port",
   withConductor(ADMIN_PORT, async (t) => {
     const { admin } = await installAppAndDna(ADMIN_PORT);
-    const { port } = await admin.attachAppInterface({});
+    const { port } = await admin.attachAppInterface({
+      allowed_origins: "client-test-app",
+    });
     t.assert(typeof port === "number", "returned a valid app port");
-    await AppWebsocket.connect({ url: new URL(`ws://127.0.0.1:${port}`) });
+    await AppWebsocket.connect({
+      url: new URL(`ws://127.0.0.1:${port}`),
+      wsClientOptions: { origin: "client-test-app" },
+    });
     t.pass("can connect an app websocket to attached port");
+  })
+);
+
+test(
+  "app websocket connection from allowed origin is established",
+  withConductor(ADMIN_PORT, async (t) => {
+    const admin = await AdminWebsocket.connect({
+      url: ADMIN_WS_URL,
+      wsClientOptions: { origin: "client-test-admin" },
+    });
+    const allowedOrigin = "client-test-app";
+    const { port } = await admin.attachAppInterface({
+      allowed_origins: allowedOrigin,
+    });
+    try {
+      await AppWebsocket.connect({
+        url: new URL(`ws://127.0.0.1:${port}`),
+        wsClientOptions: { origin: allowedOrigin },
+      });
+      t.pass("app websocket connection established");
+    } catch (error) {
+      t.fail("app websocket connection should have been established");
+    }
+  })
+);
+
+test(
+  "app websocket connection from disallowed origin is rejected",
+  withConductor(ADMIN_PORT, async (t) => {
+    const admin = await AdminWebsocket.connect({
+      url: ADMIN_WS_URL,
+      wsClientOptions: { origin: "client-test-admin" },
+    });
+    const { port } = await admin.attachAppInterface({
+      allowed_origins: "client-test-app",
+    });
+    try {
+      await AppWebsocket.connect({
+        url: new URL(`ws://127.0.0.1:${port}`),
+        wsClientOptions: { origin: "disallowed_origin" },
+      });
+      t.fail("app websocket connection should have failed");
+    } catch (error) {
+      t.assert(error instanceof HolochainError, "expected a HolochainError");
+      t.pass("app websocket connection failed as expected");
+    }
   })
 );
 
@@ -418,7 +477,10 @@ test(
 test(
   "generated signing key has same location bytes as original agent pub key",
   withConductor(ADMIN_PORT, async (t) => {
-    const admin = await AdminWebsocket.connect({ url: ADMIN_WS_URL });
+    const admin = await AdminWebsocket.connect({
+      url: ADMIN_WS_URL,
+      wsClientOptions: { origin: "client-test-admin" },
+    });
     const agent = await admin.generateAgentPubKey();
     const [, signingKey] = await generateSigningKeyPair(agent);
     t.deepEqual(signingKey.subarray(35), Uint8Array.from(agent.subarray(35)));
@@ -430,7 +492,10 @@ test(
   withConductor(ADMIN_PORT, async (t) => {
     const role_name = "foo";
     const installed_app_id = "app";
-    const admin = await AdminWebsocket.connect({ url: ADMIN_WS_URL });
+    const admin = await AdminWebsocket.connect({
+      url: ADMIN_WS_URL,
+      wsClientOptions: { origin: "client-test-admin" },
+    });
     const agent = await admin.generateAgentPubKey();
 
     const app = await admin.installApp({
@@ -459,9 +524,12 @@ test(
       membrane_proofs: {},
     });
     await admin.enableApp({ installed_app_id });
-    const { port: appPort } = await admin.attachAppInterface({ port: 0 });
+    const { port: appPort } = await admin.attachAppInterface({
+      allowed_origins: "client-test-app",
+    });
     const client = await AppWebsocket.connect({
       url: new URL(`ws://127.0.0.1:${appPort}`),
+      wsClientOptions: { origin: "client-test-app" },
     });
 
     assert(CellType.Provisioned in app.cell_info[role_name][0]);
@@ -487,7 +555,10 @@ test(
   withConductor(ADMIN_PORT, async (t) => {
     const role_name = "foo";
     const installed_app_id = "app";
-    const admin = await AdminWebsocket.connect({ url: ADMIN_WS_URL });
+    const admin = await AdminWebsocket.connect({
+      url: ADMIN_WS_URL,
+      wsClientOptions: { origin: "client-test-admin" },
+    });
     const agent = await admin.generateAgentPubKey();
 
     const dnaPath = `${FIXTURE_PATH}/test.dna`;
@@ -520,9 +591,12 @@ test(
       membrane_proofs: {},
     });
     await admin.enableApp({ installed_app_id });
-    const { port: appPort } = await admin.attachAppInterface({ port: 0 });
+    const { port: appPort } = await admin.attachAppInterface({
+      allowed_origins: "client-test-app",
+    });
     const client = await AppWebsocket.connect({
       url: new URL(`ws://127.0.0.1:${appPort}`),
+      wsClientOptions: { origin: "client-test-app" },
     });
 
     assert(CellType.Provisioned in app.cell_info[role_name][0]);
@@ -611,24 +685,22 @@ test(
   })
 );
 
-// no conductor
+// test without conductor
 test("error is catchable when holochain socket is unavailable", async (t) => {
   try {
     await AdminWebsocket.connect({ url: ADMIN_WS_URL });
+    t.fail("websocket connection should have failed");
   } catch (e) {
-    t.equal(
-      e.message,
-      `could not connect to holochain conductor, please check that a conductor service is running and available at ${ADMIN_WS_URL}`
-    );
+    t.assert(e instanceof HolochainError, "expected a HolochainError");
+    t.pass("websocket connection failed as expected");
   }
 
   try {
     await AppWebsocket.connect({ url: ADMIN_WS_URL });
+    t.fail("websocket connection should have failed");
   } catch (e) {
-    t.equal(
-      e.message,
-      `could not connect to holochain conductor, please check that a conductor service is running and available at ${ADMIN_WS_URL}`
-    );
+    t.assert(e instanceof HolochainError, "expected a HolochainError");
+    t.pass("websocket connection failed as expected");
   }
 });
 
@@ -657,9 +729,13 @@ test("can inject agents", async (t) => {
   const conductor1 = await launch(ADMIN_PORT);
   const conductor2 = await launch(ADMIN_PORT_1);
   const installed_app_id = "app";
-  const admin1 = await AdminWebsocket.connect({ url: ADMIN_WS_URL });
+  const admin1 = await AdminWebsocket.connect({
+    url: ADMIN_WS_URL,
+    wsClientOptions: { origin: "client-test-admin" },
+  });
   const admin2 = await AdminWebsocket.connect({
     url: new URL(`ws://127.0.0.1:${ADMIN_PORT_1}`),
+    wsClientOptions: { origin: "client-test-admin" },
   });
   const agent_key_1 = await admin1.generateAgentPubKey();
   t.ok(agent_key_1);
@@ -825,12 +901,17 @@ test(
 test(
   "admin smoke test: listAppInterfaces + attachAppInterface",
   withConductor(ADMIN_PORT, async (t) => {
-    const admin = await AdminWebsocket.connect({ url: ADMIN_WS_URL });
+    const admin = await AdminWebsocket.connect({
+      url: ADMIN_WS_URL,
+      wsClientOptions: { origin: "client-test-admin" },
+    });
 
     let interfaces = await admin.listAppInterfaces();
     t.equal(interfaces.length, 0);
 
-    await admin.attachAppInterface({ port: 21212 });
+    await admin.attachAppInterface({
+      allowed_origins: "client-test-app",
+    });
 
     interfaces = await admin.listAppInterfaces();
     t.equal(interfaces.length, 1);
@@ -873,7 +954,10 @@ test(
 test(
   "admin smoke test: install 2 hApp bundles with different network seeds",
   withConductor(ADMIN_PORT, async (t) => {
-    const admin = await AdminWebsocket.connect({ url: ADMIN_WS_URL });
+    const admin = await AdminWebsocket.connect({
+      url: ADMIN_WS_URL,
+      wsClientOptions: { origin: "client-test-admin" },
+    });
     const agent_key = await admin.generateAgentPubKey();
 
     const installedApp1 = await admin.installApp({
@@ -1073,7 +1157,6 @@ test(
   "requests get canceled if the websocket closes while waiting for a response",
   withConductor(ADMIN_PORT, async (t) => {
     const { cell_id, client, admin } = await installAppAndDna(ADMIN_PORT);
-
     await admin.authorizeSigningCredentials(cell_id);
 
     const call1 = client.callZome(
@@ -1108,22 +1191,17 @@ test(
 
     const [res1, res2] = await Promise.allSettled([call1, call2]);
     assert(res1.status === "rejected");
-    t.ok(
-      res1.reason
-        .toString()
-        .startsWith(
-          `Error: Websocket closed with pending requests. Close event code: ${closeEventCode}, request id:`
-        ),
-      "pending request was rejected with correct close event code"
+    t.assert(res1.reason instanceof HolochainError, "res1 is a HolochainError");
+    t.equal(
+      res1.reason.name,
+      "ClientClosedWithPendingRequests",
+      "res1 is correct holochain error"
     );
     assert(res2.status === "rejected");
-    t.ok(
-      res2.reason
-        .toString()
-        .startsWith(
-          `Error: Websocket closed with pending requests. Close event code: ${closeEventCode}, request id:`
-        ),
-      "pending request was rejected with correct close event code"
+    t.equal(
+      res2.reason.name,
+      "ClientClosedWithPendingRequests",
+      "res1 is correct holochain error"
     );
   })
 );
@@ -1221,30 +1299,27 @@ test(
   })
 );
 
-test("client reconnects WebSocket if closed before making a zome call", async (t) => {
-  const port = ADMIN_PORT;
-  const conductorProcess = await launch(port);
-  const { cell_id, client, admin } = await installAppAndDna(port);
-  await admin.authorizeSigningCredentials(cell_id);
+test(
+  "client reconnects websocket if closed before making a zome call",
+  withConductor(ADMIN_PORT, async (t) => {
+    const { cell_id, client, admin } = await installAppAndDna(ADMIN_PORT);
+    await admin.authorizeSigningCredentials(cell_id);
 
-  await client.client.close();
+    await client.client.close();
 
-  const call = client.callZome({
-    cell_id,
-    zome_name: TEST_ZOME_NAME,
-    fn_name: "bar",
-    provenance: cell_id[1],
-    payload: null,
-  });
+    const call = client.callZome({
+      cell_id,
+      zome_name: TEST_ZOME_NAME,
+      fn_name: "bar",
+      provenance: cell_id[1],
+      payload: null,
+    });
 
-  try {
-    await call;
-    t.pass("websocket was reconnected successfully");
-  } catch (error) {
-    t.fail("websocket was not reconnected");
-  }
-
-  assert(conductorProcess.pid && !conductorProcess.killed);
-  process.kill(-conductorProcess.pid);
-  await cleanSandboxConductors();
-});
+    try {
+      await call;
+      t.pass("websocket was reconnected successfully");
+    } catch (error) {
+      t.fail("websocket was not reconnected");
+    }
+  })
+);

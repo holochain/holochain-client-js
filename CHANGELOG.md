@@ -6,6 +6,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Added
 ### Changed
+- Websocket client: Specify `origin` parameter when establishing app websocket connections to protect localhost from cross origin attacks in browser scripts.
+- Websocket client: Add `allowed_origins` parameter to `AdminWebsocket.attachAppInterface` to specify allowed origins.
+- Consistently throw `HolochainError`s throughout with specific error names and messages.
 ### Fixed
 ### Removed
 
