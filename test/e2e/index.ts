@@ -1156,7 +1156,7 @@ test(
   })
 );
 
-test.only(
+test(
   "requests get canceled if the websocket closes while waiting for a response",
   withConductor(ADMIN_PORT, async (t) => {
     const { cell_id, client, admin } = await installAppAndDna(ADMIN_PORT);
