@@ -61,7 +61,6 @@ test(
     const admin = await AdminWebsocket.connect({
       url: ADMIN_WS_URL,
       wsClientOptions: { origin: "client-test-admin" },
-      defaultTimeout: 12000,
     });
 
     const agent_key = await admin.generateAgentPubKey();
@@ -193,7 +192,6 @@ test(
     const admin = await AdminWebsocket.connect({
       url: ADMIN_WS_URL,
       wsClientOptions: { origin: "client-test-admin" },
-      defaultTimeout: 12000,
     });
 
     const agent_key = await admin.generateAgentPubKey();
@@ -257,7 +255,6 @@ test(
     const admin = await AdminWebsocket.connect({
       url: ADMIN_WS_URL,
       wsClientOptions: { origin: "client-test-admin" },
-      defaultTimeout: 12000,
     });
 
     const agent_key = await admin.generateAgentPubKey();
