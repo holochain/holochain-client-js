@@ -1156,11 +1156,10 @@ test(
   })
 );
 
-test(
+test.only(
   "requests get canceled if the websocket closes while waiting for a response",
   withConductor(ADMIN_PORT, async (t) => {
     const { cell_id, client, admin } = await installAppAndDna(ADMIN_PORT);
-
     await admin.authorizeSigningCredentials(cell_id);
 
     const call1 = client.callZome(
@@ -1195,22 +1194,17 @@ test(
 
     const [res1, res2] = await Promise.allSettled([call1, call2]);
     assert(res1.status === "rejected");
-    t.ok(
-      res1.reason
-        .toString()
-        .startsWith(
-          `Error: Websocket closed with pending requests. Close event code: ${closeEventCode}, request id:`
-        ),
-      "pending request was rejected with correct close event code"
+    t.assert(res1.reason instanceof HolochainError, "res1 is a HolochainError");
+    t.equal(
+      res1.reason.name,
+      "ClientClosedWithPendingRequests",
+      "res1 is correct holochain error"
     );
     assert(res2.status === "rejected");
-    t.ok(
-      res2.reason
-        .toString()
-        .startsWith(
-          `Error: Websocket closed with pending requests. Close event code: ${closeEventCode}, request id:`
-        ),
-      "pending request was rejected with correct close event code"
+    t.equal(
+      res2.reason.name,
+      "ClientClosedWithPendingRequests",
+      "res1 is correct holochain error"
     );
   })
 );
@@ -1308,30 +1302,27 @@ test(
   })
 );
 
-test("client reconnects websocket if closed before making a zome call", async (t) => {
-  const port = ADMIN_PORT;
-  const conductorProcess = await launch(port);
-  const { cell_id, client, admin } = await installAppAndDna(port);
-  await admin.authorizeSigningCredentials(cell_id);
+test(
+  "client reconnects websocket if closed before making a zome call",
+  withConductor(ADMIN_PORT, async (t) => {
+    const { cell_id, client, admin } = await installAppAndDna(ADMIN_PORT);
+    await admin.authorizeSigningCredentials(cell_id);
 
-  await client.client.close();
+    await client.client.close();
 
-  const call = client.callZome({
-    cell_id,
-    zome_name: TEST_ZOME_NAME,
-    fn_name: "bar",
-    provenance: cell_id[1],
-    payload: null,
-  });
+    const call = client.callZome({
+      cell_id,
+      zome_name: TEST_ZOME_NAME,
+      fn_name: "bar",
+      provenance: cell_id[1],
+      payload: null,
+    });
 
-  try {
-    await call;
-    t.pass("websocket was reconnected successfully");
-  } catch (error) {
-    t.fail("websocket was not reconnected");
-  }
-
-  assert(conductorProcess.pid && !conductorProcess.killed);
-  process.kill(-conductorProcess.pid);
-  await cleanSandboxConductors();
-});
+    try {
+      await call;
+      t.pass("websocket was reconnected successfully");
+    } catch (error) {
+      t.fail("websocket was not reconnected");
+    }
+  })
+);

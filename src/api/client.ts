@@ -29,14 +29,15 @@ interface HolochainRequest {
 export class WsClient extends Emittery {
   socket: IsoWebSocket;
   url: URL | undefined;
-  options: WsClientOptions = {};
+  options: WsClientOptions;
   private pendingRequests: Record<number, HolochainRequest>;
   private index: number;
 
-  constructor(socket: IsoWebSocket, url?: URL) {
+  constructor(socket: IsoWebSocket, url?: URL, options?: WsClientOptions) {
     super();
     this.socket = socket;
     this.url = url;
+    this.options = options || {};
     this.pendingRequests = {};
     this.index = 0;
 
@@ -139,7 +140,7 @@ export class WsClient extends Emittery {
         );
       };
       socket.onopen = () => {
-        const client = new WsClient(socket, url);
+        const client = new WsClient(socket, url, options);
         resolve(client);
       };
     });
@@ -173,7 +174,7 @@ export class WsClient extends Emittery {
     } else if (this.url) {
       const response = new Promise<unknown>((resolve, reject) => {
         // typescript forgets in this promise scope that this.url is not undefined
-        const socket = new IsoWebSocket(this.url as URL);
+        const socket = new IsoWebSocket(this.url as URL, this.options);
         this.socket = socket;
         socket.onerror = (errorEvent) => {
           reject(
