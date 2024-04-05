@@ -14,9 +14,76 @@ export interface CallZomeRequestUnsigned extends CallZomeRequest
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [cap\_secret](./client.callzomerequestunsigned.cap_secret.md) |  | [CapSecret](./client.capsecret.md) \| null |  |
-|  [expires\_at](./client.callzomerequestunsigned.expires_at.md) |  | number |  |
-|  [nonce](./client.callzomerequestunsigned.nonce.md) |  | [Nonce256Bit](./client.nonce256bit.md) |  |
+<table><thead><tr><th>
 
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[cap\_secret](./client.callzomerequestunsigned.cap_secret.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[CapSecret](./client.capsecret.md) \| null
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[expires\_at](./client.callzomerequestunsigned.expires_at.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[nonce](./client.callzomerequestunsigned.nonce.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[Nonce256Bit](./client.nonce256bit.md)
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>

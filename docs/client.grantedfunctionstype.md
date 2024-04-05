@@ -13,8 +13,48 @@ export declare enum GrantedFunctionsType
 
 ## Enumeration Members
 
-|  Member | Value | Description |
-|  --- | --- | --- |
-|  All | <code>&quot;All&quot;</code> |  |
-|  Listed | <code>&quot;Listed&quot;</code> |  |
+<table><thead><tr><th>
 
+Member
+
+
+</th><th>
+
+Value
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+All
+
+
+</td><td>
+
+`"All"`
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+Listed
+
+
+</td><td>
+
+`"Listed"`
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>

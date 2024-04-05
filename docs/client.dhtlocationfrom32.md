@@ -16,10 +16,39 @@ export declare function dhtLocationFrom32(hashCore: Uint8Array): Uint8Array;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  hashCore | Uint8Array | The core 32 bytes of the hash. |
+<table><thead><tr><th>
 
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+hashCore
+
+
+</td><td>
+
+Uint8Array
+
+
+</td><td>
+
+The core 32 bytes of the hash.
+
+
+</td></tr>
+</tbody></table>
 **Returns:**
 
 Uint8Array

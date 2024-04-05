@@ -13,9 +13,76 @@ export interface ProvisionedCell
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [cell\_id](./client.provisionedcell.cell_id.md) |  | [CellId](./client.cellid.md) |  |
-|  [dna\_modifiers](./client.provisionedcell.dna_modifiers.md) |  | [DnaModifiers](./client.dnamodifiers.md) |  |
-|  [name](./client.provisionedcell.name.md) |  | string |  |
+<table><thead><tr><th>
 
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[cell\_id](./client.provisionedcell.cell_id.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[CellId](./client.cellid.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[dna\_modifiers](./client.provisionedcell.dna_modifiers.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[DnaModifiers](./client.dnamodifiers.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[name](./client.provisionedcell.name.md)
+
+
+</td><td>
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>

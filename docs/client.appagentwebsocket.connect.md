@@ -14,11 +14,55 @@ static connect(installed_app_id: InstalledAppId, options?: WebsocketConnectionOp
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  installed\_app\_id | [InstalledAppId](./client.installedappid.md) | ID of the App to link to. |
-|  options | [WebsocketConnectionOptions](./client.websocketconnectionoptions.md) | _(Optional)_ [WebsocketConnectionOptions](./client.websocketconnectionoptions.md) |
+<table><thead><tr><th>
 
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+installed\_app\_id
+
+
+</td><td>
+
+[InstalledAppId](./client.installedappid.md)
+
+
+</td><td>
+
+ID of the App to link to.
+
+
+</td></tr>
+<tr><td>
+
+options
+
+
+</td><td>
+
+[WebsocketConnectionOptions](./client.websocketconnectionoptions.md)
+
+
+</td><td>
+
+_(Optional)_ [WebsocketConnectionOptions](./client.websocketconnectionoptions.md)
+
+
+</td></tr>
+</tbody></table>
 **Returns:**
 
 Promise&lt;[AppAgentWebsocket](./client.appagentwebsocket.md)<!-- -->&gt;

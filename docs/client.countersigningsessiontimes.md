@@ -13,8 +13,59 @@ export interface CounterSigningSessionTimes
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [end](./client.countersigningsessiontimes.end.md) |  | [Timestamp](./client.timestamp.md) |  |
-|  [start](./client.countersigningsessiontimes.start.md) |  | [Timestamp](./client.timestamp.md) |  |
+<table><thead><tr><th>
 
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[end](./client.countersigningsessiontimes.end.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[Timestamp](./client.timestamp.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[start](./client.countersigningsessiontimes.start.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[Timestamp](./client.timestamp.md)
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>

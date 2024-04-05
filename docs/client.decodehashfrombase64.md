@@ -14,10 +14,39 @@ export declare function decodeHashFromBase64(hash: HoloHashB64): HoloHash;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  hash | [HoloHashB64](./client.holohashb64.md) | The Base64 encoded string to decode. |
+<table><thead><tr><th>
 
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+hash
+
+
+</td><td>
+
+[HoloHashB64](./client.holohashb64.md)
+
+
+</td><td>
+
+The Base64 encoded string to decode.
+
+
+</td></tr>
+</tbody></table>
 **Returns:**
 
 [HoloHash](./client.holohash.md)

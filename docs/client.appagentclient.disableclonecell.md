@@ -12,10 +12,37 @@ disableCloneCell(args: AppDisableCloneCellRequest): Promise<DisableCloneCellResp
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  args | [AppDisableCloneCellRequest](./client.appdisableclonecellrequest.md) |  |
+<table><thead><tr><th>
 
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+args
+
+
+</td><td>
+
+[AppDisableCloneCellRequest](./client.appdisableclonecellrequest.md)
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>
 **Returns:**
 
 Promise&lt;[DisableCloneCellResponse](./client.disableclonecellresponse.md)<!-- -->&gt;

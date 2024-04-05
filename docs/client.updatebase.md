@@ -13,9 +13,76 @@ export interface UpdateBase
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [entry\_type](./client.updatebase.entry_type.md) |  | [EntryType](./client.entrytype.md) |  |
-|  [original\_action\_address](./client.updatebase.original_action_address.md) |  | [ActionHash](./client.actionhash.md) |  |
-|  [original\_entry\_address](./client.updatebase.original_entry_address.md) |  | [EntryHash](./client.entryhash.md) |  |
+<table><thead><tr><th>
 
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[entry\_type](./client.updatebase.entry_type.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[EntryType](./client.entrytype.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[original\_action\_address](./client.updatebase.original_action_address.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[ActionHash](./client.actionhash.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[original\_entry\_address](./client.updatebase.original_entry_address.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[EntryHash](./client.entryhash.md)
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>

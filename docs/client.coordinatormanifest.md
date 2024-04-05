@@ -13,7 +13,42 @@ export interface CoordinatorManifest
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [zomes](./client.coordinatormanifest.zomes.md) |  | Array&lt;[ZomeManifest](./client.zomemanifest.md)<!-- -->&gt; |  |
+<table><thead><tr><th>
 
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[zomes](./client.coordinatormanifest.zomes.md)
+
+
+</td><td>
+
+
+</td><td>
+
+Array&lt;[ZomeManifest](./client.zomemanifest.md)<!-- -->&gt;
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>

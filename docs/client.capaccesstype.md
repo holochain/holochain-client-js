@@ -13,9 +13,62 @@ export declare enum CapAccessType
 
 ## Enumeration Members
 
-|  Member | Value | Description |
-|  --- | --- | --- |
-|  Assigned | <code>&quot;Assigned&quot;</code> |  |
-|  Transferable | <code>&quot;Transferable&quot;</code> |  |
-|  Unrestricted | <code>&quot;Unrestricted&quot;</code> |  |
+<table><thead><tr><th>
 
+Member
+
+
+</th><th>
+
+Value
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+Assigned
+
+
+</td><td>
+
+`"Assigned"`
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+Transferable
+
+
+</td><td>
+
+`"Transferable"`
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+Unrestricted
+
+
+</td><td>
+
+`"Unrestricted"`
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>

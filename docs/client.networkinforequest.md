@@ -13,9 +13,82 @@ export interface NetworkInfoRequest
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [agent\_pub\_key](./client.networkinforequest.agent_pub_key.md) |  | [AgentPubKey](./client.agentpubkey.md) | The calling agent |
-|  [dnas](./client.networkinforequest.dnas.md) |  | [DnaHash](./client.dnahash.md)<!-- -->\[\] | Get network info for these DNAs |
-|  [last\_time\_queried?](./client.networkinforequest.last_time_queried.md) |  | number | _(Optional)_ Timestamp in ms since which received amount of bytes from peers will be returned. Defaults to UNIX\_EPOCH. |
+<table><thead><tr><th>
 
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[agent\_pub\_key](./client.networkinforequest.agent_pub_key.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[AgentPubKey](./client.agentpubkey.md)
+
+
+</td><td>
+
+The calling agent
+
+
+</td></tr>
+<tr><td>
+
+[dnas](./client.networkinforequest.dnas.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[DnaHash](./client.dnahash.md)<!-- -->\[\]
+
+
+</td><td>
+
+Get network info for these DNAs
+
+
+</td></tr>
+<tr><td>
+
+[last\_time\_queried?](./client.networkinforequest.last_time_queried.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+_(Optional)_ Timestamp in ms since which received amount of bytes from peers will be returned. Defaults to UNIX\_EPOCH.
+
+
+</td></tr>
+</tbody></table>

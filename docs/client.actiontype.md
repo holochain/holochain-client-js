@@ -13,16 +13,160 @@ export declare enum ActionType
 
 ## Enumeration Members
 
-|  Member | Value | Description |
-|  --- | --- | --- |
-|  AgentValidationPkg | <code>&quot;AgentValidationPkg&quot;</code> |  |
-|  CloseChain | <code>&quot;CloseChain&quot;</code> |  |
-|  Create | <code>&quot;Create&quot;</code> |  |
-|  CreateLink | <code>&quot;CreateLink&quot;</code> |  |
-|  Delete | <code>&quot;Delete&quot;</code> |  |
-|  DeleteLink | <code>&quot;DeleteLink&quot;</code> |  |
-|  Dna | <code>&quot;Dna&quot;</code> |  |
-|  InitZomesComplete | <code>&quot;InitZomesComplete&quot;</code> |  |
-|  OpenChain | <code>&quot;OpenChain&quot;</code> |  |
-|  Update | <code>&quot;Update&quot;</code> |  |
+<table><thead><tr><th>
 
+Member
+
+
+</th><th>
+
+Value
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+AgentValidationPkg
+
+
+</td><td>
+
+`"AgentValidationPkg"`
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+CloseChain
+
+
+</td><td>
+
+`"CloseChain"`
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+Create
+
+
+</td><td>
+
+`"Create"`
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+CreateLink
+
+
+</td><td>
+
+`"CreateLink"`
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+Delete
+
+
+</td><td>
+
+`"Delete"`
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+DeleteLink
+
+
+</td><td>
+
+`"DeleteLink"`
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+Dna
+
+
+</td><td>
+
+`"Dna"`
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+InitZomesComplete
+
+
+</td><td>
+
+`"InitZomesComplete"`
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+OpenChain
+
+
+</td><td>
+
+`"OpenChain"`
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+Update
+
+
+</td><td>
+
+`"Update"`
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>

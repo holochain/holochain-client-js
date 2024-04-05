@@ -13,9 +13,76 @@ export interface FullStateDump
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [integration\_dump](./client.fullstatedump.integration_dump.md) |  | [FullIntegrationStateDump](./client.fullintegrationstatedump.md) |  |
-|  [peer\_dump](./client.fullstatedump.peer_dump.md) |  | [P2pAgentsDump](./client.p2pagentsdump.md) |  |
-|  [source\_chain\_dump](./client.fullstatedump.source_chain_dump.md) |  | [SourceChainJsonDump](./client.sourcechainjsondump.md) |  |
+<table><thead><tr><th>
 
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[integration\_dump](./client.fullstatedump.integration_dump.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[FullIntegrationStateDump](./client.fullintegrationstatedump.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[peer\_dump](./client.fullstatedump.peer_dump.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[P2pAgentsDump](./client.p2pagentsdump.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[source\_chain\_dump](./client.fullstatedump.source_chain_dump.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[SourceChainJsonDump](./client.sourcechainjsondump.md)
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>

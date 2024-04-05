@@ -13,9 +13,76 @@ export interface ZomeCallCapGrant
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [access](./client.zomecallcapgrant.access.md) |  | [CapAccess](./client.capaccess.md) |  |
-|  [functions](./client.zomecallcapgrant.functions.md) |  | [GrantedFunctions](./client.grantedfunctions.md) |  |
-|  [tag](./client.zomecallcapgrant.tag.md) |  | string |  |
+<table><thead><tr><th>
 
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[access](./client.zomecallcapgrant.access.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[CapAccess](./client.capaccess.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[functions](./client.zomecallcapgrant.functions.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[GrantedFunctions](./client.grantedfunctions.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[tag](./client.zomecallcapgrant.tag.md)
+
+
+</td><td>
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>

@@ -14,10 +14,39 @@ isCloneId: (roleName: RoleName) => boolean
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  roleName | [RoleName](./client.rolename.md) | The role name to check. |
+<table><thead><tr><th>
 
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+roleName
+
+
+</td><td>
+
+[RoleName](./client.rolename.md)
+
+
+</td><td>
+
+The role name to check.
+
+
+</td></tr>
+</tbody></table>
 **Returns:**
 
 boolean

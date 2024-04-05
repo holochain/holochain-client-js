@@ -16,15 +16,94 @@ export declare class CloneId
 
 ## Constructors
 
-|  Constructor | Modifiers | Description |
-|  --- | --- | --- |
-|  [(constructor)(roleName, index)](./client.cloneid._constructor_.md) |  | Constructs a new instance of the <code>CloneId</code> class |
+<table><thead><tr><th>
+
+Constructor
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[(constructor)(roleName, index)](./client.cloneid._constructor_.md)
+
+
+</td><td>
+
+
+</td><td>
+
+Constructs a new instance of the `CloneId` class
+
+
+</td></tr>
+</tbody></table>
 
 ## Methods
 
-|  Method | Modifiers | Description |
-|  --- | --- | --- |
-|  [fromRoleName(roleName)](./client.cloneid.fromrolename.md) | <code>static</code> | Parse a role id of a clone cell to obtain a clone id instance. |
-|  [getBaseRoleName()](./client.cloneid.getbaserolename.md) |  |  |
-|  [toString()](./client.cloneid.tostring.md) |  |  |
+<table><thead><tr><th>
 
+Method
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[fromRoleName(roleName)](./client.cloneid.fromrolename.md)
+
+
+</td><td>
+
+`static`
+
+
+</td><td>
+
+Parse a role id of a clone cell to obtain a clone id instance.
+
+
+</td></tr>
+<tr><td>
+
+[getBaseRoleName()](./client.cloneid.getbaserolename.md)
+
+
+</td><td>
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[toString()](./client.cloneid.tostring.md)
+
+
+</td><td>
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>

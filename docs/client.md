@@ -6,281 +6,2635 @@
 
 ## Classes
 
-|  Class | Description |
-|  --- | --- |
-|  [AdminWebsocket](./client.adminwebsocket.md) | A class for interacting with a conductor's Admin API. |
-|  [AppAgentWebsocket](./client.appagentwebsocket.md) | A class to establish a websocket connection to an App interface, for a specific agent and app. |
-|  [AppWebsocket](./client.appwebsocket.md) | A class to establish a websocket connection to an App interface of a Holochain conductor. |
-|  [CloneId](./client.cloneid.md) | <p>Identifier of a clone cell, composed of the DNA's role id and the index of the clone, starting at 0.</p><p>Example: <code>profiles.0</code></p> |
-|  [HolochainError](./client.holochainerror.md) | Error thrown when response from Holochain is an error. |
-|  [WsClient](./client.wsclient.md) | <p>A WebSocket client which can make requests and receive responses, as well as send and receive signals.</p><p>Uses Holochain's WireMessage for communication.</p> |
+<table><thead><tr><th>
+
+Class
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[AdminWebsocket](./client.adminwebsocket.md)
+
+
+</td><td>
+
+A class for interacting with a conductor's Admin API.
+
+
+</td></tr>
+<tr><td>
+
+[AppAgentWebsocket](./client.appagentwebsocket.md)
+
+
+</td><td>
+
+A class to establish a websocket connection to an App interface, for a specific agent and app.
+
+
+</td></tr>
+<tr><td>
+
+[AppWebsocket](./client.appwebsocket.md)
+
+
+</td><td>
+
+A class to establish a websocket connection to an App interface of a Holochain conductor.
+
+
+</td></tr>
+<tr><td>
+
+[CloneId](./client.cloneid.md)
+
+
+</td><td>
+
+Identifier of a clone cell, composed of the DNA's role id and the index of the clone, starting at 0.
+
+Example: `profiles.0`
+
+
+</td></tr>
+<tr><td>
+
+[HolochainError](./client.holochainerror.md)
+
+
+</td><td>
+
+Error thrown when response from Holochain is an error.
+
+
+</td></tr>
+<tr><td>
+
+[WsClient](./client.wsclient.md)
+
+
+</td><td>
+
+A WebSocket client which can make requests and receive responses, as well as send and receive signals.
+
+Uses Holochain's WireMessage for communication.
+
+
+</td></tr>
+</tbody></table>
 
 ## Enumerations
 
-|  Enumeration | Description |
-|  --- | --- |
-|  [ActionType](./client.actiontype.md) |  |
-|  [AppStatusFilter](./client.appstatusfilter.md) |  |
-|  [CapAccessType](./client.capaccesstype.md) |  |
-|  [CellProvisioningStrategy](./client.cellprovisioningstrategy.md) |  |
-|  [CellType](./client.celltype.md) |  |
-|  [DhtOpType](./client.dhtoptype.md) |  |
-|  [GrantedFunctionsType](./client.grantedfunctionstype.md) |  |
+<table><thead><tr><th>
+
+Enumeration
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[ActionType](./client.actiontype.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[AppStatusFilter](./client.appstatusfilter.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[CapAccessType](./client.capaccesstype.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[CellProvisioningStrategy](./client.cellprovisioningstrategy.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[CellType](./client.celltype.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[DhtOpType](./client.dhtoptype.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[GrantedFunctionsType](./client.grantedfunctionstype.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+</tbody></table>
 
 ## Functions
 
-|  Function | Description |
-|  --- | --- |
-|  [decodeHashFromBase64(hash)](./client.decodehashfrombase64.md) | Decodes a Base64 encoded string to a byte array hash. |
-|  [dhtLocationFrom32(hashCore)](./client.dhtlocationfrom32.md) | <p>Generate dht location (last 4 bytes) from a core hash (middle 32 bytes)</p><p>From https://github.com/holochain/holochain/blob/develop/crates/holo\_hash/src/hash\_type/primitive.rs</p> |
-|  [encodeHashToBase64(hash)](./client.encodehashtobase64.md) | Encode a byte array hash to a Base64 string. |
-|  [fakeActionHash(coreByte)](./client.fakeactionhash.md) | Generate a valid hash of a non-existing action. |
-|  [fakeAgentPubKey(coreByte)](./client.fakeagentpubkey.md) | Generate a valid agent key of a non-existing agent. |
-|  [fakeDnaHash(coreByte)](./client.fakednahash.md) | Generate a valid hash of a non-existing DNA. |
-|  [fakeEntryHash(coreByte)](./client.fakeentryhash.md) | <p>Generate a valid hash of a non-existing entry.</p><p>From https://github.com/holochain/holochain/blob/develop/crates/holo\_hash/src/hash\_type/primitive.rs</p> |
-|  [generateSigningKeyPair(agentPubKey)](./client.generatesigningkeypair.md) | Generates a key pair for signing zome calls. |
-|  [getBaseRoleNameFromCloneId(roleName)](./client.getbaserolenamefromcloneid.md) | Parse a clone id and get the role name part of it. |
-|  [getDhtOpAction(op)](./client.getdhtopaction.md) |  |
-|  [getDhtOpEntry(op)](./client.getdhtopentry.md) |  |
-|  [getDhtOpSignature(op)](./client.getdhtopsignature.md) |  |
-|  [getDhtOpType(op)](./client.getdhtoptype.md) |  |
-|  [getNonceExpiration()](./client.getnonceexpiration.md) |  |
-|  [getSigningCredentials(cellId)](./client.getsigningcredentials.md) | Get credentials for signing zome calls. |
-|  [hashFrom32AndType(hashCore, hashType)](./client.hashfrom32andtype.md) | <p>Generate full hash from a core hash (middle 32 bytes) and hash type label</p><p>From https://github.com/holochain/holochain/blob/develop/crates/holo\_hash/src/hash\_type/primitive.rs</p> |
-|  [isCloneId(roleName)](./client.iscloneid.md) | Check if a cell's role name is a valid clone id. |
-|  [randomByteArray(length)](./client.randombytearray.md) |  |
-|  [randomCapSecret()](./client.randomcapsecret.md) |  |
-|  [randomNonce()](./client.randomnonce.md) |  |
-|  [setSigningCredentials(cellId, credentials)](./client.setsigningcredentials.md) | Set credentials for signing zome calls. |
-|  [signZomeCall(request)](./client.signzomecall.md) |  |
-|  [sliceCore32(hash)](./client.slicecore32.md) | <p>Get core (center 32 bytes) from a hash</p><p>From https://github.com/holochain/holochain/blob/develop/crates/holo\_hash/src/hash\_type/primitive.rs</p> |
-|  [sliceDhtLocation(hash)](./client.slicedhtlocation.md) | <p>Get dht location (last 4 bytes) from a hash</p><p>From https://github.com/holochain/holochain/blob/develop/crates/holo\_hash/src/hash\_type/primitive.rs</p> |
-|  [sliceHashType(hash)](./client.slicehashtype.md) | <p>Get hash type (initial 3 bytes) from a hash</p><p>From https://github.com/holochain/holochain/blob/develop/crates/holo\_hash/src/hash\_type/primitive.rs</p> |
+<table><thead><tr><th>
+
+Function
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[decodeHashFromBase64(hash)](./client.decodehashfrombase64.md)
+
+
+</td><td>
+
+Decodes a Base64 encoded string to a byte array hash.
+
+
+</td></tr>
+<tr><td>
+
+[dhtLocationFrom32(hashCore)](./client.dhtlocationfrom32.md)
+
+
+</td><td>
+
+Generate dht location (last 4 bytes) from a core hash (middle 32 bytes)
+
+From https://github.com/holochain/holochain/blob/develop/crates/holo\_hash/src/hash\_type/primitive.rs
+
+
+</td></tr>
+<tr><td>
+
+[encodeHashToBase64(hash)](./client.encodehashtobase64.md)
+
+
+</td><td>
+
+Encode a byte array hash to a Base64 string.
+
+
+</td></tr>
+<tr><td>
+
+[fakeActionHash(coreByte)](./client.fakeactionhash.md)
+
+
+</td><td>
+
+Generate a valid hash of a non-existing action.
+
+
+</td></tr>
+<tr><td>
+
+[fakeAgentPubKey(coreByte)](./client.fakeagentpubkey.md)
+
+
+</td><td>
+
+Generate a valid agent key of a non-existing agent.
+
+
+</td></tr>
+<tr><td>
+
+[fakeDnaHash(coreByte)](./client.fakednahash.md)
+
+
+</td><td>
+
+Generate a valid hash of a non-existing DNA.
+
+
+</td></tr>
+<tr><td>
+
+[fakeEntryHash(coreByte)](./client.fakeentryhash.md)
+
+
+</td><td>
+
+Generate a valid hash of a non-existing entry.
+
+From https://github.com/holochain/holochain/blob/develop/crates/holo\_hash/src/hash\_type/primitive.rs
+
+
+</td></tr>
+<tr><td>
+
+[generateSigningKeyPair(agentPubKey)](./client.generatesigningkeypair.md)
+
+
+</td><td>
+
+Generates a key pair for signing zome calls.
+
+
+</td></tr>
+<tr><td>
+
+[getBaseRoleNameFromCloneId(roleName)](./client.getbaserolenamefromcloneid.md)
+
+
+</td><td>
+
+Parse a clone id and get the role name part of it.
+
+
+</td></tr>
+<tr><td>
+
+[getDhtOpAction(op)](./client.getdhtopaction.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[getDhtOpEntry(op)](./client.getdhtopentry.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[getDhtOpSignature(op)](./client.getdhtopsignature.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[getDhtOpType(op)](./client.getdhtoptype.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[getNonceExpiration()](./client.getnonceexpiration.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[getSigningCredentials(cellId)](./client.getsigningcredentials.md)
+
+
+</td><td>
+
+Get credentials for signing zome calls.
+
+
+</td></tr>
+<tr><td>
+
+[hashFrom32AndType(hashCore, hashType)](./client.hashfrom32andtype.md)
+
+
+</td><td>
+
+Generate full hash from a core hash (middle 32 bytes) and hash type label
+
+From https://github.com/holochain/holochain/blob/develop/crates/holo\_hash/src/hash\_type/primitive.rs
+
+
+</td></tr>
+<tr><td>
+
+[isCloneId(roleName)](./client.iscloneid.md)
+
+
+</td><td>
+
+Check if a cell's role name is a valid clone id.
+
+
+</td></tr>
+<tr><td>
+
+[randomByteArray(length)](./client.randombytearray.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[randomCapSecret()](./client.randomcapsecret.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[randomNonce()](./client.randomnonce.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[setSigningCredentials(cellId, credentials)](./client.setsigningcredentials.md)
+
+
+</td><td>
+
+Set credentials for signing zome calls.
+
+
+</td></tr>
+<tr><td>
+
+[signZomeCall(request)](./client.signzomecall.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[sliceCore32(hash)](./client.slicecore32.md)
+
+
+</td><td>
+
+Get core (center 32 bytes) from a hash
+
+From https://github.com/holochain/holochain/blob/develop/crates/holo\_hash/src/hash\_type/primitive.rs
+
+
+</td></tr>
+<tr><td>
+
+[sliceDhtLocation(hash)](./client.slicedhtlocation.md)
+
+
+</td><td>
+
+Get dht location (last 4 bytes) from a hash
+
+From https://github.com/holochain/holochain/blob/develop/crates/holo\_hash/src/hash\_type/primitive.rs
+
+
+</td></tr>
+<tr><td>
+
+[sliceHashType(hash)](./client.slicehashtype.md)
+
+
+</td><td>
+
+Get hash type (initial 3 bytes) from a hash
+
+From https://github.com/holochain/holochain/blob/develop/crates/holo\_hash/src/hash\_type/primitive.rs
+
+
+</td></tr>
+</tbody></table>
 
 ## Interfaces
 
-|  Interface | Description |
-|  --- | --- |
-|  [AdminApi](./client.adminapi.md) |  |
-|  [AgentInfoDump](./client.agentinfodump.md) |  |
-|  [AgentValidationPkg](./client.agentvalidationpkg.md) |  |
-|  [AppAgentClient](./client.appagentclient.md) |  |
-|  [AppAgentEvents](./client.appagentevents.md) |  |
-|  [AppApi](./client.appapi.md) |  |
-|  [CallZomeRequestSigned](./client.callzomerequestsigned.md) |  |
-|  [CallZomeRequestUnsigned](./client.callzomerequestunsigned.md) |  |
-|  [CapClaim](./client.capclaim.md) |  |
-|  [CellProvisioning](./client.cellprovisioning.md) |  |
-|  [ClonedCell](./client.clonedcell.md) |  |
-|  [CloseChain](./client.closechain.md) |  |
-|  [CoordinatorBundle](./client.coordinatorbundle.md) |  |
-|  [CoordinatorManifest](./client.coordinatormanifest.md) |  |
-|  [CountersigningAgentState](./client.countersigningagentstate.md) |  |
-|  [CounterSigningSessionData](./client.countersigningsessiondata.md) |  |
-|  [CounterSigningSessionTimes](./client.countersigningsessiontimes.md) |  |
-|  [Create](./client.create.md) |  |
-|  [CreateBase](./client.createbase.md) |  |
-|  [CreateCloneCellRequest](./client.createclonecellrequest.md) |  |
-|  [CreateLink](./client.createlink.md) |  |
-|  [Delete](./client.delete.md) |  |
-|  [DeleteLink](./client.deletelink.md) |  |
-|  [DisableCloneCellRequest](./client.disableclonecellrequest.md) |  |
-|  [Dna](./client.dna.md) |  |
-|  [DnaStorageBlob](./client.dnastorageblob.md) |  |
-|  [DnaStorageInfo](./client.dnastorageinfo.md) |  |
-|  [Duration](./client.duration.md) |  |
-|  [EntryContent](./client.entrycontent.md) |  |
-|  [FetchPoolInfo](./client.fetchpoolinfo.md) |  |
-|  [FullIntegrationStateDump](./client.fullintegrationstatedump.md) |  |
-|  [FullStateDump](./client.fullstatedump.md) |  |
-|  [GrantZomeCallCapabilityRequest](./client.grantzomecallcapabilityrequest.md) |  |
-|  [HoloHashed](./client.holohashed.md) |  |
-|  [InitZomesComplete](./client.initzomescomplete.md) |  |
-|  [Link](./client.link.md) |  |
-|  [NetworkInfo](./client.networkinfo.md) |  |
-|  [NetworkInfoRequest](./client.networkinforequest.md) |  |
-|  [OpenChain](./client.openchain.md) |  |
-|  [P2pAgentsDump](./client.p2pagentsdump.md) |  |
-|  [PreflightRequest](./client.preflightrequest.md) |  |
-|  [ProvisionedCell](./client.provisionedcell.md) |  |
-|  [RateWeight](./client.rateweight.md) |  |
-|  [RegisterAgentActivity](./client.registeragentactivity.md) |  |
-|  [SignedActionHashed](./client.signedactionhashed.md) |  |
-|  [SigningCredentials](./client.signingcredentials.md) |  |
-|  [SourceChainJsonDump](./client.sourcechainjsondump.md) |  |
-|  [SourceChainJsonRecord](./client.sourcechainjsonrecord.md) |  |
-|  [StemCell](./client.stemcell.md) |  |
-|  [StorageInfo](./client.storageinfo.md) |  |
-|  [Update](./client.update.md) |  |
-|  [UpdateBase](./client.updatebase.md) |  |
-|  [WebsocketConnectionOptions](./client.websocketconnectionoptions.md) | Options for a Websocket connection. |
-|  [ZomeCallCapGrant](./client.zomecallcapgrant.md) |  |
-|  [ZomeDependency](./client.zomedependency.md) |  |
+<table><thead><tr><th>
+
+Interface
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[AdminApi](./client.adminapi.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[AgentInfoDump](./client.agentinfodump.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[AgentValidationPkg](./client.agentvalidationpkg.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[AppAgentClient](./client.appagentclient.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[AppAgentEvents](./client.appagentevents.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[AppApi](./client.appapi.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[CallZomeRequestSigned](./client.callzomerequestsigned.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[CallZomeRequestUnsigned](./client.callzomerequestunsigned.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[CapClaim](./client.capclaim.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[CellProvisioning](./client.cellprovisioning.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[ClonedCell](./client.clonedcell.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[CloseChain](./client.closechain.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[CoordinatorBundle](./client.coordinatorbundle.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[CoordinatorManifest](./client.coordinatormanifest.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[CountersigningAgentState](./client.countersigningagentstate.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[CounterSigningSessionData](./client.countersigningsessiondata.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[CounterSigningSessionTimes](./client.countersigningsessiontimes.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[Create](./client.create.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[CreateBase](./client.createbase.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[CreateCloneCellRequest](./client.createclonecellrequest.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[CreateLink](./client.createlink.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[Delete](./client.delete.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[DeleteLink](./client.deletelink.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[DisableCloneCellRequest](./client.disableclonecellrequest.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[Dna](./client.dna.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[DnaStorageBlob](./client.dnastorageblob.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[DnaStorageInfo](./client.dnastorageinfo.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[Duration](./client.duration.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[EntryContent](./client.entrycontent.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[FetchPoolInfo](./client.fetchpoolinfo.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[FullIntegrationStateDump](./client.fullintegrationstatedump.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[FullStateDump](./client.fullstatedump.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[GrantZomeCallCapabilityRequest](./client.grantzomecallcapabilityrequest.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[HoloHashed](./client.holohashed.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[InitZomesComplete](./client.initzomescomplete.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[Link](./client.link.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[NetworkInfo](./client.networkinfo.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[NetworkInfoRequest](./client.networkinforequest.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[OpenChain](./client.openchain.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[P2pAgentsDump](./client.p2pagentsdump.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[PreflightRequest](./client.preflightrequest.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[ProvisionedCell](./client.provisionedcell.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[RateWeight](./client.rateweight.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[RegisterAgentActivity](./client.registeragentactivity.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[SignedActionHashed](./client.signedactionhashed.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[SigningCredentials](./client.signingcredentials.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[SourceChainJsonDump](./client.sourcechainjsondump.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[SourceChainJsonRecord](./client.sourcechainjsonrecord.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[StemCell](./client.stemcell.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[StorageInfo](./client.storageinfo.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[Update](./client.update.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[UpdateBase](./client.updatebase.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[WebsocketConnectionOptions](./client.websocketconnectionoptions.md)
+
+
+</td><td>
+
+Options for a Websocket connection.
+
+
+</td></tr>
+<tr><td>
+
+[ZomeCallCapGrant](./client.zomecallcapgrant.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[ZomeDependency](./client.zomedependency.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+</tbody></table>
 
 ## Variables
 
-|  Variable | Description |
-|  --- | --- |
-|  [HASH\_TYPE\_PREFIX](./client.hash_type_prefix.md) | <p>Hash type labels and their 3 byte values (forming the first 3 bytes of hash)</p><p>From https://github.com/holochain/holochain/blob/develop/crates/holo\_hash/src/hash\_type/primitive.rs</p> |
-|  [SignalType](./client.signaltype.md) |  |
+<table><thead><tr><th>
+
+Variable
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[HASH\_TYPE\_PREFIX](./client.hash_type_prefix.md)
+
+
+</td><td>
+
+Hash type labels and their 3 byte values (forming the first 3 bytes of hash)
+
+From https://github.com/holochain/holochain/blob/develop/crates/holo\_hash/src/hash\_type/primitive.rs
+
+
+</td></tr>
+<tr><td>
+
+[SignalType](./client.signaltype.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+</tbody></table>
 
 ## Type Aliases
 
-|  Type Alias | Description |
-|  --- | --- |
-|  [Action](./client.action.md) |  |
-|  [ActionBase](./client.actionbase.md) |  |
-|  [ActionHash](./client.actionhash.md) |  |
-|  [ActionHashB64](./client.actionhashb64.md) |  |
-|  [ActionHashed](./client.actionhashed.md) |  |
-|  [AddAgentInfoRequest](./client.addagentinforequest.md) |  |
-|  [AddAgentInfoResponse](./client.addagentinforesponse.md) |  |
-|  [AgentInfoRequest](./client.agentinforequest.md) |  |
-|  [AgentInfoResponse](./client.agentinforesponse.md) |  |
-|  [AgentInfoSigned](./client.agentinfosigned.md) | This type is meant to be opaque |
-|  [AgentPubKey](./client.agentpubkey.md) |  |
-|  [AgentPubKeyB64](./client.agentpubkeyb64.md) |  |
-|  [AnyDhtHash](./client.anydhthash.md) |  |
-|  [AnyDhtHashB64](./client.anydhthashb64.md) |  |
-|  [AnyLinkableHash](./client.anylinkablehash.md) |  |
-|  [AppAgentCallZomeRequest](./client.appagentcallzomerequest.md) |  |
-|  [AppAgentNetworkInfoRequest](./client.appagentnetworkinforequest.md) |  |
-|  [AppBundle](./client.appbundle.md) |  |
-|  [AppBundleSource](./client.appbundlesource.md) |  |
-|  [AppCreateCloneCellRequest](./client.appcreateclonecellrequest.md) |  |
-|  [AppDisableCloneCellRequest](./client.appdisableclonecellrequest.md) |  |
-|  [AppEnableCloneCellRequest](./client.appenableclonecellrequest.md) |  |
-|  [AppEntryDef](./client.appentrydef.md) |  |
-|  [AppInfo](./client.appinfo.md) |  |
-|  [AppInfoRequest](./client.appinforequest.md) |  |
-|  [AppInfoResponse](./client.appinforesponse.md) |  |
-|  [AppManifest](./client.appmanifest.md) |  |
-|  [AppRoleDnaManifest](./client.approlednamanifest.md) |  |
-|  [AppRoleManifest](./client.approlemanifest.md) |  |
-|  [AppSignal](./client.appsignal.md) |  |
-|  [AppSignalCb](./client.appsignalcb.md) |  |
-|  [AttachAppInterfaceRequest](./client.attachappinterfacerequest.md) |  |
-|  [AttachAppInterfaceResponse](./client.attachappinterfaceresponse.md) |  |
-|  [CallZomeRequest](./client.callzomerequest.md) |  |
-|  [CallZomeRequestGeneric](./client.callzomerequestgeneric.md) |  |
-|  [CallZomeResponse](./client.callzomeresponse.md) |  |
-|  [CallZomeResponseGeneric](./client.callzomeresponsegeneric.md) |  |
-|  [CapAccess](./client.capaccess.md) |  |
-|  [CapGrant](./client.capgrant.md) |  |
-|  [CapSecret](./client.capsecret.md) |  |
-|  [CellId](./client.cellid.md) |  |
-|  [CellInfo](./client.cellinfo.md) |  |
-|  [CoordinatorSource](./client.coordinatorsource.md) |  |
-|  [CoordinatorZome](./client.coordinatorzome.md) |  |
-|  [CounterSigningAgents](./client.countersigningagents.md) |  |
-|  [CreateCloneCellResponse](./client.createclonecellresponse.md) |  |
-|  [DeactivationReason](./client.deactivationreason.md) |  |
-|  [DeleteCloneCellRequest](./client.deleteclonecellrequest.md) |  |
-|  [DeleteCloneCellResponse](./client.deleteclonecellresponse.md) |  |
-|  [DhtOp](./client.dhtop.md) |  |
-|  [DisableAppRequest](./client.disableapprequest.md) |  |
-|  [DisableAppResponse](./client.disableappresponse.md) |  |
-|  [DisableCloneCellResponse](./client.disableclonecellresponse.md) |  |
-|  [DisabledAppReason](./client.disabledappreason.md) |  |
-|  [DnaBundle](./client.dnabundle.md) |  |
-|  [DnaDefinition](./client.dnadefinition.md) |  |
-|  [DnaHash](./client.dnahash.md) |  |
-|  [DnaHashB64](./client.dnahashb64.md) |  |
-|  [DnaManifest](./client.dnamanifest.md) |  |
-|  [DnaModifiers](./client.dnamodifiers.md) |  |
-|  [DnaProperties](./client.dnaproperties.md) |  |
-|  [DnaSource](./client.dnasource.md) |  |
-|  [DnaVersionFlexible](./client.dnaversionflexible.md) |  |
-|  [DnaVersionSpec](./client.dnaversionspec.md) |  |
-|  [DumpFullStateRequest](./client.dumpfullstaterequest.md) |  |
-|  [DumpFullStateResponse](./client.dumpfullstateresponse.md) |  |
-|  [DumpNetworkStatsRequest](./client.dumpnetworkstatsrequest.md) |  |
-|  [DumpNetworkStatsResponse](./client.dumpnetworkstatsresponse.md) |  |
-|  [DumpStateRequest](./client.dumpstaterequest.md) |  |
-|  [DumpStateResponse](./client.dumpstateresponse.md) |  |
-|  [EnableAppRequest](./client.enableapprequest.md) |  |
-|  [EnableAppResponse](./client.enableappresponse.md) |  |
-|  [EnableCloneCellRequest](./client.enableclonecellrequest.md) |  |
-|  [EnableCloneCellResponse](./client.enableclonecellresponse.md) |  |
-|  [EncodedAppSignal](./client.encodedappsignal.md) |  |
-|  [Entry](./client.entry.md) |  |
-|  [EntryHash](./client.entryhash.md) |  |
-|  [EntryHashB64](./client.entryhashb64.md) |  |
-|  [EntryType](./client.entrytype.md) |  |
-|  [EntryVisibility](./client.entryvisibility.md) |  |
-|  [ExternalHash](./client.externalhash.md) |  |
-|  [FunctionName](./client.functionname.md) |  |
-|  [GenerateAgentPubKeyRequest](./client.generateagentpubkeyrequest.md) |  |
-|  [GenerateAgentPubKeyResponse](./client.generateagentpubkeyresponse.md) |  |
-|  [GetDnaDefinitionRequest](./client.getdnadefinitionrequest.md) |  |
-|  [GetDnaDefinitionResponse](./client.getdnadefinitionresponse.md) |  |
-|  [GrantedFunctions](./client.grantedfunctions.md) |  |
-|  [GrantZomeCallCapabilityResponse](./client.grantzomecallcapabilityresponse.md) |  |
-|  [HoloHash](./client.holohash.md) |  |
-|  [HoloHashB64](./client.holohashb64.md) |  |
-|  [InstallAppDnaPayload](./client.installappdnapayload.md) |  |
-|  [InstallAppRequest](./client.installapprequest.md) |  |
-|  [InstallAppResponse](./client.installappresponse.md) |  |
-|  [InstalledAppId](./client.installedappid.md) |  |
-|  [InstalledAppInfoStatus](./client.installedappinfostatus.md) |  |
-|  [InstalledCell](./client.installedcell.md) |  |
-|  [IntegrityZome](./client.integrityzome.md) |  |
-|  [KitsuneAgent](./client.kitsuneagent.md) |  |
-|  [KitsuneSpace](./client.kitsunespace.md) |  |
-|  [LinkTag](./client.linktag.md) |  |
-|  [LinkType](./client.linktype.md) | An internal link type index within the DNA, from 0 to 255. |
-|  [ListActiveAppsRequest](./client.listactiveappsrequest.md) |  |
-|  [ListActiveAppsResponse](./client.listactiveappsresponse.md) |  |
-|  [ListAppInterfacesRequest](./client.listappinterfacesrequest.md) |  |
-|  [ListAppInterfacesResponse](./client.listappinterfacesresponse.md) |  |
-|  [ListAppsRequest](./client.listappsrequest.md) |  |
-|  [ListAppsResponse](./client.listappsresponse.md) |  |
-|  [ListCellIdsRequest](./client.listcellidsrequest.md) |  |
-|  [ListCellIdsResponse](./client.listcellidsresponse.md) |  |
-|  [ListDnasRequest](./client.listdnasrequest.md) |  |
-|  [ListDnasResponse](./client.listdnasresponse.md) |  |
-|  [Location\_2](./client.location_2.md) |  |
-|  [MembraneProof](./client.membraneproof.md) |  |
-|  [NetworkInfoResponse](./client.networkinforesponse.md) |  |
-|  [NetworkSeed](./client.networkseed.md) |  |
-|  [NewEntryAction](./client.newentryaction.md) |  |
-|  [Nonce256Bit](./client.nonce256bit.md) |  |
-|  [NonProvenanceCallZomeRequest](./client.nonprovenancecallzomerequest.md) |  |
-|  [PausedAppReason](./client.pausedappreason.md) |  |
-|  [PreflightBytes](./client.preflightbytes.md) |  |
-|  [RateBucketId](./client.ratebucketid.md) |  |
-|  [RateUnits](./client.rateunits.md) |  |
-|  [Record\_2](./client.record_2.md) |  |
-|  [RecordEntry](./client.recordentry.md) |  |
-|  [RegisterDnaRequest](./client.registerdnarequest.md) |  |
-|  [RegisterDnaResponse](./client.registerdnaresponse.md) |  |
-|  [Requester](./client.requester.md) |  |
-|  [ResourceBytes](./client.resourcebytes.md) |  |
-|  [ResourceMap](./client.resourcemap.md) |  |
-|  [Role](./client.role.md) |  |
-|  [RoleName](./client.rolename.md) |  |
-|  [RoleNameCallZomeRequest](./client.rolenamecallzomerequest.md) |  |
-|  [RoleNameCallZomeRequestSigned](./client.rolenamecallzomerequestsigned.md) |  |
-|  [Signal](./client.signal.md) |  |
-|  [Signature](./client.signature.md) |  |
-|  [StartAppRequest](./client.startapprequest.md) |  |
-|  [StartAppResponse](./client.startappresponse.md) |  |
-|  [StorageInfoRequest](./client.storageinforequest.md) |  |
-|  [StorageInfoResponse](./client.storageinforesponse.md) |  |
-|  [Timestamp](./client.timestamp.md) |  |
-|  [Transformer\_2](./client.transformer_2.md) |  |
-|  [UninstallAppRequest](./client.uninstallapprequest.md) |  |
-|  [UninstallAppResponse](./client.uninstallappresponse.md) |  |
-|  [UpdateCoordinatorsRequest](./client.updatecoordinatorsrequest.md) |  |
-|  [UpdateCoordinatorsResponse](./client.updatecoordinatorsresponse.md) |  |
-|  [WasmCode](./client.wasmcode.md) |  |
-|  [WasmHash](./client.wasmhash.md) |  |
-|  [WasmHashB64](./client.wasmhashb64.md) |  |
-|  [WsClientOptions](./client.wsclientoptions.md) |  |
-|  [ZomeDefinition](./client.zomedefinition.md) |  |
-|  [ZomeIndex](./client.zomeindex.md) | An internal zome index within the DNA, from 0 to 255. |
-|  [ZomeLocation](./client.zomelocation.md) |  |
-|  [ZomeManifest](./client.zomemanifest.md) |  |
-|  [ZomeName](./client.zomename.md) |  |
-|  [Zomes](./client.zomes.md) |  |
+<table><thead><tr><th>
 
+Type Alias
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[Action](./client.action.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[ActionBase](./client.actionbase.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[ActionHash](./client.actionhash.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[ActionHashB64](./client.actionhashb64.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[ActionHashed](./client.actionhashed.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[AddAgentInfoRequest](./client.addagentinforequest.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[AddAgentInfoResponse](./client.addagentinforesponse.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[AgentInfoRequest](./client.agentinforequest.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[AgentInfoResponse](./client.agentinforesponse.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[AgentInfoSigned](./client.agentinfosigned.md)
+
+
+</td><td>
+
+This type is meant to be opaque
+
+
+</td></tr>
+<tr><td>
+
+[AgentPubKey](./client.agentpubkey.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[AgentPubKeyB64](./client.agentpubkeyb64.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[AnyDhtHash](./client.anydhthash.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[AnyDhtHashB64](./client.anydhthashb64.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[AnyLinkableHash](./client.anylinkablehash.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[AppAgentCallZomeRequest](./client.appagentcallzomerequest.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[AppAgentNetworkInfoRequest](./client.appagentnetworkinforequest.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[AppBundle](./client.appbundle.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[AppBundleSource](./client.appbundlesource.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[AppCreateCloneCellRequest](./client.appcreateclonecellrequest.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[AppDisableCloneCellRequest](./client.appdisableclonecellrequest.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[AppEnableCloneCellRequest](./client.appenableclonecellrequest.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[AppEntryDef](./client.appentrydef.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[AppInfo](./client.appinfo.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[AppInfoRequest](./client.appinforequest.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[AppInfoResponse](./client.appinforesponse.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[AppManifest](./client.appmanifest.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[AppRoleDnaManifest](./client.approlednamanifest.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[AppRoleManifest](./client.approlemanifest.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[AppSignal](./client.appsignal.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[AppSignalCb](./client.appsignalcb.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[AttachAppInterfaceRequest](./client.attachappinterfacerequest.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[AttachAppInterfaceResponse](./client.attachappinterfaceresponse.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[CallZomeRequest](./client.callzomerequest.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[CallZomeRequestGeneric](./client.callzomerequestgeneric.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[CallZomeResponse](./client.callzomeresponse.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[CallZomeResponseGeneric](./client.callzomeresponsegeneric.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[CapAccess](./client.capaccess.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[CapGrant](./client.capgrant.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[CapSecret](./client.capsecret.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[CellId](./client.cellid.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[CellInfo](./client.cellinfo.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[CoordinatorSource](./client.coordinatorsource.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[CoordinatorZome](./client.coordinatorzome.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[CounterSigningAgents](./client.countersigningagents.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[CreateCloneCellResponse](./client.createclonecellresponse.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[DeactivationReason](./client.deactivationreason.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[DeleteCloneCellRequest](./client.deleteclonecellrequest.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[DeleteCloneCellResponse](./client.deleteclonecellresponse.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[DhtOp](./client.dhtop.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[DisableAppRequest](./client.disableapprequest.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[DisableAppResponse](./client.disableappresponse.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[DisableCloneCellResponse](./client.disableclonecellresponse.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[DisabledAppReason](./client.disabledappreason.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[DnaBundle](./client.dnabundle.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[DnaDefinition](./client.dnadefinition.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[DnaHash](./client.dnahash.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[DnaHashB64](./client.dnahashb64.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[DnaManifest](./client.dnamanifest.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[DnaModifiers](./client.dnamodifiers.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[DnaProperties](./client.dnaproperties.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[DnaSource](./client.dnasource.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[DnaVersionFlexible](./client.dnaversionflexible.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[DnaVersionSpec](./client.dnaversionspec.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[DumpFullStateRequest](./client.dumpfullstaterequest.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[DumpFullStateResponse](./client.dumpfullstateresponse.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[DumpNetworkStatsRequest](./client.dumpnetworkstatsrequest.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[DumpNetworkStatsResponse](./client.dumpnetworkstatsresponse.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[DumpStateRequest](./client.dumpstaterequest.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[DumpStateResponse](./client.dumpstateresponse.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[EnableAppRequest](./client.enableapprequest.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[EnableAppResponse](./client.enableappresponse.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[EnableCloneCellRequest](./client.enableclonecellrequest.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[EnableCloneCellResponse](./client.enableclonecellresponse.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[EncodedAppSignal](./client.encodedappsignal.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[Entry](./client.entry.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[EntryHash](./client.entryhash.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[EntryHashB64](./client.entryhashb64.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[EntryType](./client.entrytype.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[EntryVisibility](./client.entryvisibility.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[ExternalHash](./client.externalhash.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[FunctionName](./client.functionname.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[GenerateAgentPubKeyRequest](./client.generateagentpubkeyrequest.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[GenerateAgentPubKeyResponse](./client.generateagentpubkeyresponse.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[GetDnaDefinitionRequest](./client.getdnadefinitionrequest.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[GetDnaDefinitionResponse](./client.getdnadefinitionresponse.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[GrantedFunctions](./client.grantedfunctions.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[GrantZomeCallCapabilityResponse](./client.grantzomecallcapabilityresponse.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[HoloHash](./client.holohash.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[HoloHashB64](./client.holohashb64.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[InstallAppDnaPayload](./client.installappdnapayload.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[InstallAppRequest](./client.installapprequest.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[InstallAppResponse](./client.installappresponse.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[InstalledAppId](./client.installedappid.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[InstalledAppInfoStatus](./client.installedappinfostatus.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[InstalledCell](./client.installedcell.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[IntegrityZome](./client.integrityzome.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[KitsuneAgent](./client.kitsuneagent.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[KitsuneSpace](./client.kitsunespace.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[LinkTag](./client.linktag.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[LinkType](./client.linktype.md)
+
+
+</td><td>
+
+An internal link type index within the DNA, from 0 to 255.
+
+
+</td></tr>
+<tr><td>
+
+[ListActiveAppsRequest](./client.listactiveappsrequest.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[ListActiveAppsResponse](./client.listactiveappsresponse.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[ListAppInterfacesRequest](./client.listappinterfacesrequest.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[ListAppInterfacesResponse](./client.listappinterfacesresponse.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[ListAppsRequest](./client.listappsrequest.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[ListAppsResponse](./client.listappsresponse.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[ListCellIdsRequest](./client.listcellidsrequest.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[ListCellIdsResponse](./client.listcellidsresponse.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[ListDnasRequest](./client.listdnasrequest.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[ListDnasResponse](./client.listdnasresponse.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[Location\_2](./client.location_2.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[MembraneProof](./client.membraneproof.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[NetworkInfoResponse](./client.networkinforesponse.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[NetworkSeed](./client.networkseed.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[NewEntryAction](./client.newentryaction.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[Nonce256Bit](./client.nonce256bit.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[NonProvenanceCallZomeRequest](./client.nonprovenancecallzomerequest.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[PausedAppReason](./client.pausedappreason.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[PreflightBytes](./client.preflightbytes.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[RateBucketId](./client.ratebucketid.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[RateUnits](./client.rateunits.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[Record\_2](./client.record_2.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[RecordEntry](./client.recordentry.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[RegisterDnaRequest](./client.registerdnarequest.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[RegisterDnaResponse](./client.registerdnaresponse.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[Requester](./client.requester.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[ResourceBytes](./client.resourcebytes.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[ResourceMap](./client.resourcemap.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[Role](./client.role.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[RoleName](./client.rolename.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[RoleNameCallZomeRequest](./client.rolenamecallzomerequest.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[RoleNameCallZomeRequestSigned](./client.rolenamecallzomerequestsigned.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[Signal](./client.signal.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[Signature](./client.signature.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[StartAppRequest](./client.startapprequest.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[StartAppResponse](./client.startappresponse.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[StorageInfoRequest](./client.storageinforequest.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[StorageInfoResponse](./client.storageinforesponse.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[Timestamp](./client.timestamp.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[Transformer\_2](./client.transformer_2.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[UninstallAppRequest](./client.uninstallapprequest.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[UninstallAppResponse](./client.uninstallappresponse.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[UpdateCoordinatorsRequest](./client.updatecoordinatorsrequest.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[UpdateCoordinatorsResponse](./client.updatecoordinatorsresponse.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[WasmCode](./client.wasmcode.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[WasmHash](./client.wasmhash.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[WasmHashB64](./client.wasmhashb64.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[WsClientOptions](./client.wsclientoptions.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[ZomeDefinition](./client.zomedefinition.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[ZomeIndex](./client.zomeindex.md)
+
+
+</td><td>
+
+An internal zome index within the DNA, from 0 to 255.
+
+
+</td></tr>
+<tr><td>
+
+[ZomeLocation](./client.zomelocation.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[ZomeManifest](./client.zomemanifest.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[ZomeName](./client.zomename.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[Zomes](./client.zomes.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+</tbody></table>

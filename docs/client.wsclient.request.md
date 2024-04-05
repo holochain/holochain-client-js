@@ -14,10 +14,39 @@ request<Response>(request: unknown): Promise<Response>;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  request | unknown | The request to send over the websocket. |
+<table><thead><tr><th>
 
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+request
+
+
+</td><td>
+
+unknown
+
+
+</td><td>
+
+The request to send over the websocket.
+
+
+</td></tr>
+</tbody></table>
 **Returns:**
 
 Promise&lt;Response&gt;

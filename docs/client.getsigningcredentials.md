@@ -14,10 +14,39 @@ getSigningCredentials: (cellId: CellId) => SigningCredentials | undefined
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  cellId | [CellId](./client.cellid.md) | Cell id to get credentials of. |
+<table><thead><tr><th>
 
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+cellId
+
+
+</td><td>
+
+[CellId](./client.cellid.md)
+
+
+</td><td>
+
+Cell id to get credentials of.
+
+
+</td></tr>
+</tbody></table>
 **Returns:**
 
 [SigningCredentials](./client.signingcredentials.md) \| undefined

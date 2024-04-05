@@ -13,10 +13,37 @@ export declare function getDhtOpEntry(op: DhtOp): Entry | undefined;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  op | [DhtOp](./client.dhtop.md) |  |
+<table><thead><tr><th>
 
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+op
+
+
+</td><td>
+
+[DhtOp](./client.dhtop.md)
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>
 **Returns:**
 
 [Entry](./client.entry.md) \| undefined

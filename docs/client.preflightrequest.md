@@ -13,12 +13,127 @@ export interface PreflightRequest
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [action\_base](./client.preflightrequest.action_base.md) |  | [ActionBase](./client.actionbase.md) |  |
-|  [app\_entry\_hash](./client.preflightrequest.app_entry_hash.md) |  | [EntryHash](./client.entryhash.md) |  |
-|  [enzyme\_index](./client.preflightrequest.enzyme_index.md) |  | number \| undefined |  |
-|  [preflight\_bytes](./client.preflightrequest.preflight_bytes.md) |  | [PreflightBytes](./client.preflightbytes.md) |  |
-|  [session\_times](./client.preflightrequest.session_times.md) |  | [CounterSigningSessionTimes](./client.countersigningsessiontimes.md) |  |
-|  [signing\_agents](./client.preflightrequest.signing_agents.md) |  | [CounterSigningAgents](./client.countersigningagents.md) |  |
+<table><thead><tr><th>
 
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[action\_base](./client.preflightrequest.action_base.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[ActionBase](./client.actionbase.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[app\_entry\_hash](./client.preflightrequest.app_entry_hash.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[EntryHash](./client.entryhash.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[enzyme\_index](./client.preflightrequest.enzyme_index.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number \| undefined
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[preflight\_bytes](./client.preflightrequest.preflight_bytes.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[PreflightBytes](./client.preflightbytes.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[session\_times](./client.preflightrequest.session_times.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[CounterSigningSessionTimes](./client.countersigningsessiontimes.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[signing\_agents](./client.preflightrequest.signing_agents.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[CounterSigningAgents](./client.countersigningagents.md)
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>

@@ -13,9 +13,76 @@ export interface CountersigningAgentState
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [action\_seq](./client.countersigningagentstate.action_seq.md) |  | number |  |
-|  [agent\_index](./client.countersigningagentstate.agent_index.md) |  | number |  |
-|  [chain\_top](./client.countersigningagentstate.chain_top.md) |  | [ActionHash](./client.actionhash.md) |  |
+<table><thead><tr><th>
 
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[action\_seq](./client.countersigningagentstate.action_seq.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[agent\_index](./client.countersigningagentstate.agent_index.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[chain\_top](./client.countersigningagentstate.chain_top.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[ActionHash](./client.actionhash.md)
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>

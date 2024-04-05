@@ -13,12 +13,127 @@ export interface CloseChain
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [action\_seq](./client.closechain.action_seq.md) |  | number |  |
-|  [author](./client.closechain.author.md) |  | [AgentPubKey](./client.agentpubkey.md) |  |
-|  [new\_dna\_hash](./client.closechain.new_dna_hash.md) |  | [DnaHash](./client.dnahash.md) |  |
-|  [prev\_action](./client.closechain.prev_action.md) |  | [ActionHash](./client.actionhash.md) |  |
-|  [timestamp](./client.closechain.timestamp.md) |  | [Timestamp](./client.timestamp.md) |  |
-|  [type](./client.closechain.type.md) |  | [ActionType.CloseChain](./client.actiontype.md) |  |
+<table><thead><tr><th>
 
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[action\_seq](./client.closechain.action_seq.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[author](./client.closechain.author.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[AgentPubKey](./client.agentpubkey.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[new\_dna\_hash](./client.closechain.new_dna_hash.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[DnaHash](./client.dnahash.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[prev\_action](./client.closechain.prev_action.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[ActionHash](./client.actionhash.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[timestamp](./client.closechain.timestamp.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[Timestamp](./client.timestamp.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[type](./client.closechain.type.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[ActionType.CloseChain](./client.actiontype.md)
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>

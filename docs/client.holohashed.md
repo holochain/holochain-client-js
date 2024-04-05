@@ -13,8 +13,59 @@ export interface HoloHashed<T>
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [content](./client.holohashed.content.md) |  | T |  |
-|  [hash](./client.holohashed.hash.md) |  | [HoloHash](./client.holohash.md) |  |
+<table><thead><tr><th>
 
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[content](./client.holohashed.content.md)
+
+
+</td><td>
+
+
+</td><td>
+
+T
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[hash](./client.holohashed.hash.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[HoloHash](./client.holohash.md)
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>

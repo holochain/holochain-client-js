@@ -14,10 +14,39 @@ createCloneCell(args: AppCreateCloneCellRequest): Promise<CreateCloneCellRespons
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  args | [AppCreateCloneCellRequest](./client.appcreateclonecellrequest.md) | Specify the cell to clone. |
+<table><thead><tr><th>
 
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+args
+
+
+</td><td>
+
+[AppCreateCloneCellRequest](./client.appcreateclonecellrequest.md)
+
+
+</td><td>
+
+Specify the cell to clone.
+
+
+</td></tr>
+</tbody></table>
 **Returns:**
 
 Promise&lt;[CreateCloneCellResponse](./client.createclonecellresponse.md)<!-- -->&gt;

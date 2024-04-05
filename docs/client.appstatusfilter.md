@@ -13,11 +13,90 @@ export declare enum AppStatusFilter
 
 ## Enumeration Members
 
-|  Member | Value | Description |
-|  --- | --- | --- |
-|  Disabled | <code>&quot;disabled&quot;</code> |  |
-|  Enabled | <code>&quot;enabled&quot;</code> |  |
-|  Paused | <code>&quot;paused&quot;</code> |  |
-|  Running | <code>&quot;running&quot;</code> |  |
-|  Stopped | <code>&quot;stopped&quot;</code> |  |
+<table><thead><tr><th>
 
+Member
+
+
+</th><th>
+
+Value
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+Disabled
+
+
+</td><td>
+
+`"disabled"`
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+Enabled
+
+
+</td><td>
+
+`"enabled"`
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+Paused
+
+
+</td><td>
+
+`"paused"`
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+Running
+
+
+</td><td>
+
+`"running"`
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+Stopped
+
+
+</td><td>
+
+`"stopped"`
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>

@@ -15,25 +15,264 @@ export declare class AppAgentWebsocket implements AppAgentClient
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [appWebsocket](./client.appagentwebsocket.appwebsocket.md) | <code>readonly</code> | [AppWebsocket](./client.appwebsocket.md) |  |
-|  [cachedAppInfo?](./client.appagentwebsocket.cachedappinfo.md) |  | [AppInfo](./client.appinfo.md) \| null | _(Optional)_ |
-|  [emitter](./client.appagentwebsocket.emitter.md) | <code>readonly</code> | Emittery&lt;[AppAgentEvents](./client.appagentevents.md)<!-- -->&gt; |  |
-|  [installedAppId](./client.appagentwebsocket.installedappid.md) |  | [InstalledAppId](./client.installedappid.md) |  |
-|  [myPubKey](./client.appagentwebsocket.mypubkey.md) |  | [AgentPubKey](./client.agentpubkey.md) |  |
+<table><thead><tr><th>
+
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[appWebsocket](./client.appagentwebsocket.appwebsocket.md)
+
+
+</td><td>
+
+`readonly`
+
+
+</td><td>
+
+[AppWebsocket](./client.appwebsocket.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[cachedAppInfo?](./client.appagentwebsocket.cachedappinfo.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[AppInfo](./client.appinfo.md) \| null
+
+
+</td><td>
+
+_(Optional)_
+
+
+</td></tr>
+<tr><td>
+
+[emitter](./client.appagentwebsocket.emitter.md)
+
+
+</td><td>
+
+`readonly`
+
+
+</td><td>
+
+Emittery&lt;[AppAgentEvents](./client.appagentevents.md)<!-- -->&gt;
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[installedAppId](./client.appagentwebsocket.installedappid.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[InstalledAppId](./client.installedappid.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[myPubKey](./client.appagentwebsocket.mypubkey.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[AgentPubKey](./client.agentpubkey.md)
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>
 
 ## Methods
 
-|  Method | Modifiers | Description |
-|  --- | --- | --- |
-|  [appInfo()](./client.appagentwebsocket.appinfo.md) |  | Request the app's info, including all cell infos. |
-|  [callZome(request, timeout)](./client.appagentwebsocket.callzome.md) |  | Call a zome. |
-|  [connect(installed\_app\_id, options)](./client.appagentwebsocket.connect.md) | <code>static</code> | Instance factory for creating AppAgentWebsockets. |
-|  [createCloneCell(args)](./client.appagentwebsocket.createclonecell.md) |  | Clone an existing provisioned cell. |
-|  [disableCloneCell(args)](./client.appagentwebsocket.disableclonecell.md) |  | Disable an enabled clone cell. |
-|  [enableCloneCell(args)](./client.appagentwebsocket.enableclonecell.md) |  | Enable a disabled clone cell. |
-|  [getCellIdFromRoleName(roleName, appInfo)](./client.appagentwebsocket.getcellidfromrolename.md) |  | Get a cell id by its role name or clone id. |
-|  [networkInfo(args)](./client.appagentwebsocket.networkinfo.md) |  | Request network info about gossip status. |
-|  [on(eventName, listener)](./client.appagentwebsocket.on.md) |  | Register an event listener for signals. |
+<table><thead><tr><th>
 
+Method
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[appInfo()](./client.appagentwebsocket.appinfo.md)
+
+
+</td><td>
+
+
+</td><td>
+
+Request the app's info, including all cell infos.
+
+
+</td></tr>
+<tr><td>
+
+[callZome(request, timeout)](./client.appagentwebsocket.callzome.md)
+
+
+</td><td>
+
+
+</td><td>
+
+Call a zome.
+
+
+</td></tr>
+<tr><td>
+
+[connect(installed\_app\_id, options)](./client.appagentwebsocket.connect.md)
+
+
+</td><td>
+
+`static`
+
+
+</td><td>
+
+Instance factory for creating AppAgentWebsockets.
+
+
+</td></tr>
+<tr><td>
+
+[createCloneCell(args)](./client.appagentwebsocket.createclonecell.md)
+
+
+</td><td>
+
+
+</td><td>
+
+Clone an existing provisioned cell.
+
+
+</td></tr>
+<tr><td>
+
+[disableCloneCell(args)](./client.appagentwebsocket.disableclonecell.md)
+
+
+</td><td>
+
+
+</td><td>
+
+Disable an enabled clone cell.
+
+
+</td></tr>
+<tr><td>
+
+[enableCloneCell(args)](./client.appagentwebsocket.enableclonecell.md)
+
+
+</td><td>
+
+
+</td><td>
+
+Enable a disabled clone cell.
+
+
+</td></tr>
+<tr><td>
+
+[getCellIdFromRoleName(roleName, appInfo)](./client.appagentwebsocket.getcellidfromrolename.md)
+
+
+</td><td>
+
+
+</td><td>
+
+Get a cell id by its role name or clone id.
+
+
+</td></tr>
+<tr><td>
+
+[networkInfo(args)](./client.appagentwebsocket.networkinfo.md)
+
+
+</td><td>
+
+
+</td><td>
+
+Request network info about gossip status.
+
+
+</td></tr>
+<tr><td>
+
+[on(eventName, listener)](./client.appagentwebsocket.on.md)
+
+
+</td><td>
+
+
+</td><td>
+
+Register an event listener for signals.
+
+
+</td></tr>
+</tbody></table>

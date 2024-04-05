@@ -17,23 +17,188 @@ export declare class WsClient extends Emittery
 
 ## Constructors
 
-|  Constructor | Modifiers | Description |
-|  --- | --- | --- |
-|  [(constructor)(socket, url)](./client.wsclient._constructor_.md) |  | Constructs a new instance of the <code>WsClient</code> class |
+<table><thead><tr><th>
+
+Constructor
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[(constructor)(socket, url, options)](./client.wsclient._constructor_.md)
+
+
+</td><td>
+
+
+</td><td>
+
+Constructs a new instance of the `WsClient` class
+
+
+</td></tr>
+</tbody></table>
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [socket](./client.wsclient.socket.md) |  | IsoWebSocket |  |
-|  [url](./client.wsclient.url.md) |  | URL \| undefined |  |
+<table><thead><tr><th>
+
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[options](./client.wsclient.options.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[WsClientOptions](./client.wsclientoptions.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[socket](./client.wsclient.socket.md)
+
+
+</td><td>
+
+
+</td><td>
+
+IsoWebSocket
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[url](./client.wsclient.url.md)
+
+
+</td><td>
+
+
+</td><td>
+
+URL \| undefined
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>
 
 ## Methods
 
-|  Method | Modifiers | Description |
-|  --- | --- | --- |
-|  [close(code)](./client.wsclient.close.md) |  | Close the websocket connection. |
-|  [connect(url, options)](./client.wsclient.connect.md) | <code>static</code> | Instance factory for creating WsClients. |
-|  [emitSignal(data)](./client.wsclient.emitsignal.md) |  | Sends data as a signal. |
-|  [request(request)](./client.wsclient.request.md) |  | Send requests to the connected websocket. |
+<table><thead><tr><th>
 
+Method
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[close(code)](./client.wsclient.close.md)
+
+
+</td><td>
+
+
+</td><td>
+
+Close the websocket connection.
+
+
+</td></tr>
+<tr><td>
+
+[connect(url, options)](./client.wsclient.connect.md)
+
+
+</td><td>
+
+`static`
+
+
+</td><td>
+
+Instance factory for creating WsClients.
+
+
+</td></tr>
+<tr><td>
+
+[emitSignal(data)](./client.wsclient.emitsignal.md)
+
+
+</td><td>
+
+
+</td><td>
+
+Sends data as a signal.
+
+
+</td></tr>
+<tr><td>
+
+[request(request)](./client.wsclient.request.md)
+
+
+</td><td>
+
+
+</td><td>
+
+Send requests to the connected websocket.
+
+
+</td></tr>
+</tbody></table>

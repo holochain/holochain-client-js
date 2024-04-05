@@ -13,8 +13,59 @@ export interface EntryContent<E extends string, C>
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [entry\_type](./client.entrycontent.entry_type.md) |  | E |  |
-|  [entry](./client.entrycontent.entry.md) |  | C |  |
+<table><thead><tr><th>
 
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[entry\_type](./client.entrycontent.entry_type.md)
+
+
+</td><td>
+
+
+</td><td>
+
+E
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[entry](./client.entrycontent.entry.md)
+
+
+</td><td>
+
+
+</td><td>
+
+C
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>

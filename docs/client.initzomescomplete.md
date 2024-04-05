@@ -13,11 +13,110 @@ export interface InitZomesComplete
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [action\_seq](./client.initzomescomplete.action_seq.md) |  | number |  |
-|  [author](./client.initzomescomplete.author.md) |  | [AgentPubKey](./client.agentpubkey.md) |  |
-|  [prev\_action](./client.initzomescomplete.prev_action.md) |  | [ActionHash](./client.actionhash.md) |  |
-|  [timestamp](./client.initzomescomplete.timestamp.md) |  | [Timestamp](./client.timestamp.md) |  |
-|  [type](./client.initzomescomplete.type.md) |  | [ActionType.InitZomesComplete](./client.actiontype.md) |  |
+<table><thead><tr><th>
 
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[action\_seq](./client.initzomescomplete.action_seq.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[author](./client.initzomescomplete.author.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[AgentPubKey](./client.agentpubkey.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[prev\_action](./client.initzomescomplete.prev_action.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[ActionHash](./client.actionhash.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[timestamp](./client.initzomescomplete.timestamp.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[Timestamp](./client.timestamp.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[type](./client.initzomescomplete.type.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[ActionType.InitZomesComplete](./client.actiontype.md)
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>

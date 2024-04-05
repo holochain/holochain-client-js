@@ -13,9 +13,68 @@ export declare enum CellProvisioningStrategy
 
 ## Enumeration Members
 
-|  Member | Value | Description |
-|  --- | --- | --- |
-|  Create | <code>&quot;create&quot;</code> | Always create a new Cell when installing this App |
-|  CreateIfNoExists | <code>&quot;create_if_no_exists&quot;</code> | Try <code>UseExisting</code>, and if that fails, fallback to <code>Create</code> |
-|  UseExisting | <code>&quot;use_existing&quot;</code> | Require that a Cell is already installed which matches the DNA version spec, and which has an Agent that's associated with this App's agent via DPKI. If no such Cell exists, \*app installation fails\*. |
+<table><thead><tr><th>
 
+Member
+
+
+</th><th>
+
+Value
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+Create
+
+
+</td><td>
+
+`"create"`
+
+
+</td><td>
+
+Always create a new Cell when installing this App
+
+
+</td></tr>
+<tr><td>
+
+CreateIfNoExists
+
+
+</td><td>
+
+`"create_if_no_exists"`
+
+
+</td><td>
+
+Try `UseExisting`<!-- -->, and if that fails, fallback to `Create`
+
+
+</td></tr>
+<tr><td>
+
+UseExisting
+
+
+</td><td>
+
+`"use_existing"`
+
+
+</td><td>
+
+Require that a Cell is already installed which matches the DNA version spec, and which has an Agent that's associated with this App's agent via DPKI. If no such Cell exists, \*app installation fails\*.
+
+
+</td></tr>
+</tbody></table>

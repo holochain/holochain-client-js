@@ -14,10 +14,39 @@ static connect(options?: WebsocketConnectionOptions): Promise<AppWebsocket>;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  options | [WebsocketConnectionOptions](./client.websocketconnectionoptions.md) | _(Optional)_ [WebsocketConnectionOptions](./client.websocketconnectionoptions.md) |
+<table><thead><tr><th>
 
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+options
+
+
+</td><td>
+
+[WebsocketConnectionOptions](./client.websocketconnectionoptions.md)
+
+
+</td><td>
+
+_(Optional)_ [WebsocketConnectionOptions](./client.websocketconnectionoptions.md)
+
+
+</td></tr>
+</tbody></table>
 **Returns:**
 
 Promise&lt;[AppWebsocket](./client.appwebsocket.md)<!-- -->&gt;

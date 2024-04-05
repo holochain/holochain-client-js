@@ -13,10 +13,37 @@ signZomeCall: (request: CallZomeRequest) => Promise<CallZomeRequestSigned>
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  request | [CallZomeRequest](./client.callzomerequest.md) |  |
+<table><thead><tr><th>
 
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+request
+
+
+</td><td>
+
+[CallZomeRequest](./client.callzomerequest.md)
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>
 **Returns:**
 
 Promise&lt;[CallZomeRequestSigned](./client.callzomerequestsigned.md)<!-- -->&gt;

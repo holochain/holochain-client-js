@@ -13,13 +13,144 @@ export interface DnaStorageInfo
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [authored\_data\_size\_on\_disk](./client.dnastorageinfo.authored_data_size_on_disk.md) |  | number |  |
-|  [authored\_data\_size](./client.dnastorageinfo.authored_data_size.md) |  | number |  |
-|  [cache\_data\_size\_on\_disk](./client.dnastorageinfo.cache_data_size_on_disk.md) |  | number |  |
-|  [cache\_data\_size](./client.dnastorageinfo.cache_data_size.md) |  | number |  |
-|  [dht\_data\_size\_on\_disk](./client.dnastorageinfo.dht_data_size_on_disk.md) |  | number |  |
-|  [dht\_data\_size](./client.dnastorageinfo.dht_data_size.md) |  | number |  |
-|  [used\_by](./client.dnastorageinfo.used_by.md) |  | Array&lt;[InstalledAppId](./client.installedappid.md)<!-- -->&gt; |  |
+<table><thead><tr><th>
 
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[authored\_data\_size\_on\_disk](./client.dnastorageinfo.authored_data_size_on_disk.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[authored\_data\_size](./client.dnastorageinfo.authored_data_size.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[cache\_data\_size\_on\_disk](./client.dnastorageinfo.cache_data_size_on_disk.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[cache\_data\_size](./client.dnastorageinfo.cache_data_size.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[dht\_data\_size\_on\_disk](./client.dnastorageinfo.dht_data_size_on_disk.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[dht\_data\_size](./client.dnastorageinfo.dht_data_size.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[used\_by](./client.dnastorageinfo.used_by.md)
+
+
+</td><td>
+
+
+</td><td>
+
+Array&lt;[InstalledAppId](./client.installedappid.md)<!-- -->&gt;
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>

@@ -37,7 +37,8 @@
     "test": "RUST_LOG=error RUST_BACKTRACE=1 node --loader ts-node/esm test/index.ts",
     "build:lib": "rimraf ./lib && tsc -p tsconfig.build.json",
     "build:docs": "api-extractor run --local && api-documenter markdown -i docs/temp -o docs",
-    "build": "npm run build:lib && npm run build:docs"
+    "build": "npm run build:lib && npm run build:docs",
+    "prepublishOnly": "npm run lint && npm run build"
   },
   "dependencies": {
     "@bitgo/blake2b": "^3.2.4",

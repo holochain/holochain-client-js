@@ -13,19 +13,120 @@ export interface AppAgentClient
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [myPubKey](./client.appagentclient.mypubkey.md) |  | [AgentPubKey](./client.agentpubkey.md) |  |
+<table><thead><tr><th>
+
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[myPubKey](./client.appagentclient.mypubkey.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[AgentPubKey](./client.agentpubkey.md)
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>
 
 ## Methods
 
-|  Method | Description |
-|  --- | --- |
-|  [appInfo()](./client.appagentclient.appinfo.md) |  |
-|  [callZome(args, timeout)](./client.appagentclient.callzome.md) |  |
-|  [createCloneCell(args)](./client.appagentclient.createclonecell.md) |  |
-|  [disableCloneCell(args)](./client.appagentclient.disableclonecell.md) |  |
-|  [enableCloneCell(args)](./client.appagentclient.enableclonecell.md) |  |
-|  [networkInfo(args)](./client.appagentclient.networkinfo.md) |  |
-|  [on(eventName, listener)](./client.appagentclient.on.md) |  |
+<table><thead><tr><th>
 
+Method
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[appInfo()](./client.appagentclient.appinfo.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[callZome(args, timeout)](./client.appagentclient.callzome.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[createCloneCell(args)](./client.appagentclient.createclonecell.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[disableCloneCell(args)](./client.appagentclient.disableclonecell.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[enableCloneCell(args)](./client.appagentclient.enableclonecell.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[networkInfo(args)](./client.appagentclient.networkinfo.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[on(eventName, listener)](./client.appagentclient.on.md)
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>

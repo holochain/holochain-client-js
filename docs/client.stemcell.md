@@ -13,9 +13,78 @@ export interface StemCell
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [dna\_modifiers](./client.stemcell.dna_modifiers.md) |  | [DnaModifiers](./client.dnamodifiers.md) |  |
-|  [dna](./client.stemcell.dna.md) |  | [DnaHash](./client.dnahash.md) |  |
-|  [name?](./client.stemcell.name.md) |  | string | _(Optional)_ |
+<table><thead><tr><th>
 
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[dna\_modifiers](./client.stemcell.dna_modifiers.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[DnaModifiers](./client.dnamodifiers.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[dna](./client.stemcell.dna.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[DnaHash](./client.dnahash.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[name?](./client.stemcell.name.md)
+
+
+</td><td>
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+_(Optional)_
+
+
+</td></tr>
+</tbody></table>

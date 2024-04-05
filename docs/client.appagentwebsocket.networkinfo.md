@@ -14,10 +14,39 @@ networkInfo(args: AppAgentNetworkInfoRequest): Promise<NetworkInfoResponse>;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  args | [AppAgentNetworkInfoRequest](./client.appagentnetworkinforequest.md) | Specify the DNAs for which you want network info |
+<table><thead><tr><th>
 
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+args
+
+
+</td><td>
+
+[AppAgentNetworkInfoRequest](./client.appagentnetworkinforequest.md)
+
+
+</td><td>
+
+Specify the DNAs for which you want network info
+
+
+</td></tr>
+</tbody></table>
 **Returns:**
 
 Promise&lt;[NetworkInfoResponse](./client.networkinforesponse.md)<!-- -->&gt;

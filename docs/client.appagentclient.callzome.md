@@ -12,11 +12,53 @@ callZome(args: AppAgentCallZomeRequest, timeout?: number): Promise<any>;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  args | [AppAgentCallZomeRequest](./client.appagentcallzomerequest.md) |  |
-|  timeout | number | _(Optional)_ |
+<table><thead><tr><th>
 
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+args
+
+
+</td><td>
+
+[AppAgentCallZomeRequest](./client.appagentcallzomerequest.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+timeout
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+_(Optional)_
+
+
+</td></tr>
+</tbody></table>
 **Returns:**
 
 Promise&lt;any&gt;

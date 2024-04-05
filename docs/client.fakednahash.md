@@ -14,10 +14,39 @@ export declare function fakeDnaHash(coreByte?: number | undefined): Promise<DnaH
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  coreByte | number \| undefined | _(Optional)_ Optionally specify a byte to repeat for all core 32 bytes. If undefined will generate random core 32 bytes. |
+<table><thead><tr><th>
 
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+coreByte
+
+
+</td><td>
+
+number \| undefined
+
+
+</td><td>
+
+_(Optional)_ Optionally specify a byte to repeat for all core 32 bytes. If undefined will generate random core 32 bytes.
+
+
+</td></tr>
+</tbody></table>
 **Returns:**
 
 Promise&lt;[DnaHash](./client.dnahash.md)<!-- -->&gt;

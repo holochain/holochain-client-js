@@ -13,10 +13,93 @@ export interface Dna
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [author](./client.dna.author.md) |  | [AgentPubKey](./client.agentpubkey.md) |  |
-|  [hash](./client.dna.hash.md) |  | [DnaHash](./client.dnahash.md) |  |
-|  [timestamp](./client.dna.timestamp.md) |  | [Timestamp](./client.timestamp.md) |  |
-|  [type](./client.dna.type.md) |  | [ActionType.Dna](./client.actiontype.md) |  |
+<table><thead><tr><th>
 
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[author](./client.dna.author.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[AgentPubKey](./client.agentpubkey.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[hash](./client.dna.hash.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[DnaHash](./client.dnahash.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[timestamp](./client.dna.timestamp.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[Timestamp](./client.timestamp.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[type](./client.dna.type.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[ActionType.Dna](./client.actiontype.md)
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>
