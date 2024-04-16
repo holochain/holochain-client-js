@@ -9,6 +9,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Fixed
 ### Removed
 
+## 2024-04-16: v0.17.0-dev.9
+### Fixed
+- Replace all IPv4 addresses `127.0.0.1` by `localhost`.
+
 ## 2024-04-05: v0.17.0-dev.8
 ### Changed
 - Websocket client: Specify `origin` parameter when establishing app websocket connections to protect localhost from cross origin attacks in browser scripts.
