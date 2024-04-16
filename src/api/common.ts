@@ -85,12 +85,12 @@ export const promiseTimeout = (
 
   const timeout = new Promise((_, reject) => {
     id = setTimeout(
-      () => reject(new Error(`Timed out in ${ms}ms: ${tag}`)),
+      () => reject(new Error(`Request timed out in ${ms} ms: ${tag}`)),
       ms
     );
   });
 
-  return new Promise((res, rej) => {
+  return new Promise((res, rej) =>
     Promise.race([promise, timeout])
       .then((a) => {
         clearTimeout(id);
@@ -98,8 +98,8 @@ export const promiseTimeout = (
       })
       .catch((e) => {
         return rej(e);
-      });
-  });
+      })
+  );
 };
 
 const CLONE_ID_DELIMITER = ".";

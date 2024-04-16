@@ -52,7 +52,7 @@ const ADMIN_PORT_1 = 33002;
 const ROLE_NAME: RoleName = "foo";
 const TEST_ZOME_NAME = "foo";
 
-export const ADMIN_WS_URL = new URL(`ws://127.0.0.1:${ADMIN_PORT}`);
+export const ADMIN_WS_URL = new URL(`ws://localhost:${ADMIN_PORT}`);
 
 test(
   "admin smoke test: registerDna + installApp + uninstallApp",
@@ -388,7 +388,7 @@ test(
     });
     t.assert(typeof port === "number", "returned a valid app port");
     await AppWebsocket.connect({
-      url: new URL(`ws://127.0.0.1:${port}`),
+      url: new URL(`ws://localhost:${port}`),
       wsClientOptions: { origin: "client-test-app" },
     });
     t.pass("can connect an app websocket to attached port");
@@ -408,7 +408,7 @@ test(
     });
     try {
       await AppWebsocket.connect({
-        url: new URL(`ws://127.0.0.1:${port}`),
+        url: new URL(`ws://localhost:${port}`),
         wsClientOptions: { origin: allowedOrigin },
       });
       t.pass("app websocket connection established");
@@ -430,7 +430,7 @@ test(
     });
     try {
       await AppWebsocket.connect({
-        url: new URL(`ws://127.0.0.1:${port}`),
+        url: new URL(`ws://localhost:${port}`),
         wsClientOptions: { origin: "disallowed_origin" },
       });
       t.fail("app websocket connection should have failed");
@@ -528,7 +528,7 @@ test(
       allowed_origins: "client-test-app",
     });
     const client = await AppWebsocket.connect({
-      url: new URL(`ws://127.0.0.1:${appPort}`),
+      url: new URL(`ws://localhost:${appPort}`),
       wsClientOptions: { origin: "client-test-app" },
     });
 
@@ -595,7 +595,7 @@ test(
       allowed_origins: "client-test-app",
     });
     const client = await AppWebsocket.connect({
-      url: new URL(`ws://127.0.0.1:${appPort}`),
+      url: new URL(`ws://localhost:${appPort}`),
       wsClientOptions: { origin: "client-test-app" },
     });
 
@@ -718,7 +718,7 @@ test(
     };
     try {
       await client.callZome(zomeCallPayload, 1);
-      t.fail();
+      t.fail("zome call did not time out");
     } catch (error) {
       t.pass("zome call timed out");
     }
@@ -734,7 +734,7 @@ test("can inject agents", async (t) => {
     wsClientOptions: { origin: "client-test-admin" },
   });
   const admin2 = await AdminWebsocket.connect({
-    url: new URL(`ws://127.0.0.1:${ADMIN_PORT_1}`),
+    url: new URL(`ws://localhost:${ADMIN_PORT_1}`),
     wsClientOptions: { origin: "client-test-admin" },
   });
   const agent_key_1 = await admin1.generateAgentPubKey();
