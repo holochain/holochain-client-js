@@ -1,6 +1,6 @@
 {
   "name": "@holochain/client",
-  "version": "0.17.0-dev.8",
+  "version": "0.17.0-dev.9",
   "description": "A JavaScript client for the Holochain Conductor API",
   "author": "Holochain Foundation <info@holochain.org> (http://holochain.org)",
   "license": "CAL-1.0",
@@ -32,9 +32,9 @@
   ],
   "scripts": {
     "lint": "eslint --fix --ext .ts src test .eslintrc.cjs",
-    "test:app-agent": "RUST_LOG=error RUST_BACKTRACE=1 node --loader ts-node/esm test/e2e/app-agent-websocket.ts",
-    "test:utils": "RUST_LOG=error RUST_BACKTRACE=1 node --loader ts-node/esm test/e2e/utils.ts",
-    "test": "RUST_LOG=error RUST_BACKTRACE=1 node --loader ts-node/esm test/index.ts",
+    "test:app-agent": "RUST_LOG=error RUST_BACKTRACE=1 tsx test/e2e/app-agent-websocket.ts",
+    "test:utils": "RUST_LOG=error RUST_BACKTRACE=1 tsx test/e2e/utils.ts",
+    "test": "RUST_LOG=error RUST_BACKTRACE=1 tsx test/index.ts",
     "build:lib": "rimraf ./lib && tsc -p tsconfig.build.json",
     "build:docs": "api-extractor run --local && api-documenter markdown -i docs/temp -o docs",
     "build": "npm run build:lib && npm run build:docs",
@@ -69,7 +69,7 @@
     "prettier": "^2.8.8",
     "rimraf": "^3.0.2",
     "tape": "^5.6.6",
-    "ts-node": "^10.9.1",
+    "tsx": "^4.7.2",
     "typescript": "^4.9.5"
   }
 }

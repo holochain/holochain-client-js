@@ -102,7 +102,7 @@ export class AdminWebsocket implements AdminApi {
     const env = getLauncherEnvironment();
 
     if (env?.ADMIN_INTERFACE_PORT) {
-      options.url = new URL(`ws://127.0.0.1:${env.ADMIN_INTERFACE_PORT}`);
+      options.url = new URL(`ws://localhost:${env.ADMIN_INTERFACE_PORT}`);
     }
 
     if (!options.url) {

@@ -105,7 +105,7 @@ export const installAppAndDna = async (
   const role_name = "foo";
   const installed_app_id = "app";
   const admin = await AdminWebsocket.connect({
-    url: new URL(`ws://127.0.0.1:${adminPort}`),
+    url: new URL(`ws://localhost:${adminPort}`),
     wsClientOptions: { origin: "client-test-admin" },
   });
   const path = `${FIXTURE_PATH}/test.happ`;
@@ -124,7 +124,7 @@ export const installAppAndDna = async (
     allowed_origins: "client-test-app",
   });
   const client = await AppWebsocket.connect({
-    url: new URL(`ws://127.0.0.1:${appPort}`),
+    url: new URL(`ws://localhost:${appPort}`),
     wsClientOptions: { origin: "client-test-app" },
   });
   return { installed_app_id, cell_id, client, admin };
@@ -141,7 +141,7 @@ export const createAppAgentWsAndInstallApp = async (
   const role_name = "foo";
   const installed_app_id = "app";
   const admin = await AdminWebsocket.connect({
-    url: new URL(`ws://127.0.0.1:${adminPort}`),
+    url: new URL(`ws://localhost:${adminPort}`),
     wsClientOptions: { origin: "client-test-admin" },
   });
   const path = `${FIXTURE_PATH}/test.happ`;
@@ -159,7 +159,7 @@ export const createAppAgentWsAndInstallApp = async (
     allowed_origins: "client-test-app",
   });
   const client = await AppAgentWebsocket.connect(installed_app_id, {
-    url: new URL(`ws://127.0.0.1:${appPort}`),
+    url: new URL(`ws://localhost:${appPort}`),
     wsClientOptions: { origin: "client-test-app" },
     defaultTimeout: 12000,
   });

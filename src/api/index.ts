@@ -6,11 +6,11 @@ export { IsoWebSocket, WsClient } from "./client.js";
 export {
   CloneId,
   HolochainError,
-  Requester,
-  Transformer,
-  WebsocketConnectionOptions,
-  WsClientOptions,
   getBaseRoleNameFromCloneId,
   isCloneId,
+  type Requester,
+  type Transformer,
+  type WebsocketConnectionOptions,
+  type WsClientOptions,
 } from "./common.js";
 export * from "./zome-call-signing.js";
