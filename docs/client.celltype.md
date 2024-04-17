@@ -13,9 +13,62 @@ export declare enum CellType
 
 ## Enumeration Members
 
-|  Member | Value | Description |
-|  --- | --- | --- |
-|  Cloned | <code>&quot;cloned&quot;</code> |  |
-|  Provisioned | <code>&quot;provisioned&quot;</code> |  |
-|  Stem | <code>&quot;stem&quot;</code> |  |
+<table><thead><tr><th>
 
+Member
+
+
+</th><th>
+
+Value
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+Cloned
+
+
+</td><td>
+
+`"cloned"`
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+Provisioned
+
+
+</td><td>
+
+`"provisioned"`
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+Stem
+
+
+</td><td>
+
+`"stem"`
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>

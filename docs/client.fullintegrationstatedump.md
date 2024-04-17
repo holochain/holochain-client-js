@@ -13,10 +13,93 @@ export interface FullIntegrationStateDump
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [dht\_ops\_cursor](./client.fullintegrationstatedump.dht_ops_cursor.md) |  | number |  |
-|  [integrated](./client.fullintegrationstatedump.integrated.md) |  | Array&lt;[DhtOp](./client.dhtop.md)<!-- -->&gt; |  |
-|  [integration\_limbo](./client.fullintegrationstatedump.integration_limbo.md) |  | Array&lt;[DhtOp](./client.dhtop.md)<!-- -->&gt; |  |
-|  [validation\_limbo](./client.fullintegrationstatedump.validation_limbo.md) |  | Array&lt;[DhtOp](./client.dhtop.md)<!-- -->&gt; |  |
+<table><thead><tr><th>
 
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[dht\_ops\_cursor](./client.fullintegrationstatedump.dht_ops_cursor.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[integrated](./client.fullintegrationstatedump.integrated.md)
+
+
+</td><td>
+
+
+</td><td>
+
+Array&lt;[DhtOp](./client.dhtop.md)<!-- -->&gt;
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[integration\_limbo](./client.fullintegrationstatedump.integration_limbo.md)
+
+
+</td><td>
+
+
+</td><td>
+
+Array&lt;[DhtOp](./client.dhtop.md)<!-- -->&gt;
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[validation\_limbo](./client.fullintegrationstatedump.validation_limbo.md)
+
+
+</td><td>
+
+
+</td><td>
+
+Array&lt;[DhtOp](./client.dhtop.md)<!-- -->&gt;
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>

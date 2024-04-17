@@ -13,8 +13,59 @@ export interface SourceChainJsonDump
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [published\_ops\_count](./client.sourcechainjsondump.published_ops_count.md) |  | number |  |
-|  [records](./client.sourcechainjsondump.records.md) |  | Array&lt;[SourceChainJsonRecord](./client.sourcechainjsonrecord.md)<!-- -->&gt; |  |
+<table><thead><tr><th>
 
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[published\_ops\_count](./client.sourcechainjsondump.published_ops_count.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[records](./client.sourcechainjsondump.records.md)
+
+
+</td><td>
+
+
+</td><td>
+
+Array&lt;[SourceChainJsonRecord](./client.sourcechainjsonrecord.md)<!-- -->&gt;
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>

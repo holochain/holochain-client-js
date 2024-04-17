@@ -13,8 +13,59 @@ export interface CoordinatorBundle
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [manifest](./client.coordinatorbundle.manifest.md) |  | [CoordinatorManifest](./client.coordinatormanifest.md) |  |
-|  [resources](./client.coordinatorbundle.resources.md) |  | [ResourceMap](./client.resourcemap.md) |  |
+<table><thead><tr><th>
 
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[manifest](./client.coordinatorbundle.manifest.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[CoordinatorManifest](./client.coordinatormanifest.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[resources](./client.coordinatorbundle.resources.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[ResourceMap](./client.resourcemap.md)
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>

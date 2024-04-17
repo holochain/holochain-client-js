@@ -14,12 +14,71 @@ static connect(url: URL, installed_app_id: InstalledAppId, defaultTimeout?: numb
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  url | URL | The <code>ws://</code> URL of the App API to connect to. |
-|  installed\_app\_id | [InstalledAppId](./client.installedappid.md) | ID of the App to link to. |
-|  defaultTimeout | number | _(Optional)_ Timeout to default to for all operations. |
+<table><thead><tr><th>
 
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+url
+
+
+</td><td>
+
+URL
+
+
+</td><td>
+
+The `ws://` URL of the App API to connect to.
+
+
+</td></tr>
+<tr><td>
+
+installed\_app\_id
+
+
+</td><td>
+
+[InstalledAppId](./client.installedappid.md)
+
+
+</td><td>
+
+ID of the App to link to.
+
+
+</td></tr>
+<tr><td>
+
+defaultTimeout
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+_(Optional)_ Timeout to default to for all operations.
+
+
+</td></tr>
+</tbody></table>
 **Returns:**
 
 Promise&lt;[AppAgentWebsocket](./client.appagentwebsocket.md)<!-- -->&gt;

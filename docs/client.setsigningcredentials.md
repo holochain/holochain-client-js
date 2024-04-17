@@ -14,11 +14,53 @@ setSigningCredentials: (cellId: CellId, credentials: SigningCredentials) => void
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  cellId | [CellId](./client.cellid.md) | Cell id to set credentials for. |
-|  credentials | [SigningCredentials](./client.signingcredentials.md) |  |
+<table><thead><tr><th>
 
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+cellId
+
+
+</td><td>
+
+[CellId](./client.cellid.md)
+
+
+</td><td>
+
+Cell id to set credentials for.
+
+
+</td></tr>
+<tr><td>
+
+credentials
+
+
+</td><td>
+
+[SigningCredentials](./client.signingcredentials.md)
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>
 **Returns:**
 
 void

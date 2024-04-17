@@ -15,7 +15,34 @@ export declare class HolochainError extends Error
 
 ## Constructors
 
-|  Constructor | Modifiers | Description |
-|  --- | --- | --- |
-|  [(constructor)(name, message)](./client.holochainerror._constructor_.md) |  | Constructs a new instance of the <code>HolochainError</code> class |
+<table><thead><tr><th>
 
+Constructor
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[(constructor)(name, message)](./client.holochainerror._constructor_.md)
+
+
+</td><td>
+
+
+</td><td>
+
+Constructs a new instance of the `HolochainError` class
+
+
+</td></tr>
+</tbody></table>

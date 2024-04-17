@@ -9,6 +9,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Fixed
 ### Removed
 
+## 2024-04-17: v0.16.11
+### Fixed
+- Replace all IPv4 addresses `127.0.0.1` by `localhost`.
+
 ## 2024-02-27: v0.16.10
 ### Fixed
 - Type: `AppInfoResponse` can be `null` if the requested app is not found.

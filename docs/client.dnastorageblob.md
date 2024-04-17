@@ -13,7 +13,42 @@ export interface DnaStorageBlob
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [dna](./client.dnastorageblob.dna.md) |  | [DnaStorageInfo](./client.dnastorageinfo.md) |  |
+<table><thead><tr><th>
 
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[dna](./client.dnastorageblob.dna.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[DnaStorageInfo](./client.dnastorageinfo.md)
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>

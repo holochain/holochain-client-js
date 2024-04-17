@@ -13,10 +13,93 @@ export interface AppApi
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [appInfo](./client.appapi.appinfo.md) |  | [Requester](./client.requester.md)<!-- -->&lt;[AppInfoRequest](./client.appinforequest.md)<!-- -->, [AppInfoResponse](./client.appinforesponse.md)<!-- -->&gt; |  |
-|  [callZome](./client.appapi.callzome.md) |  | [Requester](./client.requester.md)<!-- -->&lt;[CallZomeRequest](./client.callzomerequest.md)<!-- -->, [CallZomeResponse](./client.callzomeresponse.md)<!-- -->&gt; |  |
-|  [disableCloneCell](./client.appapi.disableclonecell.md) |  | [Requester](./client.requester.md)<!-- -->&lt;[DisableCloneCellRequest](./client.disableclonecellrequest.md)<!-- -->, [DisableCloneCellResponse](./client.disableclonecellresponse.md)<!-- -->&gt; |  |
-|  [enableCloneCell](./client.appapi.enableclonecell.md) |  | [Requester](./client.requester.md)<!-- -->&lt;[EnableCloneCellRequest](./client.enableclonecellrequest.md)<!-- -->, [EnableCloneCellResponse](./client.enableclonecellresponse.md)<!-- -->&gt; |  |
+<table><thead><tr><th>
 
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[appInfo](./client.appapi.appinfo.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[Requester](./client.requester.md)<!-- -->&lt;[AppInfoRequest](./client.appinforequest.md)<!-- -->, [AppInfoResponse](./client.appinforesponse.md)<!-- -->&gt;
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[callZome](./client.appapi.callzome.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[Requester](./client.requester.md)<!-- -->&lt;[CallZomeRequest](./client.callzomerequest.md)<!-- -->, [CallZomeResponse](./client.callzomeresponse.md)<!-- -->&gt;
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[disableCloneCell](./client.appapi.disableclonecell.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[Requester](./client.requester.md)<!-- -->&lt;[DisableCloneCellRequest](./client.disableclonecellrequest.md)<!-- -->, [DisableCloneCellResponse](./client.disableclonecellresponse.md)<!-- -->&gt;
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[enableCloneCell](./client.appapi.enableclonecell.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[Requester](./client.requester.md)<!-- -->&lt;[EnableCloneCellRequest](./client.enableclonecellrequest.md)<!-- -->, [EnableCloneCellResponse](./client.enableclonecellresponse.md)<!-- -->&gt;
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>

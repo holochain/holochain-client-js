@@ -13,15 +13,146 @@ export declare enum DhtOpType
 
 ## Enumeration Members
 
-|  Member | Value | Description |
-|  --- | --- | --- |
-|  RegisterAddLink | <code>&quot;RegisterAddLink&quot;</code> |  |
-|  RegisterAgentActivity | <code>&quot;RegisterAgentActivity&quot;</code> |  |
-|  RegisterDeletedBy | <code>&quot;RegisterDeletedBy&quot;</code> |  |
-|  RegisterDeletedEntryAction | <code>&quot;RegisterDeletedEntryAction&quot;</code> |  |
-|  RegisterRemoveLink | <code>&quot;RegisterRemoveLink&quot;</code> |  |
-|  RegisterUpdatedContent | <code>&quot;RegisterUpdatedContent&quot;</code> |  |
-|  RegisterUpdatedRecord | <code>&quot;RegisterUpdatedRecord&quot;</code> |  |
-|  StoreEntry | <code>&quot;StoreEntry&quot;</code> |  |
-|  StoreRecord | <code>&quot;StoreRecord&quot;</code> |  |
+<table><thead><tr><th>
 
+Member
+
+
+</th><th>
+
+Value
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+RegisterAddLink
+
+
+</td><td>
+
+`"RegisterAddLink"`
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+RegisterAgentActivity
+
+
+</td><td>
+
+`"RegisterAgentActivity"`
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+RegisterDeletedBy
+
+
+</td><td>
+
+`"RegisterDeletedBy"`
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+RegisterDeletedEntryAction
+
+
+</td><td>
+
+`"RegisterDeletedEntryAction"`
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+RegisterRemoveLink
+
+
+</td><td>
+
+`"RegisterRemoveLink"`
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+RegisterUpdatedContent
+
+
+</td><td>
+
+`"RegisterUpdatedContent"`
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+RegisterUpdatedRecord
+
+
+</td><td>
+
+`"RegisterUpdatedRecord"`
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+StoreEntry
+
+
+</td><td>
+
+`"StoreEntry"`
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+StoreRecord
+
+
+</td><td>
+
+`"StoreRecord"`
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>

@@ -14,10 +14,39 @@ static fromRoleName(roleName: RoleName): CloneId;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  roleName | [RoleName](./client.rolename.md) | Role id to parse. |
+<table><thead><tr><th>
 
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+roleName
+
+
+</td><td>
+
+[RoleName](./client.rolename.md)
+
+
+</td><td>
+
+Role id to parse.
+
+
+</td></tr>
+</tbody></table>
 **Returns:**
 
 [CloneId](./client.cloneid.md)

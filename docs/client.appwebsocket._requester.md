@@ -12,11 +12,53 @@ _requester<ReqI, ReqO, ResI, ResO>(tag: string, transformer?: Transformer<ReqI, 
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  tag | string |  |
-|  transformer | [Transformer](./client.transformer_2.md)<!-- -->&lt;ReqI, ReqO, ResI, ResO&gt; | _(Optional)_ |
+<table><thead><tr><th>
 
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+tag
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+transformer
+
+
+</td><td>
+
+[Transformer](./client.transformer_2.md)<!-- -->&lt;ReqI, ReqO, ResI, ResO&gt;
+
+
+</td><td>
+
+_(Optional)_
+
+
+</td></tr>
+</tbody></table>
 **Returns:**
 
 (req: ReqI, timeout?: number \| undefined) =&gt; Promise&lt;ResO&gt;

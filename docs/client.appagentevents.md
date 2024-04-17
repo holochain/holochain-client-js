@@ -13,7 +13,42 @@ export interface AppAgentEvents
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [signal](./client.appagentevents.signal.md) |  | [AppSignal](./client.appsignal.md) |  |
+<table><thead><tr><th>
 
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[signal](./client.appagentevents.signal.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[AppSignal](./client.appsignal.md)
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>

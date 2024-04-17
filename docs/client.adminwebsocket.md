@@ -15,38 +15,548 @@ export declare class AdminWebsocket implements AdminApi
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [addAgentInfo](./client.adminwebsocket.addagentinfo.md) |  | [Requester](./client.requester.md)<!-- -->&lt;[AddAgentInfoRequest](./client.addagentinforequest.md)<!-- -->, [AddAgentInfoResponse](./client.addagentinforesponse.md)<!-- -->&gt; | Add an existing agent to Holochain. |
-|  [agentInfo](./client.adminwebsocket.agentinfo.md) |  | [Requester](./client.requester.md)<!-- -->&lt;[AgentInfoRequest](./client.agentinforequest.md)<!-- -->, [AgentInfoResponse](./client.agentinforesponse.md)<!-- -->&gt; | Request all available info about an agent. |
-|  [attachAppInterface](./client.adminwebsocket.attachappinterface.md) |  | [Requester](./client.requester.md)<!-- -->&lt;[AttachAppInterfaceRequest](./client.attachappinterfacerequest.md)<!-- -->, [AttachAppInterfaceResponse](./client.attachappinterfaceresponse.md)<!-- -->&gt; | Send a request to open the given port for [AppWebsocket](./client.appwebsocket.md) connections. |
-|  [authorizeSigningCredentials](./client.adminwebsocket.authorizesigningcredentials.md) |  | (cellId: [CellId](./client.cellid.md)<!-- -->, functions?: [GrantedFunctions](./client.grantedfunctions.md)<!-- -->) =&gt; Promise&lt;void&gt; | Generate and authorize a new key pair for signing zome calls. |
-|  [client](./client.adminwebsocket.client.md) | <code>readonly</code> | [WsClient](./client.wsclient.md) | The websocket client used for transporting requests and responses. |
-|  [defaultTimeout](./client.adminwebsocket.defaulttimeout.md) |  | number | Default timeout for any request made over the websocket. |
-|  [deleteCloneCell](./client.adminwebsocket.deleteclonecell.md) |  | [Requester](./client.requester.md)<!-- -->&lt;[DeleteCloneCellRequest](./client.deleteclonecellrequest.md)<!-- -->, [DeleteCloneCellResponse](./client.deleteclonecellresponse.md)<!-- -->&gt; | Delete a disabled clone cell. |
-|  [disableApp](./client.adminwebsocket.disableapp.md) |  | [Requester](./client.requester.md)<!-- -->&lt;[DisableAppRequest](./client.disableapprequest.md)<!-- -->, [DisableAppResponse](./client.disableappresponse.md)<!-- -->&gt; | Disable a running app. |
-|  [dumpFullState](./client.adminwebsocket.dumpfullstate.md) |  | [Requester](./client.requester.md)<!-- -->&lt;[DumpFullStateRequest](./client.dumpfullstaterequest.md)<!-- -->, [DumpFullStateResponse](./client.dumpfullstateresponse.md)<!-- -->&gt; | Dump the full state of the specified cell, including its chain and DHT shard, as JSON. |
-|  [dumpNetworkStats](./client.adminwebsocket.dumpnetworkstats.md) |  | [Requester](./client.requester.md)<!-- -->&lt;[DumpNetworkStatsRequest](./client.dumpnetworkstatsrequest.md)<!-- -->, [DumpNetworkStatsResponse](./client.dumpnetworkstatsresponse.md)<!-- -->&gt; |  |
-|  [dumpState](./client.adminwebsocket.dumpstate.md) |  | [Requester](./client.requester.md)<!-- -->&lt;[DumpStateRequest](./client.dumpstaterequest.md)<!-- -->, [DumpStateResponse](./client.dumpstateresponse.md)<!-- -->&gt; | Dump the state of the specified cell, including its source chain, as JSON. |
-|  [enableApp](./client.adminwebsocket.enableapp.md) |  | [Requester](./client.requester.md)<!-- -->&lt;[EnableAppRequest](./client.enableapprequest.md)<!-- -->, [EnableAppResponse](./client.enableappresponse.md)<!-- -->&gt; | Enable a stopped app. |
-|  [generateAgentPubKey](./client.adminwebsocket.generateagentpubkey.md) |  | [Requester](./client.requester.md)<!-- -->&lt;[GenerateAgentPubKeyRequest](./client.generateagentpubkeyrequest.md)<!-- -->, [GenerateAgentPubKeyResponse](./client.generateagentpubkeyresponse.md)<!-- -->&gt; | Generate a new agent pub key. |
-|  [getDnaDefinition](./client.adminwebsocket.getdnadefinition.md) |  | [Requester](./client.requester.md)<!-- -->&lt;[GetDnaDefinitionRequest](./client.getdnadefinitionrequest.md)<!-- -->, [GetDnaDefinitionResponse](./client.getdnadefinitionresponse.md)<!-- -->&gt; | Get the DNA definition for the specified DNA hash. |
-|  [grantSigningKey](./client.adminwebsocket.grantsigningkey.md) |  | (cellId: [CellId](./client.cellid.md)<!-- -->, functions: [GrantedFunctions](./client.grantedfunctions.md)<!-- -->, signingKey: [AgentPubKey](./client.agentpubkey.md)<!-- -->) =&gt; Promise&lt;[CapSecret](./client.capsecret.md)<!-- -->&gt; | Grant a capability for signing zome calls. |
-|  [grantZomeCallCapability](./client.adminwebsocket.grantzomecallcapability.md) |  | [Requester](./client.requester.md)<!-- -->&lt;[GrantZomeCallCapabilityRequest](./client.grantzomecallcapabilityrequest.md)<!-- -->, [GrantZomeCallCapabilityResponse](./client.grantzomecallcapabilityresponse.md)<!-- -->&gt; | Grant a zome call capability for an agent, to be used for signing zome calls. |
-|  [installApp](./client.adminwebsocket.installapp.md) |  | [Requester](./client.requester.md)<!-- -->&lt;[InstallAppRequest](./client.installapprequest.md)<!-- -->, [InstallAppResponse](./client.installappresponse.md)<!-- -->&gt; | Install the specified app into Holochain. |
-|  [listAppInterfaces](./client.adminwebsocket.listappinterfaces.md) |  | [Requester](./client.requester.md)<!-- -->&lt;[ListAppInterfacesRequest](./client.listappinterfacesrequest.md)<!-- -->, [ListAppInterfacesResponse](./client.listappinterfacesresponse.md)<!-- -->&gt; | List all attached app interfaces. |
-|  [listApps](./client.adminwebsocket.listapps.md) |  | [Requester](./client.requester.md)<!-- -->&lt;[ListAppsRequest](./client.listappsrequest.md)<!-- -->, [ListAppsResponse](./client.listappsresponse.md)<!-- -->&gt; | List all installed apps. |
-|  [listCellIds](./client.adminwebsocket.listcellids.md) |  | [Requester](./client.requester.md)<!-- -->&lt;[ListCellIdsRequest](./client.listcellidsrequest.md)<!-- -->, [ListCellIdsResponse](./client.listcellidsresponse.md)<!-- -->&gt; | List all installed cell ids. |
-|  [listDnas](./client.adminwebsocket.listdnas.md) |  | [Requester](./client.requester.md)<!-- -->&lt;[ListDnasRequest](./client.listdnasrequest.md)<!-- -->, [ListDnasResponse](./client.listdnasresponse.md)<!-- -->&gt; | List all registered DNAs. |
-|  [registerDna](./client.adminwebsocket.registerdna.md) |  | [Requester](./client.requester.md)<!-- -->&lt;[RegisterDnaRequest](./client.registerdnarequest.md)<!-- -->, [RegisterDnaResponse](./client.registerdnaresponse.md)<!-- -->&gt; | <p>Register a DNA for later app installation.</p><p>Stores the given DNA into the Holochain DNA database and returns the hash of it.</p> |
-|  [storageInfo](./client.adminwebsocket.storageinfo.md) |  | [Requester](./client.requester.md)<!-- -->&lt;[StorageInfoRequest](./client.storageinforequest.md)<!-- -->, [StorageInfoResponse](./client.storageinforesponse.md)<!-- -->&gt; |  |
-|  [uninstallApp](./client.adminwebsocket.uninstallapp.md) |  | [Requester](./client.requester.md)<!-- -->&lt;[UninstallAppRequest](./client.uninstallapprequest.md)<!-- -->, [UninstallAppResponse](./client.uninstallappresponse.md)<!-- -->&gt; | Uninstall the specified app from Holochain. |
-|  [updateCoordinators](./client.adminwebsocket.updatecoordinators.md) |  | [Requester](./client.requester.md)<!-- -->&lt;[UpdateCoordinatorsRequest](./client.updatecoordinatorsrequest.md)<!-- -->, [UpdateCoordinatorsResponse](./client.updatecoordinatorsresponse.md)<!-- -->&gt; | Update coordinators for an installed app. |
+<table><thead><tr><th>
+
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[addAgentInfo](./client.adminwebsocket.addagentinfo.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[Requester](./client.requester.md)<!-- -->&lt;[AddAgentInfoRequest](./client.addagentinforequest.md)<!-- -->, [AddAgentInfoResponse](./client.addagentinforesponse.md)<!-- -->&gt;
+
+
+</td><td>
+
+Add an existing agent to Holochain.
+
+
+</td></tr>
+<tr><td>
+
+[agentInfo](./client.adminwebsocket.agentinfo.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[Requester](./client.requester.md)<!-- -->&lt;[AgentInfoRequest](./client.agentinforequest.md)<!-- -->, [AgentInfoResponse](./client.agentinforesponse.md)<!-- -->&gt;
+
+
+</td><td>
+
+Request all available info about an agent.
+
+
+</td></tr>
+<tr><td>
+
+[attachAppInterface](./client.adminwebsocket.attachappinterface.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[Requester](./client.requester.md)<!-- -->&lt;[AttachAppInterfaceRequest](./client.attachappinterfacerequest.md)<!-- -->, [AttachAppInterfaceResponse](./client.attachappinterfaceresponse.md)<!-- -->&gt;
+
+
+</td><td>
+
+Send a request to open the given port for [AppWebsocket](./client.appwebsocket.md) connections.
+
+
+</td></tr>
+<tr><td>
+
+[authorizeSigningCredentials](./client.adminwebsocket.authorizesigningcredentials.md)
+
+
+</td><td>
+
+
+</td><td>
+
+(cellId: [CellId](./client.cellid.md)<!-- -->, functions?: [GrantedFunctions](./client.grantedfunctions.md)<!-- -->) =&gt; Promise&lt;void&gt;
+
+
+</td><td>
+
+Generate and authorize a new key pair for signing zome calls.
+
+
+</td></tr>
+<tr><td>
+
+[client](./client.adminwebsocket.client.md)
+
+
+</td><td>
+
+`readonly`
+
+
+</td><td>
+
+[WsClient](./client.wsclient.md)
+
+
+</td><td>
+
+The websocket client used for transporting requests and responses.
+
+
+</td></tr>
+<tr><td>
+
+[defaultTimeout](./client.adminwebsocket.defaulttimeout.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+Default timeout for any request made over the websocket.
+
+
+</td></tr>
+<tr><td>
+
+[deleteCloneCell](./client.adminwebsocket.deleteclonecell.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[Requester](./client.requester.md)<!-- -->&lt;[DeleteCloneCellRequest](./client.deleteclonecellrequest.md)<!-- -->, [DeleteCloneCellResponse](./client.deleteclonecellresponse.md)<!-- -->&gt;
+
+
+</td><td>
+
+Delete a disabled clone cell.
+
+
+</td></tr>
+<tr><td>
+
+[disableApp](./client.adminwebsocket.disableapp.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[Requester](./client.requester.md)<!-- -->&lt;[DisableAppRequest](./client.disableapprequest.md)<!-- -->, [DisableAppResponse](./client.disableappresponse.md)<!-- -->&gt;
+
+
+</td><td>
+
+Disable a running app.
+
+
+</td></tr>
+<tr><td>
+
+[dumpFullState](./client.adminwebsocket.dumpfullstate.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[Requester](./client.requester.md)<!-- -->&lt;[DumpFullStateRequest](./client.dumpfullstaterequest.md)<!-- -->, [DumpFullStateResponse](./client.dumpfullstateresponse.md)<!-- -->&gt;
+
+
+</td><td>
+
+Dump the full state of the specified cell, including its chain and DHT shard, as JSON.
+
+
+</td></tr>
+<tr><td>
+
+[dumpNetworkStats](./client.adminwebsocket.dumpnetworkstats.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[Requester](./client.requester.md)<!-- -->&lt;[DumpNetworkStatsRequest](./client.dumpnetworkstatsrequest.md)<!-- -->, [DumpNetworkStatsResponse](./client.dumpnetworkstatsresponse.md)<!-- -->&gt;
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[dumpState](./client.adminwebsocket.dumpstate.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[Requester](./client.requester.md)<!-- -->&lt;[DumpStateRequest](./client.dumpstaterequest.md)<!-- -->, [DumpStateResponse](./client.dumpstateresponse.md)<!-- -->&gt;
+
+
+</td><td>
+
+Dump the state of the specified cell, including its source chain, as JSON.
+
+
+</td></tr>
+<tr><td>
+
+[enableApp](./client.adminwebsocket.enableapp.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[Requester](./client.requester.md)<!-- -->&lt;[EnableAppRequest](./client.enableapprequest.md)<!-- -->, [EnableAppResponse](./client.enableappresponse.md)<!-- -->&gt;
+
+
+</td><td>
+
+Enable a stopped app.
+
+
+</td></tr>
+<tr><td>
+
+[generateAgentPubKey](./client.adminwebsocket.generateagentpubkey.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[Requester](./client.requester.md)<!-- -->&lt;[GenerateAgentPubKeyRequest](./client.generateagentpubkeyrequest.md)<!-- -->, [GenerateAgentPubKeyResponse](./client.generateagentpubkeyresponse.md)<!-- -->&gt;
+
+
+</td><td>
+
+Generate a new agent pub key.
+
+
+</td></tr>
+<tr><td>
+
+[getDnaDefinition](./client.adminwebsocket.getdnadefinition.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[Requester](./client.requester.md)<!-- -->&lt;[GetDnaDefinitionRequest](./client.getdnadefinitionrequest.md)<!-- -->, [GetDnaDefinitionResponse](./client.getdnadefinitionresponse.md)<!-- -->&gt;
+
+
+</td><td>
+
+Get the DNA definition for the specified DNA hash.
+
+
+</td></tr>
+<tr><td>
+
+[grantSigningKey](./client.adminwebsocket.grantsigningkey.md)
+
+
+</td><td>
+
+
+</td><td>
+
+(cellId: [CellId](./client.cellid.md)<!-- -->, functions: [GrantedFunctions](./client.grantedfunctions.md)<!-- -->, signingKey: [AgentPubKey](./client.agentpubkey.md)<!-- -->) =&gt; Promise&lt;[CapSecret](./client.capsecret.md)<!-- -->&gt;
+
+
+</td><td>
+
+Grant a capability for signing zome calls.
+
+
+</td></tr>
+<tr><td>
+
+[grantZomeCallCapability](./client.adminwebsocket.grantzomecallcapability.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[Requester](./client.requester.md)<!-- -->&lt;[GrantZomeCallCapabilityRequest](./client.grantzomecallcapabilityrequest.md)<!-- -->, [GrantZomeCallCapabilityResponse](./client.grantzomecallcapabilityresponse.md)<!-- -->&gt;
+
+
+</td><td>
+
+Grant a zome call capability for an agent, to be used for signing zome calls.
+
+
+</td></tr>
+<tr><td>
+
+[installApp](./client.adminwebsocket.installapp.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[Requester](./client.requester.md)<!-- -->&lt;[InstallAppRequest](./client.installapprequest.md)<!-- -->, [InstallAppResponse](./client.installappresponse.md)<!-- -->&gt;
+
+
+</td><td>
+
+Install the specified app into Holochain.
+
+
+</td></tr>
+<tr><td>
+
+[listAppInterfaces](./client.adminwebsocket.listappinterfaces.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[Requester](./client.requester.md)<!-- -->&lt;[ListAppInterfacesRequest](./client.listappinterfacesrequest.md)<!-- -->, [ListAppInterfacesResponse](./client.listappinterfacesresponse.md)<!-- -->&gt;
+
+
+</td><td>
+
+List all attached app interfaces.
+
+
+</td></tr>
+<tr><td>
+
+[listApps](./client.adminwebsocket.listapps.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[Requester](./client.requester.md)<!-- -->&lt;[ListAppsRequest](./client.listappsrequest.md)<!-- -->, [ListAppsResponse](./client.listappsresponse.md)<!-- -->&gt;
+
+
+</td><td>
+
+List all installed apps.
+
+
+</td></tr>
+<tr><td>
+
+[listCellIds](./client.adminwebsocket.listcellids.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[Requester](./client.requester.md)<!-- -->&lt;[ListCellIdsRequest](./client.listcellidsrequest.md)<!-- -->, [ListCellIdsResponse](./client.listcellidsresponse.md)<!-- -->&gt;
+
+
+</td><td>
+
+List all installed cell ids.
+
+
+</td></tr>
+<tr><td>
+
+[listDnas](./client.adminwebsocket.listdnas.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[Requester](./client.requester.md)<!-- -->&lt;[ListDnasRequest](./client.listdnasrequest.md)<!-- -->, [ListDnasResponse](./client.listdnasresponse.md)<!-- -->&gt;
+
+
+</td><td>
+
+List all registered DNAs.
+
+
+</td></tr>
+<tr><td>
+
+[registerDna](./client.adminwebsocket.registerdna.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[Requester](./client.requester.md)<!-- -->&lt;[RegisterDnaRequest](./client.registerdnarequest.md)<!-- -->, [RegisterDnaResponse](./client.registerdnaresponse.md)<!-- -->&gt;
+
+
+</td><td>
+
+Register a DNA for later app installation.
+
+Stores the given DNA into the Holochain DNA database and returns the hash of it.
+
+
+</td></tr>
+<tr><td>
+
+[storageInfo](./client.adminwebsocket.storageinfo.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[Requester](./client.requester.md)<!-- -->&lt;[StorageInfoRequest](./client.storageinforequest.md)<!-- -->, [StorageInfoResponse](./client.storageinforesponse.md)<!-- -->&gt;
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[uninstallApp](./client.adminwebsocket.uninstallapp.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[Requester](./client.requester.md)<!-- -->&lt;[UninstallAppRequest](./client.uninstallapprequest.md)<!-- -->, [UninstallAppResponse](./client.uninstallappresponse.md)<!-- -->&gt;
+
+
+</td><td>
+
+Uninstall the specified app from Holochain.
+
+
+</td></tr>
+<tr><td>
+
+[updateCoordinators](./client.adminwebsocket.updatecoordinators.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[Requester](./client.requester.md)<!-- -->&lt;[UpdateCoordinatorsRequest](./client.updatecoordinatorsrequest.md)<!-- -->, [UpdateCoordinatorsResponse](./client.updatecoordinatorsresponse.md)<!-- -->&gt;
+
+
+</td><td>
+
+Update coordinators for an installed app.
+
+
+</td></tr>
+</tbody></table>
 
 ## Methods
 
-|  Method | Modifiers | Description |
-|  --- | --- | --- |
-|  [\_requester(tag, transformer)](./client.adminwebsocket._requester.md) |  |  |
-|  [connect(url, defaultTimeout)](./client.adminwebsocket.connect.md) | <code>static</code> | Factory mehtod to create a new instance connected to the given URL. |
+<table><thead><tr><th>
 
+Method
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[\_requester(tag, transformer)](./client.adminwebsocket._requester.md)
+
+
+</td><td>
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[connect(url, defaultTimeout)](./client.adminwebsocket.connect.md)
+
+
+</td><td>
+
+`static`
+
+
+</td><td>
+
+Factory mehtod to create a new instance connected to the given URL.
+
+
+</td></tr>
+</tbody></table>

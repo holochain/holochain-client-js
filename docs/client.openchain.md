@@ -13,12 +13,127 @@ export interface OpenChain
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [action\_seq](./client.openchain.action_seq.md) |  | number |  |
-|  [author](./client.openchain.author.md) |  | [AgentPubKey](./client.agentpubkey.md) |  |
-|  [prev\_action](./client.openchain.prev_action.md) |  | [ActionHash](./client.actionhash.md) |  |
-|  [prev\_dna\_hash](./client.openchain.prev_dna_hash.md) |  | [DnaHash](./client.dnahash.md) |  |
-|  [timestamp](./client.openchain.timestamp.md) |  | [Timestamp](./client.timestamp.md) |  |
-|  [type](./client.openchain.type.md) |  | [ActionType.OpenChain](./client.actiontype.md) |  |
+<table><thead><tr><th>
 
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[action\_seq](./client.openchain.action_seq.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[author](./client.openchain.author.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[AgentPubKey](./client.agentpubkey.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[prev\_action](./client.openchain.prev_action.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[ActionHash](./client.actionhash.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[prev\_dna\_hash](./client.openchain.prev_dna_hash.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[DnaHash](./client.dnahash.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[timestamp](./client.openchain.timestamp.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[Timestamp](./client.timestamp.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[type](./client.openchain.type.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[ActionType.OpenChain](./client.actiontype.md)
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>

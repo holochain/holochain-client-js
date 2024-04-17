@@ -14,11 +14,55 @@ getCellIdFromRoleName(roleName: RoleName, appInfo: AppInfo): CellId;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  roleName | [RoleName](./client.rolename.md) | The role name or clone id of the cell. |
-|  appInfo | [AppInfo](./client.appinfo.md) | The app info containing all cell infos. |
+<table><thead><tr><th>
 
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+roleName
+
+
+</td><td>
+
+[RoleName](./client.rolename.md)
+
+
+</td><td>
+
+The role name or clone id of the cell.
+
+
+</td></tr>
+<tr><td>
+
+appInfo
+
+
+</td><td>
+
+[AppInfo](./client.appinfo.md)
+
+
+</td><td>
+
+The app info containing all cell infos.
+
+
+</td></tr>
+</tbody></table>
 **Returns:**
 
 [CellId](./client.cellid.md)

@@ -14,8 +14,48 @@ constructor(socket: IsoWebSocket, url: URL);
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  socket | IsoWebSocket |  |
-|  url | URL |  |
+<table><thead><tr><th>
 
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+socket
+
+
+</td><td>
+
+IsoWebSocket
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+url
+
+
+</td><td>
+
+URL
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>

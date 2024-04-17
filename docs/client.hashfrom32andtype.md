@@ -16,11 +16,55 @@ export declare function hashFrom32AndType(hashCore: AgentPubKey | EntryHash | Ac
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  hashCore | [AgentPubKey](./client.agentpubkey.md) \| [EntryHash](./client.entryhash.md) \| [ActionHash](./client.actionhash.md) | The core 32 bytes of the hash. |
-|  hashType | "Agent" \| "Entry" \| "Dna" \| "Action" \| "External" | The type of the hash. |
+<table><thead><tr><th>
 
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+hashCore
+
+
+</td><td>
+
+[AgentPubKey](./client.agentpubkey.md) \| [EntryHash](./client.entryhash.md) \| [ActionHash](./client.actionhash.md)
+
+
+</td><td>
+
+The core 32 bytes of the hash.
+
+
+</td></tr>
+<tr><td>
+
+hashType
+
+
+</td><td>
+
+"Agent" \| "Entry" \| "Dna" \| "Action" \| "External"
+
+
+</td><td>
+
+The type of the hash.
+
+
+</td></tr>
+</tbody></table>
 **Returns:**
 
 Uint8Array

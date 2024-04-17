@@ -13,8 +13,61 @@ export interface RegisterAgentActivity
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [action](./client.registeragentactivity.action.md) |  | [SignedActionHashed](./client.signedactionhashed.md) |  |
-|  [cached\_entry?](./client.registeragentactivity.cached_entry.md) |  | [Entry](./client.entry.md) | _(Optional)_ |
+<table><thead><tr><th>
 
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[action](./client.registeragentactivity.action.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[SignedActionHashed](./client.signedactionhashed.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[cached\_entry?](./client.registeragentactivity.cached_entry.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[Entry](./client.entry.md)
+
+
+</td><td>
+
+_(Optional)_
+
+
+</td></tr>
+</tbody></table>

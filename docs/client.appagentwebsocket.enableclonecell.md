@@ -14,10 +14,39 @@ enableCloneCell(args: AppEnableCloneCellRequest): Promise<EnableCloneCellRespons
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  args | [AppEnableCloneCellRequest](./client.appenableclonecellrequest.md) | Specify the clone cell to enable. |
+<table><thead><tr><th>
 
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+args
+
+
+</td><td>
+
+[AppEnableCloneCellRequest](./client.appenableclonecellrequest.md)
+
+
+</td><td>
+
+Specify the clone cell to enable.
+
+
+</td></tr>
+</tbody></table>
 **Returns:**
 
 Promise&lt;[EnableCloneCellResponse](./client.enableclonecellresponse.md)<!-- -->&gt;

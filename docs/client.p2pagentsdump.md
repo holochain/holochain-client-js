@@ -13,10 +13,101 @@ export interface P2pAgentsDump
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [peers](./client.p2pagentsdump.peers.md) |  | Array&lt;[AgentInfoDump](./client.agentinfodump.md)<!-- -->&gt; | All other agent info. |
-|  [this\_agent\_info](./client.p2pagentsdump.this_agent_info.md) |  | [AgentInfoDump](./client.agentinfodump.md) \| undefined | The info of this agent's cell. |
-|  [this\_agent](./client.p2pagentsdump.this_agent.md) |  | \[[AgentPubKey](./client.agentpubkey.md)<!-- -->, [KitsuneAgent](./client.kitsuneagent.md)<!-- -->\] \| undefined | The agent as \[<code>AgentPubKey</code>\] and \[<code>kitsune_p2p::KitsuneAgent</code>\]. |
-|  [this\_dna](./client.p2pagentsdump.this_dna.md) |  | \[[DnaHash](./client.dnahash.md)<!-- -->, [KitsuneSpace](./client.kitsunespace.md)<!-- -->\] \| undefined | The dna as a \[<code>DnaHash</code>\] and \[<code>kitsune_p2p::KitsuneSpace</code>\]. |
+<table><thead><tr><th>
 
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[peers](./client.p2pagentsdump.peers.md)
+
+
+</td><td>
+
+
+</td><td>
+
+Array&lt;[AgentInfoDump](./client.agentinfodump.md)<!-- -->&gt;
+
+
+</td><td>
+
+All other agent info.
+
+
+</td></tr>
+<tr><td>
+
+[this\_agent\_info](./client.p2pagentsdump.this_agent_info.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[AgentInfoDump](./client.agentinfodump.md) \| undefined
+
+
+</td><td>
+
+The info of this agent's cell.
+
+
+</td></tr>
+<tr><td>
+
+[this\_agent](./client.p2pagentsdump.this_agent.md)
+
+
+</td><td>
+
+
+</td><td>
+
+\[[AgentPubKey](./client.agentpubkey.md)<!-- -->, [KitsuneAgent](./client.kitsuneagent.md)<!-- -->\] \| undefined
+
+
+</td><td>
+
+The agent as \[`AgentPubKey`<!-- -->\] and \[`kitsune_p2p::KitsuneAgent`<!-- -->\].
+
+
+</td></tr>
+<tr><td>
+
+[this\_dna](./client.p2pagentsdump.this_dna.md)
+
+
+</td><td>
+
+
+</td><td>
+
+\[[DnaHash](./client.dnahash.md)<!-- -->, [KitsuneSpace](./client.kitsunespace.md)<!-- -->\] \| undefined
+
+
+</td><td>
+
+The dna as a \[`DnaHash`<!-- -->\] and \[`kitsune_p2p::KitsuneSpace`<!-- -->\].
+
+
+</td></tr>
+</tbody></table>

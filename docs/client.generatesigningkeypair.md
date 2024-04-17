@@ -14,10 +14,39 @@ generateSigningKeyPair: (agentPubKey?: AgentPubKey) => Promise<[KeyPair, AgentPu
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  agentPubKey | [AgentPubKey](./client.agentpubkey.md) | _(Optional)_ The agent pub key to take 4 last bytes (= DHT location) from (optional). |
+<table><thead><tr><th>
 
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+agentPubKey
+
+
+</td><td>
+
+[AgentPubKey](./client.agentpubkey.md)
+
+
+</td><td>
+
+_(Optional)_ The agent pub key to take 4 last bytes (= DHT location) from (optional).
+
+
+</td></tr>
+</tbody></table>
 **Returns:**
 
 Promise&lt;\[KeyPair, [AgentPubKey](./client.agentpubkey.md)<!-- -->\]&gt;

@@ -13,8 +13,61 @@ export interface CellProvisioning
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [deferred?](./client.cellprovisioning.deferred.md) |  | boolean | _(Optional)_ |
-|  [strategy](./client.cellprovisioning.strategy.md) |  | [CellProvisioningStrategy](./client.cellprovisioningstrategy.md) |  |
+<table><thead><tr><th>
 
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[deferred?](./client.cellprovisioning.deferred.md)
+
+
+</td><td>
+
+
+</td><td>
+
+boolean
+
+
+</td><td>
+
+_(Optional)_
+
+
+</td></tr>
+<tr><td>
+
+[strategy](./client.cellprovisioning.strategy.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[CellProvisioningStrategy](./client.cellprovisioningstrategy.md)
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>

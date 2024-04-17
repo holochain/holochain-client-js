@@ -13,8 +13,59 @@ export interface FetchPoolInfo
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [num\_ops\_to\_fetch](./client.fetchpoolinfo.num_ops_to_fetch.md) |  | number |  |
-|  [op\_bytes\_to\_fetch](./client.fetchpoolinfo.op_bytes_to_fetch.md) |  | number |  |
+<table><thead><tr><th>
 
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[num\_ops\_to\_fetch](./client.fetchpoolinfo.num_ops_to_fetch.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[op\_bytes\_to\_fetch](./client.fetchpoolinfo.op_bytes_to_fetch.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>

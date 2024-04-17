@@ -14,8 +14,48 @@ constructor(roleName: RoleName, index: number);
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  roleName | [RoleName](./client.rolename.md) |  |
-|  index | number |  |
+<table><thead><tr><th>
 
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+roleName
+
+
+</td><td>
+
+[RoleName](./client.rolename.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+index
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>

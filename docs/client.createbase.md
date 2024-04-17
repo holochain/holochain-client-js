@@ -13,7 +13,42 @@ export interface CreateBase
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [entry\_type](./client.createbase.entry_type.md) |  | [EntryType](./client.entrytype.md) |  |
+<table><thead><tr><th>
 
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[entry\_type](./client.createbase.entry_type.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[EntryType](./client.entrytype.md)
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>

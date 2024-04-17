@@ -13,12 +13,127 @@ export interface AgentValidationPkg
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [action\_seq](./client.agentvalidationpkg.action_seq.md) |  | number |  |
-|  [author](./client.agentvalidationpkg.author.md) |  | [AgentPubKey](./client.agentpubkey.md) |  |
-|  [membrane\_proof](./client.agentvalidationpkg.membrane_proof.md) |  | any |  |
-|  [prev\_action](./client.agentvalidationpkg.prev_action.md) |  | [ActionHash](./client.actionhash.md) |  |
-|  [timestamp](./client.agentvalidationpkg.timestamp.md) |  | [Timestamp](./client.timestamp.md) |  |
-|  [type](./client.agentvalidationpkg.type.md) |  | [ActionType.AgentValidationPkg](./client.actiontype.md) |  |
+<table><thead><tr><th>
 
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[action\_seq](./client.agentvalidationpkg.action_seq.md)
+
+
+</td><td>
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[author](./client.agentvalidationpkg.author.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[AgentPubKey](./client.agentpubkey.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[membrane\_proof](./client.agentvalidationpkg.membrane_proof.md)
+
+
+</td><td>
+
+
+</td><td>
+
+any
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[prev\_action](./client.agentvalidationpkg.prev_action.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[ActionHash](./client.actionhash.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[timestamp](./client.agentvalidationpkg.timestamp.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[Timestamp](./client.timestamp.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[type](./client.agentvalidationpkg.type.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[ActionType.AgentValidationPkg](./client.actiontype.md)
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>

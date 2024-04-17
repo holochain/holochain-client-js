@@ -13,10 +13,93 @@ export interface SourceChainJsonRecord
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [action\_address](./client.sourcechainjsonrecord.action_address.md) |  | [ActionHash](./client.actionhash.md) |  |
-|  [action](./client.sourcechainjsonrecord.action.md) |  | [Action](./client.action.md) |  |
-|  [entry](./client.sourcechainjsonrecord.entry.md) |  | [Entry](./client.entry.md) \| undefined |  |
-|  [signature](./client.sourcechainjsonrecord.signature.md) |  | [Signature](./client.signature.md) |  |
+<table><thead><tr><th>
 
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[action\_address](./client.sourcechainjsonrecord.action_address.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[ActionHash](./client.actionhash.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[action](./client.sourcechainjsonrecord.action.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[Action](./client.action.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[entry](./client.sourcechainjsonrecord.entry.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[Entry](./client.entry.md) \| undefined
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[signature](./client.sourcechainjsonrecord.signature.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[Signature](./client.signature.md)
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>

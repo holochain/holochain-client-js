@@ -13,26 +13,365 @@ export interface AdminApi
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [addAgentInfo](./client.adminapi.addagentinfo.md) |  | [Requester](./client.requester.md)<!-- -->&lt;[AddAgentInfoRequest](./client.addagentinforequest.md)<!-- -->, [AddAgentInfoResponse](./client.addagentinforesponse.md)<!-- -->&gt; |  |
-|  [agentInfo](./client.adminapi.agentinfo.md) |  | [Requester](./client.requester.md)<!-- -->&lt;[AgentInfoRequest](./client.agentinforequest.md)<!-- -->, [AgentInfoResponse](./client.agentinforesponse.md)<!-- -->&gt; |  |
-|  [attachAppInterface](./client.adminapi.attachappinterface.md) |  | [Requester](./client.requester.md)<!-- -->&lt;[AttachAppInterfaceRequest](./client.attachappinterfacerequest.md)<!-- -->, [AttachAppInterfaceResponse](./client.attachappinterfaceresponse.md)<!-- -->&gt; |  |
-|  [deleteCloneCell](./client.adminapi.deleteclonecell.md) |  | [Requester](./client.requester.md)<!-- -->&lt;[DeleteCloneCellRequest](./client.deleteclonecellrequest.md)<!-- -->, [DeleteCloneCellResponse](./client.deleteclonecellresponse.md)<!-- -->&gt; |  |
-|  [disableApp](./client.adminapi.disableapp.md) |  | [Requester](./client.requester.md)<!-- -->&lt;[DisableAppRequest](./client.disableapprequest.md)<!-- -->, [DisableAppResponse](./client.disableappresponse.md)<!-- -->&gt; |  |
-|  [dumpFullState](./client.adminapi.dumpfullstate.md) |  | [Requester](./client.requester.md)<!-- -->&lt;[DumpFullStateRequest](./client.dumpfullstaterequest.md)<!-- -->, [DumpFullStateResponse](./client.dumpfullstateresponse.md)<!-- -->&gt; |  |
-|  [dumpNetworkStats](./client.adminapi.dumpnetworkstats.md) |  | [Requester](./client.requester.md)<!-- -->&lt;[DumpNetworkStatsRequest](./client.dumpnetworkstatsrequest.md)<!-- -->, [DumpNetworkStatsResponse](./client.dumpnetworkstatsresponse.md)<!-- -->&gt; |  |
-|  [dumpState](./client.adminapi.dumpstate.md) |  | [Requester](./client.requester.md)<!-- -->&lt;[DumpStateRequest](./client.dumpstaterequest.md)<!-- -->, [DumpStateResponse](./client.dumpstateresponse.md)<!-- -->&gt; |  |
-|  [enableApp](./client.adminapi.enableapp.md) |  | [Requester](./client.requester.md)<!-- -->&lt;[EnableAppRequest](./client.enableapprequest.md)<!-- -->, [EnableAppResponse](./client.enableappresponse.md)<!-- -->&gt; |  |
-|  [generateAgentPubKey](./client.adminapi.generateagentpubkey.md) |  | [Requester](./client.requester.md)<!-- -->&lt;[GenerateAgentPubKeyRequest](./client.generateagentpubkeyrequest.md)<!-- -->, [GenerateAgentPubKeyResponse](./client.generateagentpubkeyresponse.md)<!-- -->&gt; |  |
-|  [getDnaDefinition](./client.adminapi.getdnadefinition.md) |  | [Requester](./client.requester.md)<!-- -->&lt;[GetDnaDefinitionRequest](./client.getdnadefinitionrequest.md)<!-- -->, [GetDnaDefinitionResponse](./client.getdnadefinitionresponse.md)<!-- -->&gt; |  |
-|  [grantZomeCallCapability](./client.adminapi.grantzomecallcapability.md) |  | [Requester](./client.requester.md)<!-- -->&lt;[GrantZomeCallCapabilityRequest](./client.grantzomecallcapabilityrequest.md)<!-- -->, [GrantZomeCallCapabilityResponse](./client.grantzomecallcapabilityresponse.md)<!-- -->&gt; |  |
-|  [installApp](./client.adminapi.installapp.md) |  | [Requester](./client.requester.md)<!-- -->&lt;[InstallAppRequest](./client.installapprequest.md)<!-- -->, [InstallAppResponse](./client.installappresponse.md)<!-- -->&gt; |  |
-|  [listAppInterfaces](./client.adminapi.listappinterfaces.md) |  | [Requester](./client.requester.md)<!-- -->&lt;[ListAppInterfacesRequest](./client.listappinterfacesrequest.md)<!-- -->, [ListAppInterfacesResponse](./client.listappinterfacesresponse.md)<!-- -->&gt; |  |
-|  [listApps](./client.adminapi.listapps.md) |  | [Requester](./client.requester.md)<!-- -->&lt;[ListAppsRequest](./client.listappsrequest.md)<!-- -->, [ListAppsResponse](./client.listappsresponse.md)<!-- -->&gt; |  |
-|  [listCellIds](./client.adminapi.listcellids.md) |  | [Requester](./client.requester.md)<!-- -->&lt;[ListCellIdsRequest](./client.listcellidsrequest.md)<!-- -->, [ListCellIdsResponse](./client.listcellidsresponse.md)<!-- -->&gt; |  |
-|  [listDnas](./client.adminapi.listdnas.md) |  | [Requester](./client.requester.md)<!-- -->&lt;[ListDnasRequest](./client.listdnasrequest.md)<!-- -->, [ListDnasResponse](./client.listdnasresponse.md)<!-- -->&gt; |  |
-|  [registerDna](./client.adminapi.registerdna.md) |  | [Requester](./client.requester.md)<!-- -->&lt;[RegisterDnaRequest](./client.registerdnarequest.md)<!-- -->, [RegisterDnaResponse](./client.registerdnaresponse.md)<!-- -->&gt; |  |
-|  [storageInfo](./client.adminapi.storageinfo.md) |  | [Requester](./client.requester.md)<!-- -->&lt;[StorageInfoRequest](./client.storageinforequest.md)<!-- -->, [StorageInfoResponse](./client.storageinforesponse.md)<!-- -->&gt; |  |
-|  [uninstallApp](./client.adminapi.uninstallapp.md) |  | [Requester](./client.requester.md)<!-- -->&lt;[UninstallAppRequest](./client.uninstallapprequest.md)<!-- -->, [UninstallAppResponse](./client.uninstallappresponse.md)<!-- -->&gt; |  |
+<table><thead><tr><th>
 
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[addAgentInfo](./client.adminapi.addagentinfo.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[Requester](./client.requester.md)<!-- -->&lt;[AddAgentInfoRequest](./client.addagentinforequest.md)<!-- -->, [AddAgentInfoResponse](./client.addagentinforesponse.md)<!-- -->&gt;
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[agentInfo](./client.adminapi.agentinfo.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[Requester](./client.requester.md)<!-- -->&lt;[AgentInfoRequest](./client.agentinforequest.md)<!-- -->, [AgentInfoResponse](./client.agentinforesponse.md)<!-- -->&gt;
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[attachAppInterface](./client.adminapi.attachappinterface.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[Requester](./client.requester.md)<!-- -->&lt;[AttachAppInterfaceRequest](./client.attachappinterfacerequest.md)<!-- -->, [AttachAppInterfaceResponse](./client.attachappinterfaceresponse.md)<!-- -->&gt;
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[deleteCloneCell](./client.adminapi.deleteclonecell.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[Requester](./client.requester.md)<!-- -->&lt;[DeleteCloneCellRequest](./client.deleteclonecellrequest.md)<!-- -->, [DeleteCloneCellResponse](./client.deleteclonecellresponse.md)<!-- -->&gt;
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[disableApp](./client.adminapi.disableapp.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[Requester](./client.requester.md)<!-- -->&lt;[DisableAppRequest](./client.disableapprequest.md)<!-- -->, [DisableAppResponse](./client.disableappresponse.md)<!-- -->&gt;
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[dumpFullState](./client.adminapi.dumpfullstate.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[Requester](./client.requester.md)<!-- -->&lt;[DumpFullStateRequest](./client.dumpfullstaterequest.md)<!-- -->, [DumpFullStateResponse](./client.dumpfullstateresponse.md)<!-- -->&gt;
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[dumpNetworkStats](./client.adminapi.dumpnetworkstats.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[Requester](./client.requester.md)<!-- -->&lt;[DumpNetworkStatsRequest](./client.dumpnetworkstatsrequest.md)<!-- -->, [DumpNetworkStatsResponse](./client.dumpnetworkstatsresponse.md)<!-- -->&gt;
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[dumpState](./client.adminapi.dumpstate.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[Requester](./client.requester.md)<!-- -->&lt;[DumpStateRequest](./client.dumpstaterequest.md)<!-- -->, [DumpStateResponse](./client.dumpstateresponse.md)<!-- -->&gt;
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[enableApp](./client.adminapi.enableapp.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[Requester](./client.requester.md)<!-- -->&lt;[EnableAppRequest](./client.enableapprequest.md)<!-- -->, [EnableAppResponse](./client.enableappresponse.md)<!-- -->&gt;
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[generateAgentPubKey](./client.adminapi.generateagentpubkey.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[Requester](./client.requester.md)<!-- -->&lt;[GenerateAgentPubKeyRequest](./client.generateagentpubkeyrequest.md)<!-- -->, [GenerateAgentPubKeyResponse](./client.generateagentpubkeyresponse.md)<!-- -->&gt;
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[getDnaDefinition](./client.adminapi.getdnadefinition.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[Requester](./client.requester.md)<!-- -->&lt;[GetDnaDefinitionRequest](./client.getdnadefinitionrequest.md)<!-- -->, [GetDnaDefinitionResponse](./client.getdnadefinitionresponse.md)<!-- -->&gt;
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[grantZomeCallCapability](./client.adminapi.grantzomecallcapability.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[Requester](./client.requester.md)<!-- -->&lt;[GrantZomeCallCapabilityRequest](./client.grantzomecallcapabilityrequest.md)<!-- -->, [GrantZomeCallCapabilityResponse](./client.grantzomecallcapabilityresponse.md)<!-- -->&gt;
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[installApp](./client.adminapi.installapp.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[Requester](./client.requester.md)<!-- -->&lt;[InstallAppRequest](./client.installapprequest.md)<!-- -->, [InstallAppResponse](./client.installappresponse.md)<!-- -->&gt;
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[listAppInterfaces](./client.adminapi.listappinterfaces.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[Requester](./client.requester.md)<!-- -->&lt;[ListAppInterfacesRequest](./client.listappinterfacesrequest.md)<!-- -->, [ListAppInterfacesResponse](./client.listappinterfacesresponse.md)<!-- -->&gt;
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[listApps](./client.adminapi.listapps.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[Requester](./client.requester.md)<!-- -->&lt;[ListAppsRequest](./client.listappsrequest.md)<!-- -->, [ListAppsResponse](./client.listappsresponse.md)<!-- -->&gt;
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[listCellIds](./client.adminapi.listcellids.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[Requester](./client.requester.md)<!-- -->&lt;[ListCellIdsRequest](./client.listcellidsrequest.md)<!-- -->, [ListCellIdsResponse](./client.listcellidsresponse.md)<!-- -->&gt;
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[listDnas](./client.adminapi.listdnas.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[Requester](./client.requester.md)<!-- -->&lt;[ListDnasRequest](./client.listdnasrequest.md)<!-- -->, [ListDnasResponse](./client.listdnasresponse.md)<!-- -->&gt;
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[registerDna](./client.adminapi.registerdna.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[Requester](./client.requester.md)<!-- -->&lt;[RegisterDnaRequest](./client.registerdnarequest.md)<!-- -->, [RegisterDnaResponse](./client.registerdnaresponse.md)<!-- -->&gt;
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[storageInfo](./client.adminapi.storageinfo.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[Requester](./client.requester.md)<!-- -->&lt;[StorageInfoRequest](./client.storageinforequest.md)<!-- -->, [StorageInfoResponse](./client.storageinforesponse.md)<!-- -->&gt;
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[uninstallApp](./client.adminapi.uninstallapp.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[Requester](./client.requester.md)<!-- -->&lt;[UninstallAppRequest](./client.uninstallapprequest.md)<!-- -->, [UninstallAppResponse](./client.uninstallappresponse.md)<!-- -->&gt;
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>

@@ -13,8 +13,63 @@ export interface GrantZomeCallCapabilityRequest
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [cap\_grant](./client.grantzomecallcapabilityrequest.cap_grant.md) |  | [ZomeCallCapGrant](./client.zomecallcapgrant.md) | Specifies the capability, consisting of zomes and functions to allow signing for as well as access level, secret and assignees. |
-|  [cell\_id](./client.grantzomecallcapabilityrequest.cell_id.md) |  | [CellId](./client.cellid.md) | Cell for which to authorize the capability. |
+<table><thead><tr><th>
 
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[cap\_grant](./client.grantzomecallcapabilityrequest.cap_grant.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[ZomeCallCapGrant](./client.zomecallcapgrant.md)
+
+
+</td><td>
+
+Specifies the capability, consisting of zomes and functions to allow signing for as well as access level, secret and assignees.
+
+
+</td></tr>
+<tr><td>
+
+[cell\_id](./client.grantzomecallcapabilityrequest.cell_id.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[CellId](./client.cellid.md)
+
+
+</td><td>
+
+Cell for which to authorize the capability.
+
+
+</td></tr>
+</tbody></table>

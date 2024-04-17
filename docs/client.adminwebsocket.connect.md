@@ -14,11 +14,55 @@ static connect(url: URL, defaultTimeout?: number): Promise<AdminWebsocket>;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  url | URL | A <code>ws://</code> URL used as the connection address. |
-|  defaultTimeout | number | _(Optional)_ The default timeout for any request. |
+<table><thead><tr><th>
 
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+url
+
+
+</td><td>
+
+URL
+
+
+</td><td>
+
+A `ws://` URL used as the connection address.
+
+
+</td></tr>
+<tr><td>
+
+defaultTimeout
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+_(Optional)_ The default timeout for any request.
+
+
+</td></tr>
+</tbody></table>
 **Returns:**
 
 Promise&lt;[AdminWebsocket](./client.adminwebsocket.md)<!-- -->&gt;

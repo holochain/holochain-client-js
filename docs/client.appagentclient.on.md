@@ -12,11 +12,51 @@ on<Name extends keyof AppAgentEvents>(eventName: Name | readonly Name[], listene
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  eventName | Name \| readonly Name\[\] |  |
-|  listener | [AppSignalCb](./client.appsignalcb.md) |  |
+<table><thead><tr><th>
 
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+eventName
+
+
+</td><td>
+
+Name \| readonly Name\[\]
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+listener
+
+
+</td><td>
+
+[AppSignalCb](./client.appsignalcb.md)
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>
 **Returns:**
 
 UnsubscribeFunction

@@ -14,10 +14,39 @@ static connect(url: URL): Promise<WsClient>;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  url | URL | The WebSocket URL to connect to. |
+<table><thead><tr><th>
 
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+url
+
+
+</td><td>
+
+URL
+
+
+</td><td>
+
+The WebSocket URL to connect to.
+
+
+</td></tr>
+</tbody></table>
 **Returns:**
 
 Promise&lt;[WsClient](./client.wsclient.md)<!-- -->&gt;

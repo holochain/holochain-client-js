@@ -13,7 +13,42 @@ export interface ZomeDependency
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [name](./client.zomedependency.name.md) |  | [ZomeName](./client.zomename.md) |  |
+<table><thead><tr><th>
 
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[name](./client.zomedependency.name.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[ZomeName](./client.zomename.md)
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>

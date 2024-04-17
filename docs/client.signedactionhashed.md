@@ -13,8 +13,59 @@ export interface SignedActionHashed<H extends Action = Action>
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [hashed](./client.signedactionhashed.hashed.md) |  | [HoloHashed](./client.holohashed.md)<!-- -->&lt;H&gt; |  |
-|  [signature](./client.signedactionhashed.signature.md) |  | [Signature](./client.signature.md) |  |
+<table><thead><tr><th>
 
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[hashed](./client.signedactionhashed.hashed.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[HoloHashed](./client.holohashed.md)<!-- -->&lt;H&gt;
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[signature](./client.signedactionhashed.signature.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[Signature](./client.signature.md)
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>

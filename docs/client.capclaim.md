@@ -13,9 +13,76 @@ export interface CapClaim
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [grantor](./client.capclaim.grantor.md) |  | [AgentPubKey](./client.agentpubkey.md) |  |
-|  [secret](./client.capclaim.secret.md) |  | [CapSecret](./client.capsecret.md) |  |
-|  [tag](./client.capclaim.tag.md) |  | string |  |
+<table><thead><tr><th>
 
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[grantor](./client.capclaim.grantor.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[AgentPubKey](./client.agentpubkey.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[secret](./client.capclaim.secret.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[CapSecret](./client.capsecret.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[tag](./client.capclaim.tag.md)
+
+
+</td><td>
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>

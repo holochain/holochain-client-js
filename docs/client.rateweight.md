@@ -13,8 +13,59 @@ export interface RateWeight
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [bucket\_id](./client.rateweight.bucket_id.md) |  | [RateBucketId](./client.ratebucketid.md) |  |
-|  [units](./client.rateweight.units.md) |  | [RateUnits](./client.rateunits.md) |  |
+<table><thead><tr><th>
 
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[bucket\_id](./client.rateweight.bucket_id.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[RateBucketId](./client.ratebucketid.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[units](./client.rateweight.units.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[RateUnits](./client.rateunits.md)
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>

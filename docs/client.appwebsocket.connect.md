@@ -14,11 +14,55 @@ static connect(url: URL, defaultTimeout?: number): Promise<AppWebsocket>;
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  url | URL | The <code>ws://</code> URL of the App API to connect to. |
-|  defaultTimeout | number | _(Optional)_ Timeout to default to for all operations. |
+<table><thead><tr><th>
 
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+url
+
+
+</td><td>
+
+URL
+
+
+</td><td>
+
+The `ws://` URL of the App API to connect to.
+
+
+</td></tr>
+<tr><td>
+
+defaultTimeout
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+_(Optional)_ Timeout to default to for all operations.
+
+
+</td></tr>
+</tbody></table>
 **Returns:**
 
 Promise&lt;[AppWebsocket](./client.appwebsocket.md)<!-- -->&gt;

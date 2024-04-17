@@ -13,12 +13,127 @@ export interface ClonedCell
 
 ## Properties
 
-|  Property | Modifiers | Type | Description |
-|  --- | --- | --- | --- |
-|  [cell\_id](./client.clonedcell.cell_id.md) |  | [CellId](./client.cellid.md) |  |
-|  [clone\_id](./client.clonedcell.clone_id.md) |  | [RoleName](./client.rolename.md) |  |
-|  [dna\_modifiers](./client.clonedcell.dna_modifiers.md) |  | [DnaModifiers](./client.dnamodifiers.md) |  |
-|  [enabled](./client.clonedcell.enabled.md) |  | boolean |  |
-|  [name](./client.clonedcell.name.md) |  | string |  |
-|  [original\_dna\_hash](./client.clonedcell.original_dna_hash.md) |  | [DnaHash](./client.dnahash.md) |  |
+<table><thead><tr><th>
 
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[cell\_id](./client.clonedcell.cell_id.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[CellId](./client.cellid.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[clone\_id](./client.clonedcell.clone_id.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[RoleName](./client.rolename.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[dna\_modifiers](./client.clonedcell.dna_modifiers.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[DnaModifiers](./client.dnamodifiers.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[enabled](./client.clonedcell.enabled.md)
+
+
+</td><td>
+
+
+</td><td>
+
+boolean
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[name](./client.clonedcell.name.md)
+
+
+</td><td>
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[original\_dna\_hash](./client.clonedcell.original_dna_hash.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[DnaHash](./client.dnahash.md)
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>

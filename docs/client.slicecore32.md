@@ -16,10 +16,39 @@ export declare function sliceCore32(hash: AgentPubKey | EntryHash | ActionHash):
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  hash | [AgentPubKey](./client.agentpubkey.md) \| [EntryHash](./client.entryhash.md) \| [ActionHash](./client.actionhash.md) | The full 39 byte hash. |
+<table><thead><tr><th>
 
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+hash
+
+
+</td><td>
+
+[AgentPubKey](./client.agentpubkey.md) \| [EntryHash](./client.entryhash.md) \| [ActionHash](./client.actionhash.md)
+
+
+</td><td>
+
+The full 39 byte hash.
+
+
+</td></tr>
+</tbody></table>
 **Returns:**
 
 Uint8Array

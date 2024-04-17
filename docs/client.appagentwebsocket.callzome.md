@@ -14,11 +14,55 @@ callZome(request: AppAgentCallZomeRequest, timeout?: number): Promise<CallZomeRe
 
 ## Parameters
 
-|  Parameter | Type | Description |
-|  --- | --- | --- |
-|  request | [AppAgentCallZomeRequest](./client.appagentcallzomerequest.md) | The zome call arguments. |
-|  timeout | number | _(Optional)_ A timeout to override the default. |
+<table><thead><tr><th>
 
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+request
+
+
+</td><td>
+
+[AppAgentCallZomeRequest](./client.appagentcallzomerequest.md)
+
+
+</td><td>
+
+The zome call arguments.
+
+
+</td></tr>
+<tr><td>
+
+timeout
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+_(Optional)_ A timeout to override the default.
+
+
+</td></tr>
+</tbody></table>
 **Returns:**
 
 Promise&lt;[CallZomeResponse](./client.callzomeresponse.md)<!-- -->&gt;
