@@ -1,6 +1,6 @@
 {
   "name": "@holochain/client",
-  "version": "0.16.10",
+  "version": "0.16.11",
   "description": "A JavaScript client for the Holochain Conductor API",
   "author": "Holochain Foundation <info@holochain.org> (http://holochain.org)",
   "license": "CAL-1.0",
@@ -31,6 +31,7 @@
     "lib"
   ],
   "scripts": {
+    "prepublishOnly": "npm run build",
     "lint": "eslint --fix --ext .ts src test .eslintrc.cjs",
     "test:app-agent": "RUST_LOG=error RUST_BACKTRACE=1 node --loader ts-node/esm test/e2e/app-agent-websocket.ts",
     "test:utils": "RUST_LOG=error RUST_BACKTRACE=1 node --loader ts-node/esm test/e2e/utils.ts",

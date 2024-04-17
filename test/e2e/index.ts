@@ -52,7 +52,7 @@ const ADMIN_PORT_1 = 33002;
 const ROLE_NAME: RoleName = "foo";
 const TEST_ZOME_NAME = "foo";
 
-export const ADMIN_WS_URL = new URL(`ws://127.0.0.1:${ADMIN_PORT}`);
+export const ADMIN_WS_URL = new URL(`ws://localhost:${ADMIN_PORT}`);
 
 test(
   "admin smoke test: registerDna + installApp + uninstallApp",
@@ -368,7 +368,7 @@ test(
     const { admin } = await installAppAndDna(ADMIN_PORT);
     const { port } = await admin.attachAppInterface({});
     t.assert(typeof port === "number", "returned a valid app port");
-    await AppWebsocket.connect(new URL(`ws://127.0.0.1:${port}`));
+    await AppWebsocket.connect(new URL(`ws://localhost:${port}`));
     t.pass("can connect an app websocket to attached port");
   })
 );
@@ -452,7 +452,7 @@ test(
     await admin.enableApp({ installed_app_id });
     const { port: appPort } = await admin.attachAppInterface({ port: 0 });
     const client = await AppWebsocket.connect(
-      new URL(`ws://127.0.0.1:${appPort}`)
+      new URL(`ws://localhost:${appPort}`)
     );
 
     assert(CellType.Provisioned in app.cell_info[role_name][0]);
@@ -513,7 +513,7 @@ test(
     await admin.enableApp({ installed_app_id });
     const { port: appPort } = await admin.attachAppInterface({ port: 0 });
     const client = await AppWebsocket.connect(
-      new URL(`ws://127.0.0.1:${appPort}`)
+      new URL(`ws://localhost:${appPort}`)
     );
 
     assert(CellType.Provisioned in app.cell_info[role_name][0]);
@@ -650,7 +650,7 @@ test("can inject agents", async (t) => {
   const installed_app_id = "app";
   const admin1 = await AdminWebsocket.connect(ADMIN_WS_URL);
   const admin2 = await AdminWebsocket.connect(
-    new URL(`ws://127.0.0.1:${ADMIN_PORT_1}`)
+    new URL(`ws://localhost:${ADMIN_PORT_1}`)
   );
   const agent_key_1 = await admin1.generateAgentPubKey();
   t.ok(agent_key_1);

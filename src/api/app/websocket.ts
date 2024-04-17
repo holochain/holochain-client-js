@@ -88,7 +88,7 @@ export class AppWebsocket extends Emittery implements AppApi {
     const env = getLauncherEnvironment();
 
     if (env?.APP_INTERFACE_PORT) {
-      url = new URL(`ws://127.0.0.1:${env.APP_INTERFACE_PORT}`);
+      url = new URL(`ws://localhost:${env.APP_INTERFACE_PORT}`);
     }
 
     const wsClient = await WsClient.connect(url);
