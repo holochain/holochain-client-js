@@ -10,7 +10,6 @@ import {
   AppEntryDef,
   AppSignal,
   AppStatusFilter,
-  AppWebsocket,
   CallZomeRequest,
   CellProvisioningStrategy,
   CellType,
@@ -25,6 +24,7 @@ import {
   RegisterAgentActivity,
   RoleName,
   generateSigningKeyPair,
+  AppAgentWebsocket,
 } from "../../src";
 import {
   FIXTURE_PATH,
@@ -390,7 +390,7 @@ test(
     const issued = await admin.issueAppAuthenticationToken({
       installed_app_id,
     });
-    await AppWebsocket.connect(issued.token, {
+    await AppAgentWebsocket.connect(issued.token, {
       url: new URL(`ws://localhost:${port}`),
       wsClientOptions: { origin: "client-test-app" },
     });
@@ -401,21 +401,16 @@ test(
 test(
   "app websocket connection from allowed origin is established",
   withConductor(ADMIN_PORT, async (t) => {
-    const admin = await AdminWebsocket.connect({
-      url: ADMIN_WS_URL,
-      wsClientOptions: { origin: "client-test-admin" },
-    });
+    const { admin, installed_app_id } = await installAppAndDna(ADMIN_PORT);
     const allowedOrigin = "client-test-app";
     const { port } = await admin.attachAppInterface({
       allowed_origins: allowedOrigin,
     });
-    // Dummy app id is allowed by Holochain because it doesn't check whether the app is installed when
-    // issuing or checking app tokens.
     const issued = await admin.issueAppAuthenticationToken({
-      installed_app_id: "",
+      installed_app_id,
     });
     try {
-      await AppWebsocket.connect(issued.token, {
+      await AppAgentWebsocket.connect(issued.token, {
         url: new URL(`ws://localhost:${port}`),
         wsClientOptions: { origin: allowedOrigin },
       });
@@ -429,20 +424,15 @@ test(
 test(
   "app websocket connection from disallowed origin is rejected",
   withConductor(ADMIN_PORT, async (t) => {
-    const admin = await AdminWebsocket.connect({
-      url: ADMIN_WS_URL,
-      wsClientOptions: { origin: "client-test-admin" },
-    });
+    const { admin, installed_app_id } = await installAppAndDna(ADMIN_PORT);
     const { port } = await admin.attachAppInterface({
       allowed_origins: "client-test-app",
     });
-    // Dummy app id is allowed by Holochain because it doesn't check whether the app is installed when
-    // issuing or checking app tokens.
     const issued = await admin.issueAppAuthenticationToken({
-      installed_app_id: "",
+      installed_app_id,
     });
     try {
-      await AppWebsocket.connect(issued.token, {
+      await AppAgentWebsocket.connect(issued.token, {
         url: new URL(`ws://localhost:${port}`),
         wsClientOptions: { origin: "disallowed_origin" },
       });
@@ -541,7 +531,7 @@ test(
     const issued = await admin.issueAppAuthenticationToken({
       installed_app_id,
     });
-    const client = await AppWebsocket.connect(issued.token, {
+    const client = await AppAgentWebsocket.connect(issued.token, {
       url: new URL(`ws://localhost:${appPort}`),
       wsClientOptions: { origin: "client-test-app" },
     });
@@ -611,7 +601,7 @@ test(
     const issued = await admin.issueAppAuthenticationToken({
       installed_app_id,
     });
-    const client = await AppWebsocket.connect(issued.token, {
+    const client = await AppAgentWebsocket.connect(issued.token, {
       url: new URL(`ws://localhost:${appPort}`),
       wsClientOptions: { origin: "client-test-app" },
     });
@@ -711,7 +701,7 @@ test("error is catchable when holochain socket is unavailable", async (t) => {
   }
 
   try {
-    await AppWebsocket.connect([], { url: ADMIN_WS_URL });
+    await AppAgentWebsocket.connect([], { url: ADMIN_WS_URL });
     t.fail("websocket connection should have failed");
   } catch (e) {
     t.assert(e instanceof HolochainError, "expected a HolochainError");
@@ -1236,7 +1226,6 @@ test(
     const { client, cell_id } = await installAppAndDna(ADMIN_PORT);
 
     const response = await client.networkInfo({
-      agent_pub_key: cell_id[1],
       dnas: [cell_id[0]],
     });
 

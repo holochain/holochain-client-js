@@ -1,12 +1,7 @@
 import assert from "node:assert/strict";
 import { spawn } from "node:child_process";
 import { Test } from "tape";
-import {
-  AdminWebsocket,
-  AppWebsocket,
-  CellId,
-  InstalledAppId,
-} from "../../src";
+import { AdminWebsocket, CellId, InstalledAppId } from "../../src";
 import { AppAgentWebsocket, CellType, CoordinatorBundle } from "../../src";
 import fs from "fs";
 
@@ -100,7 +95,7 @@ export const installAppAndDna = async (
 ): Promise<{
   installed_app_id: InstalledAppId;
   cell_id: CellId;
-  client: AppWebsocket;
+  client: AppAgentWebsocket;
   admin: AdminWebsocket;
 }> => {
   const role_name = "foo";
@@ -127,7 +122,7 @@ export const installAppAndDna = async (
   const issued = await admin.issueAppAuthenticationToken({
     installed_app_id,
   });
-  const client = await AppWebsocket.connect(issued.token, {
+  const client = await AppAgentWebsocket.connect(issued.token, {
     url: new URL(`ws://localhost:${appPort}`),
     wsClientOptions: { origin: "client-test-app" },
   });
