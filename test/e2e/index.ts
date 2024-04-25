@@ -24,7 +24,7 @@ import {
   RegisterAgentActivity,
   RoleName,
   generateSigningKeyPair,
-  AppAgentWebsocket,
+  AppWebsocket,
 } from "../../src";
 import {
   FIXTURE_PATH,
@@ -390,7 +390,7 @@ test(
     const issued = await admin.issueAppAuthenticationToken({
       installed_app_id,
     });
-    await AppAgentWebsocket.connect(issued.token, {
+    await AppWebsocket.connect(issued.token, {
       url: new URL(`ws://localhost:${port}`),
       wsClientOptions: { origin: "client-test-app" },
     });
@@ -410,7 +410,7 @@ test(
       installed_app_id,
     });
     try {
-      await AppAgentWebsocket.connect(issued.token, {
+      await AppWebsocket.connect(issued.token, {
         url: new URL(`ws://localhost:${port}`),
         wsClientOptions: { origin: allowedOrigin },
       });
@@ -432,7 +432,7 @@ test(
       installed_app_id,
     });
     try {
-      await AppAgentWebsocket.connect(issued.token, {
+      await AppWebsocket.connect(issued.token, {
         url: new URL(`ws://localhost:${port}`),
         wsClientOptions: { origin: "disallowed_origin" },
       });
@@ -531,7 +531,7 @@ test(
     const issued = await admin.issueAppAuthenticationToken({
       installed_app_id,
     });
-    const client = await AppAgentWebsocket.connect(issued.token, {
+    const client = await AppWebsocket.connect(issued.token, {
       url: new URL(`ws://localhost:${appPort}`),
       wsClientOptions: { origin: "client-test-app" },
     });
@@ -601,7 +601,7 @@ test(
     const issued = await admin.issueAppAuthenticationToken({
       installed_app_id,
     });
-    const client = await AppAgentWebsocket.connect(issued.token, {
+    const client = await AppWebsocket.connect(issued.token, {
       url: new URL(`ws://localhost:${appPort}`),
       wsClientOptions: { origin: "client-test-app" },
     });
@@ -701,7 +701,7 @@ test("error is catchable when holochain socket is unavailable", async (t) => {
   }
 
   try {
-    await AppAgentWebsocket.connect([], { url: ADMIN_WS_URL });
+    await AppWebsocket.connect([], { url: ADMIN_WS_URL });
     t.fail("websocket connection should have failed");
   } catch (e) {
     t.assert(e instanceof HolochainError, "expected a HolochainError");

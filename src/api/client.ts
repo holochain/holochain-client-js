@@ -3,7 +3,7 @@ import Emittery from "emittery";
 import IsoWebSocket from "isomorphic-ws";
 import { HolochainError, WsClientOptions } from "./common.js";
 import { AppAuthenticationToken } from "./admin";
-import { AppSignal, Signal, SignalType } from "./app-agent";
+import { AppSignal, Signal, SignalType } from "./app";
 
 interface HolochainMessage {
   id: number;

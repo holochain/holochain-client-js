@@ -3,7 +3,7 @@ import test from "tape";
 import {
   AdminWebsocket,
   AppAgentCallZomeRequest,
-  AppAgentWebsocket,
+  AppWebsocket,
   AppCreateCloneCellRequest,
   AppEntryDef,
   AppSignalCb,
@@ -174,14 +174,14 @@ test(
       installed_app_id: app_id1,
     });
     const clientUrl = new URL(`ws://localhost:${appPort}`);
-    const appAgentWs1 = await AppAgentWebsocket.connect(issued1.token, {
+    const appAgentWs1 = await AppWebsocket.connect(issued1.token, {
       url: clientUrl,
       wsClientOptions: { origin: "client-test-app" },
     });
     const issued2 = await admin.issueAppAuthenticationToken({
       installed_app_id: app_id2,
     });
-    const appAgentWs2 = await AppAgentWebsocket.connect(issued2.token, {
+    const appAgentWs2 = await AppWebsocket.connect(issued2.token, {
       url: clientUrl,
       wsClientOptions: { origin: "client-test-app" },
     });

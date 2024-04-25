@@ -33,7 +33,7 @@
   "scripts": {
     "lint": "eslint --fix --ext .ts src test .eslintrc.cjs",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
-    "test:app-agent": "RUST_LOG=error RUST_BACKTRACE=1 tsx test/e2e/app-agent-websocket.ts",
+    "test:app-agent": "RUST_LOG=error RUST_BACKTRACE=1 tsx test/e2e/app-websocket.ts",
     "test:utils": "RUST_LOG=error RUST_BACKTRACE=1 tsx test/e2e/utils.ts",
     "test": "RUST_LOG=error RUST_BACKTRACE=1 tsx test/index.ts",
     "build:lib": "rimraf ./lib && tsc -p tsconfig.build.json",

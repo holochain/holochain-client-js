@@ -4,7 +4,7 @@ import { CallZomeRequest } from "../api/app/types.js";
 import {
   CallZomeRequestSigned,
   CallZomeRequestUnsigned,
-} from "../api/app-agent/websocket-inner";
+} from "../api/app/websocket-inner";
 import { getNonceExpiration, randomNonce } from "../api/zome-call-signing.js";
 import { InstalledAppId } from "../types.js";
 

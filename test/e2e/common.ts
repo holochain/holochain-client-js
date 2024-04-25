@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { spawn } from "node:child_process";
 import { Test } from "tape";
 import { AdminWebsocket, CellId, InstalledAppId } from "../../src";
-import { AppAgentWebsocket, CellType, CoordinatorBundle } from "../../src";
+import { AppWebsocket, CellType, CoordinatorBundle } from "../../src";
 import fs from "fs";
 
 export const FIXTURE_PATH = "./test/e2e/fixture";
@@ -95,7 +95,7 @@ export const installAppAndDna = async (
 ): Promise<{
   installed_app_id: InstalledAppId;
   cell_id: CellId;
-  client: AppAgentWebsocket;
+  client: AppWebsocket;
   admin: AdminWebsocket;
 }> => {
   const role_name = "foo";
@@ -122,7 +122,7 @@ export const installAppAndDna = async (
   const issued = await admin.issueAppAuthenticationToken({
     installed_app_id,
   });
-  const client = await AppAgentWebsocket.connect(issued.token, {
+  const client = await AppWebsocket.connect(issued.token, {
     url: new URL(`ws://localhost:${appPort}`),
     wsClientOptions: { origin: "client-test-app" },
   });
@@ -134,7 +134,7 @@ export const createAppAgentWsAndInstallApp = async (
 ): Promise<{
   installed_app_id: InstalledAppId;
   cell_id: CellId;
-  client: AppAgentWebsocket;
+  client: AppWebsocket;
   admin: AdminWebsocket;
 }> => {
   const role_name = "foo";
@@ -160,7 +160,7 @@ export const createAppAgentWsAndInstallApp = async (
   const issued = await admin.issueAppAuthenticationToken({
     installed_app_id,
   });
-  const client = await AppAgentWebsocket.connect(issued.token, {
+  const client = await AppWebsocket.connect(issued.token, {
     url: new URL(`ws://localhost:${appPort}`),
     wsClientOptions: { origin: "client-test-app" },
     defaultTimeout: 12000,

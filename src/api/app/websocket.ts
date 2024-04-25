@@ -63,7 +63,7 @@ import { WsClient } from "../client";
  *
  * @public
  */
-export class AppAgentWebsocket implements AppAgentClient {
+export class AppWebsocket implements AppAgentClient {
   readonly client: WsClient;
   readonly myPubKey: AgentPubKey;
   private readonly defaultTimeout: number;
@@ -103,33 +103,33 @@ export class AppAgentWebsocket implements AppAgentClient {
     this.emitter = new Emittery<AppAgentEvents>();
     this.cachedAppInfo = appInfo;
 
-    this.appInfoRequester = AppAgentWebsocket.requester(
+    this.appInfoRequester = AppWebsocket.requester(
       this.client,
       "app_info",
       this.defaultTimeout
     );
-    this.callZomeRequester = AppAgentWebsocket.requester(
+    this.callZomeRequester = AppWebsocket.requester(
       this.client,
       "call_zome",
       this.defaultTimeout,
       callZomeTransform
     );
-    this.createCloneCellRequester = AppAgentWebsocket.requester(
+    this.createCloneCellRequester = AppWebsocket.requester(
       this.client,
       "create_clone_cell",
       this.defaultTimeout
     );
-    this.enableCloneCellRequester = AppAgentWebsocket.requester(
+    this.enableCloneCellRequester = AppWebsocket.requester(
       this.client,
       "enable_clone_cell",
       this.defaultTimeout
     );
-    this.disableCloneCellRequester = AppAgentWebsocket.requester(
+    this.disableCloneCellRequester = AppWebsocket.requester(
       this.client,
       "disable_clone_cell",
       this.defaultTimeout
     );
-    this.networkInfoRequester = AppAgentWebsocket.requester(
+    this.networkInfoRequester = AppWebsocket.requester(
       this.client,
       "network_info",
       this.defaultTimeout
@@ -155,7 +155,7 @@ export class AppAgentWebsocket implements AppAgentClient {
   }
 
   /**
-   * Instance factory for creating an {@link AppAgentWebsocket}.
+   * Instance factory for creating an {@link AppWebsocket}.
    *
    * @param token - A token to authenticate the websocket connection. Get a token using {@link AdminApi#issueAppAuthenticationToken}.
    * @param options - {@link (WebsocketConnectionOptions:interface)}
@@ -195,7 +195,7 @@ export class AppAgentWebsocket implements AppAgentClient {
       );
     }
 
-    return new AppAgentWebsocket(client, appInfo, options.defaultTimeout);
+    return new AppWebsocket(client, appInfo, options.defaultTimeout);
   }
 
   /**
