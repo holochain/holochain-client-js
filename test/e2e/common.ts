@@ -1,14 +1,8 @@
 import assert from "node:assert/strict";
 import { spawn } from "node:child_process";
 import { Test } from "tape";
-import { AdminWebsocket } from "../../src/api/admin/websocket.js";
-import { AppWebsocket } from "../../src/api/app/websocket.js";
-import { CellId, InstalledAppId } from "../../src/types.js";
-import {
-  AppAgentWebsocket,
-  CellType,
-  CoordinatorBundle,
-} from "../../src/index.js";
+import { AdminWebsocket, CellId, InstalledAppId } from "../../src";
+import { AppWebsocket, CellType, CoordinatorBundle } from "../../src";
 import fs from "fs";
 
 export const FIXTURE_PATH = "./test/e2e/fixture";
@@ -60,8 +54,11 @@ export const launch = async (port: number) => {
       }
     });
   });
-  runConductorProcess.stderr.on("data", (data: Buffer) => {
+  runConductorProcess.stdout.on("data", (data: Buffer) => {
     console.log(data.toString());
+  });
+  runConductorProcess.stderr.on("data", (data: Buffer) => {
+    console.error(data.toString());
   });
   await runConductorPromise;
   return runConductorProcess;
@@ -69,12 +66,11 @@ export const launch = async (port: number) => {
 
 export const cleanSandboxConductors = () => {
   const cleanSandboxConductorsProcess = spawn("hc", ["sandbox", "clean"]);
-  const cleanSandboxConductorsPromise = new Promise<void>((resolve) => {
+  return new Promise<void>((resolve) => {
     cleanSandboxConductorsProcess.stdout.on("end", () => {
       resolve();
     });
   });
-  return cleanSandboxConductorsPromise;
 };
 
 export const withConductor =
@@ -123,19 +119,22 @@ export const installAppAndDna = async (
   const { port: appPort } = await admin.attachAppInterface({
     allowed_origins: "client-test-app",
   });
-  const client = await AppWebsocket.connect({
+  const issued = await admin.issueAppAuthenticationToken({
+    installed_app_id,
+  });
+  const client = await AppWebsocket.connect(issued.token, {
     url: new URL(`ws://localhost:${appPort}`),
     wsClientOptions: { origin: "client-test-app" },
   });
   return { installed_app_id, cell_id, client, admin };
 };
 
-export const createAppAgentWsAndInstallApp = async (
+export const createAppWsAndInstallApp = async (
   adminPort: number
 ): Promise<{
   installed_app_id: InstalledAppId;
   cell_id: CellId;
-  client: AppAgentWebsocket;
+  client: AppWebsocket;
   admin: AdminWebsocket;
 }> => {
   const role_name = "foo";
@@ -158,7 +157,10 @@ export const createAppAgentWsAndInstallApp = async (
   const { port: appPort } = await admin.attachAppInterface({
     allowed_origins: "client-test-app",
   });
-  const client = await AppAgentWebsocket.connect(installed_app_id, {
+  const issued = await admin.issueAppAuthenticationToken({
+    installed_app_id,
+  });
+  const client = await AppWebsocket.connect(issued.token, {
     url: new URL(`ws://localhost:${appPort}`),
     wsClientOptions: { origin: "client-test-app" },
     defaultTimeout: 12000,

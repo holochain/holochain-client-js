@@ -8,7 +8,7 @@ import {
   sliceCore32,
   sliceDhtLocation,
   sliceHashType,
-} from "../../src/index.js";
+} from "../../src";
 import { installAppAndDna, withConductor } from "./common.js";
 import { range } from "lodash-es";
 

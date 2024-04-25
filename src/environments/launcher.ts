@@ -1,11 +1,8 @@
 import { encode } from "@msgpack/msgpack";
 import { invoke } from "@tauri-apps/api/tauri";
-import { CallZomeRequest } from "../api/app/types.js";
-import {
-  CallZomeRequestSigned,
-  CallZomeRequestUnsigned,
-} from "../api/app/websocket.js";
-import { getNonceExpiration, randomNonce } from "../api/zome-call-signing.js";
+import { CallZomeRequest } from "../api";
+import { CallZomeRequestSigned, CallZomeRequestUnsigned } from "../api";
+import { getNonceExpiration, randomNonce } from "../api";
 import { InstalledAppId } from "../types.js";
 
 export interface LauncherEnvironment {

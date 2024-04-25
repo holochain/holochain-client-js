@@ -1,4 +1,4 @@
-import { Action, DhtOp, Entry, ZomeCallCapGrant } from "../../hdk/index.js";
+import { Action, DhtOp, Entry, ZomeCallCapGrant } from "../../hdk";
 import {
   ActionHash,
   AgentPubKey,
@@ -17,7 +17,6 @@ import {
   WasmHash,
 } from "../../types.js";
 import { Requester } from "../common.js";
-import { DisableCloneCellRequest } from "../index.js";
 
 /**
  * @public
@@ -562,7 +561,16 @@ export type AddAgentInfoResponse = any;
 /**
  * @public
  */
-export type DeleteCloneCellRequest = DisableCloneCellRequest;
+export interface DeleteCloneCellRequest {
+  /**
+   * The app id that the clone cell belongs to
+   */
+  app_id: InstalledAppId;
+  /**
+   * The clone id or cell id of the clone cell
+   */
+  clone_cell_id: RoleName | CellId;
+}
 
 /**
  * @public
@@ -816,6 +824,25 @@ export type StorageInfoResponse = StorageInfo;
 /**
  * @public
  */
+export interface IssueAppAuthenticationTokenRequest {
+  installed_app_id: InstalledAppId;
+  expiry_seconds?: number;
+  single_use?: boolean;
+}
+
+export type AppAuthenticationToken = number[];
+
+/**
+ * @public
+ */
+export interface IssueAppAuthenticationTokenResponse {
+  token: AppAuthenticationToken;
+  expires_at?: Timestamp;
+}
+
+/**
+ * @public
+ */
 export type DumpNetworkStatsRequest = void;
 
 /**
@@ -861,6 +888,10 @@ export interface AdminApi {
     GrantZomeCallCapabilityResponse
   >;
   storageInfo: Requester<StorageInfoRequest, StorageInfoResponse>;
+  issueAppAuthenticationToken: Requester<
+    IssueAppAuthenticationTokenRequest,
+    IssueAppAuthenticationTokenResponse
+  >;
   dumpNetworkStats: Requester<
     DumpNetworkStatsRequest,
     DumpNetworkStatsResponse

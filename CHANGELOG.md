@@ -5,7 +5,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## \[Unreleased\]
 
 ### Added
+- **BREAKING** Connecting an app websocket now requires an authentication token which can be obtained from the admin
+  websocket using `AdminWebsocket#issueAppAuthenticationToken`.
+
 ### Changed
+- **BREAKING** Merged the app and app-agent websockets into a single `AppWebsocket` class. Following the addition of the
+  authentication token, the two types were well enough aligned that there was no longer a need to keep them separate.
+- **BREAKING** App calls that previously required an `InstalledAppId` no longer require one because the websocket will
+  be authenticated with an app already, so the app interface no longer requires you to tell it which app you are calling.
+
 ### Fixed
 ### Removed
 

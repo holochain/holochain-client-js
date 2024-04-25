@@ -1,8 +1,9 @@
 import { decode, encode } from "@msgpack/msgpack";
 import Emittery from "emittery";
 import IsoWebSocket from "isomorphic-ws";
-import { AppSignal, Signal, SignalType } from "./app/types.js";
 import { HolochainError, WsClientOptions } from "./common.js";
+import { AppAuthenticationToken } from "./admin";
+import { AppSignal, Signal, SignalType } from "./app";
 
 interface HolochainMessage {
   id: number;
@@ -16,6 +17,10 @@ type RequestRejecter = (error: Error) => void;
 interface HolochainRequest {
   resolve: RequestResolver;
   reject: RequestRejecter;
+}
+
+interface AppAuthenticationRequest {
+  token: AppAuthenticationToken;
 }
 
 /**
@@ -126,6 +131,7 @@ export class WsClient extends Emittery {
    * Instance factory for creating WsClients.
    *
    * @param url - The WebSocket URL to connect to.
+   * @param options - Options for the WsClient.
    * @returns An new instance of the WsClient.
    */
   static connect(url: URL, options?: WsClientOptions) {
@@ -160,37 +166,47 @@ export class WsClient extends Emittery {
   }
 
   /**
+   * Authenticate the client with the conductor.
+   *
+   * This is only relevant for app websockets.
+   *
+   * @param request The authentication request, containing an app authentication token.
+   */
+  async authenticate(request: AppAuthenticationRequest): Promise<void> {
+    return this.exchange(request, (request, resolve) => {
+      const encodedMsg = encode({
+        type: "authenticate",
+        data: encode(request),
+      });
+      this.socket.send(encodedMsg);
+      // Message just needs to be sent first, no need to wait for a response or even require a flush
+      resolve(null);
+    });
+  }
+
+  /**
    * Send requests to the connected websocket.
    *
    * @param request - The request to send over the websocket.
    * @returns
    */
   async request<Response>(request: unknown): Promise<Response> {
+    return this.exchange(request, this.sendMessage.bind(this));
+  }
+
+  private exchange<Response>(
+    request: unknown,
+    sendHandler: (
+      request: unknown,
+      resolve: RequestResolver,
+      reject: RequestRejecter
+    ) => void
+  ): Promise<Response> {
     if (this.socket.readyState === this.socket.OPEN) {
       const promise = new Promise((resolve, reject) => {
-        this.sendMessage(request, resolve, reject);
+        sendHandler(request, resolve, reject);
       });
       return promise as Promise<Response>;
-    } else if (this.url) {
-      const response = new Promise<unknown>((resolve, reject) => {
-        // typescript forgets in this promise scope that this.url is not undefined
-        const socket = new IsoWebSocket(this.url as URL, this.options);
-        this.socket = socket;
-        socket.onerror = (errorEvent) => {
-          reject(
-            new HolochainError(
-              "ConnectionError",
-              `could not connect to Holochain Conductor API at ${this.url} - ${errorEvent.error}`
-            )
-          );
-        };
-        socket.onopen = () => {
-          this.sendMessage(request, resolve, reject);
-        };
-
-        this.setupSocket();
-      });
-      return response as Response;
     } else {
       return Promise.reject(new Error("Socket is not open"));
     }
