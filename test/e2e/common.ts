@@ -59,8 +59,11 @@ export const launch = async (port: number) => {
       }
     });
   });
-  runConductorProcess.stderr.on("data", (data: Buffer) => {
+  runConductorProcess.stdout.on("data", (data: Buffer) => {
     console.log(data.toString());
+  });
+  runConductorProcess.stderr.on("data", (data: Buffer) => {
+    console.error(data.toString());
   });
   await runConductorPromise;
   return runConductorProcess;

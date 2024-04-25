@@ -25,7 +25,7 @@ import {
   RegisterAgentActivity,
   RoleName,
   generateSigningKeyPair,
-} from "../../src/index.js";
+} from "../../src";
 import {
   FIXTURE_PATH,
   cleanSandboxConductors,
@@ -1296,30 +1296,5 @@ test(
     });
 
     t.equal(response, "hi", "updated coordinator zomes can be called");
-  })
-);
-
-test(
-  "client reconnects websocket if closed before making a zome call",
-  withConductor(ADMIN_PORT, async (t) => {
-    const { cell_id, client, admin } = await installAppAndDna(ADMIN_PORT);
-    await admin.authorizeSigningCredentials(cell_id);
-
-    await client.client.close();
-
-    const call = client.callZome({
-      cell_id,
-      zome_name: TEST_ZOME_NAME,
-      fn_name: "bar",
-      provenance: cell_id[1],
-      payload: null,
-    });
-
-    try {
-      await call;
-      t.pass("websocket was reconnected successfully");
-    } catch (error) {
-      t.fail("websocket was not reconnected");
-    }
   })
 );

@@ -190,7 +190,7 @@ export class WsClient extends Emittery {
    * @returns
    */
   async request<Response>(request: unknown): Promise<Response> {
-    return this.exchange(request, this.sendMessage);
+    return this.exchange(request, this.sendMessage.bind(this));
   }
 
   private exchange<Response>(
@@ -206,26 +206,6 @@ export class WsClient extends Emittery {
         sendHandler(request, resolve, reject);
       });
       return promise as Promise<Response>;
-    } else if (this.url) {
-      const response = new Promise<unknown>((resolve, reject) => {
-        // typescript forgets in this promise scope that this.url is not undefined
-        const socket = new IsoWebSocket(this.url as URL, this.options);
-        this.socket = socket;
-        socket.onerror = (errorEvent) => {
-          reject(
-            new HolochainError(
-              "ConnectionError",
-              `could not connect to Holochain Conductor API at ${this.url} - ${errorEvent.error}`
-            )
-          );
-        };
-        socket.onopen = () => {
-          sendHandler(request, resolve, reject);
-        };
-
-        this.setupSocket();
-      });
-      return response as Promise<Response>;
     } else {
       return Promise.reject(new Error("Socket is not open"));
     }

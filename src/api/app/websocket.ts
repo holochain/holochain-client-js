@@ -121,7 +121,7 @@ export class AppWebsocket extends Emittery implements AppApi {
     return appWebsocket;
   }
 
-  _requester<ReqI, ReqO, ResI, ResO>(
+  private requester<ReqI, ReqO, ResI, ResO>(
     tag: string,
     transformer?: Transformer<ReqI, ReqO, ResI, ResO>
   ) {
@@ -137,12 +137,17 @@ export class AppWebsocket extends Emittery implements AppApi {
     );
   }
 
+  private appInfoRequester: Requester<null, AppInfoResponse> =
+    this.requester("app_info");
+
   /**
    * Request the app's info, including all cell infos.
    *
    * @returns The app's {@link AppInfo}.
    */
-  appInfo: RequesterNoArg<AppInfoResponse> = this._requester("app_info");
+  appInfo: RequesterNoArg<AppInfoResponse> = (
+    timeout?: number
+  ): Promise<AppInfoResponse> => this.appInfoRequester(null, timeout);
 
   /**
    * Call a zome.
@@ -154,7 +159,7 @@ export class AppWebsocket extends Emittery implements AppApi {
   callZome: Requester<
     CallZomeRequest | CallZomeRequestSigned,
     CallZomeResponse
-  > = this._requester("call_zome", callZomeTransform);
+  > = this.requester("call_zome", callZomeTransform);
 
   /**
    * Clone an existing provisioned cell.
@@ -163,7 +168,7 @@ export class AppWebsocket extends Emittery implements AppApi {
    * @returns The created clone cell.
    */
   createCloneCell: Requester<CreateCloneCellRequest, CreateCloneCellResponse> =
-    this._requester("create_clone_cell");
+    this.requester("create_clone_cell");
 
   /**
    * Enable a disabled clone cell.
@@ -172,7 +177,7 @@ export class AppWebsocket extends Emittery implements AppApi {
    * @returns The enabled clone cell.
    */
   enableCloneCell: Requester<EnableCloneCellRequest, EnableCloneCellResponse> =
-    this._requester("enable_clone_cell");
+    this.requester("enable_clone_cell");
 
   /**
    * Disable an enabled clone cell.
@@ -182,13 +187,13 @@ export class AppWebsocket extends Emittery implements AppApi {
   disableCloneCell: Requester<
     DisableCloneCellRequest,
     DisableCloneCellResponse
-  > = this._requester("disable_clone_cell");
+  > = this.requester("disable_clone_cell");
 
   /**
    * Request network info about gossip status.
    */
   networkInfo: Requester<NetworkInfoRequest, NetworkInfoResponse> =
-    this._requester("network_info");
+    this.requester("network_info");
 }
 
 /**
