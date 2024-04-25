@@ -179,7 +179,7 @@ export class WsClient extends Emittery {
         data: encode(request),
       });
       this.socket.send(encodedMsg);
-      // Message just needs to be send first, no need to wait for a response or even require a flush
+      // Message just needs to be sent first, no need to wait for a response or even require a flush
       resolve(null);
     });
   }
