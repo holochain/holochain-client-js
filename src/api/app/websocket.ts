@@ -348,9 +348,7 @@ export class AppWebsocket implements AppClient {
    *  @param args - Specify the DNAs for which you want network info
    *  @returns Network info for the specified DNAs
    */
-  async networkInfo(
-    args: AppNetworkInfoRequest
-  ): Promise<NetworkInfoResponse> {
+  async networkInfo(args: AppNetworkInfoRequest): Promise<NetworkInfoResponse> {
     return this.networkInfoRequester({
       ...args,
       agent_pub_key: this.myPubKey,

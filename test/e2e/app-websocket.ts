@@ -60,10 +60,7 @@ test(
 
     t.equal(response, null, "app entry type deserializes correctly");
 
-    const cellIdFromRoleName = appWs.getCellIdFromRoleName(
-      ROLE_NAME,
-      info
-    );
+    const cellIdFromRoleName = appWs.getCellIdFromRoleName(ROLE_NAME, info);
     t.deepEqual(cellIdFromRoleName, cell_id);
 
     const response_from_role_name = await appWs.callZome({
@@ -208,9 +205,7 @@ test(
 test(
   "can create a callable clone cell and call it by clone id",
   withConductor(ADMIN_PORT, async (t) => {
-    const { admin, client: appWs } = await createAppWsAndInstallApp(
-      ADMIN_PORT
-    );
+    const { admin, client: appWs } = await createAppWsAndInstallApp(ADMIN_PORT);
     const info = await appWs.appInfo();
 
     const createCloneCellParams: AppCreateCloneCellRequest = {
@@ -249,9 +244,7 @@ test(
 test(
   "can disable and re-enable a clone cell",
   withConductor(ADMIN_PORT, async (t) => {
-    const { admin, client: appWs } = await createAppWsAndInstallApp(
-      ADMIN_PORT
-    );
+    const { admin, client: appWs } = await createAppWsAndInstallApp(ADMIN_PORT);
 
     const createCloneCellParams: AppCreateCloneCellRequest = {
       role_name: ROLE_NAME,

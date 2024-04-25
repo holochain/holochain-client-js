@@ -70,10 +70,7 @@ export type AppDisableCloneCellRequest = Omit<
 /**
  * @public
  */
-export type AppNetworkInfoRequest = Omit<
-  NetworkInfoRequest,
-  "agent_pub_key"
->;
+export type AppNetworkInfoRequest = Omit<NetworkInfoRequest, "agent_pub_key">;
 
 /**
  * @public

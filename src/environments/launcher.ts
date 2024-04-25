@@ -1,10 +1,7 @@
 import { encode } from "@msgpack/msgpack";
 import { invoke } from "@tauri-apps/api/tauri";
 import { CallZomeRequest } from "../api";
-import {
-  CallZomeRequestSigned,
-  CallZomeRequestUnsigned,
-} from "../api";
+import { CallZomeRequestSigned, CallZomeRequestUnsigned } from "../api";
 import { getNonceExpiration, randomNonce } from "../api";
 import { InstalledAppId } from "../types.js";
 
