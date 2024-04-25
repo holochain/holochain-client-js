@@ -1173,7 +1173,7 @@ test(
     await delay(100);
 
     const closeEventCode = 1000;
-    client.client.close(closeEventCode);
+    await client.client.close(closeEventCode);
     t.ok(
       client.client.socket.readyState !== client.client.socket.OPEN,
       "ws is not open"
