@@ -3,6 +3,7 @@ import Emittery from "emittery";
 import IsoWebSocket from "isomorphic-ws";
 import { AppSignal, Signal, SignalType } from "./app/types.js";
 import { HolochainError, WsClientOptions } from "./common.js";
+import { AppAuthenticationToken } from "./admin";
 
 interface HolochainMessage {
   id: number;
@@ -16,6 +17,10 @@ type RequestRejecter = (error: Error) => void;
 interface HolochainRequest {
   resolve: RequestResolver;
   reject: RequestRejecter;
+}
+
+interface AppAuthenticationRequest {
+  token: AppAuthenticationToken;
 }
 
 /**
@@ -160,15 +165,45 @@ export class WsClient extends Emittery {
   }
 
   /**
+   * Authenticate the client with the conductor.
+   *
+   * This is only relevant for app websockets.
+   *
+   * @param request The authentication request, containing an app authentication token.
+   */
+  async authenticate(request: AppAuthenticationRequest): Promise<void> {
+    return this.exchange(request, (request, resolve) => {
+      const encodedMsg = encode({
+        type: "authenticate",
+        data: encode(request),
+      });
+      this.socket.send(encodedMsg);
+      // Message just needs to be send first, no need to wait for a response or even require a flush
+      resolve(null);
+    });
+  }
+
+  /**
    * Send requests to the connected websocket.
    *
    * @param request - The request to send over the websocket.
    * @returns
    */
   async request<Response>(request: unknown): Promise<Response> {
+    return this.exchange(request, this.sendMessage);
+  }
+
+  private exchange<Response>(
+    request: unknown,
+    sendHandler: (
+      request: unknown,
+      resolve: RequestResolver,
+      reject: RequestRejecter
+    ) => void
+  ): Promise<Response> {
     if (this.socket.readyState === this.socket.OPEN) {
       const promise = new Promise((resolve, reject) => {
-        this.sendMessage(request, resolve, reject);
+        sendHandler(request, resolve, reject);
       });
       return promise as Promise<Response>;
     } else if (this.url) {
@@ -185,12 +220,12 @@ export class WsClient extends Emittery {
           );
         };
         socket.onopen = () => {
-          this.sendMessage(request, resolve, reject);
+          sendHandler(request, resolve, reject);
         };
 
         this.setupSocket();
       });
-      return response as Response;
+      return response as Promise<Response>;
     } else {
       return Promise.reject(new Error("Socket is not open"));
     }

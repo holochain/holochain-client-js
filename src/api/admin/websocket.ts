@@ -50,6 +50,8 @@ import {
   GrantZomeCallCapabilityResponse,
   InstallAppRequest,
   InstallAppResponse,
+  IssueAppAuthenticationTokenRequest,
+  IssueAppAuthenticationTokenResponse,
   ListAppInterfacesRequest,
   ListAppInterfacesResponse,
   ListAppsRequest,
@@ -271,6 +273,11 @@ export class AdminWebsocket implements AdminApi {
 
   storageInfo: Requester<StorageInfoRequest, StorageInfoResponse> =
     this._requester("storage_info");
+
+  issueAppAuthenticationToken: Requester<
+    IssueAppAuthenticationTokenRequest,
+    IssueAppAuthenticationTokenResponse
+  > = this._requester("issue_app_authentication_token");
 
   dumpNetworkStats: Requester<
     DumpNetworkStatsRequest,

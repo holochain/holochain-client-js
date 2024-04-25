@@ -1,9 +1,8 @@
 import Emittery, { UnsubscribeFunction } from "emittery";
 import { omit } from "lodash-es";
-import { getLauncherEnvironment } from "../../environments/launcher.js";
 
-import { AgentPubKey, CellId, InstalledAppId, RoleName } from "../../types.js";
-import { AppInfo, CellType } from "../admin/types.js";
+import { AgentPubKey, CellId, RoleName } from "../../types.js";
+import { AppAuthenticationToken, AppInfo, CellType } from "../admin";
 import {
   AppSignal,
   AppSignalCb,
@@ -13,8 +12,8 @@ import {
   DisableCloneCellResponse,
   EnableCloneCellResponse,
   NetworkInfoResponse,
-} from "../app/types.js";
-import { AppWebsocket } from "../app/websocket.js";
+} from "../app";
+import { AppWebsocket } from "../app";
 import {
   WebsocketConnectionOptions,
   HolochainError,
@@ -39,16 +38,11 @@ import {
  */
 export class AppAgentWebsocket implements AppAgentClient {
   readonly appWebsocket: AppWebsocket;
-  installedAppId: InstalledAppId;
   cachedAppInfo?: AppInfo | null;
   myPubKey: AgentPubKey;
   readonly emitter: Emittery<AppAgentEvents>;
 
-  private constructor(
-    appWebsocket: AppWebsocket,
-    installedAppId: InstalledAppId,
-    myPubKey: AgentPubKey
-  ) {
+  private constructor(appWebsocket: AppWebsocket, myPubKey: AgentPubKey) {
     this.appWebsocket = appWebsocket;
     this.cachedAppInfo = null;
     this.emitter = new Emittery<AppAgentEvents>();
@@ -65,9 +59,6 @@ export class AppAgentWebsocket implements AppAgentClient {
       }
     });
 
-    const env = getLauncherEnvironment();
-    this.installedAppId = env?.INSTALLED_APP_ID || installedAppId;
-
     this.myPubKey = myPubKey;
 
     this.appWebsocket.on("signal", (signal: AppSignal) => {
@@ -83,13 +74,11 @@ export class AppAgentWebsocket implements AppAgentClient {
    * @returns The app's {@link AppInfo}.
    */
   async appInfo() {
-    const appInfo = await this.appWebsocket.appInfo({
-      installed_app_id: this.installedAppId,
-    });
+    const appInfo = await this.appWebsocket.appInfo();
     if (!appInfo) {
       throw new HolochainError(
         "AppNotFound",
-        `App info not found for the provided id "${this.installedAppId}". App needs to be installed and enabled.`
+        `App info not found. App needs to be installed and enabled.`
       );
     }
 
@@ -100,26 +89,26 @@ export class AppAgentWebsocket implements AppAgentClient {
   /**
    * Instance factory for creating AppAgentWebsockets.
    *
-   * @param installed_app_id - ID of the App to link to.
+   * @param token - A token to authenticate the websocket connection. Get a token using {@link AdminApi#issueAppAuthenticationToken}.
    * @param options - {@link (WebsocketConnectionOptions:interface)}
    * @returns A new instance of an AppAgentWebsocket.
    */
   static async connect(
-    installed_app_id: InstalledAppId,
+    token: AppAuthenticationToken,
     options: WebsocketConnectionOptions = {}
   ) {
-    const appWebsocket = await AppWebsocket.connect(options);
-    const appInfo = await appWebsocket.appInfo({ installed_app_id });
+    const appWebsocket = await AppWebsocket.connect(token, options);
+    appWebsocket;
+    const appInfo = await appWebsocket.appInfo();
     if (!appInfo) {
       throw new HolochainError(
         "AppNotFound",
-        `App info not found for the provided id "${installed_app_id}". App needs to be installed and enabled.`
+        `App info not found. App needs to be installed and enabled.`
       );
     }
 
     const appAgentWs = new AppAgentWebsocket(
       appWebsocket,
-      installed_app_id,
       appInfo.agent_pub_key
     );
     appAgentWs.cachedAppInfo = appInfo;
@@ -218,7 +207,6 @@ export class AppAgentWebsocket implements AppAgentClient {
     args: AppCreateCloneCellRequest
   ): Promise<CreateCloneCellResponse> {
     const clonedCell = this.appWebsocket.createCloneCell({
-      app_id: this.installedAppId,
       ...args,
     });
 
@@ -237,7 +225,6 @@ export class AppAgentWebsocket implements AppAgentClient {
     args: AppEnableCloneCellRequest
   ): Promise<EnableCloneCellResponse> {
     return this.appWebsocket.enableCloneCell({
-      app_id: this.installedAppId,
       ...args,
     });
   }
@@ -251,7 +238,6 @@ export class AppAgentWebsocket implements AppAgentClient {
     args: AppDisableCloneCellRequest
   ): Promise<DisableCloneCellResponse> {
     return this.appWebsocket.disableCloneCell({
-      app_id: this.installedAppId,
       ...args,
     });
   }

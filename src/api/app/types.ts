@@ -3,7 +3,6 @@ import {
   CellId,
   DnaHash,
   DnaProperties,
-  InstalledAppId,
   NetworkInfo,
   RoleName,
   Timestamp,
@@ -15,8 +14,8 @@ import {
   MembraneProof,
   NetworkSeed,
   ZomeName,
-} from "../admin/types.js";
-import { Requester } from "../common.js";
+} from "../admin";
+import { Requester, RequesterNoArg } from "../common.js";
 
 /**
  * @public
@@ -45,20 +44,12 @@ export type CallZomeResponse = CallZomeResponseGeneric<any>;
 /**
  * @public
  */
-export type AppInfoRequest = { installed_app_id: InstalledAppId };
-/**
- * @public
- */
 export type AppInfoResponse = AppInfo | null;
 
 /**
  * @public
  */
 export interface CreateCloneCellRequest {
-  /**
-   * The app id that the DNA to clone belongs to
-   */
-  app_id: InstalledAppId;
   /**
    * The DNA's role id to clone.
    */
@@ -107,10 +98,6 @@ export type CreateCloneCellResponse = ClonedCell;
  * @public
  */
 export interface DisableCloneCellRequest {
-  /**
-   * The app id that the clone cell belongs to
-   */
-  app_id: InstalledAppId;
   /**
    * The clone id or cell id of the clone cell
    */
@@ -195,8 +182,9 @@ export type NetworkInfoResponse = NetworkInfo[];
  * @public
  */
 export interface AppApi {
-  appInfo: Requester<AppInfoRequest, AppInfoResponse>;
+  appInfo: RequesterNoArg<AppInfoResponse>;
   callZome: Requester<CallZomeRequest, CallZomeResponse>;
+  createCloneCell: Requester<CreateCloneCellRequest, CreateCloneCellResponse>;
   enableCloneCell: Requester<EnableCloneCellRequest, EnableCloneCellResponse>;
   disableCloneCell: Requester<
     DisableCloneCellRequest,

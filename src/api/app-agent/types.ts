@@ -11,12 +11,12 @@ import {
   EnableCloneCellResponse,
   NetworkInfoRequest,
   NetworkInfoResponse,
-} from "../app/index.js";
+} from "../app";
 import {
   CreateCloneCellRequest,
   CreateCloneCellResponse,
   DisableCloneCellResponse,
-} from "../index.js";
+} from "../app";
 
 /**
  * @public

@@ -12,7 +12,7 @@ import {
   fakeAgentPubKey,
   NonProvenanceCallZomeRequest,
   RoleName,
-} from "../../src/index.js";
+} from "../../src";
 import {
   createAppAgentWsAndInstallApp,
   FIXTURE_PATH,
@@ -170,12 +170,18 @@ test(
 
     await admin.authorizeSigningCredentials(cell_id1);
 
+    const issued1 = await admin.issueAppAuthenticationToken({
+      installed_app_id: app_id1,
+    });
     const clientUrl = new URL(`ws://localhost:${appPort}`);
-    const appAgentWs1 = await AppAgentWebsocket.connect(app_id1, {
+    const appAgentWs1 = await AppAgentWebsocket.connect(issued1.token, {
       url: clientUrl,
       wsClientOptions: { origin: "client-test-app" },
     });
-    const appAgentWs2 = await AppAgentWebsocket.connect(app_id2, {
+    const issued2 = await admin.issueAppAuthenticationToken({
+      installed_app_id: app_id2,
+    });
+    const appAgentWs2 = await AppAgentWebsocket.connect(issued2.token, {
       url: clientUrl,
       wsClientOptions: { origin: "client-test-app" },
     });

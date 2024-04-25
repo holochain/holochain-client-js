@@ -1,14 +1,13 @@
 import assert from "node:assert/strict";
 import { spawn } from "node:child_process";
 import { Test } from "tape";
-import { AdminWebsocket } from "../../src/api/admin/websocket.js";
-import { AppWebsocket } from "../../src/api/app/websocket.js";
-import { CellId, InstalledAppId } from "../../src/types.js";
 import {
-  AppAgentWebsocket,
-  CellType,
-  CoordinatorBundle,
-} from "../../src/index.js";
+  AdminWebsocket,
+  AppWebsocket,
+  CellId,
+  InstalledAppId,
+} from "../../src";
+import { AppAgentWebsocket, CellType, CoordinatorBundle } from "../../src";
 import fs from "fs";
 
 export const FIXTURE_PATH = "./test/e2e/fixture";
@@ -69,12 +68,11 @@ export const launch = async (port: number) => {
 
 export const cleanSandboxConductors = () => {
   const cleanSandboxConductorsProcess = spawn("hc", ["sandbox", "clean"]);
-  const cleanSandboxConductorsPromise = new Promise<void>((resolve) => {
+  return new Promise<void>((resolve) => {
     cleanSandboxConductorsProcess.stdout.on("end", () => {
       resolve();
     });
   });
-  return cleanSandboxConductorsPromise;
 };
 
 export const withConductor =
@@ -123,7 +121,10 @@ export const installAppAndDna = async (
   const { port: appPort } = await admin.attachAppInterface({
     allowed_origins: "client-test-app",
   });
-  const client = await AppWebsocket.connect({
+  const issued = await admin.issueAppAuthenticationToken({
+    installed_app_id,
+  });
+  const client = await AppWebsocket.connect(issued.token, {
     url: new URL(`ws://localhost:${appPort}`),
     wsClientOptions: { origin: "client-test-app" },
   });
@@ -158,7 +159,10 @@ export const createAppAgentWsAndInstallApp = async (
   const { port: appPort } = await admin.attachAppInterface({
     allowed_origins: "client-test-app",
   });
-  const client = await AppAgentWebsocket.connect(installed_app_id, {
+  const issued = await admin.issueAppAuthenticationToken({
+    installed_app_id,
+  });
+  const client = await AppAgentWebsocket.connect(issued.token, {
     url: new URL(`ws://localhost:${appPort}`),
     wsClientOptions: { origin: "client-test-app" },
     defaultTimeout: 12000,

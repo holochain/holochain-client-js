@@ -19,7 +19,7 @@ export type Requester<Req, Res> = (req: Req, timeout?: number) => Promise<Res>;
 /**
  * @public
  */
-export type RequesterUnit<Res> = () => Promise<Res>;
+export type RequesterNoArg<Res> = (timeout?: number) => Promise<Res>;
 /**
  * @public
  */
@@ -42,8 +42,7 @@ export const requesterTransformer =
     const transformedInput = await transform.input(req);
     const input = { type: { [tag]: null }, data: transformedInput };
     const response = await requester(input, timeout);
-    const output = transform.output(response.data);
-    return output;
+    return transform.output(response.data);
   };
 
 const identity = (x: any) => x;

@@ -344,7 +344,7 @@ test(
     const { installed_app_id, cell_id, client, admin } = await installAppAndDna(
       ADMIN_PORT
     );
-    let info = await client.appInfo({ installed_app_id }, 1000);
+    let info = await client.appInfo(1000);
     assert(info);
     assert(CellType.Provisioned in info.cell_info[ROLE_NAME][0]);
     t.deepEqual(
@@ -373,7 +373,7 @@ test(
     t.equal(response, null, "app entry def deserializes correctly");
 
     await admin.disableApp({ installed_app_id });
-    info = await client.appInfo({ installed_app_id }, 1000);
+    info = await client.appInfo(1000);
     assert(info);
     t.deepEqual(info.status, { disabled: { reason: { user: null } } });
   })
@@ -382,12 +382,15 @@ test(
 test(
   "can call attachAppInterface without specific port",
   withConductor(ADMIN_PORT, async (t) => {
-    const { admin } = await installAppAndDna(ADMIN_PORT);
+    const { admin, installed_app_id } = await installAppAndDna(ADMIN_PORT);
     const { port } = await admin.attachAppInterface({
       allowed_origins: "client-test-app",
     });
     t.assert(typeof port === "number", "returned a valid app port");
-    await AppWebsocket.connect({
+    const issued = await admin.issueAppAuthenticationToken({
+      installed_app_id,
+    });
+    await AppWebsocket.connect(issued.token, {
       url: new URL(`ws://localhost:${port}`),
       wsClientOptions: { origin: "client-test-app" },
     });
@@ -406,8 +409,13 @@ test(
     const { port } = await admin.attachAppInterface({
       allowed_origins: allowedOrigin,
     });
+    // Dummy app id is allowed by Holochain because it doesn't check whether the app is installed when
+    // issuing or checking app tokens.
+    const issued = await admin.issueAppAuthenticationToken({
+      installed_app_id: "",
+    });
     try {
-      await AppWebsocket.connect({
+      await AppWebsocket.connect(issued.token, {
         url: new URL(`ws://localhost:${port}`),
         wsClientOptions: { origin: allowedOrigin },
       });
@@ -428,8 +436,13 @@ test(
     const { port } = await admin.attachAppInterface({
       allowed_origins: "client-test-app",
     });
+    // Dummy app id is allowed by Holochain because it doesn't check whether the app is installed when
+    // issuing or checking app tokens.
+    const issued = await admin.issueAppAuthenticationToken({
+      installed_app_id: "",
+    });
     try {
-      await AppWebsocket.connect({
+      await AppWebsocket.connect(issued.token, {
         url: new URL(`ws://localhost:${port}`),
         wsClientOptions: { origin: "disallowed_origin" },
       });
@@ -444,10 +457,8 @@ test(
 test(
   "client errors are HolochainErrors",
   withConductor(ADMIN_PORT, async (t) => {
-    const { installed_app_id, cell_id, client, admin } = await installAppAndDna(
-      ADMIN_PORT
-    );
-    const info = await client.appInfo({ installed_app_id }, 1000);
+    const { cell_id, client, admin } = await installAppAndDna(ADMIN_PORT);
+    const info = await client.appInfo(1000);
     assert(info);
     assert(CellType.Provisioned in info.cell_info[ROLE_NAME][0]);
 
@@ -527,7 +538,10 @@ test(
     const { port: appPort } = await admin.attachAppInterface({
       allowed_origins: "client-test-app",
     });
-    const client = await AppWebsocket.connect({
+    const issued = await admin.issueAppAuthenticationToken({
+      installed_app_id,
+    });
+    const client = await AppWebsocket.connect(issued.token, {
       url: new URL(`ws://localhost:${appPort}`),
       wsClientOptions: { origin: "client-test-app" },
     });
@@ -594,7 +608,10 @@ test(
     const { port: appPort } = await admin.attachAppInterface({
       allowed_origins: "client-test-app",
     });
-    const client = await AppWebsocket.connect({
+    const issued = await admin.issueAppAuthenticationToken({
+      installed_app_id,
+    });
+    const client = await AppWebsocket.connect(issued.token, {
       url: new URL(`ws://localhost:${appPort}`),
       wsClientOptions: { origin: "client-test-app" },
     });
@@ -620,10 +637,8 @@ test(
 test(
   "stateDump",
   withConductor(ADMIN_PORT, async (t) => {
-    const { installed_app_id, cell_id, client, admin } = await installAppAndDna(
-      ADMIN_PORT
-    );
-    const info = await client.appInfo({ installed_app_id });
+    const { cell_id, client, admin } = await installAppAndDna(ADMIN_PORT);
+    const info = await client.appInfo();
     assert(info);
     assert(CellType.Provisioned in info.cell_info[ROLE_NAME][0]);
     t.deepEqual(
@@ -696,7 +711,7 @@ test("error is catchable when holochain socket is unavailable", async (t) => {
   }
 
   try {
-    await AppWebsocket.connect({ url: ADMIN_WS_URL });
+    await AppWebsocket.connect([], { url: ADMIN_WS_URL });
     t.fail("websocket connection should have failed");
   } catch (e) {
     t.assert(e instanceof HolochainError, "expected a HolochainError");
@@ -924,7 +939,7 @@ test(
     const { installed_app_id, cell_id, client, admin } = await installAppAndDna(
       ADMIN_PORT
     );
-    let info = await client.appInfo({ installed_app_id }, 1000);
+    let info = await client.appInfo(1000);
     assert(info);
     assert(CellType.Provisioned in info.cell_info[ROLE_NAME][0]);
     t.deepEqual(
@@ -945,7 +960,7 @@ test(
     t.equal(response, "foo");
 
     await admin.disableApp({ installed_app_id });
-    info = await client.appInfo({ installed_app_id }, 1000);
+    info = await client.appInfo(1000);
     assert(info);
     t.deepEqual(info.status, { disabled: { reason: { user: null } } });
   })
@@ -987,14 +1002,11 @@ test(
 test(
   "can create a callable clone cell",
   withConductor(ADMIN_PORT, async (t) => {
-    const { installed_app_id, client, admin } = await installAppAndDna(
-      ADMIN_PORT
-    );
-    const appInfo = await client.appInfo({ installed_app_id });
+    const { client, admin } = await installAppAndDna(ADMIN_PORT);
+    const appInfo = await client.appInfo();
     assert(appInfo);
 
     const createCloneCellParams: CreateCloneCellRequest = {
-      app_id: installed_app_id,
       role_name: ROLE_NAME,
       modifiers: {
         network_seed: "clone-0",
@@ -1030,11 +1042,8 @@ test(
 test(
   "can disable a clone cell",
   withConductor(ADMIN_PORT, async (t) => {
-    const { installed_app_id, client, admin } = await installAppAndDna(
-      ADMIN_PORT
-    );
+    const { client, admin } = await installAppAndDna(ADMIN_PORT);
     const createCloneCellParams: CreateCloneCellRequest = {
-      app_id: installed_app_id,
       role_name: ROLE_NAME,
       modifiers: {
         network_seed: "clone-0",
@@ -1045,11 +1054,10 @@ test(
     await admin.authorizeSigningCredentials(cloneCell.cell_id);
 
     await client.disableCloneCell({
-      app_id: installed_app_id,
       clone_cell_id: cloneCell.cell_id,
     });
 
-    const appInfo = await client.appInfo({ installed_app_id });
+    const appInfo = await client.appInfo();
     assert(appInfo);
     t.equal(
       appInfo.cell_info[ROLE_NAME].length,
@@ -1075,11 +1083,8 @@ test(
 test(
   "can enable a disabled clone cell",
   withConductor(ADMIN_PORT, async (t) => {
-    const { installed_app_id, client, admin } = await installAppAndDna(
-      ADMIN_PORT
-    );
+    const { client, admin } = await installAppAndDna(ADMIN_PORT);
     const createCloneCellParams: CreateCloneCellRequest = {
-      app_id: installed_app_id,
       role_name: ROLE_NAME,
       modifiers: {
         network_seed: "clone-0",
@@ -1087,16 +1092,14 @@ test(
     };
     const cloneCell = await client.createCloneCell(createCloneCellParams);
     await client.disableCloneCell({
-      app_id: installed_app_id,
       clone_cell_id: cloneCell.cell_id,
     });
 
     const enabledCloneCell = await client.enableCloneCell({
-      app_id: installed_app_id,
       clone_cell_id: CloneId.fromRoleName(cloneCell.clone_id).toString(),
     });
 
-    const appInfo = await client.appInfo({ installed_app_id });
+    const appInfo = await client.appInfo();
     assert(appInfo);
     t.equal(
       appInfo.cell_info[ROLE_NAME].length,
@@ -1123,7 +1126,6 @@ test(
       ADMIN_PORT
     );
     const createCloneCellParams: CreateCloneCellRequest = {
-      app_id: installed_app_id,
       role_name: ROLE_NAME,
       modifiers: {
         network_seed: "clone-0",
@@ -1132,7 +1134,6 @@ test(
     const cloneCell = await client.createCloneCell(createCloneCellParams);
     createCloneCellParams.modifiers.network_seed = "clone-1";
     await client.disableCloneCell({
-      app_id: installed_app_id,
       clone_cell_id: cloneCell.cell_id,
     });
 
@@ -1143,7 +1144,6 @@ test(
 
     try {
       await client.enableCloneCell({
-        app_id: installed_app_id,
         clone_cell_id: cloneCell.cell_id,
       });
       t.fail();

@@ -8,9 +8,9 @@ import {
   signZomeCallElectron,
   getHostZomeCallSigner,
 } from "../../environments/launcher.js";
-import { CapSecret } from "../../hdk/capabilities.js";
+import { CapSecret } from "../../hdk";
 import { InstalledAppId } from "../../types.js";
-import { encodeHashToBase64 } from "../../utils/base64.js";
+import { encodeHashToBase64 } from "../../utils";
 import { WsClient } from "../client.js";
 import {
   WebsocketConnectionOptions,
@@ -21,6 +21,7 @@ import {
   promiseTimeout,
   requesterTransformer,
   HolochainError,
+  RequesterNoArg,
 } from "../common.js";
 import {
   Nonce256Bit,
@@ -30,7 +31,6 @@ import {
 } from "../zome-call-signing.js";
 import {
   AppApi,
-  AppInfoRequest,
   AppInfoResponse,
   CallZomeRequest,
   CallZomeResponse,
@@ -44,6 +44,7 @@ import {
   NetworkInfoRequest,
   NetworkInfoResponse,
 } from "./types.js";
+import { AppAuthenticationToken } from "../admin";
 
 /**
  * A class to establish a websocket connection to an App interface of a
@@ -81,10 +82,14 @@ export class AppWebsocket extends Emittery implements AppApi {
   /**
    * Instance factory for creating AppWebsockets.
    *
+   * @param token - A token to authenticate the websocket connection. Get a token using {@link AdminApi#issueAppAuthenticationToken}.
    * @param options - {@link (WebsocketConnectionOptions:interface)}
    * @returns A new instance of an AppWebsocket.
    */
-  static async connect(options: WebsocketConnectionOptions = {}) {
+  static async connect(
+    token: AppAuthenticationToken,
+    options: WebsocketConnectionOptions = {}
+  ) {
     // Check if we are in the launcher's environment, and if so, redirect the url to connect to
     const env = getLauncherEnvironment();
 
@@ -109,6 +114,7 @@ export class AppWebsocket extends Emittery implements AppApi {
       options.defaultTimeout,
       env?.INSTALLED_APP_ID
     );
+    await appWebsocket.client.authenticate({ token });
 
     wsClient.on("signal", (signal) => appWebsocket.emit("signal", signal));
 
@@ -136,10 +142,7 @@ export class AppWebsocket extends Emittery implements AppApi {
    *
    * @returns The app's {@link AppInfo}.
    */
-  appInfo: Requester<AppInfoRequest, AppInfoResponse> = this._requester(
-    "app_info",
-    appInfoTransform(this)
-  );
+  appInfo: RequesterNoArg<AppInfoResponse> = this._requester("app_info");
 
   /**
    * Call a zome.
@@ -233,25 +236,6 @@ const callZomeTransform: Transformer<
   },
   output: (response) => decode(response),
 };
-
-const appInfoTransform = (
-  appWs: AppWebsocket
-): Transformer<
-  AppInfoRequest,
-  AppInfoRequest,
-  AppInfoResponse,
-  AppInfoResponse
-> => ({
-  input: (request) => {
-    if (appWs.overrideInstalledAppId) {
-      return {
-        installed_app_id: appWs.overrideInstalledAppId,
-      };
-    }
-    return request;
-  },
-  output: (response) => response,
-});
 
 /**
  * @public
