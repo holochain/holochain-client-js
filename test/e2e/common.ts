@@ -129,7 +129,7 @@ export const installAppAndDna = async (
   return { installed_app_id, cell_id, client, admin };
 };
 
-export const createAppAgentWsAndInstallApp = async (
+export const createAppWsAndInstallApp = async (
   adminPort: number
 ): Promise<{
   installed_app_id: InstalledAppId;

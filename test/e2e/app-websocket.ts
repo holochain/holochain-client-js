@@ -2,7 +2,7 @@ import assert from "node:assert";
 import test from "tape";
 import {
   AdminWebsocket,
-  AppAgentCallZomeRequest,
+  AppCallZomeRequest,
   AppWebsocket,
   AppCreateCloneCellRequest,
   AppEntryDef,
@@ -14,7 +14,7 @@ import {
   RoleName,
 } from "../../src";
 import {
-  createAppAgentWsAndInstallApp,
+  createAppWsAndInstallApp,
   FIXTURE_PATH,
   withConductor,
 } from "./common.js";
@@ -30,11 +30,11 @@ test(
     const {
       installed_app_id,
       cell_id,
-      client: appAgentWs,
+      client: appWs,
       admin,
-    } = await createAppAgentWsAndInstallApp(ADMIN_PORT);
+    } = await createAppWsAndInstallApp(ADMIN_PORT);
 
-    let info = await appAgentWs.appInfo();
+    let info = await appWs.appInfo();
     assert(CellType.Provisioned in info.cell_info[ROLE_NAME][0]);
     t.deepEqual(
       info.cell_info[ROLE_NAME][0][CellType.Provisioned].cell_id,
@@ -51,7 +51,7 @@ test(
       visibility: { Private: null },
     };
 
-    const response = await appAgentWs.callZome({
+    const response = await appWs.callZome({
       cell_id,
       zome_name: TEST_ZOME_NAME,
       fn_name: "echo_app_entry_def",
@@ -60,13 +60,13 @@ test(
 
     t.equal(response, null, "app entry type deserializes correctly");
 
-    const cellIdFromRoleName = appAgentWs.getCellIdFromRoleName(
+    const cellIdFromRoleName = appWs.getCellIdFromRoleName(
       ROLE_NAME,
       info
     );
     t.deepEqual(cellIdFromRoleName, cell_id);
 
-    const response_from_role_name = await appAgentWs.callZome({
+    const response_from_role_name = await appWs.callZome({
       role_name: ROLE_NAME,
       zome_name: TEST_ZOME_NAME,
       fn_name: "echo_app_entry_def",
@@ -80,7 +80,7 @@ test(
     );
 
     await admin.disableApp({ installed_app_id });
-    info = await appAgentWs.appInfo();
+    info = await appWs.appInfo();
     t.deepEqual(info.status, { disabled: { reason: { user: null } } });
   })
 );
@@ -104,15 +104,15 @@ test(
     const {
       admin,
       cell_id,
-      client: appAgentWs,
-    } = await createAppAgentWsAndInstallApp(ADMIN_PORT);
+      client: appWs,
+    } = await createAppWsAndInstallApp(ADMIN_PORT);
 
     await admin.authorizeSigningCredentials(cell_id);
 
-    appAgentWs.on("signal", signalCb);
+    appWs.on("signal", signalCb);
 
     // trigger an emit_signal
-    await appAgentWs.callZome({
+    await appWs.callZome({
       cell_id,
       zome_name: TEST_ZOME_NAME,
       fn_name: "emitter",
@@ -174,23 +174,23 @@ test(
       installed_app_id: app_id1,
     });
     const clientUrl = new URL(`ws://localhost:${appPort}`);
-    const appAgentWs1 = await AppWebsocket.connect(issued1.token, {
+    const appWs1 = await AppWebsocket.connect(issued1.token, {
       url: clientUrl,
       wsClientOptions: { origin: "client-test-app" },
     });
     const issued2 = await admin.issueAppAuthenticationToken({
       installed_app_id: app_id2,
     });
-    const appAgentWs2 = await AppWebsocket.connect(issued2.token, {
+    const appWs2 = await AppWebsocket.connect(issued2.token, {
       url: clientUrl,
       wsClientOptions: { origin: "client-test-app" },
     });
 
-    appAgentWs1.on("signal", signalCb1);
-    appAgentWs2.on("signal", signalCb2);
+    appWs1.on("signal", signalCb1);
+    appWs2.on("signal", signalCb2);
 
     // trigger an emit_signal
-    await appAgentWs1.callZome({
+    await appWs1.callZome({
       cell_id: cell_id1,
       zome_name: TEST_ZOME_NAME,
       fn_name: "emitter",
@@ -208,10 +208,10 @@ test(
 test(
   "can create a callable clone cell and call it by clone id",
   withConductor(ADMIN_PORT, async (t) => {
-    const { admin, client: appAgentWs } = await createAppAgentWsAndInstallApp(
+    const { admin, client: appWs } = await createAppWsAndInstallApp(
       ADMIN_PORT
     );
-    const info = await appAgentWs.appInfo();
+    const info = await appWs.appInfo();
 
     const createCloneCellParams: AppCreateCloneCellRequest = {
       role_name: ROLE_NAME,
@@ -219,7 +219,7 @@ test(
         network_seed: "clone-0",
       },
     };
-    const cloneCell = await appAgentWs.createCloneCell(createCloneCellParams);
+    const cloneCell = await appWs.createCloneCell(createCloneCellParams);
     await admin.authorizeSigningCredentials(cloneCell.cell_id);
 
     const expectedCloneId = new CloneId(ROLE_NAME, 0).toString();
@@ -231,13 +231,13 @@ test(
       "clone cell agent key matches base cell agent key"
     );
 
-    const params: AppAgentCallZomeRequest = {
+    const params: AppCallZomeRequest = {
       role_name: cloneCell.clone_id,
       zome_name: TEST_ZOME_NAME,
       fn_name: "foo",
       payload: null,
     };
-    const response = await appAgentWs.callZome(params);
+    const response = await appWs.callZome(params);
     t.equal(
       response,
       "foo",
@@ -249,7 +249,7 @@ test(
 test(
   "can disable and re-enable a clone cell",
   withConductor(ADMIN_PORT, async (t) => {
-    const { admin, client: appAgentWs } = await createAppAgentWsAndInstallApp(
+    const { admin, client: appWs } = await createAppWsAndInstallApp(
       ADMIN_PORT
     );
 
@@ -259,14 +259,14 @@ test(
         network_seed: "clone-0",
       },
     };
-    const cloneCell = await appAgentWs.createCloneCell(createCloneCellParams);
+    const cloneCell = await appWs.createCloneCell(createCloneCellParams);
     await admin.authorizeSigningCredentials(cloneCell.cell_id);
 
-    await appAgentWs.disableCloneCell({
+    await appWs.disableCloneCell({
       clone_cell_id: cloneCell.cell_id,
     });
 
-    const appInfo = await appAgentWs.appInfo();
+    const appInfo = await appWs.appInfo();
     t.equal(
       appInfo.cell_info[ROLE_NAME].length,
       2,
@@ -279,16 +279,16 @@ test(
       payload: null,
     };
     try {
-      await appAgentWs.callZome(params);
+      await appWs.callZome(params);
       t.fail();
     } catch (error) {
       t.pass("disabled clone call cannot be called");
     }
 
-    await appAgentWs.enableCloneCell({
+    await appWs.enableCloneCell({
       clone_cell_id: cloneCell.cell_id,
     });
-    await appAgentWs.callZome(params);
+    await appWs.callZome(params);
     t.pass("re-enabled clone can be called");
   })
 );
@@ -296,11 +296,11 @@ test(
 test(
   "can fetch network info",
   withConductor(ADMIN_PORT, async (t) => {
-    const { client: appAgentWs, cell_id } = await createAppAgentWsAndInstallApp(
+    const { client: appWs, cell_id } = await createAppWsAndInstallApp(
       ADMIN_PORT
     );
 
-    const response = await appAgentWs.networkInfo({
+    const response = await appWs.networkInfo({
       dnas: [cell_id[0]],
     });
 

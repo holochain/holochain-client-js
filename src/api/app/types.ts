@@ -43,7 +43,7 @@ export type RoleNameCallZomeRequestSigned = Omit<
 /**
  * @public
  */
-export type AppAgentCallZomeRequest =
+export type AppCallZomeRequest =
   | NonProvenanceCallZomeRequest
   | RoleNameCallZomeRequest
   | CallZomeRequestSigned
@@ -70,7 +70,7 @@ export type AppDisableCloneCellRequest = Omit<
 /**
  * @public
  */
-export type AppAgentNetworkInfoRequest = Omit<
+export type AppNetworkInfoRequest = Omit<
   NetworkInfoRequest,
   "agent_pub_key"
 >;
@@ -78,7 +78,7 @@ export type AppAgentNetworkInfoRequest = Omit<
 /**
  * @public
  */
-export interface AppAgentEvents {
+export interface AppEvents {
   signal: AppSignal;
 }
 
@@ -262,10 +262,10 @@ export type NetworkInfoResponse = NetworkInfo[];
 /**
  * @public
  */
-export interface AppAgentClient {
-  callZome(args: AppAgentCallZomeRequest, timeout?: number): Promise<any>;
+export interface AppClient {
+  callZome(args: AppCallZomeRequest, timeout?: number): Promise<any>;
 
-  on<Name extends keyof AppAgentEvents>(
+  on<Name extends keyof AppEvents>(
     eventName: Name | readonly Name[],
     listener: AppSignalCb
   ): UnsubscribeFunction;
@@ -283,5 +283,5 @@ export interface AppAgentClient {
   disableCloneCell(
     args: AppDisableCloneCellRequest
   ): Promise<DisableCloneCellResponse>;
-  networkInfo(args: AppAgentNetworkInfoRequest): Promise<NetworkInfoResponse>;
+  networkInfo(args: AppNetworkInfoRequest): Promise<NetworkInfoResponse>;
 }

@@ -16,10 +16,10 @@ import {
   WebsocketConnectionOptions,
 } from "../common.js";
 import {
-  AppAgentCallZomeRequest,
-  AppAgentClient,
-  AppAgentEvents,
-  AppAgentNetworkInfoRequest,
+  AppCallZomeRequest,
+  AppClient,
+  AppEvents,
+  AppNetworkInfoRequest,
   AppCreateCloneCellRequest,
   AppDisableCloneCellRequest,
   AppEnableCloneCellRequest,
@@ -63,11 +63,11 @@ import { WsClient } from "../client";
  *
  * @public
  */
-export class AppWebsocket implements AppAgentClient {
+export class AppWebsocket implements AppClient {
   readonly client: WsClient;
   readonly myPubKey: AgentPubKey;
   private readonly defaultTimeout: number;
-  private readonly emitter: Emittery<AppAgentEvents>;
+  private readonly emitter: Emittery<AppEvents>;
   cachedAppInfo?: AppInfo | null;
 
   private readonly appInfoRequester: Requester<null, AppInfoResponse>;
@@ -100,7 +100,7 @@ export class AppWebsocket implements AppAgentClient {
     this.client = client;
     this.myPubKey = appInfo.agent_pub_key;
     this.defaultTimeout = defaultTimeout ?? DEFAULT_TIMEOUT;
-    this.emitter = new Emittery<AppAgentEvents>();
+    this.emitter = new Emittery<AppEvents>();
     this.cachedAppInfo = appInfo;
 
     this.appInfoRequester = AppWebsocket.requester(
@@ -271,7 +271,7 @@ export class AppWebsocket implements AppAgentClient {
    * @returns The zome call's response.
    */
   async callZome(
-    request: AppAgentCallZomeRequest,
+    request: AppCallZomeRequest,
     timeout?: number
   ): Promise<CallZomeResponse> {
     if (!("provenance" in request)) {
@@ -349,7 +349,7 @@ export class AppWebsocket implements AppAgentClient {
    *  @returns Network info for the specified DNAs
    */
   async networkInfo(
-    args: AppAgentNetworkInfoRequest
+    args: AppNetworkInfoRequest
   ): Promise<NetworkInfoResponse> {
     return this.networkInfoRequester({
       ...args,
@@ -364,7 +364,7 @@ export class AppWebsocket implements AppAgentClient {
    * @param listener - The function to call when event is triggered.
    * @returns A function to unsubscribe the event listener.
    */
-  on<Name extends keyof AppAgentEvents>(
+  on<Name extends keyof AppEvents>(
     eventName: Name | readonly Name[],
     listener: AppSignalCb
   ): UnsubscribeFunction {
