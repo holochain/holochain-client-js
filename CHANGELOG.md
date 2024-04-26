@@ -4,12 +4,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## \[Unreleased\]
 
-
-### Changed
-- **BREAKING** Changed `Appwebsocket.connect()` to take a single parameter `AppWebsocketConnectionOptions` that includes the `AppAuthenticationToken` as an optional property. The `AppAuthenticationToken` can be omitted if it is provided by the `window.__HC_LAUNCHER_ENV__` variable.
-- **BREAKING** The legacy  framework specific zome call signing methods `signZomeCallTauri` and `signZomeCallElectron` have been removed. Runtimes like Launcher now mandatorily need to provide a `window.__HC_ZOME_CALL_SIGNER__` object to have zome calls be automatically signed.
-
-## 2024-04-25: v0.17.0-dev.10
 ### Added
 ### Changed
 ### Fixed
@@ -17,6 +11,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## 2024-04-26: v0.17.0-dev.11
 ### Changed
+- **BREAKING** Changed `Appwebsocket.connect()` to take a single parameter `AppWebsocketConnectionOptions` that includes the `AppAuthenticationToken` as an optional property. The `AppAuthenticationToken` can be omitted if it is provided by the `window.__HC_LAUNCHER_ENV__` variable.
+- **BREAKING** The legacy  framework specific zome call signing methods `signZomeCallTauri` and `signZomeCallElectron` have been removed. Runtimes like Launcher now mandatorily need to provide a `window.__HC_ZOME_CALL_SIGNER__` object to have zome calls be automatically signed.
 - New optional parameter to `attachAppInterface` to bind the app interface to a specific app.
 - **BREAKING** The admin call `listAppInterfaces` now returns a list of `AppInterfaceInfo` instead of a list of ports.
 
