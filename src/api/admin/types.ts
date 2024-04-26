@@ -1,4 +1,4 @@
-import { Action, DhtOp, Entry, ZomeCallCapGrant } from "../../hdk";
+import { Action, DhtOp, Entry, ZomeCallCapGrant } from "../../hdk/index.js";
 import {
   ActionHash,
   AgentPubKey,

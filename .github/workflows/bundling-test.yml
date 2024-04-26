@@ -34,6 +34,9 @@ jobs:
       - name: Build client library
         run: npm run build
 
+      - name: Ensure Node.js can load the built client library
+        run: node lib/index.js
+
       - name: Create package tarball
         run: npm pack
 

@@ -65,7 +65,7 @@ jobs:
         run: nix develop -c $SHELL -c "npm ci"
 
       - name: Run tests
-        run: nix develop --override-input versions/holochain "github:holochain/holochain/holochain-0.3.0-beta-dev.48" -c $SHELL -c "npm t"
+        run: nix develop -c $SHELL -c "npm t"
 
       - name: Setup tmate session if a previous step failed
         if: ${{ failure() }}

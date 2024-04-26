@@ -2,8 +2,8 @@ import { decode, encode } from "@msgpack/msgpack";
 import Emittery from "emittery";
 import IsoWebSocket from "isomorphic-ws";
 import { HolochainError, WsClientOptions } from "./common.js";
-import { AppAuthenticationToken } from "./admin";
-import { AppSignal, Signal, SignalType } from "./app";
+import { AppAuthenticationToken } from "./admin/index.js";
+import { AppSignal, Signal, SignalType } from "./app/index.js";
 
 interface HolochainMessage {
   id: number;

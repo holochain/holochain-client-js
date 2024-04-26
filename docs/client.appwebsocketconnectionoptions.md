@@ -4,6 +4,7 @@
 
 ## AppWebsocketConnectionOptions interface
 
+
 **Signature:**
 
 ```typescript
