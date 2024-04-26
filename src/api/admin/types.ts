@@ -830,6 +830,9 @@ export interface IssueAppAuthenticationTokenRequest {
   single_use?: boolean;
 }
 
+/**
+ * @public
+ */
 export type AppAuthenticationToken = number[];
 
 /**

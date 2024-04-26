@@ -257,6 +257,23 @@ Description
 </td></tr>
 <tr><td>
 
+[issueAppAuthenticationToken](./client.adminapi.issueappauthenticationtoken.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[Requester](./client.requester.md)<!-- -->&lt;[IssueAppAuthenticationTokenRequest](./client.issueappauthenticationtokenrequest.md)<!-- -->, [IssueAppAuthenticationTokenResponse](./client.issueappauthenticationtokenresponse.md)<!-- -->&gt;
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
 [listAppInterfaces](./client.adminapi.listappinterfaces.md)
 
 

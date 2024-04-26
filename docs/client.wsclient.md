@@ -145,6 +145,22 @@ Description
 </th></tr></thead>
 <tbody><tr><td>
 
+[authenticate(request)](./client.wsclient.authenticate.md)
+
+
+</td><td>
+
+
+</td><td>
+
+Authenticate the client with the conductor.
+
+This is only relevant for app websockets.
+
+
+</td></tr>
+<tr><td>
+
 [close(code)](./client.wsclient.close.md)
 
 

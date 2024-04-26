@@ -2,12 +2,54 @@
 
 [Home](./index.md) &gt; [@holochain/client](./client.md) &gt; [AppWebsocket](./client.appwebsocket.md) &gt; [appInfo](./client.appwebsocket.appinfo.md)
 
-## AppWebsocket.appInfo property
+## AppWebsocket.appInfo() method
 
 Request the app's info, including all cell infos.
 
 **Signature:**
 
 ```typescript
-appInfo: Requester<AppInfoRequest, AppInfoResponse>;
+appInfo(timeout?: number): Promise<AppInfo>;
 ```
+
+## Parameters
+
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+timeout
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+_(Optional)_ A timeout to override the default.
+
+
+</td></tr>
+</tbody></table>
+**Returns:**
+
+Promise&lt;[AppInfo](./client.appinfo.md)<!-- -->&gt;
+
+The app's [AppInfo](./client.appinfo.md)<!-- -->.
+

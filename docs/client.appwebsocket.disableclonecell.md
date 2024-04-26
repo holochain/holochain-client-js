@@ -2,12 +2,52 @@
 
 [Home](./index.md) &gt; [@holochain/client](./client.md) &gt; [AppWebsocket](./client.appwebsocket.md) &gt; [disableCloneCell](./client.appwebsocket.disableclonecell.md)
 
-## AppWebsocket.disableCloneCell property
+## AppWebsocket.disableCloneCell() method
 
 Disable an enabled clone cell.
 
 **Signature:**
 
 ```typescript
-disableCloneCell: Requester<DisableCloneCellRequest, DisableCloneCellResponse>;
+disableCloneCell(args: AppDisableCloneCellRequest): Promise<DisableCloneCellResponse>;
 ```
+
+## Parameters
+
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+args
+
+
+</td><td>
+
+[AppDisableCloneCellRequest](./client.appdisableclonecellrequest.md)
+
+
+</td><td>
+
+Specify the clone cell to disable.
+
+
+</td></tr>
+</tbody></table>
+**Returns:**
+
+Promise&lt;[DisableCloneCellResponse](./client.disableclonecellresponse.md)<!-- -->&gt;
+

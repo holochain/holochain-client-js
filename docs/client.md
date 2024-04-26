@@ -30,23 +30,12 @@ A class for interacting with a conductor's Admin API.
 </td></tr>
 <tr><td>
 
-[AppAgentWebsocket](./client.appagentwebsocket.md)
-
-
-</td><td>
-
-A class to establish a websocket connection to an App interface, for a specific agent and app.
-
-
-</td></tr>
-<tr><td>
-
 [AppWebsocket](./client.appwebsocket.md)
 
 
 </td><td>
 
-A class to establish a websocket connection to an App interface of a Holochain conductor.
+A class to establish a websocket connection to an App interface, for a specific agent and app.
 
 
 </td></tr>
@@ -512,7 +501,7 @@ Description
 </td></tr>
 <tr><td>
 
-[AppAgentClient](./client.appagentclient.md)
+[AppAuthenticationRequest](./client.appauthenticationrequest.md)
 
 
 </td><td>
@@ -522,7 +511,7 @@ Description
 </td></tr>
 <tr><td>
 
-[AppAgentEvents](./client.appagentevents.md)
+[AppClient](./client.appclient.md)
 
 
 </td><td>
@@ -532,7 +521,7 @@ Description
 </td></tr>
 <tr><td>
 
-[AppApi](./client.appapi.md)
+[AppEvents](./client.appevents.md)
 
 
 </td><td>
@@ -702,6 +691,16 @@ Description
 </td></tr>
 <tr><td>
 
+[DeleteCloneCellRequest](./client.deleteclonecellrequest.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
 [DeleteLink](./client.deletelink.md)
 
 
@@ -823,6 +822,26 @@ Description
 <tr><td>
 
 [InitZomesComplete](./client.initzomescomplete.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[IssueAppAuthenticationTokenRequest](./client.issueappauthenticationtokenrequest.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[IssueAppAuthenticationTokenResponse](./client.issueappauthenticationtokenresponse.md)
 
 
 </td><td>
@@ -1237,17 +1256,7 @@ This type is meant to be opaque
 </td></tr>
 <tr><td>
 
-[AppAgentCallZomeRequest](./client.appagentcallzomerequest.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[AppAgentNetworkInfoRequest](./client.appagentnetworkinforequest.md)
+[AppAuthenticationToken](./client.appauthenticationtoken.md)
 
 
 </td><td>
@@ -1268,6 +1277,16 @@ This type is meant to be opaque
 <tr><td>
 
 [AppBundleSource](./client.appbundlesource.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[AppCallZomeRequest](./client.appcallzomerequest.md)
 
 
 </td><td>
@@ -1327,16 +1346,6 @@ This type is meant to be opaque
 </td></tr>
 <tr><td>
 
-[AppInfoRequest](./client.appinforequest.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
 [AppInfoResponse](./client.appinforesponse.md)
 
 
@@ -1348,6 +1357,16 @@ This type is meant to be opaque
 <tr><td>
 
 [AppManifest](./client.appmanifest.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[AppNetworkInfoRequest](./client.appnetworkinforequest.md)
 
 
 </td><td>
@@ -1548,16 +1567,6 @@ This type is meant to be opaque
 <tr><td>
 
 [DeactivationReason](./client.deactivationreason.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[DeleteCloneCellRequest](./client.deleteclonecellrequest.md)
 
 
 </td><td>
