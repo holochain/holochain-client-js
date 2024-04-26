@@ -10,7 +10,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - **BREAKING** The legacy  framework specific zome call signing methods `signZomeCallTauri` and `signZomeCallElectron` have been removed. Runtimes like Launcher now mandatorily need to provide a `window.__HC_ZOME_CALL_SIGNER__` object to have zome calls be automatically signed.
 
 ## 2024-04-25: v0.17.0-dev.10
-
 ### Added
 - **BREAKING** Connecting an app websocket now requires an authentication token which can be obtained from the admin
   websocket using `AdminWebsocket#issueAppAuthenticationToken`.
