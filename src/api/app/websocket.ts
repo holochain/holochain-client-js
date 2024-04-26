@@ -175,7 +175,9 @@ export class AppWebsocket implements AppClient {
     }
 
     const client = await WsClient.connect(options.url, options.wsClientOptions);
+
     if (env?.APP_INTERFACE_TOKEN) {
+      // Note: This will only work for multiple connections if a single_use = false token is provided
       await client.authenticate({ token: env.APP_INTERFACE_TOKEN });
     } else {
       if (!options.token) {
