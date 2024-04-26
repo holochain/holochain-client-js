@@ -533,9 +533,11 @@ Description
 
 [AppWebsocketConnectionOptions](./client.appwebsocketconnectionoptions.md)
 
+                        
+[AppInterfaceInfo](./client.appinterfaceinfo.md)
+
 
 </td><td>
-
 
 </td></tr>
 <tr><td>

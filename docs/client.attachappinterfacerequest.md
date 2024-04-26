@@ -11,5 +11,8 @@
 export type AttachAppInterfaceRequest = {
     port?: number;
     allowed_origins: string;
+    installed_app_id?: InstalledAppId;
 };
 ```
+**References:** [InstalledAppId](./client.installedappid.md)
+

@@ -920,6 +920,9 @@ test(
 
     interfaces = await admin.listAppInterfaces();
     t.equal(interfaces.length, 1);
+    t.true(interfaces[0].port > 0);
+    t.equal(interfaces[0].allowed_origins, "client-test-app");
+    t.equal(interfaces[0].installed_app_id, null);
   })
 );
 
