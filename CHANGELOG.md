@@ -7,9 +7,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Added
 ### Changed
 ### Fixed
-- Invalid module references which caused the client to fail to import in Node environments.
-
 ### Removed
+
+## 2024-04-27: v0.17.0-dev.12
+### Fixed
+- Invalid module references which caused the client to fail to import in Node environments.
 
 ## 2024-04-26: v0.17.0-dev.11
 ### Changed
