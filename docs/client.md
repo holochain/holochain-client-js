@@ -531,6 +531,15 @@ Description
 </td></tr>
 <tr><td>
 
+[AppWebsocketConnectionOptions](./client.appwebsocketconnectionoptions.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
 [CallZomeRequestSigned](./client.callzomerequestsigned.md)
 
 

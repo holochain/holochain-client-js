@@ -9,7 +9,7 @@ Instance factory for creating an [AppWebsocket](./client.appwebsocket.md)<!-- --
 **Signature:**
 
 ```typescript
-static connect(token: AppAuthenticationToken, options?: WebsocketConnectionOptions): Promise<AppWebsocket>;
+static connect(options?: AppWebsocketConnectionOptions): Promise<AppWebsocket>;
 ```
 
 ## Parameters
@@ -32,28 +32,12 @@ Description
 </th></tr></thead>
 <tbody><tr><td>
 
-token
-
-
-</td><td>
-
-[AppAuthenticationToken](./client.appauthenticationtoken.md)
-
-
-</td><td>
-
-A token to authenticate the websocket connection. Get a token using AdminWebsocket\#issueAppAuthenticationToken.
-
-
-</td></tr>
-<tr><td>
-
 options
 
 
 </td><td>
 
-[WebsocketConnectionOptions](./client.websocketconnectionoptions.md)
+[AppWebsocketConnectionOptions](./client.appwebsocketconnectionoptions.md)
 
 
 </td><td>

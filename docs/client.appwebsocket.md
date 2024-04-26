@@ -143,7 +143,7 @@ Call a zome.
 </td></tr>
 <tr><td>
 
-[connect(token, options)](./client.appwebsocket.connect.md)
+[connect(options)](./client.appwebsocket.connect.md)
 
 
 </td><td>
