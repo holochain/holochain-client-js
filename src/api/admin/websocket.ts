@@ -3,7 +3,7 @@ import {
   CapSecret,
   GrantedFunctions,
   GrantedFunctionsType,
-} from "../../hdk/capabilities.js";
+} from "../../hdk/index.js";
 import type { AgentPubKey, CellId } from "../../types.js";
 import { WsClient } from "../client.js";
 import {

@@ -1,5 +1,8 @@
-import { AppAuthenticationToken, CallZomeRequest } from "../api";
-import { CallZomeRequestSigned, CallZomeRequestUnsigned } from "../api";
+import { AppAuthenticationToken, CallZomeRequest } from "../api/index.js";
+import {
+  CallZomeRequestSigned,
+  CallZomeRequestUnsigned,
+} from "../api/index.js";
 import { InstalledAppId } from "../types.js";
 
 export interface LauncherEnvironment {

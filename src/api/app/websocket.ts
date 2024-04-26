@@ -1,8 +1,7 @@
 import Emittery, { UnsubscribeFunction } from "emittery";
 import { omit } from "lodash-es";
-
 import { AgentPubKey, CellId, RoleName } from "../../types.js";
-import { AppInfo, CellType } from "../admin";
+import { AppInfo, CellType } from "../admin/index.js";
 import {
   catchError,
   DEFAULT_TIMEOUT,
@@ -43,17 +42,17 @@ import {
 import {
   getHostZomeCallSigner,
   getLauncherEnvironment,
-} from "../../environments/launcher";
+} from "../../environments/launcher.js";
 import { decode, encode } from "@msgpack/msgpack";
 import {
   getNonceExpiration,
   getSigningCredentials,
   randomNonce,
-} from "../zome-call-signing";
-import { encodeHashToBase64 } from "../../utils";
+} from "../zome-call-signing.js";
+import { encodeHashToBase64 } from "../../utils/index.js";
 import { hashZomeCall } from "@holochain/serialization";
 import _sodium from "libsodium-wrappers";
-import { WsClient } from "../client";
+import { WsClient } from "../client.js";
 
 /**
  * A class to establish a websocket connection to an App interface, for a

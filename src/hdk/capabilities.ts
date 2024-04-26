@@ -1,4 +1,4 @@
-import { FunctionName, ZomeName } from "../api/admin/types.js";
+import { FunctionName, ZomeName } from "../api/admin/index.js";
 import { AgentPubKey } from "../types.js";
 
 /**

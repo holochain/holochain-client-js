@@ -285,6 +285,9 @@ export interface AppClient {
   networkInfo(args: AppNetworkInfoRequest): Promise<NetworkInfoResponse>;
 }
 
+/**
+ * @public
+ */
 export interface AppWebsocketConnectionOptions
   extends WebsocketConnectionOptions {
   token?: AppAuthenticationToken;
