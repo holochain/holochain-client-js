@@ -4,6 +4,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## \[Unreleased\]
 
+
+### Changed
+- **BREAKING** Changed `Appwebsocket.connect()` to take a single parameter `AppWebsocketConnectionOptions` that includes the `AppAuthenticationToken` as an optional property. The `AppAuthenticationToken` can be omitted if it is provided by the `window.__HC_LAUNCHER_ENV__` variable.
+- **BREAKING** The legacy  framework specific zome call signing methods `signZomeCallTauri` and `signZomeCallElectron` have been removed. Runtimes like Launcher now mandatorily need to provide a `window.__HC_ZOME_CALL_SIGNER__` object to have zome calls be automatically signed.
+
+## 2024-04-25: v0.17.0-dev.10
 ### Added
 ### Changed
 ### Fixed
@@ -54,7 +60,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## 2023-11-29: v0.17.0-dev.3
 ### Added
 - Utility functions for slicing hashes into their components: `sliceHashType`, `sliceCore32`, `sliceDhtLocation`
-- Utility functions for generating hashes from components: `dhtLocationFrom32`, `hashFrom32AndType`: 
+- Utility functions for generating hashes from components: `dhtLocationFrom32`, `hashFrom32AndType`:
 ### Changed
 - Utility functions fakeAgentPubKey, fakeEntryHash, fakeActionHash and fakeDnaHash now generate *valid* hashes with a valid final 4 bytes
 - Utility functions fakeAgentPubKey, fakeEntryHash, fakeActionHash and fakeDnaHash now optionally take a single parameter `coreByte` which if defined will be repeated for all core 32 bytes of the hash
@@ -80,7 +86,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## 2023-09-19: v0.16.2
 ### Added
-- Support for signing zome calls in electron via `window.electronAPI.signZomeCall` when `__HC_LAUNCHER_ENV__.ENVIRONMENT == 'electron'`. 
+- Support for signing zome calls in electron via `window.electronAPI.signZomeCall` when `__HC_LAUNCHER_ENV__.ENVIRONMENT == 'electron'`.
 ### Fixed
 - `DnaProperties` in `DnaModifiers` changed to `Uint8array` as it comes back serialized from Holochain.
 
@@ -219,7 +225,7 @@ Compatible with Holochain v0.1.0
 
 ## 2022-12-21: v0.11.7
 ### Changed
-- AppAgentWebsocket constructor is private now and follows the same pattern to instantiate through `connect` as the other websockets. 
+- AppAgentWebsocket constructor is private now and follows the same pattern to instantiate through `connect` as the other websockets.
 
 ## 2022-12-21: v0.11.6
 ### Fixed

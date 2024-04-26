@@ -2,7 +2,7 @@ import Emittery, { UnsubscribeFunction } from "emittery";
 import { omit } from "lodash-es";
 
 import { AgentPubKey, CellId, RoleName } from "../../types.js";
-import { AppAuthenticationToken, AppInfo, CellType } from "../admin";
+import { AppInfo, CellType } from "../admin";
 import {
   catchError,
   DEFAULT_TIMEOUT,
@@ -13,7 +13,6 @@ import {
   Requester,
   requesterTransformer,
   Transformer,
-  WebsocketConnectionOptions,
 } from "../common.js";
 import {
   AppCallZomeRequest,
@@ -39,12 +38,11 @@ import {
   EnableCloneCellResponse,
   NetworkInfoRequest,
   NetworkInfoResponse,
+  AppWebsocketConnectionOptions,
 } from "./types.js";
 import {
   getHostZomeCallSigner,
   getLauncherEnvironment,
-  signZomeCallElectron,
-  signZomeCallTauri,
 } from "../../environments/launcher";
 import { decode, encode } from "@msgpack/msgpack";
 import {
@@ -161,10 +159,7 @@ export class AppWebsocket implements AppClient {
    * @param options - {@link (WebsocketConnectionOptions:interface)}
    * @returns A new instance of an AppWebsocket.
    */
-  static async connect(
-    token: AppAuthenticationToken,
-    options: WebsocketConnectionOptions = {}
-  ) {
+  static async connect(options: AppWebsocketConnectionOptions = {}) {
     // Check if we are in the launcher's environment, and if so, redirect the url to connect to
     const env = getLauncherEnvironment();
 
@@ -180,7 +175,19 @@ export class AppWebsocket implements AppClient {
     }
 
     const client = await WsClient.connect(options.url, options.wsClientOptions);
-    await client.authenticate({ token });
+
+    if (env?.APP_INTERFACE_TOKEN) {
+      // Note: This will only work for multiple connections if a single_use = false token is provided
+      await client.authenticate({ token: env.APP_INTERFACE_TOKEN });
+    } else {
+      if (!options.token) {
+        throw new HolochainError(
+          "AppAuthenticationTokenMissing",
+          `unable to connect to Conductor API - no app authentication token provided.`
+        );
+      }
+      await client.authenticate({ token: options.token });
+    }
 
     const appInfo = await (
       this.requester(client, "app_info", DEFAULT_TIMEOUT) as Requester<
@@ -426,14 +433,7 @@ const callZomeTransform: Transformer<
     if (hostSigner) {
       return hostSigner.signZomeCall(request);
     } else {
-      const env = getLauncherEnvironment();
-      if (!env) {
-        return signZomeCall(request);
-      }
-      if (env.FRAMEWORK === "electron") {
-        return signZomeCallElectron(request);
-      }
-      return signZomeCallTauri(request);
+      return signZomeCall(request);
     }
   },
   output: (response) => decode(response),

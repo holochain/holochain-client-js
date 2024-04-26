@@ -171,16 +171,18 @@ test(
       installed_app_id: app_id1,
     });
     const clientUrl = new URL(`ws://localhost:${appPort}`);
-    const appWs1 = await AppWebsocket.connect(issued1.token, {
+    const appWs1 = await AppWebsocket.connect({
       url: clientUrl,
       wsClientOptions: { origin: "client-test-app" },
+      token: issued1.token,
     });
     const issued2 = await admin.issueAppAuthenticationToken({
       installed_app_id: app_id2,
     });
-    const appWs2 = await AppWebsocket.connect(issued2.token, {
+    const appWs2 = await AppWebsocket.connect({
       url: clientUrl,
       wsClientOptions: { origin: "client-test-app" },
+      token: issued2.token,
     });
 
     appWs1.on("signal", signalCb1);
