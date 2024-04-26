@@ -390,9 +390,10 @@ test(
     const issued = await admin.issueAppAuthenticationToken({
       installed_app_id,
     });
-    await AppWebsocket.connect(issued.token, {
+    await AppWebsocket.connect({
       url: new URL(`ws://localhost:${port}`),
       wsClientOptions: { origin: "client-test-app" },
+      token: issued.token,
     });
     t.pass("can connect an app websocket to attached port");
   })
@@ -410,9 +411,10 @@ test(
       installed_app_id,
     });
     try {
-      await AppWebsocket.connect(issued.token, {
+      await AppWebsocket.connect({
         url: new URL(`ws://localhost:${port}`),
         wsClientOptions: { origin: allowedOrigin },
+        token: issued.token,
       });
       t.pass("app websocket connection established");
     } catch (error) {
@@ -432,9 +434,10 @@ test(
       installed_app_id,
     });
     try {
-      await AppWebsocket.connect(issued.token, {
+      await AppWebsocket.connect({
         url: new URL(`ws://localhost:${port}`),
         wsClientOptions: { origin: "disallowed_origin" },
+        token: issued.token,
       });
       t.fail("app websocket connection should have failed");
     } catch (error) {
@@ -531,9 +534,10 @@ test(
     const issued = await admin.issueAppAuthenticationToken({
       installed_app_id,
     });
-    const client = await AppWebsocket.connect(issued.token, {
+    const client = await AppWebsocket.connect({
       url: new URL(`ws://localhost:${appPort}`),
       wsClientOptions: { origin: "client-test-app" },
+      token: issued.token,
     });
 
     assert(CellType.Provisioned in app.cell_info[role_name][0]);
@@ -601,9 +605,10 @@ test(
     const issued = await admin.issueAppAuthenticationToken({
       installed_app_id,
     });
-    const client = await AppWebsocket.connect(issued.token, {
+    const client = await AppWebsocket.connect({
       url: new URL(`ws://localhost:${appPort}`),
       wsClientOptions: { origin: "client-test-app" },
+      token: issued.token,
     });
 
     assert(CellType.Provisioned in app.cell_info[role_name][0]);
@@ -701,7 +706,7 @@ test("error is catchable when holochain socket is unavailable", async (t) => {
   }
 
   try {
-    await AppWebsocket.connect([], { url: ADMIN_WS_URL });
+    await AppWebsocket.connect({ url: ADMIN_WS_URL });
     t.fail("websocket connection should have failed");
   } catch (e) {
     t.assert(e instanceof HolochainError, "expected a HolochainError");

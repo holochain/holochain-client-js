@@ -122,9 +122,10 @@ export const installAppAndDna = async (
   const issued = await admin.issueAppAuthenticationToken({
     installed_app_id,
   });
-  const client = await AppWebsocket.connect(issued.token, {
+  const client = await AppWebsocket.connect({
     url: new URL(`ws://localhost:${appPort}`),
     wsClientOptions: { origin: "client-test-app" },
+    token: issued.token,
   });
   return { installed_app_id, cell_id, client, admin };
 };
@@ -160,10 +161,11 @@ export const createAppWsAndInstallApp = async (
   const issued = await admin.issueAppAuthenticationToken({
     installed_app_id,
   });
-  const client = await AppWebsocket.connect(issued.token, {
+  const client = await AppWebsocket.connect({
     url: new URL(`ws://localhost:${appPort}`),
     wsClientOptions: { origin: "client-test-app" },
     defaultTimeout: 12000,
+    token: issued.token,
   });
   return { installed_app_id, cell_id, client, admin };
 };
