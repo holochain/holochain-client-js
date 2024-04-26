@@ -28,6 +28,10 @@ export type AttachAppInterfaceRequest = {
    * For example: `http://localhost:3000,http://localhost:3001`
    */
   allowed_origins: string;
+  /**
+   * Optionally, bind this app interface to a specific installed app.
+   */
+  installed_app_id?: InstalledAppId;
 };
 
 /**
@@ -524,7 +528,16 @@ export type ListAppInterfacesRequest = void;
 /**
  * @public
  */
-export type ListAppInterfacesResponse = Array<number>;
+export type ListAppInterfacesResponse = Array<AppInterfaceInfo>;
+
+/**
+ * @public
+ */
+export interface AppInterfaceInfo {
+  port: number;
+  allowed_origins: string;
+  installed_app_id?: InstalledAppId;
+}
 
 /**
  * This type is meant to be opaque

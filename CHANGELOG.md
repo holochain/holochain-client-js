@@ -5,6 +5,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## \[Unreleased\]
 
 ### Added
+### Changed
+### Fixed
+### Removed
+
+## 2024-04-26: v0.17.0-dev.11
+### Changed
+- New optional parameter to `attachAppInterface` to bind the app interface to a specific app.
+- **BREAKING** The admin call `listAppInterfaces` now returns a list of `AppInterfaceInfo` instead of a list of ports.
+
+## 2024-04-25: v0.17.0-dev.10
+### Added
 - **BREAKING** Connecting an app websocket now requires an authentication token which can be obtained from the admin
   websocket using `AdminWebsocket#issueAppAuthenticationToken`.
 
@@ -13,9 +24,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   authentication token, the two types were well enough aligned that there was no longer a need to keep them separate.
 - **BREAKING** App calls that previously required an `InstalledAppId` no longer require one because the websocket will
   be authenticated with an app already, so the app interface no longer requires you to tell it which app you are calling.
-
-### Fixed
-### Removed
 
 ## 2024-04-16: v0.17.0-dev.9
 ### Fixed
