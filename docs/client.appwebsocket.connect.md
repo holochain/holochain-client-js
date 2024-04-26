@@ -4,12 +4,12 @@
 
 ## AppWebsocket.connect() method
 
-Instance factory for creating AppWebsockets.
+Instance factory for creating an [AppWebsocket](./client.appwebsocket.md)<!-- -->.
 
 **Signature:**
 
 ```typescript
-static connect(options?: WebsocketConnectionOptions): Promise<AppWebsocket>;
+static connect(token: AppAuthenticationToken, options?: WebsocketConnectionOptions): Promise<AppWebsocket>;
 ```
 
 ## Parameters
@@ -31,6 +31,22 @@ Description
 
 </th></tr></thead>
 <tbody><tr><td>
+
+token
+
+
+</td><td>
+
+[AppAuthenticationToken](./client.appauthenticationtoken.md)
+
+
+</td><td>
+
+A token to authenticate the websocket connection. Get a token using AdminWebsocket\#issueAppAuthenticationToken.
+
+
+</td></tr>
+<tr><td>
 
 options
 

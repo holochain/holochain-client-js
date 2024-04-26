@@ -4,16 +4,14 @@
 
 ## AppWebsocket class
 
-A class to establish a websocket connection to an App interface of a Holochain conductor.
+A class to establish a websocket connection to an App interface, for a specific agent and app.
 
 **Signature:**
 
 ```typescript
-export declare class AppWebsocket extends Emittery implements AppApi 
+export declare class AppWebsocket implements AppClient 
 ```
-**Extends:** Emittery
-
-**Implements:** [AppApi](./client.appapi.md)
+**Implements:** [AppClient](./client.appclient.md)
 
 ## Properties
 
@@ -40,7 +38,7 @@ Description
 </th></tr></thead>
 <tbody><tr><td>
 
-[appInfo](./client.appwebsocket.appinfo.md)
+[cachedAppInfo?](./client.appwebsocket.cachedappinfo.md)
 
 
 </td><td>
@@ -48,31 +46,12 @@ Description
 
 </td><td>
 
-[Requester](./client.requester.md)<!-- -->&lt;[AppInfoRequest](./client.appinforequest.md)<!-- -->, [AppInfoResponse](./client.appinforesponse.md)<!-- -->&gt;
+[AppInfo](./client.appinfo.md) \| null
 
 
 </td><td>
 
-Request the app's info, including all cell infos.
-
-
-</td></tr>
-<tr><td>
-
-[callZome](./client.appwebsocket.callzome.md)
-
-
-</td><td>
-
-
-</td><td>
-
-[Requester](./client.requester.md)<!-- -->&lt;[CallZomeRequest](./client.callzomerequest.md) \| [CallZomeRequestSigned](./client.callzomerequestsigned.md)<!-- -->, [CallZomeResponse](./client.callzomeresponse.md)<!-- -->&gt;
-
-
-</td><td>
-
-Call a zome.
+_(Optional)_
 
 
 </td></tr>
@@ -97,113 +76,20 @@ Call a zome.
 </td></tr>
 <tr><td>
 
-[createCloneCell](./client.appwebsocket.createclonecell.md)
+[myPubKey](./client.appwebsocket.mypubkey.md)
 
 
 </td><td>
 
-
-</td><td>
-
-[Requester](./client.requester.md)<!-- -->&lt;[CreateCloneCellRequest](./client.createclonecellrequest.md)<!-- -->, [CreateCloneCellResponse](./client.createclonecellresponse.md)<!-- -->&gt;
+`readonly`
 
 
 </td><td>
 
-Clone an existing provisioned cell.
-
-
-</td></tr>
-<tr><td>
-
-[defaultTimeout](./client.appwebsocket.defaulttimeout.md)
+[AgentPubKey](./client.agentpubkey.md)
 
 
 </td><td>
-
-
-</td><td>
-
-number
-
-
-</td><td>
-
-
-</td></tr>
-<tr><td>
-
-[disableCloneCell](./client.appwebsocket.disableclonecell.md)
-
-
-</td><td>
-
-
-</td><td>
-
-[Requester](./client.requester.md)<!-- -->&lt;[DisableCloneCellRequest](./client.disableclonecellrequest.md)<!-- -->, [DisableCloneCellResponse](./client.disableclonecellresponse.md)<!-- -->&gt;
-
-
-</td><td>
-
-Disable an enabled clone cell.
-
-
-</td></tr>
-<tr><td>
-
-[enableCloneCell](./client.appwebsocket.enableclonecell.md)
-
-
-</td><td>
-
-
-</td><td>
-
-[Requester](./client.requester.md)<!-- -->&lt;[EnableCloneCellRequest](./client.enableclonecellrequest.md)<!-- -->, [EnableCloneCellResponse](./client.enableclonecellresponse.md)<!-- -->&gt;
-
-
-</td><td>
-
-Enable a disabled clone cell.
-
-
-</td></tr>
-<tr><td>
-
-[networkInfo](./client.appwebsocket.networkinfo.md)
-
-
-</td><td>
-
-
-</td><td>
-
-[Requester](./client.requester.md)<!-- -->&lt;[NetworkInfoRequest](./client.networkinforequest.md)<!-- -->, [NetworkInfoResponse](./client.networkinforesponse.md)<!-- -->&gt;
-
-
-</td><td>
-
-Request network info about gossip status.
-
-
-</td></tr>
-<tr><td>
-
-[overrideInstalledAppId?](./client.appwebsocket.overrideinstalledappid.md)
-
-
-</td><td>
-
-
-</td><td>
-
-[InstalledAppId](./client.installedappid.md)
-
-
-</td><td>
-
-_(Optional)_
 
 
 </td></tr>
@@ -229,19 +115,35 @@ Description
 </th></tr></thead>
 <tbody><tr><td>
 
-[\_requester(tag, transformer)](./client.appwebsocket._requester.md)
+[appInfo(timeout)](./client.appwebsocket.appinfo.md)
 
 
 </td><td>
 
 
 </td><td>
+
+Request the app's info, including all cell infos.
 
 
 </td></tr>
 <tr><td>
 
-[connect(options)](./client.appwebsocket.connect.md)
+[callZome(request, timeout)](./client.appwebsocket.callzome.md)
+
+
+</td><td>
+
+
+</td><td>
+
+Call a zome.
+
+
+</td></tr>
+<tr><td>
+
+[connect(token, options)](./client.appwebsocket.connect.md)
 
 
 </td><td>
@@ -251,7 +153,91 @@ Description
 
 </td><td>
 
-Instance factory for creating AppWebsockets.
+Instance factory for creating an [AppWebsocket](./client.appwebsocket.md)<!-- -->.
+
+
+</td></tr>
+<tr><td>
+
+[createCloneCell(args)](./client.appwebsocket.createclonecell.md)
+
+
+</td><td>
+
+
+</td><td>
+
+Clone an existing provisioned cell.
+
+
+</td></tr>
+<tr><td>
+
+[disableCloneCell(args)](./client.appwebsocket.disableclonecell.md)
+
+
+</td><td>
+
+
+</td><td>
+
+Disable an enabled clone cell.
+
+
+</td></tr>
+<tr><td>
+
+[enableCloneCell(args)](./client.appwebsocket.enableclonecell.md)
+
+
+</td><td>
+
+
+</td><td>
+
+Enable a disabled clone cell.
+
+
+</td></tr>
+<tr><td>
+
+[getCellIdFromRoleName(roleName, appInfo)](./client.appwebsocket.getcellidfromrolename.md)
+
+
+</td><td>
+
+
+</td><td>
+
+Get a cell id by its role name or clone id.
+
+
+</td></tr>
+<tr><td>
+
+[networkInfo(args)](./client.appwebsocket.networkinfo.md)
+
+
+</td><td>
+
+
+</td><td>
+
+Request network info about gossip status.
+
+
+</td></tr>
+<tr><td>
+
+[on(eventName, listener)](./client.appwebsocket.on.md)
+
+
+</td><td>
+
+
+</td><td>
+
+Register an event listener for signals.
 
 
 </td></tr>

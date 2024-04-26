@@ -58,7 +58,7 @@ options
 
 </td><td>
 
-_(Optional)_
+_(Optional)_ Options for the WsClient.
 
 
 </td></tr>

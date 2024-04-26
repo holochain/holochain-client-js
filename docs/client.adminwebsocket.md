@@ -361,6 +361,23 @@ Install the specified app into Holochain.
 </td></tr>
 <tr><td>
 
+[issueAppAuthenticationToken](./client.adminwebsocket.issueappauthenticationtoken.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[Requester](./client.requester.md)<!-- -->&lt;[IssueAppAuthenticationTokenRequest](./client.issueappauthenticationtokenrequest.md)<!-- -->, [IssueAppAuthenticationTokenResponse](./client.issueappauthenticationtokenresponse.md)<!-- -->&gt;
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
 [listAppInterfaces](./client.adminwebsocket.listappinterfaces.md)
 
 

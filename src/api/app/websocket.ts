@@ -157,7 +157,7 @@ export class AppWebsocket implements AppClient {
   /**
    * Instance factory for creating an {@link AppWebsocket}.
    *
-   * @param token - A token to authenticate the websocket connection. Get a token using {@link AdminApi#issueAppAuthenticationToken}.
+   * @param token - A token to authenticate the websocket connection. Get a token using AdminWebsocket#issueAppAuthenticationToken.
    * @param options - {@link (WebsocketConnectionOptions:interface)}
    * @returns A new instance of an AppWebsocket.
    */

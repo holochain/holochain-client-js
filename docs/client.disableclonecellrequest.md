@@ -36,25 +36,6 @@ Description
 </th></tr></thead>
 <tbody><tr><td>
 
-[app\_id](./client.disableclonecellrequest.app_id.md)
-
-
-</td><td>
-
-
-</td><td>
-
-[InstalledAppId](./client.installedappid.md)
-
-
-</td><td>
-
-The app id that the clone cell belongs to
-
-
-</td></tr>
-<tr><td>
-
 [clone\_cell\_id](./client.disableclonecellrequest.clone_cell_id.md)
 
 

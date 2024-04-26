@@ -19,7 +19,10 @@ interface HolochainRequest {
   reject: RequestRejecter;
 }
 
-interface AppAuthenticationRequest {
+/**
+ * @public
+ */
+export interface AppAuthenticationRequest {
   token: AppAuthenticationToken;
 }
 
@@ -170,7 +173,7 @@ export class WsClient extends Emittery {
    *
    * This is only relevant for app websockets.
    *
-   * @param request The authentication request, containing an app authentication token.
+   * @param request - The authentication request, containing an app authentication token.
    */
   async authenticate(request: AppAuthenticationRequest): Promise<void> {
     return this.exchange(request, (request, resolve) => {
