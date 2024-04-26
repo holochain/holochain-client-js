@@ -8,5 +8,7 @@
 **Signature:**
 
 ```typescript
-export type ListAppInterfacesResponse = Array<number>;
+export type ListAppInterfacesResponse = Array<AppInterfaceInfo>;
 ```
+**References:** [AppInterfaceInfo](./client.appinterfaceinfo.md)
+

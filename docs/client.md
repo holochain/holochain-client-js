@@ -531,6 +531,16 @@ Description
 </td></tr>
 <tr><td>
 
+[AppInterfaceInfo](./client.appinterfaceinfo.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
 [CallZomeRequestSigned](./client.callzomerequestsigned.md)
 
 
