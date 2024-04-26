@@ -1,6 +1,7 @@
 import { UnsubscribeFunction } from "emittery";
 import {
   AgentPubKey,
+  AppAuthenticationToken,
   AppInfo,
   CapSecret,
   CellId,
@@ -14,6 +15,7 @@ import {
   Nonce256Bit,
   RoleName,
   Timestamp,
+  WebsocketConnectionOptions,
   ZomeName,
 } from "../../index.js";
 
@@ -281,4 +283,9 @@ export interface AppClient {
     args: AppDisableCloneCellRequest
   ): Promise<DisableCloneCellResponse>;
   networkInfo(args: AppNetworkInfoRequest): Promise<NetworkInfoResponse>;
+}
+
+export interface AppWebsocketConnectionOptions
+  extends WebsocketConnectionOptions {
+  token?: AppAuthenticationToken;
 }
