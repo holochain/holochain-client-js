@@ -64,52 +64,60 @@ test(
     });
 
     const agent_key = await admin.generateAgentPubKey();
-    t.ok(agent_key);
+    t.ok(agent_key, "agent key generated");
 
     const path = `${FIXTURE_PATH}/test.dna`;
     const hash = await admin.registerDna({
       modifiers: {},
       path,
     });
+    t.ok(hash, "dna registered");
 
-    t.ok(hash);
     const installedApp = await admin.installApp({
       installed_app_id,
       agent_key,
       path: `${FIXTURE_PATH}/test.happ`,
       membrane_proofs: {},
     });
-
     const status: InstalledAppInfoStatus = installedApp.status;
-    t.deepEqual(status, { disabled: { reason: { never_started: null } } });
+    t.deepEqual(
+      status,
+      { disabled: { reason: "never_started" } },
+      "app installed"
+    );
 
     const runningApps = await admin.listApps({
       status_filter: AppStatusFilter.Running,
     });
-    t.equal(runningApps.length, 0);
+    t.equal(runningApps.length, 0, "no running apps");
 
     let allAppsInfo = await admin.listApps({});
-    t.equal(allAppsInfo.length, 1);
+    t.equal(allAppsInfo.length, 1, "all apps listed");
 
-    const runningAppsInfo = await admin.listApps({
-      status_filter: AppStatusFilter.Running,
-    });
     const disabledAppsInfo = await admin.listApps({
       status_filter: AppStatusFilter.Disabled,
     });
+    t.equal(disabledAppsInfo.length, 1, "1 disabled app");
+    t.equal(
+      disabledAppsInfo[0].cell_info[ROLE_NAME].length,
+      1,
+      "expected cell in disabled app info"
+    );
+    t.deepEqual(
+      disabledAppsInfo[0].status,
+      {
+        disabled: { reason: "never_started" },
+      },
+      "disabled app never started"
+    );
+
     const pausedAppsInfo = await admin.listApps({
       status_filter: AppStatusFilter.Paused,
     });
-    t.equal(runningAppsInfo.length, 0);
-    t.equal(pausedAppsInfo.length, 0);
-    t.equal(disabledAppsInfo.length, 1);
-    t.equal(disabledAppsInfo[0].cell_info[ROLE_NAME].length, 1);
-    t.deepEqual(disabledAppsInfo[0].status, {
-      disabled: { reason: { never_started: null } },
-    });
+    t.equal(pausedAppsInfo.length, 0, "0 paused apps");
 
     const { app, errors } = await admin.enableApp({ installed_app_id });
-    t.deepEqual(app.status, { running: null });
+    t.deepEqual(app.status, "running");
     t.ok(ROLE_NAME in app.cell_info);
     t.ok(Array.isArray(app.cell_info[ROLE_NAME]));
     t.equal(app.installed_app_id, installed_app_id);
@@ -134,7 +142,7 @@ test(
     t.equal(disabledAppsInfo2.length, 0);
     t.equal(runningAppsInfo2.length, 1);
     t.equal(runningAppsInfo2[0].cell_info[ROLE_NAME].length, 1);
-    t.deepEqual(runningAppsInfo2[0].status, { running: null });
+    t.deepEqual(runningAppsInfo2[0].status, "running");
 
     await admin.attachAppInterface({
       port: 0,
@@ -155,7 +163,7 @@ test(
     t.equal(pausedAppsInfo3.length, 0);
     t.equal(disabledAppsInfo3.length, 1);
     t.deepEqual(disabledAppsInfo3[0].status, {
-      disabled: { reason: { user: null } },
+      disabled: { reason: "user" },
     });
 
     let dnas = await admin.listDnas();
@@ -206,7 +214,7 @@ test(
     });
     t.ok(installedApp);
     t.deepEqual(installedApp.status, {
-      disabled: { reason: { never_started: null } },
+      disabled: { reason: "never_started" },
     });
 
     const runningApps1 = await admin.listApps({
@@ -215,7 +223,7 @@ test(
     t.equal(runningApps1.length, 0);
 
     const enabledAppInfo = await admin.enableApp({ installed_app_id });
-    t.deepEqual(enabledAppInfo.app.status, { running: null });
+    t.deepEqual(enabledAppInfo.app.status, "running");
     t.equal(enabledAppInfo.app.installed_app_id, installed_app_id);
     t.equal(enabledAppInfo.errors.length, 0);
 
@@ -311,8 +319,7 @@ test(
     const enabledAppInfo: EnableAppResponse = await admin.enableApp({
       installed_app_id,
     });
-    t.deepEqual(enabledAppInfo.app.status, { running: null });
-    // t.equal(enabledAppInfo.app.cell_info[0].role_name, role_name);
+    t.deepEqual(enabledAppInfo.app.status, "running");
     t.equal(enabledAppInfo.app.installed_app_id, installed_app_id);
     t.equal(enabledAppInfo.errors.length, 0);
 
@@ -345,20 +352,26 @@ test(
       ADMIN_PORT
     );
     let info = await client.appInfo(1000);
-    assert(info);
-    assert(CellType.Provisioned in info.cell_info[ROLE_NAME][0]);
+    assert(info, "got app info");
+    assert(
+      CellType.Provisioned in info.cell_info[ROLE_NAME][0],
+      "got expected cell"
+    );
     t.deepEqual(
       info.cell_info[ROLE_NAME][0][CellType.Provisioned].cell_id,
-      cell_id
+      cell_id,
+      "got correct cell id"
     );
-    t.ok(ROLE_NAME in info.cell_info);
-    t.deepEqual(info.status, { running: null });
+    t.ok(ROLE_NAME in info.cell_info, "role name correct");
+    t.deepEqual(info.status, "running", "status is running");
+
+    await admin.authorizeSigningCredentials(cell_id);
+
     const appEntryDef: AppEntryDef = {
       entry_index: 0,
       zome_index: 0,
-      visibility: { Private: null },
+      visibility: "Private",
     };
-
     const zomeCallPayload: CallZomeRequest = {
       cell_id,
       zome_name: TEST_ZOME_NAME,
@@ -367,15 +380,17 @@ test(
       payload: appEntryDef,
     };
 
-    await admin.authorizeSigningCredentials(cell_id);
-
     const response = await client.callZome(zomeCallPayload, 30000);
     t.equal(response, null, "app entry def deserializes correctly");
 
     await admin.disableApp({ installed_app_id });
     info = await client.appInfo(1000);
     assert(info);
-    t.deepEqual(info.status, { disabled: { reason: { user: null } } });
+    t.deepEqual(
+      info.status,
+      { disabled: { reason: "user" } },
+      "disabled reason user"
+    );
   })
 );
 
@@ -557,7 +572,7 @@ test(
     t.equal(response, "foo", "zome call succeeds");
   })
 );
-
+//marker
 test(
   "install app with app manifest and resource map",
   withConductor(ADMIN_PORT, async (t) => {
@@ -628,7 +643,7 @@ test(
     t.equal(response, "foo", "zome call succeeds");
   })
 );
-
+//marker
 test(
   "stateDump",
   withConductor(ADMIN_PORT, async (t) => {
@@ -641,7 +656,7 @@ test(
       cell_id
     );
     t.ok(ROLE_NAME in info.cell_info);
-    t.deepEqual(info.status, { running: null });
+    t.deepEqual(info.status, "running");
     const zomeCallPayload: CallZomeRequest = {
       cell_id,
       zome_name: TEST_ZOME_NAME,
@@ -713,7 +728,7 @@ test("error is catchable when holochain socket is unavailable", async (t) => {
     t.pass("websocket connection failed as expected");
   }
 });
-
+//marker
 test(
   "zome call timeout can be overridden",
   withConductor(ADMIN_PORT, async (t) => {
@@ -763,7 +778,7 @@ test("can inject agents", async (t) => {
   const app1_cell =
     result.cell_info[ROLE_NAME][0][CellType.Provisioned].cell_id;
   const activeApp1Info = await admin1.enableApp({ installed_app_id }, 1000);
-  t.deepEqual(activeApp1Info.app.status, { running: null });
+  t.deepEqual(activeApp1Info.app.status, "running");
   t.ok(ROLE_NAME in activeApp1Info.app.cell_info);
   t.equal(activeApp1Info.app.installed_app_id, installed_app_id);
   t.equal(activeApp1Info.errors.length, 0);
@@ -804,7 +819,7 @@ test("can inject agents", async (t) => {
   const app2_cell =
     result.cell_info[ROLE_NAME][0][CellType.Provisioned].cell_id;
   const activeApp2Info = await admin2.enableApp({ installed_app_id });
-  t.deepEqual(activeApp2Info.app.status, { running: null });
+  t.deepEqual(activeApp2Info.app.status, "running");
   t.ok(ROLE_NAME in activeApp2Info.app.cell_info);
   t.equal(activeApp2Info.app.installed_app_id, installed_app_id);
   t.equal(activeApp2Info.errors.length, 0);
@@ -945,7 +960,7 @@ test(
       cell_id
     );
     t.ok(ROLE_NAME in info.cell_info);
-    t.deepEqual(info.status, { running: null });
+    t.deepEqual(info.status, "running");
     await admin.authorizeSigningCredentials(cell_id);
     const zomeCallPayload: CallZomeRequest = {
       cell_id,
@@ -960,7 +975,7 @@ test(
     await admin.disableApp({ installed_app_id });
     info = await client.appInfo(1000);
     assert(info);
-    t.deepEqual(info.status, { disabled: { reason: { user: null } } });
+    t.deepEqual(info.status, { disabled: { reason: "user" } });
   })
 );
 
@@ -1036,7 +1051,7 @@ test(
     );
   })
 );
-
+//marker
 test(
   "can disable a clone cell",
   withConductor(ADMIN_PORT, async (t) => {
@@ -1243,7 +1258,7 @@ test(
         current_number_of_peers: 1,
         arc_size: 1,
         total_network_peers: 1,
-        bytes_since_last_time_queried: 1844,
+        bytes_since_last_time_queried: 1838,
         completed_rounds_since_last_time_queried: 0,
       },
     ]);
@@ -1302,13 +1317,13 @@ test(
     const { client, admin, cell_id } = await installAppAndDna(ADMIN_PORT);
     await admin.authorizeSigningCredentials(cell_id);
 
-    const serializationEnumInput = "Input";
+    const serializationEnumInputVariant = "Input";
     const response = await client.callZome({
       cell_id,
       zome_name: TEST_ZOME_NAME,
       fn_name: "enum_serialization",
       provenance: cell_id[1],
-      payload: serializationEnumInput,
+      payload: serializationEnumInputVariant,
     });
     t.deepEqual(response, { Output: "success" });
   })

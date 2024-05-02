@@ -55,8 +55,8 @@ export type EnableAppResponse = {
  * @public
  */
 export type DeactivationReason =
-  | { never_activated: null }
-  | { normal: null }
+  | "never_activated"
+  | "normal"
   | { quarantined: { error: string } };
 
 /**
@@ -69,12 +69,7 @@ export type PausedAppReason = {
 /**
  * @public
  */
-export type DisabledAppReason =
-  | {
-      never_started: null;
-    }
-  | { user: null }
-  | { error: string };
+export type DisabledAppReason = "never_started" | "user" | { error: string };
 
 /**
  * @public
@@ -88,10 +83,7 @@ export type InstalledAppInfoStatus =
         reason: DisabledAppReason;
       };
     }
-  | {
-      running: null;
-    };
-
+  | "running";
 /**
  * @public
  */
@@ -501,11 +493,11 @@ export type ListActiveAppsResponse = Array<InstalledAppId>;
  * @public
  */
 export enum AppStatusFilter {
-  Enabled = "enabled",
-  Disabled = "disabled",
-  Running = "running",
-  Stopped = "stopped",
-  Paused = "paused",
+  Enabled = "Enabled",
+  Disabled = "Disabled",
+  Running = "Running",
+  Stopped = "Stopped",
+  Paused = "Paused",
 }
 
 /**
@@ -569,7 +561,7 @@ export type AddAgentInfoRequest = { agent_infos: Array<AgentInfoSigned> };
 /**
  * @public
  */
-export type AddAgentInfoResponse = any;
+export type AddAgentInfoResponse = unknown;
 
 /**
  * @public
