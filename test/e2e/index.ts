@@ -572,7 +572,7 @@ test(
     t.equal(response, "foo", "zome call succeeds");
   })
 );
-//marker
+
 test(
   "install app with app manifest and resource map",
   withConductor(ADMIN_PORT, async (t) => {
@@ -643,7 +643,7 @@ test(
     t.equal(response, "foo", "zome call succeeds");
   })
 );
-//marker
+
 test(
   "stateDump",
   withConductor(ADMIN_PORT, async (t) => {
@@ -728,7 +728,7 @@ test("error is catchable when holochain socket is unavailable", async (t) => {
     t.pass("websocket connection failed as expected");
   }
 });
-//marker
+
 test(
   "zome call timeout can be overridden",
   withConductor(ADMIN_PORT, async (t) => {
@@ -1051,7 +1051,7 @@ test(
     );
   })
 );
-//marker
+
 test(
   "can disable a clone cell",
   withConductor(ADMIN_PORT, async (t) => {
