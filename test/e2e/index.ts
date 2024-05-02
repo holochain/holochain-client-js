@@ -1295,3 +1295,21 @@ test(
     t.equal(response, "hi", "updated coordinator zomes can be called");
   })
 );
+
+test(
+  "Rust enums are serialized correctly",
+  withConductor(ADMIN_PORT, async (t) => {
+    const { client, admin, cell_id } = await installAppAndDna(ADMIN_PORT);
+    await admin.authorizeSigningCredentials(cell_id);
+
+    const serializationEnumInput = "Input";
+    const response = await client.callZome({
+      cell_id,
+      zome_name: TEST_ZOME_NAME,
+      fn_name: "enum_serialization",
+      provenance: cell_id[1],
+      payload: serializationEnumInput,
+    });
+    t.deepEqual(response, { Output: "success" });
+  })
+);
