@@ -3,16 +3,18 @@ import {
   CapSecret,
   GrantedFunctions,
   GrantedFunctionsType,
-} from "../../hdk/capabilities.js";
+} from "../../hdk/index.js";
 import type { AgentPubKey, CellId } from "../../types.js";
 import { WsClient } from "../client.js";
 import {
+  WebsocketConnectionOptions,
   catchError,
   DEFAULT_TIMEOUT,
   promiseTimeout,
   Requester,
   requesterTransformer,
   Transformer,
+  HolochainError,
 } from "../common.js";
 import {
   generateSigningKeyPair,
@@ -48,6 +50,8 @@ import {
   GrantZomeCallCapabilityResponse,
   InstallAppRequest,
   InstallAppResponse,
+  IssueAppAuthenticationTokenRequest,
+  IssueAppAuthenticationTokenResponse,
   ListAppInterfacesRequest,
   ListAppInterfacesResponse,
   ListAppsRequest,
@@ -90,23 +94,31 @@ export class AdminWebsocket implements AdminApi {
   /**
    * Factory mehtod to create a new instance connected to the given URL.
    *
-   * @param url - A `ws://` URL used as the connection address.
-   * @param defaultTimeout - The default timeout for any request.
+   * @param options - {@link (WebsocketConnectionOptions:interface)}
    * @returns A promise for a new connected instance.
    */
   static async connect(
-    url: URL,
-    defaultTimeout?: number
+    options: WebsocketConnectionOptions = {}
   ): Promise<AdminWebsocket> {
     // Check if we are in the launcher's environment, and if so, redirect the url to connect to
     const env = getLauncherEnvironment();
 
     if (env?.ADMIN_INTERFACE_PORT) {
-      url = new URL(`ws://localhost:${env.ADMIN_INTERFACE_PORT}`);
+      options.url = new URL(`ws://localhost:${env.ADMIN_INTERFACE_PORT}`);
     }
 
-    const wsClient = await WsClient.connect(url);
-    return new AdminWebsocket(wsClient, defaultTimeout);
+    if (!options.url) {
+      throw new HolochainError(
+        "ConnectionUrlMissing",
+        `unable to connect to Conductor API - no url provided and not in a launcher environment.`
+      );
+    }
+
+    const wsClient = await WsClient.connect(
+      options.url,
+      options.wsClientOptions
+    );
+    return new AdminWebsocket(wsClient, options.defaultTimeout);
   }
 
   _requester<ReqI, ReqO, ResI, ResO>(
@@ -261,6 +273,11 @@ export class AdminWebsocket implements AdminApi {
 
   storageInfo: Requester<StorageInfoRequest, StorageInfoResponse> =
     this._requester("storage_info");
+
+  issueAppAuthenticationToken: Requester<
+    IssueAppAuthenticationTokenRequest,
+    IssueAppAuthenticationTokenResponse
+  > = this._requester("issue_app_authentication_token");
 
   dumpNetworkStats: Requester<
     DumpNetworkStatsRequest,

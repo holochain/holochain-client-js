@@ -2,12 +2,54 @@
 
 [Home](./index.md) &gt; [@holochain/client](./client.md) &gt; [AppWebsocket](./client.appwebsocket.md) &gt; [networkInfo](./client.appwebsocket.networkinfo.md)
 
-## AppWebsocket.networkInfo property
+## AppWebsocket.networkInfo() method
 
 Request network info about gossip status.
 
 **Signature:**
 
 ```typescript
-networkInfo: Requester<NetworkInfoRequest, NetworkInfoResponse>;
+networkInfo(args: AppNetworkInfoRequest): Promise<NetworkInfoResponse>;
 ```
+
+## Parameters
+
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+args
+
+
+</td><td>
+
+[AppNetworkInfoRequest](./client.appnetworkinforequest.md)
+
+
+</td><td>
+
+Specify the DNAs for which you want network info
+
+
+</td></tr>
+</tbody></table>
+**Returns:**
+
+Promise&lt;[NetworkInfoResponse](./client.networkinforesponse.md)<!-- -->&gt;
+
+Network info for the specified DNAs
+

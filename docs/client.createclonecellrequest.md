@@ -36,25 +36,6 @@ Description
 </th></tr></thead>
 <tbody><tr><td>
 
-[app\_id](./client.createclonecellrequest.app_id.md)
-
-
-</td><td>
-
-
-</td><td>
-
-[InstalledAppId](./client.installedappid.md)
-
-
-</td><td>
-
-The app id that the DNA to clone belongs to
-
-
-</td></tr>
-<tr><td>
-
 [membrane\_proof?](./client.createclonecellrequest.membrane_proof.md)
 
 

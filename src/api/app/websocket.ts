@@ -1,36 +1,32 @@
-import { hashZomeCall } from "@holochain/serialization";
-import { decode, encode } from "@msgpack/msgpack";
-import _sodium from "libsodium-wrappers";
-import Emittery from "emittery";
+import Emittery, { UnsubscribeFunction } from "emittery";
+import { omit } from "lodash-es";
+import { AgentPubKey, CellId, RoleName } from "../../types.js";
+import { AppInfo, CellType } from "../admin/index.js";
 import {
-  getLauncherEnvironment,
-  signZomeCallTauri,
-  signZomeCallElectron,
-  getHostZomeCallSigner,
-} from "../../environments/launcher.js";
-import { CapSecret } from "../../hdk/capabilities.js";
-import { InstalledAppId } from "../../types.js";
-import { encodeHashToBase64 } from "../../utils/base64.js";
-import { WsClient } from "../client.js";
-import {
-  DEFAULT_TIMEOUT,
-  Requester,
-  Transformer,
   catchError,
+  DEFAULT_TIMEOUT,
+  getBaseRoleNameFromCloneId,
+  HolochainError,
+  isCloneId,
   promiseTimeout,
+  Requester,
   requesterTransformer,
+  Transformer,
 } from "../common.js";
 import {
-  Nonce256Bit,
-  getNonceExpiration,
-  getSigningCredentials,
-  randomNonce,
-} from "../zome-call-signing.js";
-import {
-  AppApi,
-  AppInfoRequest,
+  AppCallZomeRequest,
+  AppClient,
+  AppEvents,
+  AppNetworkInfoRequest,
+  AppCreateCloneCellRequest,
+  AppDisableCloneCellRequest,
+  AppEnableCloneCellRequest,
   AppInfoResponse,
+  AppSignal,
+  AppSignalCb,
   CallZomeRequest,
+  CallZomeRequestSigned,
+  CallZomeRequestUnsigned,
   CallZomeResponse,
   CallZomeResponseGeneric,
   CreateCloneCellRequest,
@@ -41,94 +37,237 @@ import {
   EnableCloneCellResponse,
   NetworkInfoRequest,
   NetworkInfoResponse,
+  AppWebsocketConnectionOptions,
 } from "./types.js";
+import {
+  getHostZomeCallSigner,
+  getLauncherEnvironment,
+} from "../../environments/launcher.js";
+import { decode, encode } from "@msgpack/msgpack";
+import {
+  getNonceExpiration,
+  getSigningCredentials,
+  randomNonce,
+} from "../zome-call-signing.js";
+import { encodeHashToBase64 } from "../../utils/index.js";
+import { hashZomeCall } from "@holochain/serialization";
+import _sodium from "libsodium-wrappers";
+import { WsClient } from "../client.js";
 
 /**
- * A class to establish a websocket connection to an App interface of a
- * Holochain conductor.
+ * A class to establish a websocket connection to an App interface, for a
+ * specific agent and app.
  *
  * @public
  */
-export class AppWebsocket extends Emittery implements AppApi {
+export class AppWebsocket implements AppClient {
   readonly client: WsClient;
-  defaultTimeout: number;
-  overrideInstalledAppId?: InstalledAppId;
+  readonly myPubKey: AgentPubKey;
+  private readonly defaultTimeout: number;
+  private readonly emitter: Emittery<AppEvents>;
+  cachedAppInfo?: AppInfo | null;
+
+  private readonly appInfoRequester: Requester<null, AppInfoResponse>;
+  private readonly callZomeRequester: Requester<
+    CallZomeRequest | CallZomeRequestSigned,
+    CallZomeResponse
+  >;
+  private readonly createCloneCellRequester: Requester<
+    CreateCloneCellRequest,
+    CreateCloneCellResponse
+  >;
+  private readonly enableCloneCellRequester: Requester<
+    EnableCloneCellRequest,
+    EnableCloneCellResponse
+  >;
+  private readonly disableCloneCellRequester: Requester<
+    DisableCloneCellRequest,
+    DisableCloneCellResponse
+  >;
+  private readonly networkInfoRequester: Requester<
+    NetworkInfoRequest,
+    NetworkInfoResponse
+  >;
 
   private constructor(
     client: WsClient,
-    defaultTimeout?: number,
-    overrideInstalledAppId?: InstalledAppId
+    appInfo: AppInfo,
+    defaultTimeout?: number
   ) {
-    super();
+    this.client = client;
+    this.myPubKey = appInfo.agent_pub_key;
+    this.defaultTimeout = defaultTimeout ?? DEFAULT_TIMEOUT;
+    this.emitter = new Emittery<AppEvents>();
+    this.cachedAppInfo = appInfo;
+
+    this.appInfoRequester = AppWebsocket.requester(
+      this.client,
+      "app_info",
+      this.defaultTimeout
+    );
+    this.callZomeRequester = AppWebsocket.requester(
+      this.client,
+      "call_zome",
+      this.defaultTimeout,
+      callZomeTransform
+    );
+    this.createCloneCellRequester = AppWebsocket.requester(
+      this.client,
+      "create_clone_cell",
+      this.defaultTimeout
+    );
+    this.enableCloneCellRequester = AppWebsocket.requester(
+      this.client,
+      "enable_clone_cell",
+      this.defaultTimeout
+    );
+    this.disableCloneCellRequester = AppWebsocket.requester(
+      this.client,
+      "disable_clone_cell",
+      this.defaultTimeout
+    );
+    this.networkInfoRequester = AppWebsocket.requester(
+      this.client,
+      "network_info",
+      this.defaultTimeout
+    );
+
     // Ensure all super methods are bound to this instance because Emittery relies on `this` being the instance.
     // Please retain until the upstream is fixed https://github.com/sindresorhus/emittery/issues/86.
     Object.getOwnPropertyNames(Emittery.prototype).forEach((name) => {
-      const to_bind = (this as unknown as { [key: string]: unknown })[name];
+      const to_bind = (this.emitter as unknown as { [key: string]: unknown })[
+        name
+      ];
       if (typeof to_bind === "function") {
-        (this as unknown as { [key: string]: unknown })[name] =
-          to_bind.bind(this);
+        (this.emitter as unknown as { [key: string]: unknown })[name] =
+          to_bind.bind(this.emitter);
       }
     });
 
-    this.client = client;
-    this.defaultTimeout =
-      defaultTimeout === undefined ? DEFAULT_TIMEOUT : defaultTimeout;
-    this.overrideInstalledAppId = overrideInstalledAppId;
+    this.client.on("signal", (signal: AppSignal) => {
+      if (this.containsCell(signal.cell_id)) {
+        this.emitter.emit("signal", signal).catch(console.error);
+      }
+    });
   }
 
   /**
-   * Instance factory for creating AppWebsockets.
+   * Instance factory for creating an {@link AppWebsocket}.
    *
-   * @param url - The `ws://` URL of the App API to connect to.
-   * @param defaultTimeout - Timeout to default to for all operations.
+   * @param token - A token to authenticate the websocket connection. Get a token using AdminWebsocket#issueAppAuthenticationToken.
+   * @param options - {@link (WebsocketConnectionOptions:interface)}
    * @returns A new instance of an AppWebsocket.
    */
-  static async connect(url: URL, defaultTimeout?: number) {
+  static async connect(options: AppWebsocketConnectionOptions = {}) {
     // Check if we are in the launcher's environment, and if so, redirect the url to connect to
     const env = getLauncherEnvironment();
 
     if (env?.APP_INTERFACE_PORT) {
-      url = new URL(`ws://localhost:${env.APP_INTERFACE_PORT}`);
+      options.url = new URL(`ws://localhost:${env.APP_INTERFACE_PORT}`);
     }
 
-    const wsClient = await WsClient.connect(url);
+    if (!options.url) {
+      throw new HolochainError(
+        "ConnectionUrlMissing",
+        `unable to connect to Conductor API - no url provided and not in a launcher environment.`
+      );
+    }
 
-    const appWebsocket = new AppWebsocket(
-      wsClient,
-      defaultTimeout,
-      env?.INSTALLED_APP_ID
-    );
+    const client = await WsClient.connect(options.url, options.wsClientOptions);
 
-    wsClient.on("signal", (signal) => appWebsocket.emit("signal", signal));
+    if (env?.APP_INTERFACE_TOKEN) {
+      // Note: This will only work for multiple connections if a single_use = false token is provided
+      await client.authenticate({ token: env.APP_INTERFACE_TOKEN });
+    } else {
+      if (!options.token) {
+        throw new HolochainError(
+          "AppAuthenticationTokenMissing",
+          `unable to connect to Conductor API - no app authentication token provided.`
+        );
+      }
+      await client.authenticate({ token: options.token });
+    }
 
-    return appWebsocket;
-  }
+    const appInfo = await (
+      this.requester(client, "app_info", DEFAULT_TIMEOUT) as Requester<
+        null,
+        AppInfoResponse
+      >
+    )(null);
+    if (!appInfo) {
+      throw new HolochainError(
+        "AppNotFound",
+        `The app your connection token was issued for was not found. The app needs to be installed and enabled.`
+      );
+    }
 
-  _requester<ReqI, ReqO, ResI, ResO>(
-    tag: string,
-    transformer?: Transformer<ReqI, ReqO, ResI, ResO>
-  ) {
-    return requesterTransformer(
-      (req, timeout) =>
-        promiseTimeout(
-          this.client.request(req),
-          tag,
-          timeout || this.defaultTimeout
-        ).then(catchError),
-      tag,
-      transformer
-    );
+    return new AppWebsocket(client, appInfo, options.defaultTimeout);
   }
 
   /**
    * Request the app's info, including all cell infos.
    *
+   * @param timeout - A timeout to override the default.
    * @returns The app's {@link AppInfo}.
    */
-  appInfo: Requester<AppInfoRequest, AppInfoResponse> = this._requester(
-    "app_info",
-    appInfoTransform(this)
-  );
+  async appInfo(timeout?: number) {
+    const appInfo = await this.appInfoRequester(null, timeout);
+    if (!appInfo) {
+      throw new HolochainError(
+        "AppNotFound",
+        `App info not found. App needs to be installed and enabled.`
+      );
+    }
+
+    this.cachedAppInfo = appInfo;
+    return appInfo;
+  }
+
+  /**
+   * Get a cell id by its role name or clone id.
+   *
+   * @param roleName - The role name or clone id of the cell.
+   * @param appInfo - The app info containing all cell infos.
+   * @returns The cell id or throws an error if not found.
+   */
+  getCellIdFromRoleName(roleName: RoleName, appInfo: AppInfo) {
+    if (isCloneId(roleName)) {
+      const baseRoleName = getBaseRoleNameFromCloneId(roleName);
+      if (!(baseRoleName in appInfo.cell_info)) {
+        throw new HolochainError(
+          "NoCellForRoleName",
+          `no cell found with role_name ${roleName}`
+        );
+      }
+      const cloneCell = appInfo.cell_info[baseRoleName].find(
+        (c) => CellType.Cloned in c && c[CellType.Cloned].clone_id === roleName
+      );
+      if (!cloneCell || !(CellType.Cloned in cloneCell)) {
+        throw new HolochainError(
+          "NoCellForCloneId",
+          `no clone cell found with clone id ${roleName}`
+        );
+      }
+      return cloneCell[CellType.Cloned].cell_id;
+    }
+
+    if (!(roleName in appInfo.cell_info)) {
+      throw new HolochainError(
+        "NoCellForRoleName",
+        `no cell found with role_name ${roleName}`
+      );
+    }
+    const cell = appInfo.cell_info[roleName].find(
+      (c) => CellType.Provisioned in c
+    );
+    if (!cell || !(CellType.Provisioned in cell)) {
+      throw new HolochainError(
+        "NoProvisionedCellForRoleName",
+        `no provisioned cell found with role_name ${roleName}`
+      );
+    }
+    return cell[CellType.Provisioned].cell_id;
+  }
 
   /**
    * Call a zome.
@@ -137,10 +276,33 @@ export class AppWebsocket extends Emittery implements AppApi {
    * @param timeout - A timeout to override the default.
    * @returns The zome call's response.
    */
-  callZome: Requester<
-    CallZomeRequest | CallZomeRequestSigned,
-    CallZomeResponse
-  > = this._requester("call_zome", callZomeTransform);
+  async callZome(
+    request: AppCallZomeRequest,
+    timeout?: number
+  ): Promise<CallZomeResponse> {
+    if (!("provenance" in request)) {
+      request = {
+        ...request,
+        provenance: this.myPubKey,
+      };
+    }
+    if ("role_name" in request && request.role_name) {
+      const appInfo = this.cachedAppInfo || (await this.appInfo());
+      const cell_id = this.getCellIdFromRoleName(request.role_name, appInfo);
+      const zomeCallPayload: CallZomeRequest = {
+        ...omit(request, "role_name"),
+        provenance: this.myPubKey,
+        cell_id: [cell_id[0], cell_id[1]],
+      };
+      return this.callZomeRequester(zomeCallPayload, timeout);
+    } else if ("cell_id" in request && request.cell_id) {
+      return this.callZomeRequester(request as CallZomeRequest, timeout);
+    }
+    throw new HolochainError(
+      "MissingRoleNameOrCellId",
+      "callZome requires a role_name or cell_id argument"
+    );
+  }
 
   /**
    * Clone an existing provisioned cell.
@@ -148,8 +310,17 @@ export class AppWebsocket extends Emittery implements AppApi {
    * @param args - Specify the cell to clone.
    * @returns The created clone cell.
    */
-  createCloneCell: Requester<CreateCloneCellRequest, CreateCloneCellResponse> =
-    this._requester("create_clone_cell");
+  async createCloneCell(
+    args: AppCreateCloneCellRequest
+  ): Promise<CreateCloneCellResponse> {
+    const clonedCell = this.createCloneCellRequester({
+      ...args,
+    });
+
+    this.cachedAppInfo = undefined;
+
+    return clonedCell;
+  }
 
   /**
    * Enable a disabled clone cell.
@@ -157,40 +328,91 @@ export class AppWebsocket extends Emittery implements AppApi {
    * @param args - Specify the clone cell to enable.
    * @returns The enabled clone cell.
    */
-  enableCloneCell: Requester<EnableCloneCellRequest, EnableCloneCellResponse> =
-    this._requester("enable_clone_cell");
+  async enableCloneCell(
+    args: AppEnableCloneCellRequest
+  ): Promise<EnableCloneCellResponse> {
+    return this.enableCloneCellRequester({
+      ...args,
+    });
+  }
 
   /**
    * Disable an enabled clone cell.
    *
    * @param args - Specify the clone cell to disable.
    */
-  disableCloneCell: Requester<
-    DisableCloneCellRequest,
-    DisableCloneCellResponse
-  > = this._requester("disable_clone_cell");
+  async disableCloneCell(
+    args: AppDisableCloneCellRequest
+  ): Promise<DisableCloneCellResponse> {
+    return this.disableCloneCellRequester({
+      ...args,
+    });
+  }
 
   /**
    * Request network info about gossip status.
+   *  @param args - Specify the DNAs for which you want network info
+   *  @returns Network info for the specified DNAs
    */
-  networkInfo: Requester<NetworkInfoRequest, NetworkInfoResponse> =
-    this._requester("network_info");
-}
+  async networkInfo(args: AppNetworkInfoRequest): Promise<NetworkInfoResponse> {
+    return this.networkInfoRequester({
+      ...args,
+      agent_pub_key: this.myPubKey,
+    });
+  }
 
-/**
- * @public
- */
-export interface CallZomeRequestUnsigned extends CallZomeRequest {
-  cap_secret: CapSecret | null;
-  nonce: Nonce256Bit;
-  expires_at: number;
-}
+  /**
+   * Register an event listener for signals.
+   *
+   * @param eventName - Event name to listen to (currently only "signal").
+   * @param listener - The function to call when event is triggered.
+   * @returns A function to unsubscribe the event listener.
+   */
+  on<Name extends keyof AppEvents>(
+    eventName: Name | readonly Name[],
+    listener: AppSignalCb
+  ): UnsubscribeFunction {
+    return this.emitter.on(eventName, listener);
+  }
 
-/**
- * @public
- */
-export interface CallZomeRequestSigned extends CallZomeRequestUnsigned {
-  signature: Uint8Array;
+  private static requester<ReqI, ReqO, ResI, ResO>(
+    client: WsClient,
+    tag: string,
+    defaultTimeout: number,
+    transformer?: Transformer<ReqI, ReqO, ResI, ResO>
+  ) {
+    return requesterTransformer(
+      (req, timeout) =>
+        promiseTimeout(
+          client.request(req),
+          tag,
+          timeout || defaultTimeout
+        ).then(catchError),
+      tag,
+      transformer
+    );
+  }
+
+  private containsCell(cellId: CellId) {
+    const appInfo = this.cachedAppInfo;
+    if (!appInfo) {
+      return false;
+    }
+    for (const roleName of Object.keys(appInfo.cell_info)) {
+      for (const cellInfo of appInfo.cell_info[roleName]) {
+        const currentCellId =
+          CellType.Provisioned in cellInfo
+            ? cellInfo[CellType.Provisioned].cell_id
+            : CellType.Cloned in cellInfo
+            ? cellInfo[CellType.Cloned].cell_id
+            : undefined;
+        if (currentCellId && isSameCell(currentCellId, cellId)) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
 }
 
 const callZomeTransform: Transformer<
@@ -209,37 +431,15 @@ const callZomeTransform: Transformer<
     if (hostSigner) {
       return hostSigner.signZomeCall(request);
     } else {
-      const env = getLauncherEnvironment();
-      if (!env) {
-        return signZomeCall(request);
-      }
-      if (env.FRAMEWORK === "electron") {
-        return signZomeCallElectron(request);
-      }
-      return signZomeCallTauri(request);
+      return signZomeCall(request);
     }
   },
   output: (response) => decode(response),
 };
 
-const appInfoTransform = (
-  appWs: AppWebsocket
-): Transformer<
-  AppInfoRequest,
-  AppInfoRequest,
-  AppInfoResponse,
-  AppInfoResponse
-> => ({
-  input: (request) => {
-    if (appWs.overrideInstalledAppId) {
-      return {
-        installed_app_id: appWs.overrideInstalledAppId,
-      };
-    }
-    return request;
-  },
-  output: (response) => response,
-});
+const isSameCell = (cellId1: CellId, cellId2: CellId) =>
+  cellId1[0].every((byte, index) => byte === cellId2[0][index]) &&
+  cellId1[1].every((byte, index) => byte === cellId2[1][index]);
 
 /**
  * @public
@@ -247,8 +447,9 @@ const appInfoTransform = (
 export const signZomeCall = async (request: CallZomeRequest) => {
   const signingCredentialsForCell = getSigningCredentials(request.cell_id);
   if (!signingCredentialsForCell) {
-    throw new Error(
-      `cannot sign zome call: no signing credentials have been authorized for cell [${encodeHashToBase64(
+    throw new HolochainError(
+      "NoSigningCredentialsForCell",
+      `no signing credentials have been authorized for cell [${encodeHashToBase64(
         request.cell_id[0]
       )}, ${encodeHashToBase64(request.cell_id[1])}]`
     );

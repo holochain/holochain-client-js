@@ -1,22 +1,101 @@
+import { UnsubscribeFunction } from "emittery";
 import {
   AgentPubKey,
+  AppAuthenticationToken,
+  AppInfo,
+  CapSecret,
   CellId,
+  ClonedCell,
   DnaHash,
   DnaProperties,
-  InstalledAppId,
-  NetworkInfo,
-  RoleName,
-  Timestamp,
-} from "../../types.js";
-import {
-  AppInfo,
-  ClonedCell,
   FunctionName,
   MembraneProof,
+  NetworkInfo,
   NetworkSeed,
+  Nonce256Bit,
+  RoleName,
+  Timestamp,
+  WebsocketConnectionOptions,
   ZomeName,
-} from "../admin/types.js";
-import { Requester } from "../common.js";
+} from "../../index.js";
+
+/**
+ * @public
+ */
+export type NonProvenanceCallZomeRequest = Omit<CallZomeRequest, "provenance">;
+
+/**
+ * @public
+ */
+export type RoleNameCallZomeRequest = Omit<
+  NonProvenanceCallZomeRequest,
+  "cell_id"
+> & {
+  role_name: RoleName;
+};
+
+/**
+ * @public
+ */
+export type RoleNameCallZomeRequestSigned = Omit<
+  CallZomeRequestSigned,
+  "cell_id"
+> & { role_name: RoleName };
+
+/**
+ * @public
+ */
+export type AppCallZomeRequest =
+  | NonProvenanceCallZomeRequest
+  | RoleNameCallZomeRequest
+  | CallZomeRequestSigned
+  | RoleNameCallZomeRequestSigned;
+
+/**
+ * @public
+ */
+export type AppCreateCloneCellRequest = Omit<CreateCloneCellRequest, "app_id">;
+
+/**
+ * @public
+ */
+export type AppEnableCloneCellRequest = Omit<EnableCloneCellRequest, "app_id">;
+
+/**
+ * @public
+ */
+export type AppDisableCloneCellRequest = Omit<
+  DisableCloneCellRequest,
+  "app_id"
+>;
+
+/**
+ * @public
+ */
+export type AppNetworkInfoRequest = Omit<NetworkInfoRequest, "agent_pub_key">;
+
+/**
+ * @public
+ */
+export interface AppEvents {
+  signal: AppSignal;
+}
+
+/**
+ * @public
+ */
+export interface CallZomeRequestUnsigned extends CallZomeRequest {
+  cap_secret: CapSecret | null;
+  nonce: Nonce256Bit;
+  expires_at: number;
+}
+
+/**
+ * @public
+ */
+export interface CallZomeRequestSigned extends CallZomeRequestUnsigned {
+  signature: Uint8Array;
+}
 
 /**
  * @public
@@ -45,20 +124,12 @@ export type CallZomeResponse = CallZomeResponseGeneric<any>;
 /**
  * @public
  */
-export type AppInfoRequest = { installed_app_id: InstalledAppId };
-/**
- * @public
- */
 export type AppInfoResponse = AppInfo | null;
 
 /**
  * @public
  */
 export interface CreateCloneCellRequest {
-  /**
-   * The app id that the DNA to clone belongs to
-   */
-  app_id: InstalledAppId;
   /**
    * The DNA's role id to clone.
    */
@@ -107,10 +178,6 @@ export type CreateCloneCellResponse = ClonedCell;
  * @public
  */
 export interface DisableCloneCellRequest {
-  /**
-   * The app id that the clone cell belongs to
-   */
-  app_id: InstalledAppId;
   /**
    * The clone id or cell id of the clone cell
    */
@@ -194,12 +261,34 @@ export type NetworkInfoResponse = NetworkInfo[];
 /**
  * @public
  */
-export interface AppApi {
-  appInfo: Requester<AppInfoRequest, AppInfoResponse>;
-  callZome: Requester<CallZomeRequest, CallZomeResponse>;
-  enableCloneCell: Requester<EnableCloneCellRequest, EnableCloneCellResponse>;
-  disableCloneCell: Requester<
-    DisableCloneCellRequest,
-    DisableCloneCellResponse
-  >;
+export interface AppClient {
+  callZome(args: AppCallZomeRequest, timeout?: number): Promise<any>;
+
+  on<Name extends keyof AppEvents>(
+    eventName: Name | readonly Name[],
+    listener: AppSignalCb
+  ): UnsubscribeFunction;
+
+  appInfo(): Promise<AppInfoResponse>;
+
+  myPubKey: AgentPubKey;
+
+  createCloneCell(
+    args: AppCreateCloneCellRequest
+  ): Promise<CreateCloneCellResponse>;
+  enableCloneCell(
+    args: AppEnableCloneCellRequest
+  ): Promise<EnableCloneCellResponse>;
+  disableCloneCell(
+    args: AppDisableCloneCellRequest
+  ): Promise<DisableCloneCellResponse>;
+  networkInfo(args: AppNetworkInfoRequest): Promise<NetworkInfoResponse>;
+}
+
+/**
+ * @public
+ */
+export interface AppWebsocketConnectionOptions
+  extends WebsocketConnectionOptions {
+  token?: AppAuthenticationToken;
 }

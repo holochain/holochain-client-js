@@ -9,7 +9,7 @@ Constructs a new instance of the `WsClient` class
 **Signature:**
 
 ```typescript
-constructor(socket: IsoWebSocket, url: URL);
+constructor(socket: IsoWebSocket, url?: URL, options?: WsClientOptions);
 ```
 
 ## Parameters
@@ -55,6 +55,24 @@ URL
 
 
 </td><td>
+
+_(Optional)_
+
+
+</td></tr>
+<tr><td>
+
+options
+
+
+</td><td>
+
+[WsClientOptions](./client.wsclientoptions.md)
+
+
+</td><td>
+
+_(Optional)_
 
 
 </td></tr>

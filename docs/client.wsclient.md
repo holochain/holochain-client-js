@@ -35,7 +35,7 @@ Description
 </th></tr></thead>
 <tbody><tr><td>
 
-[(constructor)(socket, url)](./client.wsclient._constructor_.md)
+[(constructor)(socket, url, options)](./client.wsclient._constructor_.md)
 
 
 </td><td>
@@ -73,6 +73,23 @@ Description
 
 </th></tr></thead>
 <tbody><tr><td>
+
+[options](./client.wsclient.options.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[WsClientOptions](./client.wsclientoptions.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
 
 [socket](./client.wsclient.socket.md)
 
@@ -128,6 +145,22 @@ Description
 </th></tr></thead>
 <tbody><tr><td>
 
+[authenticate(request)](./client.wsclient.authenticate.md)
+
+
+</td><td>
+
+
+</td><td>
+
+Authenticate the client with the conductor.
+
+This is only relevant for app websockets.
+
+
+</td></tr>
+<tr><td>
+
 [close(code)](./client.wsclient.close.md)
 
 
@@ -142,7 +175,7 @@ Close the websocket connection.
 </td></tr>
 <tr><td>
 
-[connect(url)](./client.wsclient.connect.md)
+[connect(url, options)](./client.wsclient.connect.md)
 
 
 </td><td>

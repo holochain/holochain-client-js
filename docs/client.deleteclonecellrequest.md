@@ -2,13 +2,74 @@
 
 [Home](./index.md) &gt; [@holochain/client](./client.md) &gt; [DeleteCloneCellRequest](./client.deleteclonecellrequest.md)
 
-## DeleteCloneCellRequest type
+## DeleteCloneCellRequest interface
 
 
 **Signature:**
 
 ```typescript
-export type DeleteCloneCellRequest = DisableCloneCellRequest;
+export interface DeleteCloneCellRequest 
 ```
-**References:** [DisableCloneCellRequest](./client.disableclonecellrequest.md)
 
+## Properties
+
+<table><thead><tr><th>
+
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[app\_id](./client.deleteclonecellrequest.app_id.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[InstalledAppId](./client.installedappid.md)
+
+
+</td><td>
+
+The app id that the clone cell belongs to
+
+
+</td></tr>
+<tr><td>
+
+[clone\_cell\_id](./client.deleteclonecellrequest.clone_cell_id.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[RoleName](./client.rolename.md) \| [CellId](./client.cellid.md)
+
+
+</td><td>
+
+The clone id or cell id of the clone cell
+
+
+</td></tr>
+</tbody></table>

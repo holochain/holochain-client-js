@@ -9,7 +9,7 @@ Instance factory for creating WsClients.
 **Signature:**
 
 ```typescript
-static connect(url: URL): Promise<WsClient>;
+static connect(url: URL, options?: WsClientOptions): Promise<WsClient>;
 ```
 
 ## Parameters
@@ -43,6 +43,22 @@ URL
 </td><td>
 
 The WebSocket URL to connect to.
+
+
+</td></tr>
+<tr><td>
+
+options
+
+
+</td><td>
+
+[WsClientOptions](./client.wsclientoptions.md)
+
+
+</td><td>
+
+_(Optional)_ Options for the WsClient.
 
 
 </td></tr>

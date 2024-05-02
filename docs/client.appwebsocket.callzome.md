@@ -2,12 +2,70 @@
 
 [Home](./index.md) &gt; [@holochain/client](./client.md) &gt; [AppWebsocket](./client.appwebsocket.md) &gt; [callZome](./client.appwebsocket.callzome.md)
 
-## AppWebsocket.callZome property
+## AppWebsocket.callZome() method
 
 Call a zome.
 
 **Signature:**
 
 ```typescript
-callZome: Requester<CallZomeRequest | CallZomeRequestSigned, CallZomeResponse>;
+callZome(request: AppCallZomeRequest, timeout?: number): Promise<CallZomeResponse>;
 ```
+
+## Parameters
+
+<table><thead><tr><th>
+
+Parameter
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+request
+
+
+</td><td>
+
+[AppCallZomeRequest](./client.appcallzomerequest.md)
+
+
+</td><td>
+
+The zome call arguments.
+
+
+</td></tr>
+<tr><td>
+
+timeout
+
+
+</td><td>
+
+number
+
+
+</td><td>
+
+_(Optional)_ A timeout to override the default.
+
+
+</td></tr>
+</tbody></table>
+**Returns:**
+
+Promise&lt;[CallZomeResponse](./client.callzomeresponse.md)<!-- -->&gt;
+
+The zome call's response.
+

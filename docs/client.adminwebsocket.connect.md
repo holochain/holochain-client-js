@@ -9,7 +9,7 @@ Factory mehtod to create a new instance connected to the given URL.
 **Signature:**
 
 ```typescript
-static connect(url: URL, defaultTimeout?: number): Promise<AdminWebsocket>;
+static connect(options?: WebsocketConnectionOptions): Promise<AdminWebsocket>;
 ```
 
 ## Parameters
@@ -32,33 +32,17 @@ Description
 </th></tr></thead>
 <tbody><tr><td>
 
-url
+options
 
 
 </td><td>
 
-URL
+[WebsocketConnectionOptions](./client.websocketconnectionoptions.md)
 
 
 </td><td>
 
-A `ws://` URL used as the connection address.
-
-
-</td></tr>
-<tr><td>
-
-defaultTimeout
-
-
-</td><td>
-
-number
-
-
-</td><td>
-
-_(Optional)_ The default timeout for any request.
+_(Optional)_ [WebsocketConnectionOptions](./client.websocketconnectionoptions.md)
 
 
 </td></tr>

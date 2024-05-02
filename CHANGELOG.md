@@ -9,13 +9,56 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Fixed
 ### Removed
 
+## 2024-04-27: v0.17.0-dev.12
+### Fixed
+- Invalid module references which caused the client to fail to import in Node environments.
+
+## 2024-04-26: v0.17.0-dev.11
+### Changed
+- **BREAKING** Changed `Appwebsocket.connect()` to take a single parameter `AppWebsocketConnectionOptions` that includes the `AppAuthenticationToken` as an optional property. The `AppAuthenticationToken` can be omitted if it is provided by the `window.__HC_LAUNCHER_ENV__` variable.
+- **BREAKING** The legacy  framework specific zome call signing methods `signZomeCallTauri` and `signZomeCallElectron` have been removed. Runtimes like Launcher now mandatorily need to provide a `window.__HC_ZOME_CALL_SIGNER__` object to have zome calls be automatically signed.
+- New optional parameter to `attachAppInterface` to bind the app interface to a specific app.
+- **BREAKING** The admin call `listAppInterfaces` now returns a list of `AppInterfaceInfo` instead of a list of ports.
+
+## 2024-04-25: v0.17.0-dev.10
+### Added
+- **BREAKING** Connecting an app websocket now requires an authentication token which can be obtained from the admin
+  websocket using `AdminWebsocket#issueAppAuthenticationToken`.
+### Changed
+- **BREAKING** Merged the app and app-agent websockets into a single `AppWebsocket` class. Following the addition of the
+  authentication token, the two types were well enough aligned that there was no longer a need to keep them separate.
+- **BREAKING** App calls that previously required an `InstalledAppId` no longer require one because the websocket will
+  be authenticated with an app already, so the app interface no longer requires you to tell it which app you are calling.
+
 ## 2024-04-17: v0.16.11
 ### Fixed
 - Replace all IPv4 addresses `127.0.0.1` by `localhost`.
 
+## 2024-04-16: v0.17.0-dev.9
+### Fixed
+- Replace all IPv4 addresses `127.0.0.1` by `localhost`.
+
+## 2024-04-05: v0.17.0-dev.8
+### Changed
+- Websocket client: Specify `origin` parameter when establishing app websocket connections to protect localhost from cross origin attacks in browser scripts.
+- Websocket client: Add `allowed_origins` parameter to `AdminWebsocket.attachAppInterface` to specify allowed origins.
+- Consistently throw `HolochainError`s throughout with specific error names and messages.
+
+## 2024-02-27: v0.17.0-dev.7
+### Fixed
+- Type: `AppInfoResponse` can be `null` if the requested app is not found.
+
 ## 2024-02-27: v0.16.10
 ### Fixed
 - Type: `AppInfoResponse` can be `null` if the requested app is not found.
+
+## 2024-02-23: v0.17.0-dev.6
+### Changed
+- **BREAKING**: `Websocket.connect()` functions' mandatory `url` parameter is replaced by an optional options object, which contains optional properties `url` and `defaultTimeout`. Calling `connect` if the url is not defined by parameter, nor by launcher environment will throw an error. Order of parameters in the `AppAgentWebsocket.connect` function is changed, so the required parameter goes first.
+
+## 2024-02-02: v0.17.0-dev.5
+### Fixed
+- Work around cell_id being a proxy object in Vue.
 
 ## 2024-02-02: v0.16.9
 ### Fixed
@@ -28,14 +71,32 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## 2023-11-29: v0.16.7
 ### Added
 - Utility functions for slicing hashes into their components: `sliceHashType`, `sliceCore32`, `sliceDhtLocation`
-- Utility functions for generating hashes from components: `dhtLocationFrom32`, `hashFrom32AndType`: 
+- Utility functions for generating hashes from components: `dhtLocationFrom32`, `hashFrom32AndType`
+
+## 2024-01-27: v0.17.0-dev.4
+### Changed
+- Decouple host zome call signer from environment. Now a zome call signer can be provided separatedly from the environment that the client is used in.
+
+## 2023-11-29: v0.17.0-dev.3
+### Added
+- Utility functions for slicing hashes into their components: `sliceHashType`, `sliceCore32`, `sliceDhtLocation`
+- Utility functions for generating hashes from components: `dhtLocationFrom32`, `hashFrom32AndType`:
+
 ### Changed
 - Utility functions fakeAgentPubKey, fakeEntryHash, fakeActionHash and fakeDnaHash now generate *valid* hashes with a valid final 4 bytes
 - Utility functions fakeAgentPubKey, fakeEntryHash, fakeActionHash and fakeDnaHash now optionally take a single parameter `coreByte` which if defined will be repeated for all core 32 bytes of the hash
 
+## 2023-11-22: v0.17.0-dev.2
+### Fixed
+- Action type `CreateLink`: Add field `link_type`.
+
 ## 2023-11-22: v0.16.6
 ### Fixed
 - Action type `CreateLink`: Add field `link_type`.
+
+## 2023-11-16: v0.17.0-dev.1
+### Added
+- Type `Link` to HDK and a confirmatory test.
 
 ## 2023-11-16: v0.16.5
 ### Added
@@ -43,6 +104,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## 2023-11-16: v0.16.4
 --erroneously published lib for Holochain v0.3.0--
+
+## 2023-11-08: v0.17.0-dev.0
+### Changed
+- **BREAKING CHANGE**: Conductor API ser/deserialization has changed on Holochain side. Tags are serialized like `{ type: { app_info: null } }` now, when before it was `{ type: "app_info" }` for requests and responses.
 
 ## 2023-10-17: v0.16.3
 ### Fixed
@@ -53,7 +118,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## 2023-09-19: v0.16.2
 ### Added
-- Support for signing zome calls in electron via `window.electronAPI.signZomeCall` when `__HC_LAUNCHER_ENV__.ENVIRONMENT == 'electron'`. 
+- Support for signing zome calls in electron via `window.electronAPI.signZomeCall` when `__HC_LAUNCHER_ENV__.ENVIRONMENT == 'electron'`.
 ### Fixed
 - `DnaProperties` in `DnaModifiers` changed to `Uint8array` as it comes back serialized from Holochain.
 
@@ -192,7 +257,7 @@ Compatible with Holochain v0.1.0
 
 ## 2022-12-21: v0.11.7
 ### Changed
-- AppAgentWebsocket constructor is private now and follows the same pattern to instantiate through `connect` as the other websockets. 
+- AppAgentWebsocket constructor is private now and follows the same pattern to instantiate through `connect` as the other websockets.
 
 ## 2022-12-21: v0.11.6
 ### Fixed

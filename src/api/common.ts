@@ -1,4 +1,5 @@
 import { RoleName } from "../types.js";
+import { IsoWebSocket } from "./client.js";
 
 const ERROR_TYPE = "error";
 export const DEFAULT_TIMEOUT = 60000;
@@ -18,11 +19,11 @@ export type Requester<Req, Res> = (req: Req, timeout?: number) => Promise<Res>;
 /**
  * @public
  */
-export type RequesterUnit<Res> = () => Promise<Res>;
+export type RequesterNoArg<Res> = (timeout?: number) => Promise<Res>;
 /**
  * @public
  */
-export type Tagged<T> = { type: string; data: T };
+export type Tagged<T> = { type: { [tag: string]: null }; data: T };
 
 /**
  * Take a Requester function which deals with tagged requests and responses,
@@ -39,10 +40,9 @@ export const requesterTransformer =
   ) =>
   async (req: ReqI, timeout?: number) => {
     const transformedInput = await transform.input(req);
-    const input = { type: tag, data: transformedInput };
+    const input = { type: { [tag]: null }, data: transformedInput };
     const response = await requester(input, timeout);
-    const output = transform.output(response.data);
-    return output;
+    return transform.output(response.data);
   };
 
 const identity = (x: any) => x;
@@ -66,8 +66,9 @@ export class HolochainError extends Error {
 
 // this determines the error format of all error responses
 export const catchError = (res: any) => {
-  if (res.type === ERROR_TYPE) {
-    const error = new HolochainError(res.data.type, res.data.data);
+  if (ERROR_TYPE in res.type) {
+    const errorName = Object.keys(res.data.type)[0];
+    const error = new HolochainError(errorName, res.data.data);
     return Promise.reject(error);
   } else {
     return Promise.resolve(res);
@@ -83,12 +84,12 @@ export const promiseTimeout = (
 
   const timeout = new Promise((_, reject) => {
     id = setTimeout(
-      () => reject(new Error(`Timed out in ${ms}ms: ${tag}`)),
+      () => reject(new Error(`Request timed out in ${ms} ms: ${tag}`)),
       ms
     );
   });
 
-  return new Promise((res, rej) => {
+  return new Promise((res, rej) =>
     Promise.race([promise, timeout])
       .then((a) => {
         clearTimeout(id);
@@ -96,8 +97,8 @@ export const promiseTimeout = (
       })
       .catch((e) => {
         return rej(e);
-      });
-  });
+      })
+  );
 };
 
 const CLONE_ID_DELIMITER = ".";
@@ -120,8 +121,9 @@ export const isCloneId = (roleName: RoleName) =>
  */
 export const getBaseRoleNameFromCloneId = (roleName: RoleName) => {
   if (!isCloneId(roleName)) {
-    throw new Error(
-      "invalid clone id: no clone id delimiter found in role name"
+    throw new HolochainError(
+      "MissingCloneIdDelimiter",
+      `invalid clone id - no clone id delimiter found in role name ${roleName}`
     );
   }
   return roleName.split(CLONE_ID_DELIMITER)[0];
@@ -152,8 +154,9 @@ export class CloneId {
   static fromRoleName(roleName: RoleName) {
     const parts = roleName.split(CLONE_ID_DELIMITER);
     if (parts.length !== 2) {
-      throw new Error(
-        "Malformed clone id: must consist of {role id.clone index}"
+      throw new HolochainError(
+        "MalformedCloneId",
+        `clone id must consist of 'role_id.clone_index', but got ${roleName}`
       );
     }
     return new CloneId(parts[0], parseInt(parts[1]));
@@ -166,4 +169,31 @@ export class CloneId {
   getBaseRoleName() {
     return this.roleName;
   }
+}
+
+/**
+ * @public
+ */
+export type WsClientOptions = Pick<IsoWebSocket.ClientOptions, "origin">;
+
+/**
+ * Options for a Websocket connection.
+ *
+ * @public
+ */
+export interface WebsocketConnectionOptions {
+  /**
+   * The `ws://` URL of the Websocket server to connect to. Not required when connecting to App API from a Launcher or Kangaroo environment.
+   */
+  url?: URL;
+
+  /**
+   * Options to pass to the underlying websocket connection.
+   */
+  wsClientOptions?: WsClientOptions;
+
+  /**
+   * Timeout to default to for all operations.
+   */
+  defaultTimeout?: number;
 }

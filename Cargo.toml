@@ -1,8 +1,5 @@
 [workspace]
-members = [
-  "test/e2e/fixture/zomes/foo",
-  "test/e2e/fixture2/coordinator2",
-]
+members = ["test/e2e/fixture/zomes/foo", "test/e2e/fixture2/coordinator2"]
 
 resolver = "2"
 
@@ -10,4 +7,4 @@ resolver = "2"
 opt-level = "z"
 
 [workspace.dependencies]
-hdk = "0.2"
+hdk = "0.3.0-beta-dev.35"

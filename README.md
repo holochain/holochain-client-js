@@ -17,7 +17,9 @@ A JavaScript client for the Holochain Conductor API (works with browsers as well
 
 **JS client v0.12.x** is compatible with **Holochain v0.1.x**.  
 
-**JS client v0.16.x** are compatible with **Holochain v0.2.x**.
+**JS client v0.16.x** is compatible with **Holochain v0.2.x**.
+
+**JS client v0.17.x** is compatible with **Holochain v0.3.x**.
 
 To install from NPM, run
 ```bash
@@ -32,7 +34,7 @@ npm install --save-exact @holochain/client
 ```typescript
 import { ActionHash, AdminWebsocket, AppAgentWebsocket, CellType } from "@holochain/client";
 
-const adminWs = await AdminWebsocket.connect("ws://127.0.0.1:65000");
+const adminWs = await AdminWebsocket.connect({url: "ws://127.0.0.1:65000"});
 const agent_key = await adminWs.generateAgentPubKey();
 const role_name = "role";
 const installed_app_id = "test-app";
@@ -49,10 +51,7 @@ if (!(CellType.Provisioned in appInfo.cell_info[role_name][0])) {
 const { cell_id } = appInfo.cell_info[role_name][0][CellType.Provisioned];
 await adminWs.authorizeSigningCredentials(cell_id);
 await adminWs.attachAppInterface({ port: 65001 });
-const appAgentWs = await AppAgentWebsocket.connect(
-  "ws://127.0.0.1:65001",
-  installed_app_id
-);
+const appAgentWs = await AppAgentWebsocket.connect(installed_app_id, {url: "ws://127.0.0.1:65001"});
 
 const zomeCallPayload: CallZomeRequest = {
   cell_id,
@@ -72,7 +71,7 @@ await adminWs.client.close();
 ```typescript
 import { AdminWebsocket, AppWebsocket, CellType } from "@holochain/client";
 
-const adminWs = await AdminWebsocket.connect("ws://127.0.0.1:65000");
+const adminWs = await AdminWebsocket.connect({url: "ws://127.0.0.1:65000"});
 const agent_key = await adminWs.generateAgentPubKey();
 const installed_app_id = "test-app";
 const appInfo = await adminWs.installApp({
@@ -88,7 +87,7 @@ if (!(CellType.Provisioned in appInfo.cell_info["role"][0])) {
 const { cell_id } = appInfo.cell_info["role"][0][CellType.Provisioned];
 await adminWs.authorizeSigningCredentials(cell_id);
 await adminWs.attachAppInterface({ port: 65001 });
-const appWs = await AppWebsocket.connect("ws://127.0.0.1:65001");
+const appWs = await AppWebsocket.connect({url: "ws://127.0.0.1:65001"});
 
 let signalCb;
 const signalReceived = new Promise<void>((resolve) => {

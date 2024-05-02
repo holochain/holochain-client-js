@@ -1,7 +1,9 @@
 import { decode, encode } from "@msgpack/msgpack";
 import Emittery from "emittery";
 import IsoWebSocket from "isomorphic-ws";
-import { AppSignal, Signal, SignalType } from "./app/types.js";
+import { HolochainError, WsClientOptions } from "./common.js";
+import { AppAuthenticationToken } from "./admin/index.js";
+import { AppSignal, Signal, SignalType } from "./app/index.js";
 
 interface HolochainMessage {
   id: number;
@@ -18,6 +20,13 @@ interface HolochainRequest {
 }
 
 /**
+ * @public
+ */
+export interface AppAuthenticationRequest {
+  token: AppAuthenticationToken;
+}
+
+/**
  * A WebSocket client which can make requests and receive responses,
  * as well as send and receive signals.
  *
@@ -28,13 +37,15 @@ interface HolochainRequest {
 export class WsClient extends Emittery {
   socket: IsoWebSocket;
   url: URL | undefined;
+  options: WsClientOptions;
   private pendingRequests: Record<number, HolochainRequest>;
   private index: number;
 
-  constructor(socket: IsoWebSocket, url: URL) {
+  constructor(socket: IsoWebSocket, url?: URL, options?: WsClientOptions) {
     super();
     this.socket = socket;
     this.url = url;
+    this.options = options || {};
     this.pendingRequests = {};
     this.index = 0;
 
@@ -57,7 +68,10 @@ export class WsClient extends Emittery {
         ) {
           deserializedData = serializedMessage.data;
         } else {
-          throw new Error("websocket client: unknown message format");
+          throw new HolochainError(
+            "UnknownMessageFormat",
+            `incoming message has unknown message format - ${deserializedData}`
+          );
         }
       }
 
@@ -66,7 +80,10 @@ export class WsClient extends Emittery {
 
       if (message.type === "signal") {
         if (message.data === null) {
-          throw new Error("received a signal without data");
+          throw new HolochainError(
+            "UnknownSignalFormat",
+            "incoming signal has no data"
+          );
         }
         const deserializedSignal = decode(message.data);
         assertHolochainSignal(deserializedSignal);
@@ -89,8 +106,9 @@ export class WsClient extends Emittery {
       } else if (message.type === "response") {
         this.handleResponse(message);
       } else {
-        console.error(
-          `Got unrecognized Websocket message type: ${message.type}`
+        throw new HolochainError(
+          "UnknownMessageType",
+          `incoming message has unknown type - ${message.type}`
         );
       }
     };
@@ -101,8 +119,9 @@ export class WsClient extends Emittery {
       );
       if (pendingRequestIds.length) {
         pendingRequestIds.forEach((id) => {
-          const error = new Error(
-            `Websocket closed with pending requests. Close event code: ${event.code}, request id: ${id}`
+          const error = new HolochainError(
+            "ClientClosedWithPendingRequests",
+            `client closed with pending requests - close event code: ${event.code}, request id: ${id}`
           );
           this.pendingRequests[id].reject(error);
           delete this.pendingRequests[id];
@@ -115,20 +134,22 @@ export class WsClient extends Emittery {
    * Instance factory for creating WsClients.
    *
    * @param url - The WebSocket URL to connect to.
+   * @param options - Options for the WsClient.
    * @returns An new instance of the WsClient.
    */
-  static connect(url: URL) {
+  static connect(url: URL, options?: WsClientOptions) {
     return new Promise<WsClient>((resolve, reject) => {
-      const socket = new IsoWebSocket(url);
-      socket.onerror = () => {
+      const socket = new IsoWebSocket(url, options);
+      socket.onerror = (errorEvent) => {
         reject(
-          new Error(
-            `could not connect to holochain conductor, please check that a conductor service is running and available at ${url}`
+          new HolochainError(
+            "ConnectionError",
+            `could not connect to Holochain Conductor API at ${url} - ${errorEvent.error}`
           )
         );
       };
       socket.onopen = () => {
-        const client = new WsClient(socket, url);
+        const client = new WsClient(socket, url, options);
         resolve(client);
       };
     });
@@ -148,36 +169,47 @@ export class WsClient extends Emittery {
   }
 
   /**
+   * Authenticate the client with the conductor.
+   *
+   * This is only relevant for app websockets.
+   *
+   * @param request - The authentication request, containing an app authentication token.
+   */
+  async authenticate(request: AppAuthenticationRequest): Promise<void> {
+    return this.exchange(request, (request, resolve) => {
+      const encodedMsg = encode({
+        type: "authenticate",
+        data: encode(request),
+      });
+      this.socket.send(encodedMsg);
+      // Message just needs to be sent first, no need to wait for a response or even require a flush
+      resolve(null);
+    });
+  }
+
+  /**
    * Send requests to the connected websocket.
    *
    * @param request - The request to send over the websocket.
    * @returns
    */
   async request<Response>(request: unknown): Promise<Response> {
+    return this.exchange(request, this.sendMessage.bind(this));
+  }
+
+  private exchange<Response>(
+    request: unknown,
+    sendHandler: (
+      request: unknown,
+      resolve: RequestResolver,
+      reject: RequestRejecter
+    ) => void
+  ): Promise<Response> {
     if (this.socket.readyState === this.socket.OPEN) {
       const promise = new Promise((resolve, reject) => {
-        this.sendMessage(request, resolve, reject);
+        sendHandler(request, resolve, reject);
       });
       return promise as Promise<Response>;
-    } else if (this.url) {
-      const response = new Promise<unknown>((resolve, reject) => {
-        // typescript forgets in this promise scope that this.url is not undefined
-        const socket = new IsoWebSocket(this.url as URL);
-        this.socket = socket;
-        socket.onerror = () => {
-          reject(
-            new Error(
-              `could not connect to Holochain conductor, please check that a conductor service is running and available at ${this.url}`
-            )
-          );
-        };
-        socket.onopen = () => {
-          this.sendMessage(request, resolve, reject);
-        };
-
-        this.setupSocket();
-      });
-      return response as Response;
     } else {
       return Promise.reject(new Error("Socket is not open"));
     }
@@ -211,7 +243,9 @@ export class WsClient extends Emittery {
       }
       delete this.pendingRequests[id];
     } else {
-      console.error(`Got response with no matching request. id=${id}`);
+      console.error(
+        `got response with no matching request. id = ${id} msg = ${msg}`
+      );
     }
   }
 
@@ -247,7 +281,14 @@ function assertHolochainMessage(
   ) {
     return;
   }
-  throw new Error(`unknown message format ${JSON.stringify(message, null, 4)}`);
+  throw new HolochainError(
+    "UnknownMessageFormat",
+    `incoming message has unknown message format ${JSON.stringify(
+      message,
+      null,
+      4
+    )}`
+  );
 }
 
 function assertHolochainSignal(signal: unknown): asserts signal is Signal {
@@ -258,7 +299,14 @@ function assertHolochainSignal(signal: unknown): asserts signal is Signal {
   ) {
     return;
   }
-  throw new Error(`unknown signal format ${JSON.stringify(signal, null, 4)}`);
+  throw new HolochainError(
+    "UnknownSignalFormat",
+    `incoming signal has unknown signal format ${JSON.stringify(
+      signal,
+      null,
+      4
+    )}`
+  );
 }
 
 export { IsoWebSocket };

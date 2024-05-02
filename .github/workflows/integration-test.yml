@@ -4,6 +4,7 @@ on:
   pull_request:
   push:
     branches:
+      - "develop"
       - "main"
 
 concurrency:
@@ -32,9 +33,8 @@ jobs:
         with:
           name: holochain-ci
 
-      - name: Cache test zome build
-        uses: actions/cache@v4
-        if: always()
+      - name: Restore test zome build
+        uses: actions/cache/restore@v4
         env:
           cache-name: test-zome
         with:
@@ -49,6 +49,17 @@ jobs:
 
       - name: Build test fixture
         run: nix develop -c $SHELL -c "./build-fixture.sh"
+
+      - name: Save test zome build
+        uses: actions/cache/save@v4
+        env:
+          cache-name: test-zome
+        with:
+          path: |
+            .cargo
+            test/e2e/fixture/zomes/foo/target
+            test/e2e/fixture2/coordinator2/target
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('Cargo.lock') }}
 
       - name: Install JS packages
         run: nix develop -c $SHELL -c "npm ci"

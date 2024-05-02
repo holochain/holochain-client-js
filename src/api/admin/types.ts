@@ -17,12 +17,23 @@ import {
   WasmHash,
 } from "../../types.js";
 import { Requester } from "../common.js";
-import { DisableCloneCellRequest } from "../index.js";
 
 /**
  * @public
  */
-export type AttachAppInterfaceRequest = { port?: number };
+export type AttachAppInterfaceRequest = {
+  port?: number;
+  /**
+   * Comma separated list of origins, or `*` to allow any origin.
+   * For example: `http://localhost:3000,http://localhost:3001`
+   */
+  allowed_origins: string;
+  /**
+   * Optionally, bind this app interface to a specific installed app.
+   */
+  installed_app_id?: InstalledAppId;
+};
+
 /**
  * @public
  */
@@ -517,7 +528,16 @@ export type ListAppInterfacesRequest = void;
 /**
  * @public
  */
-export type ListAppInterfacesResponse = Array<number>;
+export type ListAppInterfacesResponse = Array<AppInterfaceInfo>;
+
+/**
+ * @public
+ */
+export interface AppInterfaceInfo {
+  port: number;
+  allowed_origins: string;
+  installed_app_id?: InstalledAppId;
+}
 
 /**
  * This type is meant to be opaque
@@ -554,7 +574,16 @@ export type AddAgentInfoResponse = any;
 /**
  * @public
  */
-export type DeleteCloneCellRequest = DisableCloneCellRequest;
+export interface DeleteCloneCellRequest {
+  /**
+   * The app id that the clone cell belongs to
+   */
+  app_id: InstalledAppId;
+  /**
+   * The clone id or cell id of the clone cell
+   */
+  clone_cell_id: RoleName | CellId;
+}
 
 /**
  * @public
@@ -808,6 +837,28 @@ export type StorageInfoResponse = StorageInfo;
 /**
  * @public
  */
+export interface IssueAppAuthenticationTokenRequest {
+  installed_app_id: InstalledAppId;
+  expiry_seconds?: number;
+  single_use?: boolean;
+}
+
+/**
+ * @public
+ */
+export type AppAuthenticationToken = number[];
+
+/**
+ * @public
+ */
+export interface IssueAppAuthenticationTokenResponse {
+  token: AppAuthenticationToken;
+  expires_at?: Timestamp;
+}
+
+/**
+ * @public
+ */
 export type DumpNetworkStatsRequest = void;
 
 /**
@@ -853,6 +904,10 @@ export interface AdminApi {
     GrantZomeCallCapabilityResponse
   >;
   storageInfo: Requester<StorageInfoRequest, StorageInfoResponse>;
+  issueAppAuthenticationToken: Requester<
+    IssueAppAuthenticationTokenRequest,
+    IssueAppAuthenticationTokenResponse
+  >;
   dumpNetworkStats: Requester<
     DumpNetworkStatsRequest,
     DumpNetworkStatsResponse
