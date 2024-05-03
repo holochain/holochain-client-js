@@ -16,9 +16,7 @@ export type InstalledAppInfoStatus = {
     disabled: {
         reason: DisabledAppReason;
     };
-} | {
-    running: null;
-};
+} | "running";
 ```
 **References:** [PausedAppReason](./client.pausedappreason.md)<!-- -->, [DisabledAppReason](./client.disabledappreason.md)
 

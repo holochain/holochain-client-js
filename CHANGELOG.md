@@ -5,11 +5,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## \[Unreleased\]
 
 ### Added
+### Changed
+### Fixed
+### Removed
+
+## 2024-05-02: v0.18.0-dev.0
+### Added
 - Test for Rust enum serialization.
 ### Changed
 - **BREAKING** Update enum serialization to match [changed Conductor API serialization format](https://github.com/holochain/holochain/blob/develop/crates/holochain/CHANGELOG.md#040-dev1).
-### Fixed
-### Removed
 
 ## 2024-04-27: v0.17.0-dev.12
 ### Fixed

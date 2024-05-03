@@ -8,11 +8,7 @@
 **Signature:**
 
 ```typescript
-export type DeactivationReason = {
-    never_activated: null;
-} | {
-    normal: null;
-} | {
+export type DeactivationReason = "never_activated" | "normal" | {
     quarantined: {
         error: string;
     };

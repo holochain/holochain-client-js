@@ -8,9 +8,7 @@
 **Signature:**
 
 ```typescript
-export type CapAccess = {
-    [CapAccessType.Unrestricted]: null;
-} | {
+export type CapAccess = [CapAccessType.Unrestricted] | {
     [CapAccessType.Transferable]: {
         secret: CapSecret;
     };

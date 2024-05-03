@@ -8,11 +8,7 @@
 **Signature:**
 
 ```typescript
-export type DisabledAppReason = {
-    never_started: null;
-} | {
-    user: null;
-} | {
+export type DisabledAppReason = "never_started" | "user" | {
     error: string;
 };
 ```

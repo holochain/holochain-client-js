@@ -36,7 +36,7 @@ Disabled
 
 </td><td>
 
-`"disabled"`
+`"Disabled"`
 
 
 </td><td>
@@ -50,7 +50,7 @@ Enabled
 
 </td><td>
 
-`"enabled"`
+`"Enabled"`
 
 
 </td><td>
@@ -64,7 +64,7 @@ Paused
 
 </td><td>
 
-`"paused"`
+`"Paused"`
 
 
 </td><td>
@@ -78,7 +78,7 @@ Running
 
 </td><td>
 
-`"running"`
+`"Running"`
 
 
 </td><td>
@@ -92,7 +92,7 @@ Stopped
 
 </td><td>
 
-`"stopped"`
+`"Stopped"`
 
 
 </td><td>
