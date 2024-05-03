@@ -41,14 +41,14 @@ test(
       cell_id
     );
     t.ok(ROLE_NAME in info.cell_info);
-    t.deepEqual(info.status, { running: null });
+    t.equal(info.status, "running");
 
     await admin.authorizeSigningCredentials(cell_id);
 
     const appEntryDef: AppEntryDef = {
       entry_index: 0,
       zome_index: 0,
-      visibility: { Private: null },
+      visibility: "Private",
     };
 
     const response = await appWs.callZome({
@@ -78,7 +78,7 @@ test(
 
     await admin.disableApp({ installed_app_id });
     info = await appWs.appInfo();
-    t.deepEqual(info.status, { disabled: { reason: { user: null } } });
+    t.deepEqual(info.status, { disabled: { reason: "user" } });
   })
 );
 
@@ -305,7 +305,7 @@ test(
         current_number_of_peers: 1,
         arc_size: 1,
         total_network_peers: 1,
-        bytes_since_last_time_queried: 1844,
+        bytes_since_last_time_queried: 1838,
         completed_rounds_since_last_time_queried: 0,
       },
     ]);
