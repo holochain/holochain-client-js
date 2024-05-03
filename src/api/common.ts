@@ -23,7 +23,7 @@ export type RequesterNoArg<Res> = (timeout?: number) => Promise<Res>;
 /**
  * @public
  */
-export type Tagged<T> = { type: { [tag: string]: null }; data: T };
+export type Tagged<T> = { type: string; data: T };
 
 /**
  * Take a Requester function which deals with tagged requests and responses,
@@ -40,7 +40,7 @@ export const requesterTransformer =
   ) =>
   async (req: ReqI, timeout?: number) => {
     const transformedInput = await transform.input(req);
-    const input = { type: { [tag]: null }, data: transformedInput };
+    const input = { type: tag, data: transformedInput };
     const response = await requester(input, timeout);
     return transform.output(response.data);
   };
@@ -65,13 +65,13 @@ export class HolochainError extends Error {
 }
 
 // this determines the error format of all error responses
-export const catchError = (res: any) => {
-  if (ERROR_TYPE in res.type) {
-    const errorName = Object.keys(res.data.type)[0];
-    const error = new HolochainError(errorName, res.data.data);
+export const catchError = (response: any) => {
+  if (response.type === ERROR_TYPE) {
+    const errorName = response.data.type;
+    const error = new HolochainError(errorName, response.data.data);
     return Promise.reject(error);
   } else {
-    return Promise.resolve(res);
+    return Promise.resolve(response);
   }
 };
 

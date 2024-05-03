@@ -5,6 +5,12 @@ use hdk::prelude::{holo_hash::DnaHash, *};
 #[serde(transparent)]
 pub struct TestString(pub String);
 
+#[derive(Debug, Serialize, Deserialize)]
+pub enum SerializationEnum {
+    Input,
+    Output(String),
+}
+
 impl From<String> for TestString {
     fn from(s: String) -> Self {
         Self(s)
@@ -116,4 +122,11 @@ pub fn create_and_delete_link(_: ()) -> ExternResult<ActionHash> {
 pub fn get_agent_activity(chain_top: ActionHash) -> ExternResult<Vec<RegisterAgentActivity>> {
     let agent = agent_info()?.agent_initial_pubkey;
     must_get_agent_activity(agent, ChainFilter::new(chain_top))
+}
+
+#[hdk_extern]
+pub fn enum_serialization(input: SerializationEnum) -> ExternResult<SerializationEnum> {
+    tracing::info!("incoming enum serialization value: {input:?}");
+    assert!(matches!(input, SerializationEnum::Input));
+    Ok(SerializationEnum::Output("success".to_string()))
 }

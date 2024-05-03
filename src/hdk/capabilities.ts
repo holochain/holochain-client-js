@@ -27,7 +27,7 @@ export enum GrantedFunctionsType {
  * @public
  */
 export type GrantedFunctions =
-  | { [GrantedFunctionsType.All]: null }
+  | GrantedFunctionsType.All
   | { [GrantedFunctionsType.Listed]: [ZomeName, FunctionName][] };
 
 /**
@@ -52,7 +52,7 @@ export enum CapAccessType {
  * @public
  */
 export type CapAccess =
-  | { [CapAccessType.Unrestricted]: null }
+  | [CapAccessType.Unrestricted]
   | {
       [CapAccessType.Transferable]: { secret: CapSecret };
     }

@@ -7,14 +7,14 @@ import {
 import type { AgentPubKey, CellId } from "../../types.js";
 import { WsClient } from "../client.js";
 import {
+  DEFAULT_TIMEOUT,
+  HolochainError,
+  Requester,
+  Transformer,
   WebsocketConnectionOptions,
   catchError,
-  DEFAULT_TIMEOUT,
   promiseTimeout,
-  Requester,
   requesterTransformer,
-  Transformer,
-  HolochainError,
 } from "../common.js";
 import {
   generateSigningKeyPair,
@@ -27,7 +27,6 @@ import {
   AdminApi,
   AgentInfoRequest,
   AgentInfoResponse,
-  AppStatusFilter,
   AttachAppInterfaceRequest,
   AttachAppInterfaceResponse,
   DeleteCloneCellRequest,
@@ -231,10 +230,8 @@ export class AdminWebsocket implements AdminApi {
   /**
    * List all installed apps.
    */
-  listApps: Requester<ListAppsRequest, ListAppsResponse> = this._requester(
-    "list_apps",
-    listAppsTransform
-  );
+  listApps: Requester<ListAppsRequest, ListAppsResponse> =
+    this._requester("list_apps");
 
   /**
    * List all attached app interfaces.
@@ -331,39 +328,12 @@ export class AdminWebsocket implements AdminApi {
     const [keyPair, signingKey] = await generateSigningKeyPair();
     const capSecret = await this.grantSigningKey(
       cellId,
-      functions || { [GrantedFunctionsType.All]: null },
+      functions || GrantedFunctionsType.All,
       signingKey
     );
     setSigningCredentials(cellId, { capSecret, keyPair, signingKey });
   };
 }
-
-interface InternalListAppsRequest {
-  status_filter?:
-    | { Running: null }
-    | { Enabled: null }
-    | { Paused: null }
-    | { Disabled: null }
-    | { Stopped: null };
-}
-
-const listAppsTransform: Transformer<
-  ListAppsRequest,
-  InternalListAppsRequest,
-  ListAppsResponse,
-  ListAppsResponse
-> = {
-  input: (req) => {
-    const args: InternalListAppsRequest = {};
-
-    if (req.status_filter) {
-      args.status_filter = getAppStatusInApiForm(req.status_filter);
-    }
-
-    return args;
-  },
-  output: (res) => res,
-};
 
 const dumpStateTransform: Transformer<
   DumpStateRequest,
@@ -376,28 +346,3 @@ const dumpStateTransform: Transformer<
     return JSON.parse(res);
   },
 };
-
-function getAppStatusInApiForm(status_filter: AppStatusFilter) {
-  switch (status_filter) {
-    case AppStatusFilter.Running:
-      return {
-        Running: null,
-      };
-    case AppStatusFilter.Enabled:
-      return {
-        Enabled: null,
-      };
-    case AppStatusFilter.Paused:
-      return {
-        Paused: null,
-      };
-    case AppStatusFilter.Disabled:
-      return {
-        Disabled: null,
-      };
-    case AppStatusFilter.Stopped:
-      return {
-        Stopped: null,
-      };
-  }
-}
