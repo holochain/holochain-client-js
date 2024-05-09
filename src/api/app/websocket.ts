@@ -38,6 +38,7 @@ import {
   NetworkInfoRequest,
   NetworkInfoResponse,
   AppWebsocketConnectionOptions,
+  CallZomeTransform,
 } from "./types.js";
 import {
   getHostZomeCallSigner,
@@ -65,6 +66,13 @@ export class AppWebsocket implements AppClient {
   readonly myPubKey: AgentPubKey;
   private readonly defaultTimeout: number;
   private readonly emitter: Emittery<AppEvents>;
+  private readonly callZomeTransform: Transformer<
+    CallZomeRequest | CallZomeRequestSigned,
+    Promise<CallZomeRequestSigned>,
+    CallZomeResponseGeneric<Uint8Array>,
+    CallZomeResponse
+  >;
+
   cachedAppInfo?: AppInfo | null;
 
   private readonly appInfoRequester: Requester<null, AppInfoResponse>;
@@ -92,11 +100,15 @@ export class AppWebsocket implements AppClient {
   private constructor(
     client: WsClient,
     appInfo: AppInfo,
-    defaultTimeout?: number
+    defaultTimeout?: number,
+    callZomeTransform?: CallZomeTransform
   ) {
     this.client = client;
     this.myPubKey = appInfo.agent_pub_key;
     this.defaultTimeout = defaultTimeout ?? DEFAULT_TIMEOUT;
+    this.callZomeTransform = callZomeTransform
+      ? callZomeTransform
+      : defaultCallZomeTransform;
     this.emitter = new Emittery<AppEvents>();
     this.cachedAppInfo = appInfo;
 
@@ -109,7 +121,7 @@ export class AppWebsocket implements AppClient {
       this.client,
       "call_zome",
       this.defaultTimeout,
-      callZomeTransform
+      this.callZomeTransform
     );
     this.createCloneCellRequester = AppWebsocket.requester(
       this.client,
@@ -201,7 +213,12 @@ export class AppWebsocket implements AppClient {
       );
     }
 
-    return new AppWebsocket(client, appInfo, options.defaultTimeout);
+    return new AppWebsocket(
+      client,
+      appInfo,
+      options.defaultTimeout,
+      options.callZomeTransform
+    );
   }
 
   /**
@@ -415,7 +432,7 @@ export class AppWebsocket implements AppClient {
   }
 }
 
-const callZomeTransform: Transformer<
+const defaultCallZomeTransform: Transformer<
   // either an already signed zome call which is returned as is, or a zome call
   // payload to be signed
   CallZomeRequest | CallZomeRequestSigned,
