@@ -76,6 +76,25 @@ _(Optional)_
 </td></tr>
 <tr><td>
 
+[installedAppId](./client.appwebsocket.installedappid.md)
+
+
+</td><td>
+
+`readonly`
+
+
+</td><td>
+
+[InstalledAppId](./client.installedappid.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
 [myPubKey](./client.appwebsocket.mypubkey.md)
 
 

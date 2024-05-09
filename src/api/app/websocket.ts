@@ -1,6 +1,6 @@
 import Emittery, { UnsubscribeFunction } from "emittery";
 import { omit } from "lodash-es";
-import { AgentPubKey, CellId, RoleName } from "../../types.js";
+import { AgentPubKey, CellId, InstalledAppId, RoleName } from "../../types.js";
 import { AppInfo, CellType } from "../admin/index.js";
 import {
   catchError,
@@ -63,6 +63,7 @@ import { WsClient } from "../client.js";
 export class AppWebsocket implements AppClient {
   readonly client: WsClient;
   readonly myPubKey: AgentPubKey;
+  readonly installedAppId: InstalledAppId;
   private readonly defaultTimeout: number;
   private readonly emitter: Emittery<AppEvents>;
   cachedAppInfo?: AppInfo | null;
@@ -96,6 +97,7 @@ export class AppWebsocket implements AppClient {
   ) {
     this.client = client;
     this.myPubKey = appInfo.agent_pub_key;
+    this.installedAppId = appInfo.installed_app_id;
     this.defaultTimeout = defaultTimeout ?? DEFAULT_TIMEOUT;
     this.emitter = new Emittery<AppEvents>();
     this.cachedAppInfo = appInfo;
