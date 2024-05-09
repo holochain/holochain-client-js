@@ -106,9 +106,7 @@ export class AppWebsocket implements AppClient {
     this.client = client;
     this.myPubKey = appInfo.agent_pub_key;
     this.defaultTimeout = defaultTimeout ?? DEFAULT_TIMEOUT;
-    this.callZomeTransform = callZomeTransform
-      ? callZomeTransform
-      : defaultCallZomeTransform;
+    this.callZomeTransform = callZomeTransform ?? defaultCallZomeTransform;
     this.emitter = new Emittery<AppEvents>();
     this.cachedAppInfo = appInfo;
 
