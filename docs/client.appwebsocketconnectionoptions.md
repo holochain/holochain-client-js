@@ -37,6 +37,25 @@ Description
 </th></tr></thead>
 <tbody><tr><td>
 
+[callZomeTransform?](./client.appwebsocketconnectionoptions.callzometransform.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[CallZomeTransform](./client.callzometransform.md)
+
+
+</td><td>
+
+_(Optional)_
+
+
+</td></tr>
+<tr><td>
+
 [token?](./client.appwebsocketconnectionoptions.token.md)
 
 
