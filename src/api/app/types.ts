@@ -9,6 +9,7 @@ import {
   DnaHash,
   DnaProperties,
   FunctionName,
+  InstalledAppId,
   MembraneProof,
   NetworkInfo,
   NetworkSeed,
@@ -272,6 +273,7 @@ export interface AppClient {
   appInfo(): Promise<AppInfoResponse>;
 
   myPubKey: AgentPubKey;
+  installedAppId: InstalledAppId;
 
   createCloneCell(
     args: AppCreateCloneCellRequest

@@ -36,6 +36,23 @@ Description
 </th></tr></thead>
 <tbody><tr><td>
 
+[installedAppId](./client.appclient.installedappid.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[InstalledAppId](./client.installedappid.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
 [myPubKey](./client.appclient.mypubkey.md)
 
 
