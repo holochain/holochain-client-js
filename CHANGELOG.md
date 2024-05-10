@@ -9,6 +9,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Fixed
 ### Removed
 
+## 2024-05-10: v0.18.0-dev.1
+### Added
+- App id to `AppClient` and `AppWebsocket`.
+- Optional function parameter for a custom zome transformer in `AppWebsocket`.
+
 ## 2024-05-02: v0.18.0-dev.0
 ### Added
 - Test for Rust enum serialization.

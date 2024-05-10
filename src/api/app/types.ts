@@ -297,6 +297,9 @@ export interface AppWebsocketConnectionOptions
   callZomeTransform?: CallZomeTransform;
 }
 
+/**
+ * @public
+ */
 export type CallZomeTransform = Transformer<
   CallZomeRequest | CallZomeRequestSigned,
   Promise<CallZomeRequestSigned>,
