@@ -101,8 +101,8 @@ export class AppWebsocket implements AppClient {
   private constructor(
     client: WsClient,
     appInfo: AppInfo,
-    defaultTimeout?: number,
-    callZomeTransform?: CallZomeTransform
+    callZomeTransform?: CallZomeTransform,
+    defaultTimeout?: number
   ) {
     this.client = client;
     this.myPubKey = appInfo.agent_pub_key;
@@ -216,8 +216,8 @@ export class AppWebsocket implements AppClient {
     return new AppWebsocket(
       client,
       appInfo,
-      options.defaultTimeout,
-      options.callZomeTransform
+      options.callZomeTransform,
+      options.defaultTimeout
     );
   }
 
