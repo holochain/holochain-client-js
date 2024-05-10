@@ -124,7 +124,7 @@ export type CallZomeResponse = CallZomeResponseGeneric<any>;
 /**
  * @public
  */
-export type AppInfoResponse = AppInfo | null;
+export type AppInfoResponse = AppInfo;
 
 /**
  * @public
