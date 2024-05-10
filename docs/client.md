@@ -1496,6 +1496,15 @@ This type is meant to be opaque
 </td></tr>
 <tr><td>
 
+[CallZomeTransform](./client.callzometransform.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
 [CapAccess](./client.capaccess.md)
 
 

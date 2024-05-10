@@ -16,6 +16,7 @@ import {
   Nonce256Bit,
   RoleName,
   Timestamp,
+  Transformer,
   WebsocketConnectionOptions,
   ZomeName,
 } from "../../index.js";
@@ -293,4 +294,12 @@ export interface AppClient {
 export interface AppWebsocketConnectionOptions
   extends WebsocketConnectionOptions {
   token?: AppAuthenticationToken;
+  callZomeTransform?: CallZomeTransform;
 }
+
+export type CallZomeTransform = Transformer<
+  CallZomeRequest | CallZomeRequestSigned,
+  Promise<CallZomeRequestSigned>,
+  CallZomeResponseGeneric<Uint8Array>,
+  CallZomeResponse
+>;
