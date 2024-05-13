@@ -67,6 +67,12 @@ jobs:
       - name: Run tests
         run: nix develop -c $SHELL -c "npm t"
 
+      - name: Run doc test of app websocket
+        run: nix develop -c $SHELL -c "./doc-test-app-ws.sh"
+
+      - name: Run doc test of signal
+        run: nix develop -c $SHELL -c "./doc-test-signal.sh"
+
       - name: Setup tmate session if a previous step failed
         if: ${{ failure() }}
         uses: mxschmitt/action-tmate@v3
