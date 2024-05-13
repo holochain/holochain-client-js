@@ -3,6 +3,7 @@ name: Documentation Test
 on:
   workflow_run:
     workflows: [Integration Test]
+    types: completed
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref_name }}
