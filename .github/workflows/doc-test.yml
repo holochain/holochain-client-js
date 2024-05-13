@@ -2,7 +2,7 @@ name: Documentation Test
 
 on:
   workflow_run:
-    workflows: [Integration Test]
+    workflows: ["Integration Test"]
     types: completed
 
 concurrency:
