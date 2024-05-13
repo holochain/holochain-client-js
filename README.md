@@ -30,64 +30,92 @@ npm install --save-exact @holochain/client
 
 ## Sample usage
 
-### Use AppAgentWebsocket with implicit zome call signing
+### Use AppWebsocket with implicit zome call signing
 ```typescript
-import { ActionHash, AdminWebsocket, AppAgentWebsocket, CellType } from "@holochain/client";
+import {
+  AdminWebsocket,
+  AppWebsocket,
+  CellType,
+  type ActionHash,
+  type CallZomeRequest,
+} from "./lib/index.js";
 
-const adminWs = await AdminWebsocket.connect({url: "ws://127.0.0.1:65000"});
+const adminWs = await AdminWebsocket.connect({
+  url: new URL("ws://127.0.0.1:65000"),
+  wsClientOptions: { origin: "my-happ" },
+});
 const agent_key = await adminWs.generateAgentPubKey();
-const role_name = "role";
+const role_name = "foo";
 const installed_app_id = "test-app";
 const appInfo = await adminWs.installApp({
   agent_key,
-  path: "path/to/happ/file",
+  path: "./test/e2e/fixture/test.happ",
   installed_app_id,
   membrane_proofs: {},
 });
 await adminWs.enableApp({ installed_app_id });
 if (!(CellType.Provisioned in appInfo.cell_info[role_name][0])) {
-  process.exit();
+  throw new Error(`No cell found under role name ${role_name}`);
 }
 const { cell_id } = appInfo.cell_info[role_name][0][CellType.Provisioned];
 await adminWs.authorizeSigningCredentials(cell_id);
-await adminWs.attachAppInterface({ port: 65001 });
-const appAgentWs = await AppAgentWebsocket.connect(installed_app_id, {url: "ws://127.0.0.1:65001"});
+await adminWs.attachAppInterface({ port: 65001, allowed_origins: "my-happ" });
+const issuedToken = await adminWs.issueAppAuthenticationToken({
+  installed_app_id,
+});
+const appWs = await AppWebsocket.connect({
+  url: new URL("ws://127.0.0.1:65001"),
+  token: issuedToken.token,
+  wsClientOptions: { origin: "my-happ" },
+});
 
 const zomeCallPayload: CallZomeRequest = {
   cell_id,
-  zome_name: "zome_name",
-  fn_name: "create_entry",
+  zome_name: "foo",
+  fn_name: "foo",
   provenance: agent_key,
-  payload: "some_content",
+  payload: null,
 };
 
-const response: ActionHash = await appAgentWs.callZome(zomeCallPayload, 30000);
+const response: ActionHash = await appWs.callZome(zomeCallPayload, 30000);
+console.log("zome call response is", response);
 
-await appAgentWs.appWebsocket.client.close();
+await appWs.client.close();
 await adminWs.client.close();
 ```
 
-### Use AppWebsocket with implicit zome call signing
+### Subscribe to signals
 ```typescript
 import { AdminWebsocket, AppWebsocket, CellType } from "@holochain/client";
 
-const adminWs = await AdminWebsocket.connect({url: "ws://127.0.0.1:65000"});
+const adminWs = await AdminWebsocket.connect({
+  url: new URL("ws://127.0.0.1:65000"),
+  wsClientOptions: { origin: "my-happ" },
+});
 const agent_key = await adminWs.generateAgentPubKey();
+const role_name = "foo";
 const installed_app_id = "test-app";
 const appInfo = await adminWs.installApp({
   agent_key,
-  path: "path/to/happ/file",
+  path: "./test/e2e/fixture/test.happ",
   installed_app_id,
   membrane_proofs: {},
 });
 await adminWs.enableApp({ installed_app_id });
-if (!(CellType.Provisioned in appInfo.cell_info["role"][0])) {
-  process.exit();
+if (!(CellType.Provisioned in appInfo.cell_info[role_name][0])) {
+  throw new Error(`No cell found under role name ${role_name}`);
 }
-const { cell_id } = appInfo.cell_info["role"][0][CellType.Provisioned];
+const { cell_id } = appInfo.cell_info[role_name][0][CellType.Provisioned];
 await adminWs.authorizeSigningCredentials(cell_id);
-await adminWs.attachAppInterface({ port: 65001 });
-const appWs = await AppWebsocket.connect({url: "ws://127.0.0.1:65001"});
+await adminWs.attachAppInterface({ port: 65001, allowed_origins: "my-happ" });
+const issuedToken = await adminWs.issueAppAuthenticationToken({
+  installed_app_id,
+});
+const appWs = await AppWebsocket.connect({
+  url: new URL("ws://127.0.0.1:65001"),
+  token: issuedToken.token,
+  wsClientOptions: { origin: "my-happ" },
+});
 
 let signalCb;
 const signalReceived = new Promise<void>((resolve) => {
@@ -103,7 +131,7 @@ appWs.on("signal", signalCb);
 // trigger an emit_signal
 await appWs.callZome({
   cell_id,
-  zome_name: "zome",
+  zome_name: "foo",
   fn_name: "emitter",
   provenance: agent_key,
   payload: null,
@@ -165,7 +193,7 @@ Holochain is an open source project.  We welcome all sorts of participation and 
 
  [![License: CAL 1.0](https://img.shields.io/badge/License-CAL%201.0-blue.svg)](https://github.com/holochain/cryptographic-autonomy-license)
 
-Copyright (C) 2020-2023, Holochain Foundation
+Copyright (C) 2020-2024, Holochain Foundation
 
 This program is free software: you can redistribute it and/or modify it under the terms of the license
 provided in the LICENSE file (CAL-1.0).  This program is distributed in the hope that it will be useful,

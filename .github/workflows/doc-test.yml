@@ -1,0 +1,59 @@
+name: Documentation Test
+
+on:
+  workflow_run:
+    workflows: [Integration Test]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref_name }}
+  cancel-in-progress: true
+
+jobs:
+  doc-test:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+      fail-fast: false
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Check out source code
+        uses: actions/checkout@v4
+
+      - name: Install nix
+        uses: cachix/install-nix-action@v25
+        with:
+          install_url: https://releases.nixos.org/nix/nix-2.17.0/install
+
+      - name: Set up cachix
+        uses: cachix/cachix-action@v14
+        with:
+          name: holochain-ci
+
+      - name: Restore test zome build
+        uses: actions/cache/restore@v4
+        env:
+          cache-name: test-zome
+        with:
+          path: |
+            .cargo
+            test/e2e/fixture/zomes/foo/target
+            test/e2e/fixture2/coordinator2/target
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('Cargo.lock') }}
+
+      - name: Build Nix packages
+        run: nix develop -c $SHELL -c "holochain --version"
+
+      - name: Install JS packages
+        run: nix develop -c $SHELL -c "npm ci"
+
+      - name: Run doc test of app websocket
+        run: nix develop -c $SHELL -c "./doc-test-app-ws.sh"
+
+      - name: Run doc test of signal
+        run: nix develop -c $SHELL -c "./doc-test-signal.sh"
+
+      - name: Setup tmate session if a previous step failed
+        if: ${{ failure() }}
+        uses: mxschmitt/action-tmate@v3
+        timeout-minutes: 10
