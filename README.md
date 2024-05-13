@@ -38,7 +38,7 @@ import {
   CellType,
   type ActionHash,
   type CallZomeRequest,
-} from "./lib/index.js";
+} from "@holochain/client";
 
 const adminWs = await AdminWebsocket.connect({
   url: new URL("ws://127.0.0.1:65000"),
