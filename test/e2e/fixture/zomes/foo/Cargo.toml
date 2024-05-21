@@ -9,5 +9,5 @@ crate-type = ["cdylib", "rlib"]
 name = "test_wasm_foo"
 
 [dependencies]
-hdk = {workspace = true}
+hdk = { workspace = true }
 serde = "1"

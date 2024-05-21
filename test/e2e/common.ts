@@ -44,7 +44,6 @@ export const launch = async (port: number) => {
 
   const runConductorPromise = new Promise<void>((resolve) => {
     runConductorProcess.stdout.on("data", (data: Buffer) => {
-      console.log(data.toString());
       const isConductorStarted = data
         .toString()
         .includes("Connected successfully to a running holochain");
