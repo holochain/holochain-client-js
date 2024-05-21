@@ -8,5 +8,5 @@
 **Signature:**
 
 ```typescript
-export type AddAgentInfoResponse = any;
+export type AddAgentInfoResponse = unknown;
 ```

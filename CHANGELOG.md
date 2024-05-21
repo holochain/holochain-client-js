@@ -5,14 +5,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## \[Unreleased\]
 
 ### Added
-- Test for Rust enum serialization.
 ### Changed
-- **BREAKING** Update enum serialization to match [changed Conductor API serialization format](https://github.com/holochain/holochain/blob/develop/crates/holochain/CHANGELOG.md#040-dev1).
 ### Fixed
 ### Removed
 
+## 2024-05-21: v0.17.0-rc.0
+### Added
+- Test for Rust enum serialization.
+### Changed
+- **BREAKING** Update enum serialization to match [changed Conductor API serialization format](https://github.com/holochain/holochain/blob/develop/crates/holochain/CHANGELOG.md#040-dev1).
+
 ## 2024-04-27: v0.17.0-dev.12
-### Fixed
+### Fixed`
 - Invalid module references which caused the client to fail to import in Node environments.
 
 ## 2024-04-26: v0.17.0-dev.11

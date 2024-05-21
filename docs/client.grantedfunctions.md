@@ -8,9 +8,7 @@
 **Signature:**
 
 ```typescript
-export type GrantedFunctions = {
-    [GrantedFunctionsType.All]: null;
-} | {
+export type GrantedFunctions = GrantedFunctionsType.All | {
     [GrantedFunctionsType.Listed]: [ZomeName, FunctionName][];
 };
 ```
