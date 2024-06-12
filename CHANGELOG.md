@@ -5,10 +5,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## \[Unreleased\]
 
 ### Added
-- New call `AppRequest::ProvideMemproofs`. An app can be installed with deferred membrane proofs, which can later be provided through this call.
 ### Changed
 ### Fixed
 ### Removed
+
+## 2024-06-11: v0.18.0-dev.2
+### Added
+- New call `AppRequest::ProvideMemproofs`. An app can be installed with deferred membrane proofs, which can later be provided through this call.
 
 ## 2024-05-10: v0.18.0-dev.1
 ### Added
