@@ -493,7 +493,7 @@ test(
   })
 );
 
-test.only(
+test(
   "memproofs can be provided after app installation",
   withConductor(ADMIN_PORT, async (t) => {
     const role_name = "foo";
