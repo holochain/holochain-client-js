@@ -493,6 +493,73 @@ test(
   })
 );
 
+test.only(
+  "memproofs can be provided after app installation",
+  withConductor(ADMIN_PORT, async (t) => {
+    const role_name = "foo";
+    const installed_app_id = "app";
+    const admin = await AdminWebsocket.connect({
+      url: ADMIN_WS_URL,
+      wsClientOptions: { origin: "client-test-admin" },
+    });
+    const agent = await admin.generateAgentPubKey();
+
+    await admin.installApp({
+      installed_app_id,
+      agent_key: agent,
+      bundle: {
+        manifest: {
+          manifest_version: "1",
+          name: "app",
+          roles: [
+            {
+              name: role_name,
+              provisioning: {
+                strategy: CellProvisioningStrategy.Create,
+                deferred: false,
+              },
+              dna: {
+                path: fs.realpathSync("test/e2e/fixture/test.dna"),
+                modifiers: { network_seed: "some_seed" },
+              },
+            },
+          ],
+          membrane_proofs_deferred: true,
+        },
+        resources: {},
+      },
+      membrane_proofs: {},
+    });
+
+    const { port: appPort } = await admin.attachAppInterface({
+      allowed_origins: "client-test-app",
+    });
+    const issued = await admin.issueAppAuthenticationToken({
+      installed_app_id,
+    });
+    const client = await AppWebsocket.connect({
+      url: new URL(`ws://localhost:${appPort}`),
+      wsClientOptions: { origin: "client-test-app" },
+      token: issued.token,
+    });
+
+    let appInfo = await client.appInfo();
+    t.equal(
+      appInfo.status,
+      "awaiting_memproofs",
+      "app is in status awaiting_memproofs"
+    );
+
+    const response = await client.provideMemproofs({});
+    t.equal(response, undefined, "memproofs provided successfully");
+
+    await admin.enableApp({ installed_app_id });
+
+    appInfo = await client.appInfo();
+    t.equal(appInfo.status, "running", "app is in status running");
+  })
+);
+
 test(
   "generated signing key has same location bytes as original agent pub key",
   withConductor(ADMIN_PORT, async (t) => {
@@ -537,6 +604,7 @@ test(
               },
             },
           ],
+          membrane_proofs_deferred: false,
         },
         resources: {},
       },
@@ -606,6 +674,7 @@ test(
               },
             },
           ],
+          membrane_proofs_deferred: false,
         },
         resources: {
           dna_1: zippedDnaBundle,

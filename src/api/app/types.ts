@@ -11,6 +11,7 @@ import {
   FunctionName,
   InstalledAppId,
   MembraneProof,
+  MemproofMap,
   NetworkInfo,
   NetworkSeed,
   Nonce256Bit,
@@ -127,6 +128,15 @@ export type CallZomeResponse = CallZomeResponseGeneric<any>;
  * @public
  */
 export type AppInfoResponse = AppInfo | null;
+
+/**
+ * @public
+ */
+export type ProvideMemproofsRequest = MemproofMap;
+/**
+ * @public
+ */
+export type ProvideMemproofsResponse = void;
 
 /**
  * @public

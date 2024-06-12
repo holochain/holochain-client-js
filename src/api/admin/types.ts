@@ -83,6 +83,7 @@ export type InstalledAppInfoStatus =
         reason: DisabledAppReason;
       };
     }
+  | "awaiting_memproofs"
   | "running";
 /**
  * @public
@@ -145,6 +146,11 @@ export type AppInfo = {
  * @public
  */
 export type MembraneProof = Uint8Array;
+
+/**
+ * @public
+ */
+export type MemproofMap = { [key: string]: MembraneProof };
 
 /**
  * @public
@@ -397,6 +403,7 @@ export type AppManifest = {
   name: string;
   description?: string;
   roles: Array<AppRoleManifest>;
+  membrane_proofs_deferred: boolean;
 };
 /**
  * @public
@@ -438,7 +445,7 @@ export type InstallAppRequest = {
    * Include proof-of-membrane-membership data for cells that require it,
    * keyed by the CellNick specified in the app bundle manifest.
    */
-  membrane_proofs: { [key: string]: MembraneProof };
+  membrane_proofs: MemproofMap;
 
   /**
    * Optional global network seed override.  If set will override the network seed value for all
