@@ -1,7 +1,7 @@
 import Emittery, { UnsubscribeFunction } from "emittery";
 import { omit } from "lodash-es";
 import { AgentPubKey, CellId, InstalledAppId, RoleName } from "../../types.js";
-import { AppInfo, CellType } from "../admin/index.js";
+import { AppInfo, CellType, MemproofMap } from "../admin/index.js";
 import {
   catchError,
   DEFAULT_TIMEOUT,
@@ -39,6 +39,8 @@ import {
   NetworkInfoResponse,
   AppWebsocketConnectionOptions,
   CallZomeTransform,
+  ProvideMemproofsRequest,
+  ProvideMemproofsResponse,
 } from "./types.js";
 import {
   getHostZomeCallSigner,
@@ -81,6 +83,10 @@ export class AppWebsocket implements AppClient {
     CallZomeRequest | CallZomeRequestSigned,
     CallZomeResponse
   >;
+  private readonly provideMemproofRequester: Requester<
+    ProvideMemproofsRequest,
+    ProvideMemproofsResponse
+  >;
   private readonly createCloneCellRequester: Requester<
     CreateCloneCellRequest,
     CreateCloneCellResponse
@@ -122,6 +128,11 @@ export class AppWebsocket implements AppClient {
       "call_zome",
       this.defaultTimeout,
       this.callZomeTransform
+    );
+    this.provideMemproofRequester = AppWebsocket.requester(
+      this.client,
+      "provide_memproofs",
+      this.defaultTimeout
     );
     this.createCloneCellRequester = AppWebsocket.requester(
       this.client,
@@ -238,6 +249,15 @@ export class AppWebsocket implements AppClient {
 
     this.cachedAppInfo = appInfo;
     return appInfo;
+  }
+
+  /**
+   * Provide membrane proofs for the app.
+   *
+   * @param memproofs - A map of {@link MembraneProof}s.
+   */
+  async provideMemproofs(memproofs: MemproofMap) {
+    await this.provideMemproofRequester(memproofs);
   }
 
   /**
