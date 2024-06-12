@@ -16,7 +16,7 @@ export type InstalledAppInfoStatus = {
     disabled: {
         reason: DisabledAppReason;
     };
-} | "running";
+} | "awaiting_memproofs" | "running";
 ```
 **References:** [PausedAppReason](./client.pausedappreason.md)<!-- -->, [DisabledAppReason](./client.disabledappreason.md)
 

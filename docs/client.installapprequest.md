@@ -11,12 +11,10 @@
 export type InstallAppRequest = {
     agent_key: AgentPubKey;
     installed_app_id?: InstalledAppId;
-    membrane_proofs: {
-        [key: string]: MembraneProof;
-    };
+    membrane_proofs: MemproofMap;
     network_seed?: NetworkSeed;
     ignore_genesis_failure?: boolean;
 } & AppBundleSource;
 ```
-**References:** [AgentPubKey](./client.agentpubkey.md)<!-- -->, [InstalledAppId](./client.installedappid.md)<!-- -->, [MembraneProof](./client.membraneproof.md)<!-- -->, [NetworkSeed](./client.networkseed.md)<!-- -->, [AppBundleSource](./client.appbundlesource.md)
+**References:** [AgentPubKey](./client.agentpubkey.md)<!-- -->, [InstalledAppId](./client.installedappid.md)<!-- -->, [MemproofMap](./client.memproofmap.md)<!-- -->, [NetworkSeed](./client.networkseed.md)<!-- -->, [AppBundleSource](./client.appbundlesource.md)
 

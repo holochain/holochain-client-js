@@ -260,4 +260,18 @@ Register an event listener for signals.
 
 
 </td></tr>
+<tr><td>
+
+[provideMemproofs(memproofs)](./client.appwebsocket.providememproofs.md)
+
+
+</td><td>
+
+
+</td><td>
+
+Provide membrane proofs for the app.
+
+
+</td></tr>
 </tbody></table>

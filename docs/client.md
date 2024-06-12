@@ -2257,6 +2257,16 @@ An internal link type index within the DNA, from 0 to 255.
 </td></tr>
 <tr><td>
 
+[MemproofMap](./client.memproofmap.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
 [NetworkInfoResponse](./client.networkinforesponse.md)
 
 
@@ -2318,6 +2328,26 @@ An internal link type index within the DNA, from 0 to 255.
 <tr><td>
 
 [PreflightBytes](./client.preflightbytes.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[ProvideMemproofsRequest](./client.providememproofsrequest.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[ProvideMemproofsResponse](./client.providememproofsresponse.md)
 
 
 </td><td>
