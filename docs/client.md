@@ -1041,6 +1041,26 @@ Description
 </td></tr>
 <tr><td>
 
+[Warrant](./client.warrant.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[WarrantOp](./client.warrantop.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
 [WebsocketConnectionOptions](./client.websocketconnectionoptions.md)
 
 
@@ -1150,6 +1170,17 @@ Description
 
 </td><td>
 
+
+
+</td></tr>
+<tr><td>
+
+[ActionHashAndSig](./client.actionhashandsig.md)
+
+
+</td><td>
+
+Action hash with the signature of the action at that hash
 
 
 </td></tr>
@@ -1547,6 +1578,26 @@ This type is meant to be opaque
 <tr><td>
 
 [CellInfo](./client.cellinfo.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[ChainIntegrityWarrant](./client.chainintegritywarrant.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[ChainOp](./client.chainop.md)
 
 
 </td><td>
@@ -2598,6 +2649,16 @@ An internal link type index within the DNA, from 0 to 255.
 <tr><td>
 
 [UpdateCoordinatorsResponse](./client.updatecoordinatorsresponse.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[ValidationType](./client.validationtype.md)
 
 
 </td><td>
