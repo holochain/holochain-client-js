@@ -748,7 +748,7 @@ test(
   })
 );
 
-test.only(
+test(
   "fullStateDump with ChainOps",
   withConductor(ADMIN_PORT, async (t) => {
     const { cell_id, admin } = await installAppAndDna(ADMIN_PORT);
