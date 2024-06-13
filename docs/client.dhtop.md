@@ -9,28 +9,10 @@
 
 ```typescript
 export type DhtOp = {
-    [DhtOpType.StoreRecord]: [Signature, Action, Entry | undefined];
+    ChainOp: ChainOp;
 } | {
-    [DhtOpType.StoreEntry]: [Signature, NewEntryAction, Entry];
-} | {
-    [DhtOpType.RegisterAgentActivity]: [Signature, Action];
-} | {
-    [DhtOpType.RegisterUpdatedContent]: [
-        Signature,
-        Update,
-        Entry | undefined
-    ];
-} | {
-    [DhtOpType.RegisterUpdatedRecord]: [Signature, Update, Entry | undefined];
-} | {
-    [DhtOpType.RegisterDeletedBy]: [Signature, Delete];
-} | {
-    [DhtOpType.RegisterDeletedEntryAction]: [Signature, Delete];
-} | {
-    [DhtOpType.RegisterAddLink]: [Signature, CreateLink];
-} | {
-    [DhtOpType.RegisterRemoveLink]: [Signature, DeleteLink];
+    WarrantOp: WarrantOp;
 };
 ```
-**References:** [DhtOpType.StoreRecord](./client.dhtoptype.md)<!-- -->, [Signature](./client.signature.md)<!-- -->, [Action](./client.action.md)<!-- -->, [Entry](./client.entry.md)<!-- -->, [DhtOpType.StoreEntry](./client.dhtoptype.md)<!-- -->, [NewEntryAction](./client.newentryaction.md)<!-- -->, [DhtOpType.RegisterAgentActivity](./client.dhtoptype.md)<!-- -->, [DhtOpType.RegisterUpdatedContent](./client.dhtoptype.md)<!-- -->, [Update](./client.update.md)<!-- -->, [DhtOpType.RegisterUpdatedRecord](./client.dhtoptype.md)<!-- -->, [DhtOpType.RegisterDeletedBy](./client.dhtoptype.md)<!-- -->, [Delete](./client.delete.md)<!-- -->, [DhtOpType.RegisterDeletedEntryAction](./client.dhtoptype.md)<!-- -->, [DhtOpType.RegisterAddLink](./client.dhtoptype.md)<!-- -->, [CreateLink](./client.createlink.md)<!-- -->, [DhtOpType.RegisterRemoveLink](./client.dhtoptype.md)<!-- -->, [DeleteLink](./client.deletelink.md)
+**References:** [ChainOp](./client.chainop.md)<!-- -->, [WarrantOp](./client.warrantop.md)
 

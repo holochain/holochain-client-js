@@ -25,6 +25,7 @@ import {
   RoleName,
   generateSigningKeyPair,
   AppWebsocket,
+  FullStateDump,
 } from "../../src";
 import {
   FIXTURE_PATH,
@@ -744,6 +745,19 @@ test(
     });
     t.equal(state[0].source_chain_dump.records.length, 5);
     t.equal(state[0].source_chain_dump.records[0].action.type, "Dna");
+  })
+);
+
+test.only(
+  "fullStateDump with ChainOps",
+  withConductor(ADMIN_PORT, async (t) => {
+    const { cell_id, admin } = await installAppAndDna(ADMIN_PORT);
+    const state: FullStateDump = await admin.dumpFullState({
+      cell_id,
+    });
+    for (const dhtOp of state.integration_dump.integrated) {
+      t.assert("ChainOp" in dhtOp, "dht op is a chain op");
+    }
   })
 );
 
