@@ -9,6 +9,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Fixed
 ### Removed
 
+## 2024-06-17: v0.17.0
+Release for use with the `0.3.1` version of Holochain
+
 ## 2024-05-21: v0.17.0-rc.0
 ### Added
 - Test for Rust enum serialization.
