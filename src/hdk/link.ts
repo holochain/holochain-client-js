@@ -53,6 +53,7 @@ export type RateUnits = number;
  */
 export interface Link {
   author: AgentPubKey;
+  base: AnyLinkableHash;
   target: AnyLinkableHash;
   timestamp: Timestamp;
   zome_index: ZomeIndex;
