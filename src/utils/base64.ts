@@ -1,5 +1,6 @@
 import { Base64 } from "js-base64";
-import { HoloHash, HoloHashB64 } from "../types.js";
+import { HoloHashB64 } from "../types.js";
+import { HoloHash } from "@spartan-hc/holo-hash";
 
 /**
  * Decodes a Base64 encoded string to a byte array hash.
@@ -9,8 +10,8 @@ import { HoloHash, HoloHashB64 } from "../types.js";
  *
  * @public
  */
-export function decodeHashFromBase64(hash: HoloHashB64): HoloHash {
-  return Base64.toUint8Array(hash.slice(1));
+export function decodeHashFromBase64(hash: string): HoloHash {
+  return new HoloHash( hash );
 }
 
 /**
@@ -21,6 +22,8 @@ export function decodeHashFromBase64(hash: HoloHashB64): HoloHash {
  *
  * @public
  */
-export function encodeHashToBase64(hash: HoloHash): HoloHashB64 {
-  return `u${Base64.fromUint8Array(hash, true)}`;
+export function encodeHashToBase64(hash: Uint8Array): HoloHashB64 {
+  return String(new HoloHash( hash ));
 }
+
+export * from "@spartan-hc/holo-hash";
