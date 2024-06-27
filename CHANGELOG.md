@@ -5,10 +5,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## \[Unreleased\]
 
 ### Added
+### Changed
+### Fixed
+### Removed
+
+## 2024-06-27: v0.18.0-dev.4
+
+### Added
 - Added missing `base` field to the `Link` type. This exists in Holochain but wasn't present in the client.
 
 ### Changed
 ### Fixed
+- Refer to type, not `this` in a static context to fix a bug in the `AppWebsocket` that would result in `this.requester is not a function` when the client is used in as JavaScript environment.
+
 ### Removed
 
 ## 2024-06-13: v0.18.0-dev.3
