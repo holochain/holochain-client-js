@@ -212,7 +212,7 @@ export class AppWebsocket implements AppClient {
     }
 
     const appInfo = await (
-      this.requester(client, "app_info", DEFAULT_TIMEOUT) as Requester<
+      AppWebsocket.requester(client, "app_info", DEFAULT_TIMEOUT) as Requester<
         null,
         AppInfoResponse
       >
