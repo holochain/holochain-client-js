@@ -1,4 +1,4 @@
-import { ActionHash, AgentPubKey, EntryHash } from "../types.js";
+import { HoloHash, ActionHash, AgentPubKey, EntryHash } from "@spartan-hc/holo-hash";
 import blake2b from "@bitgo/blake2b";
 
 /**
@@ -27,9 +27,11 @@ export const HASH_TYPE_PREFIX = {
  * @public
  */
 export function sliceDhtLocation(
-  hash: AgentPubKey | EntryHash | ActionHash
+  hash: HoloHash,
 ): Uint8Array {
-  return Uint8Array.from(hash.slice(36, 40));
+  return hash?.getDHTAddress
+    ? hash.getDHTAddress()
+    : Uint8Array.from(hash.slice(36, 40));
 }
 
 /**
@@ -43,9 +45,11 @@ export function sliceDhtLocation(
  * @public
  */
 export function sliceCore32(
-  hash: AgentPubKey | EntryHash | ActionHash
+  hash: HoloHash,
 ): Uint8Array {
-  return Uint8Array.from(hash.slice(3, 36));
+  return hash?.getHash
+    ? hash.getHash()
+    : Uint8Array.from(hash.slice(3, 36));
 }
 
 /**
@@ -59,9 +63,11 @@ export function sliceCore32(
  * @public
  */
 export function sliceHashType(
-  hash: AgentPubKey | EntryHash | ActionHash
+  hash: HoloHash,
 ): Uint8Array {
-  return Uint8Array.from(hash.slice(0, 3));
+  return hash?.getPrefix
+    ? hash.getPrefix()
+    : Uint8Array.from(hash.slice(0, 3));
 }
 
 /**
@@ -101,12 +107,9 @@ export function dhtLocationFrom32(hashCore: Uint8Array): Uint8Array {
  * @public
  */
 export function hashFrom32AndType(
-  hashCore: AgentPubKey | EntryHash | ActionHash,
+  hashCore: Uint8Array,
   hashType: "Agent" | "Entry" | "Dna" | "Action" | "External"
 ): Uint8Array {
-  return Uint8Array.from([
-    ...HASH_TYPE_PREFIX[hashType],
-    ...hashCore,
-    ...dhtLocationFrom32(hashCore),
-  ]);
+  return (new HoloHash(hashCore))
+    .toType(hashType === "Agent" ? "AgentPubKey" : hashType + "Hash");
 }

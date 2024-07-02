@@ -222,7 +222,7 @@ test("hashFrom32AndType generates valid hash with type and 32 core bytes", async
   const fullHash = hashFrom32AndType(core, "Agent");
 
   t.deepEqual(
-    fullHash,
+    fullHash.bytes(),
     Uint8Array.from([
       132, 32, 36, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
       1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 126, 207, 206, 190,

@@ -25,5 +25,3 @@ export function decodeHashFromBase64(hash: string): HoloHash {
 export function encodeHashToBase64(hash: Uint8Array): HoloHashB64 {
   return String(new HoloHash( hash ));
 }
-
-export * from "@spartan-hc/holo-hash";
