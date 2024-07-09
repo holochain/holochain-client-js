@@ -4,7 +4,7 @@
 
 ## sliceCore32() function
 
-Get core (center 32 bytes) from a hash
+Get core hash from a Holochain hash (32 bytes).
 
 From https://github.com/holochain/holochain/blob/develop/crates/holo\_hash/src/hash\_type/primitive.rs
 

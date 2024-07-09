@@ -4,7 +4,7 @@
 
 ## sliceHashType() function
 
-Get hash type (initial 3 bytes) from a hash
+Get hash type (initial 3 bytes) from a hash.
 
 From https://github.com/holochain/holochain/blob/develop/crates/holo\_hash/src/hash\_type/primitive.rs
 

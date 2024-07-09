@@ -53,6 +53,23 @@ Description
 </td></tr>
 <tr><td>
 
+[base](./client.link.base.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[AnyLinkableHash](./client.anylinkablehash.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
 [create\_link\_hash](./client.link.create_link_hash.md)
 
 

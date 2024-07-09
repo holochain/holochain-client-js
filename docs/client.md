@@ -194,7 +194,7 @@ Decodes a Base64 encoded string to a byte array hash.
 
 </td><td>
 
-Generate dht location (last 4 bytes) from a core hash (middle 32 bytes)
+Generate DHT location (last 4 bytes) from a core hash (middle 32 bytes).
 
 From https://github.com/holochain/holochain/blob/develop/crates/holo\_hash/src/hash\_type/primitive.rs
 
@@ -347,7 +347,7 @@ Get credentials for signing zome calls.
 
 </td><td>
 
-Generate full hash from a core hash (middle 32 bytes) and hash type label
+Generate full hash from a core hash (middle 32 bytes) and hash type label.
 
 From https://github.com/holochain/holochain/blob/develop/crates/holo\_hash/src/hash\_type/primitive.rs
 
@@ -422,7 +422,7 @@ Set credentials for signing zome calls.
 
 </td><td>
 
-Get core (center 32 bytes) from a hash
+Get core hash from a Holochain hash (32 bytes).
 
 From https://github.com/holochain/holochain/blob/develop/crates/holo\_hash/src/hash\_type/primitive.rs
 
@@ -435,7 +435,7 @@ From https://github.com/holochain/holochain/blob/develop/crates/holo\_hash/src/h
 
 </td><td>
 
-Get dht location (last 4 bytes) from a hash
+Get DHT location (last 4 bytes) from a hash.
 
 From https://github.com/holochain/holochain/blob/develop/crates/holo\_hash/src/hash\_type/primitive.rs
 
@@ -448,7 +448,7 @@ From https://github.com/holochain/holochain/blob/develop/crates/holo\_hash/src/h
 
 </td><td>
 
-Get hash type (initial 3 bytes) from a hash
+Get hash type (initial 3 bytes) from a hash.
 
 From https://github.com/holochain/holochain/blob/develop/crates/holo\_hash/src/hash\_type/primitive.rs
 
@@ -1092,7 +1092,7 @@ Description
 
 </td><td>
 
-Hash type labels and their 3 byte values (forming the first 3 bytes of hash)
+Hash type labels and their 3 byte values (forming the first 3 bytes of hash).
 
 From https://github.com/holochain/holochain/blob/develop/crates/holo\_hash/src/hash\_type/primitive.rs
 

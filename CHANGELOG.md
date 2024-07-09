@@ -7,8 +7,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Added
 ### Changed
 ### Fixed
-- Hash part utility functions for core hash and DHT location. Both were using an incorrect number of bytes.
 ### Removed
+
+## 2024-07-09: v0.17.1
+### Fixed
+- Hash part utility functions for core hash and DHT location. Both were using an incorrect number of bytes.
 
 ## 2024-06-17: v0.17.0
 Release for use with the `0.3.1` version of Holochain

@@ -4,7 +4,7 @@
 
 ## HASH\_TYPE\_PREFIX variable
 
-Hash type labels and their 3 byte values (forming the first 3 bytes of hash)
+Hash type labels and their 3 byte values (forming the first 3 bytes of hash).
 
 From https://github.com/holochain/holochain/blob/develop/crates/holo\_hash/src/hash\_type/primitive.rs
 
