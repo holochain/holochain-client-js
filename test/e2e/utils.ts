@@ -204,7 +204,7 @@ test(
   })
 );
 
-test.only("sliceDhtLocation, sliceCore32, sliceHashType extract components of a hash", async (t) => {
+test("sliceDhtLocation, sliceCore32, sliceHashType extract components of a hash", async (t) => {
   const fakeHash = await fakeDnaHash(1);
   const prefix = sliceHashType(fakeHash);
   const hash = sliceCore32(fakeHash);
