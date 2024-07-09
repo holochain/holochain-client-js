@@ -7,8 +7,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Added
 ### Changed
 ### Fixed
-- Hash part utility functions for core hash and DHT location. Both were using an incorrect number of bytes.
 ### Removed
+
+## 2024-07-09: v0.18.0-dev.5
+### Fixed
+- Hash part utility functions for core hash and DHT location. Both were using an incorrect number of bytes.
 
 ## 2024-06-27: v0.18.0-dev.4
 

@@ -4,7 +4,7 @@
 
 ## hashFrom32AndType() function
 
-Generate full hash from a core hash (middle 32 bytes) and hash type label
+Generate full hash from a core hash (middle 32 bytes) and hash type label.
 
 From https://github.com/holochain/holochain/blob/develop/crates/holo\_hash/src/hash\_type/primitive.rs
 
