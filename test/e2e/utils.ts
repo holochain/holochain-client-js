@@ -204,16 +204,16 @@ test(
   })
 );
 
-test("sliceDhtLocation, sliceCore32, sliceHashType extract components of a hash", async (t) => {
+test.only("sliceDhtLocation, sliceCore32, sliceHashType extract components of a hash", async (t) => {
   const fakeHash = await fakeDnaHash(1);
   const prefix = sliceHashType(fakeHash);
-  const core = sliceCore32(fakeHash);
-  const postfix = sliceDhtLocation(fakeHash);
+  const hash = sliceCore32(fakeHash);
+  const dhtLocation = sliceDhtLocation(fakeHash);
 
   t.deepEqual(
     fakeHash,
-    Uint8Array.from([...prefix, ...core, ...postfix]),
-    "extracted prefix, core, and postfix components of a hash concat back into the original hash"
+    Uint8Array.from([...prefix, ...hash, ...dhtLocation]),
+    "extracted hash type, core hash, and dht location components of a hash concat back into the original hash"
   );
 });
 

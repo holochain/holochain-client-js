@@ -5,10 +5,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## \[Unreleased\]
 
 ### Added
-- Added missing `base` field to the `Link` type. This exists in Holochain but wasn't present in the client.
-
 ### Changed
 ### Fixed
+- Hash part utility functions for core hash and DHT location. Both were using an incorrect number of bytes.
 ### Removed
 
 ## 2024-06-17: v0.17.0
