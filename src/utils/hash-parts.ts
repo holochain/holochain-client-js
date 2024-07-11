@@ -1,8 +1,13 @@
 import { HoloHash, ActionHash, AgentPubKey, EntryHash } from "@spartan-hc/holo-hash";
 import blake2b from "@bitgo/blake2b";
 
+const HASH_TYPE_START = 0;
+const HASH_TYPE_BYTE_LENGTH = 3;
+const CORE_HASH_BYTE_LENGTH = 32;
+const DHT_LOCATION_BYTE_LENGTH = 4;
+
 /**
- * Hash type labels and their 3 byte values (forming the first 3 bytes of hash)
+ * Hash type labels and their 3 byte values (forming the first 3 bytes of hash).
  *
  * From https://github.com/holochain/holochain/blob/develop/crates/holo_hash/src/hash_type/primitive.rs
  *
@@ -17,43 +22,7 @@ export const HASH_TYPE_PREFIX = {
 };
 
 /**
- * Get dht location (last 4 bytes) from a hash
- *
- * From https://github.com/holochain/holochain/blob/develop/crates/holo_hash/src/hash_type/primitive.rs
- *
- * @param hash - The full 39 byte hash.
- * @returns The last 4 bytes of the hash.
- *
- * @public
- */
-export function sliceDhtLocation(
-  hash: HoloHash,
-): Uint8Array {
-  return hash?.getDHTAddress
-    ? hash.getDHTAddress()
-    : Uint8Array.from(hash.slice(36, 40));
-}
-
-/**
- * Get core (center 32 bytes) from a hash
- *
- * From https://github.com/holochain/holochain/blob/develop/crates/holo_hash/src/hash_type/primitive.rs
- *
- * @param hash - The full 39 byte hash.
- * @returns The core 32 bytes of the hash.
- *
- * @public
- */
-export function sliceCore32(
-  hash: HoloHash,
-): Uint8Array {
-  return hash?.getHash
-    ? hash.getHash()
-    : Uint8Array.from(hash.slice(3, 36));
-}
-
-/**
- * Get hash type (initial 3 bytes) from a hash
+ * Get hash type (initial 3 bytes) from a hash.
  *
  * From https://github.com/holochain/holochain/blob/develop/crates/holo_hash/src/hash_type/primitive.rs
  *
@@ -71,7 +40,47 @@ export function sliceHashType(
 }
 
 /**
- * Generate dht location (last 4 bytes) from a core hash (middle 32 bytes)
+ * Get core hash from a Holochain hash (32 bytes).
+ *
+ * From https://github.com/holochain/holochain/blob/develop/crates/holo_hash/src/hash_type/primitive.rs
+ *
+ * @param hash - The full 39 byte hash.
+ * @returns The core 32 bytes of the hash.
+ *
+ * @public
+ */
+export function sliceCore32(
+  hash: HoloHash,
+): Uint8Array {
+  const start = HASH_TYPE_START + HASH_TYPE_BYTE_LENGTH;
+  const end = start + CORE_HASH_BYTE_LENGTH;
+  return hash?.getHash
+    ? hash.getHash()
+    : Uint8Array.from(hash.slice(3, 36));
+}
+
+/**
+ * Get DHT location (last 4 bytes) from a hash.
+ *
+ * From https://github.com/holochain/holochain/blob/develop/crates/holo_hash/src/hash_type/primitive.rs
+ *
+ * @param hash - The full 39 byte hash.
+ * @returns The last 4 bytes of the hash.
+ *
+ * @public
+ */
+export function sliceDhtLocation(
+  hash: HoloHash,
+): Uint8Array {
+  const start = HASH_TYPE_START + HASH_TYPE_BYTE_LENGTH + CORE_HASH_BYTE_LENGTH;
+  const end = start + DHT_LOCATION_BYTE_LENGTH;
+  return hash?.getDHTAddress
+    ? hash.getDHTAddress()
+    : Uint8Array.from(hash.slice(36, 40));
+}
+
+/**
+ * Generate DHT location (last 4 bytes) from a core hash (middle 32 bytes).
  *
  * From https://github.com/holochain/holochain/blob/develop/crates/holo_hash/src/hash_type/primitive.rs
  *
@@ -96,7 +105,7 @@ export function dhtLocationFrom32(hashCore: Uint8Array): Uint8Array {
 }
 
 /**
- * Generate full hash from a core hash (middle 32 bytes) and hash type label
+ * Generate full hash from a core hash (middle 32 bytes) and hash type label.
  *
  * From https://github.com/holochain/holochain/blob/develop/crates/holo_hash/src/hash_type/primitive.rs
  *

@@ -4,7 +4,7 @@
 
 ## dhtLocationFrom32() function
 
-Generate dht location (last 4 bytes) from a core hash (middle 32 bytes)
+Generate DHT location (last 4 bytes) from a core hash (middle 32 bytes).
 
 From https://github.com/holochain/holochain/blob/develop/crates/holo\_hash/src/hash\_type/primitive.rs
 
