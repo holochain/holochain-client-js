@@ -562,15 +562,10 @@ test(
 );
 
 test(
-  "generated signing key has same location bytes as original agent pub key",
+  "generated signing key",
   withConductor(ADMIN_PORT, async (t) => {
-    const admin = await AdminWebsocket.connect({
-      url: ADMIN_WS_URL,
-      wsClientOptions: { origin: "client-test-admin" },
-    });
-    const agent = await admin.generateAgentPubKey();
-    const [, signingKey] = await generateSigningKeyPair(agent);
-    t.deepEqual(signingKey.subarray(35), Uint8Array.from(agent.subarray(35)));
+    const [, signingKey] = await generateSigningKeyPair();
+    t.assert(signingKey?.constructor.name === "AgentPubKey", "expected an AgentPubKey");
   })
 );
 

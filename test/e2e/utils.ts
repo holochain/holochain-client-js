@@ -211,7 +211,7 @@ test("sliceDhtLocation, sliceCore32, sliceHashType extract components of a hash"
   const dhtLocation = sliceDhtLocation(fakeHash);
 
   t.deepEqual(
-    fakeHash,
+    fakeHash.bytes(),
     Uint8Array.from([...prefix, ...hash, ...dhtLocation]),
     "extracted hash type, core hash, and dht location components of a hash concat back into the original hash"
   );

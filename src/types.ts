@@ -1,35 +1,29 @@
+import {
+  HoloHash,
+  AgentPubKey,
+  DnaHash,
+  WasmHash,
+  EntryHash,
+  ActionHash,
+  AnyDhtHash,
+  AnyLinkableHash,
+  ExternalHash,
+} from "@spartan-hc/holo-hash";
+
 /**
  * @public
  */
-export type HoloHash = Uint8Array; // length 39
-/**
- * @public
- */
-export type AgentPubKey = HoloHash;
-/**
- * @public
- */
-export type DnaHash = HoloHash;
-/**
- * @public
- */
-export type WasmHash = HoloHash;
-/**
- * @public
- */
-export type EntryHash = HoloHash;
-/**
- * @public
- */
-export type ActionHash = HoloHash;
-/**
- * @public
- */
-export type AnyDhtHash = HoloHash;
-/**
- * @public
- */
-export type ExternalHash = HoloHash;
+export {
+  HoloHash,
+  AgentPubKey,
+  DnaHash,
+  WasmHash,
+  EntryHash,
+  ActionHash,
+  AnyDhtHash,
+  AnyLinkableHash,
+  ExternalHash,
+}
 
 /**
  * @public

@@ -1,5 +1,5 @@
-import { HoloHash, ActionHash, AgentPubKey, EntryHash } from "@spartan-hc/holo-hash";
 import blake2b from "@bitgo/blake2b";
+import { HoloHash } from "../types.js";
 
 const HASH_TYPE_START = 0;
 const HASH_TYPE_BYTE_LENGTH = 3;
@@ -32,11 +32,11 @@ export const HASH_TYPE_PREFIX = {
  * @public
  */
 export function sliceHashType(
-  hash: HoloHash,
+  hash: HoloHash | Uint8Array,
 ): Uint8Array {
-  return hash?.getPrefix
-    ? hash.getPrefix()
-    : Uint8Array.from(hash.slice(0, 3));
+  if (!(hash instanceof HoloHash))
+    hash = new HoloHash(hash);
+  return (hash as HoloHash).getPrefix()
 }
 
 /**
@@ -50,13 +50,13 @@ export function sliceHashType(
  * @public
  */
 export function sliceCore32(
-  hash: HoloHash,
+  hash: HoloHash | Uint8Array,
 ): Uint8Array {
+  if (!(hash instanceof HoloHash))
+    hash = new HoloHash(hash);
   const start = HASH_TYPE_START + HASH_TYPE_BYTE_LENGTH;
   const end = start + CORE_HASH_BYTE_LENGTH;
-  return hash?.getHash
-    ? hash.getHash()
-    : Uint8Array.from(hash.slice(3, 36));
+  return (hash as HoloHash).bytes(start, end);
 }
 
 /**
@@ -70,13 +70,13 @@ export function sliceCore32(
  * @public
  */
 export function sliceDhtLocation(
-  hash: HoloHash,
+  hash: HoloHash | Uint8Array,
 ): Uint8Array {
+  if (!(hash instanceof HoloHash))
+    hash = new HoloHash(hash);
   const start = HASH_TYPE_START + HASH_TYPE_BYTE_LENGTH + CORE_HASH_BYTE_LENGTH;
   const end = start + DHT_LOCATION_BYTE_LENGTH;
-  return hash?.getDHTAddress
-    ? hash.getDHTAddress()
-    : Uint8Array.from(hash.slice(36, 40));
+  return (hash as HoloHash).bytes(start, end);
 }
 
 /**
