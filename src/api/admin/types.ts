@@ -260,6 +260,7 @@ export type CoordinatorZome = ZomeDefinition;
 export type DnaDefinition = {
   name: string;
   modifiers: DnaModifiers;
+  lineage: DnaHashB64[];
   integrity_zomes: IntegrityZome[];
   coordinator_zomes: CoordinatorZome[];
 };
