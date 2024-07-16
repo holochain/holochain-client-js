@@ -14,7 +14,6 @@
       perSystem = { inputs', pkgs, ... }:
         {
           devShells.default = pkgs.mkShell {
-            # inputsFrom = [ holonix.devShells.${system}.holochainBinaries ];
             packages = [
               inputs'.holonix.packages.holochain
               inputs'.holonix.packages.lair-keystore
