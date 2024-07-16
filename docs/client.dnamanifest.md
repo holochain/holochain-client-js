@@ -14,7 +14,8 @@ export type DnaManifest = {
     network_seed?: NetworkSeed;
     properties?: DnaProperties;
     zomes: Array<ZomeManifest>;
+    lineage: DnaHashB64[];
 };
 ```
-**References:** [NetworkSeed](./client.networkseed.md)<!-- -->, [DnaProperties](./client.dnaproperties.md)<!-- -->, [ZomeManifest](./client.zomemanifest.md)
+**References:** [NetworkSeed](./client.networkseed.md)<!-- -->, [DnaProperties](./client.dnaproperties.md)<!-- -->, [ZomeManifest](./client.zomemanifest.md)<!-- -->, [DnaHashB64](./client.dnahashb64.md)
 

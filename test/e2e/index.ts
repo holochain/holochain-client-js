@@ -10,6 +10,7 @@ import {
   AppEntryDef,
   AppSignal,
   AppStatusFilter,
+  AppWebsocket,
   CallZomeRequest,
   CellProvisioningStrategy,
   CellType,
@@ -18,14 +19,14 @@ import {
   DnaBundle,
   DumpStateResponse,
   EnableAppResponse,
+  FullStateDump,
   HolochainError,
   InstalledAppInfoStatus,
   Link,
   RegisterAgentActivity,
   RoleName,
+  encodeHashToBase64,
   generateSigningKeyPair,
-  AppWebsocket,
-  FullStateDump,
 } from "../../src";
 import {
   FIXTURE_PATH,
@@ -551,10 +552,30 @@ test(
       "app is in status awaiting_memproofs"
     );
 
+    try {
+      await client.enableApp();
+      t.fail("enabling app should fail while memproofs not provided");
+    } catch (error) {
+      t.equal(
+        error.message,
+        "Other: app not in correct state to enable",
+        "enabling app fails while memproofs not provided"
+      );
+    }
+
     const response = await client.provideMemproofs({});
     t.equal(response, undefined, "memproofs provided successfully");
 
-    await admin.enableApp({ installed_app_id });
+    appInfo = await client.appInfo();
+    t.deepEqual(
+      appInfo.status,
+      { disabled: { reason: "not_started_after_providing_memproofs" } },
+      "app is disabled after providing memproofs"
+    );
+
+    await client.enableApp();
+    appInfo = await client.appInfo();
+    t.deepEqual(appInfo.status, "running", "app is running");
 
     appInfo = await client.appInfo();
     t.equal(appInfo.status, "running", "app is in status running");
@@ -711,6 +732,27 @@ test(
 
     const response = await client.callZome(zomeCallPayload, 30000);
     t.equal(response, "foo", "zome call succeeds");
+  })
+);
+
+test(
+  "get compatible cells of a cell",
+  withConductor(ADMIN_PORT, async (t) => {
+    const { installed_app_id, cell_id, admin } = await installAppAndDna(
+      ADMIN_PORT
+    );
+    const dnaHashB64 = encodeHashToBase64(cell_id[0]);
+    const a = await admin.getCompatibleCells(dnaHashB64);
+    const compatibleCells = a.values();
+    const compatibleCell_1 = compatibleCells.next();
+    t.deepEqual(
+      compatibleCell_1.value,
+      [installed_app_id, [cell_id]],
+      "compatible cells contains tuple of installed app id and cell id"
+    );
+    const next = compatibleCells.next();
+    t.equal(next.value, undefined, "no other value in set");
+    t.assert(next.done);
   })
 );
 

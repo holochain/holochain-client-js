@@ -137,6 +137,14 @@ export type ProvideMemproofsRequest = MemproofMap;
  * @public
  */
 export type ProvideMemproofsResponse = void;
+/**
+ * @public
+ */
+export type EnableRequest = void;
+/**
+ * @public
+ */
+export type EnableResponse = void;
 
 /**
  * @public

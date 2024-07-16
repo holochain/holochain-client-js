@@ -1917,6 +1917,26 @@ This type is meant to be opaque
 </td></tr>
 <tr><td>
 
+[EnableRequest](./client.enablerequest.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[EnableResponse](./client.enableresponse.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
 [EncodedAppSignal](./client.encodedappsignal.md)
 
 
@@ -2008,6 +2028,26 @@ This type is meant to be opaque
 <tr><td>
 
 [GenerateAgentPubKeyResponse](./client.generateagentpubkeyresponse.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[GetCompatibleCellsRequest](./client.getcompatiblecellsrequest.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[GetCompatibleCellsResponse](./client.getcompatiblecellsresponse.md)
 
 
 </td><td>

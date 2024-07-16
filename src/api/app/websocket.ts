@@ -41,6 +41,8 @@ import {
   CallZomeTransform,
   ProvideMemproofsRequest,
   ProvideMemproofsResponse,
+  EnableRequest,
+  EnableResponse,
 } from "./types.js";
 import {
   getHostZomeCallSigner,
@@ -87,6 +89,7 @@ export class AppWebsocket implements AppClient {
     ProvideMemproofsRequest,
     ProvideMemproofsResponse
   >;
+  private readonly enableAppRequester: Requester<EnableRequest, EnableResponse>;
   private readonly createCloneCellRequester: Requester<
     CreateCloneCellRequest,
     CreateCloneCellResponse
@@ -132,6 +135,11 @@ export class AppWebsocket implements AppClient {
     this.provideMemproofRequester = AppWebsocket.requester(
       this.client,
       "provide_memproofs",
+      this.defaultTimeout
+    );
+    this.enableAppRequester = AppWebsocket.requester(
+      this.client,
+      "enable_app",
       this.defaultTimeout
     );
     this.createCloneCellRequester = AppWebsocket.requester(
@@ -258,6 +266,14 @@ export class AppWebsocket implements AppClient {
    */
   async provideMemproofs(memproofs: MemproofMap) {
     await this.provideMemproofRequester(memproofs);
+  }
+
+  /**
+   * Enablie an app only if the app is in the `AppStatus::Disabled(DisabledAppReason::NotStartedAfterProvidingMemproofs)`
+   * state. Attempting to enable the app from other states (other than Running) will fail.
+   */
+  async enableApp() {
+    await this.enableAppRequester();
   }
 
   /**

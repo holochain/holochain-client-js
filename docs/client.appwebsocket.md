@@ -206,6 +206,20 @@ Disable an enabled clone cell.
 </td></tr>
 <tr><td>
 
+[enableApp()](./client.appwebsocket.enableapp.md)
+
+
+</td><td>
+
+
+</td><td>
+
+Enablie an app only if the app is in the `AppStatus::Disabled(DisabledAppReason::NotStartedAfterProvidingMemproofs)` state. Attempting to enable the app from other states (other than Running) will fail.
+
+
+</td></tr>
+<tr><td>
+
 [enableCloneCell(args)](./client.appwebsocket.enableclonecell.md)
 
 

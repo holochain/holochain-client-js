@@ -5,6 +5,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## \[Unreleased\]
 
 ### Added
+- New value `NotStartedAfterProvidingMemproofs` for type `DisabledAppReason` which effectively allows a new app status, corresponding to the specific state where a UI has just called AppRequest::ProvideMemproofs, but the app has not yet been enabled for the first time.
+- New `AppWebsocket` call `EnableAfterMemproofsProvided`, which allows enabling an app only if the app is in the `AppStatus::Disabled(DisabledAppReason::NotStartedAfterProvidingMemproofs)` state. Attempting to enable the app from other states (other than Running) will fail.
+- New field `lineage` to the DNA manifest, which declares forward compatibility for any hash in that list with this DNA.
+- New `AdminWebsocket` call `GetCompatibleCells`, which returns `CellId` for all installed cells which use a DNA that is forward-compatible with a given DNA hash. This can be used to find a compatible cell for use with the UseExisting cell provisioning method.
+
 ### Changed
 ### Fixed
 ### Removed
