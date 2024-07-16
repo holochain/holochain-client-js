@@ -69,7 +69,11 @@ export type PausedAppReason = {
 /**
  * @public
  */
-export type DisabledAppReason = "never_started" | "user" | { error: string };
+export type DisabledAppReason =
+  | "never_started"
+  | "user"
+  | "not_started_after_providing_memproofs"
+  | { error: string };
 
 /**
  * @public

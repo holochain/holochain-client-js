@@ -494,7 +494,7 @@ test(
   })
 );
 
-test(
+test.only(
   "memproofs can be provided after app installation",
   withConductor(ADMIN_PORT, async (t) => {
     const role_name = "foo";
@@ -551,10 +551,30 @@ test(
       "app is in status awaiting_memproofs"
     );
 
+    try {
+      await client.enableApp();
+      t.fail("enabling app should fail while memproofs not provided");
+    } catch (error) {
+      t.equal(
+        error.message,
+        "Other: app not in correct state to enable",
+        "enabling app fails while memproofs not provided"
+      );
+    }
+
     const response = await client.provideMemproofs({});
     t.equal(response, undefined, "memproofs provided successfully");
 
-    await admin.enableApp({ installed_app_id });
+    appInfo = await client.appInfo();
+    t.deepEqual(
+      appInfo.status,
+      { disabled: { reason: "not_started_after_providing_memproofs" } },
+      "app is disabled after providing memproofs"
+    );
+
+    await client.enableApp();
+    appInfo = await client.appInfo();
+    t.deepEqual(appInfo.status, "running", "app is running");
 
     appInfo = await client.appInfo();
     t.equal(appInfo.status, "running", "app is in status running");
