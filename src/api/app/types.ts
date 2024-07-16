@@ -140,11 +140,11 @@ export type ProvideMemproofsResponse = void;
 /**
  * @public
  */
-export type EnableAppRequest = void;
+export type EnableRequest = void;
 /**
  * @public
  */
-export type EnableAppResponse = void;
+export type EnableResponse = void;
 
 /**
  * @public

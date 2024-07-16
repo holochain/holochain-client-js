@@ -41,8 +41,8 @@ import {
   CallZomeTransform,
   ProvideMemproofsRequest,
   ProvideMemproofsResponse,
-  EnableAppRequest,
-  EnableAppResponse,
+  EnableRequest,
+  EnableResponse,
 } from "./types.js";
 import {
   getHostZomeCallSigner,
@@ -89,10 +89,7 @@ export class AppWebsocket implements AppClient {
     ProvideMemproofsRequest,
     ProvideMemproofsResponse
   >;
-  private readonly enableAppRequester: Requester<
-    EnableAppRequest,
-    EnableAppResponse
-  >;
+  private readonly enableAppRequester: Requester<EnableRequest, EnableResponse>;
   private readonly createCloneCellRequester: Requester<
     CreateCloneCellRequest,
     CreateCloneCellResponse
