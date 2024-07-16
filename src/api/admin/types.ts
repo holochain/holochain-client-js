@@ -4,6 +4,7 @@ import {
   AgentPubKey,
   CellId,
   DnaHash,
+  DnaHashB64,
   DnaProperties,
   Duration,
   HoloHash,
@@ -271,6 +272,15 @@ export type GetDnaDefinitionRequest = DnaHash;
  * @public
  */
 export type GetDnaDefinitionResponse = DnaDefinition;
+
+/**
+ * @public
+ */
+export type GetCompatibleCellsRequest = DnaHashB64;
+/**
+ * @public
+ */
+export type GetCompatibleCellsResponse = Set<[InstalledAppId, Set<CellId>]>;
 
 /**
  * @public
@@ -698,6 +708,27 @@ export type DnaManifest = {
    * The order is significant: it determines initialization order.
    */
   zomes: Array<ZomeManifest>;
+
+  /**
+   *  A list of past "ancestors" of this DNA.
+   *
+   * Whenever a DNA is created which is intended to be used as a migration from
+   * a previous DNA, the lineage should be updated to include the hash of the
+   * DNA being migrated from. DNA hashes may also be removed from this list if
+   * it is desired to remove them from the lineage.
+   *
+   * The meaning of the "ancestor" relationship is as follows:
+   * - For any DNA, there is a migration path from any of its ancestors to itself.
+   * - When an app depends on a DnaHash via UseExisting, it means that any installed
+   *     DNA in the lineage which contains that DnaHash can be used.
+   * - The app's Coordinator interface is expected to be compatible across the lineage.
+   *     (Though this cannot be enforced, since Coordinators can be swapped out at
+   *      will by the user, the intention is still there.)
+   *
+   * Holochain does nothing to ensure the correctness of the lineage, it is up to
+   * the app developer to make the necessary guarantees.
+   */
+  lineage: DnaHashB64[];
 };
 
 /**

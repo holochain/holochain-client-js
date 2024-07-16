@@ -26,6 +26,7 @@ import {
   generateSigningKeyPair,
   AppWebsocket,
   FullStateDump,
+  encodeHashToBase64,
 } from "../../src";
 import {
   FIXTURE_PATH,
@@ -494,7 +495,7 @@ test(
   })
 );
 
-test.only(
+test(
   "memproofs can be provided after app installation",
   withConductor(ADMIN_PORT, async (t) => {
     const role_name = "foo";
@@ -731,6 +732,27 @@ test(
 
     const response = await client.callZome(zomeCallPayload, 30000);
     t.equal(response, "foo", "zome call succeeds");
+  })
+);
+
+test(
+  "get compatible cells of a cell",
+  withConductor(ADMIN_PORT, async (t) => {
+    const { installed_app_id, cell_id, admin } = await installAppAndDna(
+      ADMIN_PORT
+    );
+    const dnaHashB64 = encodeHashToBase64(cell_id[0]);
+    const a = await admin.getCompatibleCells(dnaHashB64);
+    const compatibleCells = a.values();
+    const compatibleCell_1 = compatibleCells.next();
+    t.deepEqual(
+      compatibleCell_1.value,
+      [installed_app_id, [cell_id]],
+      "compatible cells contains tuple of installed app id and cell id"
+    );
+    const next = compatibleCells.next();
+    t.equal(next.value, undefined, "no other value in set");
+    t.assert(next.done);
   })
 );
 
