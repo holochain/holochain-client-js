@@ -586,7 +586,10 @@ test(
   "generated signing key",
   withConductor(ADMIN_PORT, async (t) => {
     const [, signingKey] = await generateSigningKeyPair();
-    t.assert(signingKey?.constructor.name === "AgentPubKey", "expected an AgentPubKey");
+    t.assert(
+      signingKey?.constructor.name === "AgentPubKey",
+      "expected an AgentPubKey"
+    );
   })
 );
 

@@ -15,5 +15,5 @@ export type AppInfo = {
     status: InstalledAppInfoStatus;
 };
 ```
-**References:** [AgentPubKey](./client.agentpubkey.md)<!-- -->, [InstalledAppId](./client.installedappid.md)<!-- -->, [RoleName](./client.rolename.md)<!-- -->, [CellInfo](./client.cellinfo.md)<!-- -->, [InstalledAppInfoStatus](./client.installedappinfostatus.md)
+**References:** [InstalledAppId](./client.installedappid.md)<!-- -->, [RoleName](./client.rolename.md)<!-- -->, [CellInfo](./client.cellinfo.md)<!-- -->, [InstalledAppInfoStatus](./client.installedappinfostatus.md)
 

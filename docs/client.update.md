@@ -61,7 +61,7 @@ number
 
 </td><td>
 
-[AgentPubKey](./client.agentpubkey.md)
+AgentPubKey
 
 
 </td><td>
@@ -78,7 +78,7 @@ number
 
 </td><td>
 
-[EntryHash](./client.entryhash.md)
+EntryHash
 
 
 </td><td>
@@ -112,7 +112,7 @@ number
 
 </td><td>
 
-[ActionHash](./client.actionhash.md)
+ActionHash
 
 
 </td><td>
@@ -129,7 +129,7 @@ number
 
 </td><td>
 
-[EntryHash](./client.entryhash.md)
+EntryHash
 
 
 </td><td>
@@ -146,7 +146,7 @@ number
 
 </td><td>
 
-[ActionHash](./client.actionhash.md)
+ActionHash
 
 
 </td><td>

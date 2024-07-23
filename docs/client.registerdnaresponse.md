@@ -10,5 +10,3 @@
 ```typescript
 export type RegisterDnaResponse = HoloHash;
 ```
-**References:** [HoloHash](./client.holohash.md)
-

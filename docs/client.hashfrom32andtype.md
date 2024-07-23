@@ -11,7 +11,7 @@ From https://github.com/holochain/holochain/blob/develop/crates/holo\_hash/src/h
 **Signature:**
 
 ```typescript
-export declare function hashFrom32AndType(hashCore: AgentPubKey | EntryHash | ActionHash, hashType: "Agent" | "Entry" | "Dna" | "Action" | "External"): Uint8Array;
+export declare function hashFrom32AndType(hashCore: Uint8Array, hashType: "Agent" | "Entry" | "Dna" | "Action" | "External"): Uint8Array;
 ```
 
 ## Parameters
@@ -39,7 +39,7 @@ hashCore
 
 </td><td>
 
-[AgentPubKey](./client.agentpubkey.md) \| [EntryHash](./client.entryhash.md) \| [ActionHash](./client.actionhash.md)
+Uint8Array
 
 
 </td><td>

@@ -44,7 +44,7 @@ Description
 
 </td><td>
 
-[AgentPubKey](./client.agentpubkey.md)
+AgentPubKey
 
 
 </td><td>

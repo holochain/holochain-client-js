@@ -82,7 +82,7 @@ The info of this agent's cell.
 
 </td><td>
 
-\[[AgentPubKey](./client.agentpubkey.md)<!-- -->, [KitsuneAgent](./client.kitsuneagent.md)<!-- -->\] \| undefined
+\[AgentPubKey, [KitsuneAgent](./client.kitsuneagent.md)<!-- -->\] \| undefined
 
 
 </td><td>
@@ -101,7 +101,7 @@ The agent as \[`AgentPubKey`<!-- -->\] and \[`kitsune_p2p::KitsuneAgent`<!-- -->
 
 </td><td>
 
-\[[DnaHash](./client.dnahash.md)<!-- -->, [KitsuneSpace](./client.kitsunespace.md)<!-- -->\] \| undefined
+\[DnaHash, [KitsuneSpace](./client.kitsunespace.md)<!-- -->\] \| undefined
 
 
 </td><td>

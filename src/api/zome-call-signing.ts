@@ -59,14 +59,15 @@ export const setSigningCredentials = (
  *
  * @public
  */
-export const generateSigningKeyPair: () => Promise<[KeyPair, AgentPubKey]> =
-  async () => {
-    await _sodium.ready;
-    const sodium = _sodium;
-    const keyPair = sodium.crypto_sign_keypair();
-    const signingKey = new AgentPubKey(keyPair.publicKey);
-    return [keyPair, signingKey];
-  };
+export const generateSigningKeyPair: () => Promise<
+  [KeyPair, AgentPubKey]
+> = async () => {
+  await _sodium.ready;
+  const sodium = _sodium;
+  const keyPair = sodium.crypto_sign_keypair();
+  const signingKey = new AgentPubKey(keyPair.publicKey);
+  return [keyPair, signingKey];
+};
 
 /**
  * @public

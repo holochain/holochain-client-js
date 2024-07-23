@@ -9,6 +9,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Fixed
 ### Removed
 
+## 2024-07-23: v0.18.0-dev.7
+### Changed
+- Use package @spartan-hc/holo-hash for managing hashes, instead of custom functions.
+
 ## 2024-07-16: v0.18.0-dev.6
 ### Added
 - New value `NotStartedAfterProvidingMemproofs` for type `DisabledAppReason` which effectively allows a new app status, corresponding to the specific state where a UI has just called AppRequest::ProvideMemproofs, but the app has not yet been enabled for the first time.

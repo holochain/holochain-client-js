@@ -16,5 +16,5 @@ export type ZomeDefinition = [
     }
 ];
 ```
-**References:** [ZomeName](./client.zomename.md)<!-- -->, [WasmHash](./client.wasmhash.md)
+**References:** [ZomeName](./client.zomename.md)
 

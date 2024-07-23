@@ -61,7 +61,7 @@ Description
 
 </td><td>
 
-[ActionHash](./client.actionhash.md)
+ActionHash
 
 
 </td><td>
@@ -78,7 +78,7 @@ Description
 
 </td><td>
 
-[EntryHash](./client.entryhash.md)
+EntryHash
 
 
 </td><td>

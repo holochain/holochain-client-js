@@ -10,5 +10,5 @@
 ```typescript
 export type CounterSigningAgents = Array<[AgentPubKey, Array<Role>]>;
 ```
-**References:** [AgentPubKey](./client.agentpubkey.md)<!-- -->, [Role](./client.role.md)
+**References:** [Role](./client.role.md)
 

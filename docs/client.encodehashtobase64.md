@@ -9,7 +9,7 @@ Encode a byte array hash to a Base64 string.
 **Signature:**
 
 ```typescript
-export declare function encodeHashToBase64(hash: HoloHash): HoloHashB64;
+export declare function encodeHashToBase64(hash: Uint8Array): HoloHashB64;
 ```
 
 ## Parameters
@@ -37,7 +37,7 @@ hash
 
 </td><td>
 
-[HoloHash](./client.holohash.md)
+Uint8Array
 
 
 </td><td>

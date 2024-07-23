@@ -49,7 +49,7 @@ _(Optional)_ Optionally specify a byte to repeat for all core 32 bytes. If undef
 </tbody></table>
 **Returns:**
 
-Promise&lt;[AgentPubKey](./client.agentpubkey.md)<!-- -->&gt;
+Promise&lt;AgentPubKey&gt;
 
-An [AgentPubKey](./client.agentpubkey.md)<!-- -->.
+An instance ofAgentPubKey.
 

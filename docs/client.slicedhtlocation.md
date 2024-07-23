@@ -11,7 +11,7 @@ From https://github.com/holochain/holochain/blob/develop/crates/holo\_hash/src/h
 **Signature:**
 
 ```typescript
-export declare function sliceDhtLocation(hash: AgentPubKey | EntryHash | ActionHash): Uint8Array;
+export declare function sliceDhtLocation(hash: HoloHash | Uint8Array): Uint8Array;
 ```
 
 ## Parameters
@@ -39,7 +39,7 @@ hash
 
 </td><td>
 
-[AgentPubKey](./client.agentpubkey.md) \| [EntryHash](./client.entryhash.md) \| [ActionHash](./client.actionhash.md)
+HoloHash \| Uint8Array
 
 
 </td><td>

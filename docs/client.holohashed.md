@@ -61,7 +61,7 @@ T
 
 </td><td>
 
-[HoloHash](./client.holohash.md)
+HoloHash
 
 
 </td><td>

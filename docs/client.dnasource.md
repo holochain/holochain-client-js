@@ -16,5 +16,5 @@ export type DnaSource = {
     bundle: DnaBundle;
 };
 ```
-**References:** [HoloHash](./client.holohash.md)<!-- -->, [DnaBundle](./client.dnabundle.md)
+**References:** [DnaBundle](./client.dnabundle.md)
 

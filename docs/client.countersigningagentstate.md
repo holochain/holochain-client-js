@@ -78,7 +78,7 @@ number
 
 </td><td>
 
-[ActionHash](./client.actionhash.md)
+ActionHash
 
 
 </td><td>

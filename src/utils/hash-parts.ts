@@ -31,12 +31,9 @@ export const HASH_TYPE_PREFIX = {
  *
  * @public
  */
-export function sliceHashType(
-  hash: HoloHash | Uint8Array,
-): Uint8Array {
-  if (!(hash instanceof HoloHash))
-    hash = new HoloHash(hash);
-  return (hash as HoloHash).getPrefix()
+export function sliceHashType(hash: HoloHash | Uint8Array): Uint8Array {
+  if (!(hash instanceof HoloHash)) hash = new HoloHash(hash);
+  return (hash as HoloHash).getPrefix();
 }
 
 /**
@@ -49,11 +46,8 @@ export function sliceHashType(
  *
  * @public
  */
-export function sliceCore32(
-  hash: HoloHash | Uint8Array,
-): Uint8Array {
-  if (!(hash instanceof HoloHash))
-    hash = new HoloHash(hash);
+export function sliceCore32(hash: HoloHash | Uint8Array): Uint8Array {
+  if (!(hash instanceof HoloHash)) hash = new HoloHash(hash);
   const start = HASH_TYPE_START + HASH_TYPE_BYTE_LENGTH;
   const end = start + CORE_HASH_BYTE_LENGTH;
   return (hash as HoloHash).bytes(start, end);
@@ -69,11 +63,8 @@ export function sliceCore32(
  *
  * @public
  */
-export function sliceDhtLocation(
-  hash: HoloHash | Uint8Array,
-): Uint8Array {
-  if (hash instanceof Uint8Array)
-    hash = new HoloHash(hash);
+export function sliceDhtLocation(hash: HoloHash | Uint8Array): Uint8Array {
+  if (hash instanceof Uint8Array) hash = new HoloHash(hash);
   const start = HASH_TYPE_START + HASH_TYPE_BYTE_LENGTH + CORE_HASH_BYTE_LENGTH;
   const end = start + DHT_LOCATION_BYTE_LENGTH;
   return (hash as HoloHash).bytes(start, end);
@@ -119,6 +110,7 @@ export function hashFrom32AndType(
   hashCore: Uint8Array,
   hashType: "Agent" | "Entry" | "Dna" | "Action" | "External"
 ): Uint8Array {
-  return (new HoloHash(hashCore))
-    .toType(hashType === "Agent" ? "AgentPubKey" : hashType + "Hash");
+  return new HoloHash(hashCore).toType(
+    hashType === "Agent" ? "AgentPubKey" : hashType + "Hash"
+  );
 }

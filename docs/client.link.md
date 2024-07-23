@@ -44,7 +44,7 @@ Description
 
 </td><td>
 
-[AgentPubKey](./client.agentpubkey.md)
+AgentPubKey
 
 
 </td><td>
@@ -61,7 +61,7 @@ Description
 
 </td><td>
 
-[AnyLinkableHash](./client.anylinkablehash.md)
+AnyLinkableHash
 
 
 </td><td>
@@ -78,7 +78,7 @@ Description
 
 </td><td>
 
-[ActionHash](./client.actionhash.md)
+ActionHash
 
 
 </td><td>
@@ -129,7 +129,7 @@ Uint8Array
 
 </td><td>
 
-[AnyLinkableHash](./client.anylinkablehash.md)
+AnyLinkableHash
 
 
 </td><td>

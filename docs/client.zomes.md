@@ -12,5 +12,3 @@ export type Zomes = Array<[string, {
     wasm_hash: Array<HoloHash>;
 }]>;
 ```
-**References:** [HoloHash](./client.holohash.md)
-

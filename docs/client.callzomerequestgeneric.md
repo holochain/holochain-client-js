@@ -16,5 +16,5 @@ export type CallZomeRequestGeneric<Payload> = {
     provenance: AgentPubKey;
 };
 ```
-**References:** [CellId](./client.cellid.md)<!-- -->, [ZomeName](./client.zomename.md)<!-- -->, [FunctionName](./client.functionname.md)<!-- -->, [AgentPubKey](./client.agentpubkey.md)
+**References:** [CellId](./client.cellid.md)<!-- -->, [ZomeName](./client.zomename.md)<!-- -->, [FunctionName](./client.functionname.md)
 

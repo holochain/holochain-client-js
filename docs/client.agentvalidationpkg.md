@@ -61,7 +61,7 @@ number
 
 </td><td>
 
-[AgentPubKey](./client.agentpubkey.md)
+AgentPubKey
 
 
 </td><td>
@@ -95,7 +95,7 @@ any
 
 </td><td>
 
-[ActionHash](./client.actionhash.md)
+ActionHash
 
 
 </td><td>

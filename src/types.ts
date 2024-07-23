@@ -23,7 +23,7 @@ export {
   AnyDhtHash,
   AnyLinkableHash,
   ExternalHash,
-}
+};
 
 /**
  * @public

@@ -9,7 +9,7 @@ Decodes a Base64 encoded string to a byte array hash.
 **Signature:**
 
 ```typescript
-export declare function decodeHashFromBase64(hash: HoloHashB64): HoloHash;
+export declare function decodeHashFromBase64(hash: string): HoloHash;
 ```
 
 ## Parameters
@@ -37,7 +37,7 @@ hash
 
 </td><td>
 
-[HoloHashB64](./client.holohashb64.md)
+string
 
 
 </td><td>
@@ -49,7 +49,7 @@ The Base64 encoded string to decode.
 </tbody></table>
 **Returns:**
 
-[HoloHash](./client.holohash.md)
+HoloHash
 
 The hash in byte format.
 

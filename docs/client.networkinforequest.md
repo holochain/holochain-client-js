@@ -44,7 +44,7 @@ Description
 
 </td><td>
 
-[AgentPubKey](./client.agentpubkey.md)
+AgentPubKey
 
 
 </td><td>
@@ -63,7 +63,7 @@ The calling agent
 
 </td><td>
 
-[DnaHash](./client.dnahash.md)<!-- -->\[\]
+DnaHash\[\]
 
 
 </td><td>

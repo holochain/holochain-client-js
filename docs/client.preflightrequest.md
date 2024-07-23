@@ -61,7 +61,7 @@ Description
 
 </td><td>
 
-[EntryHash](./client.entryhash.md)
+EntryHash
 
 
 </td><td>

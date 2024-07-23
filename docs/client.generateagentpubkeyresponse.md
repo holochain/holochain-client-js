@@ -10,5 +10,3 @@
 ```typescript
 export type GenerateAgentPubKeyResponse = AgentPubKey;
 ```
-**References:** [AgentPubKey](./client.agentpubkey.md)
-

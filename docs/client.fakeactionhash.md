@@ -49,7 +49,7 @@ _(Optional)_ Optionally specify a byte to repeat for all core 32 bytes. If undef
 </tbody></table>
 **Returns:**
 
-Promise&lt;[ActionHash](./client.actionhash.md)<!-- -->&gt;
+Promise&lt;ActionHash&gt;
 
-An [ActionHash](./client.actionhash.md)<!-- -->.
+An instance of ActionHash.
 

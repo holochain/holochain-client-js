@@ -10,5 +10,3 @@
 ```typescript
 export type CellId = [DnaHash, AgentPubKey];
 ```
-**References:** [DnaHash](./client.dnahash.md)<!-- -->, [AgentPubKey](./client.agentpubkey.md)
-

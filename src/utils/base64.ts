@@ -11,7 +11,7 @@ import { HoloHash } from "@spartan-hc/holo-hash";
  * @public
  */
 export function decodeHashFromBase64(hash: string): HoloHash {
-  return new HoloHash( hash );
+  return new HoloHash(hash);
 }
 
 /**
@@ -23,5 +23,5 @@ export function decodeHashFromBase64(hash: string): HoloHash {
  * @public
  */
 export function encodeHashToBase64(hash: Uint8Array): HoloHashB64 {
-  return String(new HoloHash( hash ));
+  return String(new HoloHash(hash));
 }

@@ -14,5 +14,5 @@ export type InstallAppDnaPayload = {
     membrane_proof?: MembraneProof;
 };
 ```
-**References:** [HoloHash](./client.holohash.md)<!-- -->, [RoleName](./client.rolename.md)<!-- -->, [MembraneProof](./client.membraneproof.md)
+**References:** [RoleName](./client.rolename.md)<!-- -->, [MembraneProof](./client.membraneproof.md)
 

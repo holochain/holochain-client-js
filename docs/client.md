@@ -259,7 +259,7 @@ From https://github.com/holochain/holochain/blob/develop/crates/holo\_hash/src/h
 </td></tr>
 <tr><td>
 
-[generateSigningKeyPair(agentPubKey)](./client.generatesigningkeypair.md)
+[generateSigningKeyPair()](./client.generatesigningkeypair.md)
 
 
 </td><td>
@@ -1165,16 +1165,6 @@ Description
 </td></tr>
 <tr><td>
 
-[ActionHash](./client.actionhash.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
 [ActionHashAndSig](./client.actionhashandsig.md)
 
 
@@ -1257,16 +1247,6 @@ This type is meant to be opaque
 </td></tr>
 <tr><td>
 
-[AgentPubKey](./client.agentpubkey.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
 [AgentPubKeyB64](./client.agentpubkeyb64.md)
 
 
@@ -1277,27 +1257,7 @@ This type is meant to be opaque
 </td></tr>
 <tr><td>
 
-[AnyDhtHash](./client.anydhthash.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
 [AnyDhtHashB64](./client.anydhthashb64.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[AnyLinkableHash](./client.anylinkablehash.md)
 
 
 </td><td>
@@ -1737,16 +1697,6 @@ This type is meant to be opaque
 </td></tr>
 <tr><td>
 
-[DnaHash](./client.dnahash.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
 [DnaHashB64](./client.dnahashb64.md)
 
 
@@ -1957,16 +1907,6 @@ This type is meant to be opaque
 </td></tr>
 <tr><td>
 
-[EntryHash](./client.entryhash.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
 [EntryHashB64](./client.entryhashb64.md)
 
 
@@ -1988,16 +1928,6 @@ This type is meant to be opaque
 <tr><td>
 
 [EntryVisibility](./client.entryvisibility.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[ExternalHash](./client.externalhash.md)
 
 
 </td><td>
@@ -2088,16 +2018,6 @@ This type is meant to be opaque
 <tr><td>
 
 [GrantZomeCallCapabilityResponse](./client.grantzomecallcapabilityresponse.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[HoloHash](./client.holohash.md)
 
 
 </td><td>
@@ -2709,16 +2629,6 @@ An internal link type index within the DNA, from 0 to 255.
 <tr><td>
 
 [WasmCode](./client.wasmcode.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[WasmHash](./client.wasmhash.md)
 
 
 </td><td>
