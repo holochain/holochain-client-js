@@ -11,7 +11,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## 2024-07-23: v0.18.0-dev.7
 ### Changed
-- Use package @spartan-hc/holo-hash for managing hashes, instead of custom functions.
+- **BREAKING**: Use package @spartan-hc/holo-hash for managing hashes, instead of custom functions. `AgentPubKey` is a new type now instead of a `Uint8Array`.
 
 ## 2024-07-16: v0.18.0-dev.6
 ### Added
