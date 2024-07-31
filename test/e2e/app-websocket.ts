@@ -325,9 +325,9 @@ test(
 
     const myPubKey = appWs.myPubKey;
     const appInfo = await appWs.appInfo();
-    
+
     t.deepEqual(myPubKey, appInfo.agent_pub_key);
-    t.deepEqual(myPubKey.getHashB64(), appInfo.agent_pub_key.getHashB64());
+    t.deepEqual(myPubKey.toString(), appInfo.agent_pub_key.toString());
     t.deepEqual(myPubKey.toBytes(), appInfo.agent_pub_key.toBytes());
   })
 );
