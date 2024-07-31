@@ -12,6 +12,7 @@ import {
   fakeAgentPubKey,
   NonProvenanceCallZomeRequest,
   RoleName,
+  AgentPubKey,
 } from "../../src";
 import {
   createAppWsAndInstallApp,
@@ -309,5 +310,24 @@ test(
         completed_rounds_since_last_time_queried: 0,
       },
     ]);
+  })
+);
+
+test(
+  "can read myPubKey",
+  withConductor(ADMIN_PORT, async (t) => {
+    const {
+      installed_app_id,
+      cell_id,
+      client: appWs,
+      admin,
+    } = await createAppWsAndInstallApp(ADMIN_PORT);
+
+    const myPubKey = appWs.myPubKey;
+    const appInfo = await appWs.appInfo();
+    
+    t.deepEqual(myPubKey, appInfo.agent_pub_key);
+    t.deepEqual(myPubKey.getHashB64(), appInfo.agent_pub_key.getHashB64());
+    t.deepEqual(myPubKey.toBytes(), appInfo.agent_pub_key.toBytes());
   })
 );
