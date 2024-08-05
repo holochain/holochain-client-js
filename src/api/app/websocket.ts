@@ -231,6 +231,7 @@ export class AppWebsocket implements AppClient {
         `The app your connection token was issued for was not found. The app needs to be installed and enabled.`
       );
     }
+    appInfo.agent_pub_key = new AgentPubKey(appInfo.agent_pub_key);
 
     return new AppWebsocket(
       client,
@@ -254,6 +255,7 @@ export class AppWebsocket implements AppClient {
         `App info not found. App needs to be installed and enabled.`
       );
     }
+    appInfo.agent_pub_key = new AgentPubKey(appInfo.agent_pub_key);
 
     this.cachedAppInfo = appInfo;
     return appInfo;
