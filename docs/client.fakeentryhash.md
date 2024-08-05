@@ -51,7 +51,7 @@ _(Optional)_ Optionally specify a byte to repeat for all core 32 bytes. If undef
 </tbody></table>
 **Returns:**
 
-Promise&lt;EntryHash&gt;
+Promise&lt;[EntryHash](./client.entryhash.md)<!-- -->&gt;
 
-An instance of EntryHash.
+An [EntryHash](./client.entryhash.md)<!-- -->.
 

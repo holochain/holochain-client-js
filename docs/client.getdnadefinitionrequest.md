@@ -10,3 +10,5 @@
 ```typescript
 export type GetDnaDefinitionRequest = DnaHash;
 ```
+**References:** [DnaHash](./client.dnahash.md)
+

@@ -10,5 +10,5 @@
 ```typescript
 export type Entry = EntryContent<"Agent", AgentPubKey> | EntryContent<"App", Uint8Array> | EntryContent<"CounterSign", [CounterSigningSessionData, Uint8Array]> | EntryContent<"CapGrant", ZomeCallCapGrant> | EntryContent<"CapClaim", CapClaim>;
 ```
-**References:** [EntryContent](./client.entrycontent.md)<!-- -->, [CounterSigningSessionData](./client.countersigningsessiondata.md)<!-- -->, [ZomeCallCapGrant](./client.zomecallcapgrant.md)<!-- -->, [CapClaim](./client.capclaim.md)
+**References:** [EntryContent](./client.entrycontent.md)<!-- -->, [AgentPubKey](./client.agentpubkey.md)<!-- -->, [CounterSigningSessionData](./client.countersigningsessiondata.md)<!-- -->, [ZomeCallCapGrant](./client.zomecallcapgrant.md)<!-- -->, [CapClaim](./client.capclaim.md)
 

@@ -329,7 +329,7 @@ Get the DNA definition for the specified DNA hash.
 
 </td><td>
 
-(cellId: [CellId](./client.cellid.md)<!-- -->, functions: [GrantedFunctions](./client.grantedfunctions.md)<!-- -->, signingKey: AgentPubKey) =&gt; Promise&lt;[CapSecret](./client.capsecret.md)<!-- -->&gt;
+(cellId: [CellId](./client.cellid.md)<!-- -->, functions: [GrantedFunctions](./client.grantedfunctions.md)<!-- -->, signingKey: [AgentPubKey](./client.agentpubkey.md)<!-- -->) =&gt; Promise&lt;[CapSecret](./client.capsecret.md)<!-- -->&gt;
 
 
 </td><td>

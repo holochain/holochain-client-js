@@ -21,5 +21,5 @@ export type ChainIntegrityWarrant = {
     };
 };
 ```
-**References:** [ActionHashAndSig](./client.actionhashandsig.md)<!-- -->, [ValidationType](./client.validationtype.md)
+**References:** [AgentPubKey](./client.agentpubkey.md)<!-- -->, [ActionHashAndSig](./client.actionhashandsig.md)<!-- -->, [ValidationType](./client.validationtype.md)
 
