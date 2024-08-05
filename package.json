@@ -1,6 +1,6 @@
 {
   "name": "@holochain/client",
-  "version": "0.18.0-dev.9",
+  "version": "0.18.0-dev.8",
   "description": "A JavaScript client for the Holochain Conductor API",
   "author": "Holochain Foundation <info@holochain.org> (https://holochain.org)",
   "license": "CAL-1.0",
