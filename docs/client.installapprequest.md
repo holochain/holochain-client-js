@@ -16,5 +16,5 @@ export type InstallAppRequest = {
     ignore_genesis_failure?: boolean;
 } & AppBundleSource;
 ```
-**References:** [InstalledAppId](./client.installedappid.md)<!-- -->, [MemproofMap](./client.memproofmap.md)<!-- -->, [NetworkSeed](./client.networkseed.md)<!-- -->, [AppBundleSource](./client.appbundlesource.md)
+**References:** [AgentPubKey](./client.agentpubkey.md)<!-- -->, [InstalledAppId](./client.installedappid.md)<!-- -->, [MemproofMap](./client.memproofmap.md)<!-- -->, [NetworkSeed](./client.networkseed.md)<!-- -->, [AppBundleSource](./client.appbundlesource.md)
 

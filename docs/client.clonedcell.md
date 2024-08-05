@@ -129,7 +129,7 @@ string
 
 </td><td>
 
-DnaHash
+[DnaHash](./client.dnahash.md)
 
 
 </td><td>

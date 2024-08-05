@@ -11,5 +11,5 @@ Action hash with the signature of the action at that hash
 ```typescript
 export type ActionHashAndSig = [ActionHash, Signature];
 ```
-**References:** [Signature](./client.signature.md)
+**References:** [ActionHash](./client.actionhash.md)<!-- -->, [Signature](./client.signature.md)
 

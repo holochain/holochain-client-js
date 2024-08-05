@@ -12,3 +12,5 @@ export type WasmCode = [HoloHash, {
     code: Array<number>;
 }];
 ```
+**References:** [HoloHash](./client.holohash.md)
+

@@ -49,7 +49,7 @@ _(Optional)_ Optionally specify a byte to repeat for all core 32 bytes. If undef
 </tbody></table>
 **Returns:**
 
-Promise&lt;DnaHash&gt;
+Promise&lt;[DnaHash](./client.dnahash.md)<!-- -->&gt;
 
-A instance of DnaHash.
+A [DnaHash](./client.dnahash.md)<!-- -->.
 

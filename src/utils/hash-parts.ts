@@ -1,5 +1,5 @@
+import { ActionHash, AgentPubKey, EntryHash } from "../types.js";
 import blake2b from "@bitgo/blake2b";
-import { HoloHash } from "../types.js";
 
 const HASH_TYPE_START = 0;
 const HASH_TYPE_BYTE_LENGTH = 3;
@@ -31,9 +31,10 @@ export const HASH_TYPE_PREFIX = {
  *
  * @public
  */
-export function sliceHashType(hash: HoloHash | Uint8Array): Uint8Array {
-  if (!(hash instanceof HoloHash)) hash = new HoloHash(hash);
-  return (hash as HoloHash).getPrefix();
+export function sliceHashType(
+  hash: AgentPubKey | EntryHash | ActionHash
+): Uint8Array {
+  return Uint8Array.from(hash.slice(0, 3));
 }
 
 /**
@@ -46,11 +47,12 @@ export function sliceHashType(hash: HoloHash | Uint8Array): Uint8Array {
  *
  * @public
  */
-export function sliceCore32(hash: HoloHash | Uint8Array): Uint8Array {
-  if (!(hash instanceof HoloHash)) hash = new HoloHash(hash);
+export function sliceCore32(
+  hash: AgentPubKey | EntryHash | ActionHash
+): Uint8Array {
   const start = HASH_TYPE_START + HASH_TYPE_BYTE_LENGTH;
   const end = start + CORE_HASH_BYTE_LENGTH;
-  return (hash as HoloHash).bytes(start, end);
+  return Uint8Array.from(hash.slice(start, end));
 }
 
 /**
@@ -63,11 +65,12 @@ export function sliceCore32(hash: HoloHash | Uint8Array): Uint8Array {
  *
  * @public
  */
-export function sliceDhtLocation(hash: HoloHash | Uint8Array): Uint8Array {
-  if (hash instanceof Uint8Array) hash = new HoloHash(hash);
+export function sliceDhtLocation(
+  hash: AgentPubKey | EntryHash | ActionHash
+): Uint8Array {
   const start = HASH_TYPE_START + HASH_TYPE_BYTE_LENGTH + CORE_HASH_BYTE_LENGTH;
   const end = start + DHT_LOCATION_BYTE_LENGTH;
-  return (hash as HoloHash).bytes(start, end);
+  return Uint8Array.from(hash.slice(start, end));
 }
 
 /**
@@ -107,10 +110,12 @@ export function dhtLocationFrom32(hashCore: Uint8Array): Uint8Array {
  * @public
  */
 export function hashFrom32AndType(
-  hashCore: Uint8Array,
+  hashCore: AgentPubKey | EntryHash | ActionHash,
   hashType: "Agent" | "Entry" | "Dna" | "Action" | "External"
 ): Uint8Array {
-  return new HoloHash(hashCore).toType(
-    hashType === "Agent" ? "AgentPubKey" : hashType + "Hash"
-  );
+  return Uint8Array.from([
+    ...HASH_TYPE_PREFIX[hashType],
+    ...hashCore,
+    ...dhtLocationFrom32(hashCore),
+  ]);
 }

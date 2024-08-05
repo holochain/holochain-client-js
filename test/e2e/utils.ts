@@ -211,7 +211,7 @@ test("sliceDhtLocation, sliceCore32, sliceHashType extract components of a hash"
   const dhtLocation = sliceDhtLocation(fakeHash);
 
   t.deepEqual(
-    fakeHash.bytes(),
+    fakeHash,
     Uint8Array.from([...prefix, ...hash, ...dhtLocation]),
     "extracted hash type, core hash, and dht location components of a hash concat back into the original hash"
   );
@@ -222,7 +222,7 @@ test("hashFrom32AndType generates valid hash with type and 32 core bytes", async
   const fullHash = hashFrom32AndType(core, "Agent");
 
   t.deepEqual(
-    fullHash.bytes(),
+    fullHash,
     Uint8Array.from([
       132, 32, 36, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
       1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 126, 207, 206, 190,

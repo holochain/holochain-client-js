@@ -4,8 +4,12 @@ import {
   EntryHash,
   ExternalHash,
   Timestamp,
-  AnyLinkableHash,
 } from "../types.js";
+
+/**
+ * @public
+ */
+export type AnyLinkableHash = EntryHash | ActionHash | ExternalHash;
 
 /**
  * An internal zome index within the DNA, from 0 to 255.

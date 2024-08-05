@@ -14,5 +14,5 @@ export type CapGrant = {
     RemoteAgent: ZomeCallCapGrant;
 };
 ```
-**References:** [ZomeCallCapGrant](./client.zomecallcapgrant.md)
+**References:** [AgentPubKey](./client.agentpubkey.md)<!-- -->, [ZomeCallCapGrant](./client.zomecallcapgrant.md)
 

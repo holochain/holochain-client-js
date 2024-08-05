@@ -19,5 +19,5 @@ export type CapAccess = [CapAccessType.Unrestricted] | {
     };
 };
 ```
-**References:** [CapAccessType.Unrestricted](./client.capaccesstype.md)<!-- -->, [CapAccessType.Transferable](./client.capaccesstype.md)<!-- -->, [CapSecret](./client.capsecret.md)<!-- -->, [CapAccessType.Assigned](./client.capaccesstype.md)
+**References:** [CapAccessType.Unrestricted](./client.capaccesstype.md)<!-- -->, [CapAccessType.Transferable](./client.capaccesstype.md)<!-- -->, [CapSecret](./client.capsecret.md)<!-- -->, [CapAccessType.Assigned](./client.capaccesstype.md)<!-- -->, [AgentPubKey](./client.agentpubkey.md)
 
