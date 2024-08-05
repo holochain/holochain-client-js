@@ -6,6 +6,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Added
 ### Changed
+- Revert addition of @hc-spartan/holo-hash. Hashes were used inconsistently and lead to wrong types for return values.
 ### Fixed
 ### Removed
 
