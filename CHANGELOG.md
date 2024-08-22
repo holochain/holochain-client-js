@@ -9,7 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Fixed
 ### Removed
 
-## 2024-08-05: v0.18.0-dev.9
+## 2024-08-05: v0.18.0-dev.10
 ### Changed
 - Signal listeners changed from only returning an `AppSignal` to a `Signal` which can be either an app or system signal.
 
