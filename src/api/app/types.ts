@@ -8,6 +8,7 @@ import {
   ClonedCell,
   DnaHash,
   DnaProperties,
+  EntryHash,
   FunctionName,
   InstalledAppId,
   MembraneProof,
@@ -81,7 +82,7 @@ export type AppNetworkInfoRequest = Omit<NetworkInfoRequest, "agent_pub_key">;
  * @public
  */
 export interface AppEvents {
-  signal: AppSignal;
+  signal: Signal;
 }
 
 /**
@@ -242,16 +243,29 @@ export const SignalType = {
   App: "App",
   System: "System",
 } as const;
+
+/**
+ * @public
+ */
+export type RawSignal =
+  | {
+      [SignalType.App]: EncodedAppSignal;
+    }
+  | {
+      [SignalType.System]: SystemSignal;
+    };
+
 /**
  * @public
  */
 export type Signal =
   | {
-      [SignalType.App]: EncodedAppSignal;
+      [SignalType.App]: AppSignal;
     }
   | {
-      [SignalType.System]: unknown;
+      [SignalType.System]: SystemSignal;
     };
+
 /**
  * @public
  */
@@ -260,6 +274,7 @@ export type EncodedAppSignal = {
   zome_name: string;
   signal: Uint8Array;
 };
+
 /**
  * @public
  */
@@ -268,10 +283,16 @@ export type AppSignal = {
   zome_name: string;
   payload: unknown;
 };
+
 /**
  * @public
  */
-export type AppSignalCb = (signal: AppSignal) => void;
+export type SystemSignal = { SuccessfulCountersigning: EntryHash };
+
+/**
+ * @public
+ */
+export type SignalCb = (signal: Signal) => void;
 
 /**
  * @public
@@ -286,7 +307,7 @@ export interface AppClient {
 
   on<Name extends keyof AppEvents>(
     eventName: Name | readonly Name[],
-    listener: AppSignalCb
+    listener: SignalCb
   ): UnsubscribeFunction;
 
   appInfo(): Promise<AppInfoResponse>;

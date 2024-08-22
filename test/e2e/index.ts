@@ -8,7 +8,6 @@ import {
   ActionType,
   AdminWebsocket,
   AppEntryDef,
-  AppSignal,
   AppStatusFilter,
   AppWebsocket,
   CallZomeRequest,
@@ -27,6 +26,8 @@ import {
   RoleName,
   encodeHashToBase64,
   generateSigningKeyPair,
+  SignalType,
+  Signal,
 } from "../../src";
 import {
   FIXTURE_PATH,
@@ -546,9 +547,9 @@ test(
     });
 
     let appInfo = await client.appInfo();
-    t.equal(
+    t.deepEqual(
       appInfo.status,
-      "awaiting_memproofs",
+      { disabled: { reason: "never_started" } },
       "app is in status awaiting_memproofs"
     );
 
@@ -811,8 +812,9 @@ test(
     const signalReceivedPromise = new Promise(
       (resolve) => (resolveSignalPromise = resolve)
     );
-    const signalCb = (signal: AppSignal) => {
-      t.deepEqual(signal, {
+    const signalCb = (signal: Signal) => {
+      assert(SignalType.App in signal);
+      t.deepEqual(signal[SignalType.App], {
         cell_id,
         zome_name: TEST_ZOME_NAME,
         payload: "i am a signal",

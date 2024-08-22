@@ -931,6 +931,16 @@ Description
 </td></tr>
 <tr><td>
 
+[PreflightResponse](./client.preflightresponse.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
 [ProvisionedCell](./client.provisionedcell.md)
 
 
@@ -1448,16 +1458,6 @@ This type is meant to be opaque
 <tr><td>
 
 [AppSignal](./client.appsignal.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[AppSignalCb](./client.appsignalcb.md)
 
 
 </td><td>
@@ -2468,6 +2468,16 @@ An internal link type index within the DNA, from 0 to 255.
 </td></tr>
 <tr><td>
 
+[RawSignal](./client.rawsignal.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
 [Record\_2](./client.record_2.md)
 
 
@@ -2588,6 +2598,16 @@ An internal link type index within the DNA, from 0 to 255.
 </td></tr>
 <tr><td>
 
+[SignalCb](./client.signalcb.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
 [Signature](./client.signature.md)
 
 
@@ -2629,6 +2649,16 @@ An internal link type index within the DNA, from 0 to 255.
 <tr><td>
 
 [StorageInfoResponse](./client.storageinforesponse.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[SystemSignal](./client.systemsignal.md)
 
 
 </td><td>

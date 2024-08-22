@@ -6,6 +6,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Added
 ### Changed
+- Signal listeners changed from only returning an `AppSignal` to a `Signal` which can be either an app or system signal.
 ### Fixed
 ### Removed
 

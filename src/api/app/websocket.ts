@@ -22,8 +22,7 @@ import {
   AppDisableCloneCellRequest,
   AppEnableCloneCellRequest,
   AppInfoResponse,
-  AppSignal,
-  AppSignalCb,
+  SignalCb,
   CallZomeRequest,
   CallZomeRequestSigned,
   CallZomeRequestUnsigned,
@@ -43,6 +42,7 @@ import {
   ProvideMemproofsResponse,
   EnableRequest,
   EnableResponse,
+  Signal,
 } from "./types.js";
 import {
   getHostZomeCallSigner,
@@ -175,10 +175,8 @@ export class AppWebsocket implements AppClient {
       }
     });
 
-    this.client.on("signal", (signal: AppSignal) => {
-      if (this.containsCell(signal.cell_id)) {
-        this.emitter.emit("signal", signal).catch(console.error);
-      }
+    this.client.on("signal", (signal: Signal) => {
+      this.emitter.emit("signal", signal).catch(console.error);
     });
   }
 
@@ -423,7 +421,7 @@ export class AppWebsocket implements AppClient {
    */
   on<Name extends keyof AppEvents>(
     eventName: Name | readonly Name[],
-    listener: AppSignalCb
+    listener: SignalCb
   ): UnsubscribeFunction {
     return this.emitter.on(eventName, listener);
   }

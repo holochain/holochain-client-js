@@ -7,7 +7,7 @@
 **Signature:**
 
 ```typescript
-on<Name extends keyof AppEvents>(eventName: Name | readonly Name[], listener: AppSignalCb): UnsubscribeFunction;
+on<Name extends keyof AppEvents>(eventName: Name | readonly Name[], listener: SignalCb): UnsubscribeFunction;
 ```
 
 ## Parameters
@@ -49,7 +49,7 @@ listener
 
 </td><td>
 
-[AppSignalCb](./client.appsignalcb.md)
+[SignalCb](./client.signalcb.md)
 
 
 </td><td>

@@ -3,7 +3,7 @@ import Emittery from "emittery";
 import IsoWebSocket from "isomorphic-ws";
 import { HolochainError, WsClientOptions } from "./common.js";
 import { AppAuthenticationToken } from "./admin/index.js";
-import { AppSignal, Signal, SignalType } from "./app/index.js";
+import { AppSignal, RawSignal, Signal, SignalType } from "./app/index.js";
 
 interface HolochainMessage {
   id: number;
@@ -89,20 +89,22 @@ export class WsClient extends Emittery {
         assertHolochainSignal(deserializedSignal);
 
         if (SignalType.System in deserializedSignal) {
-          // We have received a system signal, do nothing
-          return;
+          this.emit("signal", {
+            System: deserializedSignal[SignalType.System],
+          } as Signal);
+        } else {
+          const encodedAppSignal = deserializedSignal[SignalType.App];
+
+          // In order to return readable content to the UI, the signal payload must also be deserialized.
+          const payload = decode(encodedAppSignal.signal);
+
+          const signal: AppSignal = {
+            cell_id: encodedAppSignal.cell_id,
+            zome_name: encodedAppSignal.zome_name,
+            payload,
+          };
+          this.emit("signal", { App: signal } as Signal);
         }
-        const encodedAppSignal = deserializedSignal[SignalType.App];
-
-        // In order to return readable content to the UI, the signal payload must also be deserialized.
-        const payload = decode(encodedAppSignal.signal);
-
-        const signal: AppSignal = {
-          cell_id: encodedAppSignal.cell_id,
-          zome_name: encodedAppSignal.zome_name,
-          payload,
-        };
-        this.emit("signal", signal);
       } else if (message.type === "response") {
         this.handleResponse(message);
       } else {
@@ -291,7 +293,7 @@ function assertHolochainMessage(
   );
 }
 
-function assertHolochainSignal(signal: unknown): asserts signal is Signal {
+function assertHolochainSignal(signal: unknown): asserts signal is RawSignal {
   if (
     typeof signal === "object" &&
     signal !== null &&
