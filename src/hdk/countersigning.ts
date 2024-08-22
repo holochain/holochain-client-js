@@ -40,6 +40,24 @@ export interface PreflightRequest {
 /**
  * @public
  */
+export interface PreflightResponse {
+  /**
+   * The request associated with this response.
+   */
+  request: PreflightRequest;
+  /**
+   * The chain state declaration for the agent that produced this response.
+   */
+  agent_state: CountersigningAgentState;
+  /**
+   * The signature of this response, by the agent that created it.
+   */
+  signature: Signature;
+}
+
+/**
+ * @public
+ */
 export interface CounterSigningSessionTimes {
   start: Timestamp;
   end: Timestamp;

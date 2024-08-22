@@ -44,7 +44,7 @@ Description
 
 </td><td>
 
-[AppSignal](./client.appsignal.md)
+[Signal](./client.signal.md)
 
 
 </td><td>
