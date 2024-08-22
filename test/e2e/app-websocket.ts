@@ -12,6 +12,8 @@ import {
   fakeAgentPubKey,
   NonProvenanceCallZomeRequest,
   RoleName,
+  SignalCb,
+  SignalType,
 } from "../../src";
 import {
   createAppWsAndInstallApp,
@@ -89,8 +91,9 @@ test(
     const signalReceivedPromise = new Promise(
       (resolve) => (resolveSignalPromise = resolve)
     );
-    const signalCb: AppSignalCb = (signal) => {
-      t.deepEqual(signal, {
+    const signalCb: SignalCb = (signal) => {
+      assert(SignalType.App in signal);
+      t.deepEqual(signal[SignalType.App], {
         cell_id,
         zome_name: TEST_ZOME_NAME,
         payload: "i am a signal",

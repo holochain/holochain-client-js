@@ -547,9 +547,9 @@ test(
     });
 
     let appInfo = await client.appInfo();
-    t.equal(
+    t.deepEqual(
       appInfo.status,
-      "awaiting_memproofs",
+      { disabled: { reason: "never_started" } },
       "app is in status awaiting_memproofs"
     );
 
