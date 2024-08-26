@@ -9,7 +9,7 @@
 
 ```typescript
 export type InstallAppRequest = {
-    agent_key: AgentPubKey;
+    agent_key?: AgentPubKey;
     installed_app_id?: InstalledAppId;
     membrane_proofs: MemproofMap;
     network_seed?: NetworkSeed;
