@@ -3,7 +3,13 @@ import Emittery from "emittery";
 import IsoWebSocket from "isomorphic-ws";
 import { HolochainError, WsClientOptions } from "./common.js";
 import { AppAuthenticationToken } from "./admin/index.js";
-import { AppSignal, RawSignal, Signal, SignalType } from "./app/index.js";
+import {
+  AppSignal,
+  EncodedAppSignal,
+  RawSignal,
+  Signal,
+  SignalType,
+} from "./app/index.js";
 
 interface HolochainMessage {
   id: number;
@@ -93,7 +99,8 @@ export class WsClient extends Emittery {
             System: deserializedSignal[SignalType.System],
           } as Signal);
         } else {
-          const encodedAppSignal = deserializedSignal[SignalType.App];
+          const encodedAppSignal: EncodedAppSignal =
+            deserializedSignal[SignalType.App];
 
           // In order to return readable content to the UI, the signal payload must also be deserialized.
           const payload = decode(encodedAppSignal.signal);
