@@ -6,7 +6,6 @@ import {
   AppWebsocket,
   AppCreateCloneCellRequest,
   AppEntryDef,
-  AppSignal,
   CellType,
   CloneId,
   fakeAgentPubKey,
@@ -149,7 +148,7 @@ test(
     await admin.enableApp({ installed_app_id: app_id1 });
 
     let received1 = false;
-    const signalCb1: AppSignal = () => {
+    const signalCb1: SignalCb = () => {
       received1 = true;
     };
 
@@ -164,7 +163,7 @@ test(
     await admin.enableApp({ installed_app_id: app_id2 });
 
     let received2 = false;
-    const signalCb2: AppSignal = () => {
+    const signalCb2: SignalCb = () => {
       received2 = true;
     };
 

@@ -247,24 +247,21 @@ export const SignalType = {
 /**
  * @public
  */
-export type RawSignal =
-  | {
-      [SignalType.App]: EncodedAppSignal;
-    }
-  | {
-      [SignalType.System]: SystemSignal;
-    };
+export type SignalTypeValues = (typeof SignalType)[keyof typeof SignalType];
 
 /**
  * @public
  */
-export type Signal =
-  | {
-      [SignalType.App]: AppSignal;
-    }
-  | {
-      [SignalType.System]: SystemSignal;
-    };
+export type RawSignal = {
+  [K in SignalTypeValues]: K extends "App" ? AppSignal : SystemSignal;
+};
+
+/**
+ * @public
+ */
+export type Signal = {
+  [K in SignalTypeValues]: K extends "App" ? AppSignal : SystemSignal;
+};
 
 /**
  * @public
