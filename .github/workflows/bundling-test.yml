@@ -62,7 +62,7 @@ jobs:
 
     steps:
       - name: Download package tarball
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4.1.7
         with:
           name: client-${{ matrix.node }}.tgz
 
