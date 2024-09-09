@@ -45,6 +45,7 @@ jobs:
         with:
           name: client-${{ matrix.node }}.tgz
           path: holochain-client-*.tgz
+          overwrite: true
 
       - name: Setup tmate session if a previous step failed
         if: ${{ failure() }}
