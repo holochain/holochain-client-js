@@ -41,7 +41,7 @@ jobs:
         run: npm pack
 
       - name: Upload package tarball
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4.4.0
         with:
           name: client-${{ matrix.node }}.tgz
           path: holochain-client-*.tgz
@@ -62,7 +62,7 @@ jobs:
 
     steps:
       - name: Download package tarball
-        uses: actions/download-artifact@v4.1.7
+        uses: actions/download-artifact@v4.1.8
         with:
           name: client-${{ matrix.node }}.tgz
 
