@@ -1194,7 +1194,7 @@ test(
     await admin.authorizeSigningCredentials(cloneCell.cell_id);
 
     await client.disableCloneCell({
-      clone_cell_id: cloneCell.cell_id,
+      clone_cell_id: cloneCell.cell_id[0],
     });
 
     const appInfo = await client.appInfo();
@@ -1232,7 +1232,7 @@ test(
     };
     const cloneCell = await client.createCloneCell(createCloneCellParams);
     await client.disableCloneCell({
-      clone_cell_id: cloneCell.cell_id,
+      clone_cell_id: cloneCell.cell_id[0],
     });
 
     const enabledCloneCell = await client.enableCloneCell({
@@ -1274,17 +1274,17 @@ test(
     const cloneCell = await client.createCloneCell(createCloneCellParams);
     createCloneCellParams.modifiers.network_seed = "clone-1";
     await client.disableCloneCell({
-      clone_cell_id: cloneCell.cell_id,
+      clone_cell_id: cloneCell.cell_id[0],
     });
 
     await admin.deleteCloneCell({
       app_id: installed_app_id,
-      clone_cell_id: cloneCell.cell_id,
+      clone_cell_id: cloneCell.cell_id[0],
     });
 
     try {
       await client.enableCloneCell({
-        clone_cell_id: cloneCell.cell_id,
+        clone_cell_id: cloneCell.cell_id[0],
       });
       t.fail();
     } catch (error) {
