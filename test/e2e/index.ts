@@ -237,7 +237,7 @@ test(
     t.equal(runningApps2[0].installed_app_id, installed_app_id);
 
     const cellIds = await admin.listCellIds();
-    t.equal(cellIds.length, 1);
+    t.equal(cellIds.length, 2);
     assert(CellType.Provisioned in installedApp.cell_info[ROLE_NAME][0]);
     t.deepEqual(
       cellIds[0],
@@ -910,25 +910,20 @@ test("can inject agents", async (t) => {
   t.equal(activeApp1Info.app.installed_app_id, installed_app_id);
   t.equal(activeApp1Info.errors.length, 0);
 
-  await delay(500);
-
-  // after activating an app requestAgentInfo should return the agentid
-  // requesting info with null cell_id should return all agents known about.
-  // otherwise it's just agents know about for that cell
   const conductor1_agentInfo = await admin1.agentInfo({
     cell_id: null,
   });
-  t.equal(conductor1_agentInfo.length, 1);
+  // one app agent and one DPKI agent
+  t.equal(conductor1_agentInfo.length, 2);
 
-  // agent2 with no activated apps there are no agents
+  // with no activated apps there is only the DPKI agent
   let conductor2_agentInfo = await admin2.agentInfo({ cell_id: null });
-  t.equal(conductor2_agentInfo.length, 0);
-
-  // but, after explicitly injecting an agent, we should see it
-  await admin2.addAgentInfo({ agent_infos: conductor1_agentInfo });
-  conductor2_agentInfo = await admin2.agentInfo({ cell_id: null });
   t.equal(conductor2_agentInfo.length, 1);
-  t.deepEqual(conductor1_agentInfo, conductor2_agentInfo);
+
+  // but, after explicitly injecting an agent, we should see it too
+  await admin2.addAgentInfo({ agent_infos: [conductor1_agentInfo[0]] });
+  conductor2_agentInfo = await admin2.agentInfo({ cell_id: null });
+  t.equal(conductor2_agentInfo.length, 2);
 
   // now install the app and activate it on agent 2.
   await admin2.registerDna({
@@ -951,10 +946,9 @@ test("can inject agents", async (t) => {
   t.equal(activeApp2Info.app.installed_app_id, installed_app_id);
   t.equal(activeApp2Info.errors.length, 0);
 
-  await delay(500);
   // observe 2 agent infos
   conductor2_agentInfo = await admin2.agentInfo({ cell_id: null });
-  t.equal(conductor2_agentInfo.length, 2);
+  t.equal(conductor2_agentInfo.length, 3);
 
   // now confirm that we can ask for just one cell
   await admin1.addAgentInfo({ agent_infos: conductor2_agentInfo });
@@ -1353,8 +1347,12 @@ test(
 
     const response = await admin.storageInfo();
 
-    t.equal(response.blobs.length, 1);
-    t.equal(response.blobs[0].dna.used_by.indexOf(installed_app_id), 0);
+    console.log(response.blobs[1].dna);
+
+    t.equal(response.blobs.length, 2);
+    t.assert(
+      response.blobs.some((blob) => blob.dna.used_by.includes(installed_app_id))
+    );
   })
 );
 
