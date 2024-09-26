@@ -81,13 +81,13 @@ export type DisabledAppReason =
  */
 export type InstalledAppInfoStatus =
   | {
-      paused: { reason: PausedAppReason };
-    }
+    paused: { reason: PausedAppReason };
+  }
   | {
-      disabled: {
-        reason: DisabledAppReason;
-      };
-    }
+    disabled: {
+      reason: DisabledAppReason;
+    };
+  }
   | "awaiting_memproofs"
   | "running";
 /**
@@ -360,23 +360,23 @@ export interface CellProvisioning {
  */
 export type Location =
   | {
-      /**
-       * Expect file to be part of this bundle
-       */
-      bundled: string;
-    }
+    /**
+     * Expect file to be part of this bundle
+     */
+    bundled: string;
+  }
   | {
-      /**
-       * Get file from local filesystem (not bundled)
-       */
-      path: string;
-    }
+    /**
+     * Get file from local filesystem (not bundled)
+     */
+    path: string;
+  }
   | {
-      /**
-       * Get file from URL
-       */
-      url: string;
-    };
+    /**
+     * Get file from URL
+     */
+    url: string;
+  };
 
 /**
  * @public
@@ -387,11 +387,11 @@ export type DnaVersionSpec = Array<HoloHashB64>;
  */
 export type DnaVersionFlexible =
   | {
-      singleton: HoloHashB64;
-    }
+    singleton: HoloHashB64;
+  }
   | {
-      multiple: DnaVersionSpec;
-    };
+    multiple: DnaVersionSpec;
+  };
 /**
  * @public
  */
@@ -599,7 +599,7 @@ export interface DeleteCloneCellRequest {
   /**
    * The clone id or cell id of the clone cell
    */
-  clone_cell_id: RoleName | CellId;
+  clone_cell_id: RoleName | DnaHash;
 }
 
 /**
@@ -677,11 +677,11 @@ export interface CoordinatorBundle {
  */
 export type CoordinatorSource =
   | {
-      path: string;
-    }
+    path: string;
+  }
   | {
-      bundle: CoordinatorBundle;
-    };
+    bundle: CoordinatorBundle;
+  };
 
 /**
  * @public
@@ -748,14 +748,14 @@ export type DnaBundle = {
  */
 export type DnaSource =
   | {
-      hash: HoloHash;
-    }
+    hash: HoloHash;
+  }
   | {
-      path: string;
-    }
+    path: string;
+  }
   | {
-      bundle: DnaBundle;
-    };
+    bundle: DnaBundle;
+  };
 
 /**
  * @public
