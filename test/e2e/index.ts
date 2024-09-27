@@ -28,6 +28,7 @@ import {
   generateSigningKeyPair,
   SignalType,
   Signal,
+  isSameCell,
 } from "../../src";
 import {
   FIXTURE_PATH,
@@ -239,9 +240,13 @@ test(
     const cellIds = await admin.listCellIds();
     t.equal(cellIds.length, 2);
     assert(CellType.Provisioned in installedApp.cell_info[ROLE_NAME][0]);
-    t.deepEqual(
-      cellIds[0],
-      installedApp.cell_info[ROLE_NAME][0][CellType.Provisioned].cell_id
+    t.assert(
+      cellIds.some((cellId) =>
+        isSameCell(
+          cellId,
+          installedApp.cell_info[ROLE_NAME][0][CellType.Provisioned].cell_id
+        )
+      )
     );
 
     await admin.attachAppInterface({
