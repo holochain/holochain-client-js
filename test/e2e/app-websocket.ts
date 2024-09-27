@@ -149,7 +149,7 @@ test(
     await admin.enableApp({ installed_app_id: app_id1 });
 
     let received1 = false;
-    const signalCb1: AppSignal = () => {
+    const signalCb1: SignalCb = () => {
       received1 = true;
     };
 
@@ -164,7 +164,7 @@ test(
     await admin.enableApp({ installed_app_id: app_id2 });
 
     let received2 = false;
-    const signalCb2: AppSignal = () => {
+    const signalCb2: SignalCb = () => {
       received2 = true;
     };
 
@@ -261,7 +261,7 @@ test(
     await admin.authorizeSigningCredentials(cloneCell.cell_id);
 
     await appWs.disableCloneCell({
-      clone_cell_id: cloneCell.cell_id,
+      clone_cell_id: cloneCell.cell_id[0],
     });
 
     const appInfo = await appWs.appInfo();
@@ -284,7 +284,7 @@ test(
     }
 
     await appWs.enableCloneCell({
-      clone_cell_id: cloneCell.cell_id,
+      clone_cell_id: cloneCell.cell_id[0],
     });
     await appWs.callZome(params);
     t.pass("re-enabled clone can be called");

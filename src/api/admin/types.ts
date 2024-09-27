@@ -599,7 +599,7 @@ export interface DeleteCloneCellRequest {
   /**
    * The clone id or cell id of the clone cell
    */
-  clone_cell_id: RoleName | CellId;
+  clone_cell_id: RoleName | DnaHash;
 }
 
 /**

@@ -202,7 +202,7 @@ export interface DisableCloneCellRequest {
   /**
    * The clone id or cell id of the clone cell
    */
-  clone_cell_id: RoleName | CellId;
+  clone_cell_id: RoleName | DnaHash;
 }
 /**
  * @public
@@ -249,22 +249,22 @@ export const SignalType = {
  */
 export type RawSignal =
   | {
-      [SignalType.App]: EncodedAppSignal;
-    }
+    [SignalType.App]: EncodedAppSignal;
+  }
   | {
-      [SignalType.System]: SystemSignal;
-    };
+    [SignalType.System]: SystemSignal;
+  };
 
 /**
  * @public
  */
 export type Signal =
   | {
-      [SignalType.App]: AppSignal;
-    }
+    [SignalType.App]: AppSignal;
+  }
   | {
-      [SignalType.System]: SystemSignal;
-    };
+    [SignalType.System]: SystemSignal;
+  };
 
 /**
  * @public
