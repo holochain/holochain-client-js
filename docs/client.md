@@ -366,6 +366,17 @@ Check if a cell's role name is a valid clone id.
 </td></tr>
 <tr><td>
 
+[isSameCell(cellId1, cellId2)](./client.issamecell.md)
+
+
+</td><td>
+
+Check if two cell ids are identical.
+
+
+</td></tr>
+<tr><td>
+
 [randomByteArray(length)](./client.randombytearray.md)
 
 

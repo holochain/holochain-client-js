@@ -44,7 +44,7 @@ Description
 
 </td><td>
 
-[RoleName](./client.rolename.md) \| [CellId](./client.cellid.md)
+[RoleName](./client.rolename.md) \| [DnaHash](./client.dnahash.md)
 
 
 </td><td>

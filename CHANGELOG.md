@@ -9,6 +9,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Fixed
 ### Removed
 
+## 2024-09-26: v0.18.0-dev.11
+### Added
+- Util function to compare two cell ids `isSameCell`.
+### Changed
+- **BREAKING**: Clone cell ids have changed from accepting a `CellId` to a `DnaHash`.
+
 ## 2024-08-05: v0.18.0-dev.10
 ### Changed
 - Signal listeners changed from only returning an `AppSignal` to a `Signal` which can be either an app or system signal.

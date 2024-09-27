@@ -249,22 +249,22 @@ export const SignalType = {
  */
 export type RawSignal =
   | {
-    [SignalType.App]: EncodedAppSignal;
-  }
+      [SignalType.App]: EncodedAppSignal;
+    }
   | {
-    [SignalType.System]: SystemSignal;
-  };
+      [SignalType.System]: SystemSignal;
+    };
 
 /**
  * @public
  */
 export type Signal =
   | {
-    [SignalType.App]: AppSignal;
-  }
+      [SignalType.App]: AppSignal;
+    }
   | {
-    [SignalType.System]: SystemSignal;
-  };
+      [SignalType.System]: SystemSignal;
+    };
 
 /**
  * @public
