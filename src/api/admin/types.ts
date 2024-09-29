@@ -208,6 +208,18 @@ export type GenerateAgentPubKeyResponse = AgentPubKey;
 /**
  * @public
  */
+export type RevokeAgentKeyRequest = {
+  agent_key: AgentPubKey;
+  app_id: InstalledAppId;
+};
+/**
+ * @public
+ */
+export type RevokeAgentKeyResponse = void;
+
+/**
+ * @public
+ */
 export type RegisterDnaRequest = {
   modifiers?: {
     network_seed?: string;

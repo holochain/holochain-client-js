@@ -1,8 +1,6 @@
 use hdk::prelude::{holo_hash::DnaHash, *};
 
-#[derive(Clone, Debug, Serialize, Deserialize, SerializedBytes)]
-#[repr(transparent)]
-#[serde(transparent)]
+#[hdk_entry_helper]
 pub struct TestString(pub String);
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -23,25 +21,35 @@ impl From<&str> for TestString {
     }
 }
 
+#[hdk_entry_types]
+#[unit_enum(UnitEntryTypes)]
+enum EntryTypes {
+    Test(TestString),
+}
+
 #[hdk_link_types]
-// #[derive]
 enum LinkTypes {
     A,
 }
 
 #[hdk_extern]
-fn init(_: ()) -> ExternResult<InitCallbackResult> {
+fn init() -> ExternResult<InitCallbackResult> {
     Ok(InitCallbackResult::Pass)
 }
 
 #[hdk_extern]
-fn foo(_: ()) -> ExternResult<TestString> {
+fn foo() -> ExternResult<TestString> {
     Ok(TestString::from(String::from("foo")))
 }
 
 #[hdk_extern]
-fn bar(_: ()) -> ExternResult<TestString> {
+fn bar() -> ExternResult<TestString> {
     Ok(TestString::from(String::from("bar")))
+}
+
+#[hdk_extern]
+fn create_an_entry() -> ExternResult<ActionHash> {
+    create_entry(EntryTypes::Test(TestString::from(String::from("bar"))))
 }
 
 #[hdk_extern]

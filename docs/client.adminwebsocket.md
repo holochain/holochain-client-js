@@ -492,6 +492,25 @@ Stores the given DNA into the Holochain DNA database and returns the hash of it.
 </td></tr>
 <tr><td>
 
+[revokeAgentKey](./client.adminwebsocket.revokeagentkey.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[Requester](./client.requester.md)<!-- -->&lt;[RevokeAgentKeyRequest](./client.revokeagentkeyrequest.md)<!-- -->, [RevokeAgentKeyResponse](./client.revokeagentkeyresponse.md)<!-- -->&gt;
+
+
+</td><td>
+
+Generate a new agent pub key.
+
+
+</td></tr>
+<tr><td>
+
 [storageInfo](./client.adminwebsocket.storageinfo.md)
 
 

@@ -2559,6 +2559,26 @@ An internal link type index within the DNA, from 0 to 255.
 </td></tr>
 <tr><td>
 
+[RevokeAgentKeyRequest](./client.revokeagentkeyrequest.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[RevokeAgentKeyResponse](./client.revokeagentkeyresponse.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
 [Role](./client.role.md)
 
 

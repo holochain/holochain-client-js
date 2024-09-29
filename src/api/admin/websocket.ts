@@ -63,6 +63,8 @@ import {
   ListDnasResponse,
   RegisterDnaRequest,
   RegisterDnaResponse,
+  RevokeAgentKeyRequest,
+  RevokeAgentKeyResponse,
   StorageInfoRequest,
   StorageInfoResponse,
   UninstallAppRequest,
@@ -180,6 +182,12 @@ export class AdminWebsocket implements AdminApi {
     GenerateAgentPubKeyRequest,
     GenerateAgentPubKeyResponse
   > = this._requester("generate_agent_pub_key");
+
+  /**
+   * Generate a new agent pub key.
+   */
+  revokeAgentKey: Requester<RevokeAgentKeyRequest, RevokeAgentKeyResponse> =
+    this._requester("revoke_agent_key");
 
   /**
    * Register a DNA for later app installation.
