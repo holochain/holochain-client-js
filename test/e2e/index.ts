@@ -869,7 +869,7 @@ test(
     const zomeCallPayload: CallZomeRequest = {
       cell_id,
       zome_name: TEST_ZOME_NAME,
-      fn_name: "foo",
+      fn_name: "waste_some_time",
       provenance: fakeAgentPubKey(),
       payload: null,
     };
@@ -1456,5 +1456,40 @@ test(
       payload: serializationEnumInputVariant,
     });
     t.deepEqual(response, { Output: "success" });
+  })
+);
+
+test(
+  "Agent key can be revoked",
+  withConductor(ADMIN_PORT, async (t) => {
+    const { admin, cell_id, client, installed_app_id } = await installAppAndDna(
+      ADMIN_PORT
+    );
+    await admin.authorizeSigningCredentials(cell_id);
+
+    const zomeCallPayload: CallZomeRequest = {
+      cell_id,
+      zome_name: TEST_ZOME_NAME,
+      fn_name: "create_an_entry",
+      provenance: cell_id[1],
+      payload: null,
+    };
+    let response = await client.callZome(zomeCallPayload);
+    t.ok(response, "zome call succeeds");
+
+    response = await admin.revokeAgentKey({
+      app_id: installed_app_id,
+      agent_key: cell_id[1],
+    });
+    t.deepEqual(response, []);
+
+    try {
+      response = await client.callZome(zomeCallPayload);
+      console.log("response", response);
+      t.fail("create entry must no be possible after revoking agent key");
+    } catch (error) {
+      t.assert(error instanceof HolochainError);
+      t.pass("create entry must no be possible after revoking agent key");
+    }
   })
 );

@@ -1,8 +1,6 @@
 use hdk::prelude::{holo_hash::DnaHash, *};
 
-#[derive(Clone, Debug, Serialize, Deserialize, SerializedBytes)]
-#[repr(transparent)]
-#[serde(transparent)]
+#[hdk_entry_helper]
 pub struct TestString(pub String);
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -23,29 +21,39 @@ impl From<&str> for TestString {
     }
 }
 
+#[hdk_entry_types]
+#[unit_enum(UnitEntryTypes)]
+enum EntryTypes {
+    Test(TestString),
+}
+
 #[hdk_link_types]
-// #[derive]
 enum LinkTypes {
     A,
 }
 
 #[hdk_extern]
-fn init(_: ()) -> ExternResult<InitCallbackResult> {
+fn init() -> ExternResult<InitCallbackResult> {
     Ok(InitCallbackResult::Pass)
 }
 
 #[hdk_extern]
-fn foo(_: ()) -> ExternResult<TestString> {
+fn foo() -> ExternResult<TestString> {
     Ok(TestString::from(String::from("foo")))
 }
 
 #[hdk_extern]
-fn bar(_: ()) -> ExternResult<TestString> {
+fn bar() -> ExternResult<TestString> {
     Ok(TestString::from(String::from("bar")))
 }
 
 #[hdk_extern]
-fn emitter(_: ()) -> ExternResult<TestString> {
+fn create_an_entry() -> ExternResult<ActionHash> {
+    create_entry(EntryTypes::Test(TestString::from(String::from("bar"))))
+}
+
+#[hdk_extern]
+fn emitter() -> ExternResult<TestString> {
     match emit_signal(&TestString::from(String::from("i am a signal"))) {
         Ok(()) => Ok(TestString::from(String::from("bar"))),
         Err(e) => Err(e),
@@ -59,7 +67,7 @@ pub fn echo_app_entry_def(entry_def: AppEntryDef) -> ExternResult<()> {
 }
 
 #[hdk_extern]
-pub fn waste_some_time(_: ()) -> ExternResult<TestString> {
+pub fn waste_some_time() -> ExternResult<TestString> {
     let mut x: u32 = 3;
     for _ in 0..2 {
         for _ in 0..99999999 {
@@ -111,7 +119,7 @@ pub fn create_and_get_link(tag: Vec<u8>) -> ExternResult<Link> {
 }
 
 #[hdk_extern]
-pub fn create_and_delete_link(_: ()) -> ExternResult<ActionHash> {
+pub fn create_and_delete_link() -> ExternResult<ActionHash> {
     let link_base = agent_info()?.agent_latest_pubkey;
     let link_target = link_base.clone();
     let create_link_action_hash = create_link(link_base.clone(), link_target, LinkTypes::A, ())?;
