@@ -869,7 +869,7 @@ test(
     const zomeCallPayload: CallZomeRequest = {
       cell_id,
       zome_name: TEST_ZOME_NAME,
-      fn_name: "foo",
+      fn_name: "waste_some_time",
       provenance: fakeAgentPubKey(),
       payload: null,
     };
