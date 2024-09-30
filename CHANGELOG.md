@@ -5,10 +5,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## \[Unreleased\]
 
 ### Added
-- Admin API call `RevokeAgentKey`.
 ### Changed
 ### Fixed
 ### Removed
+
+## 2024-09-30: v0.18.0-dev.12
+### Added
+- Admin API call `RevokeAgentKey`.
 
 ## 2024-09-26: v0.18.0-dev.11
 ### Added
