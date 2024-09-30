@@ -10,6 +10,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Removed
 
 ## 2024-09-30: v0.18.0-dev.12
+### Fixed
+- Type `RevokeAgentKeyResponse`, which returns an array of tuples with cell id and error message for all cells that key revocation failed for.
+
+## 2024-09-30: v0.18.0-dev.12
 ### Added
 - Admin API call `RevokeAgentKey`.
 

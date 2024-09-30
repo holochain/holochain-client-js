@@ -4,9 +4,14 @@
 
 ## RevokeAgentKeyResponse type
 
+Contains a list of errors of the cells where deletion was unsuccessful.
+
+If the key could not be deleted from all cells, the call [RevokeAgentKeyRequest](./client.revokeagentkeyrequest.md) can be re-attempted to delete the key from the remaining cells.
 
 **Signature:**
 
 ```typescript
-export type RevokeAgentKeyResponse = void;
+export type RevokeAgentKeyResponse = Array<[CellId, string]>;
 ```
+**References:** [CellId](./client.cellid.md)
+

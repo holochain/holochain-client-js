@@ -2574,6 +2574,9 @@ An internal link type index within the DNA, from 0 to 255.
 
 </td><td>
 
+Contains a list of errors of the cells where deletion was unsuccessful.
+
+If the key could not be deleted from all cells, the call [RevokeAgentKeyRequest](./client.revokeagentkeyrequest.md) can be re-attempted to delete the key from the remaining cells.
 
 
 </td></tr>

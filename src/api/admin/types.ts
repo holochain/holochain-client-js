@@ -213,9 +213,14 @@ export type RevokeAgentKeyRequest = {
   app_id: InstalledAppId;
 };
 /**
+ * Contains a list of errors of the cells where deletion was unsuccessful.
+ *
+ * If the key could not be deleted from all cells, the call
+ * {@link RevokeAgentKeyRequest} can be re-attempted to delete the key from the remaining cells.
+ *
  * @public
  */
-export type RevokeAgentKeyResponse = void;
+export type RevokeAgentKeyResponse = Array<[CellId, string]>;
 
 /**
  * @public
