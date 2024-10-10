@@ -6,7 +6,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Added
 ### Changed
-- Update to Holochain 0.4.0-rc.0
+- Update to Holochain 0.5.0-dev.0
 ### Fixed
 ### Removed
 
