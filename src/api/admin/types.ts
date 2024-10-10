@@ -220,7 +220,7 @@ export type RevokeAgentKeyRequest = {
  *
  * @public
  */
-export type RevokeAgentKeyResponse = Array<[CellId, string]>;
+export type RevokeAgentKeyResponse = [CellId, string][];
 
 /**
  * @public
