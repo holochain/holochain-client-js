@@ -5,10 +5,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## \[Unreleased\]
 
 ### Added
+### Fixed
+### Changed
+### Removed
+
+## 2024-10-09: v0.19.0-dev.0
 ### Changed
 - Update to Holochain 0.5.0-dev.0
-### Fixed
-### Removed
 
 ## 2024-09-30: v0.18.0-dev.12
 ### Fixed
