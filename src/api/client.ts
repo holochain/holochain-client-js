@@ -40,6 +40,7 @@ export class WsClient extends Emittery {
   options: WsClientOptions;
   private pendingRequests: Record<number, HolochainRequest>;
   private index: number;
+  private authenticationToken: AppAuthenticationToken | undefined;
 
   constructor(socket: IsoWebSocket, url?: URL, options?: WsClientOptions) {
     super();
@@ -178,6 +179,7 @@ export class WsClient extends Emittery {
    * @param request - The authentication request, containing an app authentication token.
    */
   async authenticate(request: AppAuthenticationRequest): Promise<void> {
+    this.authenticationToken = request.token;
     return this.exchange(request, (request, resolve) => {
       const encodedMsg = encode({
         type: "authenticate",
@@ -212,6 +214,33 @@ export class WsClient extends Emittery {
         sendHandler(request, resolve, reject);
       });
       return promise as Promise<Response>;
+    } else if (this.url && this.authenticationToken) {
+      const response = new Promise<unknown>((resolve, reject) => {
+        // typescript forgets in this promise scope that this.url is undefined
+        const socket = new IsoWebSocket(this.url as URL, this.options);
+        this.socket = socket;
+        socket.onerror = (errorEvent) => {
+          reject(
+            new HolochainError(
+              "ConnectionError",
+              `could not connect to Holochain Conductor API at ${this.url} - ${errorEvent.error}`
+            )
+          );
+        };
+        socket.onopen = () => {
+          // Send authentication token
+          const encodedMsg = encode({
+            type: "authenticate",
+            data: encode({
+              token: this.authenticationToken as AppAuthenticationToken,
+            }),
+          });
+          this.socket.send(encodedMsg);
+          sendHandler(request, resolve, reject);
+        };
+        this.setupSocket();
+      });
+      return response as Promise<Response>;
     } else {
       return Promise.reject(new Error("Socket is not open"));
     }

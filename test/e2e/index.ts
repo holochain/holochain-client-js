@@ -1442,6 +1442,52 @@ test(
 );
 
 test(
+  "client reconnects websocket if closed before making a zome call",
+  withConductor(ADMIN_PORT, async (t) => {
+    const { cell_id, client, admin } = await installAppAndDna(ADMIN_PORT, true);
+    await admin.authorizeSigningCredentials(cell_id);
+    await client.client.close();
+    const call = client.callZome({
+      cell_id,
+      zome_name: TEST_ZOME_NAME,
+      fn_name: "bar",
+      provenance: cell_id[1],
+      payload: null,
+    });
+    try {
+      await call;
+      t.pass("websocket was reconnected successfully");
+    } catch (error) {
+      t.fail("websocket was not reconnected");
+    }
+  })
+);
+
+test(
+  "client fails to reconnect to websocket if closed before making a zome call and does not end up in a loop",
+  withConductor(ADMIN_PORT, async (t) => {
+    const { cell_id, client, admin } = await installAppAndDna(ADMIN_PORT);
+    await admin.authorizeSigningCredentials(cell_id);
+    await client.client.close();
+    const call = client.callZome({
+      cell_id,
+      zome_name: TEST_ZOME_NAME,
+      fn_name: "bar",
+      provenance: cell_id[1],
+      payload: null,
+    });
+    try {
+      await call;
+      t.fail(
+        "reconnecting to websocket should have failed due to an invalid token."
+      );
+    } catch (error) {
+      t.pass("reconnecting to websocket failed");
+    }
+  })
+);
+
+test(
   "Rust enums are serialized correctly",
   withConductor(ADMIN_PORT, async (t) => {
     const { client, admin, cell_id } = await installAppAndDna(ADMIN_PORT);
