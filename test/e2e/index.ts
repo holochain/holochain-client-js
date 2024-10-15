@@ -1444,7 +1444,11 @@ test(
 test(
   "client reconnects websocket if closed before making a zome call",
   withConductor(ADMIN_PORT, async (t) => {
-    const { cell_id, client, admin } = await installAppAndDna(ADMIN_PORT, true);
+    const { cell_id, client, admin } = await installAppAndDna(
+      ADMIN_PORT,
+      false,
+      0
+    );
     await admin.authorizeSigningCredentials(cell_id);
     await client.client.close();
     const call = client.callZome({
