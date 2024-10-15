@@ -128,7 +128,7 @@ export const installAppAndDna = async (
   });
   const issued = await admin.issueAppAuthenticationToken({
     installed_app_id,
-    single_use: nonExpiringToken ? false : true,
+    single_use: !nonExpiringToken,
     expiry_seconds: nonExpiringToken ? 0 : 30,
   });
   const client = await AppWebsocket.connect({

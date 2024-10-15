@@ -216,7 +216,7 @@ export class WsClient extends Emittery {
       return promise as Promise<Response>;
     } else if (this.url && this.authenticationToken) {
       const response = new Promise<unknown>((resolve, reject) => {
-        // typescript forgets in this promise scope that this.url is undefined
+        // typescript forgets in this promise scope that `this.url` is not undefined
         const socket = new IsoWebSocket(this.url as URL, this.options);
         this.socket = socket;
         socket.onerror = (errorEvent) => {

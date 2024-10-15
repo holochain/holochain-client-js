@@ -212,7 +212,7 @@ export class AppWebsocket implements AppClient {
 
     const client = await WsClient.connect(options.url, options.wsClientOptions);
 
-    const token = options.token ? options.token : env?.APP_INTERFACE_TOKEN;
+    const token = options.token ?? env?.APP_INTERFACE_TOKEN;
 
     if (!token)
       throw new HolochainError(
