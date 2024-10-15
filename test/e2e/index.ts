@@ -1458,7 +1458,7 @@ test(
       await call;
       t.pass("websocket was reconnected successfully");
     } catch (error) {
-      t.fail("websocket was not reconnected");
+      t.fail(`websocket was not reconnected: ${error}`);
     }
   })
 );
