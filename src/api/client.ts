@@ -37,7 +37,7 @@ export interface AppAuthenticationRequest {
 export class WsClient extends Emittery {
   socket: IsoWebSocket;
   url: URL | undefined;
-  options: WsClientOptions;
+  options: WsClientOptions | undefined;
   private pendingRequests: Record<number, HolochainRequest>;
   private index: number;
   private authenticationToken: AppAuthenticationToken | undefined;
@@ -46,7 +46,7 @@ export class WsClient extends Emittery {
     super();
     this.socket = socket;
     this.url = url;
-    this.options = options || {};
+    this.options = options;
     this.pendingRequests = {};
     this.index = 0;
 
