@@ -1468,7 +1468,7 @@ test(
 );
 
 test(
-  "client fails to reconnect to websocket if closed before making a zome call and does not end up in a loop",
+  "client fails to reconnect to websocket if closed before making a zome call if the provided token is invalid",
   withConductor(ADMIN_PORT, async (t) => {
     const { cell_id, client, admin } = await installAppAndDna(ADMIN_PORT);
     await admin.authorizeSigningCredentials(cell_id);
@@ -1486,7 +1486,19 @@ test(
         "reconnecting to websocket should have failed due to an invalid token."
       );
     } catch (error) {
-      t.pass("reconnecting to websocket failed");
+      if (
+        error
+          .toString()
+          .includes(
+            "client closed with pending requests - close event code: 1005"
+          )
+      ) {
+        t.pass("reconnecting to websocket failed with the expected error");
+      } else {
+        t.fail(
+          `reconnecting to websocket failed with an unexpected error: ${error}`
+        );
+      }
     }
   })
 );
