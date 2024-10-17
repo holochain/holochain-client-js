@@ -449,27 +449,6 @@ export class AppWebsocket implements AppClient {
       transformer
     );
   }
-
-  private containsCell(cellId: CellId) {
-    const appInfo = this.cachedAppInfo;
-    if (!appInfo) {
-      return false;
-    }
-    for (const roleName of Object.keys(appInfo.cell_info)) {
-      for (const cellInfo of appInfo.cell_info[roleName]) {
-        const currentCellId =
-          CellType.Provisioned in cellInfo
-            ? cellInfo[CellType.Provisioned].cell_id
-            : CellType.Cloned in cellInfo
-            ? cellInfo[CellType.Cloned].cell_id
-            : undefined;
-        if (currentCellId && isSameCell(currentCellId, cellId)) {
-          return true;
-        }
-      }
-    }
-    return false;
-  }
 }
 
 const defaultCallZomeTransform: Transformer<
