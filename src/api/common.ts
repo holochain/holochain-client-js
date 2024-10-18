@@ -96,6 +96,7 @@ export const promiseTimeout = (
         return res(a);
       })
       .catch((e) => {
+        clearTimeout(id);
         return rej(e);
       })
   );

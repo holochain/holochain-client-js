@@ -4,4 +4,4 @@ target
 node_modules
 /lib
 .tsbuildinfo
-.hc
+.hc*
