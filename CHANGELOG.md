@@ -5,6 +5,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## \[Unreleased\]
 
 ### Added
+- Bring back a websocket reconnection automation for Admin and App websockets. When either of them is closed and a new request made, it will attempt to reconnect using the same app authentication token that was used to initially authenticate the websocket. A specific `InvalidTokenError` is returned if that fails.
 ### Fixed
 ### Changed
 ### Removed

@@ -97,7 +97,15 @@ export const withConductor =
   };
 
 export const installAppAndDna = async (
-  adminPort: number
+  adminPort: number,
+  /**
+   * Whether the app authentication token is single use or not
+   */
+  singleUse = true,
+  /**
+   * expiry seconds of the app authentication token
+   */
+  expirySeconds = 30
 ): Promise<{
   installed_app_id: InstalledAppId;
   cell_id: CellId;
@@ -127,6 +135,8 @@ export const installAppAndDna = async (
   });
   const issued = await admin.issueAppAuthenticationToken({
     installed_app_id,
+    single_use: singleUse,
+    expiry_seconds: expirySeconds,
   });
   const client = await AppWebsocket.connect({
     url: new URL(`ws://localhost:${appPort}`),

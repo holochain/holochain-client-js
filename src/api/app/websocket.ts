@@ -1,7 +1,12 @@
 import Emittery, { UnsubscribeFunction } from "emittery";
 import { omit } from "lodash-es";
 import { AgentPubKey, CellId, InstalledAppId, RoleName } from "../../types.js";
-import { AppInfo, CellType, MemproofMap } from "../admin/index.js";
+import {
+  AppAuthenticationToken,
+  AppInfo,
+  CellType,
+  MemproofMap,
+} from "../admin/index.js";
 import {
   catchError,
   DEFAULT_TIMEOUT,
@@ -77,6 +82,7 @@ export class AppWebsocket implements AppClient {
     CallZomeResponseGeneric<Uint8Array>,
     CallZomeResponse
   >;
+  private readonly appAuthenticationToken: AppAuthenticationToken;
 
   cachedAppInfo?: AppInfo | null;
 
@@ -110,6 +116,7 @@ export class AppWebsocket implements AppClient {
   private constructor(
     client: WsClient,
     appInfo: AppInfo,
+    token: AppAuthenticationToken,
     callZomeTransform?: CallZomeTransform,
     defaultTimeout?: number
   ) {
@@ -118,6 +125,7 @@ export class AppWebsocket implements AppClient {
     this.installedAppId = appInfo.installed_app_id;
     this.defaultTimeout = defaultTimeout ?? DEFAULT_TIMEOUT;
     this.callZomeTransform = callZomeTransform ?? defaultCallZomeTransform;
+    this.appAuthenticationToken = token;
     this.emitter = new Emittery<AppEvents>();
     this.cachedAppInfo = appInfo;
 
@@ -204,18 +212,15 @@ export class AppWebsocket implements AppClient {
 
     const client = await WsClient.connect(options.url, options.wsClientOptions);
 
-    if (env?.APP_INTERFACE_TOKEN) {
-      // Note: This will only work for multiple connections if a single_use = false token is provided
-      await client.authenticate({ token: env.APP_INTERFACE_TOKEN });
-    } else {
-      if (!options.token) {
-        throw new HolochainError(
-          "AppAuthenticationTokenMissing",
-          `unable to connect to Conductor API - no app authentication token provided.`
-        );
-      }
-      await client.authenticate({ token: options.token });
-    }
+    const token = options.token ?? env?.APP_INTERFACE_TOKEN;
+
+    if (!token)
+      throw new HolochainError(
+        "AppAuthenticationTokenMissing",
+        `unable to connect to Conductor API - no app authentication token provided.`
+      );
+
+    await client.authenticate({ token });
 
     const appInfo = await (
       AppWebsocket.requester(client, "app_info", DEFAULT_TIMEOUT) as Requester<
@@ -233,6 +238,7 @@ export class AppWebsocket implements AppClient {
     return new AppWebsocket(
       client,
       appInfo,
+      token,
       options.callZomeTransform,
       options.defaultTimeout
     );
@@ -442,27 +448,6 @@ export class AppWebsocket implements AppClient {
       tag,
       transformer
     );
-  }
-
-  private containsCell(cellId: CellId) {
-    const appInfo = this.cachedAppInfo;
-    if (!appInfo) {
-      return false;
-    }
-    for (const roleName of Object.keys(appInfo.cell_info)) {
-      for (const cellInfo of appInfo.cell_info[roleName]) {
-        const currentCellId =
-          CellType.Provisioned in cellInfo
-            ? cellInfo[CellType.Provisioned].cell_id
-            : CellType.Cloned in cellInfo
-            ? cellInfo[CellType.Cloned].cell_id
-            : undefined;
-        if (currentCellId && isSameCell(currentCellId, cellId)) {
-          return true;
-        }
-      }
-    }
-    return false;
   }
 }
 
