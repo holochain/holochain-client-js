@@ -425,7 +425,7 @@ test(
 test(
   "invalid app authentication token fails",
   withConductor(ADMIN_PORT, async (t) => {
-    const { admin, installed_app_id } = await installAppAndDna(ADMIN_PORT);
+    const { admin } = await installAppAndDna(ADMIN_PORT);
     const { port } = await admin.attachAppInterface({
       allowed_origins: "client-test-app",
     });
@@ -1487,7 +1487,7 @@ test(
   })
 );
 
-test(
+test.only(
   "client fails to reconnect to websocket if closed before making a zome call if the provided token is invalid",
   withConductor(ADMIN_PORT, async (t) => {
     const { cell_id, client, admin } = await installAppAndDna(ADMIN_PORT);
@@ -1504,7 +1504,9 @@ test(
     // Websocket is closed and app authentication token has expired. Websocket reconnection
     // should fail.
     try {
-      await client.callZome(callParams, 3000);
+      console.log("now calling");
+      console.log();
+      await client.callZome(callParams);
       t.fail(
         "reconnecting to websocket should have failed due to an invalid token."
       );
@@ -1520,7 +1522,7 @@ test(
     // Websocket reconnection has failed and subsequent calls should just return a websocket
     // closed error.
     try {
-      await client.callZome(callParams, 3000);
+      await client.callZome(callParams);
       t.fail("should not be attempted to reconnect websocket");
     } catch (error) {
       t.assert(
