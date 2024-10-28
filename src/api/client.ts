@@ -108,6 +108,7 @@ export class WsClient extends Emittery {
       const invalidTokenCloseListener = (
         closeEvent: IsoWebSocket.CloseEvent
       ) => {
+        this.authenticationToken = undefined;
         reject(
           new HolochainError(
             "InvalidTokenError",
