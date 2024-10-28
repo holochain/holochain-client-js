@@ -9,7 +9,7 @@ Close the websocket connection.
 **Signature:**
 
 ```typescript
-close(code?: number): Promise<CloseEvent>;
+close(code?: number): Promise<IsoWebSocket.CloseEvent>;
 ```
 
 ## Parameters
@@ -49,5 +49,5 @@ _(Optional)_
 </tbody></table>
 **Returns:**
 
-Promise&lt;CloseEvent&gt;
+Promise&lt;IsoWebSocket.CloseEvent&gt;
 

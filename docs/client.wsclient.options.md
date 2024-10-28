@@ -7,5 +7,5 @@
 **Signature:**
 
 ```typescript
-options: WsClientOptions | undefined;
+options: WsClientOptions;
 ```
