@@ -423,6 +423,28 @@ test(
 );
 
 test(
+  "invalid app authentication token fails",
+  withConductor(ADMIN_PORT, async (t) => {
+    const { admin } = await installAppAndDna(ADMIN_PORT);
+    const { port } = await admin.attachAppInterface({
+      allowed_origins: "client-test-app",
+    });
+    try {
+      await AppWebsocket.connect({
+        url: new URL(`ws://localhost:${port}`),
+        wsClientOptions: { origin: "client-test-app" },
+        token: [0],
+      });
+      t.fail("could connect with invalid authentication token");
+    } catch (error) {
+      t.assert(error instanceof HolochainError);
+      assert(error instanceof HolochainError);
+      t.equal(error.name, "InvalidTokenError", "expected InvalidTokenError");
+    }
+  })
+);
+
+test(
   "app websocket connection from allowed origin is established",
   withConductor(ADMIN_PORT, async (t) => {
     const { admin, installed_app_id } = await installAppAndDna(ADMIN_PORT);
@@ -1352,8 +1374,6 @@ test(
 
     const response = await admin.storageInfo();
 
-    console.log(response.blobs[1].dna);
-
     t.equal(response.blobs.length, 2);
     t.assert(
       response.blobs.some((blob) => blob.dna.used_by.includes(installed_app_id))
@@ -1438,6 +1458,84 @@ test(
     });
 
     t.equal(response, "hi", "updated coordinator zomes can be called");
+  })
+);
+
+test(
+  "client reconnects websocket if closed before making a zome call",
+  withConductor(ADMIN_PORT, async (t) => {
+    const { cell_id, client, admin } = await installAppAndDna(
+      ADMIN_PORT,
+      false,
+      0
+    );
+    await admin.authorizeSigningCredentials(cell_id);
+    await client.client.close();
+    const callParams = {
+      cell_id,
+      zome_name: TEST_ZOME_NAME,
+      fn_name: "bar",
+      provenance: cell_id[1],
+      payload: null,
+    };
+    try {
+      await client.callZome(callParams);
+      t.pass("websocket was reconnected successfully");
+    } catch (error) {
+      t.fail(`websocket was not reconnected: ${error}`);
+    }
+  })
+);
+
+test.only(
+  "client fails to reconnect to websocket if closed before making a zome call if the provided token is invalid",
+  withConductor(ADMIN_PORT, async (t) => {
+    const { cell_id, client, admin } = await installAppAndDna(ADMIN_PORT);
+    await admin.authorizeSigningCredentials(cell_id);
+    await client.client.close();
+    const callParams = {
+      cell_id,
+      zome_name: TEST_ZOME_NAME,
+      fn_name: "bar",
+      provenance: cell_id[1],
+      payload: null,
+    };
+
+    // Websocket is closed and app authentication token has expired. Websocket reconnection
+    // should fail.
+    try {
+      console.log("now calling");
+      console.log();
+      await client.callZome(callParams);
+      t.fail(
+        "reconnecting to websocket should have failed due to an invalid token."
+      );
+    } catch (error) {
+      t.assert(
+        error instanceof HolochainError,
+        "error should be of type HolochainError"
+      );
+      assert(error instanceof HolochainError);
+      t.equal(error.name, "InvalidTokenError", "expected an InvalidTokenError");
+    }
+
+    // Websocket reconnection has failed and subsequent calls should just return a websocket
+    // closed error.
+    try {
+      await client.callZome(callParams);
+      t.fail("should not be attempted to reconnect websocket");
+    } catch (error) {
+      t.assert(
+        error instanceof HolochainError,
+        "error should be of type HolochainError"
+      );
+      assert(error instanceof HolochainError);
+      t.equal(
+        error.name,
+        "WebsocketClosedError",
+        "expected a WebsocketClosedError"
+      );
+    }
   })
 );
 
