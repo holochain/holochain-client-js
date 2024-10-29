@@ -5,12 +5,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## \[Unreleased\]
 
 ### Added
+- Bring back a websocket reconnection automation for Admin and App websockets. When either of them is closed and a new request made, it will attempt to reconnect using the same app authentication token that was used to initially authenticate the websocket. A specific `InvalidTokenError` is returned if that fails.
 ### Changed
 - Update to Holochain 0.4.0-rc.0
 ### Fixed
 ### Removed
 
-## 2024-09-30: v0.18.0-dev.12
+## 2024-09-30: v0.18.0-dev.13
 ### Fixed
 - Type `RevokeAgentKeyResponse`, which returns an array of tuples with cell id and error message for all cells that key revocation failed for.
 
