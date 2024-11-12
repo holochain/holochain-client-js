@@ -238,7 +238,7 @@ test(
     t.equal(runningApps2[0].installed_app_id, installed_app_id);
 
     const cellIds = await admin.listCellIds();
-    t.equal(cellIds.length, 2);
+    t.equal(cellIds.length, 1);
     assert(CellType.Provisioned in installedApp.cell_info[ROLE_NAME][0]);
     t.assert(
       cellIds.some((cellId) =>
@@ -940,17 +940,19 @@ test("can inject agents", async (t) => {
   const conductor1_agentInfo = await admin1.agentInfo({
     cell_id: null,
   });
-  // one app agent and one DPKI agent
-  t.equal(conductor1_agentInfo.length, 2);
+  // one app agent
+  // and one DPKI agent once DPKI is enabled again
+  t.equal(conductor1_agentInfo.length, 1);
 
-  // with no activated apps there is only the DPKI agent
+  // with no activated apps there is no agent
+  // only the DPKI agent
   let conductor2_agentInfo = await admin2.agentInfo({ cell_id: null });
-  t.equal(conductor2_agentInfo.length, 1);
+  t.equal(conductor2_agentInfo.length, 0);
 
   // but, after explicitly injecting an agent, we should see it too
   await admin2.addAgentInfo({ agent_infos: [conductor1_agentInfo[0]] });
   conductor2_agentInfo = await admin2.agentInfo({ cell_id: null });
-  t.equal(conductor2_agentInfo.length, 2);
+  t.equal(conductor2_agentInfo.length, 1);
 
   // now install the app and activate it on agent 2.
   await admin2.registerDna({
@@ -975,7 +977,7 @@ test("can inject agents", async (t) => {
 
   // observe 2 agent infos
   conductor2_agentInfo = await admin2.agentInfo({ cell_id: null });
-  t.equal(conductor2_agentInfo.length, 3);
+  t.equal(conductor2_agentInfo.length, 2);
 
   // now confirm that we can ask for just one cell
   await admin1.addAgentInfo({ agent_infos: conductor2_agentInfo });
@@ -1374,7 +1376,7 @@ test(
 
     const response = await admin.storageInfo();
 
-    t.equal(response.blobs.length, 2);
+    t.equal(response.blobs.length, 1);
     t.assert(
       response.blobs.some((blob) => blob.dna.used_by.includes(installed_app_id))
     );
