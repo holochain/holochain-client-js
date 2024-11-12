@@ -336,5 +336,16 @@ test.only(
         "there should not be a countersigning session"
       );
     }
+
+    try {
+      await appWs.publishCountersigningSession(cell_id);
+      t.fail("there should not be a countersigning session to be published");
+    } catch (error) {
+      assert(error instanceof Error);
+      t.assert(
+        error.message.includes("SessionNotFound"),
+        "there should not be a countersigning session"
+      );
+    }
   })
 );

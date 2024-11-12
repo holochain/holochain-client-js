@@ -264,6 +264,18 @@ export type AbandonCountersigningSessionStateRequest = CellId;
  */
 export type AbandonCountersigningSessionStateResponse = null;
 
+/**
+ * Cell id for which the countersigning session should be published.
+ *
+ * @public
+ */
+export type PublishCountersigningSessionStateRequest = CellId;
+
+/**
+ * @public
+ */
+export type PublishCountersigningSessionStateResponse = null;
+
 export enum CountersigningSessionStateType {
   Accepted = "Accepted",
   SignaturesCollected = "SignaturesCollected",
