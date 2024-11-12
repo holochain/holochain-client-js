@@ -315,37 +315,40 @@ test(
   })
 );
 
-test.only(
-  "countersigning session interaction calls",
-  withConductor(ADMIN_PORT, async (t) => {
-    const { client: appWs, cell_id } = await createAppWsAndInstallApp(
-      ADMIN_PORT
-    );
-
-    let response = await appWs.getCountersigningSessionState(cell_id);
-    console.log("response", response);
-    t.equals(response, null, "countersigning session state should be null");
-
-    try {
-      await appWs.abandonCountersigningSession(cell_id);
-      t.fail("there should not be a countersigning session to be abandoned");
-    } catch (error) {
-      assert(error instanceof Error);
-      t.assert(
-        error.message.includes("SessionNotFound"),
-        "there should not be a countersigning session"
+// To test unstable features in Holochain, set env var `TEST_UNSTABLE` to `true`.
+if (process.env.TEST_UNSTABLE === "true") {
+  test(
+    "countersigning session interaction calls",
+    withConductor(ADMIN_PORT, async (t) => {
+      const { client: appWs, cell_id } = await createAppWsAndInstallApp(
+        ADMIN_PORT
       );
-    }
 
-    try {
-      await appWs.publishCountersigningSession(cell_id);
-      t.fail("there should not be a countersigning session to be published");
-    } catch (error) {
-      assert(error instanceof Error);
-      t.assert(
-        error.message.includes("SessionNotFound"),
-        "there should not be a countersigning session"
-      );
-    }
-  })
-);
+      let response = await appWs.getCountersigningSessionState(cell_id);
+      console.log("response", response);
+      t.equals(response, null, "countersigning session state should be null");
+
+      try {
+        await appWs.abandonCountersigningSession(cell_id);
+        t.fail("there should not be a countersigning session to be abandoned");
+      } catch (error) {
+        assert(error instanceof Error);
+        t.assert(
+          error.message.includes("SessionNotFound"),
+          "there should not be a countersigning session"
+        );
+      }
+
+      try {
+        await appWs.publishCountersigningSession(cell_id);
+        t.fail("there should not be a countersigning session to be published");
+      } catch (error) {
+        assert(error instanceof Error);
+        t.assert(
+          error.message.includes("SessionNotFound"),
+          "there should not be a countersigning session"
+        );
+      }
+    })
+  );
+}
