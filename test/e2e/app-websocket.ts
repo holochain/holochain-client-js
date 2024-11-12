@@ -322,8 +322,19 @@ test.only(
       ADMIN_PORT
     );
 
-    const response = await appWs.getCountersigningSessionState(cell_id);
+    let response = await appWs.getCountersigningSessionState(cell_id);
     console.log("response", response);
     t.equals(response, null, "countersigning session state should be null");
+
+    try {
+      await appWs.abandonCountersigningSession(cell_id);
+      t.fail("there should not be a countersigning session to be abandoned");
+    } catch (error) {
+      assert(error instanceof Error);
+      t.assert(
+        error.message.includes("SessionNotFound"),
+        "there should not be a countersigning session"
+      );
+    }
   })
 );

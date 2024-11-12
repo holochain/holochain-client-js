@@ -50,6 +50,8 @@ import {
   Signal,
   GetCountersigningSessionStateRequest,
   GetCountersigningSessionStateResponse,
+  AbandonCountersigningSessionStateRequest,
+  AbandonCountersigningSessionStateResponse,
 } from "./types.js";
 import {
   getHostZomeCallSigner,
@@ -117,6 +119,10 @@ export class AppWebsocket implements AppClient {
     GetCountersigningSessionStateRequest,
     GetCountersigningSessionStateResponse
   >;
+  private readonly abandonCountersigningSessionRequester: Requester<
+    AbandonCountersigningSessionStateRequest,
+    AbandonCountersigningSessionStateResponse
+  >;
 
   private constructor(
     client: WsClient,
@@ -176,6 +182,11 @@ export class AppWebsocket implements AppClient {
     this.getCountersigningSessionStateRequester = AppWebsocket.requester(
       this.client,
       "get_countersigning_session_state",
+      this.defaultTimeout
+    );
+    this.abandonCountersigningSessionRequester = AppWebsocket.requester(
+      this.client,
+      "abandon_countersigning_session",
       this.defaultTimeout
     );
 
@@ -426,6 +437,48 @@ export class AppWebsocket implements AppClient {
     args: GetCountersigningSessionStateRequest
   ) {
     return this.getCountersigningSessionStateRequester(args);
+  }
+
+  /**
+   * Abandon an unresolved countersigning session.
+   *
+   * If the current session has not been resolved automatically, it can be forcefully abandoned.
+   * A condition for this call to succeed is that at least one attempt has been made to resolve
+   * it automatically.
+   *
+   * # Returns
+   *
+   * [`AppResponse::CountersigningSessionAbandoned`]
+   *
+   * The session is marked for abandoning and the countersigning workflow was triggered. The session
+   * has not been abandoned yet.
+   *
+   * Upon successful abandoning the system signal [`SystemSignal::AbandonedCountersigning`] will
+   * be emitted and the session removed from state, so that [`AppRequest::GetCountersigningSessionState`]
+   * would return `None`.
+   *
+   * In the countersigning workflow it will first be attempted to resolve the session with incoming
+   * signatures of the countersigned entries, before force-abandoning the session. In a very rare event
+   * it could happen that in just the moment where the [`AppRequest::AbandonCountersigningSession`]
+   * is made, signatures for this session come in. If they are valid, the session will be resolved and
+   * published as usual. Should they be invalid, however, the flag to abandon the session is erased.
+   * In such cases this request can be retried until the session has been abandoned successfully.
+   *
+   * # Errors
+   *
+   * [`CountersigningError::WorkspaceDoesNotExist`] likely indicates that an invalid cell id was
+   * passed in to the call.
+   *
+   * [`CountersigningError::SessionNotFound`] when no ongoing session could be found for the provided
+   * cell id.
+   *
+   * [`CountersigningError::SessionNotUnresolved`] when an attempt to resolve the session
+   * automatically has not been made.
+   */
+  async abandonCountersigningSession(
+    args: AbandonCountersigningSessionStateRequest
+  ) {
+    return this.abandonCountersigningSessionRequester(args);
   }
 
   /**
