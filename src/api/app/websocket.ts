@@ -48,6 +48,8 @@ import {
   EnableRequest,
   EnableResponse,
   Signal,
+  GetCountersigningSessionStateRequest,
+  GetCountersigningSessionStateResponse,
 } from "./types.js";
 import {
   getHostZomeCallSigner,
@@ -111,6 +113,10 @@ export class AppWebsocket implements AppClient {
     NetworkInfoRequest,
     NetworkInfoResponse
   >;
+  private readonly getCountersigningSessionStateRequester: Requester<
+    GetCountersigningSessionStateRequest,
+    GetCountersigningSessionStateResponse
+  >;
 
   private constructor(
     client: WsClient,
@@ -165,6 +171,11 @@ export class AppWebsocket implements AppClient {
     this.networkInfoRequester = AppWebsocket.requester(
       this.client,
       "network_info",
+      this.defaultTimeout
+    );
+    this.getCountersigningSessionStateRequester = AppWebsocket.requester(
+      this.client,
+      "get_countersigning_session_state",
       this.defaultTimeout
     );
 
@@ -329,10 +340,10 @@ export class AppWebsocket implements AppClient {
    * @param timeout - A timeout to override the default.
    * @returns The zome call's response.
    */
-  async callZome(
+  async callZome<ReturnType>(
     request: AppCallZomeRequest,
     timeout?: number
-  ): Promise<CallZomeResponse> {
+  ): Promise<ReturnType> {
     if (!("provenance" in request)) {
       request = {
         ...request,
@@ -363,9 +374,7 @@ export class AppWebsocket implements AppClient {
    * @param args - Specify the cell to clone.
    * @returns The created clone cell.
    */
-  async createCloneCell(
-    args: AppCreateCloneCellRequest
-  ): Promise<CreateCloneCellResponse> {
+  async createCloneCell(args: AppCreateCloneCellRequest) {
     const clonedCell = this.createCloneCellRequester({
       ...args,
     });
@@ -381,9 +390,7 @@ export class AppWebsocket implements AppClient {
    * @param args - Specify the clone cell to enable.
    * @returns The enabled clone cell.
    */
-  async enableCloneCell(
-    args: AppEnableCloneCellRequest
-  ): Promise<EnableCloneCellResponse> {
+  async enableCloneCell(args: AppEnableCloneCellRequest) {
     return this.enableCloneCellRequester({
       ...args,
     });
@@ -394,9 +401,7 @@ export class AppWebsocket implements AppClient {
    *
    * @param args - Specify the clone cell to disable.
    */
-  async disableCloneCell(
-    args: AppDisableCloneCellRequest
-  ): Promise<DisableCloneCellResponse> {
+  async disableCloneCell(args: AppDisableCloneCellRequest) {
     return this.disableCloneCellRequester({
       ...args,
     });
@@ -407,11 +412,20 @@ export class AppWebsocket implements AppClient {
    *  @param args - Specify the DNAs for which you want network info
    *  @returns Network info for the specified DNAs
    */
-  async networkInfo(args: AppNetworkInfoRequest): Promise<NetworkInfoResponse> {
+  async networkInfo(args: AppNetworkInfoRequest) {
     return this.networkInfoRequester({
       ...args,
       agent_pub_key: this.myPubKey,
     });
+  }
+
+  /**
+   * Get the state of a countersigning session.
+   */
+  async getCountersigningSessionState(
+    args: GetCountersigningSessionStateRequest
+  ) {
+    return this.getCountersigningSessionStateRequester(args);
   }
 
   /**
@@ -469,10 +483,6 @@ const defaultCallZomeTransform: Transformer<
   },
   output: (response) => decode(response),
 };
-
-const isSameCell = (cellId1: CellId, cellId2: CellId) =>
-  cellId1[0].every((byte, index) => byte === cellId2[0][index]) &&
-  cellId1[1].every((byte, index) => byte === cellId2[1][index]);
 
 /**
  * @public

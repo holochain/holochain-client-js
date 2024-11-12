@@ -314,3 +314,16 @@ test(
     ]);
   })
 );
+
+test.only(
+  "countersigning session interaction calls",
+  withConductor(ADMIN_PORT, async (t) => {
+    const { client: appWs, cell_id } = await createAppWsAndInstallApp(
+      ADMIN_PORT
+    );
+
+    const response = await appWs.getCountersigningSessionState(cell_id);
+    console.log("response", response);
+    t.equals(response, null, "countersigning session state should be null");
+  })
+);
