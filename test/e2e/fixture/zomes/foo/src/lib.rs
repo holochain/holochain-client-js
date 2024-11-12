@@ -79,23 +79,26 @@ pub fn waste_some_time() -> ExternResult<TestString> {
 
 #[hdk_extern]
 pub fn decode_as_agentpubkey(bytes: Vec<u8>) -> ExternResult<AgentPubKey> {
-    AgentPubKey::from_raw_39(bytes)
+    AgentPubKey::try_from_raw_39(bytes)
         .map_err(|e| wasm_error!(WasmErrorInner::Guest(format!("{}", e))))
 }
 
 #[hdk_extern]
 pub fn decode_as_entryhash(bytes: Vec<u8>) -> ExternResult<EntryHash> {
-    EntryHash::from_raw_39(bytes).map_err(|e| wasm_error!(WasmErrorInner::Guest(format!("{}", e))))
+    EntryHash::try_from_raw_39(bytes)
+        .map_err(|e| wasm_error!(WasmErrorInner::Guest(format!("{}", e))))
 }
 
 #[hdk_extern]
 pub fn decode_as_actionhash(bytes: Vec<u8>) -> ExternResult<ActionHash> {
-    ActionHash::from_raw_39(bytes).map_err(|e| wasm_error!(WasmErrorInner::Guest(format!("{}", e))))
+    ActionHash::try_from_raw_39(bytes)
+        .map_err(|e| wasm_error!(WasmErrorInner::Guest(format!("{}", e))))
 }
 
 #[hdk_extern]
 pub fn decode_as_dnahash(bytes: Vec<u8>) -> ExternResult<DnaHash> {
-    DnaHash::from_raw_39(bytes).map_err(|e| wasm_error!(WasmErrorInner::Guest(format!("{}", e))))
+    DnaHash::try_from_raw_39(bytes)
+        .map_err(|e| wasm_error!(WasmErrorInner::Guest(format!("{}", e))))
 }
 
 #[hdk_extern]
