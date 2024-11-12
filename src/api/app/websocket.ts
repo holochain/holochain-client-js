@@ -82,7 +82,6 @@ export class AppWebsocket implements AppClient {
     CallZomeResponseGeneric<Uint8Array>,
     CallZomeResponse
   >;
-  private readonly appAuthenticationToken: AppAuthenticationToken;
 
   cachedAppInfo?: AppInfo | null;
 
@@ -116,7 +115,6 @@ export class AppWebsocket implements AppClient {
   private constructor(
     client: WsClient,
     appInfo: AppInfo,
-    token: AppAuthenticationToken,
     callZomeTransform?: CallZomeTransform,
     defaultTimeout?: number
   ) {
@@ -125,7 +123,6 @@ export class AppWebsocket implements AppClient {
     this.installedAppId = appInfo.installed_app_id;
     this.defaultTimeout = defaultTimeout ?? DEFAULT_TIMEOUT;
     this.callZomeTransform = callZomeTransform ?? defaultCallZomeTransform;
-    this.appAuthenticationToken = token;
     this.emitter = new Emittery<AppEvents>();
     this.cachedAppInfo = appInfo;
 
@@ -238,7 +235,6 @@ export class AppWebsocket implements AppClient {
     return new AppWebsocket(
       client,
       appInfo,
-      token,
       options.callZomeTransform,
       options.defaultTimeout
     );
