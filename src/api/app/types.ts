@@ -276,12 +276,18 @@ export type PublishCountersigningSessionStateRequest = CellId;
  */
 export type PublishCountersigningSessionStateResponse = null;
 
+/**
+ * @public
+ */
 export enum CountersigningSessionStateType {
   Accepted = "Accepted",
   SignaturesCollected = "SignaturesCollected",
   Unknown = "Unknown",
 }
 
+/**
+ * @public
+ */
 export type CountersigningSessionState =
   /**
    * This is the entry state. Accepting a countersigning session through the HDK will immediately
@@ -366,6 +372,8 @@ export type CountersigningSessionState =
 /**
  * Summary of the workflow's attempts to resolve the outcome a failed countersigning session.
  * This tracks the numbers of attempts and the outcome of the most recent attempt.
+ *
+ * @public
  */
 export interface SessionResolutionSummary {
   /** The reason why session resolution is required. */
@@ -387,6 +395,8 @@ export interface SessionResolutionSummary {
 
 /**
  * The reason why a countersigning session can not be resolved automatically and requires manual resolution.
+ *
+ * @public
  */
 export enum ResolutionRequiredReason {
   /** The session has timed out, so we should try to resolve its state before abandoning. */
@@ -400,6 +410,8 @@ export enum ResolutionRequiredReason {
  *
  * [NUM_AUTHORITIES_TO_QUERY] authorities are made to agent activity authorities for each agent,
  * and the decisions are collected into [SessionResolutionOutcome::decisions].
+ *
+ * @public
  */
 export interface SessionResolutionOutcome {
   /**
@@ -413,6 +425,8 @@ export interface SessionResolutionOutcome {
 
 /**
  * Decision about an incomplete countersigning session.
+ *
+ * @public
  */
 export enum SessionCompletionDecisionType {
   /** Evidence found on the network that this session completed successfully. */
@@ -435,6 +449,9 @@ export enum SessionCompletionDecisionType {
   Failed = "Failed",
 }
 
+/**
+ * @public
+ */
 export type SessionCompletionDecision =
   | { [SessionCompletionDecisionType.Complete]: SignedActionHashed }
   | SessionCompletionDecisionType.Abandoned

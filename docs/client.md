@@ -143,6 +143,16 @@ Description
 </td></tr>
 <tr><td>
 
+[CountersigningSessionStateType](./client.countersigningsessionstatetype.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
 [DhtOpType](./client.dhtoptype.md)
 
 
@@ -158,6 +168,28 @@ Description
 
 </td><td>
 
+
+
+</td></tr>
+<tr><td>
+
+[ResolutionRequiredReason](./client.resolutionrequiredreason.md)
+
+
+</td><td>
+
+The reason why a countersigning session can not be resolved automatically and requires manual resolution.
+
+
+</td></tr>
+<tr><td>
+
+[SessionCompletionDecisionType](./client.sessioncompletiondecisiontype.md)
+
+
+</td><td>
+
+Decision about an incomplete countersigning session.
 
 
 </td></tr>
@@ -982,6 +1014,40 @@ Description
 </td></tr>
 <tr><td>
 
+[SessionResolutionOutcome](./client.sessionresolutionoutcome.md)
+
+
+</td><td>
+
+The outcome for a single agent who participated in a countersigning session.
+
+\[NUM\_AUTHORITIES\_TO\_QUERY\] authorities are made to agent activity authorities for each agent, and the decisions are collected into \[SessionResolutionOutcome::decisions\].
+
+
+</td></tr>
+<tr><td>
+
+[SessionResolutionSummary](./client.sessionresolutionsummary.md)
+
+
+</td><td>
+
+Summary of the workflow's attempts to resolve the outcome a failed countersigning session. This tracks the numbers of attempts and the outcome of the most recent attempt.
+
+
+</td></tr>
+<tr><td>
+
+[SignedAction](./client.signedaction.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
 [SignedActionHashed](./client.signedactionhashed.md)
 
 
@@ -1165,6 +1231,27 @@ Description
 
 </th></tr></thead>
 <tbody><tr><td>
+
+[AbandonCountersigningSessionStateRequest](./client.abandoncountersigningsessionstaterequest.md)
+
+
+</td><td>
+
+Cell id for which the countersigning session should be abandoned.
+
+
+</td></tr>
+<tr><td>
+
+[AbandonCountersigningSessionStateResponse](./client.abandoncountersigningsessionstateresponse.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
 
 [Action](./client.action.md)
 
@@ -1648,6 +1735,16 @@ This type is meant to be opaque
 </td></tr>
 <tr><td>
 
+[CountersigningSessionState](./client.countersigningsessionstate.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
 [CreateCloneCellResponse](./client.createclonecellresponse.md)
 
 
@@ -2068,6 +2165,27 @@ This type is meant to be opaque
 </td></tr>
 <tr><td>
 
+[GetCountersigningSessionStateRequest](./client.getcountersigningsessionstaterequest.md)
+
+
+</td><td>
+
+Cell id for which the countersigning session state is requested.
+
+
+</td></tr>
+<tr><td>
+
+[GetCountersigningSessionStateResponse](./client.getcountersigningsessionstateresponse.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
 [GetDnaDefinitionRequest](./client.getdnadefinitionrequest.md)
 
 
@@ -2459,6 +2577,27 @@ An internal link type index within the DNA, from 0 to 255.
 </td></tr>
 <tr><td>
 
+[PublishCountersigningSessionStateRequest](./client.publishcountersigningsessionstaterequest.md)
+
+
+</td><td>
+
+Cell id for which the countersigning session should be published.
+
+
+</td></tr>
+<tr><td>
+
+[PublishCountersigningSessionStateResponse](./client.publishcountersigningsessionstateresponse.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
 [RateBucketId](./client.ratebucketid.md)
 
 
@@ -2613,6 +2752,16 @@ If the key could not be deleted from all cells, the call [RevokeAgentKeyRequest]
 <tr><td>
 
 [RoleNameCallZomeRequestSigned](./client.rolenamecallzomerequestsigned.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[SessionCompletionDecision](./client.sessioncompletiondecision.md)
 
 
 </td><td>

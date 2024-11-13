@@ -324,7 +324,7 @@ if (process.env.TEST_UNSTABLE === "true") {
         ADMIN_PORT
       );
 
-      let response = await appWs.getCountersigningSessionState(cell_id);
+      const response = await appWs.getCountersigningSessionState(cell_id);
       console.log("response", response);
       t.equals(response, null, "countersigning session state should be null");
 
