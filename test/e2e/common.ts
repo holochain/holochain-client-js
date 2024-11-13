@@ -11,14 +11,7 @@ const LAIR_PASSPHRASE = "passphrase";
 
 export const launch = async (port: number) => {
   // create sandbox conductor
-  const args = [
-    "sandbox",
-    "--piped",
-    "create",
-    "--in-process-lair",
-    "--dpki-network-seed",
-    Date.now().toString(),
-  ];
+  const args = ["sandbox", "--piped", "create", "--in-process-lair"];
   const createConductorProcess = spawn("hc", args);
   createConductorProcess.stdin.write(LAIR_PASSPHRASE);
   createConductorProcess.stdin.end();

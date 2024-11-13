@@ -48,6 +48,12 @@ import {
   EnableRequest,
   EnableResponse,
   Signal,
+  GetCountersigningSessionStateRequest,
+  GetCountersigningSessionStateResponse,
+  AbandonCountersigningSessionStateRequest,
+  AbandonCountersigningSessionStateResponse,
+  PublishCountersigningSessionStateRequest,
+  PublishCountersigningSessionStateResponse,
 } from "./types.js";
 import {
   getHostZomeCallSigner,
@@ -82,7 +88,6 @@ export class AppWebsocket implements AppClient {
     CallZomeResponseGeneric<Uint8Array>,
     CallZomeResponse
   >;
-  private readonly appAuthenticationToken: AppAuthenticationToken;
 
   cachedAppInfo?: AppInfo | null;
 
@@ -112,11 +117,22 @@ export class AppWebsocket implements AppClient {
     NetworkInfoRequest,
     NetworkInfoResponse
   >;
+  private readonly getCountersigningSessionStateRequester: Requester<
+    GetCountersigningSessionStateRequest,
+    GetCountersigningSessionStateResponse
+  >;
+  private readonly abandonCountersigningSessionRequester: Requester<
+    AbandonCountersigningSessionStateRequest,
+    AbandonCountersigningSessionStateResponse
+  >;
+  private readonly publishCountersigningSessionRequester: Requester<
+    PublishCountersigningSessionStateRequest,
+    PublishCountersigningSessionStateResponse
+  >;
 
   private constructor(
     client: WsClient,
     appInfo: AppInfo,
-    token: AppAuthenticationToken,
     callZomeTransform?: CallZomeTransform,
     defaultTimeout?: number
   ) {
@@ -125,7 +141,6 @@ export class AppWebsocket implements AppClient {
     this.installedAppId = appInfo.installed_app_id;
     this.defaultTimeout = defaultTimeout ?? DEFAULT_TIMEOUT;
     this.callZomeTransform = callZomeTransform ?? defaultCallZomeTransform;
-    this.appAuthenticationToken = token;
     this.emitter = new Emittery<AppEvents>();
     this.cachedAppInfo = appInfo;
 
@@ -168,6 +183,21 @@ export class AppWebsocket implements AppClient {
     this.networkInfoRequester = AppWebsocket.requester(
       this.client,
       "network_info",
+      this.defaultTimeout
+    );
+    this.getCountersigningSessionStateRequester = AppWebsocket.requester(
+      this.client,
+      "get_countersigning_session_state",
+      this.defaultTimeout
+    );
+    this.abandonCountersigningSessionRequester = AppWebsocket.requester(
+      this.client,
+      "abandon_countersigning_session",
+      this.defaultTimeout
+    );
+    this.publishCountersigningSessionRequester = AppWebsocket.requester(
+      this.client,
+      "publish_countersigning_session",
       this.defaultTimeout
     );
 
@@ -238,7 +268,6 @@ export class AppWebsocket implements AppClient {
     return new AppWebsocket(
       client,
       appInfo,
-      token,
       options.callZomeTransform,
       options.defaultTimeout
     );
@@ -333,10 +362,10 @@ export class AppWebsocket implements AppClient {
    * @param timeout - A timeout to override the default.
    * @returns The zome call's response.
    */
-  async callZome(
+  async callZome<ReturnType>(
     request: AppCallZomeRequest,
     timeout?: number
-  ): Promise<CallZomeResponse> {
+  ): Promise<ReturnType> {
     if (!("provenance" in request)) {
       request = {
         ...request,
@@ -367,9 +396,7 @@ export class AppWebsocket implements AppClient {
    * @param args - Specify the cell to clone.
    * @returns The created clone cell.
    */
-  async createCloneCell(
-    args: AppCreateCloneCellRequest
-  ): Promise<CreateCloneCellResponse> {
+  async createCloneCell(args: AppCreateCloneCellRequest) {
     const clonedCell = this.createCloneCellRequester({
       ...args,
     });
@@ -385,9 +412,7 @@ export class AppWebsocket implements AppClient {
    * @param args - Specify the clone cell to enable.
    * @returns The enabled clone cell.
    */
-  async enableCloneCell(
-    args: AppEnableCloneCellRequest
-  ): Promise<EnableCloneCellResponse> {
+  async enableCloneCell(args: AppEnableCloneCellRequest) {
     return this.enableCloneCellRequester({
       ...args,
     });
@@ -398,9 +423,7 @@ export class AppWebsocket implements AppClient {
    *
    * @param args - Specify the clone cell to disable.
    */
-  async disableCloneCell(
-    args: AppDisableCloneCellRequest
-  ): Promise<DisableCloneCellResponse> {
+  async disableCloneCell(args: AppDisableCloneCellRequest) {
     return this.disableCloneCellRequester({
       ...args,
     });
@@ -411,11 +434,104 @@ export class AppWebsocket implements AppClient {
    *  @param args - Specify the DNAs for which you want network info
    *  @returns Network info for the specified DNAs
    */
-  async networkInfo(args: AppNetworkInfoRequest): Promise<NetworkInfoResponse> {
+  async networkInfo(args: AppNetworkInfoRequest) {
     return this.networkInfoRequester({
       ...args,
       agent_pub_key: this.myPubKey,
     });
+  }
+
+  /**
+   * Get the state of a countersigning session.
+   */
+  async getCountersigningSessionState(
+    args: GetCountersigningSessionStateRequest
+  ) {
+    return this.getCountersigningSessionStateRequester(args);
+  }
+
+  /**
+   * Abandon an unresolved countersigning session.
+   *
+   * If the current session has not been resolved automatically, it can be forcefully abandoned.
+   * A condition for this call to succeed is that at least one attempt has been made to resolve
+   * it automatically.
+   *
+   * # Returns
+   *
+   * [`AppResponse::CountersigningSessionAbandoned`]
+   *
+   * The session is marked for abandoning and the countersigning workflow was triggered. The session
+   * has not been abandoned yet.
+   *
+   * Upon successful abandoning the system signal [`SystemSignal::AbandonedCountersigning`] will
+   * be emitted and the session removed from state, so that [`AppRequest::GetCountersigningSessionState`]
+   * would return `None`.
+   *
+   * In the countersigning workflow it will first be attempted to resolve the session with incoming
+   * signatures of the countersigned entries, before force-abandoning the session. In a very rare event
+   * it could happen that in just the moment where the [`AppRequest::AbandonCountersigningSession`]
+   * is made, signatures for this session come in. If they are valid, the session will be resolved and
+   * published as usual. Should they be invalid, however, the flag to abandon the session is erased.
+   * In such cases this request can be retried until the session has been abandoned successfully.
+   *
+   * # Errors
+   *
+   * [`CountersigningError::WorkspaceDoesNotExist`] likely indicates that an invalid cell id was
+   * passed in to the call.
+   *
+   * [`CountersigningError::SessionNotFound`] when no ongoing session could be found for the provided
+   * cell id.
+   *
+   * [`CountersigningError::SessionNotUnresolved`] when an attempt to resolve the session
+   * automatically has not been made.
+   */
+  async abandonCountersigningSession(
+    args: AbandonCountersigningSessionStateRequest
+  ) {
+    return this.abandonCountersigningSessionRequester(args);
+  }
+
+  /**
+   * Publish an unresolved countersigning session.
+   *
+   * If the current session has not been resolved automatically, it can be forcefully published.
+   * A condition for this call to succeed is that at least one attempt has been made to resolve
+   * it automatically.
+   *
+   * # Returns
+   *
+   * [`AppResponse::PublishCountersigningSessionTriggered`]
+   *
+   * The session is marked for publishing and the countersigning workflow was triggered. The session
+   * has not been published yet.
+   *
+   * Upon successful publishing the system signal [`SystemSignal::SuccessfulCountersigning`] will
+   * be emitted and the session removed from state, so that [`AppRequest::GetCountersigningSessionState`]
+   * would return `None`.
+   *
+   * In the countersigning workflow it will first be attempted to resolve the session with incoming
+   * signatures of the countersigned entries, before force-publishing the session. In a very rare event
+   * it could happen that in just the moment where the [`AppRequest::PublishCountersigningSession`]
+   * is made, signatures for this session come in. If they are valid, the session will be resolved and
+   * published as usual. Should they be invalid, however, the flag to publish the session is erased.
+   * In such cases this request can be retried until the session has been published successfully.
+   *
+   * # Errors
+   *
+   * [`CountersigningError::WorkspaceDoesNotExist`] likely indicates that an invalid cell id was
+   * passed in to the call.
+   *
+   * [`CountersigningError::SessionNotFound`] when no ongoing session could be found for the provided
+   * cell id.
+   *
+   * [`CountersigningError::SessionNotUnresolved`] when an attempt to resolve the session
+   * automatically has not been made.
+   */
+  async publishCountersigningSession(
+    args: PublishCountersigningSessionStateRequest
+  ) {
+    return this.publishCountersigningSessionRequester(args);
   }
 
   /**
@@ -473,10 +589,6 @@ const defaultCallZomeTransform: Transformer<
   },
   output: (response) => decode(response),
 };
-
-const isSameCell = (cellId1: CellId, cellId2: CellId) =>
-  cellId1[0].every((byte, index) => byte === cellId2[0][index]) &&
-  cellId1[1].every((byte, index) => byte === cellId2[1][index]);
 
 /**
  * @public

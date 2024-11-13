@@ -13,6 +13,14 @@ import { LinkTag, LinkType, RateWeight } from "./link.js";
 /**
  * @public
  */
+export interface SignedAction {
+  data: Action;
+  signature: Signature;
+}
+
+/**
+ * @public
+ */
 export interface SignedActionHashed<H extends Action = Action> {
   hashed: HoloHashed<H>;
   signature: Signature;
