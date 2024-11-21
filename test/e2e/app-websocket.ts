@@ -3,10 +3,9 @@ import test from "tape";
 import {
   AdminWebsocket,
   AppCallZomeRequest,
-  AppWebsocket,
   AppCreateCloneCellRequest,
   AppEntryDef,
-  AppSignal,
+  AppWebsocket,
   CellType,
   CloneId,
   fakeAgentPubKey,

@@ -29,6 +29,10 @@ import {
   SignalType,
   Signal,
   isSameCell,
+  CallZomeRequestAllParams,
+  getSigningCredentials,
+  randomNonce,
+  getNonceExpiration,
 } from "../../src";
 import {
   FIXTURE_PATH,
@@ -399,6 +403,41 @@ test(
       { disabled: { reason: "user" } },
       "disabled reason user"
     );
+  })
+);
+
+test(
+  "can call a zome function with different sets of params",
+  withConductor(ADMIN_PORT, async (t) => {
+    const { cell_id, client, admin } = await installAppAndDna(ADMIN_PORT);
+    await admin.authorizeSigningCredentials(cell_id);
+
+    const request: CallZomeRequest = {
+      cell_id,
+      zome_name: TEST_ZOME_NAME,
+      fn_name: "foo",
+      provenance: cell_id[1],
+      payload: null,
+    };
+    let response = await client.callZome(request, 30000);
+    t.equal(response, "foo", "zome can be called with all parameters");
+
+    const cap_secret = getSigningCredentials(cell_id)?.capSecret;
+    assert(cap_secret);
+
+    const zomeCallPayload: CallZomeRequestAllParams = {
+      cell_id,
+      zome_name: TEST_ZOME_NAME,
+      fn_name: "foo",
+      provenance: cell_id[1],
+      payload: null,
+      cap_secret,
+      nonce: await randomNonce(),
+      expires_at: getNonceExpiration(),
+    };
+
+    response = await client.callZome(zomeCallPayload, 30000);
+    t.equal(response, "foo", "zome can be called with all parameters");
   })
 );
 
