@@ -30,7 +30,7 @@ import {
   SignalCb,
   CallZomeRequest,
   CallZomeRequestSigned,
-  CallZomeRequestUnsigned,
+  CallZomeRequestParams,
   CallZomeResponse,
   CallZomeResponseGeneric,
   CreateCloneCellRequest,
@@ -603,7 +603,7 @@ export const signZomeCall = async (request: CallZomeRequest) => {
       )}, ${encodeHashToBase64(request.cell_id[1])}]`
     );
   }
-  const unsignedZomeCallPayload: CallZomeRequestUnsigned = {
+  const unsignedZomeCallPayload: CallZomeRequestParams = {
     cap_secret: signingCredentialsForCell.capSecret,
     cell_id: request.cell_id,
     zome_name: request.zome_name,

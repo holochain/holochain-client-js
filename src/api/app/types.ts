@@ -90,7 +90,7 @@ export interface AppEvents {
 /**
  * @public
  */
-export interface CallZomeRequestUnsigned extends CallZomeRequest {
+export interface CallZomeRequestParams extends CallZomeRequest {
   cap_secret: CapSecret | null;
   nonce: Nonce256Bit;
   expires_at: number;
