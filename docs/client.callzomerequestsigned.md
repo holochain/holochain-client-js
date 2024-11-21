@@ -8,9 +8,8 @@
 **Signature:**
 
 ```typescript
-export interface CallZomeRequestSigned extends CallZomeRequestUnsigned 
+export interface CallZomeRequestSigned 
 ```
-**Extends:** [CallZomeRequestUnsigned](./client.callzomerequestunsigned.md)
 
 ## Properties
 
@@ -36,6 +35,23 @@ Description
 
 </th></tr></thead>
 <tbody><tr><td>
+
+[bytes](./client.callzomerequestsigned.bytes.md)
+
+
+</td><td>
+
+
+</td><td>
+
+Uint8Array
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
 
 [signature](./client.callzomerequestsigned.signature.md)
 
