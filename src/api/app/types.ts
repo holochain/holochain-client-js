@@ -29,38 +29,6 @@ import {
 /**
  * @public
  */
-export type NonProvenanceCallZomeRequest = Omit<CallZomeRequest, "provenance">;
-
-/**
- * @public
- */
-export type RoleNameCallZomeRequest = Omit<
-  NonProvenanceCallZomeRequest,
-  "cell_id"
-> & {
-  role_name: RoleName;
-};
-
-/**
- * @public
- */
-export type RoleNameCallZomeRequestSigned = Omit<
-  CallZomeRequestSigned,
-  "cell_id"
-> & { role_name: RoleName };
-
-/**
- * @public
- */
-export type AppCallZomeRequest =
-  | NonProvenanceCallZomeRequest
-  | RoleNameCallZomeRequest
-  | CallZomeRequest
-  | CallZomeRequestAllParams;
-
-/**
- * @public
- */
 export type AppCreateCloneCellRequest = Omit<CreateCloneCellRequest, "app_id">;
 
 /**
@@ -91,11 +59,27 @@ export interface AppEvents {
 /**
  * @public
  */
-export interface CallZomeRequestAllParams extends CallZomeRequest {
-  cap_secret: CapSecret | null;
-  nonce: Nonce256Bit;
-  expires_at: number;
-}
+export type CallZomeRequestGeneric<Payload> = {
+  cell_id: CellId;
+  zome_name: ZomeName;
+  fn_name: FunctionName;
+  provenance?: AgentPubKey;
+  payload?: Payload;
+  cap_secret?: CapSecret;
+  nonce?: Nonce256Bit;
+  expires_at?: number;
+};
+/**
+ * @public
+ */
+export type CallZomeRequest = CallZomeRequestGeneric<any>;
+
+/**
+ * @public
+ */
+export type RoleNameCallZomeRequest = Omit<CallZomeRequest, "cell_id"> & {
+  role_name: RoleName;
+};
 
 /**
  * @public
@@ -104,21 +88,6 @@ export interface CallZomeRequestSigned {
   bytes: Uint8Array;
   signature: Uint8Array;
 }
-
-/**
- * @public
- */
-export type CallZomeRequestGeneric<Payload> = {
-  cell_id: CellId;
-  zome_name: ZomeName;
-  fn_name: FunctionName;
-  payload: Payload;
-  provenance: AgentPubKey;
-};
-/**
- * @public
- */
-export type CallZomeRequest = CallZomeRequestGeneric<any>;
 
 /**
  * @public
@@ -526,7 +495,10 @@ export type NetworkInfoResponse = NetworkInfo[];
  * @public
  */
 export interface AppClient {
-  callZome(args: AppCallZomeRequest, timeout?: number): Promise<any>;
+  callZome(
+    args: CallZomeRequest | RoleNameCallZomeRequest,
+    timeout?: number
+  ): Promise<any>;
 
   on<Name extends keyof AppEvents>(
     eventName: Name | readonly Name[],

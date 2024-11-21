@@ -594,16 +594,6 @@ Description
 </td></tr>
 <tr><td>
 
-[CallZomeRequestAllParams](./client.callzomerequestallparams.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
 [CallZomeRequestSigned](./client.callzomerequestsigned.md)
 
 
@@ -1436,16 +1426,6 @@ This type is meant to be opaque
 <tr><td>
 
 [AppBundleSource](./client.appbundlesource.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[AppCallZomeRequest](./client.appcallzomerequest.md)
 
 
 </td><td>
@@ -2527,16 +2507,6 @@ An internal link type index within the DNA, from 0 to 255.
 </td></tr>
 <tr><td>
 
-[NonProvenanceCallZomeRequest](./client.nonprovenancecallzomerequest.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
 [PausedAppReason](./client.pausedappreason.md)
 
 
@@ -2742,16 +2712,6 @@ If the key could not be deleted from all cells, the call [RevokeAgentKeyRequest]
 <tr><td>
 
 [RoleNameCallZomeRequest](./client.rolenamecallzomerequest.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[RoleNameCallZomeRequestSigned](./client.rolenamecallzomerequestsigned.md)
 
 
 </td><td>
