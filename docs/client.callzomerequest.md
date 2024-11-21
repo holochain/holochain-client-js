@@ -8,7 +8,7 @@
 **Signature:**
 
 ```typescript
-export type CallZomeRequest = CallZomeRequestGeneric<unknown>;
+export type CallZomeRequest = CallZomeRequestGeneric<any>;
 ```
 **References:** [CallZomeRequestGeneric](./client.callzomerequestgeneric.md)
 
