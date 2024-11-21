@@ -66,9 +66,9 @@ import {
   randomNonce,
 } from "../zome-call-signing.js";
 import { encodeHashToBase64 } from "../../utils/index.js";
-import { hashZomeCall } from "@holochain/serialization";
 import _sodium from "libsodium-wrappers";
 import { WsClient } from "../client.js";
+import { sha512 } from "js-sha512";
 
 /**
  * A class to establish a websocket connection to an App interface, for a
@@ -613,15 +613,16 @@ export const signZomeCall = async (request: CallZomeRequest) => {
     nonce: await randomNonce(),
     expires_at: getNonceExpiration(),
   };
-  const hashedZomeCall = await hashZomeCall(unsignedZomeCallPayload);
+  const bytes = encode(unsignedZomeCallPayload);
+  const bytesHash = new Uint8Array(sha512.array(bytes));
   await _sodium.ready;
   const sodium = _sodium;
   const signature = sodium
-    .crypto_sign(hashedZomeCall, signingCredentialsForCell.keyPair.privateKey)
+    .crypto_sign(bytesHash, signingCredentialsForCell.keyPair.privateKey)
     .subarray(0, sodium.crypto_sign_BYTES);
 
   const signedZomeCall: CallZomeRequestSigned = {
-    ...unsignedZomeCallPayload,
+    bytes,
     signature,
   };
   return signedZomeCall;
