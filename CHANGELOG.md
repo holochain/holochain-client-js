@@ -7,8 +7,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Added
 ### Fixed
 ### Changed
-- Simplify zome call parameters. `cap_secret`, `provenance` and `payload` are optional parameters of a `CallZomeRequest`. If implicit zome call signing is used, which happens when calling a zome with a `CallZomeRequest`, `provenance` and `cap_secret` are automatically set with the authorized signing credentials. It is still possible to call a cell by its role name instead of its cell id. Alternatively to passing in a `CallZomeRequest`, `callZome` can be invoked with a signed request `CallZomeRequestSigned`, where the zome call parameters have already been serialized and signed.
 ### Removed
+
+## 2024-11-21: v0.19.0-dev.5
+### Changed
+- Simplify zome call parameters. `cap_secret`, `provenance` and `payload` are optional parameters of a `CallZomeRequest`. If implicit zome call signing is used, which happens when calling a zome with a `CallZomeRequest`, `provenance` and `cap_secret` are automatically set with the authorized signing credentials. It is still possible to call a cell by its role name instead of its cell id. Alternatively to passing in a `CallZomeRequest`, `callZome` can be invoked with a signed request `CallZomeRequestSigned`, where the zome call parameters have already been serialized and signed.
 
 ## 2024-11-21: v0.19.0-dev.4
 ### Fixed
