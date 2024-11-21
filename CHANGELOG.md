@@ -9,6 +9,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Changed
 ### Removed
 
+## 2024-11-21: v0.19.0-dev.4
+### Fixed
+- Bring back optional cap_secret to zome call parameters.
+
 ## 2024-11-20: v0.19.0-dev.3
 ### Changed
 - Zome call signing has been changed in Holochain to remove the requirement of imitating Holochain serialization. Signing is now a simplified process of serializing zome call parameters using MessagePack, then computing a SHA2 512-bit hash of the serialized bytes and signing the hash. The zome call payload consists of the serialized bytes and the signature.
