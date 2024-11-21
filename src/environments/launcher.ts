@@ -1,8 +1,5 @@
 import { AppAuthenticationToken, CallZomeRequest } from "../api/index.js";
-import {
-  CallZomeRequestSigned,
-  CallZomeRequestUnsigned,
-} from "../api/index.js";
+import { CallZomeRequestSigned, CallZomeRequestParams } from "../api/index.js";
 import { InstalledAppId } from "../types.js";
 
 export interface LauncherEnvironment {
@@ -61,7 +58,7 @@ interface CallZomeRequestSignedElectron
 
 interface CallZomeRequestUnsignedElectron
   extends Omit<
-    CallZomeRequestUnsigned,
+    CallZomeRequestParams,
     | "cap_secret"
     | "cell_id"
     | "provenance"

@@ -594,7 +594,7 @@ Description
 </td></tr>
 <tr><td>
 
-[CallZomeRequestSigned](./client.callzomerequestsigned.md)
+[CallZomeRequestParams](./client.callzomerequestparams.md)
 
 
 </td><td>
@@ -604,7 +604,7 @@ Description
 </td></tr>
 <tr><td>
 
-[CallZomeRequestUnsigned](./client.callzomerequestunsigned.md)
+[CallZomeRequestSigned](./client.callzomerequestsigned.md)
 
 
 </td><td>

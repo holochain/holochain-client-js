@@ -55,8 +55,7 @@ export type RoleNameCallZomeRequestSigned = Omit<
 export type AppCallZomeRequest =
   | NonProvenanceCallZomeRequest
   | RoleNameCallZomeRequest
-  | CallZomeRequestSigned
-  | RoleNameCallZomeRequestSigned;
+  | CallZomeRequest;
 
 /**
  * @public
@@ -91,7 +90,7 @@ export interface AppEvents {
 /**
  * @public
  */
-export interface CallZomeRequestUnsigned extends CallZomeRequest {
+export interface CallZomeRequestParams extends CallZomeRequest {
   cap_secret: CapSecret | null;
   nonce: Nonce256Bit;
   expires_at: number;
@@ -100,7 +99,8 @@ export interface CallZomeRequestUnsigned extends CallZomeRequest {
 /**
  * @public
  */
-export interface CallZomeRequestSigned extends CallZomeRequestUnsigned {
+export interface CallZomeRequestSigned {
+  bytes: Uint8Array;
   signature: Uint8Array;
 }
 
