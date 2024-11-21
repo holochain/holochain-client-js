@@ -143,9 +143,9 @@ dependencies = [
 
 [[package]]
 name = "cc"
-version = "1.2.0"
+version = "1.2.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1aeb932158bd710538c73702db6945cb68a8fb08c519e6e12706b94263b36db8"
+checksum = "fd9de9f2205d5ef3fd67e685b0df337994ddd4495e2a28d185500d0e1edfea47"
 dependencies = [
  "shlex",
 ]
@@ -470,9 +470,9 @@ checksum = "3a9bfc1af68b1726ea47d3d5109de126281def866b33970e10fbab11b5dafab3"
 
 [[package]]
 name = "hdi"
-version = "0.6.0-dev.2"
+version = "0.6.0-dev.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "53159bb4f411ea083642d2fb48ccf0648c761ee292212fceb9fa7a013d298e29"
+checksum = "fd2b81d1ca8036deba19b4d55ece09def176eeb062a49391369ccb424223c917"
 dependencies = [
  "getrandom",
  "hdk_derive",
@@ -488,9 +488,9 @@ dependencies = [
 
 [[package]]
 name = "hdk"
-version = "0.5.0-dev.4"
+version = "0.5.0-dev.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "bd8c893bb6777a3fff50a47604e9051ff05abc2eba83bbf6c227084d8f3f5603"
+checksum = "9f2c97f85f43c82aa95488bed64f85aa2ac84cc209adf1bfc8f6e3a2f3a8110a"
 dependencies = [
  "getrandom",
  "hdi",
@@ -508,9 +508,9 @@ dependencies = [
 
 [[package]]
 name = "hdk_derive"
-version = "0.5.0-dev.2"
+version = "0.5.0-dev.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ee069cd3ba1ae4d0677832b43b8307ae022cfd57235509a634114425f42522f5"
+checksum = "3477a3b1fa6e302d14144397a7cf669e7806e6b116e6f432411d232d8c3c243d"
 dependencies = [
  "darling 0.14.4",
  "heck",
@@ -536,9 +536,9 @@ checksum = "7f24254aa9a54b5c858eaee2f5bccdb46aaf0e486a595ed5fd8f86ba55232a70"
 
 [[package]]
 name = "holo_hash"
-version = "0.5.0-dev.2"
+version = "0.5.0-dev.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "52b1609ab3426ffbc6b96c0ae917d5281682f6bde22c1799fdc2d2f65d1c716d"
+checksum = "e9ef5f1b831a64ab1e1d2a2d6c76b8140c59660cd9b6c745eaf0c4b0d03b9257"
 dependencies = [
  "base64",
  "blake2b_simd",
@@ -549,14 +549,15 @@ dependencies = [
  "kitsune_p2p_dht_arc",
  "serde",
  "serde_bytes",
+ "sha2",
  "thiserror",
 ]
 
 [[package]]
 name = "holochain_integrity_types"
-version = "0.5.0-dev.2"
+version = "0.5.0-dev.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1ad6856a52474f4d99818b3492260e1a53e8d7a766584bce1e8dfd2a3475dfc3"
+checksum = "8835be40ef1c0dffbfa111991611169a886506c48d45c91dce9523eae7639a14"
 dependencies = [
  "holo_hash",
  "holochain_secure_primitive",
@@ -658,9 +659,9 @@ dependencies = [
 
 [[package]]
 name = "holochain_zome_types"
-version = "0.5.0-dev.4"
+version = "0.5.0-dev.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "992e6f17a7bf5248d9739a92a64f067f3c5a0c47b71bc197c6d637223846212e"
+checksum = "0c9a6ecee3de89277f3711c4fa41d9627287b494a2e043b3dd43afd284b328bc"
 dependencies = [
  "derive_more",
  "holo_hash",
@@ -749,9 +750,9 @@ dependencies = [
 
 [[package]]
 name = "itoa"
-version = "1.0.11"
+version = "1.0.13"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "49f1f14873335454500d59611f1cf4a4b0f786f9ac11f4312a78e4cf2566695b"
+checksum = "540654e97a3f4470a492cd30ff187bc95d89557a903a2bbf112e2fae98104ef2"
 
 [[package]]
 name = "js-sys"
@@ -819,9 +820,9 @@ checksum = "bbd2bcb4c963f2ddae06a2efc7e9f3591312473c50c6685e1f298068316e66fe"
 
 [[package]]
 name = "libc"
-version = "0.2.162"
+version = "0.2.164"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "18d287de67fe55fd7e1581fe933d965a5a9477b38e949cfa9f8574ef01506398"
+checksum = "433bfe06b8c75da9b2e3fbea6e5329ff87748f0b144ef75306e674c3f6f7c13f"
 
 [[package]]
 name = "lock_api"
@@ -1063,9 +1064,9 @@ dependencies = [
 
 [[package]]
 name = "serde_json"
-version = "1.0.132"
+version = "1.0.133"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d726bfaff4b320266d395898905d0eba0345aae23b54aee3a737e260fd46db03"
+checksum = "c7fceb2473b9166b2294ef05efcb65a3db80803f0b03ef86a5fc88a2b85ee377"
 dependencies = [
  "indexmap",
  "itoa",
@@ -1079,6 +1080,17 @@ name = "sha1"
 version = "0.10.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e3bf829a2d51ab4a5ddf1352d8470c140cadc8301b2ae1789db023f01cedd6ba"
+dependencies = [
+ "cfg-if",
+ "cpufeatures",
+ "digest",
+]
+
+[[package]]
+name = "sha2"
+version = "0.10.8"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "793db75ad2bcafc3ffa7c68b215fee268f537982cd901d132f89c6343f3a3dc8"
 dependencies = [
  "cfg-if",
  "cpufeatures",
@@ -1285,9 +1297,9 @@ checksum = "42ff0bf0c66b8238c6f3b578df37d0b7848e55df8577b3f74f92a69acceeb825"
 
 [[package]]
 name = "unicode-ident"
-version = "1.0.13"
+version = "1.0.14"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e91b56cd4cadaeb79bbf1a5645f6b4f8dc5bde8834ad5894a8db35fda9efa1fe"
+checksum = "adb9e6ca4f869e1180728b7950e35922a7fc6397f7b641499e8f3ef06e50dc83"
 
 [[package]]
 name = "valuable"
