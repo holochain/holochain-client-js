@@ -19,7 +19,6 @@ import {
   Transformer,
 } from "../common.js";
 import {
-  AppCallZomeRequest,
   AppClient,
   AppEvents,
   AppNetworkInfoRequest,
@@ -30,7 +29,6 @@ import {
   SignalCb,
   CallZomeRequest,
   CallZomeRequestSigned,
-  CallZomeRequestAllParams,
   CallZomeResponse,
   CallZomeResponseGeneric,
   CreateCloneCellRequest,
@@ -54,6 +52,7 @@ import {
   AbandonCountersigningSessionStateResponse,
   PublishCountersigningSessionStateRequest,
   PublishCountersigningSessionStateResponse,
+  RoleNameCallZomeRequest,
 } from "./types.js";
 import {
   getHostZomeCallSigner,
@@ -363,7 +362,7 @@ export class AppWebsocket implements AppClient {
    * @returns The zome call's response.
    */
   async callZome<ReturnType>(
-    request: AppCallZomeRequest,
+    request: CallZomeRequest | RoleNameCallZomeRequest,
     timeout?: number
   ): Promise<ReturnType> {
     if (!("provenance" in request)) {
@@ -375,19 +374,17 @@ export class AppWebsocket implements AppClient {
     if ("role_name" in request && request.role_name) {
       const appInfo = this.cachedAppInfo || (await this.appInfo());
       const cell_id = this.getCellIdFromRoleName(request.role_name, appInfo);
-      const zomeCallPayload: CallZomeRequest = {
+      request = {
         ...omit(request, "role_name"),
-        provenance: this.myPubKey,
-        cell_id: [cell_id[0], cell_id[1]],
+        cell_id,
       };
-      return this.callZomeRequester(zomeCallPayload, timeout);
-    } else if ("cell_id" in request && request.cell_id) {
-      return this.callZomeRequester(request as CallZomeRequest, timeout);
+    } else if (!("cell_id" in request)) {
+      throw new HolochainError(
+        "MissingRoleNameOrCellId",
+        "callZome requires a role_name or cell_id argument"
+      );
     }
-    throw new HolochainError(
-      "MissingRoleNameOrCellId",
-      "callZome requires a role_name or cell_id argument"
-    );
+    return this.callZomeRequester(request, timeout);
   }
 
   /**
@@ -603,7 +600,7 @@ export const signZomeCall = async (request: CallZomeRequest) => {
       )}, ${encodeHashToBase64(request.cell_id[1])}]`
     );
   }
-  const unsignedZomeCallPayload: CallZomeRequestAllParams = {
+  const zome_call_params: CallZomeRequest = {
     cap_secret: signingCredentialsForCell.capSecret,
     cell_id: request.cell_id,
     zome_name: request.zome_name,
@@ -613,7 +610,7 @@ export const signZomeCall = async (request: CallZomeRequest) => {
     nonce: await randomNonce(),
     expires_at: getNonceExpiration(),
   };
-  const bytes = encode(unsignedZomeCallPayload);
+  const bytes = encode(zome_call_params);
   const bytesHash = new Uint8Array(sha512.array(bytes));
   await _sodium.ready;
   const sodium = _sodium;

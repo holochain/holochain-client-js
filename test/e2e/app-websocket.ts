@@ -2,15 +2,15 @@ import assert from "node:assert";
 import test from "tape";
 import {
   AdminWebsocket,
-  AppCallZomeRequest,
   AppCreateCloneCellRequest,
   AppEntryDef,
   AppWebsocket,
+  CallZomeRequest,
   CellType,
   CloneId,
   fakeAgentPubKey,
-  NonProvenanceCallZomeRequest,
   RoleName,
+  RoleNameCallZomeRequest,
   SignalCb,
   SignalType,
 } from "../../src";
@@ -116,7 +116,6 @@ test(
       zome_name: TEST_ZOME_NAME,
       fn_name: "emitter",
       provenance: await fakeAgentPubKey(),
-      payload: null,
     });
     await signalReceivedPromise;
   })
@@ -196,7 +195,6 @@ test(
       zome_name: TEST_ZOME_NAME,
       fn_name: "emitter",
       provenance: await fakeAgentPubKey(),
-      payload: null,
     });
 
     // signals are received before the timeout step in the JS event loop is completed
@@ -230,11 +228,10 @@ test(
       "clone cell agent key matches base cell agent key"
     );
 
-    const params: AppCallZomeRequest = {
+    const params: RoleNameCallZomeRequest = {
       role_name: cloneCell.clone_id,
       zome_name: TEST_ZOME_NAME,
       fn_name: "foo",
-      payload: null,
     };
     const response = await appWs.callZome(params);
     t.equal(
@@ -269,11 +266,10 @@ test(
       2,
       "disabled clone cell is part of app info"
     );
-    const params: NonProvenanceCallZomeRequest = {
+    const params: CallZomeRequest = {
       cell_id: cloneCell.cell_id,
       zome_name: TEST_ZOME_NAME,
       fn_name: "foo",
-      payload: null,
     };
     try {
       await appWs.callZome(params);
