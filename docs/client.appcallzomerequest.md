@@ -8,7 +8,7 @@
 **Signature:**
 
 ```typescript
-export type AppCallZomeRequest = NonProvenanceCallZomeRequest | RoleNameCallZomeRequest | CallZomeRequest;
+export type AppCallZomeRequest = NonProvenanceCallZomeRequest | RoleNameCallZomeRequest | CallZomeRequest | CallZomeRequestAllParams;
 ```
-**References:** [NonProvenanceCallZomeRequest](./client.nonprovenancecallzomerequest.md)<!-- -->, [RoleNameCallZomeRequest](./client.rolenamecallzomerequest.md)<!-- -->, [CallZomeRequest](./client.callzomerequest.md)
+**References:** [NonProvenanceCallZomeRequest](./client.nonprovenancecallzomerequest.md)<!-- -->, [RoleNameCallZomeRequest](./client.rolenamecallzomerequest.md)<!-- -->, [CallZomeRequest](./client.callzomerequest.md)<!-- -->, [CallZomeRequestAllParams](./client.callzomerequestallparams.md)
 

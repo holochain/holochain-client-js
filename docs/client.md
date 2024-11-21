@@ -594,7 +594,7 @@ Description
 </td></tr>
 <tr><td>
 
-[CallZomeRequestParams](./client.callzomerequestparams.md)
+[CallZomeRequestAllParams](./client.callzomerequestallparams.md)
 
 
 </td><td>
