@@ -376,7 +376,8 @@ export class AppWebsocket implements AppClient {
       const cell_id = this.getCellIdFromRoleName(request.role_name, appInfo);
       request = {
         ...omit(request, "role_name"),
-        cell_id,
+        // Some problem here with the launcher with just the `cell_id`.
+        cell_id: [cell_id[0], cell_id[1]],
       };
     } else if (!("cell_id" in request)) {
       throw new HolochainError(
