@@ -11,10 +11,10 @@
 export type InstallAppRequest = {
     agent_key?: AgentPubKey;
     installed_app_id?: InstalledAppId;
-    membrane_proofs: MemproofMap;
     network_seed?: NetworkSeed;
+    roles_settings?: RoleSettingsMap;
     ignore_genesis_failure?: boolean;
 } & AppBundleSource;
 ```
-**References:** [AgentPubKey](./client.agentpubkey.md)<!-- -->, [InstalledAppId](./client.installedappid.md)<!-- -->, [MemproofMap](./client.memproofmap.md)<!-- -->, [NetworkSeed](./client.networkseed.md)<!-- -->, [AppBundleSource](./client.appbundlesource.md)
+**References:** [AgentPubKey](./client.agentpubkey.md)<!-- -->, [InstalledAppId](./client.installedappid.md)<!-- -->, [NetworkSeed](./client.networkseed.md)<!-- -->, [RoleSettingsMap](./client.rolesettingsmap.md)<!-- -->, [AppBundleSource](./client.appbundlesource.md)
 

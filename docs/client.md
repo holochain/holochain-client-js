@@ -1865,6 +1865,15 @@ This type is meant to be opaque
 </td></tr>
 <tr><td>
 
+[DnaModifiersOpt](./client.dnamodifiersopt.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
 [DnaProperties](./client.dnaproperties.md)
 
 
@@ -2712,6 +2721,25 @@ If the key could not be deleted from all cells, the call [RevokeAgentKeyRequest]
 <tr><td>
 
 [RoleNameCallZomeRequest](./client.rolenamecallzomerequest.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[RoleSettings](./client.rolesettings.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[RoleSettingsMap](./client.rolesettingsmap.md)
 
 
 </td><td>
