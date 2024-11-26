@@ -174,9 +174,15 @@ export type RoleSettings =
       modifiers?: DnaModifiersOpt;
     };
 
+/**
+ * Any value that is serializable to a Yaml value
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type YamlProperties = any;
+
 export type DnaModifiersOpt = {
   network_seed?: NetworkSeed;
-  properties?: Uint8Array;
+  properties?: YamlProperties;
   origin_time?: Timestamp;
   quantum_time?: Duration;
 };

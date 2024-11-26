@@ -1,4 +1,4 @@
-import { decode } from "@msgpack/msgpack";
+import { decode, encode } from "@msgpack/msgpack";
 import assert from "node:assert/strict";
 import fs from "node:fs";
 import test from "tape";
@@ -29,10 +29,11 @@ import {
   SignalType,
   Signal,
   isSameCell,
-  CallZomeRequestAllParams,
   getSigningCredentials,
   randomNonce,
   getNonceExpiration,
+  ProvisionedCell,
+  Duration,
 } from "../../src";
 import {
   FIXTURE_PATH,
@@ -85,7 +86,7 @@ test(
       installed_app_id,
       agent_key,
       path: `${FIXTURE_PATH}/test.happ`,
-      membrane_proofs: {},
+      roles_settings: {},
     });
     const status: InstalledAppInfoStatus = installedApp.status;
     t.deepEqual(
@@ -218,7 +219,7 @@ test(
       path,
       agent_key,
       installed_app_id,
-      membrane_proofs: {},
+      roles_settings: {},
     });
     t.ok(installedApp);
     t.deepEqual(installedApp.status, {
@@ -296,7 +297,7 @@ test(
       installed_app_id,
       agent_key,
       path: `${FIXTURE_PATH}/test.happ`,
-      membrane_proofs: {},
+      roles_settings: {},
     });
 
     const dnaDefinition = await admin.getDnaDefinition(hash);
@@ -425,7 +426,7 @@ test(
     const cap_secret = getSigningCredentials(cell_id)?.capSecret;
     assert(cap_secret);
 
-    const zomeCallPayload: CallZomeRequestAllParams = {
+    const zomeCallPayload: CallZomeRequest = {
       cell_id,
       zome_name: TEST_ZOME_NAME,
       fn_name: "foo",
@@ -563,6 +564,74 @@ test(
 );
 
 test(
+  "can install app with roles_settings",
+  withConductor(ADMIN_PORT, async (t) => {
+    const role_name = "foo";
+    const installed_app_id = "app";
+    const admin = await AdminWebsocket.connect({
+      url: ADMIN_WS_URL,
+      wsClientOptions: { origin: "client-test-admin" },
+    });
+    const agent = await admin.generateAgentPubKey();
+
+    const originTime = Date.now();
+    const quantumTime: Duration = {
+      secs: originTime,
+      nanos: 0,
+    };
+
+    await admin.installApp({
+      installed_app_id,
+      agent_key: agent,
+      bundle: {
+        manifest: {
+          manifest_version: "1",
+          name: "app",
+          roles: [
+            {
+              name: role_name,
+              provisioning: {
+                strategy: CellProvisioningStrategy.Create,
+                deferred: false,
+              },
+              dna: {
+                path: fs.realpathSync("test/e2e/fixture/test.dna"),
+                modifiers: { network_seed: "some_seed" },
+              },
+            },
+          ],
+          membrane_proofs_deferred: true,
+        },
+        resources: {},
+      },
+      roles_settings: {
+        foo: {
+          type: "Provisioned",
+          membrane_proof: new Uint8Array(6),
+          modifiers: {
+            network_seed: "hello",
+            properties: { specialProp: "prop" },
+            origin_time: originTime,
+            quantum_time: quantumTime,
+          },
+        },
+      },
+    });
+
+    const apps = await admin.listApps({});
+    const appInfo = apps[0];
+    const provisionedCell: ProvisionedCell =
+      appInfo.cell_info["foo"][0][CellType.Provisioned];
+    t.equal(provisionedCell.dna_modifiers.network_seed, "hello");
+    t.deepEqual(decode(provisionedCell.dna_modifiers.properties), {
+      specialProp: "prop",
+    });
+    t.equal(provisionedCell.dna_modifiers.origin_time, originTime);
+    t.deepEqual(provisionedCell.dna_modifiers.quantum_time, quantumTime);
+  })
+);
+
+test(
   "memproofs can be provided after app installation",
   withConductor(ADMIN_PORT, async (t) => {
     const role_name = "foo";
@@ -597,7 +666,7 @@ test(
         },
         resources: {},
       },
-      membrane_proofs: {},
+      roles_settings: {},
     });
 
     const { port: appPort } = await admin.attachAppInterface({
@@ -697,7 +766,7 @@ test(
         },
         resources: {},
       },
-      membrane_proofs: {},
+      roles_settings: {},
     });
     await admin.enableApp({ installed_app_id });
     const { port: appPort } = await admin.attachAppInterface({
@@ -769,7 +838,7 @@ test(
           dna_1: zippedDnaBundle,
         },
       },
-      membrane_proofs: {},
+      roles_settings: {},
     });
     await admin.enableApp({ installed_app_id });
     const { port: appPort } = await admin.attachAppInterface({
@@ -963,7 +1032,7 @@ test("can inject agents", async (t) => {
   let result = await admin1.installApp({
     installed_app_id,
     agent_key: agent_key_1,
-    membrane_proofs: {},
+    roles_settings: {},
     path: `${FIXTURE_PATH}/test.happ`,
   });
   t.ok(result);
@@ -1001,7 +1070,7 @@ test("can inject agents", async (t) => {
   result = await admin2.installApp({
     installed_app_id,
     agent_key: agent_key_2,
-    membrane_proofs: {},
+    roles_settings: {},
     path: `${FIXTURE_PATH}/test.happ`,
   });
   t.ok(result);
@@ -1046,7 +1115,7 @@ test(
 
     const tag = "test_tag";
     const link: Link = await client.callZome({
-      cap_secret: null,
+      cap_secret: undefined,
       cell_id,
       provenance: cell_id[1],
       zome_name: TEST_ZOME_NAME,
@@ -1074,7 +1143,7 @@ test(
     await admin.authorizeSigningCredentials(cell_id);
 
     const linkHash: ActionHash = await client.callZome({
-      cap_secret: null,
+      cap_secret: undefined,
       cell_id,
       provenance: cell_id[1],
       zome_name: TEST_ZOME_NAME,
@@ -1082,7 +1151,7 @@ test(
       payload: null,
     });
     const activity: RegisterAgentActivity[] = await client.callZome({
-      cap_secret: null,
+      cap_secret: undefined,
       cell_id,
       provenance: cell_id[1],
       zome_name: TEST_ZOME_NAME,
@@ -1180,14 +1249,14 @@ test(
     const installedApp1 = await admin.installApp({
       agent_key,
       installed_app_id: "test-app1",
-      membrane_proofs: {},
+      roles_settings: {},
       path: `${FIXTURE_PATH}/test.happ`,
       network_seed: "1",
     });
     const installedApp2 = await admin.installApp({
       agent_key,
       installed_app_id: "test-app2",
-      membrane_proofs: {},
+      roles_settings: {},
       path: `${FIXTURE_PATH}/test.happ`,
       network_seed: "2",
     });

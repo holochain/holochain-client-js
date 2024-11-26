@@ -2949,6 +2949,17 @@ If the key could not be deleted from all cells, the call [RevokeAgentKeyRequest]
 </td></tr>
 <tr><td>
 
+[YamlProperties](./client.yamlproperties.md)
+
+
+</td><td>
+
+Any value that is serializable to a Yaml value
+
+
+</td></tr>
+<tr><td>
+
 [ZomeDefinition](./client.zomedefinition.md)
 
 
