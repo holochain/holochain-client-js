@@ -181,8 +181,7 @@ export type RoleSettings =
  *  @public
  * Any value that is serializable to a Yaml value
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type YamlProperties = any;
+export type YamlProperties = unknown;
 
 /**
  * @public

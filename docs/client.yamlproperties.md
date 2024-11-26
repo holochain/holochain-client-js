@@ -9,5 +9,5 @@ Any value that is serializable to a Yaml value
 **Signature:**
 
 ```typescript
-export type YamlProperties = any;
+export type YamlProperties = unknown;
 ```

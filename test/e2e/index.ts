@@ -87,7 +87,6 @@ test(
       installed_app_id,
       agent_key,
       path: `${FIXTURE_PATH}/test.happ`,
-      roles_settings: {},
     });
     const status: InstalledAppInfoStatus = installedApp.status;
     t.deepEqual(
@@ -220,7 +219,6 @@ test(
       path,
       agent_key,
       installed_app_id,
-      roles_settings: {},
     });
     t.ok(installedApp);
     t.deepEqual(installedApp.status, {
@@ -298,7 +296,6 @@ test(
       installed_app_id,
       agent_key,
       path: `${FIXTURE_PATH}/test.happ`,
-      roles_settings: {},
     });
 
     const dnaDefinition = await admin.getDnaDefinition(hash);
@@ -581,7 +578,7 @@ test(
       nanos: 0,
     };
 
-    const progenitorKey = fakeAgentPubKey();
+    const progenitorKey = Uint8Array.from(fakeAgentPubKey());
 
     await admin.installApp({
       installed_app_id,
@@ -670,7 +667,6 @@ test(
         },
         resources: {},
       },
-      roles_settings: {},
     });
 
     const { port: appPort } = await admin.attachAppInterface({
@@ -770,7 +766,6 @@ test(
         },
         resources: {},
       },
-      roles_settings: {},
     });
     await admin.enableApp({ installed_app_id });
     const { port: appPort } = await admin.attachAppInterface({
@@ -842,7 +837,6 @@ test(
           dna_1: zippedDnaBundle,
         },
       },
-      roles_settings: {},
     });
     await admin.enableApp({ installed_app_id });
     const { port: appPort } = await admin.attachAppInterface({
@@ -1036,7 +1030,6 @@ test("can inject agents", async (t) => {
   let result = await admin1.installApp({
     installed_app_id,
     agent_key: agent_key_1,
-    roles_settings: {},
     path: `${FIXTURE_PATH}/test.happ`,
   });
   t.ok(result);
@@ -1074,7 +1067,6 @@ test("can inject agents", async (t) => {
   result = await admin2.installApp({
     installed_app_id,
     agent_key: agent_key_2,
-    roles_settings: {},
     path: `${FIXTURE_PATH}/test.happ`,
   });
   t.ok(result);
@@ -1119,7 +1111,6 @@ test(
 
     const tag = "test_tag";
     const link: Link = await client.callZome({
-      cap_secret: undefined,
       cell_id,
       provenance: cell_id[1],
       zome_name: TEST_ZOME_NAME,
@@ -1147,7 +1138,6 @@ test(
     await admin.authorizeSigningCredentials(cell_id);
 
     const linkHash: ActionHash = await client.callZome({
-      cap_secret: undefined,
       cell_id,
       provenance: cell_id[1],
       zome_name: TEST_ZOME_NAME,
@@ -1155,7 +1145,6 @@ test(
       payload: null,
     });
     const activity: RegisterAgentActivity[] = await client.callZome({
-      cap_secret: undefined,
       cell_id,
       provenance: cell_id[1],
       zome_name: TEST_ZOME_NAME,
@@ -1253,14 +1242,12 @@ test(
     const installedApp1 = await admin.installApp({
       agent_key,
       installed_app_id: "test-app1",
-      roles_settings: {},
       path: `${FIXTURE_PATH}/test.happ`,
       network_seed: "1",
     });
     const installedApp2 = await admin.installApp({
       agent_key,
       installed_app_id: "test-app2",
-      roles_settings: {},
       path: `${FIXTURE_PATH}/test.happ`,
       network_seed: "2",
     });
