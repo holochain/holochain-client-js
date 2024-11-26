@@ -1871,6 +1871,7 @@ This type is meant to be opaque
 </td><td>
 
 
+
 </td></tr>
 <tr><td>
 
@@ -2734,6 +2735,7 @@ If the key could not be deleted from all cells, the call [RevokeAgentKeyRequest]
 
 
 </td><td>
+
 
 
 </td></tr>

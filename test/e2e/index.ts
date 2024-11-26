@@ -1,7 +1,8 @@
-import { decode, encode } from "@msgpack/msgpack";
+import { decode } from "@msgpack/msgpack";
 import assert from "node:assert/strict";
 import fs from "node:fs";
 import test from "tape";
+import yaml from "js-yaml";
 import zlib from "zlib";
 import {
   ActionHash,
@@ -580,6 +581,8 @@ test(
       nanos: 0,
     };
 
+    const progenitorKey = fakeAgentPubKey();
+
     await admin.installApp({
       installed_app_id,
       agent_key: agent,
@@ -610,7 +613,7 @@ test(
           membrane_proof: new Uint8Array(6),
           modifiers: {
             network_seed: "hello",
-            properties: { specialProp: "prop" },
+            properties: yaml.dump({ progenitor: progenitorKey }),
             origin_time: originTime,
             quantum_time: quantumTime,
           },
@@ -623,9 +626,10 @@ test(
     const provisionedCell: ProvisionedCell =
       appInfo.cell_info["foo"][0][CellType.Provisioned];
     t.equal(provisionedCell.dna_modifiers.network_seed, "hello");
-    t.deepEqual(decode(provisionedCell.dna_modifiers.properties), {
-      specialProp: "prop",
-    });
+    t.deepEqual(
+      yaml.load(decode(provisionedCell.dna_modifiers.properties) as string),
+      { progenitor: progenitorKey }
+    );
     t.equal(provisionedCell.dna_modifiers.origin_time, originTime);
     t.deepEqual(provisionedCell.dna_modifiers.quantum_time, quantumTime);
   })

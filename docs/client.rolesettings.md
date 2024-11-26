@@ -4,6 +4,7 @@
 
 ## RoleSettings type
 
+
 **Signature:**
 
 ```typescript

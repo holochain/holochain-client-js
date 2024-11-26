@@ -163,6 +163,9 @@ export type MemproofMap = { [key: RoleName]: MembraneProof };
  */
 export type RoleSettingsMap = { [key: RoleName]: RoleSettings };
 
+/**
+ * @public
+ */
 export type RoleSettings =
   | {
       type: "UseExisting";
@@ -175,11 +178,15 @@ export type RoleSettings =
     };
 
 /**
+ *  @public
  * Any value that is serializable to a Yaml value
  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type YamlProperties = any;
 
+/**
+ * @public
+ */
 export type DnaModifiersOpt = {
   network_seed?: NetworkSeed;
   properties?: YamlProperties;
