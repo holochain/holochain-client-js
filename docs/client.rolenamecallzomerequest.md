@@ -8,9 +8,9 @@
 **Signature:**
 
 ```typescript
-export type RoleNameCallZomeRequest = Omit<CallZomeRequest, "cell_id"> & {
+export type RoleNameCallZomeRequest = Omit<NonProvenanceCallZomeRequest, "cell_id"> & {
     role_name: RoleName;
 };
 ```
-**References:** [CallZomeRequest](./client.callzomerequest.md)<!-- -->, [RoleName](./client.rolename.md)
+**References:** [NonProvenanceCallZomeRequest](./client.nonprovenancecallzomerequest.md)<!-- -->, [RoleName](./client.rolename.md)
 

@@ -11,7 +11,7 @@ If the key could not be deleted from all cells, the call [RevokeAgentKeyRequest]
 **Signature:**
 
 ```typescript
-export type RevokeAgentKeyResponse = [CellId, string][];
+export type RevokeAgentKeyResponse = Array<[CellId, string]>;
 ```
 **References:** [CellId](./client.cellid.md)
 

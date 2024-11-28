@@ -9,7 +9,7 @@ Call a zome.
 **Signature:**
 
 ```typescript
-callZome<ReturnType>(request: CallZomeRequest | RoleNameCallZomeRequest, timeout?: number): Promise<ReturnType>;
+callZome(request: AppCallZomeRequest, timeout?: number): Promise<CallZomeResponse>;
 ```
 
 ## Parameters
@@ -37,7 +37,7 @@ request
 
 </td><td>
 
-[CallZomeRequest](./client.callzomerequest.md) \| [RoleNameCallZomeRequest](./client.rolenamecallzomerequest.md)
+[AppCallZomeRequest](./client.appcallzomerequest.md)
 
 
 </td><td>
@@ -65,7 +65,7 @@ _(Optional)_ A timeout to override the default.
 </tbody></table>
 **Returns:**
 
-Promise&lt;ReturnType&gt;
+Promise&lt;[CallZomeResponse](./client.callzomeresponse.md)<!-- -->&gt;
 
 The zome call's response.
 

@@ -7,7 +7,7 @@
 **Signature:**
 
 ```typescript
-callZome(args: CallZomeRequest | RoleNameCallZomeRequest, timeout?: number): Promise<any>;
+callZome(args: AppCallZomeRequest, timeout?: number): Promise<any>;
 ```
 
 ## Parameters
@@ -35,7 +35,7 @@ args
 
 </td><td>
 
-[CallZomeRequest](./client.callzomerequest.md) \| [RoleNameCallZomeRequest](./client.rolenamecallzomerequest.md)
+[AppCallZomeRequest](./client.appcallzomerequest.md)
 
 
 </td><td>
