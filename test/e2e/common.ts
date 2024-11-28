@@ -18,6 +18,9 @@ export const launch = async (port: number) => {
 
   let conductorDir = "";
   const createConductorPromise = new Promise<void>((resolve) => {
+    createConductorProcess.stderr.on("data", (data) => {
+      console.error("[hc sandbox] ERROR: ", data.toString());
+    });
     createConductorProcess.stdout.on("data", (data) => {
       const tmpDirMatches = data.toString().match(/Created.+"(.+)"/);
       if (tmpDirMatches) {
