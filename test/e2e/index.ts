@@ -1548,7 +1548,7 @@ test(
   })
 );
 
-test.only(
+test(
   "client fails to reconnect to websocket if closed before making a zome call if the provided token is invalid",
   withConductor(ADMIN_PORT, async (t) => {
     const { cell_id, client, admin } = await installAppAndDna(ADMIN_PORT);
