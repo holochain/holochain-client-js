@@ -7,6 +7,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Added
 ### Fixed
 ### Changed
+### Removed
+
+## 2024-11-28: v0.19.0-dev.6
+
+### Added
+### Fixed
+### Changed
 - Change `InstallAppRequest` type to adhere to the new format that includes the `roles_settings` field and removes
 the `membrane_proofs` field as membrane proofs are now specified as part of the `roles_settings`.
 ### Removed
