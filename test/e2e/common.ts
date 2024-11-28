@@ -124,7 +124,6 @@ export const installAppAndDna = async (
     installed_app_id,
     agent_key: agent,
     path,
-    membrane_proofs: {},
   });
   assert(CellType.Provisioned in app.cell_info[role_name][0]);
   const cell_id = app.cell_info[role_name][0][CellType.Provisioned].cell_id;
@@ -166,7 +165,6 @@ export const createAppWsAndInstallApp = async (
     installed_app_id,
     agent_key: agent,
     path,
-    membrane_proofs: {},
   });
   assert(CellType.Provisioned in app.cell_info[role_name][0]);
   const cell_id = app.cell_info[role_name][0][CellType.Provisioned].cell_id;

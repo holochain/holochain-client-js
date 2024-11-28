@@ -155,7 +155,42 @@ export type MembraneProof = Uint8Array;
 /**
  * @public
  */
-export type MemproofMap = { [key: string]: MembraneProof };
+export type MemproofMap = { [key: RoleName]: MembraneProof };
+
+/**
+ * @public
+ */
+export type RoleSettingsMap = { [key: RoleName]: RoleSettings };
+
+/**
+ * @public
+ */
+export type RoleSettings =
+  | {
+      type: "UseExisting";
+      cell_id: CellId;
+    }
+  | {
+      type: "Provisioned";
+      membrane_proof?: MembraneProof;
+      modifiers?: DnaModifiersOpt;
+    };
+
+/**
+ *  @public
+ * Any value that is serializable to a Yaml value
+ */
+export type YamlProperties = unknown;
+
+/**
+ * @public
+ */
+export type DnaModifiersOpt = {
+  network_seed?: NetworkSeed;
+  properties?: YamlProperties;
+  origin_time?: Timestamp;
+  quantum_time?: Duration;
+};
 
 /**
  * @public
@@ -477,16 +512,15 @@ export type InstallAppRequest = {
   installed_app_id?: InstalledAppId;
 
   /**
-   * Include proof-of-membrane-membership data for cells that require it,
-   * keyed by the CellNick specified in the app bundle manifest.
-   */
-  membrane_proofs: MemproofMap;
-
-  /**
    * Optional global network seed override.  If set will override the network seed value for all
    * DNAs in the bundle.
    */
   network_seed?: NetworkSeed;
+
+  /**
+   * Specify role specific settings or modifiers that will override any settings in the dna manifest.
+   */
+  roles_settings?: RoleSettingsMap;
 
   /**
    * Optional: If app installation fails due to genesis failure, normally the app will be immediately uninstalled.

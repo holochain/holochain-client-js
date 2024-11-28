@@ -12,9 +12,12 @@ export type CallZomeRequestGeneric<Payload> = {
     cell_id: CellId;
     zome_name: ZomeName;
     fn_name: FunctionName;
-    payload: Payload;
-    provenance: AgentPubKey;
+    provenance?: AgentPubKey;
+    payload?: Payload;
+    cap_secret?: CapSecret;
+    nonce?: Nonce256Bit;
+    expires_at?: number;
 };
 ```
-**References:** [CellId](./client.cellid.md)<!-- -->, [ZomeName](./client.zomename.md)<!-- -->, [FunctionName](./client.functionname.md)<!-- -->, [AgentPubKey](./client.agentpubkey.md)
+**References:** [CellId](./client.cellid.md)<!-- -->, [ZomeName](./client.zomename.md)<!-- -->, [FunctionName](./client.functionname.md)<!-- -->, [AgentPubKey](./client.agentpubkey.md)<!-- -->, [CapSecret](./client.capsecret.md)<!-- -->, [Nonce256Bit](./client.nonce256bit.md)
 
