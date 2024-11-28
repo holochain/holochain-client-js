@@ -17,7 +17,6 @@ const appInfo = await adminWs.installApp({
   agent_key,
   path: "./test/e2e/fixture/test.happ",
   installed_app_id,
-  membrane_proofs: {},
 });
 await adminWs.enableApp({ installed_app_id });
 if (!(CellType.Provisioned in appInfo.cell_info[role_name][0])) {

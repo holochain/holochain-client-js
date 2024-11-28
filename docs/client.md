@@ -1865,6 +1865,16 @@ This type is meant to be opaque
 </td></tr>
 <tr><td>
 
+[DnaModifiersOpt](./client.dnamodifiersopt.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
 [DnaProperties](./client.dnaproperties.md)
 
 
@@ -2721,6 +2731,26 @@ If the key could not be deleted from all cells, the call [RevokeAgentKeyRequest]
 </td></tr>
 <tr><td>
 
+[RoleSettings](./client.rolesettings.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[RoleSettingsMap](./client.rolesettingsmap.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
 [SessionCompletionDecision](./client.sessioncompletiondecision.md)
 
 
@@ -2916,6 +2946,17 @@ If the key could not be deleted from all cells, the call [RevokeAgentKeyRequest]
 
 </td><td>
 
+
+
+</td></tr>
+<tr><td>
+
+[YamlProperties](./client.yamlproperties.md)
+
+
+</td><td>
+
+Any value that is serializable to a Yaml value
 
 
 </td></tr>
