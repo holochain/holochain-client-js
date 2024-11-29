@@ -9,8 +9,8 @@
 
 ```typescript
 export type MemproofMap = {
-    [key: string]: MembraneProof;
+    [key: RoleName]: MembraneProof;
 };
 ```
-**References:** [MembraneProof](./client.membraneproof.md)
+**References:** [RoleName](./client.rolename.md)<!-- -->, [MembraneProof](./client.membraneproof.md)
 

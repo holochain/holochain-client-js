@@ -142,7 +142,6 @@ test(
       installed_app_id: app_id1,
       agent_key: agent1,
       path,
-      membrane_proofs: {},
     });
     assert(CellType.Provisioned in app1.cell_info[role_name][0]);
     const cell_id1 = app1.cell_info[role_name][0][CellType.Provisioned].cell_id;
@@ -159,7 +158,6 @@ test(
       installed_app_id: app_id2,
       agent_key: agent2,
       path,
-      membrane_proofs: {},
     });
     await admin.enableApp({ installed_app_id: app_id2 });
 

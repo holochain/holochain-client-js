@@ -11,20 +11,16 @@ const LAIR_PASSPHRASE = "passphrase";
 
 export const launch = async (port: number) => {
   // create sandbox conductor
-  const args = [
-    "sandbox",
-    "--piped",
-    "create",
-    "--in-process-lair",
-    "--dpki-network-seed",
-    Date.now().toString(),
-  ];
+  const args = ["sandbox", "--piped", "create", "--in-process-lair"];
   const createConductorProcess = spawn("hc", args);
   createConductorProcess.stdin.write(LAIR_PASSPHRASE);
   createConductorProcess.stdin.end();
 
   let conductorDir = "";
   const createConductorPromise = new Promise<void>((resolve) => {
+    createConductorProcess.stderr.on("data", (data) => {
+      console.error("[hc sandbox] ERROR: ", data.toString());
+    });
     createConductorProcess.stdout.on("data", (data) => {
       const tmpDirMatches = data.toString().match(/Created.+"(.+)"/);
       if (tmpDirMatches) {
@@ -124,7 +120,6 @@ export const installAppAndDna = async (
     installed_app_id,
     agent_key: agent,
     path,
-    membrane_proofs: {},
   });
   assert(CellType.Provisioned in app.cell_info[role_name][0]);
   const cell_id = app.cell_info[role_name][0][CellType.Provisioned].cell_id;
@@ -166,7 +161,6 @@ export const createAppWsAndInstallApp = async (
     installed_app_id,
     agent_key: agent,
     path,
-    membrane_proofs: {},
   });
   assert(CellType.Provisioned in app.cell_info[role_name][0]);
   const cell_id = app.cell_info[role_name][0][CellType.Provisioned].cell_id;
