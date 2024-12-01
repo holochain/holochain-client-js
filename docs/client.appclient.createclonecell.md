@@ -7,7 +7,7 @@
 **Signature:**
 
 ```typescript
-createCloneCell(args: AppCreateCloneCellRequest): Promise<CreateCloneCellResponse>;
+createCloneCell(args: CreateCloneCellRequest): Promise<CreateCloneCellResponse>;
 ```
 
 ## Parameters
@@ -35,7 +35,7 @@ args
 
 </td><td>
 
-[AppCreateCloneCellRequest](./client.appcreateclonecellrequest.md)
+[CreateCloneCellRequest](./client.createclonecellrequest.md)
 
 
 </td><td>

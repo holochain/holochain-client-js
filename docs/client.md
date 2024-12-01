@@ -1435,36 +1435,6 @@ This type is meant to be opaque
 </td></tr>
 <tr><td>
 
-[AppCreateCloneCellRequest](./client.appcreateclonecellrequest.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[AppDisableCloneCellRequest](./client.appdisableclonecellrequest.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[AppEnableCloneCellRequest](./client.appenableclonecellrequest.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
 [AppEntryDef](./client.appentrydef.md)
 
 
