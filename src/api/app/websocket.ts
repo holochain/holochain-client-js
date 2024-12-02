@@ -1,12 +1,7 @@
 import Emittery, { UnsubscribeFunction } from "emittery";
 import { omit } from "lodash-es";
-import { AgentPubKey, CellId, InstalledAppId, RoleName } from "../../types.js";
-import {
-  AppAuthenticationToken,
-  AppInfo,
-  CellType,
-  MemproofMap,
-} from "../admin/index.js";
+import { AgentPubKey, InstalledAppId, RoleName } from "../../types.js";
+import { AppInfo, CellType, MemproofMap } from "../admin/index.js";
 import {
   catchError,
   DEFAULT_TIMEOUT,
@@ -22,9 +17,6 @@ import {
   AppClient,
   AppEvents,
   AppNetworkInfoRequest,
-  AppCreateCloneCellRequest,
-  AppDisableCloneCellRequest,
-  AppEnableCloneCellRequest,
   AppInfoResponse,
   SignalCb,
   CallZomeRequest,
@@ -394,7 +386,7 @@ export class AppWebsocket implements AppClient {
    * @param args - Specify the cell to clone.
    * @returns The created clone cell.
    */
-  async createCloneCell(args: AppCreateCloneCellRequest) {
+  async createCloneCell(args: CreateCloneCellRequest) {
     const clonedCell = this.createCloneCellRequester({
       ...args,
     });
@@ -410,7 +402,7 @@ export class AppWebsocket implements AppClient {
    * @param args - Specify the clone cell to enable.
    * @returns The enabled clone cell.
    */
-  async enableCloneCell(args: AppEnableCloneCellRequest) {
+  async enableCloneCell(args: EnableCloneCellRequest) {
     return this.enableCloneCellRequester({
       ...args,
     });
@@ -421,7 +413,7 @@ export class AppWebsocket implements AppClient {
    *
    * @param args - Specify the clone cell to disable.
    */
-  async disableCloneCell(args: AppDisableCloneCellRequest) {
+  async disableCloneCell(args: DisableCloneCellRequest) {
     return this.disableCloneCellRequester({
       ...args,
     });
