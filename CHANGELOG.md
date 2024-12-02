@@ -10,14 +10,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Removed
 
 ## 2024-12-01: v0.18.0-rc.1
-
-### Added
 ### Changed
 - Change `InstallAppRequest` type to adhere to the new format that includes the `roles_settings` field and removes
 the `membrane_proofs` field as membrane proofs are now specified as part of the `roles_settings`.
 - Compatible with Holochain 0.4.0-rc.2
-### Fixed
-### Removed
 
 ## 2024-10-29: v0.18.0-rc.0
 ### Added
