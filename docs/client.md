@@ -143,7 +143,7 @@ Description
 </td></tr>
 <tr><td>
 
-[CountersigningSessionStateType](./client.countersigningsessionstatetype.md)
+[ChainOpType](./client.chainoptype.md)
 
 
 </td><td>
@@ -153,7 +153,7 @@ Description
 </td></tr>
 <tr><td>
 
-[DhtOpType](./client.dhtoptype.md)
+[CountersigningSessionStateType](./client.countersigningsessionstatetype.md)
 
 
 </td><td>
@@ -313,7 +313,7 @@ Parse a clone id and get the role name part of it.
 </td></tr>
 <tr><td>
 
-[getDhtOpAction(op)](./client.getdhtopaction.md)
+[getChainOpAction(op)](./client.getchainopaction.md)
 
 
 </td><td>
@@ -323,7 +323,7 @@ Parse a clone id and get the role name part of it.
 </td></tr>
 <tr><td>
 
-[getDhtOpEntry(op)](./client.getdhtopentry.md)
+[getChainOpEntry(op)](./client.getchainopentry.md)
 
 
 </td><td>
@@ -333,7 +333,7 @@ Parse a clone id and get the role name part of it.
 </td></tr>
 <tr><td>
 
-[getDhtOpSignature(op)](./client.getdhtopsignature.md)
+[getChainOpSignature(op)](./client.getchainopsignature.md)
 
 
 </td><td>
@@ -343,7 +343,7 @@ Parse a clone id and get the role name part of it.
 </td></tr>
 <tr><td>
 
-[getDhtOpType(op)](./client.getdhtoptype.md)
+[getChainOpType(op)](./client.getchainoptype.md)
 
 
 </td><td>
