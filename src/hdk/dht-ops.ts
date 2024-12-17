@@ -14,7 +14,7 @@ import {
 /**
  * @public
  */
-export enum DhtOpType {
+export enum ChainOpType {
   StoreRecord = "StoreRecord",
   StoreEntry = "StoreEntry",
   RegisterAgentActivity = "RegisterAgentActivity",
@@ -53,23 +53,27 @@ export interface WarrantOp {
  * @public
  */
 export type ChainOp =
-  | { [DhtOpType.StoreRecord]: [Signature, Action, Entry | undefined] }
-  | { [DhtOpType.StoreEntry]: [Signature, NewEntryAction, Entry] }
-  | { [DhtOpType.RegisterAgentActivity]: [Signature, Action] }
+  | { [ChainOpType.StoreRecord]: [Signature, Action, Entry | undefined] }
+  | { [ChainOpType.StoreEntry]: [Signature, NewEntryAction, Entry] }
+  | { [ChainOpType.RegisterAgentActivity]: [Signature, Action] }
   | {
-      [DhtOpType.RegisterUpdatedContent]: [
+      [ChainOpType.RegisterUpdatedContent]: [
         Signature,
         Update,
         Entry | undefined
       ];
     }
   | {
-      [DhtOpType.RegisterUpdatedRecord]: [Signature, Update, Entry | undefined];
+      [ChainOpType.RegisterUpdatedRecord]: [
+        Signature,
+        Update,
+        Entry | undefined
+      ];
     }
-  | { [DhtOpType.RegisterDeletedBy]: [Signature, Delete] }
-  | { [DhtOpType.RegisterDeletedEntryAction]: [Signature, Delete] }
-  | { [DhtOpType.RegisterAddLink]: [Signature, CreateLink] }
-  | { [DhtOpType.RegisterRemoveLink]: [Signature, DeleteLink] };
+  | { [ChainOpType.RegisterDeletedBy]: [Signature, Delete] }
+  | { [ChainOpType.RegisterDeletedEntryAction]: [Signature, Delete] }
+  | { [ChainOpType.RegisterAddLink]: [Signature, CreateLink] }
+  | { [ChainOpType.RegisterRemoveLink]: [Signature, DeleteLink] };
 
 /**
  * @public
@@ -129,26 +133,26 @@ export type ActionHashAndSig = [ActionHash, Signature];
 /**
  * @public
  */
-export function getDhtOpType(op: DhtOp): DhtOpType {
-  return Object.keys(op)[0] as DhtOpType;
+export function getChainOpType(op: ChainOp): ChainOpType {
+  return Object.keys(op)[0] as ChainOpType;
 }
 
 /**
  * @public
  */
-export function getDhtOpAction(op: DhtOp): Action {
-  const opType = getDhtOpType(op);
+export function getChainOpAction(op: ChainOp): Action {
+  const opType = getChainOpType(op);
   const action = Object.values(op)[0][1];
 
-  if (opType === DhtOpType.RegisterAddLink) {
+  if (opType === ChainOpType.RegisterAddLink) {
     return {
       type: "CreateLink",
       ...action,
     };
   }
   if (
-    opType === DhtOpType.RegisterUpdatedContent ||
-    opType === DhtOpType.RegisterUpdatedRecord
+    opType === ChainOpType.RegisterUpdatedContent ||
+    opType === ChainOpType.RegisterUpdatedRecord
   ) {
     return {
       type: "Update",
@@ -169,13 +173,13 @@ export function getDhtOpAction(op: DhtOp): Action {
 /**
  * @public
  */
-export function getDhtOpEntry(op: DhtOp): Entry | undefined {
+export function getChainOpEntry(op: ChainOp): Entry | undefined {
   return Object.values(op)[0][2];
 }
 
 /**
  * @public
  */
-export function getDhtOpSignature(op: DhtOp): Signature {
+export function getChainOpSignature(op: ChainOp): Signature {
   return Object.values(op)[0][1];
 }
