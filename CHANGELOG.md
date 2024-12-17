@@ -5,8 +5,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## \[Unreleased\]
 
 ### Added
-### Changed
 ### Fixed
+- Fix DhtOps helper functions `getChainOpType`, `getChainOpAction`, `getChainOpEntry` and `getChainOpSignature` to adhere to the new types
+### Changed
 ### Removed
 
 ## 2024-12-01: v0.18.0-rc.1
