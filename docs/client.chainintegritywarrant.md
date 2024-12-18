@@ -13,11 +13,11 @@ export type ChainIntegrityWarrant = {
         action_author: AgentPubKey;
         action: ActionHashAndSig;
         validation_type: ValidationType;
-    } | {
-        ChainFork: {
-            chain_author: AgentPubKey;
-            action_pair: [ActionHashAndSig, ActionHashAndSig];
-        };
+    };
+} | {
+    ChainFork: {
+        chain_author: AgentPubKey;
+        action_pair: [ActionHashAndSig, ActionHashAndSig];
     };
 };
 ```
