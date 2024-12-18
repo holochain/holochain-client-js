@@ -88,31 +88,31 @@ export interface Warrant {
 /**
  * @public
  */
-export type ChainIntegrityWarrant = {
-  /**
-   * Something invalid was authored on a chain.
-   * When we receive this warrant, we fetch the Action and validate it
-   * under every applicable DhtOpType.
-   */
-  InvalidChainOp:
-    | {
+export type ChainIntegrityWarrant =
+  | {
+      /**
+       * Something invalid was authored on a chain.
+       * When we receive this warrant, we fetch the Action and validate it
+       * under every applicable DhtOpType.
+       */
+      InvalidChainOp: {
         /** The author of the action */
         action_author: AgentPubKey;
         /** The hash of the action to fetch by */
         action: ActionHashAndSig;
         /** Whether to run app or sys validation */
         validation_type: ValidationType;
-      }
-    | {
-        /** Proof of chain fork. */
-        ChainFork: {
-          /** Author of the chain which is forked */
-          chain_author: AgentPubKey;
-          /** Two actions of the same seq number which prove the fork */
-          action_pair: [ActionHashAndSig, ActionHashAndSig];
-        };
       };
-};
+    }
+  | {
+      /** Proof of chain fork. */
+      ChainFork: {
+        /** Author of the chain which is forked */
+        chain_author: AgentPubKey;
+        /** Two actions of the same seq number which prove the fork */
+        action_pair: [ActionHashAndSig, ActionHashAndSig];
+      };
+    };
 
 /**
  * @public
