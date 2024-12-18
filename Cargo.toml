@@ -7,4 +7,4 @@ resolver = "2"
 opt-level = "z"
 
 [workspace.dependencies]
-hdk = "0.4.0-rc.0"
+hdk = "0.4.0"
