@@ -9,6 +9,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Changed
 ### Removed
 
+## 2024-12-18: v0.18.0
+### Fixed
+- Fixed `ChainIntegrityWarrantType`
+
 ## 2024-12-17: v0.18.0-rc.2
 ### Fixed
 - Fix DhtOps helper functions `getChainOpType`, `getChainOpAction`, `getChainOpEntry` and `getChainOpSignature` to adhere to the new types
