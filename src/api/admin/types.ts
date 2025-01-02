@@ -972,13 +972,16 @@ export interface AdminApi {
     GenerateAgentPubKeyRequest,
     GenerateAgentPubKeyResponse
   >;
+  revokeAgentKey: Requester<RevokeAgentKeyRequest, RevokeAgentKeyResponse>;
   registerDna: Requester<RegisterDnaRequest, RegisterDnaResponse>;
   getDnaDefinition: Requester<
     GetDnaDefinitionRequest,
     GetDnaDefinitionResponse
   >;
+  getCompatibleCells: Requester<GetCompatibleCellsRequest, GetCompatibleCellsResponse>;
   uninstallApp: Requester<UninstallAppRequest, UninstallAppResponse>;
   installApp: Requester<InstallAppRequest, InstallAppResponse>;
+  updateCoordinators: Requester<UpdateCoordinatorsRequest, UpdateCoordinatorsResponse>
   listDnas: Requester<ListDnasRequest, ListDnasResponse>;
   listCellIds: Requester<ListCellIdsRequest, ListCellIdsResponse>;
   listApps: Requester<ListAppsRequest, ListAppsResponse>;
