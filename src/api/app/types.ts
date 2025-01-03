@@ -29,24 +29,6 @@ import {
 /**
  * @public
  */
-export type AppCreateCloneCellRequest = Omit<CreateCloneCellRequest, "app_id">;
-
-/**
- * @public
- */
-export type AppEnableCloneCellRequest = Omit<EnableCloneCellRequest, "app_id">;
-
-/**
- * @public
- */
-export type AppDisableCloneCellRequest = Omit<
-  DisableCloneCellRequest,
-  "app_id"
->;
-
-/**
- * @public
- */
 export type AppNetworkInfoRequest = Omit<NetworkInfoRequest, "agent_pub_key">;
 
 /**
@@ -511,13 +493,13 @@ export interface AppClient {
   installedAppId: InstalledAppId;
 
   createCloneCell(
-    args: AppCreateCloneCellRequest
+    args: CreateCloneCellRequest
   ): Promise<CreateCloneCellResponse>;
   enableCloneCell(
-    args: AppEnableCloneCellRequest
+    args: EnableCloneCellRequest
   ): Promise<EnableCloneCellResponse>;
   disableCloneCell(
-    args: AppDisableCloneCellRequest
+    args: DisableCloneCellRequest
   ): Promise<DisableCloneCellResponse>;
   networkInfo(args: AppNetworkInfoRequest): Promise<NetworkInfoResponse>;
 }

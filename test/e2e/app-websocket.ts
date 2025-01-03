@@ -2,12 +2,12 @@ import assert from "node:assert";
 import test from "tape";
 import {
   AdminWebsocket,
-  AppCreateCloneCellRequest,
   AppEntryDef,
   AppWebsocket,
   CallZomeRequest,
   CellType,
   CloneId,
+  CreateCloneCellRequest,
   fakeAgentPubKey,
   RoleName,
   RoleNameCallZomeRequest,
@@ -208,7 +208,7 @@ test(
     const { admin, client: appWs } = await createAppWsAndInstallApp(ADMIN_PORT);
     const info = await appWs.appInfo();
 
-    const createCloneCellParams: AppCreateCloneCellRequest = {
+    const createCloneCellParams: CreateCloneCellRequest = {
       role_name: ROLE_NAME,
       modifiers: {
         network_seed: "clone-0",
@@ -245,7 +245,7 @@ test(
   withConductor(ADMIN_PORT, async (t) => {
     const { admin, client: appWs } = await createAppWsAndInstallApp(ADMIN_PORT);
 
-    const createCloneCellParams: AppCreateCloneCellRequest = {
+    const createCloneCellParams: CreateCloneCellRequest = {
       role_name: ROLE_NAME,
       modifiers: {
         network_seed: "clone-0",

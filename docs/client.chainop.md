@@ -9,28 +9,32 @@
 
 ```typescript
 export type ChainOp = {
-    [DhtOpType.StoreRecord]: [Signature, Action, Entry | undefined];
+    [ChainOpType.StoreRecord]: [Signature, Action, Entry | undefined];
 } | {
-    [DhtOpType.StoreEntry]: [Signature, NewEntryAction, Entry];
+    [ChainOpType.StoreEntry]: [Signature, NewEntryAction, Entry];
 } | {
-    [DhtOpType.RegisterAgentActivity]: [Signature, Action];
+    [ChainOpType.RegisterAgentActivity]: [Signature, Action];
 } | {
-    [DhtOpType.RegisterUpdatedContent]: [
+    [ChainOpType.RegisterUpdatedContent]: [
         Signature,
         Update,
         Entry | undefined
     ];
 } | {
-    [DhtOpType.RegisterUpdatedRecord]: [Signature, Update, Entry | undefined];
+    [ChainOpType.RegisterUpdatedRecord]: [
+        Signature,
+        Update,
+        Entry | undefined
+    ];
 } | {
-    [DhtOpType.RegisterDeletedBy]: [Signature, Delete];
+    [ChainOpType.RegisterDeletedBy]: [Signature, Delete];
 } | {
-    [DhtOpType.RegisterDeletedEntryAction]: [Signature, Delete];
+    [ChainOpType.RegisterDeletedEntryAction]: [Signature, Delete];
 } | {
-    [DhtOpType.RegisterAddLink]: [Signature, CreateLink];
+    [ChainOpType.RegisterAddLink]: [Signature, CreateLink];
 } | {
-    [DhtOpType.RegisterRemoveLink]: [Signature, DeleteLink];
+    [ChainOpType.RegisterRemoveLink]: [Signature, DeleteLink];
 };
 ```
-**References:** [DhtOpType.StoreRecord](./client.dhtoptype.md)<!-- -->, [Signature](./client.signature.md)<!-- -->, [Action](./client.action.md)<!-- -->, [Entry](./client.entry.md)<!-- -->, [DhtOpType.StoreEntry](./client.dhtoptype.md)<!-- -->, [NewEntryAction](./client.newentryaction.md)<!-- -->, [DhtOpType.RegisterAgentActivity](./client.dhtoptype.md)<!-- -->, [DhtOpType.RegisterUpdatedContent](./client.dhtoptype.md)<!-- -->, [Update](./client.update.md)<!-- -->, [DhtOpType.RegisterUpdatedRecord](./client.dhtoptype.md)<!-- -->, [DhtOpType.RegisterDeletedBy](./client.dhtoptype.md)<!-- -->, [Delete](./client.delete.md)<!-- -->, [DhtOpType.RegisterDeletedEntryAction](./client.dhtoptype.md)<!-- -->, [DhtOpType.RegisterAddLink](./client.dhtoptype.md)<!-- -->, [CreateLink](./client.createlink.md)<!-- -->, [DhtOpType.RegisterRemoveLink](./client.dhtoptype.md)<!-- -->, [DeleteLink](./client.deletelink.md)
+**References:** [ChainOpType.StoreRecord](./client.chainoptype.md)<!-- -->, [Signature](./client.signature.md)<!-- -->, [Action](./client.action.md)<!-- -->, [Entry](./client.entry.md)<!-- -->, [ChainOpType.StoreEntry](./client.chainoptype.md)<!-- -->, [NewEntryAction](./client.newentryaction.md)<!-- -->, [ChainOpType.RegisterAgentActivity](./client.chainoptype.md)<!-- -->, [ChainOpType.RegisterUpdatedContent](./client.chainoptype.md)<!-- -->, [Update](./client.update.md)<!-- -->, [ChainOpType.RegisterUpdatedRecord](./client.chainoptype.md)<!-- -->, [ChainOpType.RegisterDeletedBy](./client.chainoptype.md)<!-- -->, [Delete](./client.delete.md)<!-- -->, [ChainOpType.RegisterDeletedEntryAction](./client.chainoptype.md)<!-- -->, [ChainOpType.RegisterAddLink](./client.chainoptype.md)<!-- -->, [CreateLink](./client.createlink.md)<!-- -->, [ChainOpType.RegisterRemoveLink](./client.chainoptype.md)<!-- -->, [DeleteLink](./client.deletelink.md)
 
