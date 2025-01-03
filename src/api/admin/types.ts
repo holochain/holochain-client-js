@@ -427,6 +427,12 @@ export type Location =
        * Get file from URL
        */
       url: string;
+    }
+  | {
+      /**
+       * Not specified. Use only when the location should be optional, as when
+       * referring to a DNA by hash rather than location with @see CellProvisioningStrategy.CloneOnly .
+       */
     };
 
 /**
@@ -450,6 +456,17 @@ export type AppRoleDnaManifest = {
   clone_limit?: number;
   modifiers?: Partial<DnaModifiers>;
   version?: DnaVersionFlexible;
+  /**
+   * The hash of the DNA to be installed. If specified, will cause
+   * installation to fail if the bundled DNA hash does not match this.
+   *
+   * Also allows the conductor to search for an already-installed DNA using
+   * this hash, which allows for re-installing an app which has already been
+   * installed by manifest only (no need to include the DNAs, since they are
+   * already installed in the conductor). In this case, location does not even
+   * need to be set.
+   */
+  installed_hash?: DnaHashB64;
 } & Location;
 /**
  * @public
