@@ -870,6 +870,193 @@ test(
 );
 
 test(
+  "install app with UseExisting provisioning strategy",
+  withConductor(ADMIN_PORT, async (t) => {
+    const role_name = "foo";
+    const installed_app_id_1 = "app1";
+    const installed_app_id_2 = "app2";
+    const admin = await AdminWebsocket.connect({
+      url: ADMIN_WS_URL,
+      wsClientOptions: { origin: "client-test-admin" },
+    });
+    const agent = await admin.generateAgentPubKey();
+
+    const dnaPath = `${FIXTURE_PATH}/test.dna`;
+    const zippedDnaBundle = fs.readFileSync(dnaPath);
+    const app1 = await admin.installApp({
+      installed_app_id: installed_app_id_1,
+      agent_key: agent,
+      bundle: {
+        manifest: {
+          manifest_version: "1",
+          name: "app",
+          roles: [
+            {
+              name: role_name,
+              provisioning: {
+                strategy: CellProvisioningStrategy.Create,
+                deferred: false,
+              },
+              dna: {
+                bundled: "dna_1",
+                modifiers: { quantum_time: { secs: 1111, nanos: 1111 } },
+              },
+            },
+          ],
+          membrane_proofs_deferred: false,
+        },
+        resources: {
+          dna_1: zippedDnaBundle,
+        },
+      },
+    });
+    await admin.enableApp({ installed_app_id: installed_app_id_1 });
+    assert(CellType.Provisioned in app1.cell_info[role_name][0]);
+
+    const cellId = app1.cell_info[role_name][0][CellType.Provisioned].cell_id;
+    const dnaHash = cellId[0];
+
+    const app2 = await admin.installApp({
+      installed_app_id: installed_app_id_2,
+      agent_key: agent,
+      bundle: {
+        manifest: {
+          manifest_version: "1",
+          name: "app",
+          roles: [
+            {
+              name: role_name,
+              provisioning: {
+                strategy: CellProvisioningStrategy.UseExisting,
+                protected: true,
+              },
+              dna: {
+                installed_hash: encodeHashToBase64(dnaHash),
+              },
+            },
+          ],
+          membrane_proofs_deferred: false,
+        },
+        resources: { },
+      },
+      roles_settings: {
+        [role_name]: {
+          type: "UseExisting",
+          cell_id: cellId
+        },
+      },
+  });
+    await admin.enableApp({ installed_app_id: installed_app_id_2 });
+    const { port: appPort } = await admin.attachAppInterface({
+      allowed_origins: "client-test-app",
+    });
+    const issued = await admin.issueAppAuthenticationToken({
+      installed_app_id: installed_app_id_2,
+    });
+    const client = await AppWebsocket.connect({
+      url: new URL(`ws://localhost:${appPort}`),
+      wsClientOptions: { origin: "client-test-app" },
+      token: issued.token,
+    });
+
+    assert(CellType.Provisioned in app2.cell_info[role_name][0]);
+    const cell_id = app2.cell_info[role_name][0][CellType.Provisioned].cell_id;
+
+    const zomeCallPayload: CallZomeRequest = {
+      cell_id,
+      zome_name: TEST_ZOME_NAME,
+      fn_name: "foo",
+      provenance: agent,
+      payload: null,
+    };
+
+    await admin.authorizeSigningCredentials(cell_id);
+
+    const response = await client.callZome(zomeCallPayload, 30000);
+    t.equal(response, "foo", "zome call succeeds");
+  })
+);
+
+test.only(
+  "install app with CloneOnly provisioning strategy",
+  withConductor(ADMIN_PORT, async (t) => {
+    const role_name = "foo";
+    const installed_app_id = "app";
+    const admin = await AdminWebsocket.connect({
+      url: ADMIN_WS_URL,
+      wsClientOptions: { origin: "client-test-admin" },
+    });
+    const agent = await admin.generateAgentPubKey();
+
+    const dnaPath = `${FIXTURE_PATH}/test.dna`;
+    const zippedDnaBundle = fs.readFileSync(dnaPath);
+    const app = await admin.installApp({
+      installed_app_id,
+      agent_key: agent,
+      bundle: {
+        manifest: {
+          manifest_version: "1",
+          name: "app",
+          roles: [
+            {
+              name: role_name,
+              provisioning: CellProvisioningStrategy.CloneOnly,
+              dna: {
+                bundled: "dna_1",
+                modifiers: { quantum_time: { secs: 1111, nanos: 1111 } },
+              },
+            },
+          ],
+          membrane_proofs_deferred: false,
+        },
+        resources: {
+          dna_1: zippedDnaBundle,
+        },
+      },
+    });
+    await admin.enableApp({ installed_app_id });
+
+    assert(!(role_name in app.cell_info), "Cell shouldn't be instantiated yet");
+
+    const { port: appPort } = await admin.attachAppInterface({
+      allowed_origins: "client-test-app",
+    });
+    const issued = await admin.issueAppAuthenticationToken({
+      installed_app_id,
+    });
+    const client = await AppWebsocket.connect({
+      url: new URL(`ws://localhost:${appPort}`),
+      wsClientOptions: { origin: "client-test-app" },
+      token: issued.token,
+    });
+
+    const cloneCell = await client.createCloneCell({
+      role_name: ROLE_NAME,
+      modifiers: {
+        network_seed: "clone-0",
+      },
+    });
+
+    assert(cloneCell.enabled, "clone cell should be enabled");
+
+    const cell_id = cloneCell.cell_id;
+
+    const zomeCallPayload: CallZomeRequest = {
+      cell_id,
+      zome_name: TEST_ZOME_NAME,
+      fn_name: "foo",
+      provenance: agent,
+      payload: null,
+    };
+
+    await admin.authorizeSigningCredentials(cell_id);
+
+    const response = await client.callZome(zomeCallPayload, 30000);
+    t.equal(response, "foo", "zome call succeeds");
+  })
+);
+
+test(
   "get compatible cells of a cell",
   withConductor(ADMIN_PORT, async (t) => {
     const { installed_app_id, cell_id, admin } = await installAppAndDna(
