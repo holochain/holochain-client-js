@@ -977,7 +977,7 @@ test(
   })
 );
 
-test.only(
+test(
   "install app with CloneOnly provisioning strategy",
   withConductor(ADMIN_PORT, async (t) => {
     const role_name = "foo";
