@@ -368,45 +368,43 @@ export type ResourceBytes = Uint8Array;
  */
 export type ResourceMap = { [key: string]: ResourceBytes };
 /**
+ * Used as the discriminant in @see CellProvisioning . See that type for
+ * documentation on the different options.
  * @public
  */
 export enum CellProvisioningStrategy {
-  /**
-   * Always create a new Cell when installing this App
-   */
   Create = "create",
-  /**
-   * Always create a new Cell when installing the App,
-   * and use a unique network seed to ensure a distinct DHT network.
-   *
-   * Not implemented
-   */
-  // CreateClone = "create_clone",
-  /**
-   * Require that a Cell is already installed which matches the DNA version
-   * spec, and which has an Agent that's associated with this App's agent
-   * via DPKI. If no such Cell exists, *app installation fails*.
-   */
   UseExisting = "use_existing",
-  /**
-   * Try `UseExisting`, and if that fails, fallback to `Create`
-   */
-  CreateIfNoExists = "create_if_no_exists",
-  /**
-   * Disallow provisioning altogether. In this case, we expect
-   * `clone_limit > 0`: otherwise, no Cells will ever be created.
-   *
-   * Not implemented
-   */
-  // Disabled = "disabled",
-}
+  CloneOnly = "clone_only",
+};
 /**
+ * The means of provisioning Cells for a given DNA.
  * @public
  */
-export interface CellProvisioning {
-  strategy: CellProvisioningStrategy;
-  deferred?: boolean;
-}
+export type CellProvisioning =
+  | {
+      /**
+       * Always create a new Cell when installing this App.
+       */
+      strategy: CellProvisioningStrategy.Create;
+      deferred: boolean;
+    }
+  | {
+      /**
+       * Require that a Cell is already installed which matches the DNA version
+       * spec, and which has an Agent that's associated with this App's agent
+       * via DPKI. If no such Cell exists, *app installation fails*.
+       */
+      strategy: CellProvisioningStrategy.UseExisting;
+      protected: boolean;
+    }
+  |
+    /**
+     * Install or locate the DNA, but never create a Cell for this DNA. Only
+     * allow clones to be created from the DNA specified. This case requires
+     * `clone_limit > 0`, otherwise no Cells will ever be created.
+     */
+    CellProvisioningStrategy.CloneOnly;
 
 /**
  * @public
