@@ -1004,10 +1004,13 @@ test(
           roles: [
             {
               name: role_name,
-              provisioning: CellProvisioningStrategy.CloneOnly,
+              provisioning: {
+                strategy: CellProvisioningStrategy.CloneOnly,
+              },
               dna: {
                 bundled: "dna_1",
                 modifiers: { quantum_time: { secs: 1111, nanos: 1111 } },
+                clone_limit: 1,
               },
             },
           ],
