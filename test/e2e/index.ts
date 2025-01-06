@@ -910,7 +910,9 @@ test(
         },
       },
     });
+    t.pass("Installed first app instance");
     await admin.enableApp({ installed_app_id: installed_app_id_1 });
+    t.pass("Enabled first app instance");
     assert(CellType.Provisioned in app1.cell_info[role_name][0]);
 
     const cellId = app1.cell_info[role_name][0][CellType.Provisioned].cell_id;
@@ -945,7 +947,8 @@ test(
           cell_id: cellId
         },
       },
-  });
+    });
+    t.pass("Installed second app instance");
     await admin.enableApp({ installed_app_id: installed_app_id_2 });
     const { port: appPort } = await admin.attachAppInterface({
       allowed_origins: "client-test-app",
@@ -987,6 +990,7 @@ test(
       wsClientOptions: { origin: "client-test-admin" },
     });
     const agent = await admin.generateAgentPubKey();
+    t.pass("Generated agent pub key");
 
     const dnaPath = `${FIXTURE_PATH}/test.dna`;
     const zippedDnaBundle = fs.readFileSync(dnaPath);
@@ -1014,7 +1018,9 @@ test(
         },
       },
     });
+    t.pass("Installed app");
     await admin.enableApp({ installed_app_id });
+    t.pass("Enabled app");
 
     assert(!(role_name in app.cell_info), "Cell shouldn't be instantiated yet");
 
