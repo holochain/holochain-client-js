@@ -74,6 +74,11 @@ export type AnyDhtHashB64 = HoloHashB64;
 /**
  * @public
  */
+export type CellIdB64 = string;
+
+/**
+ * @public
+ */
 export type InstalledAppId = string;
 
 /**

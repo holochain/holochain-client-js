@@ -1,5 +1,9 @@
 import test from "tape";
 import {
+  CellId,
+  decodeHashFromBase64,
+  encodeCellIdToBase64,
+  encodeHashToBase64,
   fakeActionHash,
   fakeAgentPubKey,
   fakeDnaHash,
@@ -228,5 +232,32 @@ test("hashFrom32AndType generates valid hash with type and 32 core bytes", async
       1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 126, 207, 206, 190,
     ]),
     "generated full valid hash"
+  );
+});
+
+
+test("encodeHashToBase64 and decodeHashFromBase64 round trip", async (t) => {
+  const hash = await fakeActionHash();
+
+  const hashB64 = encodeHashToBase64(hash);
+  const hashB64Decoded = decodeHashFromBase64(hashB64);
+
+  t.deepEqual(
+    hash,
+    hashB64Decoded,
+    "encoded hash to base64, decode base64 back to original hash"
+  );
+});
+
+test("encodeCellIdToBase64 and decodeCellIdFromBase64 round trip", async (t) => {
+  const cellId: CellId = [await fakeDnaHash(), await fakeAgentPubKey()];
+
+  const cellIdB64 = encodeCellIdToBase64(cellId);
+  const cellIdDecoded = decodeHashFromBase64(cellIdB64);
+
+  t.deepEqual(
+    cellId,
+    cellIdDecoded,
+    "encoded CellId to base64, decode base64 back to original CellId"
   );
 });

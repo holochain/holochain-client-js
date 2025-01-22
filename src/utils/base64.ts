@@ -1,5 +1,5 @@
 import { Base64 } from "js-base64";
-import { HoloHash, HoloHashB64 } from "../types.js";
+import { CellId, CellIdB64, HoloHash, HoloHashB64 } from "../types.js";
 
 /**
  * Decodes a Base64 encoded string to a byte array hash.
@@ -23,4 +23,13 @@ export function decodeHashFromBase64(hash: HoloHashB64): HoloHash {
  */
 export function encodeHashToBase64(hash: HoloHash): HoloHashB64 {
   return `u${Base64.fromUint8Array(hash, true)}`;
+}
+
+export function encodeCellIdToBase64(cellId: CellId): CellIdB64 {
+  return Base64.fromUint8Array(new Uint8Array([...cellId[0], ...cellId[1]]), true);
+}
+
+export function decodeCellIdFromBase64(base64: CellIdB64): CellId {
+  const bytes = Base64.toUint8Array(base64);
+  return [bytes.slice(0, 39), bytes.slice(39)];
 }
