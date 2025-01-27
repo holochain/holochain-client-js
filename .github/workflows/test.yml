@@ -117,7 +117,7 @@ jobs:
         timeout-minutes: 10
 
   bundle-test:
-    needs: build
+    needs: bundle
     strategy:
       matrix:
         os: [ ubuntu-latest, macos-latest ]
