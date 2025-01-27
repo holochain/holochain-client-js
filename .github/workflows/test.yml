@@ -107,7 +107,7 @@ jobs:
       - name: Upload package tarball
         uses: actions/upload-artifact@v4
         with:
-          name: client-${{ matrix.node }}.tgz
+          name: client-${{ matrix.os }}-${{ matrix.node }}.tgz
           path: holochain-client-*.tgz
           overwrite: true
 
@@ -129,7 +129,7 @@ jobs:
       - name: Download package tarball
         uses: actions/download-artifact@v4
         with:
-          name: client-${{ matrix.node }}.tgz
+          name: client-${{ matrix.os }}-${{ matrix.node }}.tgz
 
       - name: Install Node.js
         uses: actions/setup-node@v4
