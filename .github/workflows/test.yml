@@ -164,7 +164,7 @@ jobs:
     name: "All Jobs Pass"
     runs-on: "ubuntu-latest"
     needs:
-      - bundle-test
+      - integration-test
       - bundle
       - bundle-test
     steps:
