@@ -13,7 +13,6 @@ import {
   AppWebsocket,
   CallZomeRequest,
   CellProvisioningStrategy,
-  CellType,
   CloneId,
   CreateCloneCellRequest,
   DnaBundle,
@@ -27,7 +26,6 @@ import {
   RoleName,
   encodeHashToBase64,
   generateSigningKeyPair,
-  SignalType,
   Signal,
   isSameCell,
   getSigningCredentials,
@@ -78,20 +76,26 @@ test(
 
     const path = `${FIXTURE_PATH}/test.dna`;
     const hash = await admin.registerDna({
+      source: {
+        type: "path",
+        value: path,
+      },
       modifiers: {},
-      path,
     });
     t.ok(hash, "dna registered");
 
     const installedApp = await admin.installApp({
+      source: {
+        type: "path",
+        value: `${FIXTURE_PATH}/test.happ`,
+      },
       installed_app_id,
       agent_key,
-      path: `${FIXTURE_PATH}/test.happ`,
     });
     const status: InstalledAppInfoStatus = installedApp.status;
     t.deepEqual(
       status,
-      { disabled: { reason: "never_started" } },
+      { type: "disabled", value: { reason: { type: "never_started" } } },
       "app installed"
     );
 
@@ -114,9 +118,7 @@ test(
     );
     t.deepEqual(
       disabledAppsInfo[0].status,
-      {
-        disabled: { reason: "never_started" },
-      },
+      { type: "disabled", value: { reason: { type: "never_started" } } },
       "disabled app never started"
     );
 
@@ -126,7 +128,7 @@ test(
     t.equal(pausedAppsInfo.length, 0, "0 paused apps");
 
     const { app, errors } = await admin.enableApp({ installed_app_id });
-    t.deepEqual(app.status, "running");
+    t.deepEqual(app.status, { type: "running" });
     t.ok(ROLE_NAME in app.cell_info);
     t.ok(Array.isArray(app.cell_info[ROLE_NAME]));
     t.equal(app.installed_app_id, installed_app_id);
@@ -151,7 +153,7 @@ test(
     t.equal(disabledAppsInfo2.length, 0);
     t.equal(runningAppsInfo2.length, 1);
     t.equal(runningAppsInfo2[0].cell_info[ROLE_NAME].length, 1);
-    t.deepEqual(runningAppsInfo2[0].status, "running");
+    t.deepEqual(runningAppsInfo2[0].status, { type: "running" });
 
     await admin.attachAppInterface({
       port: 0,
@@ -172,7 +174,8 @@ test(
     t.equal(pausedAppsInfo3.length, 0);
     t.equal(disabledAppsInfo3.length, 1);
     t.deepEqual(disabledAppsInfo3[0].status, {
-      disabled: { reason: "user" },
+      type: "disabled",
+      value: { reason: { type: "user" } },
     });
 
     let dnas = await admin.listDnas();
@@ -186,7 +189,10 @@ test(
 
     // install from hash and network seed
     const newHash = await admin.registerDna({
-      hash,
+      source: {
+        type: "hash",
+        value: hash,
+      },
       modifiers: {
         network_seed: "123456",
       },
@@ -216,13 +222,17 @@ test(
 
     const path = `${FIXTURE_PATH}/test.happ`;
     const installedApp = await admin.installApp({
-      path,
+      source: {
+        type: "path",
+        value: path,
+      },
       agent_key,
       installed_app_id,
     });
     t.ok(installedApp);
     t.deepEqual(installedApp.status, {
-      disabled: { reason: "never_started" },
+      type: "disabled",
+      value: { reason: { type: "never_started" } },
     });
 
     const runningApps1 = await admin.listApps({
@@ -231,7 +241,7 @@ test(
     t.equal(runningApps1.length, 0);
 
     const enabledAppInfo = await admin.enableApp({ installed_app_id });
-    t.deepEqual(enabledAppInfo.app.status, "running");
+    t.deepEqual(enabledAppInfo.app.status, { type: "running" });
     t.equal(enabledAppInfo.app.installed_app_id, installed_app_id);
     t.equal(enabledAppInfo.errors.length, 0);
 
@@ -243,12 +253,13 @@ test(
 
     const cellIds = await admin.listCellIds();
     t.equal(cellIds.length, 1);
-    assert(CellType.Provisioned in installedApp.cell_info[ROLE_NAME][0]);
+    assert(installedApp.cell_info[ROLE_NAME][0].type === "provisioned");
     t.assert(
       cellIds.some((cellId) =>
         isSameCell(
           cellId,
-          installedApp.cell_info[ROLE_NAME][0][CellType.Provisioned].cell_id
+          (installedApp.cell_info[ROLE_NAME][0].value as ProvisionedCell)
+            .cell_id
         )
       )
     );
@@ -287,15 +298,21 @@ test(
 
     const dnaBundle = decode(encodedDnaBundle.buffer) as DnaBundle;
     const hash = await admin.registerDna({
+      source: {
+        type: "bundle",
+        value: dnaBundle,
+      },
       modifiers: {},
-      bundle: dnaBundle,
     });
     t.ok(hash);
 
     await admin.installApp({
+      source: {
+        type: "path",
+        value: `${FIXTURE_PATH}/test.happ`,
+      },
       installed_app_id,
       agent_key,
-      path: `${FIXTURE_PATH}/test.happ`,
     });
 
     const dnaDefinition = await admin.getDnaDefinition(hash);
@@ -330,7 +347,7 @@ test(
     const enabledAppInfo: EnableAppResponse = await admin.enableApp({
       installed_app_id,
     });
-    t.deepEqual(enabledAppInfo.app.status, "running");
+    t.deepEqual(enabledAppInfo.app.status, { type: "running" });
     t.equal(enabledAppInfo.app.installed_app_id, installed_app_id);
     t.equal(enabledAppInfo.errors.length, 0);
 
@@ -365,16 +382,16 @@ test(
     let info = await client.appInfo(1000);
     assert(info, "got app info");
     assert(
-      CellType.Provisioned in info.cell_info[ROLE_NAME][0],
+      info.cell_info[ROLE_NAME][0].type === "provisioned",
       "got expected cell"
     );
     t.deepEqual(
-      info.cell_info[ROLE_NAME][0][CellType.Provisioned].cell_id,
+      info.cell_info[ROLE_NAME][0].value.cell_id,
       cell_id,
       "got correct cell id"
     );
     t.ok(ROLE_NAME in info.cell_info, "role name correct");
-    t.deepEqual(info.status, "running", "status is running");
+    t.deepEqual(info.status, { type: "running" }, "status is running");
 
     await admin.authorizeSigningCredentials(cell_id);
 
@@ -399,7 +416,7 @@ test(
     assert(info);
     t.deepEqual(
       info.status,
-      { disabled: { reason: "user" } },
+      { type: "disabled", value: { reason: { type: "user" } } },
       "disabled reason user"
     );
   })
@@ -536,7 +553,7 @@ test(
     const { cell_id, client, admin } = await installAppAndDna(ADMIN_PORT);
     const info = await client.appInfo(1000);
     assert(info);
-    assert(CellType.Provisioned in info.cell_info[ROLE_NAME][0]);
+    assert(info.cell_info[ROLE_NAME][0].type === "provisioned");
 
     const zomeCallPayload: CallZomeRequest = {
       cell_id,
@@ -550,6 +567,7 @@ test(
 
     try {
       await client.callZome(zomeCallPayload);
+      t.fail("This zome call should have thrown an error.");
     } catch (error) {
       t.ok(
         error instanceof HolochainError,
@@ -583,36 +601,41 @@ test(
     await admin.installApp({
       installed_app_id,
       agent_key: agent,
-      bundle: {
-        manifest: {
-          manifest_version: "1",
-          name: "app",
-          roles: [
-            {
-              name: role_name,
-              provisioning: {
-                strategy: CellProvisioningStrategy.Create,
-                deferred: false,
+      source: {
+        type: "bundle",
+        value: {
+          manifest: {
+            manifest_version: "1",
+            name: "app",
+            roles: [
+              {
+                name: role_name,
+                provisioning: {
+                  strategy: CellProvisioningStrategy.Create,
+                  deferred: false,
+                },
+                dna: {
+                  path: fs.realpathSync("test/e2e/fixture/test.dna"),
+                  modifiers: { network_seed: "some_seed" },
+                },
               },
-              dna: {
-                path: fs.realpathSync("test/e2e/fixture/test.dna"),
-                modifiers: { network_seed: "some_seed" },
-              },
-            },
-          ],
-          membrane_proofs_deferred: true,
+            ],
+            membrane_proofs_deferred: true,
+          },
+          resources: {},
         },
-        resources: {},
       },
       roles_settings: {
         foo: {
-          type: "Provisioned",
-          membrane_proof: new Uint8Array(6),
-          modifiers: {
-            network_seed: "hello",
-            properties: yaml.dump({ progenitor: progenitorKey }),
-            origin_time: originTime,
-            quantum_time: quantumTime,
+          type: "provisioned",
+          value: {
+            membrane_proof: new Uint8Array(6),
+            modifiers: {
+              network_seed: "hello",
+              properties: yaml.dump({ progenitor: progenitorKey }),
+              origin_time: originTime,
+              quantum_time: quantumTime,
+            },
           },
         },
       },
@@ -620,8 +643,8 @@ test(
 
     const apps = await admin.listApps({});
     const appInfo = apps[0];
-    const provisionedCell: ProvisionedCell =
-      appInfo.cell_info["foo"][0][CellType.Provisioned];
+    const provisionedCell = appInfo.cell_info["foo"][0]
+      .value as ProvisionedCell;
     t.equal(provisionedCell.dna_modifiers.network_seed, "hello");
     t.deepEqual(
       yaml.load(decode(provisionedCell.dna_modifiers.properties) as string),
@@ -646,26 +669,29 @@ test(
     await admin.installApp({
       installed_app_id,
       agent_key: agent,
-      bundle: {
-        manifest: {
-          manifest_version: "1",
-          name: "app",
-          roles: [
-            {
-              name: role_name,
-              provisioning: {
-                strategy: CellProvisioningStrategy.Create,
-                deferred: false,
+      source: {
+        type: "bundle",
+        value: {
+          manifest: {
+            manifest_version: "1",
+            name: "app",
+            roles: [
+              {
+                name: role_name,
+                provisioning: {
+                  strategy: CellProvisioningStrategy.Create,
+                  deferred: false,
+                },
+                dna: {
+                  path: fs.realpathSync("test/e2e/fixture/test.dna"),
+                  modifiers: { network_seed: "some_seed" },
+                },
               },
-              dna: {
-                path: fs.realpathSync("test/e2e/fixture/test.dna"),
-                modifiers: { network_seed: "some_seed" },
-              },
-            },
-          ],
-          membrane_proofs_deferred: true,
+            ],
+            membrane_proofs_deferred: true,
+          },
+          resources: {},
         },
-        resources: {},
       },
     });
 
@@ -684,7 +710,7 @@ test(
     let appInfo = await client.appInfo();
     t.deepEqual(
       appInfo.status,
-      { disabled: { reason: "never_started" } },
+      { type: "disabled", value: { reason: { type: "never_started" } } },
       "app is in status awaiting_memproofs"
     );
 
@@ -705,16 +731,16 @@ test(
     appInfo = await client.appInfo();
     t.deepEqual(
       appInfo.status,
-      { disabled: { reason: "not_started_after_providing_memproofs" } },
+      {
+        type: "disabled",
+        value: { reason: { type: "not_started_after_providing_memproofs" } },
+      },
       "app is disabled after providing memproofs"
     );
 
     await client.enableApp();
     appInfo = await client.appInfo();
-    t.deepEqual(appInfo.status, "running", "app is running");
-
-    appInfo = await client.appInfo();
-    t.equal(appInfo.status, "running", "app is in status running");
+    t.deepEqual(appInfo.status, { type: "running" }, "app is running");
   })
 );
 
@@ -745,26 +771,29 @@ test(
     const app = await admin.installApp({
       installed_app_id,
       agent_key: agent,
-      bundle: {
-        manifest: {
-          manifest_version: "1",
-          name: "app",
-          roles: [
-            {
-              name: role_name,
-              provisioning: {
-                strategy: CellProvisioningStrategy.Create,
-                deferred: false,
+      source: {
+        type: "bundle",
+        value: {
+          manifest: {
+            manifest_version: "1",
+            name: "app",
+            roles: [
+              {
+                name: role_name,
+                provisioning: {
+                  strategy: CellProvisioningStrategy.Create,
+                  deferred: false,
+                },
+                dna: {
+                  path: fs.realpathSync("test/e2e/fixture/test.dna"),
+                  modifiers: { quantum_time: { secs: 1111, nanos: 1111 } },
+                },
               },
-              dna: {
-                path: fs.realpathSync("test/e2e/fixture/test.dna"),
-                modifiers: { quantum_time: { secs: 1111, nanos: 1111 } },
-              },
-            },
-          ],
-          membrane_proofs_deferred: false,
+            ],
+            membrane_proofs_deferred: false,
+          },
+          resources: {},
         },
-        resources: {},
       },
     });
     await admin.enableApp({ installed_app_id });
@@ -780,8 +809,8 @@ test(
       token: issued.token,
     });
 
-    assert(CellType.Provisioned in app.cell_info[role_name][0]);
-    const cell_id = app.cell_info[role_name][0][CellType.Provisioned].cell_id;
+    assert(app.cell_info[role_name][0].type === "provisioned");
+    const cell_id = app.cell_info[role_name][0].value.cell_id;
 
     const zomeCallPayload: CallZomeRequest = {
       cell_id,
@@ -814,27 +843,30 @@ test(
     const app = await admin.installApp({
       installed_app_id,
       agent_key: agent,
-      bundle: {
-        manifest: {
-          manifest_version: "1",
-          name: "app",
-          roles: [
-            {
-              name: role_name,
-              provisioning: {
-                strategy: CellProvisioningStrategy.Create,
-                deferred: false,
+      source: {
+        type: "bundle",
+        value: {
+          manifest: {
+            manifest_version: "1",
+            name: "app",
+            roles: [
+              {
+                name: role_name,
+                provisioning: {
+                  strategy: CellProvisioningStrategy.Create,
+                  deferred: false,
+                },
+                dna: {
+                  bundled: "dna_1",
+                  modifiers: { quantum_time: { secs: 1111, nanos: 1111 } },
+                },
               },
-              dna: {
-                bundled: "dna_1",
-                modifiers: { quantum_time: { secs: 1111, nanos: 1111 } },
-              },
-            },
-          ],
-          membrane_proofs_deferred: false,
-        },
-        resources: {
-          dna_1: zippedDnaBundle,
+            ],
+            membrane_proofs_deferred: false,
+          },
+          resources: {
+            dna_1: zippedDnaBundle,
+          },
         },
       },
     });
@@ -851,8 +883,8 @@ test(
       token: issued.token,
     });
 
-    assert(CellType.Provisioned in app.cell_info[role_name][0]);
-    const cell_id = app.cell_info[role_name][0][CellType.Provisioned].cell_id;
+    assert(app.cell_info[role_name][0].type === "provisioned");
+    const cell_id = app.cell_info[role_name][0].value.cell_id;
 
     const zomeCallPayload: CallZomeRequest = {
       cell_id,
@@ -896,13 +928,10 @@ test(
     const { cell_id, client, admin } = await installAppAndDna(ADMIN_PORT);
     const info = await client.appInfo();
     assert(info);
-    assert(CellType.Provisioned in info.cell_info[ROLE_NAME][0]);
-    t.deepEqual(
-      info.cell_info[ROLE_NAME][0][CellType.Provisioned].cell_id,
-      cell_id
-    );
+    assert(info.cell_info[ROLE_NAME][0].type === "provisioned");
+    t.deepEqual(info.cell_info[ROLE_NAME][0].value.cell_id, cell_id);
     t.ok(ROLE_NAME in info.cell_info);
-    t.deepEqual(info.status, "running");
+    t.deepEqual(info.status, { type: "running" });
     const zomeCallPayload: CallZomeRequest = {
       cell_id,
       zome_name: TEST_ZOME_NAME,
@@ -917,7 +946,7 @@ test(
     t.equal(response, "foo");
 
     const state: DumpStateResponse = await admin.dumpState({
-      cell_id: info.cell_info[ROLE_NAME][0][CellType.Provisioned].cell_id,
+      cell_id: (info.cell_info[ROLE_NAME][0].value as ProvisionedCell).cell_id,
     });
     t.equal(state[0].source_chain_dump.records.length, 5);
     t.equal(state[0].source_chain_dump.records[0].action.type, "Dna");
@@ -946,8 +975,8 @@ test(
       (resolve) => (resolveSignalPromise = resolve)
     );
     const signalCb = (signal: Signal) => {
-      assert(SignalType.App in signal);
-      t.deepEqual(signal[SignalType.App], {
+      assert(signal.type === "app");
+      t.deepEqual(signal.value, {
         cell_id,
         zome_name: TEST_ZOME_NAME,
         payload: "i am a signal",
@@ -1028,16 +1057,18 @@ test("can inject agents", async (t) => {
   t.ok(agent_key_2);
   const path = `${FIXTURE_PATH}/test.dna`;
   let result = await admin1.installApp({
+    source: {
+      type: "path",
+      value: `${FIXTURE_PATH}/test.happ`,
+    },
     installed_app_id,
     agent_key: agent_key_1,
-    path: `${FIXTURE_PATH}/test.happ`,
   });
   t.ok(result);
-  assert(CellType.Provisioned in result.cell_info[ROLE_NAME][0]);
-  const app1_cell =
-    result.cell_info[ROLE_NAME][0][CellType.Provisioned].cell_id;
+  assert(result.cell_info[ROLE_NAME][0].type === "provisioned");
+  const app1_cell = result.cell_info[ROLE_NAME][0].value.cell_id;
   const activeApp1Info = await admin1.enableApp({ installed_app_id }, 1000);
-  t.deepEqual(activeApp1Info.app.status, "running");
+  t.deepEqual(activeApp1Info.app.status, { type: "running" });
   t.ok(ROLE_NAME in activeApp1Info.app.cell_info);
   t.equal(activeApp1Info.app.installed_app_id, installed_app_id);
   t.equal(activeApp1Info.errors.length, 0);
@@ -1061,20 +1092,25 @@ test("can inject agents", async (t) => {
 
   // now install the app and activate it on agent 2.
   await admin2.registerDna({
+    source: {
+      type: "path",
+      value: path,
+    },
     modifiers: {},
-    path,
   });
   result = await admin2.installApp({
+    source: {
+      type: "path",
+      value: `${FIXTURE_PATH}/test.happ`,
+    },
     installed_app_id,
     agent_key: agent_key_2,
-    path: `${FIXTURE_PATH}/test.happ`,
   });
   t.ok(result);
-  assert(CellType.Provisioned in result.cell_info[ROLE_NAME][0]);
-  const app2_cell =
-    result.cell_info[ROLE_NAME][0][CellType.Provisioned].cell_id;
+  assert(result.cell_info[ROLE_NAME][0].type === "provisioned");
+  const app2_cell = result.cell_info[ROLE_NAME][0].value.cell_id;
   const activeApp2Info = await admin2.enableApp({ installed_app_id });
-  t.deepEqual(activeApp2Info.app.status, "running");
+  t.deepEqual(activeApp2Info.app.status, { type: "running" });
   t.ok(ROLE_NAME in activeApp2Info.app.cell_info);
   t.equal(activeApp2Info.app.installed_app_id, installed_app_id);
   t.equal(activeApp2Info.errors.length, 0);
@@ -1205,13 +1241,10 @@ test(
     );
     let info = await client.appInfo(1000);
     assert(info);
-    assert(CellType.Provisioned in info.cell_info[ROLE_NAME][0]);
-    t.deepEqual(
-      info.cell_info[ROLE_NAME][0][CellType.Provisioned].cell_id,
-      cell_id
-    );
+    assert(info.cell_info[ROLE_NAME][0].type === "provisioned");
+    t.deepEqual(info.cell_info[ROLE_NAME][0].value.cell_id, cell_id);
     t.ok(ROLE_NAME in info.cell_info);
-    t.deepEqual(info.status, "running");
+    t.deepEqual(info.status, { type: "running" });
     await admin.authorizeSigningCredentials(cell_id);
     const zomeCallPayload: CallZomeRequest = {
       cell_id,
@@ -1226,7 +1259,10 @@ test(
     await admin.disableApp({ installed_app_id });
     info = await client.appInfo(1000);
     assert(info);
-    t.deepEqual(info.status, { disabled: { reason: "user" } });
+    t.deepEqual(info.status, {
+      type: "disabled",
+      value: { reason: { type: "user" } },
+    });
   })
 );
 
@@ -1240,23 +1276,29 @@ test(
     const agent_key = await admin.generateAgentPubKey();
 
     const installedApp1 = await admin.installApp({
+      source: {
+        type: "path",
+        value: `${FIXTURE_PATH}/test.happ`,
+      },
       agent_key,
       installed_app_id: "test-app1",
-      path: `${FIXTURE_PATH}/test.happ`,
       network_seed: "1",
     });
     const installedApp2 = await admin.installApp({
+      source: {
+        type: "path",
+        value: `${FIXTURE_PATH}/test.happ`,
+      },
       agent_key,
       installed_app_id: "test-app2",
-      path: `${FIXTURE_PATH}/test.happ`,
       network_seed: "2",
     });
 
-    assert(CellType.Provisioned in installedApp1.cell_info[ROLE_NAME][0]);
-    assert(CellType.Provisioned in installedApp2.cell_info[ROLE_NAME][0]);
+    assert(installedApp1.cell_info[ROLE_NAME][0].type === "provisioned");
+    assert(installedApp2.cell_info[ROLE_NAME][0].type === "provisioned");
     t.isNotDeepEqual(
-      installedApp1.cell_info[ROLE_NAME][0][CellType.Provisioned].cell_id[0],
-      installedApp2.cell_info[ROLE_NAME][0][CellType.Provisioned].cell_id[0]
+      installedApp1.cell_info[ROLE_NAME][0].value.cell_id[0],
+      installedApp2.cell_info[ROLE_NAME][0].value.cell_id[0]
     );
   })
 );
@@ -1278,10 +1320,10 @@ test(
 
     const expectedCloneId = new CloneId(ROLE_NAME, 0).toString();
     t.equal(cloneCell.clone_id, expectedCloneId, "correct clone id");
-    assert(CellType.Provisioned in appInfo.cell_info[ROLE_NAME][0]);
+    assert(appInfo.cell_info[ROLE_NAME][0].type === "provisioned");
     t.deepEqual(
       cloneCell.cell_id[1],
-      appInfo.cell_info[ROLE_NAME][0][CellType.Provisioned].cell_id[1],
+      appInfo.cell_info[ROLE_NAME][0].value.cell_id[1],
       "clone cell agent key matches base cell agent key"
     );
     const zomeCallPayload: CallZomeRequest = {
@@ -1316,7 +1358,10 @@ test(
     await admin.authorizeSigningCredentials(cloneCell.cell_id);
 
     await client.disableCloneCell({
-      clone_cell_id: cloneCell.cell_id[0],
+      clone_cell_id: {
+        type: "dna_hash",
+        value: cloneCell.cell_id[0],
+      },
     });
 
     const appInfo = await client.appInfo();
@@ -1354,11 +1399,17 @@ test(
     };
     const cloneCell = await client.createCloneCell(createCloneCellParams);
     await client.disableCloneCell({
-      clone_cell_id: cloneCell.cell_id[0],
+      clone_cell_id: {
+        type: "dna_hash",
+        value: cloneCell.cell_id[0],
+      },
     });
 
     const enabledCloneCell = await client.enableCloneCell({
-      clone_cell_id: CloneId.fromRoleName(cloneCell.clone_id).toString(),
+      clone_cell_id: {
+        type: "clone_id",
+        value: CloneId.fromRoleName(cloneCell.clone_id).toString(),
+      },
     });
 
     const appInfo = await client.appInfo();
@@ -1396,17 +1447,17 @@ test(
     const cloneCell = await client.createCloneCell(createCloneCellParams);
     createCloneCellParams.modifiers.network_seed = "clone-1";
     await client.disableCloneCell({
-      clone_cell_id: cloneCell.cell_id[0],
+      clone_cell_id: { type: "dna_hash", value: cloneCell.cell_id[0] },
     });
 
     await admin.deleteCloneCell({
       app_id: installed_app_id,
-      clone_cell_id: cloneCell.cell_id[0],
+      clone_cell_id: { type: "dna_hash", value: cloneCell.cell_id[0] },
     });
 
     try {
       await client.enableCloneCell({
-        clone_cell_id: cloneCell.cell_id[0],
+        clone_cell_id: { type: "dna_hash", value: cloneCell.cell_id[0] },
       });
       t.fail();
     } catch (error) {
@@ -1477,7 +1528,9 @@ test(
 
     t.equal(response.blobs.length, 1);
     t.assert(
-      response.blobs.some((blob) => blob.dna.used_by.includes(installed_app_id))
+      response.blobs.some((blob) =>
+        blob.value.used_by.includes(installed_app_id)
+      )
     );
   })
 );
@@ -1539,7 +1592,10 @@ test(
 
     await admin.updateCoordinators({
       dna_hash: cell_id[0],
-      bundle,
+      source: {
+        type: "bundle",
+        value: bundle,
+      },
     });
 
     const dnaDef = await admin.getDnaDefinition(cell_id[0]);

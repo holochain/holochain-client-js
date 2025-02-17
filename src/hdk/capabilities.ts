@@ -27,8 +27,13 @@ export enum GrantedFunctionsType {
  * @public
  */
 export type GrantedFunctions =
-  | GrantedFunctionsType.All
-  | { [GrantedFunctionsType.Listed]: [ZomeName, FunctionName][] };
+  | {
+      type: "all";
+    }
+  | {
+      type: "listed";
+      value: [ZomeName, FunctionName][];
+    };
 
 /**
  * @public
@@ -42,22 +47,17 @@ export interface ZomeCallCapGrant {
 /**
  * @public
  */
-export enum CapAccessType {
-  Unrestricted = "Unrestricted",
-  Transferable = "Transferable",
-  Assigned = "Assigned",
-}
-
-/**
- * @public
- */
 export type CapAccess =
-  | [CapAccessType.Unrestricted]
   | {
-      [CapAccessType.Transferable]: { secret: CapSecret };
+      type: "unrestricted";
     }
   | {
-      [CapAccessType.Assigned]: { secret: CapSecret; assignees: AgentPubKey[] };
+      type: "transferable";
+      value: { secret: CapSecret };
+    }
+  | {
+      type: "assigned";
+      value: { secret: CapSecret; assignees: AgentPubKey[] };
     };
 
 /**

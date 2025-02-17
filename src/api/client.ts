@@ -3,7 +3,7 @@ import Emittery from "emittery";
 import IsoWebSocket from "isomorphic-ws";
 import { HolochainError, WsClientOptions } from "./common.js";
 import { AppAuthenticationToken } from "./admin/index.js";
-import { AppSignal, RawSignal, Signal, SignalType } from "./app/index.js";
+import { AppSignal, RawSignal, Signal } from "./app/index.js";
 
 interface HolochainMessage {
   id: number;
@@ -237,12 +237,13 @@ export class WsClient extends Emittery {
         const deserializedSignal = decode(message.data);
         assertHolochainSignal(deserializedSignal);
 
-        if (SignalType.System in deserializedSignal) {
+        if (deserializedSignal.type === "system") {
           this.emit("signal", {
-            System: deserializedSignal[SignalType.System],
+            type: "system",
+            value: deserializedSignal.value,
           } as Signal);
         } else {
-          const encodedAppSignal = deserializedSignal[SignalType.App];
+          const encodedAppSignal = deserializedSignal.value;
 
           // In order to return readable content to the UI, the signal payload must also be deserialized.
           const payload = decode(encodedAppSignal.signal);
@@ -252,7 +253,7 @@ export class WsClient extends Emittery {
             zome_name: encodedAppSignal.zome_name,
             payload,
           };
-          this.emit("signal", { App: signal } as Signal);
+          this.emit("signal", { type: "app", value: signal } as Signal);
         }
       } else if (message.type === "response") {
         this.handleResponse(message);
@@ -383,7 +384,9 @@ function assertHolochainSignal(signal: unknown): asserts signal is RawSignal {
   if (
     typeof signal === "object" &&
     signal !== null &&
-    Object.values(SignalType).some((type) => type in signal)
+    "type" in signal &&
+    "value" in signal &&
+    ["app", "signal"].some((type) => signal.type === type)
   ) {
     return;
   }

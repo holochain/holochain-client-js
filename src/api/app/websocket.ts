@@ -1,7 +1,7 @@
 import Emittery, { UnsubscribeFunction } from "emittery";
 import { omit } from "lodash-es";
 import { AgentPubKey, InstalledAppId, RoleName } from "../../types.js";
-import { AppInfo, CellType, MemproofMap } from "../admin/index.js";
+import { AppInfo, MemproofMap } from "../admin/index.js";
 import {
   catchError,
   DEFAULT_TIMEOUT,
@@ -317,15 +317,15 @@ export class AppWebsocket implements AppClient {
         );
       }
       const cloneCell = appInfo.cell_info[baseRoleName].find(
-        (c) => CellType.Cloned in c && c[CellType.Cloned].clone_id === roleName
+        (c) => c.type === "cloned" && c.value.clone_id === roleName
       );
-      if (!cloneCell || !(CellType.Cloned in cloneCell)) {
+      if (!cloneCell || !(cloneCell.type === "cloned")) {
         throw new HolochainError(
           "NoCellForCloneId",
           `no clone cell found with clone id ${roleName}`
         );
       }
-      return cloneCell[CellType.Cloned].cell_id;
+      return cloneCell.value.cell_id;
     }
 
     if (!(roleName in appInfo.cell_info)) {
@@ -335,15 +335,15 @@ export class AppWebsocket implements AppClient {
       );
     }
     const cell = appInfo.cell_info[roleName].find(
-      (c) => CellType.Provisioned in c
+      (c) => c.type === "provisioned"
     );
-    if (!cell || !(CellType.Provisioned in cell)) {
+    if (!cell) {
       throw new HolochainError(
         "NoProvisionedCellForRoleName",
         `no provisioned cell found with role_name ${roleName}`
       );
     }
-    return cell[CellType.Provisioned].cell_id;
+    return cell.value.cell_id;
   }
 
   /**
