@@ -1,7 +1,12 @@
 import Emittery, { UnsubscribeFunction } from "emittery";
 import { omit } from "lodash-es";
 import { AgentPubKey, InstalledAppId, RoleName } from "../../types.js";
-import { AppInfo, MemproofMap } from "../admin/index.js";
+import {
+  AppInfo,
+  ClonedCell,
+  MemproofMap,
+  ProvisionedCell,
+} from "../admin/index.js";
 import {
   catchError,
   DEFAULT_TIMEOUT,
@@ -319,13 +324,13 @@ export class AppWebsocket implements AppClient {
       const cloneCell = appInfo.cell_info[baseRoleName].find(
         (c) => c.type === "cloned" && c.value.clone_id === roleName
       );
-      if (!cloneCell || !(cloneCell.type === "cloned")) {
+      if (!cloneCell) {
         throw new HolochainError(
           "NoCellForCloneId",
           `no clone cell found with clone id ${roleName}`
         );
       }
-      return cloneCell.value.cell_id;
+      return (cloneCell.value as ClonedCell).cell_id;
     }
 
     if (!(roleName in appInfo.cell_info)) {
@@ -343,7 +348,7 @@ export class AppWebsocket implements AppClient {
         `no provisioned cell found with role_name ${roleName}`
       );
     }
-    return cell.value.cell_id;
+    return (cell.value as ProvisionedCell).cell_id;
   }
 
   /**

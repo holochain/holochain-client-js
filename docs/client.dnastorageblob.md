@@ -2,53 +2,16 @@
 
 [Home](./index.md) &gt; [@holochain/client](./client.md) &gt; [DnaStorageBlob](./client.dnastorageblob.md)
 
-## DnaStorageBlob interface
+## DnaStorageBlob type
 
 
 **Signature:**
 
 ```typescript
-export interface DnaStorageBlob 
+export type DnaStorageBlob = {
+    type: "dna";
+    value: DnaStorageInfo;
+};
 ```
+**References:** [DnaStorageInfo](./client.dnastorageinfo.md)
 
-## Properties
-
-<table><thead><tr><th>
-
-Property
-
-
-</th><th>
-
-Modifiers
-
-
-</th><th>
-
-Type
-
-
-</th><th>
-
-Description
-
-
-</th></tr></thead>
-<tbody><tr><td>
-
-[dna](./client.dnastorageblob.dna.md)
-
-
-</td><td>
-
-
-</td><td>
-
-[DnaStorageInfo](./client.dnastorageinfo.md)
-
-
-</td><td>
-
-
-</td></tr>
-</tbody></table>

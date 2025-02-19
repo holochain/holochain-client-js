@@ -9,12 +9,15 @@
 
 ```typescript
 export type DnaSource = {
-    hash: HoloHash;
+    type: "path";
+    value: string;
 } | {
-    path: string;
+    type: "bundle";
+    value: DnaBundle;
 } | {
-    bundle: DnaBundle;
+    type: "hash";
+    value: HoloHash;
 };
 ```
-**References:** [HoloHash](./client.holohash.md)<!-- -->, [DnaBundle](./client.dnabundle.md)
+**References:** [DnaBundle](./client.dnabundle.md)<!-- -->, [HoloHash](./client.holohash.md)
 

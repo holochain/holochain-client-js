@@ -63,7 +63,7 @@ The app id that the clone cell belongs to
 
 </td><td>
 
-[RoleName](./client.rolename.md) \| [DnaHash](./client.dnahash.md)
+[CloneCellId](./client.clonecellid.md)
 
 
 </td><td>

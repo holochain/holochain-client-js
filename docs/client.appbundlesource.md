@@ -9,9 +9,11 @@
 
 ```typescript
 export type AppBundleSource = {
-    bundle: AppBundle;
+    type: "path";
+    value: string;
 } | {
-    path: string;
+    type: "bundle";
+    value: AppBundle;
 };
 ```
 **References:** [AppBundle](./client.appbundle.md)

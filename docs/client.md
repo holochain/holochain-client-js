@@ -113,27 +113,7 @@ Description
 </td></tr>
 <tr><td>
 
-[CapAccessType](./client.capaccesstype.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
 [CellProvisioningStrategy](./client.cellprovisioningstrategy.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[CellType](./client.celltype.md)
 
 
 </td><td>
@@ -784,16 +764,6 @@ Description
 </td></tr>
 <tr><td>
 
-[DnaStorageBlob](./client.dnastorageblob.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
 [DnaStorageInfo](./client.dnastorageinfo.md)
 
 
@@ -1192,16 +1162,6 @@ Description
 Hash type labels and their 3 byte values (forming the first 3 bytes of hash).
 
 From https://github.com/holochain/holochain/blob/develop/crates/holo\_hash/src/hash\_type/primitive.rs
-
-
-</td></tr>
-<tr><td>
-
-[SignalType](./client.signaltype.md)
-
-
-</td><td>
-
 
 
 </td></tr>
@@ -1655,6 +1615,16 @@ This type is meant to be opaque
 </td></tr>
 <tr><td>
 
+[CloneCellId](./client.clonecellid.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
 [CoordinatorSource](./client.coordinatorsource.md)
 
 
@@ -1856,6 +1826,16 @@ This type is meant to be opaque
 <tr><td>
 
 [DnaSource](./client.dnasource.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[DnaStorageBlob](./client.dnastorageblob.md)
 
 
 </td><td>

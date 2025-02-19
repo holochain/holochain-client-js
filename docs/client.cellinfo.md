@@ -9,12 +9,15 @@
 
 ```typescript
 export type CellInfo = {
-    [CellType.Provisioned]: ProvisionedCell;
+    type: "provisioned";
+    value: ProvisionedCell;
 } | {
-    [CellType.Cloned]: ClonedCell;
+    type: "cloned";
+    value: ClonedCell;
 } | {
-    [CellType.Stem]: StemCell;
+    type: "stem";
+    value: StemCell;
 };
 ```
-**References:** [CellType.Provisioned](./client.celltype.md)<!-- -->, [ProvisionedCell](./client.provisionedcell.md)<!-- -->, [CellType.Cloned](./client.celltype.md)<!-- -->, [ClonedCell](./client.clonedcell.md)<!-- -->, [CellType.Stem](./client.celltype.md)<!-- -->, [StemCell](./client.stemcell.md)
+**References:** [ProvisionedCell](./client.provisionedcell.md)<!-- -->, [ClonedCell](./client.clonedcell.md)<!-- -->, [StemCell](./client.stemcell.md)
 

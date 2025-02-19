@@ -9,9 +9,11 @@
 
 ```typescript
 export type Signal = {
-    [SignalType.App]: AppSignal;
+    type: "app";
+    value: AppSignal;
 } | {
-    [SignalType.System]: SystemSignal;
+    type: "system";
+    value: SystemSignal;
 };
 ```
 **References:** [AppSignal](./client.appsignal.md)<!-- -->, [SystemSignal](./client.systemsignal.md)

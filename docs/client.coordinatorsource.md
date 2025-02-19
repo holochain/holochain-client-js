@@ -9,9 +9,11 @@
 
 ```typescript
 export type CoordinatorSource = {
-    path: string;
+    type: "path";
+    value: string;
 } | {
-    bundle: CoordinatorBundle;
+    type: "bundle";
+    value: CoordinatorBundle;
 };
 ```
 **References:** [CoordinatorBundle](./client.coordinatorbundle.md)
