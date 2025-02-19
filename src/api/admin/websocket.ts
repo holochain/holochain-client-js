@@ -320,7 +320,8 @@ export class AdminWebsocket implements AdminApi {
         tag: "zome-call-signing-key",
         functions,
         access: {
-          Assigned: {
+          type: "assigned",
+          value: {
             secret: capSecret,
             assignees: [signingKey],
           },
@@ -345,7 +346,7 @@ export class AdminWebsocket implements AdminApi {
     const [keyPair, signingKey] = await generateSigningKeyPair();
     const capSecret = await this.grantSigningKey(
       cellId,
-      functions || GrantedFunctionsType.All,
+      functions || { type: "all" },
       signingKey
     );
     setSigningCredentials(cellId, { capSecret, keyPair, signingKey });

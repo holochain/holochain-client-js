@@ -8,9 +8,12 @@
 **Signature:**
 
 ```typescript
-export type GrantedFunctions = GrantedFunctionsType.All | {
-    [GrantedFunctionsType.Listed]: [ZomeName, FunctionName][];
+export type GrantedFunctions = {
+    type: "all";
+} | {
+    type: "listed";
+    value: [ZomeName, FunctionName][];
 };
 ```
-**References:** [GrantedFunctionsType.All](./client.grantedfunctionstype.md)<!-- -->, [GrantedFunctionsType.Listed](./client.grantedfunctionstype.md)<!-- -->, [ZomeName](./client.zomename.md)<!-- -->, [FunctionName](./client.functionname.md)
+**References:** [ZomeName](./client.zomename.md)<!-- -->, [FunctionName](./client.functionname.md)
 

@@ -9,12 +9,13 @@
 
 ```typescript
 export type InstallAppRequest = {
+    source: AppBundleSource;
     agent_key?: AgentPubKey;
     installed_app_id?: InstalledAppId;
     network_seed?: NetworkSeed;
     roles_settings?: RoleSettingsMap;
     ignore_genesis_failure?: boolean;
-} & AppBundleSource;
+};
 ```
-**References:** [AgentPubKey](./client.agentpubkey.md)<!-- -->, [InstalledAppId](./client.installedappid.md)<!-- -->, [NetworkSeed](./client.networkseed.md)<!-- -->, [RoleSettingsMap](./client.rolesettingsmap.md)<!-- -->, [AppBundleSource](./client.appbundlesource.md)
+**References:** [AppBundleSource](./client.appbundlesource.md)<!-- -->, [AgentPubKey](./client.agentpubkey.md)<!-- -->, [InstalledAppId](./client.installedappid.md)<!-- -->, [NetworkSeed](./client.networkseed.md)<!-- -->, [RoleSettingsMap](./client.rolesettingsmap.md)
 

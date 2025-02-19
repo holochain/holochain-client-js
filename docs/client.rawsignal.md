@@ -9,9 +9,11 @@
 
 ```typescript
 export type RawSignal = {
-    [SignalType.App]: EncodedAppSignal;
+    type: "app";
+    value: EncodedAppSignal;
 } | {
-    [SignalType.System]: SystemSignal;
+    type: "system";
+    value: SystemSignal;
 };
 ```
 **References:** [EncodedAppSignal](./client.encodedappsignal.md)<!-- -->, [SystemSignal](./client.systemsignal.md)

@@ -1,8 +1,8 @@
 import assert from "node:assert/strict";
 import { spawn } from "node:child_process";
 import { Test } from "tape";
-import { AdminWebsocket, CellId, InstalledAppId } from "../../src";
-import { AppWebsocket, CellType, CoordinatorBundle } from "../../src";
+import { AdminWebsocket, CellId, CellType, InstalledAppId } from "../../src";
+import { AppWebsocket, CoordinatorBundle } from "../../src";
 import fs from "fs";
 
 export const FIXTURE_PATH = "./test/e2e/fixture";
@@ -119,10 +119,13 @@ export const installAppAndDna = async (
   const app = await admin.installApp({
     installed_app_id,
     agent_key: agent,
-    path,
+    source: {
+      type: "path",
+      value: path,
+    },
   });
-  assert(CellType.Provisioned in app.cell_info[role_name][0]);
-  const cell_id = app.cell_info[role_name][0][CellType.Provisioned].cell_id;
+  assert(app.cell_info[role_name][0].type === CellType.Provisioned);
+  const cell_id = app.cell_info[role_name][0].value.cell_id;
   await admin.enableApp({ installed_app_id });
   // destructure to get whatever open port was assigned to the interface
   const { port: appPort } = await admin.attachAppInterface({
@@ -160,10 +163,13 @@ export const createAppWsAndInstallApp = async (
   const app = await admin.installApp({
     installed_app_id,
     agent_key: agent,
-    path,
+    source: {
+      type: "path",
+      value: path,
+    },
   });
-  assert(CellType.Provisioned in app.cell_info[role_name][0]);
-  const cell_id = app.cell_info[role_name][0][CellType.Provisioned].cell_id;
+  assert(app.cell_info[role_name][0].type === CellType.Provisioned);
+  const cell_id = app.cell_info[role_name][0].value.cell_id;
   await admin.enableApp({ installed_app_id });
   const { port: appPort } = await admin.attachAppInterface({
     allowed_origins: "client-test-app",

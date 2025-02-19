@@ -9,12 +9,16 @@
 
 ```typescript
 export type RoleSettings = {
-    type: "UseExisting";
-    cell_id: CellId;
+    type: "use_existing";
+    value: {
+        cell_id: CellId;
+    };
 } | {
-    type: "Provisioned";
-    membrane_proof?: MembraneProof;
-    modifiers?: DnaModifiersOpt;
+    type: "provisioned";
+    value: {
+        membrane_proof?: MembraneProof;
+        modifiers?: DnaModifiersOpt;
+    };
 };
 ```
 **References:** [CellId](./client.cellid.md)<!-- -->, [MembraneProof](./client.membraneproof.md)<!-- -->, [DnaModifiersOpt](./client.dnamodifiersopt.md)

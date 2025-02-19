@@ -9,7 +9,7 @@ Clone an existing provisioned cell.
 **Signature:**
 
 ```typescript
-createCloneCell(args: CreateCloneCellRequest): Promise<import("../admin/types.js").ClonedCell>;
+createCloneCell(args: CreateCloneCellRequest): Promise<ClonedCell>;
 ```
 
 ## Parameters
@@ -49,7 +49,7 @@ Specify the cell to clone.
 </tbody></table>
 **Returns:**
 
-Promise&lt;import("../admin/types.js").[ClonedCell](./client.clonedcell.md)<!-- -->&gt;
+Promise&lt;[ClonedCell](./client.clonedcell.md)<!-- -->&gt;
 
 The created clone cell.
 

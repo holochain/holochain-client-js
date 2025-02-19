@@ -8,16 +8,20 @@
 **Signature:**
 
 ```typescript
-export type CapAccess = [CapAccessType.Unrestricted] | {
-    [CapAccessType.Transferable]: {
+export type CapAccess = {
+    type: "unrestricted";
+} | {
+    type: "transferable";
+    value: {
         secret: CapSecret;
     };
 } | {
-    [CapAccessType.Assigned]: {
+    type: "assigned";
+    value: {
         secret: CapSecret;
         assignees: AgentPubKey[];
     };
 };
 ```
-**References:** [CapAccessType.Unrestricted](./client.capaccesstype.md)<!-- -->, [CapAccessType.Transferable](./client.capaccesstype.md)<!-- -->, [CapSecret](./client.capsecret.md)<!-- -->, [CapAccessType.Assigned](./client.capaccesstype.md)<!-- -->, [AgentPubKey](./client.agentpubkey.md)
+**References:** [CapSecret](./client.capsecret.md)<!-- -->, [AgentPubKey](./client.agentpubkey.md)
 

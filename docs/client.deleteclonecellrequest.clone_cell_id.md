@@ -9,5 +9,5 @@ The clone id or cell id of the clone cell
 **Signature:**
 
 ```typescript
-clone_cell_id: RoleName | DnaHash;
+clone_cell_id: CloneCellId;
 ```

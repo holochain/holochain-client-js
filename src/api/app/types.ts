@@ -153,11 +153,29 @@ export type CreateCloneCellResponse = ClonedCell;
 /**
  * @public
  */
+export type CloneId = string;
+
+/**
+ * @public
+ */
+export type CloneCellId =
+  | {
+      type: "clone_id";
+      value: CloneId;
+    }
+  | {
+      type: "dna_hash";
+      value: DnaHash;
+    };
+
+/**
+ * @public
+ */
 export interface DisableCloneCellRequest {
   /**
    * The clone id or cell id of the clone cell
    */
-  clone_cell_id: RoleName | DnaHash;
+  clone_cell_id: CloneCellId;
 }
 /**
  * @public
@@ -413,20 +431,14 @@ export type SessionCompletionDecision =
 /**
  * @public
  */
-export const SignalType = {
-  App: "App",
-  System: "System",
-} as const;
-
-/**
- * @public
- */
 export type RawSignal =
   | {
-      [SignalType.App]: EncodedAppSignal;
+      type: "app";
+      value: EncodedAppSignal;
     }
   | {
-      [SignalType.System]: SystemSignal;
+      type: "system";
+      value: SystemSignal;
     };
 
 /**
@@ -434,10 +446,12 @@ export type RawSignal =
  */
 export type Signal =
   | {
-      [SignalType.App]: AppSignal;
+      type: "app";
+      value: AppSignal;
     }
   | {
-      [SignalType.System]: SystemSignal;
+      type: "system";
+      value: SystemSignal;
     };
 
 /**

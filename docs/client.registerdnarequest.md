@@ -9,11 +9,12 @@
 
 ```typescript
 export type RegisterDnaRequest = {
+    source: DnaSource;
     modifiers?: {
         network_seed?: string;
         properties?: DnaProperties;
     };
-} & DnaSource;
+};
 ```
-**References:** [DnaProperties](./client.dnaproperties.md)<!-- -->, [DnaSource](./client.dnasource.md)
+**References:** [DnaSource](./client.dnasource.md)<!-- -->, [DnaProperties](./client.dnaproperties.md)
 
