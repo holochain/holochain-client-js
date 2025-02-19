@@ -8,6 +8,63 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Fixed
 - Fix DhtOps helper functions `getChainOpType`, `getChainOpAction`, `getChainOpEntry` and `getChainOpSignature` to adhere to the new types
 ### Changed
+- Updated types to the new [enum serialization convention](https://docs.rs/holochain_conductor_api/0.5.0-dev.19/holochain_conductor_api/docs/index.html#enum-serialization-convention). The following types are affected:
+  - `SignalType`
+  - `CellInfo`
+  - `InstallAppRequest`
+  - `RoleSettings`
+  - `DnaSource`
+  - `RegisterDnaRequest`
+  - `CoordinatorSource`
+  - `AppBundleSource`
+  - `AppStatusFilter`
+  - `CloneCellId`
+  - `GrantedFunctions`
+  - `CapAccess`
+  - `DnaStorageBlob`
+
+  Enum variants are now consistently `snake_case` and typically distinguished by a `type` attribute, unless for enums with exclusively unit-like variants.
+
+  Example 1:
+  ```
+  // OLD
+  export type AppBundleSource =
+    | { bundle: AppBundle }
+    | { path: string };
+
+  // NEW
+  export type AppBundleSource =
+  | {
+      type: "path";
+      value: string;
+    }
+  | {
+      type: "bundle";
+      value: AppBundle;
+    };
+  ```
+
+  Example 2 (unit-like variants only):
+  ```
+  // OLD
+  export enum AppStatusFilter {
+    Enabled = "Enabled",
+    Disabled = "Disabled",
+    Running = "Running",
+    Stopped = "Stopped",
+    Paused = "Paused",
+  }
+
+  // NEW
+  export enum AppStatusFilter {
+    Enabled = "enabled",
+    Disabled = "disabled",
+    Running = "running",
+    Stopped = "stopped",
+    Paused = "paused",
+  }
+  ```
+
 ### Removed
 
 ## 2024-11-28: v0.19.0-dev.6
