@@ -5,6 +5,7 @@ import {
   AppEntryDef,
   AppWebsocket,
   CallZomeRequest,
+  CellType,
   CloneId,
   CreateCloneCellRequest,
   fakeAgentPubKey,
@@ -34,7 +35,7 @@ test(
     } = await createAppWsAndInstallApp(ADMIN_PORT);
 
     let info = await appWs.appInfo();
-    assert(info.cell_info[ROLE_NAME][0].type === "provisioned");
+    assert(info.cell_info[ROLE_NAME][0].type === CellType.Provisioned);
     t.deepEqual(info.cell_info[ROLE_NAME][0].value.cell_id, cell_id);
     t.ok(ROLE_NAME in info.cell_info);
     t.deepEqual(info.status, { type: "running" });
@@ -142,7 +143,7 @@ test(
         value: path,
       },
     });
-    assert(app1.cell_info[role_name][0].type === "provisioned");
+    assert(app1.cell_info[role_name][0].type === CellType.Provisioned);
     const cell_id1 = app1.cell_info[role_name][0].value.cell_id;
     await admin.enableApp({ installed_app_id: app_id1 });
 
@@ -223,7 +224,7 @@ test(
 
     const expectedCloneId = new CloneId(ROLE_NAME, 0).toString();
     t.equal(cloneCell.clone_id, expectedCloneId, "correct clone id");
-    assert(info.cell_info[ROLE_NAME][0].type === "provisioned");
+    assert(info.cell_info[ROLE_NAME][0].type === CellType.Provisioned);
     t.deepEqual(
       cloneCell.cell_id[1],
       info.cell_info[ROLE_NAME][0].value.cell_id[1],

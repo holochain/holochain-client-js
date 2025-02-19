@@ -33,6 +33,7 @@ import {
   getNonceExpiration,
   ProvisionedCell,
   Duration,
+  CellType,
 } from "../../src";
 import {
   FIXTURE_PATH,
@@ -253,7 +254,7 @@ test(
 
     const cellIds = await admin.listCellIds();
     t.equal(cellIds.length, 1);
-    assert(installedApp.cell_info[ROLE_NAME][0].type === "provisioned");
+    assert(installedApp.cell_info[ROLE_NAME][0].type === CellType.Provisioned);
     t.assert(
       cellIds.some((cellId) =>
         isSameCell(
@@ -382,7 +383,7 @@ test(
     let info = await client.appInfo(1000);
     assert(info, "got app info");
     assert(
-      info.cell_info[ROLE_NAME][0].type === "provisioned",
+      info.cell_info[ROLE_NAME][0].type === CellType.Provisioned,
       "got expected cell"
     );
     t.deepEqual(
@@ -553,7 +554,7 @@ test(
     const { cell_id, client, admin } = await installAppAndDna(ADMIN_PORT);
     const info = await client.appInfo(1000);
     assert(info);
-    assert(info.cell_info[ROLE_NAME][0].type === "provisioned");
+    assert(info.cell_info[ROLE_NAME][0].type === CellType.Provisioned);
 
     const zomeCallPayload: CallZomeRequest = {
       cell_id,
@@ -809,7 +810,7 @@ test(
       token: issued.token,
     });
 
-    assert(app.cell_info[role_name][0].type === "provisioned");
+    assert(app.cell_info[role_name][0].type === CellType.Provisioned);
     const cell_id = app.cell_info[role_name][0].value.cell_id;
 
     const zomeCallPayload: CallZomeRequest = {
@@ -883,7 +884,7 @@ test(
       token: issued.token,
     });
 
-    assert(app.cell_info[role_name][0].type === "provisioned");
+    assert(app.cell_info[role_name][0].type === CellType.Provisioned);
     const cell_id = app.cell_info[role_name][0].value.cell_id;
 
     const zomeCallPayload: CallZomeRequest = {
@@ -928,7 +929,7 @@ test(
     const { cell_id, client, admin } = await installAppAndDna(ADMIN_PORT);
     const info = await client.appInfo();
     assert(info);
-    assert(info.cell_info[ROLE_NAME][0].type === "provisioned");
+    assert(info.cell_info[ROLE_NAME][0].type === CellType.Provisioned);
     t.deepEqual(info.cell_info[ROLE_NAME][0].value.cell_id, cell_id);
     t.ok(ROLE_NAME in info.cell_info);
     t.deepEqual(info.status, { type: "running" });
@@ -1065,7 +1066,7 @@ test("can inject agents", async (t) => {
     agent_key: agent_key_1,
   });
   t.ok(result);
-  assert(result.cell_info[ROLE_NAME][0].type === "provisioned");
+  assert(result.cell_info[ROLE_NAME][0].type === CellType.Provisioned);
   const app1_cell = result.cell_info[ROLE_NAME][0].value.cell_id;
   const activeApp1Info = await admin1.enableApp({ installed_app_id }, 1000);
   t.deepEqual(activeApp1Info.app.status, { type: "running" });
@@ -1107,7 +1108,7 @@ test("can inject agents", async (t) => {
     agent_key: agent_key_2,
   });
   t.ok(result);
-  assert(result.cell_info[ROLE_NAME][0].type === "provisioned");
+  assert(result.cell_info[ROLE_NAME][0].type === CellType.Provisioned);
   const app2_cell = result.cell_info[ROLE_NAME][0].value.cell_id;
   const activeApp2Info = await admin2.enableApp({ installed_app_id });
   t.deepEqual(activeApp2Info.app.status, { type: "running" });
@@ -1241,7 +1242,7 @@ test(
     );
     let info = await client.appInfo(1000);
     assert(info);
-    assert(info.cell_info[ROLE_NAME][0].type === "provisioned");
+    assert(info.cell_info[ROLE_NAME][0].type === CellType.Provisioned);
     t.deepEqual(info.cell_info[ROLE_NAME][0].value.cell_id, cell_id);
     t.ok(ROLE_NAME in info.cell_info);
     t.deepEqual(info.status, { type: "running" });
@@ -1294,8 +1295,8 @@ test(
       network_seed: "2",
     });
 
-    assert(installedApp1.cell_info[ROLE_NAME][0].type === "provisioned");
-    assert(installedApp2.cell_info[ROLE_NAME][0].type === "provisioned");
+    assert(installedApp1.cell_info[ROLE_NAME][0].type === CellType.Provisioned);
+    assert(installedApp2.cell_info[ROLE_NAME][0].type === CellType.Provisioned);
     t.isNotDeepEqual(
       installedApp1.cell_info[ROLE_NAME][0].value.cell_id[0],
       installedApp2.cell_info[ROLE_NAME][0].value.cell_id[0]
@@ -1320,7 +1321,7 @@ test(
 
     const expectedCloneId = new CloneId(ROLE_NAME, 0).toString();
     t.equal(cloneCell.clone_id, expectedCloneId, "correct clone id");
-    assert(appInfo.cell_info[ROLE_NAME][0].type === "provisioned");
+    assert(appInfo.cell_info[ROLE_NAME][0].type === CellType.Provisioned);
     t.deepEqual(
       cloneCell.cell_id[1],
       appInfo.cell_info[ROLE_NAME][0].value.cell_id[1],

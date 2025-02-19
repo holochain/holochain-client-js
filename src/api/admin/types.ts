@@ -124,17 +124,26 @@ export interface ClonedCell {
 /**
  * @public
  */
+export enum CellType {
+  Provisioned = "provisioned",
+  Cloned = "cloned",
+  Stem = "stem",
+}
+
+/**
+ * @public
+ */
 export type CellInfo =
   | {
-      type: "provisioned";
+      type: CellType.Provisioned;
       value: ProvisionedCell;
     }
   | {
-      type: "cloned";
+      type: CellType.Cloned;
       value: ClonedCell;
     }
   | {
-      type: "stem";
+      type: CellType.Stem;
       value: StemCell;
     };
 

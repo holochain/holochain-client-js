@@ -123,6 +123,16 @@ Description
 </td></tr>
 <tr><td>
 
+[CellType](./client.celltype.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
 [ChainOpType](./client.chainoptype.md)
 
 

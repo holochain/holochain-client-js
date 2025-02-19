@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { spawn } from "node:child_process";
 import { Test } from "tape";
-import { AdminWebsocket, CellId, InstalledAppId } from "../../src";
+import { AdminWebsocket, CellId, CellType, InstalledAppId } from "../../src";
 import { AppWebsocket, CoordinatorBundle } from "../../src";
 import fs from "fs";
 
@@ -124,7 +124,7 @@ export const installAppAndDna = async (
       value: path,
     },
   });
-  assert(app.cell_info[role_name][0].type === "provisioned");
+  assert(app.cell_info[role_name][0].type === CellType.Provisioned);
   const cell_id = app.cell_info[role_name][0].value.cell_id;
   await admin.enableApp({ installed_app_id });
   // destructure to get whatever open port was assigned to the interface
@@ -168,7 +168,7 @@ export const createAppWsAndInstallApp = async (
       value: path,
     },
   });
-  assert(app.cell_info[role_name][0].type === "provisioned");
+  assert(app.cell_info[role_name][0].type === CellType.Provisioned);
   const cell_id = app.cell_info[role_name][0].value.cell_id;
   await admin.enableApp({ installed_app_id });
   const { port: appPort } = await admin.attachAppInterface({
