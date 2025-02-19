@@ -23,7 +23,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   - `CapAccess`
   - `DnaStorageBlob`
 
-  Enum variants are now consistently `snake_case` and typically distinguished by a `type` attribute, unless for content-less enum variants.
+  Enum variants are now consistently `snake_case` and typically distinguished by a `type` attribute, unless for enums with exclusively unit-like variants.
 
   Example 1:
   ```
@@ -44,7 +44,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
     };
   ```
 
-  Example 2 (content-less variants only):
+  Example 2 (unit-like variants only):
   ```
   // OLD
   export enum AppStatusFilter {
