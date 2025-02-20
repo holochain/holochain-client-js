@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Added
 ### Fixed
+### Changed
+### Removed
+
+## 2025-02-20: v0.19.0-dev.7
+
+### Fixed
 - Fix DhtOps helper functions `getChainOpType`, `getChainOpAction`, `getChainOpEntry` and `getChainOpSignature` to adhere to the new types
 ### Changed
 - Updated types to the new [enum serialization convention](https://docs.rs/holochain_conductor_api/0.5.0-dev.19/holochain_conductor_api/docs/index.html#enum-serialization-convention). The following types are affected:
@@ -64,8 +70,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
     Paused = "paused",
   }
   ```
-
-### Removed
 
 ## 2024-11-28: v0.19.0-dev.6
 ### Added
