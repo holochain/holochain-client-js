@@ -1,4 +1,4 @@
-import { decode } from "@msgpack/msgpack";
+import { decode, encode } from "@msgpack/msgpack";
 import assert from "node:assert/strict";
 import fs from "node:fs";
 import test from "tape";
@@ -34,6 +34,7 @@ import {
   ProvisionedCell,
   Duration,
   CellType,
+  AppBundle,
 } from "../../src";
 import {
   FIXTURE_PATH,
@@ -583,7 +584,6 @@ test(
 test(
   "can install app with roles_settings",
   withConductor(ADMIN_PORT, async (t) => {
-    const role_name = "foo";
     const installed_app_id = "app";
     const admin = await AdminWebsocket.connect({
       url: ADMIN_WS_URL,
@@ -603,28 +603,8 @@ test(
       installed_app_id,
       agent_key: agent,
       source: {
-        type: "bundle",
-        value: {
-          manifest: {
-            manifest_version: "1",
-            name: "app",
-            roles: [
-              {
-                name: role_name,
-                provisioning: {
-                  strategy: CellProvisioningStrategy.Create,
-                  deferred: false,
-                },
-                dna: {
-                  path: fs.realpathSync("test/e2e/fixture/test.dna"),
-                  modifiers: { network_seed: "some_seed" },
-                },
-              },
-            ],
-            membrane_proofs_deferred: true,
-          },
-          resources: {},
-        },
+        type: "path",
+        value: `${FIXTURE_PATH}/test.happ`,
       },
       roles_settings: {
         foo: {
@@ -667,32 +647,40 @@ test(
     });
     const agent = await admin.generateAgentPubKey();
 
+    const zippedDnaBundle = fs.readFileSync("test/e2e/fixture/test.dna");
+
+    const appBundle: AppBundle = {
+      manifest: {
+        manifest_version: "1",
+        name: "app",
+        roles: [
+          {
+            name: role_name,
+            provisioning: {
+              strategy: CellProvisioningStrategy.Create,
+              deferred: false,
+            },
+            dna: {
+              bundled: "dna_1",
+              modifiers: { network_seed: "some_seed" },
+            },
+          },
+        ],
+        membrane_proofs_deferred: true,
+      },
+      resources: {
+        dna_1: zippedDnaBundle,
+      },
+    };
+
+    const zippedAppBundle = zlib.gzipSync(encode(appBundle));
+
     await admin.installApp({
       installed_app_id,
       agent_key: agent,
       source: {
-        type: "bundle",
-        value: {
-          manifest: {
-            manifest_version: "1",
-            name: "app",
-            roles: [
-              {
-                name: role_name,
-                provisioning: {
-                  strategy: CellProvisioningStrategy.Create,
-                  deferred: false,
-                },
-                dna: {
-                  path: fs.realpathSync("test/e2e/fixture/test.dna"),
-                  modifiers: { network_seed: "some_seed" },
-                },
-              },
-            ],
-            membrane_proofs_deferred: true,
-          },
-          resources: {},
-        },
+        type: "bytes",
+        value: zippedAppBundle,
       },
     });
 
@@ -759,7 +747,7 @@ test(
 );
 
 test(
-  "install app with app manifest from path",
+  "install app from bytes",
   withConductor(ADMIN_PORT, async (t) => {
     const role_name = "foo";
     const installed_app_id = "app";
@@ -769,106 +757,14 @@ test(
     });
     const agent = await admin.generateAgentPubKey();
 
+    const appBundleBytes = fs.readFileSync(`${FIXTURE_PATH}/test.happ`);
+
     const app = await admin.installApp({
       installed_app_id,
       agent_key: agent,
       source: {
-        type: "bundle",
-        value: {
-          manifest: {
-            manifest_version: "1",
-            name: "app",
-            roles: [
-              {
-                name: role_name,
-                provisioning: {
-                  strategy: CellProvisioningStrategy.Create,
-                  deferred: false,
-                },
-                dna: {
-                  path: fs.realpathSync("test/e2e/fixture/test.dna"),
-                  modifiers: { quantum_time: { secs: 1111, nanos: 1111 } },
-                },
-              },
-            ],
-            membrane_proofs_deferred: false,
-          },
-          resources: {},
-        },
-      },
-    });
-    await admin.enableApp({ installed_app_id });
-    const { port: appPort } = await admin.attachAppInterface({
-      allowed_origins: "client-test-app",
-    });
-    const issued = await admin.issueAppAuthenticationToken({
-      installed_app_id,
-    });
-    const client = await AppWebsocket.connect({
-      url: new URL(`ws://localhost:${appPort}`),
-      wsClientOptions: { origin: "client-test-app" },
-      token: issued.token,
-    });
-
-    assert(app.cell_info[role_name][0].type === CellType.Provisioned);
-    const cell_id = app.cell_info[role_name][0].value.cell_id;
-
-    const zomeCallPayload: CallZomeRequest = {
-      cell_id,
-      zome_name: TEST_ZOME_NAME,
-      fn_name: "foo",
-      provenance: agent,
-      payload: null,
-    };
-
-    await admin.authorizeSigningCredentials(cell_id);
-
-    const response = await client.callZome(zomeCallPayload, 30000);
-    t.equal(response, "foo", "zome call succeeds");
-  })
-);
-
-test(
-  "install app with app manifest and resource map",
-  withConductor(ADMIN_PORT, async (t) => {
-    const role_name = "foo";
-    const installed_app_id = "app";
-    const admin = await AdminWebsocket.connect({
-      url: ADMIN_WS_URL,
-      wsClientOptions: { origin: "client-test-admin" },
-    });
-    const agent = await admin.generateAgentPubKey();
-
-    const dnaPath = `${FIXTURE_PATH}/test.dna`;
-    const zippedDnaBundle = fs.readFileSync(dnaPath);
-    const app = await admin.installApp({
-      installed_app_id,
-      agent_key: agent,
-      source: {
-        type: "bundle",
-        value: {
-          manifest: {
-            manifest_version: "1",
-            name: "app",
-            roles: [
-              {
-                name: role_name,
-                provisioning: {
-                  strategy: CellProvisioningStrategy.Create,
-                  deferred: false,
-                },
-                dna: {
-                  bundled: "dna_1",
-                  modifiers: { quantum_time: { secs: 1111, nanos: 1111 } },
-                },
-              },
-            ],
-            membrane_proofs_deferred: false,
-          },
-          resources: {
-            dna_1: zippedDnaBundle,
-          },
-        },
+        type: "bytes",
+        value: appBundleBytes,
       },
     });
     await admin.enableApp({ installed_app_id });
