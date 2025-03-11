@@ -510,8 +510,8 @@ export type AppBundleSource =
       value: string;
     }
   | {
-      type: "bundle";
-      value: AppBundle;
+      type: "bytes";
+      value: Uint8Array;
     };
 
 /**

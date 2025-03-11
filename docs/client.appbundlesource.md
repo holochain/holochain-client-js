@@ -12,9 +12,7 @@ export type AppBundleSource = {
     type: "path";
     value: string;
 } | {
-    type: "bundle";
-    value: AppBundle;
+    type: "bytes";
+    value: Uint8Array;
 };
 ```
-**References:** [AppBundle](./client.appbundle.md)
-
