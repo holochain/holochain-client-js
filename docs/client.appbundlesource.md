@@ -12,6 +12,8 @@ export type AppBundleSource = {
     bundle: AppBundle;
 } | {
     path: string;
+} | {
+    bytes: Uint8Array;
 };
 ```
 **References:** [AppBundle](./client.appbundle.md)
