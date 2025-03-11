@@ -487,7 +487,10 @@ export type AppBundle = {
 /**
  * @public
  */
-export type AppBundleSource = { bundle: AppBundle } | { path: string };
+export type AppBundleSource =
+  | { bundle: AppBundle }
+  | { path: string }
+  | { bytes: Uint8Array };
 
 /**
  * @public

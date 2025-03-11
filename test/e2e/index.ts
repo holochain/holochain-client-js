@@ -693,6 +693,56 @@ test(
   })
 );
 
+test.only(
+  "install app from bytes",
+  withConductor(ADMIN_PORT, async (t) => {
+    const role_name = "foo";
+    const installed_app_id = "app";
+    const admin = await AdminWebsocket.connect({
+      url: ADMIN_WS_URL,
+      wsClientOptions: { origin: "client-test-admin" },
+    });
+    const agent = await admin.generateAgentPubKey();
+
+    const happBytes = fs.readFileSync(`${FIXTURE_PATH}/test.happ`);
+
+    const app = await admin.installApp({
+      installed_app_id,
+      agent_key: agent,
+      bytes: happBytes,
+    });
+
+    await admin.enableApp({ installed_app_id });
+    const { port: appPort } = await admin.attachAppInterface({
+      allowed_origins: "client-test-app",
+    });
+    const issued = await admin.issueAppAuthenticationToken({
+      installed_app_id,
+    });
+    const client = await AppWebsocket.connect({
+      url: new URL(`ws://localhost:${appPort}`),
+      wsClientOptions: { origin: "client-test-app" },
+      token: issued.token,
+    });
+
+    assert(CellType.Provisioned in app.cell_info[role_name][0]);
+    const cell_id = app.cell_info[role_name][0][CellType.Provisioned].cell_id;
+
+    const zomeCallPayload: CallZomeRequest = {
+      cell_id,
+      zome_name: TEST_ZOME_NAME,
+      fn_name: "foo",
+      provenance: agent,
+      payload: null,
+    };
+
+    await admin.authorizeSigningCredentials(cell_id);
+
+    const response = await client.callZome(zomeCallPayload, 30000);
+    t.equal(response, "foo", "zome call succeeds");
+  })
+);
+
 test(
   "install app with app manifest from path",
   withConductor(ADMIN_PORT, async (t) => {
