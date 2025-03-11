@@ -7,8 +7,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Added
 ### Fixed
 ### Changed
-- Update `AppBundleSource` type acccording to holochain [PR #4745](https://github.com/holochain/holochain/pull/4753)
 ### Removed
+
+## 2025-03-11: v0.18.1
+### Changed
+- Update `AppBundleSource` type acccording to holochain [PR #4745](https://github.com/holochain/holochain/pull/4753)
 
 ## 2024-12-18: v0.18.0
 ### Fixed
