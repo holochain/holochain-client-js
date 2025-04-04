@@ -299,7 +299,7 @@ export class AppWebsocket implements AppClient {
   }
 
   /**
-   * Enablie an app only if the app is in the `AppStatus::Disabled(DisabledAppReason::NotStartedAfterProvidingMemproofs)`
+   * Enable an app only if the app is in the `AppStatus::Disabled(DisabledAppReason::NotStartedAfterProvidingMemproofs)`
    * state. Attempting to enable the app from other states (other than Running) will fail.
    */
   async enableApp() {
