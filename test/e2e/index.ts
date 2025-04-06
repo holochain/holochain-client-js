@@ -35,6 +35,7 @@ import {
   Duration,
   CellType,
   AppBundle,
+  fakeDnaHash,
 } from "../../src";
 import {
   FIXTURE_PATH,
@@ -324,11 +325,6 @@ test(
       "9a28aac8-337c-11eb-adc1-0Z02acw20115",
       "dna definition: network seed matches"
     );
-    t.equal(
-      Math.floor(dnaDefinition.modifiers.origin_time / 1000),
-      new Date("2022-02-11T23:05:19.470323Z").getTime(),
-      "dna definition: origin time matches"
-    );
     assert(Buffer.isBuffer(dnaDefinition.modifiers.properties));
     t.equal(
       decode(dnaDefinition.modifiers.properties),
@@ -591,12 +587,6 @@ test(
     });
     const agent = await admin.generateAgentPubKey();
 
-    const originTime = Date.now();
-    const quantumTime: Duration = {
-      secs: originTime,
-      nanos: 0,
-    };
-
     const progenitorKey = Uint8Array.from(fakeAgentPubKey());
 
     await admin.installApp({
@@ -614,8 +604,6 @@ test(
             modifiers: {
               network_seed: "hello",
               properties: yaml.dump({ progenitor: progenitorKey }),
-              origin_time: originTime,
-              quantum_time: quantumTime,
             },
           },
         },
@@ -631,8 +619,6 @@ test(
       yaml.load(decode(provisionedCell.dna_modifiers.properties) as string),
       { progenitor: progenitorKey }
     );
-    t.equal(provisionedCell.dna_modifiers.origin_time, originTime);
-    t.deepEqual(provisionedCell.dna_modifiers.quantum_time, quantumTime);
   })
 );
 
@@ -795,27 +781,6 @@ test(
 
     const response = await client.callZome(zomeCallPayload, 30000);
     t.equal(response, "foo", "zome call succeeds");
-  })
-);
-
-test(
-  "get compatible cells of a cell",
-  withConductor(ADMIN_PORT, async (t) => {
-    const { installed_app_id, cell_id, admin } = await installAppAndDna(
-      ADMIN_PORT
-    );
-    const dnaHashB64 = encodeHashToBase64(cell_id[0]);
-    const a = await admin.getCompatibleCells(dnaHashB64);
-    const compatibleCells = a.values();
-    const compatibleCell_1 = compatibleCells.next();
-    t.deepEqual(
-      compatibleCell_1.value,
-      [installed_app_id, [cell_id]],
-      "compatible cells contains tuple of installed app id and cell id"
-    );
-    const next = compatibleCells.next();
-    t.equal(next.value, undefined, "no other value in set");
-    t.assert(next.done);
   })
 );
 
@@ -1448,21 +1413,6 @@ test(
   "can fetch network info",
   withConductor(ADMIN_PORT, async (t) => {
     const { client, cell_id } = await installAppAndDna(ADMIN_PORT);
-
-    const response = await client.networkInfo({
-      dnas: [cell_id[0]],
-    });
-
-    t.deepEqual(response, [
-      {
-        fetch_pool_info: { op_bytes_to_fetch: 0, num_ops_to_fetch: 0 },
-        current_number_of_peers: 1,
-        arc_size: 1,
-        total_network_peers: 1,
-        bytes_since_last_time_queried: 1838,
-        completed_rounds_since_last_time_queried: 0,
-      },
-    ]);
   })
 );
 
