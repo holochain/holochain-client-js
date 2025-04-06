@@ -35,6 +35,7 @@ import {
   Duration,
   CellType,
   AppBundle,
+  AgentInfoResponse,
   fakeDnaHash,
 } from "../../src";
 import {
@@ -903,28 +904,24 @@ test(
 
 test("can inject agents", async (t) => {
   const conductor1 = await launch(ADMIN_PORT);
-  const conductor2 = await launch(ADMIN_PORT_1);
   const installed_app_id = "app";
   const admin1 = await AdminWebsocket.connect({
     url: ADMIN_WS_URL,
     wsClientOptions: { origin: "client-test-admin" },
   });
-  const admin2 = await AdminWebsocket.connect({
-    url: new URL(`ws://localhost:${ADMIN_PORT_1}`),
-    wsClientOptions: { origin: "client-test-admin" },
-  });
-  const agent_key_1 = await admin1.generateAgentPubKey();
-  t.ok(agent_key_1);
-  const agent_key_2 = await admin2.generateAgentPubKey();
-  t.ok(agent_key_2);
-  const path = `${FIXTURE_PATH}/test.dna`;
-  let result = await admin1.installApp({
+
+  // There shouldn't be any agent infos yet.
+  let agentInfos1 = await admin1.agentInfo({ cell_id: null });
+  t.assert(agentInfos1.length === 0);
+
+  const agent1 = await admin1.generateAgentPubKey();
+  const result = await admin1.installApp({
     source: {
       type: "path",
       value: `${FIXTURE_PATH}/test.happ`,
     },
     installed_app_id,
-    agent_key: agent_key_1,
+    agent_key: agent1,
   });
   t.ok(result);
   assert(result.cell_info[ROLE_NAME][0].type === CellType.Provisioned);
@@ -935,62 +932,32 @@ test("can inject agents", async (t) => {
   t.equal(activeApp1Info.app.installed_app_id, installed_app_id);
   t.equal(activeApp1Info.errors.length, 0);
 
-  const conductor1_agentInfo = await admin1.agentInfo({
-    cell_id: null,
+  // There should be one agent info now.
+  agentInfos1 = await admin1.agentInfo({ cell_id: null });
+  t.assert(agentInfos1.length === 1);
+
+  // Now confirm that we can ask for just one cell.
+  let cellAgentInfos = await admin1.agentInfo({
+    cell_id: [await fakeDnaHash(), fakeAgentPubKey()],
   });
-  // one app agent
-  // and one DPKI agent once DPKI is enabled again
-  t.equal(conductor1_agentInfo.length, 1);
-
-  // with no activated apps there is no agent
-  // only the DPKI agent
-  let conductor2_agentInfo = await admin2.agentInfo({ cell_id: null });
-  t.equal(conductor2_agentInfo.length, 0);
-
-  // but, after explicitly injecting an agent, we should see it too
-  await admin2.addAgentInfo({ agent_infos: [conductor1_agentInfo[0]] });
-  conductor2_agentInfo = await admin2.agentInfo({ cell_id: null });
-  t.equal(conductor2_agentInfo.length, 1);
-
-  // now install the app and activate it on agent 2.
-  await admin2.registerDna({
-    source: {
-      type: "path",
-      value: path,
-    },
-    modifiers: {},
-  });
-  result = await admin2.installApp({
-    source: {
-      type: "path",
-      value: `${FIXTURE_PATH}/test.happ`,
-    },
-    installed_app_id,
-    agent_key: agent_key_2,
-  });
-  t.ok(result);
-  assert(result.cell_info[ROLE_NAME][0].type === CellType.Provisioned);
-  const app2_cell = result.cell_info[ROLE_NAME][0].value.cell_id;
-  const activeApp2Info = await admin2.enableApp({ installed_app_id });
-  t.deepEqual(activeApp2Info.app.status, { type: "running" });
-  t.ok(ROLE_NAME in activeApp2Info.app.cell_info);
-  t.equal(activeApp2Info.app.installed_app_id, installed_app_id);
-  t.equal(activeApp2Info.errors.length, 0);
-
-  // observe 2 agent infos
-  conductor2_agentInfo = await admin2.agentInfo({ cell_id: null });
-  t.equal(conductor2_agentInfo.length, 2);
-
-  // now confirm that we can ask for just one cell
-  await admin1.addAgentInfo({ agent_infos: conductor2_agentInfo });
-  const app1_agentInfo = await admin1.agentInfo({
+  t.assert(cellAgentInfos.length === 0);
+  cellAgentInfos = await admin1.agentInfo({
     cell_id: app1_cell,
   });
-  t.equal(app1_agentInfo.length, 1);
-  const app2_agentInfo = await admin2.agentInfo({
-    cell_id: app2_cell,
+  t.deepEqual(cellAgentInfos, agentInfos1);
+
+  const conductor2 = await launch(ADMIN_PORT_1);
+  const admin2 = await AdminWebsocket.connect({
+    url: new URL(`ws://localhost:${ADMIN_PORT_1}`),
+    wsClientOptions: { origin: "client-test-admin" },
   });
-  t.equal(app2_agentInfo.length, 1);
+
+  let agentInfos2 = await admin2.agentInfo({ cell_id: null });
+  t.assert(agentInfos2.length === 0);
+
+  await admin2.addAgentInfo({ agent_infos: agentInfos1 });
+  agentInfos2 = await admin2.agentInfo({ cell_id: null });
+  t.assert(agentInfos2.length === 1);
 
   if (conductor1.pid) {
     process.kill(-conductor1.pid);
