@@ -657,12 +657,12 @@ export type AgentInfoRequest = { cell_id: CellId | null };
 /**
  * @public
  */
-export type AgentInfoResponse = Array<AgentInfoSigned>;
+export type AgentInfoResponse = Array<string>;
 
 /**
  * @public
  */
-export type AddAgentInfoRequest = { agent_infos: Array<AgentInfoSigned> };
+export type AddAgentInfoRequest = { agent_infos: Array<string> };
 
 /**
  * @public
@@ -987,9 +987,73 @@ export interface IssueAppAuthenticationTokenResponse {
 export type DumpNetworkStatsRequest = void;
 
 /**
+ * Stats for a transport connection.
+ *
+ * This is intended to be a state dump that gives some insight into what the transport is doing.
+ *
  * @public
  */
-export type DumpNetworkStatsResponse = string;
+export interface TransportStats {
+  /**
+   * The networking backend that is in use.
+   */
+  backend: string;
+
+  /**
+   * The list of peer urls that this Kitsune2 instance can currently be reached at.
+   */
+  peer_urls: string[];
+
+  /**
+   * The list of current connections.
+   */
+  connections: TransportConnectionStats[];
+}
+
+/**
+ * Stats for a single transport connection.
+ */
+export interface TransportConnectionStats {
+  /**
+   * The public key of the remote peer.
+   */
+  pub_key: string;
+
+  /**
+   * The message count sent on this connection.
+   */
+  send_message_count: number;
+
+  /**
+   * The bytes sent on this connection.
+   */
+  send_bytes: number;
+
+  /**
+   * The message count received on this connection.
+   */
+  recv_message_count: number;
+
+  /**
+   * The bytes received on this connection
+   */
+  recv_bytes: number;
+
+  /**
+   * UNIX epoch timestamp in seconds when this connection was opened.
+   */
+  opened_at_s: number;
+
+  /**
+   * True if this connection has successfully upgraded to webrtc.
+   */
+  is_webrtc: boolean;
+}
+
+/**
+ * @public
+ */
+export type DumpNetworkStatsResponse = TransportStats;
 
 /**
  * @public

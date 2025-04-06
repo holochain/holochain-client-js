@@ -13,7 +13,6 @@ import {
   InstalledAppId,
   MembraneProof,
   MemproofMap,
-  NetworkInfo,
   NetworkSeed,
   Nonce256Bit,
   RoleName,
@@ -24,12 +23,8 @@ import {
   PreflightRequest,
   SignedAction,
   SignedActionHashed,
+  DumpNetworkStatsResponse,
 } from "../../index.js";
-
-/**
- * @public
- */
-export type AppNetworkInfoRequest = Omit<NetworkInfoRequest, "agent_pub_key">;
 
 /**
  * @public
@@ -190,24 +185,6 @@ export type EnableCloneCellRequest = DisableCloneCellRequest;
  * @public
  */
 export type EnableCloneCellResponse = CreateCloneCellResponse;
-
-/**
- * @public
- */
-export interface NetworkInfoRequest {
-  /**
-   * The calling agent
-   */
-  agent_pub_key: AgentPubKey;
-  /**
-   * Get network info for these DNAs
-   */
-  dnas: DnaHash[];
-  /**
-   * Timestamp in ms since which received amount of bytes from peers will be returned. Defaults to UNIX_EPOCH.
-   */
-  last_time_queried?: number;
-}
 
 /**
  * Cell id for which the countersigning session state is requested.
@@ -485,11 +462,6 @@ export type SignalCb = (signal: Signal) => void;
 /**
  * @public
  */
-export type NetworkInfoResponse = NetworkInfo[];
-
-/**
- * @public
- */
 export interface AppClient {
   callZome(
     args: CallZomeRequest | RoleNameCallZomeRequest,
@@ -506,6 +478,7 @@ export interface AppClient {
   myPubKey: AgentPubKey;
   installedAppId: InstalledAppId;
 
+  dumpNetworkStats(): Promise<DumpNetworkStatsResponse>;
   createCloneCell(
     args: CreateCloneCellRequest
   ): Promise<CreateCloneCellResponse>;
@@ -515,7 +488,6 @@ export interface AppClient {
   disableCloneCell(
     args: DisableCloneCellRequest
   ): Promise<DisableCloneCellResponse>;
-  networkInfo(args: AppNetworkInfoRequest): Promise<NetworkInfoResponse>;
 }
 
 /**

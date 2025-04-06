@@ -1,9 +1,5 @@
 import { getLauncherEnvironment } from "../../environments/launcher.js";
-import {
-  CapSecret,
-  GrantedFunctions,
-  GrantedFunctionsType,
-} from "../../hdk/index.js";
+import { CapSecret, GrantedFunctions } from "../../hdk/index.js";
 import type { AgentPubKey, CellId } from "../../types.js";
 import { WsClient } from "../client.js";
 import {

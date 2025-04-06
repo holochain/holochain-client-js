@@ -289,30 +289,6 @@ test(
   })
 );
 
-test(
-  "can fetch network info",
-  withConductor(ADMIN_PORT, async (t) => {
-    const { client: appWs, cell_id } = await createAppWsAndInstallApp(
-      ADMIN_PORT
-    );
-
-    const response = await appWs.networkInfo({
-      dnas: [cell_id[0]],
-    });
-
-    t.deepEqual(response, [
-      {
-        fetch_pool_info: { op_bytes_to_fetch: 0, num_ops_to_fetch: 0 },
-        current_number_of_peers: 1,
-        arc_size: 1,
-        total_network_peers: 1,
-        bytes_since_last_time_queried: 1838,
-        completed_rounds_since_last_time_queried: 0,
-      },
-    ]);
-  })
-);
-
 // To test unstable features in Holochain, set env var `TEST_UNSTABLE` to `true`.
 if (process.env.TEST_UNSTABLE === "true") {
   test(

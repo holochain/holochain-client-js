@@ -4,9 +4,9 @@ import { AgentPubKey, InstalledAppId, RoleName } from "../../types.js";
 import {
   AppInfo,
   CellType,
-  ClonedCell,
+  DumpNetworkStatsRequest,
+  DumpNetworkStatsResponse,
   MemproofMap,
-  ProvisionedCell,
 } from "../admin/index.js";
 import {
   catchError,
@@ -22,7 +22,6 @@ import {
 import {
   AppClient,
   AppEvents,
-  AppNetworkInfoRequest,
   AppInfoResponse,
   SignalCb,
   CallZomeRequest,
@@ -35,8 +34,6 @@ import {
   DisableCloneCellResponse,
   EnableCloneCellRequest,
   EnableCloneCellResponse,
-  NetworkInfoRequest,
-  NetworkInfoResponse,
   AppWebsocketConnectionOptions,
   CallZomeTransform,
   ProvideMemproofsRequest,
@@ -110,9 +107,9 @@ export class AppWebsocket implements AppClient {
     DisableCloneCellRequest,
     DisableCloneCellResponse
   >;
-  private readonly networkInfoRequester: Requester<
-    NetworkInfoRequest,
-    NetworkInfoResponse
+  private readonly dumpNetworkStatsRequester: Requester<
+    DumpNetworkStatsRequest,
+    DumpNetworkStatsResponse
   >;
   private readonly getCountersigningSessionStateRequester: Requester<
     GetCountersigningSessionStateRequest,
@@ -177,9 +174,9 @@ export class AppWebsocket implements AppClient {
       "disable_clone_cell",
       this.defaultTimeout
     );
-    this.networkInfoRequester = AppWebsocket.requester(
+    this.dumpNetworkStatsRequester = AppWebsocket.requester(
       this.client,
-      "network_info",
+      "dump_network_stats",
       this.defaultTimeout
     );
     this.getCountersigningSessionStateRequester = AppWebsocket.requester(
@@ -287,6 +284,15 @@ export class AppWebsocket implements AppClient {
 
     this.cachedAppInfo = appInfo;
     return appInfo;
+  }
+
+  /**
+   * Request network stats.
+   *
+   * @returns The conductor's {@link TransportStats}.
+   */
+  async dumpNetworkStats(timeout?: number): Promise<DumpNetworkStatsResponse> {
+    return await this.dumpNetworkStatsRequester(undefined, timeout);
   }
 
   /**
@@ -422,18 +428,6 @@ export class AppWebsocket implements AppClient {
   async disableCloneCell(args: DisableCloneCellRequest) {
     return this.disableCloneCellRequester({
       ...args,
-    });
-  }
-
-  /**
-   * Request network info about gossip status.
-   *  @param args - Specify the DNAs for which you want network info
-   *  @returns Network info for the specified DNAs
-   */
-  async networkInfo(args: AppNetworkInfoRequest) {
-    return this.networkInfoRequester({
-      ...args,
-      agent_pub_key: this.myPubKey,
     });
   }
 
