@@ -43,9 +43,9 @@ import {
   launch,
   makeCoordinatorZomeBundle,
   withConductor,
+  delay,
 } from "./common.js";
 
-const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 const fakeAgentPubKey = () =>
   Buffer.from(

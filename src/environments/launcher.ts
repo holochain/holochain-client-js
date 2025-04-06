@@ -9,24 +9,67 @@ export interface LauncherEnvironment {
   APP_INTERFACE_TOKEN?: AppAuthenticationToken;
 }
 
+export interface AwaitLauncherEnvironment {
+  interval?: number;
+  timeout?: number;
+}
+
 export interface HostZomeCallSigner {
   signZomeCall: (request: CallZomeRequest) => Promise<CallZomeRequestSigned>;
 }
 
+const __HC_AWAIT_LAUNCHER_ENV__ = "__HC_AWAIT_LAUNCHER_ENV__";
 const __HC_LAUNCHER_ENV__ = "__HC_LAUNCHER_ENV__";
 const __HC_ZOME_CALL_SIGNER__ = "__HC_ZOME_CALL_SIGNER__";
 
-export const isLauncher = () =>
+const isLauncher = () =>
   globalThis.window && __HC_LAUNCHER_ENV__ in globalThis.window;
 
-export const getLauncherEnvironment = (): LauncherEnvironment | undefined =>
+const isAwaitLauncher = () =>
+  globalThis.window && __HC_AWAIT_LAUNCHER_ENV__ in globalThis.window;
+
+const getAwaitLauncherEnv = (): AwaitLauncherEnvironment | undefined =>
+  isAwaitLauncher() ? globalThis.window[__HC_AWAIT_LAUNCHER_ENV__] : undefined;
+
+const getLauncherEnvironment = (): LauncherEnvironment | undefined =>
   isLauncher() ? globalThis.window[__HC_LAUNCHER_ENV__] : undefined;
 
 export const getHostZomeCallSigner = (): HostZomeCallSigner | undefined =>
   globalThis.window && globalThis.window[__HC_ZOME_CALL_SIGNER__];
 
+export const launcherEnv = async (): Promise<LauncherEnvironment | undefined> => {
+  let launcherEnv = getLauncherEnvironment();
+  if(launcherEnv !== undefined) return launcherEnv;
+
+  const awaitLauncherEnv = getAwaitLauncherEnv();
+  if(awaitLauncherEnv !== undefined) {
+    const interval = awaitLauncherEnv.interval || 10;
+    const timeout = awaitLauncherEnv.timeout || 5000;
+
+    await new Promise<void>((resolve) => {
+      let elapsed = 0;
+      const i = setInterval(() => {
+        elapsed += interval;
+        if(elapsed >= timeout) {
+          clearInterval(i);
+          resolve();
+        }
+
+        launcherEnv = getLauncherEnvironment();
+        if (launcherEnv !== undefined) {
+          clearInterval(i);
+          resolve();
+        }
+      }, interval);
+    });
+
+    return launcherEnv;
+  }
+}
+
 declare global {
   interface Window {
+    [__HC_AWAIT_LAUNCHER_ENV__]?: AwaitLauncherEnvironment;
     [__HC_LAUNCHER_ENV__]?: LauncherEnvironment;
     [__HC_ZOME_CALL_SIGNER__]?: HostZomeCallSigner;
     electronAPI?: {

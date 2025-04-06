@@ -1,4 +1,4 @@
-import { getLauncherEnvironment } from "../../environments/launcher.js";
+import { launcherEnv } from "../../environments/launcher.js";
 import {
   CapSecret,
   GrantedFunctions,
@@ -104,7 +104,7 @@ export class AdminWebsocket implements AdminApi {
     options: WebsocketConnectionOptions = {}
   ): Promise<AdminWebsocket> {
     // Check if we are in the launcher's environment, and if so, redirect the url to connect to
-    const env = getLauncherEnvironment();
+    const env = await launcherEnv();
 
     if (env?.ADMIN_INTERFACE_PORT) {
       options.url = new URL(`ws://localhost:${env.ADMIN_INTERFACE_PORT}`);

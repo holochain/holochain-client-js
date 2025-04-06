@@ -54,7 +54,7 @@ import {
 } from "./types.js";
 import {
   getHostZomeCallSigner,
-  getLauncherEnvironment,
+  launcherEnv,
 } from "../../environments/launcher.js";
 import { decode, encode } from "@msgpack/msgpack";
 import {
@@ -224,7 +224,7 @@ export class AppWebsocket implements AppClient {
    */
   static async connect(options: AppWebsocketConnectionOptions = {}) {
     // Check if we are in the launcher's environment, and if so, redirect the url to connect to
-    const env = getLauncherEnvironment();
+    const env = await launcherEnv();
 
     if (env?.APP_INTERFACE_PORT) {
       options.url = new URL(`ws://localhost:${env.APP_INTERFACE_PORT}`);
