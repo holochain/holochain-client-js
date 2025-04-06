@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## \[Unreleased\]
 
 ### Added
+- Add new magic configuration variable `window.__HC_AWAIT_LAUNCHER_ENV__`. If this variable is defined, then `AppWebsocket` and `AdminWebsocket`s' `connect` function will poll for `window.__HC_LAUNCHER_ENV__`, until a timeout is reached. This allows `window.__HC_LAUNCHER_ENV__` to be defined shortly *after* `connect` is called.
+
 ### Fixed
 ### Changed
 ### Removed
