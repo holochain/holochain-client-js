@@ -103,7 +103,7 @@ pub fn decode_as_dnahash(bytes: Vec<u8>) -> ExternResult<DnaHash> {
 
 #[hdk_extern]
 pub fn create_and_get_link(tag: Vec<u8>) -> ExternResult<Link> {
-    let link_base = agent_info()?.agent_latest_pubkey;
+    let link_base = agent_info()?.agent_initial_pubkey;
     let link_target = link_base.clone();
     let create_link_action_hash = create_link(
         link_base.clone(),
@@ -123,7 +123,7 @@ pub fn create_and_get_link(tag: Vec<u8>) -> ExternResult<Link> {
 
 #[hdk_extern]
 pub fn create_and_delete_link() -> ExternResult<ActionHash> {
-    let link_base = agent_info()?.agent_latest_pubkey;
+    let link_base = agent_info()?.agent_initial_pubkey;
     let link_target = link_base.clone();
     let create_link_action_hash = create_link(link_base.clone(), link_target, LinkTypes::A, ())?;
     delete_link(create_link_action_hash.clone())
