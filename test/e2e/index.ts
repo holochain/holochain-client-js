@@ -46,7 +46,6 @@ import {
   delay,
 } from "./common.js";
 
-
 const fakeAgentPubKey = () =>
   Buffer.from(
     [0x84, 0x20, 0x24].concat(

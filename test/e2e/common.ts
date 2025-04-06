@@ -1,7 +1,13 @@
 import assert from "node:assert/strict";
 import { spawn } from "node:child_process";
 import { Test } from "tape";
-import { AdminWebsocket, CellId, CellType, InstalledAppId, IssueAppAuthenticationTokenResponse } from "../../src";
+import {
+  AdminWebsocket,
+  CellId,
+  CellType,
+  InstalledAppId,
+  IssueAppAuthenticationTokenResponse,
+} from "../../src";
 import { AppWebsocket, CoordinatorBundle } from "../../src";
 import fs from "fs";
 
@@ -144,13 +150,13 @@ export const installAppAndDna = async (
   return { installed_app_id, cell_id, client, admin };
 };
 
-export const createAppInterfaceAndInstallApp =  async (
+export const createAppInterfaceAndInstallApp = async (
   adminPort: number
 ): Promise<{
   installed_app_id: InstalledAppId;
   cell_id: CellId;
   appPort: number;
-  appAuthentication: IssueAppAuthenticationTokenResponse
+  appAuthentication: IssueAppAuthenticationTokenResponse;
   admin: AdminWebsocket;
 }> => {
   const role_name = "foo";
@@ -189,7 +195,8 @@ export const createAppWsAndInstallApp = async (
   client: AppWebsocket;
   admin: AdminWebsocket;
 }> => {
-  const { installed_app_id, cell_id, appPort, appAuthentication, admin } = await createAppInterfaceAndInstallApp(adminPort);
+  const { installed_app_id, cell_id, appPort, appAuthentication, admin } =
+    await createAppInterfaceAndInstallApp(adminPort);
   const client = await AppWebsocket.connect({
     url: new URL(`ws://localhost:${appPort}`),
     wsClientOptions: { origin: "client-test-app" },
@@ -221,4 +228,5 @@ export async function makeCoordinatorZomeBundle(): Promise<CoordinatorBundle> {
   };
 }
 
-export const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+export const delay = (ms: number) =>
+  new Promise((resolve) => setTimeout(resolve, ms));

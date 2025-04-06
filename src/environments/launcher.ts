@@ -37,12 +37,14 @@ const getLauncherEnvironment = (): LauncherEnvironment | undefined =>
 export const getHostZomeCallSigner = (): HostZomeCallSigner | undefined =>
   globalThis.window && globalThis.window[__HC_ZOME_CALL_SIGNER__];
 
-export const launcherEnv = async (): Promise<LauncherEnvironment | undefined> => {
+export const launcherEnv = async (): Promise<
+  LauncherEnvironment | undefined
+> => {
   let launcherEnv = getLauncherEnvironment();
-  if(launcherEnv !== undefined) return launcherEnv;
+  if (launcherEnv !== undefined) return launcherEnv;
 
   const awaitLauncherEnv = getAwaitLauncherEnv();
-  if(awaitLauncherEnv !== undefined) {
+  if (awaitLauncherEnv !== undefined) {
     const interval = awaitLauncherEnv.interval || 10;
     const timeout = awaitLauncherEnv.timeout || 5000;
 
@@ -50,7 +52,7 @@ export const launcherEnv = async (): Promise<LauncherEnvironment | undefined> =>
       let elapsed = 0;
       const i = setInterval(() => {
         elapsed += interval;
-        if(elapsed >= timeout) {
+        if (elapsed >= timeout) {
           clearInterval(i);
           resolve();
         }
@@ -65,7 +67,7 @@ export const launcherEnv = async (): Promise<LauncherEnvironment | undefined> =>
 
     return launcherEnv;
   }
-}
+};
 
 declare global {
   interface Window {
