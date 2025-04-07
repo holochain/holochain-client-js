@@ -1006,12 +1006,16 @@ export interface TransportStats {
 
   /**
    * The list of current connections.
+   *
+   * @public
    */
   connections: TransportConnectionStats[];
 }
 
 /**
  * Stats for a single transport connection.
+ *
+ * @public
  */
 export interface TransportConnectionStats {
   /**
@@ -1075,6 +1079,8 @@ export interface DumpNetworkMetricsRequest {
 /**
  * The definition of a storage arc compatible with the concept of
  * storage and querying of items in a store that fall within that arc.
+ *
+ * @public
  */
 export type DhtArc =
   | {
@@ -1095,6 +1101,8 @@ export type DhtArc =
 
 /**
  * Summary of a local agent's network state.
+ *
+ * @public
  */
 export interface LocalAgentSummary {
   /**
@@ -1121,6 +1129,8 @@ export interface LocalAgentSummary {
 
 /**
  * Summary of the fetch state.
+ *
+ * @public
  */
 export interface FetchStateSummary {
   /**
@@ -1142,6 +1152,8 @@ export interface FetchStateSummary {
 
 /**
  * DHT segment state.
+ *
+ * @public
  */
 export interface DhtSegmentState {
   /**
@@ -1160,6 +1172,8 @@ export interface DhtSegmentState {
 
 /**
  * Peer metadata dump.
+ *
+ * @public
  */
 export interface PeerMeta {
   /**
@@ -1200,6 +1214,8 @@ export interface PeerMeta {
 
 /**
  * Gossip round state summary.
+ *
+ * @public
  */
 export interface GossipRoundStateSummary {
   /**
@@ -1210,6 +1226,8 @@ export interface GossipRoundStateSummary {
 
 /**
  * Gossip state summary.
+ *
+ * @public
  */
 export interface GossipStateSummary {
   /**
@@ -1232,6 +1250,8 @@ export interface GossipStateSummary {
 
 /**
  * Network metrics from Kitsune2.
+ *
+ * @public
  */
 export interface NetworkMetrics {
   /**

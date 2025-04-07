@@ -240,6 +240,34 @@ Disable an enabled clone cell.
 </td></tr>
 <tr><td>
 
+[dumpNetworkMetrics(req, timeout)](./client.appwebsocket.dumpnetworkmetrics.md)
+
+
+</td><td>
+
+
+</td><td>
+
+Request network metrics.
+
+
+</td></tr>
+<tr><td>
+
+[dumpNetworkStats(timeout)](./client.appwebsocket.dumpnetworkstats.md)
+
+
+</td><td>
+
+
+</td><td>
+
+Request network stats.
+
+
+</td></tr>
+<tr><td>
+
 [enableApp()](./client.appwebsocket.enableapp.md)
 
 
@@ -291,20 +319,6 @@ Get a cell id by its role name or clone id.
 </td><td>
 
 Get the state of a countersigning session.
-
-
-</td></tr>
-<tr><td>
-
-[networkInfo(args)](./client.appwebsocket.networkinfo.md)
-
-
-</td><td>
-
-
-</td><td>
-
-Request network info about gossip status.
 
 
 </td></tr>

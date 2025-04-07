@@ -8,7 +8,5 @@
 **Signature:**
 
 ```typescript
-export type AgentInfoResponse = Array<AgentInfoSigned>;
+export type AgentInfoResponse = Array<string>;
 ```
-**References:** [AgentInfoSigned](./client.agentinfosigned.md)
-

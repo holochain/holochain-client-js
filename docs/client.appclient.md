@@ -121,7 +121,7 @@ Description
 </td></tr>
 <tr><td>
 
-[enableCloneCell(args)](./client.appclient.enableclonecell.md)
+[dumpNetworkMetrics(args)](./client.appclient.dumpnetworkmetrics.md)
 
 
 </td><td>
@@ -130,7 +130,16 @@ Description
 </td></tr>
 <tr><td>
 
-[networkInfo(args)](./client.appclient.networkinfo.md)
+[dumpNetworkStats()](./client.appclient.dumpnetworkstats.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[enableCloneCell(args)](./client.appclient.enableclonecell.md)
 
 
 </td><td>

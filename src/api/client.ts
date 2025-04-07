@@ -351,7 +351,7 @@ export class WsClient extends Emittery {
       } else {
         this.pendingRequests[id].resolve(
           decode(msg.data, {
-            mapKeyConverter: (key) => {
+            mapKeyConverter: (key: unknown) => {
               if (typeof key === "string" || typeof key === "number") {
                 return key;
               }

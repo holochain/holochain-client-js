@@ -9,8 +9,6 @@
 
 ```typescript
 export type AddAgentInfoRequest = {
-    agent_infos: Array<AgentInfoSigned>;
+    agent_infos: Array<string>;
 };
 ```
-**References:** [AgentInfoSigned](./client.agentinfosigned.md)
-
