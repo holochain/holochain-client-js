@@ -70,16 +70,16 @@
     "holochain": {
       "flake": false,
       "locked": {
-        "lastModified": 1743769594,
-        "narHash": "sha256-85zHhgAOX+/E377C8gRmnD5uxXMMhVhaaiIsUTtc0Pw=",
+        "lastModified": 1743969955,
+        "narHash": "sha256-wXYafWQJxIco5gxMC2tM4tQtV2uql0F6EqcPbgLPrwg=",
         "owner": "holochain",
         "repo": "holochain",
-        "rev": "d6d371caf1d1fc6feecd6049f4d54eb34873f036",
+        "rev": "7215c67810ae50d10dc8ff68bac368fe6a07ff2b",
         "type": "github"
       },
       "original": {
         "owner": "holochain",
-        "ref": "holochain-0.5.0-rc.0",
+        "ref": "fix/set-crypto-provider-for-tls-connections-in-holochain-binary",
         "repo": "holochain",
         "type": "github"
       }
