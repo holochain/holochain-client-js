@@ -1,15 +1,27 @@
+import { decode, encode } from "@msgpack/msgpack";
 import Emittery, { UnsubscribeFunction } from "emittery";
+import { sha512 } from "js-sha512";
+import _sodium from "libsodium-wrappers";
 import { omit } from "lodash-es";
+import {
+  getHostZomeCallSigner,
+  getLauncherEnvironment,
+} from "../../environments/launcher.js";
 import { AgentPubKey, InstalledAppId, RoleName } from "../../types.js";
+import { encodeHashToBase64 } from "../../utils/index.js";
 import {
   AppInfo,
   CellType,
+  // Required to TSDoc generation.
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  ClonedCell,
   DumpNetworkMetricsRequest,
   DumpNetworkMetricsResponse,
   DumpNetworkStatsRequest,
   DumpNetworkStatsResponse,
   MemproofMap,
 } from "../admin/index.js";
+import { WsClient } from "../client.js";
 import {
   catchError,
   DEFAULT_TIMEOUT,
@@ -22,49 +34,40 @@ import {
   Transformer,
 } from "../common.js";
 import {
+  getNonceExpiration,
+  getSigningCredentials,
+  randomNonce,
+} from "../zome-call-signing.js";
+import {
+  AbandonCountersigningSessionStateRequest,
+  AbandonCountersigningSessionStateResponse,
   AppClient,
   AppEvents,
   AppInfoResponse,
-  SignalCb,
+  AppWebsocketConnectionOptions,
   CallZomeRequest,
   CallZomeRequestSigned,
   CallZomeResponse,
   CallZomeResponseGeneric,
+  CallZomeTransform,
   CreateCloneCellRequest,
   CreateCloneCellResponse,
   DisableCloneCellRequest,
   DisableCloneCellResponse,
   EnableCloneCellRequest,
   EnableCloneCellResponse,
-  AppWebsocketConnectionOptions,
-  CallZomeTransform,
-  ProvideMemproofsRequest,
-  ProvideMemproofsResponse,
   EnableRequest,
   EnableResponse,
-  Signal,
   GetCountersigningSessionStateRequest,
   GetCountersigningSessionStateResponse,
-  AbandonCountersigningSessionStateRequest,
-  AbandonCountersigningSessionStateResponse,
+  ProvideMemproofsRequest,
+  ProvideMemproofsResponse,
   PublishCountersigningSessionStateRequest,
   PublishCountersigningSessionStateResponse,
   RoleNameCallZomeRequest,
+  Signal,
+  SignalCb,
 } from "./types.js";
-import {
-  getHostZomeCallSigner,
-  getLauncherEnvironment,
-} from "../../environments/launcher.js";
-import { decode, encode } from "@msgpack/msgpack";
-import {
-  getNonceExpiration,
-  getSigningCredentials,
-  randomNonce,
-} from "../zome-call-signing.js";
-import { encodeHashToBase64 } from "../../utils/index.js";
-import _sodium from "libsodium-wrappers";
-import { WsClient } from "../client.js";
-import { sha512 } from "js-sha512";
 
 /**
  * A class to establish a websocket connection to an App interface, for a
