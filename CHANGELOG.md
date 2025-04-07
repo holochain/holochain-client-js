@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Fixed
 ### Changed
 ### Removed
+- Call `NetworkInfo` was replaced by `DumpNetworkStats`.
 
 ## 2025-03-11: v0.19.0-dev.8
 
