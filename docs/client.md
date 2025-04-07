@@ -41,7 +41,7 @@ A class to establish a websocket connection to an App interface, for a specific 
 </td></tr>
 <tr><td>
 
-[CloneId](./client.cloneid.md)
+[CloneIdHelper](./client.cloneidhelper.md)
 
 
 </td><td>
@@ -1727,6 +1727,16 @@ This type is meant to be opaque
 </td></tr>
 <tr><td>
 
+[CloneId](./client.cloneid.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
 [CoordinatorSource](./client.coordinatorsource.md)
 
 
@@ -2199,26 +2209,6 @@ The definition of a storage arc compatible with the concept of storage and query
 <tr><td>
 
 [GenerateAgentPubKeyResponse](./client.generateagentpubkeyresponse.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[GetCompatibleCellsRequest](./client.getcompatiblecellsrequest.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[GetCompatibleCellsResponse](./client.getcompatiblecellsresponse.md)
 
 
 </td><td>

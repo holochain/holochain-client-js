@@ -6,7 +6,7 @@ import {
   AppWebsocket,
   CallZomeRequest,
   CellType,
-  CloneId,
+  CloneIdHelper,
   CreateCloneCellRequest,
   fakeAgentPubKey,
   RoleName,
@@ -222,7 +222,7 @@ test(
     const cloneCell = await appWs.createCloneCell(createCloneCellParams);
     await admin.authorizeSigningCredentials(cloneCell.cell_id);
 
-    const expectedCloneId = new CloneId(ROLE_NAME, 0).toString();
+    const expectedCloneId = new CloneIdHelper(ROLE_NAME, 0).toString();
     t.equal(cloneCell.clone_id, expectedCloneId, "correct clone id");
     assert(info.cell_info[ROLE_NAME][0].type === CellType.Provisioned);
     t.deepEqual(

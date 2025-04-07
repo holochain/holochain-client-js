@@ -13,7 +13,6 @@ import {
   AppWebsocket,
   CallZomeRequest,
   CellProvisioningStrategy,
-  CloneId,
   CreateCloneCellRequest,
   DnaBundle,
   DumpStateResponse,
@@ -35,6 +34,7 @@ import {
   AppBundle,
   fakeDnaHash,
   encodeHashToBase64,
+  CloneIdHelper,
 } from "../../src";
 import {
   FIXTURE_PATH,
@@ -1145,7 +1145,7 @@ test(
     };
     const cloneCell = await client.createCloneCell(createCloneCellParams);
 
-    const expectedCloneId = new CloneId(ROLE_NAME, 0).toString();
+    const expectedCloneId = new CloneIdHelper(ROLE_NAME, 0).toString();
     t.equal(cloneCell.clone_id, expectedCloneId, "correct clone id");
     assert(appInfo.cell_info[ROLE_NAME][0].type === CellType.Provisioned);
     t.deepEqual(
@@ -1235,7 +1235,7 @@ test(
     const enabledCloneCell = await client.enableCloneCell({
       clone_cell_id: {
         type: "clone_id",
-        value: CloneId.fromRoleName(cloneCell.clone_id).toString(),
+        value: CloneIdHelper.fromRoleName(cloneCell.clone_id).toString(),
       },
     });
 

@@ -302,23 +302,6 @@ Generate a new agent pub key.
 </td></tr>
 <tr><td>
 
-[getCompatibleCells](./client.adminwebsocket.getcompatiblecells.md)
-
-
-</td><td>
-
-
-</td><td>
-
-[Requester](./client.requester.md)<!-- -->&lt;[GetCompatibleCellsRequest](./client.getcompatiblecellsrequest.md)<!-- -->, [GetCompatibleCellsResponse](./client.getcompatiblecellsresponse.md)<!-- -->&gt;
-
-
-</td><td>
-
-
-</td></tr>
-<tr><td>
-
 [getDnaDefinition](./client.adminwebsocket.getdnadefinition.md)
 
 
