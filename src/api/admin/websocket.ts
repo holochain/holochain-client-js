@@ -41,8 +41,6 @@ import {
   EnableAppResponse,
   GenerateAgentPubKeyRequest,
   GenerateAgentPubKeyResponse,
-  GetCompatibleCellsRequest,
-  GetCompatibleCellsResponse,
   GetDnaDefinitionRequest,
   GetDnaDefinitionResponse,
   GrantZomeCallCapabilityRequest,
@@ -202,13 +200,6 @@ export class AdminWebsocket implements AdminApi {
     GetDnaDefinitionRequest,
     GetDnaDefinitionResponse
   > = this._requester("get_dna_definition");
-
-  /// Find installed cells which use a DNA that's forward-compatible with the given DNA hash.
-  /// Namely, this finds cells with DNAs whose manifest lists the given DNA hash in its `lineage` field.
-  getCompatibleCells: Requester<
-    GetCompatibleCellsRequest,
-    GetCompatibleCellsResponse
-  > = this._requester("get_compatible_cells");
 
   /**
    * Uninstall the specified app from Holochain.

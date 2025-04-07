@@ -345,15 +345,6 @@ export type GetDnaDefinitionResponse = DnaDefinition;
 /**
  * @public
  */
-export type GetCompatibleCellsRequest = DnaHashB64;
-/**
- * @public
- */
-export type GetCompatibleCellsResponse = Set<[InstalledAppId, Set<CellId>]>;
-
-/**
- * @public
- */
 export type UninstallAppRequest = {
   installed_app_id: InstalledAppId;
 };
