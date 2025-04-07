@@ -1,9 +1,5 @@
 import { getLauncherEnvironment } from "../../environments/launcher.js";
-import {
-  CapSecret,
-  GrantedFunctions,
-  GrantedFunctionsType,
-} from "../../hdk/index.js";
+import { CapSecret, GrantedFunctions } from "../../hdk/index.js";
 import type { AgentPubKey, CellId } from "../../types.js";
 import { WsClient } from "../client.js";
 import {
@@ -35,6 +31,8 @@ import {
   DisableAppResponse,
   DumpFullStateRequest,
   DumpFullStateResponse,
+  DumpNetworkMetricsRequest,
+  DumpNetworkMetricsResponse,
   DumpNetworkStatsRequest,
   DumpNetworkStatsResponse,
   DumpStateRequest,
@@ -43,8 +41,6 @@ import {
   EnableAppResponse,
   GenerateAgentPubKeyRequest,
   GenerateAgentPubKeyResponse,
-  GetCompatibleCellsRequest,
-  GetCompatibleCellsResponse,
   GetDnaDefinitionRequest,
   GetDnaDefinitionResponse,
   GrantZomeCallCapabilityRequest,
@@ -205,13 +201,6 @@ export class AdminWebsocket implements AdminApi {
     GetDnaDefinitionResponse
   > = this._requester("get_dna_definition");
 
-  /// Find installed cells which use a DNA that's forward-compatible with the given DNA hash.
-  /// Namely, this finds cells with DNAs whose manifest lists the given DNA hash in its `lineage` field.
-  getCompatibleCells: Requester<
-    GetCompatibleCellsRequest,
-    GetCompatibleCellsResponse
-  > = this._requester("get_compatible_cells");
-
   /**
    * Uninstall the specified app from Holochain.
    */
@@ -297,6 +286,11 @@ export class AdminWebsocket implements AdminApi {
     DumpNetworkStatsRequest,
     DumpNetworkStatsResponse
   > = this._requester("dump_network_stats");
+
+  dumpNetworkMetrics: Requester<
+    DumpNetworkMetricsRequest,
+    DumpNetworkMetricsResponse
+  > = this._requester("dump_network_metrics");
 
   // zome call signing related methods
 

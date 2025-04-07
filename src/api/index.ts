@@ -6,7 +6,7 @@ export {
   type AppAuthenticationRequest,
 } from "./client.js";
 export {
-  CloneId,
+  CloneIdHelper,
   HolochainError,
   getBaseRoleNameFromCloneId,
   isCloneId,

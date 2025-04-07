@@ -138,7 +138,7 @@ export const getBaseRoleNameFromCloneId = (roleName: RoleName) => {
  *
  * @public
  */
-export class CloneId {
+export class CloneIdHelper {
   private readonly roleName: RoleName;
   private readonly index: number;
 
@@ -160,7 +160,7 @@ export class CloneId {
         `clone id must consist of 'role_id.clone_index', but got ${roleName}`
       );
     }
-    return new CloneId(parts[0], parseInt(parts[1]));
+    return new CloneIdHelper(parts[0], parseInt(parts[1]));
   }
 
   toString() {

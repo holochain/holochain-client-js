@@ -211,6 +211,23 @@ Dump the full state of the specified cell, including its chain and DHT shard, as
 </td></tr>
 <tr><td>
 
+[dumpNetworkMetrics](./client.adminwebsocket.dumpnetworkmetrics.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[Requester](./client.requester.md)<!-- -->&lt;[DumpNetworkMetricsRequest](./client.dumpnetworkmetricsrequest.md)<!-- -->, [DumpNetworkMetricsResponse](./client.dumpnetworkmetricsresponse.md)<!-- -->&gt;
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
 [dumpNetworkStats](./client.adminwebsocket.dumpnetworkstats.md)
 
 
@@ -280,23 +297,6 @@ Enable a stopped app.
 </td><td>
 
 Generate a new agent pub key.
-
-
-</td></tr>
-<tr><td>
-
-[getCompatibleCells](./client.adminwebsocket.getcompatiblecells.md)
-
-
-</td><td>
-
-
-</td><td>
-
-[Requester](./client.requester.md)<!-- -->&lt;[GetCompatibleCellsRequest](./client.getcompatiblecellsrequest.md)<!-- -->, [GetCompatibleCellsResponse](./client.getcompatiblecellsresponse.md)<!-- -->&gt;
-
-
-</td><td>
 
 
 </td></tr>
