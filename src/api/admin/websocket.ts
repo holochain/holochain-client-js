@@ -31,6 +31,8 @@ import {
   DisableAppResponse,
   DumpFullStateRequest,
   DumpFullStateResponse,
+  DumpNetworkMetricsRequest,
+  DumpNetworkMetricsResponse,
   DumpNetworkStatsRequest,
   DumpNetworkStatsResponse,
   DumpStateRequest,
@@ -293,6 +295,11 @@ export class AdminWebsocket implements AdminApi {
     DumpNetworkStatsRequest,
     DumpNetworkStatsResponse
   > = this._requester("dump_network_stats");
+
+  dumpNetworkMetrics: Requester<
+    DumpNetworkMetricsRequest,
+    DumpNetworkMetricsResponse
+  > = this._requester("dump_network_metrics");
 
   // zome call signing related methods
 

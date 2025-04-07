@@ -24,6 +24,8 @@ import {
   SignedAction,
   SignedActionHashed,
   DumpNetworkStatsResponse,
+  DumpNetworkMetricsResponse,
+  DumpNetworkMetricsRequest,
 } from "../../index.js";
 
 /**
@@ -479,6 +481,9 @@ export interface AppClient {
   installedAppId: InstalledAppId;
 
   dumpNetworkStats(): Promise<DumpNetworkStatsResponse>;
+  dumpNetworkMetrics(
+    args: DumpNetworkMetricsRequest
+  ): Promise<DumpNetworkMetricsResponse>;
   createCloneCell(
     args: CreateCloneCellRequest
   ): Promise<CreateCloneCellResponse>;

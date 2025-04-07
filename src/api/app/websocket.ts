@@ -4,6 +4,8 @@ import { AgentPubKey, InstalledAppId, RoleName } from "../../types.js";
 import {
   AppInfo,
   CellType,
+  DumpNetworkMetricsRequest,
+  DumpNetworkMetricsResponse,
   DumpNetworkStatsRequest,
   DumpNetworkStatsResponse,
   MemproofMap,
@@ -111,6 +113,10 @@ export class AppWebsocket implements AppClient {
     DumpNetworkStatsRequest,
     DumpNetworkStatsResponse
   >;
+  private readonly dumpNetworkMetricsRequester: Requester<
+    DumpNetworkMetricsRequest,
+    DumpNetworkMetricsResponse
+  >;
   private readonly getCountersigningSessionStateRequester: Requester<
     GetCountersigningSessionStateRequest,
     GetCountersigningSessionStateResponse
@@ -177,6 +183,11 @@ export class AppWebsocket implements AppClient {
     this.dumpNetworkStatsRequester = AppWebsocket.requester(
       this.client,
       "dump_network_stats",
+      this.defaultTimeout
+    );
+    this.dumpNetworkMetricsRequester = AppWebsocket.requester(
+      this.client,
+      "dump_network_metrics",
       this.defaultTimeout
     );
     this.getCountersigningSessionStateRequester = AppWebsocket.requester(
@@ -293,6 +304,18 @@ export class AppWebsocket implements AppClient {
    */
   async dumpNetworkStats(timeout?: number): Promise<DumpNetworkStatsResponse> {
     return await this.dumpNetworkStatsRequester(undefined, timeout);
+  }
+
+  /**
+   * Request network metrics.
+   *
+   * @returns The {@link NetworkMetrics}.
+   */
+  async dumpNetworkMetrics(
+    req: DumpNetworkMetricsRequest,
+    timeout?: number
+  ): Promise<DumpNetworkMetricsResponse> {
+    return await this.dumpNetworkMetricsRequester(req, timeout);
   }
 
   /**

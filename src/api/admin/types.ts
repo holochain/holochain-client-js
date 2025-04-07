@@ -1119,8 +1119,6 @@ export interface LocalAgentSummary {
   target_arc: DhtArc;
 }
 
-export type OpId = Uint8Array;
-
 /**
  * Summary of the fetch state.
  */
@@ -1131,7 +1129,7 @@ export interface FetchStateSummary {
    * Each op id is associated with one or more peer URL from which the op data could be
    * requested.
    */
-  pending_requests: Map<OpId, string[]>;
+  pending_requests: Record<HoloHashB64, string[]>;
 
   /**
    * The peer URL for nodes that are currently on backoff because of failed fetch requests, and the timestamp when that backoff will expire.
@@ -1225,11 +1223,11 @@ export interface GossipStateSummary {
   /**
    * DHT summary.
    */
-  dht_summary: Map<string, DhtSegmentState>;
+  dht_summary: Record<string, DhtSegmentState>;
   /**
    * Peer metadata dump for each agent in this space.
    */
-  peer_meta: Map<string, PeerMeta>;
+  peer_meta: Record<string, PeerMeta>;
 }
 
 /**
@@ -1260,7 +1258,7 @@ export interface NetworkMetrics {
 /**
  * @public
  */
-export type DumpNetworkMetricsResponse = Map<DnaHash, NetworkMetrics>;
+export type DumpNetworkMetricsResponse = Record<DnaHashB64, NetworkMetrics>;
 
 /**
  * @public

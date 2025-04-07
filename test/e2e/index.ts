@@ -34,6 +34,7 @@ import {
   CellType,
   AppBundle,
   fakeDnaHash,
+  encodeHashToBase64,
 } from "../../src";
 import {
   FIXTURE_PATH,
@@ -1375,6 +1376,32 @@ test(
     t.deepEqual(response.connections, []);
 
     const appWsResponse = await client.dumpNetworkStats();
+    t.deepEqual(appWsResponse, response);
+  })
+);
+
+test(
+  "can dump network metrics",
+  withConductor(ADMIN_PORT, async (t) => {
+    const { admin, cell_id, client } = await installAppAndDna(ADMIN_PORT);
+
+    const response = await admin.dumpNetworkMetrics({
+      include_dht_summary: true,
+    });
+    const dnaHash = encodeHashToBase64(cell_id[0]);
+    t.assert(response[dnaHash], "expected entry in map under dna hash");
+    t.deepEqual(response[dnaHash].fetch_state_summary.pending_requests, {});
+    t.deepEqual(response[dnaHash].fetch_state_summary.peers_on_backoff, {});
+    t.deepEqual(response[dnaHash].gossip_state_summary.accepted_rounds, []);
+    t.deepEqual(response[dnaHash].gossip_state_summary.initiated_round, null);
+    t.deepEqual(response[dnaHash].gossip_state_summary.peer_meta, {});
+    t.deepEqual(response[dnaHash].local_agents, [
+      { agent: cell_id[1], storage_arc: null, target_arc: [0, 4294967295] },
+    ]);
+
+    const appWsResponse = await client.dumpNetworkMetrics({
+      include_dht_summary: true,
+    });
     t.deepEqual(appWsResponse, response);
   })
 );
