@@ -1056,6 +1056,213 @@ export interface TransportConnectionStats {
 export type DumpNetworkStatsResponse = TransportStats;
 
 /**
+ * Arguments for dumping network metrics.
+ *
+ * @public
+ */
+export interface DumpNetworkMetricsRequest {
+  /**
+   * The DNA hash of the app network to dump.
+   */
+  dna?: DnaHash;
+
+  /**
+   * Include DHT summary in the response.
+   */
+  include_dht_summary: boolean;
+}
+
+/**
+ * The definition of a storage arc compatible with the concept of
+ * storage and querying of items in a store that fall within that arc.
+ */
+export type DhtArc =
+  | {
+      /**
+       * No DHT locations are contained within this arc.
+       */
+      type: "empty";
+    }
+  | {
+      /**
+       * A specific range of DHT locations are contained within this arc.
+       *
+       * The lower and upper bounds are inclusive.
+       */
+      type: "arc";
+      value: [number, number];
+    };
+
+/**
+ * Summary of a local agent's network state.
+ */
+export interface LocalAgentSummary {
+  /**
+   * The agent's public key.
+   */
+  agent: AgentPubKey;
+
+  /**
+   * The current storage arc that the agent is declaring.
+   *
+   * This is the arc that the agent is claiming that it is an authority for.
+   */
+  storage_arc: DhtArc;
+
+  /**
+   * The target arc that the agent is trying to achieve as a storage arc.
+   *
+   * This is not declared to other peers on the network. It is used during gossip to try to sync
+   * ops in the target arc. Once the DHT state appears to be in sync with the target arc, the
+   * storage arc can be updated towards the target arc.
+   */
+  target_arc: DhtArc;
+}
+
+export type OpId = Uint8Array;
+
+/**
+ * Summary of the fetch state.
+ */
+export interface FetchStateSummary {
+  /**
+   * The op ids that are currently being fetched.
+   *
+   * Each op id is associated with one or more peer URL from which the op data could be
+   * requested.
+   */
+  pending_requests: Map<OpId, string[]>;
+
+  /**
+   * The peer URL for nodes that are currently on backoff because of failed fetch requests, and the timestamp when that backoff will expire.
+   *
+   * If peers are in here then they are not being used as potential sources in
+   * [`FetchStateSummary::pending_requests`].
+   */
+  peers_on_backoff: Map<string, number>;
+}
+
+/**
+ * DHT segment state.
+ */
+export interface DhtSegmentState {
+  /**
+   * The top hash of the DHT ring segment.
+   */
+  disc_top_hash: Uint8Array;
+  /**
+   * The boundary timestamp of the DHT ring segment.
+   */
+  disc_boundary: Timestamp;
+  /**
+   * The top hashes of each DHT ring segment.
+   */
+  ring_top_hashes: Uint8Array[];
+}
+
+/**
+ * Peer metadata dump.
+ */
+export interface PeerMeta {
+  /**
+   * The timestamp of the last gossip round.
+   */
+  last_gossip_timestamp?: Timestamp;
+  /**
+   * The bookmark of the last op bookmark received.
+   */
+  new_ops_bookmark?: Timestamp;
+  /**
+   * The number of behavior errors observed.
+   */
+  peer_behavior_errors?: number;
+  /**
+   * The number of local errors.
+   */
+  local_errors?: number;
+  /**
+   * The number of busy peer errors.
+   */
+  peer_busy?: number;
+  /**
+   * The number of terminated rounds.
+   *
+   * Note that termination is not necessarily an error.
+   */
+  peer_terminated?: number;
+  /**
+   * The number of completed rounds.
+   */
+  completed_rounds?: number;
+  /**
+   * The number of peer timeouts.
+   */
+  peer_timeouts?: number;
+}
+
+/**
+ * Gossip round state summary.
+ */
+export interface GossipRoundStateSummary {
+  /**
+   * The URL of the peer with which the round is initiated.
+   */
+  session_with_peer: string;
+}
+
+/**
+ * Gossip state summary.
+ */
+export interface GossipStateSummary {
+  /**
+   * The current initiated round summary.
+   */
+  initiated_round?: GossipRoundStateSummary;
+  /**
+   * The list of accepted round summaries.
+   */
+  accepted_rounds: GossipRoundStateSummary[];
+  /**
+   * DHT summary.
+   */
+  dht_summary: Map<string, DhtSegmentState>;
+  /**
+   * Peer metadata dump for each agent in this space.
+   */
+  peer_meta: Map<string, PeerMeta>;
+}
+
+/**
+ * Network metrics from Kitsune2.
+ */
+export interface NetworkMetrics {
+  /**
+   * A summary of the fetch queue.
+   *
+   * The fetch queue is used to retrieve op data based on op ids that have been discovered
+   * through publish or gossip.
+   */
+  fetch_state_summary: FetchStateSummary;
+  /**
+   * A summary of the gossip state.
+   *
+   * This includes both live gossip rounds and metrics about peers that we've gossiped with.
+   * Optionally, it can include a summary of the DHT state as Kitsune2 sees it.
+   */
+  gossip_state_summary: GossipStateSummary;
+
+  /**
+   * A summary of the state of each local agent.
+   */
+  local_agents: LocalAgentSummary[];
+}
+
+/**
+ * @public
+ */
+export type DumpNetworkMetricsResponse = Map<DnaHash, NetworkMetrics>;
+
+/**
  * @public
  */
 export interface AdminApi {
