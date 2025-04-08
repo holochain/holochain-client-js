@@ -45,10 +45,6 @@ test(
       wsClientOptions: { origin: "client-test-app" },
     });
 
-    await appWs.networkInfo({
-      dnas: [cell_id[0]],
-    });
-
     t.equal(appWs.client.url?.href, `ws://localhost:${appPort}/`);
   })
 );
