@@ -10,6 +10,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Changed
 ### Removed
 
+## 2025-04-07: v0.19.0-rc.0
+### Added
+- Call `DumpNetworkStats` was added to Admin + App websockets.
+- Call `DumpNetworkMetrics` was added to Admin + App websockets.
+### Removed
+- Call `NetworkInfo` was removed from the Conductor API.
+- Call `GetCompatibleCells` was moved to a feature.
+
 ## 2025-03-11: v0.19.0-dev.8
 
 ### Changed

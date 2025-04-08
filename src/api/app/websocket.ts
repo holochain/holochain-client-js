@@ -1,13 +1,27 @@
+import { decode, encode } from "@msgpack/msgpack";
 import Emittery, { UnsubscribeFunction } from "emittery";
+import { sha512 } from "js-sha512";
+import _sodium from "libsodium-wrappers";
 import { omit } from "lodash-es";
+import {
+  getHostZomeCallSigner,
+  getLauncherEnvironment,
+} from "../../environments/launcher.js";
 import { AgentPubKey, InstalledAppId, RoleName } from "../../types.js";
+import { encodeHashToBase64 } from "../../utils/index.js";
 import {
   AppInfo,
   CellType,
+  // Required to TSDoc generation.
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   ClonedCell,
+  DumpNetworkMetricsRequest,
+  DumpNetworkMetricsResponse,
+  DumpNetworkStatsRequest,
+  DumpNetworkStatsResponse,
   MemproofMap,
-  ProvisionedCell,
 } from "../admin/index.js";
+import { WsClient } from "../client.js";
 import {
   catchError,
   DEFAULT_TIMEOUT,
@@ -20,52 +34,40 @@ import {
   Transformer,
 } from "../common.js";
 import {
+  getNonceExpiration,
+  getSigningCredentials,
+  randomNonce,
+} from "../zome-call-signing.js";
+import {
+  AbandonCountersigningSessionStateRequest,
+  AbandonCountersigningSessionStateResponse,
   AppClient,
   AppEvents,
-  AppNetworkInfoRequest,
   AppInfoResponse,
-  SignalCb,
+  AppWebsocketConnectionOptions,
   CallZomeRequest,
   CallZomeRequestSigned,
   CallZomeResponse,
   CallZomeResponseGeneric,
+  CallZomeTransform,
   CreateCloneCellRequest,
   CreateCloneCellResponse,
   DisableCloneCellRequest,
   DisableCloneCellResponse,
   EnableCloneCellRequest,
   EnableCloneCellResponse,
-  NetworkInfoRequest,
-  NetworkInfoResponse,
-  AppWebsocketConnectionOptions,
-  CallZomeTransform,
-  ProvideMemproofsRequest,
-  ProvideMemproofsResponse,
   EnableRequest,
   EnableResponse,
-  Signal,
   GetCountersigningSessionStateRequest,
   GetCountersigningSessionStateResponse,
-  AbandonCountersigningSessionStateRequest,
-  AbandonCountersigningSessionStateResponse,
+  ProvideMemproofsRequest,
+  ProvideMemproofsResponse,
   PublishCountersigningSessionStateRequest,
   PublishCountersigningSessionStateResponse,
   RoleNameCallZomeRequest,
+  Signal,
+  SignalCb,
 } from "./types.js";
-import {
-  getHostZomeCallSigner,
-  getLauncherEnvironment,
-} from "../../environments/launcher.js";
-import { decode, encode } from "@msgpack/msgpack";
-import {
-  getNonceExpiration,
-  getSigningCredentials,
-  randomNonce,
-} from "../zome-call-signing.js";
-import { encodeHashToBase64 } from "../../utils/index.js";
-import _sodium from "libsodium-wrappers";
-import { WsClient } from "../client.js";
-import { sha512 } from "js-sha512";
 
 /**
  * A class to establish a websocket connection to an App interface, for a
@@ -110,9 +112,13 @@ export class AppWebsocket implements AppClient {
     DisableCloneCellRequest,
     DisableCloneCellResponse
   >;
-  private readonly networkInfoRequester: Requester<
-    NetworkInfoRequest,
-    NetworkInfoResponse
+  private readonly dumpNetworkStatsRequester: Requester<
+    DumpNetworkStatsRequest,
+    DumpNetworkStatsResponse
+  >;
+  private readonly dumpNetworkMetricsRequester: Requester<
+    DumpNetworkMetricsRequest,
+    DumpNetworkMetricsResponse
   >;
   private readonly getCountersigningSessionStateRequester: Requester<
     GetCountersigningSessionStateRequest,
@@ -177,9 +183,14 @@ export class AppWebsocket implements AppClient {
       "disable_clone_cell",
       this.defaultTimeout
     );
-    this.networkInfoRequester = AppWebsocket.requester(
+    this.dumpNetworkStatsRequester = AppWebsocket.requester(
       this.client,
-      "network_info",
+      "dump_network_stats",
+      this.defaultTimeout
+    );
+    this.dumpNetworkMetricsRequester = AppWebsocket.requester(
+      this.client,
+      "dump_network_metrics",
       this.defaultTimeout
     );
     this.getCountersigningSessionStateRequester = AppWebsocket.requester(
@@ -287,6 +298,27 @@ export class AppWebsocket implements AppClient {
 
     this.cachedAppInfo = appInfo;
     return appInfo;
+  }
+
+  /**
+   * Request network stats.
+   *
+   * @returns The conductor's {@link TransportStats}.
+   */
+  async dumpNetworkStats(timeout?: number): Promise<DumpNetworkStatsResponse> {
+    return await this.dumpNetworkStatsRequester(undefined, timeout);
+  }
+
+  /**
+   * Request network metrics.
+   *
+   * @returns The {@link NetworkMetrics}.
+   */
+  async dumpNetworkMetrics(
+    req: DumpNetworkMetricsRequest,
+    timeout?: number
+  ): Promise<DumpNetworkMetricsResponse> {
+    return await this.dumpNetworkMetricsRequester(req, timeout);
   }
 
   /**
@@ -422,18 +454,6 @@ export class AppWebsocket implements AppClient {
   async disableCloneCell(args: DisableCloneCellRequest) {
     return this.disableCloneCellRequester({
       ...args,
-    });
-  }
-
-  /**
-   * Request network info about gossip status.
-   *  @param args - Specify the DNAs for which you want network info
-   *  @returns Network info for the specified DNAs
-   */
-  async networkInfo(args: AppNetworkInfoRequest) {
-    return this.networkInfoRequester({
-      ...args,
-      agent_pub_key: this.myPubKey,
     });
   }
 

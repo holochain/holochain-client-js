@@ -41,7 +41,7 @@ A class to establish a websocket connection to an App interface, for a specific 
 </td></tr>
 <tr><td>
 
-[CloneId](./client.cloneid.md)
+[CloneIdHelper](./client.cloneidhelper.md)
 
 
 </td><td>
@@ -754,6 +754,17 @@ Description
 </td></tr>
 <tr><td>
 
+[DhtSegmentState](./client.dhtsegmentstate.md)
+
+
+</td><td>
+
+DHT segment state.
+
+
+</td></tr>
+<tr><td>
+
 [DisableCloneCellRequest](./client.disableclonecellrequest.md)
 
 
@@ -779,6 +790,17 @@ Description
 
 </td><td>
 
+
+
+</td></tr>
+<tr><td>
+
+[DumpNetworkMetricsRequest](./client.dumpnetworkmetricsrequest.md)
+
+
+</td><td>
+
+Arguments for dumping network metrics.
 
 
 </td></tr>
@@ -814,6 +836,17 @@ Description
 </td></tr>
 <tr><td>
 
+[FetchStateSummary](./client.fetchstatesummary.md)
+
+
+</td><td>
+
+Summary of the fetch state.
+
+
+</td></tr>
+<tr><td>
+
 [FullIntegrationStateDump](./client.fullintegrationstatedump.md)
 
 
@@ -829,6 +862,28 @@ Description
 
 </td><td>
 
+
+
+</td></tr>
+<tr><td>
+
+[GossipRoundStateSummary](./client.gossiproundstatesummary.md)
+
+
+</td><td>
+
+Gossip round state summary.
+
+
+</td></tr>
+<tr><td>
+
+[GossipStateSummary](./client.gossipstatesummary.md)
+
+
+</td><td>
+
+Gossip state summary.
 
 
 </td></tr>
@@ -894,6 +949,17 @@ Description
 </td></tr>
 <tr><td>
 
+[LocalAgentSummary](./client.localagentsummary.md)
+
+
+</td><td>
+
+Summary of a local agent's network state.
+
+
+</td></tr>
+<tr><td>
+
 [NetworkInfo](./client.networkinfo.md)
 
 
@@ -904,11 +970,12 @@ Description
 </td></tr>
 <tr><td>
 
-[NetworkInfoRequest](./client.networkinforequest.md)
+[NetworkMetrics](./client.networkmetrics.md)
 
 
 </td><td>
 
+Network metrics from Kitsune2.
 
 
 </td></tr>
@@ -929,6 +996,17 @@ Description
 
 </td><td>
 
+
+
+</td></tr>
+<tr><td>
+
+[PeerMeta](./client.peermeta.md)
+
+
+</td><td>
+
+Peer metadata dump.
 
 
 </td></tr>
@@ -1073,6 +1151,30 @@ Summary of the workflow's attempts to resolve the outcome a failed countersignin
 
 </td><td>
 
+
+
+</td></tr>
+<tr><td>
+
+[TransportConnectionStats](./client.transportconnectionstats.md)
+
+
+</td><td>
+
+Stats for a single transport connection.
+
+
+</td></tr>
+<tr><td>
+
+[TransportStats](./client.transportstats.md)
+
+
+</td><td>
+
+Stats for a transport connection.
+
+This is intended to be a state dump that gives some insight into what the transport is doing.
 
 
 </td></tr>
@@ -1445,16 +1547,6 @@ This type is meant to be opaque
 </td></tr>
 <tr><td>
 
-[AppNetworkInfoRequest](./client.appnetworkinforequest.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
 [AppRoleDnaManifest](./client.approlednamanifest.md)
 
 
@@ -1635,6 +1727,16 @@ This type is meant to be opaque
 </td></tr>
 <tr><td>
 
+[CloneId](./client.cloneid.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
 [CoordinatorSource](./client.coordinatorsource.md)
 
 
@@ -1700,6 +1802,17 @@ This type is meant to be opaque
 
 </td><td>
 
+
+
+</td></tr>
+<tr><td>
+
+[DhtArc](./client.dhtarc.md)
+
+
+</td><td>
+
+The definition of a storage arc compatible with the concept of storage and querying of items in a store that fall within that arc.
 
 
 </td></tr>
@@ -1886,6 +1999,16 @@ This type is meant to be opaque
 <tr><td>
 
 [DumpFullStateResponse](./client.dumpfullstateresponse.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[DumpNetworkMetricsResponse](./client.dumpnetworkmetricsresponse.md)
 
 
 </td><td>
@@ -2086,26 +2209,6 @@ This type is meant to be opaque
 <tr><td>
 
 [GenerateAgentPubKeyResponse](./client.generateagentpubkeyresponse.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[GetCompatibleCellsRequest](./client.getcompatiblecellsrequest.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[GetCompatibleCellsResponse](./client.getcompatiblecellsresponse.md)
 
 
 </td><td>
@@ -2428,16 +2531,6 @@ An internal link type index within the DNA, from 0 to 255.
 <tr><td>
 
 [MemproofMap](./client.memproofmap.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[NetworkInfoResponse](./client.networkinforesponse.md)
 
 
 </td><td>

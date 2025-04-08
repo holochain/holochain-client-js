@@ -13,7 +13,6 @@ import {
   AppWebsocket,
   CallZomeRequest,
   CellProvisioningStrategy,
-  CloneId,
   CreateCloneCellRequest,
   DnaBundle,
   DumpStateResponse,
@@ -24,7 +23,6 @@ import {
   Link,
   RegisterAgentActivity,
   RoleName,
-  encodeHashToBase64,
   generateSigningKeyPair,
   Signal,
   isSameCell,
@@ -32,9 +30,11 @@ import {
   randomNonce,
   getNonceExpiration,
   ProvisionedCell,
-  Duration,
   CellType,
   AppBundle,
+  fakeDnaHash,
+  encodeHashToBase64,
+  CloneIdHelper,
 } from "../../src";
 import {
   FIXTURE_PATH,
@@ -324,11 +324,6 @@ test(
       "9a28aac8-337c-11eb-adc1-0Z02acw20115",
       "dna definition: network seed matches"
     );
-    t.equal(
-      Math.floor(dnaDefinition.modifiers.origin_time / 1000),
-      new Date("2022-02-11T23:05:19.470323Z").getTime(),
-      "dna definition: origin time matches"
-    );
     assert(Buffer.isBuffer(dnaDefinition.modifiers.properties));
     t.equal(
       decode(dnaDefinition.modifiers.properties),
@@ -591,12 +586,6 @@ test(
     });
     const agent = await admin.generateAgentPubKey();
 
-    const originTime = Date.now();
-    const quantumTime: Duration = {
-      secs: originTime,
-      nanos: 0,
-    };
-
     const progenitorKey = Uint8Array.from(fakeAgentPubKey());
 
     await admin.installApp({
@@ -614,8 +603,6 @@ test(
             modifiers: {
               network_seed: "hello",
               properties: yaml.dump({ progenitor: progenitorKey }),
-              origin_time: originTime,
-              quantum_time: quantumTime,
             },
           },
         },
@@ -631,8 +618,6 @@ test(
       yaml.load(decode(provisionedCell.dna_modifiers.properties) as string),
       { progenitor: progenitorKey }
     );
-    t.equal(provisionedCell.dna_modifiers.origin_time, originTime);
-    t.deepEqual(provisionedCell.dna_modifiers.quantum_time, quantumTime);
   })
 );
 
@@ -799,27 +784,6 @@ test(
 );
 
 test(
-  "get compatible cells of a cell",
-  withConductor(ADMIN_PORT, async (t) => {
-    const { installed_app_id, cell_id, admin } = await installAppAndDna(
-      ADMIN_PORT
-    );
-    const dnaHashB64 = encodeHashToBase64(cell_id[0]);
-    const a = await admin.getCompatibleCells(dnaHashB64);
-    const compatibleCells = a.values();
-    const compatibleCell_1 = compatibleCells.next();
-    t.deepEqual(
-      compatibleCell_1.value,
-      [installed_app_id, [cell_id]],
-      "compatible cells contains tuple of installed app id and cell id"
-    );
-    const next = compatibleCells.next();
-    t.equal(next.value, undefined, "no other value in set");
-    t.assert(next.done);
-  })
-);
-
-test(
   "stateDump",
   withConductor(ADMIN_PORT, async (t) => {
     const { cell_id, client, admin } = await installAppAndDna(ADMIN_PORT);
@@ -938,28 +902,24 @@ test(
 
 test("can inject agents", async (t) => {
   const conductor1 = await launch(ADMIN_PORT);
-  const conductor2 = await launch(ADMIN_PORT_1);
   const installed_app_id = "app";
   const admin1 = await AdminWebsocket.connect({
     url: ADMIN_WS_URL,
     wsClientOptions: { origin: "client-test-admin" },
   });
-  const admin2 = await AdminWebsocket.connect({
-    url: new URL(`ws://localhost:${ADMIN_PORT_1}`),
-    wsClientOptions: { origin: "client-test-admin" },
-  });
-  const agent_key_1 = await admin1.generateAgentPubKey();
-  t.ok(agent_key_1);
-  const agent_key_2 = await admin2.generateAgentPubKey();
-  t.ok(agent_key_2);
-  const path = `${FIXTURE_PATH}/test.dna`;
-  let result = await admin1.installApp({
+
+  // There shouldn't be any agent infos yet.
+  let agentInfos1 = await admin1.agentInfo({ cell_id: null });
+  t.assert(agentInfos1.length === 0);
+
+  const agent1 = await admin1.generateAgentPubKey();
+  const result = await admin1.installApp({
     source: {
       type: "path",
       value: `${FIXTURE_PATH}/test.happ`,
     },
     installed_app_id,
-    agent_key: agent_key_1,
+    agent_key: agent1,
   });
   t.ok(result);
   assert(result.cell_info[ROLE_NAME][0].type === CellType.Provisioned);
@@ -970,62 +930,32 @@ test("can inject agents", async (t) => {
   t.equal(activeApp1Info.app.installed_app_id, installed_app_id);
   t.equal(activeApp1Info.errors.length, 0);
 
-  const conductor1_agentInfo = await admin1.agentInfo({
-    cell_id: null,
+  // There should be one agent info now.
+  agentInfos1 = await admin1.agentInfo({ cell_id: null });
+  t.assert(agentInfos1.length === 1);
+
+  // Now confirm that we can ask for just one cell.
+  let cellAgentInfos = await admin1.agentInfo({
+    cell_id: [await fakeDnaHash(), fakeAgentPubKey()],
   });
-  // one app agent
-  // and one DPKI agent once DPKI is enabled again
-  t.equal(conductor1_agentInfo.length, 1);
-
-  // with no activated apps there is no agent
-  // only the DPKI agent
-  let conductor2_agentInfo = await admin2.agentInfo({ cell_id: null });
-  t.equal(conductor2_agentInfo.length, 0);
-
-  // but, after explicitly injecting an agent, we should see it too
-  await admin2.addAgentInfo({ agent_infos: [conductor1_agentInfo[0]] });
-  conductor2_agentInfo = await admin2.agentInfo({ cell_id: null });
-  t.equal(conductor2_agentInfo.length, 1);
-
-  // now install the app and activate it on agent 2.
-  await admin2.registerDna({
-    source: {
-      type: "path",
-      value: path,
-    },
-    modifiers: {},
-  });
-  result = await admin2.installApp({
-    source: {
-      type: "path",
-      value: `${FIXTURE_PATH}/test.happ`,
-    },
-    installed_app_id,
-    agent_key: agent_key_2,
-  });
-  t.ok(result);
-  assert(result.cell_info[ROLE_NAME][0].type === CellType.Provisioned);
-  const app2_cell = result.cell_info[ROLE_NAME][0].value.cell_id;
-  const activeApp2Info = await admin2.enableApp({ installed_app_id });
-  t.deepEqual(activeApp2Info.app.status, { type: "running" });
-  t.ok(ROLE_NAME in activeApp2Info.app.cell_info);
-  t.equal(activeApp2Info.app.installed_app_id, installed_app_id);
-  t.equal(activeApp2Info.errors.length, 0);
-
-  // observe 2 agent infos
-  conductor2_agentInfo = await admin2.agentInfo({ cell_id: null });
-  t.equal(conductor2_agentInfo.length, 2);
-
-  // now confirm that we can ask for just one cell
-  await admin1.addAgentInfo({ agent_infos: conductor2_agentInfo });
-  const app1_agentInfo = await admin1.agentInfo({
+  t.assert(cellAgentInfos.length === 0);
+  cellAgentInfos = await admin1.agentInfo({
     cell_id: app1_cell,
   });
-  t.equal(app1_agentInfo.length, 1);
-  const app2_agentInfo = await admin2.agentInfo({
-    cell_id: app2_cell,
+  t.deepEqual(cellAgentInfos, agentInfos1);
+
+  const conductor2 = await launch(ADMIN_PORT_1);
+  const admin2 = await AdminWebsocket.connect({
+    url: new URL(`ws://localhost:${ADMIN_PORT_1}`),
+    wsClientOptions: { origin: "client-test-admin" },
   });
-  t.equal(app2_agentInfo.length, 1);
+
+  let agentInfos2 = await admin2.agentInfo({ cell_id: null });
+  t.assert(agentInfos2.length === 0);
+
+  await admin2.addAgentInfo({ agent_infos: agentInfos1 });
+  agentInfos2 = await admin2.agentInfo({ cell_id: null });
+  t.assert(agentInfos2.length === 1);
 
   if (conductor1.pid) {
     process.kill(-conductor1.pid);
@@ -1215,7 +1145,7 @@ test(
     };
     const cloneCell = await client.createCloneCell(createCloneCellParams);
 
-    const expectedCloneId = new CloneId(ROLE_NAME, 0).toString();
+    const expectedCloneId = new CloneIdHelper(ROLE_NAME, 0).toString();
     t.equal(cloneCell.clone_id, expectedCloneId, "correct clone id");
     assert(appInfo.cell_info[ROLE_NAME][0].type === CellType.Provisioned);
     t.deepEqual(
@@ -1305,7 +1235,7 @@ test(
     const enabledCloneCell = await client.enableCloneCell({
       clone_cell_id: {
         type: "clone_id",
-        value: CloneId.fromRoleName(cloneCell.clone_id).toString(),
+        value: CloneIdHelper.fromRoleName(cloneCell.clone_id).toString(),
       },
     });
 
@@ -1433,36 +1363,46 @@ test(
 );
 
 test(
-  "can fetch network stats",
+  "can dump network stats",
   withConductor(ADMIN_PORT, async (t) => {
-    const { admin } = await installAppAndDna(ADMIN_PORT);
+    const { admin, client } = await installAppAndDna(ADMIN_PORT);
 
     const response = await admin.dumpNetworkStats();
 
-    t.ok(typeof response === "string", "response is string");
-    t.ok(JSON.parse(response), "response is valid JSON");
+    t.assert(response.backend, "BackendLibDataChannel");
+    t.assert(response.peer_urls.length === 1);
+    const peerUrl = new URL(response.peer_urls[0]);
+    t.assert(peerUrl.origin, "wss://dev-test-bootstrap2.holochain.org");
+    t.deepEqual(response.connections, []);
+
+    const appWsResponse = await client.dumpNetworkStats();
+    t.deepEqual(appWsResponse, response);
   })
 );
 
 test(
-  "can fetch network info",
+  "can dump network metrics",
   withConductor(ADMIN_PORT, async (t) => {
-    const { client, cell_id } = await installAppAndDna(ADMIN_PORT);
+    const { admin, cell_id, client } = await installAppAndDna(ADMIN_PORT);
 
-    const response = await client.networkInfo({
-      dnas: [cell_id[0]],
+    const response = await admin.dumpNetworkMetrics({
+      include_dht_summary: true,
     });
-
-    t.deepEqual(response, [
-      {
-        fetch_pool_info: { op_bytes_to_fetch: 0, num_ops_to_fetch: 0 },
-        current_number_of_peers: 1,
-        arc_size: 1,
-        total_network_peers: 1,
-        bytes_since_last_time_queried: 1838,
-        completed_rounds_since_last_time_queried: 0,
-      },
+    const dnaHash = encodeHashToBase64(cell_id[0]);
+    t.assert(response[dnaHash], "expected entry in map under dna hash");
+    t.deepEqual(response[dnaHash].fetch_state_summary.pending_requests, {});
+    t.deepEqual(response[dnaHash].fetch_state_summary.peers_on_backoff, {});
+    t.deepEqual(response[dnaHash].gossip_state_summary.accepted_rounds, []);
+    t.deepEqual(response[dnaHash].gossip_state_summary.initiated_round, null);
+    t.deepEqual(response[dnaHash].gossip_state_summary.peer_meta, {});
+    t.deepEqual(response[dnaHash].local_agents, [
+      { agent: cell_id[1], storage_arc: null, target_arc: [0, 4294967295] },
     ]);
+
+    const appWsResponse = await client.dumpNetworkMetrics({
+      include_dht_summary: true,
+    });
+    t.deepEqual(appWsResponse, response);
   })
 );
 

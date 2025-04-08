@@ -4,6 +4,7 @@ import IsoWebSocket from "isomorphic-ws";
 import { HolochainError, WsClientOptions } from "./common.js";
 import { AppAuthenticationToken } from "./admin/index.js";
 import { AppSignal, RawSignal, Signal } from "./app/index.js";
+import { encodeHashToBase64 } from "../utils/base64.js";
 
 interface HolochainMessage {
   id: number;
@@ -348,7 +349,24 @@ export class WsClient extends Emittery {
           new Error("Response canceled by responder")
         );
       } else {
-        this.pendingRequests[id].resolve(decode(msg.data));
+        this.pendingRequests[id].resolve(
+          decode(msg.data, {
+            mapKeyConverter: (key: unknown) => {
+              if (typeof key === "string" || typeof key === "number") {
+                return key;
+              }
+              if (key && typeof key === "object" && key instanceof Uint8Array) {
+                // Key of type byte array, must be a HoloHash.
+                return encodeHashToBase64(key);
+              }
+              throw new HolochainError(
+                "DeserializationError",
+                "Encountered map with key of type 'object', but not HoloHash " +
+                  key
+              );
+            },
+          })
+        );
       }
       delete this.pendingRequests[id];
     } else {
