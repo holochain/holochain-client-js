@@ -227,6 +227,3 @@ export async function makeCoordinatorZomeBundle(): Promise<CoordinatorBundle> {
     },
   };
 }
-
-export const delay = (ms: number) =>
-  new Promise((resolve) => setTimeout(resolve, ms));
