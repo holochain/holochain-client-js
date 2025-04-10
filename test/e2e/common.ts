@@ -1,7 +1,13 @@
 import assert from "node:assert/strict";
 import { spawn } from "node:child_process";
 import { Test } from "tape";
-import { AdminWebsocket, CellId, CellType, InstalledAppId } from "../../src";
+import {
+  AdminWebsocket,
+  CellId,
+  CellType,
+  InstalledAppId,
+  IssueAppAuthenticationTokenResponse,
+} from "../../src";
 import { AppWebsocket, CoordinatorBundle } from "../../src";
 import fs from "fs";
 
@@ -144,12 +150,13 @@ export const installAppAndDna = async (
   return { installed_app_id, cell_id, client, admin };
 };
 
-export const createAppWsAndInstallApp = async (
+export const createAppInterfaceAndInstallApp = async (
   adminPort: number
 ): Promise<{
   installed_app_id: InstalledAppId;
   cell_id: CellId;
-  client: AppWebsocket;
+  appPort: number;
+  appAuthentication: IssueAppAuthenticationTokenResponse;
   admin: AdminWebsocket;
 }> => {
   const role_name = "foo";
@@ -174,14 +181,27 @@ export const createAppWsAndInstallApp = async (
   const { port: appPort } = await admin.attachAppInterface({
     allowed_origins: "client-test-app",
   });
-  const issued = await admin.issueAppAuthenticationToken({
+  const appAuthentication = await admin.issueAppAuthenticationToken({
     installed_app_id,
   });
+  return { installed_app_id, cell_id, appPort, appAuthentication, admin };
+};
+
+export const createAppWsAndInstallApp = async (
+  adminPort: number
+): Promise<{
+  installed_app_id: InstalledAppId;
+  cell_id: CellId;
+  client: AppWebsocket;
+  admin: AdminWebsocket;
+}> => {
+  const { installed_app_id, cell_id, appPort, appAuthentication, admin } =
+    await createAppInterfaceAndInstallApp(adminPort);
   const client = await AppWebsocket.connect({
     url: new URL(`ws://localhost:${appPort}`),
     wsClientOptions: { origin: "client-test-app" },
     defaultTimeout: 12000,
-    token: issued.token,
+    token: appAuthentication.token,
   });
   return { installed_app_id, cell_id, client, admin };
 };
