@@ -3,7 +3,6 @@
 
   inputs = {
     holonix.url = "github:holochain/holonix?ref=main";
-    holonix.inputs.holochain.url = "github:holochain/holochain?ref=fix/set-crypto-provider-for-tls-connections-in-holochain-binary";
     nixpkgs.follows = "holonix/nixpkgs";
   };
 

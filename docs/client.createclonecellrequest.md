@@ -63,7 +63,7 @@ _(Optional)_ Optionally set a proof of membership for the new cell.
 
 </td><td>
 
-{ network\_seed?: [NetworkSeed](./client.networkseed.md)<!-- -->; properties?: [DnaProperties](./client.dnaproperties.md)<!-- -->; origin\_time?: [Timestamp](./client.timestamp.md)<!-- -->; }
+{ network\_seed?: [NetworkSeed](./client.networkseed.md)<!-- -->; properties?: [DnaProperties](./client.dnaproperties.md)<!-- -->; }
 
 
 </td><td>

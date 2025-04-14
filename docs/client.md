@@ -183,6 +183,15 @@ Decision about an incomplete countersigning session.
 
 
 </td></tr>
+<tr><td>
+
+[SignalType](./client.signaltype.md)
+
+
+</td><td>
+
+
+</td></tr>
 </tbody></table>
 
 ## Functions

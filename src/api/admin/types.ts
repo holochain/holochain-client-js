@@ -203,8 +203,6 @@ export type YamlProperties = unknown;
 export type DnaModifiersOpt = {
   network_seed?: NetworkSeed;
   properties?: YamlProperties;
-  origin_time?: Timestamp;
-  quantum_time?: Duration;
 };
 
 /**
@@ -294,8 +292,6 @@ export type RegisterDnaResponse = HoloHash;
 export type DnaModifiers = {
   network_seed: NetworkSeed;
   properties: Uint8Array;
-  origin_time: Timestamp;
-  quantum_time: Duration;
 };
 
 /**

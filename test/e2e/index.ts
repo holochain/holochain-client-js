@@ -35,6 +35,7 @@ import {
   fakeDnaHash,
   encodeHashToBase64,
   CloneIdHelper,
+  SignalType,
 } from "../../src";
 import {
   FIXTURE_PATH,
@@ -836,7 +837,7 @@ test(
       (resolve) => (resolveSignalPromise = resolve)
     );
     const signalCb = (signal: Signal) => {
-      assert(signal.type === "app");
+      assert(signal.type === SignalType.App);
       t.deepEqual(signal.value, {
         cell_id,
         zome_name: TEST_ZOME_NAME,

@@ -9,12 +9,12 @@
 
 ```typescript
 export type Signal = {
-    type: "app";
+    type: SignalType.App;
     value: AppSignal;
 } | {
-    type: "system";
+    type: SignalType.System;
     value: SystemSignal;
 };
 ```
-**References:** [AppSignal](./client.appsignal.md)<!-- -->, [SystemSignal](./client.systemsignal.md)
+**References:** [SignalType.App](./client.signaltype.md)<!-- -->, [AppSignal](./client.appsignal.md)<!-- -->, [SignalType.System](./client.signaltype.md)<!-- -->, [SystemSignal](./client.systemsignal.md)
 

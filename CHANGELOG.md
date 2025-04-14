@@ -6,6 +6,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Added
 - Tests for magic config variables: `window.__HC_LAUNCHER_ENV__` and `window.__HC_ZOME_CALL_SIGNER__`
+- Added `SignalType` enum
 ### Fixed
 ### Changed
 ### Removed
