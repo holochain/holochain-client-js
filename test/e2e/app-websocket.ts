@@ -83,7 +83,7 @@ test(
   })
 );
 
-test.only(
+test(
   "can receive a signal",
   withConductor(ADMIN_PORT, async (t) => {
     let resolveSignalPromise: (value?: unknown) => void | undefined;
