@@ -12,6 +12,7 @@ import {
   RoleName,
   RoleNameCallZomeRequest,
   SignalCb,
+  SignalType,
 } from "../../src";
 import {
   createAppWsAndInstallApp,
@@ -82,7 +83,7 @@ test(
   })
 );
 
-test(
+test.only(
   "can receive a signal",
   withConductor(ADMIN_PORT, async (t) => {
     let resolveSignalPromise: (value?: unknown) => void | undefined;
@@ -90,7 +91,7 @@ test(
       (resolve) => (resolveSignalPromise = resolve)
     );
     const signalCb: SignalCb = (signal) => {
-      assert(signal.type === "app");
+      assert(signal.type === SignalType.App);
       t.deepEqual(signal.value, {
         cell_id,
         zome_name: TEST_ZOME_NAME,

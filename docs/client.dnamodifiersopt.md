@@ -11,9 +11,7 @@
 export type DnaModifiersOpt = {
     network_seed?: NetworkSeed;
     properties?: YamlProperties;
-    origin_time?: Timestamp;
-    quantum_time?: Duration;
 };
 ```
-**References:** [NetworkSeed](./client.networkseed.md)<!-- -->, [YamlProperties](./client.yamlproperties.md)<!-- -->, [Timestamp](./client.timestamp.md)<!-- -->, [Duration](./client.duration.md)
+**References:** [NetworkSeed](./client.networkseed.md)<!-- -->, [YamlProperties](./client.yamlproperties.md)
 

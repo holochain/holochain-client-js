@@ -126,12 +126,6 @@ export interface CreateCloneCellRequest {
      * override the DNA properties.
      */
     properties?: DnaProperties;
-    /**
-     * The time used to denote the origin of the network, used to calculate
-     * time windows during gossip.
-     * All Action timestamps must come after this time.
-     */
-    origin_time?: Timestamp;
   };
   /**
    * Optionally set a proof of membership for the new cell.
@@ -407,16 +401,21 @@ export type SessionCompletionDecision =
   | SessionCompletionDecisionType.Indeterminate
   | SessionCompletionDecisionType.Failed;
 
+export enum SignalType {
+  App = "app",
+  System = "system",
+}
+
 /**
  * @public
  */
 export type RawSignal =
   | {
-      type: "app";
+      type: SignalType.App;
       value: EncodedAppSignal;
     }
   | {
-      type: "system";
+      type: SignalType.System;
       value: SystemSignal;
     };
 
@@ -425,11 +424,11 @@ export type RawSignal =
  */
 export type Signal =
   | {
-      type: "app";
+      type: SignalType.App;
       value: AppSignal;
     }
   | {
-      type: "system";
+      type: SignalType.System;
       value: SystemSignal;
     };
 

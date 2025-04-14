@@ -12,6 +12,5 @@ Modifiers to set for the new cell. At least one of the modifiers must be set to 
 modifiers: {
         network_seed?: NetworkSeed;
         properties?: DnaProperties;
-        origin_time?: Timestamp;
     };
 ```

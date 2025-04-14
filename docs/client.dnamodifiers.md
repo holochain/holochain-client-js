@@ -11,9 +11,7 @@
 export type DnaModifiers = {
     network_seed: NetworkSeed;
     properties: Uint8Array;
-    origin_time: Timestamp;
-    quantum_time: Duration;
 };
 ```
-**References:** [NetworkSeed](./client.networkseed.md)<!-- -->, [Timestamp](./client.timestamp.md)<!-- -->, [Duration](./client.duration.md)
+**References:** [NetworkSeed](./client.networkseed.md)
 
