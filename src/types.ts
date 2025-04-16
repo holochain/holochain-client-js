@@ -126,18 +126,6 @@ export interface HoloHashed<T> {
 /**
  * @public
  */
-export interface NetworkInfo {
-  fetch_pool_info: FetchPoolInfo;
-  current_number_of_peers: number;
-  arc_size: number;
-  total_network_peers: number;
-  bytes_since_last_time_queried: number;
-  completed_rounds_since_last_time_queried: number;
-}
-
-/**
- * @public
- */
 export interface FetchPoolInfo {
   /// Total number of bytes expected to be received through fetches
   op_bytes_to_fetch: number;

@@ -969,16 +969,6 @@ Summary of a local agent's network state.
 </td></tr>
 <tr><td>
 
-[NetworkInfo](./client.networkinfo.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
 [NetworkMetrics](./client.networkmetrics.md)
 
 
