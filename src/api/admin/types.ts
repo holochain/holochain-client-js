@@ -82,15 +82,17 @@ export type DisabledAppReason =
  */
 export type InstalledAppInfoStatus =
   | {
-      paused: { reason: PausedAppReason };
+      type: "paused";
+      value: { reason: PausedAppReason };
     }
   | {
-      disabled: {
+      type: "disabled";
+      value: {
         reason: DisabledAppReason;
       };
     }
-  | "awaiting_memproofs"
-  | "running";
+  | { type: "awaiting_memproofs" }
+  | { type: "running" };
 /**
  * @public
  */
