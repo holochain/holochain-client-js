@@ -38,7 +38,7 @@ test(
     // @ts-ignore-next-line
     globalThis.window = { Blob };
 
-    const { installed_app_id, cell_id, appPort, appAuthentication } =
+    const { installed_app_id, appPort, appAuthentication } =
       await createAppInterfaceAndInstallApp(ADMIN_PORT);
 
     globalThis.window.__HC_LAUNCHER_ENV__ = {
