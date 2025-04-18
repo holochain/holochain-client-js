@@ -19,7 +19,7 @@ import {
   EnableAppResponse,
   FullStateDump,
   HolochainError,
-  InstalledAppInfoStatus,
+  AppInfoStatus,
   Link,
   RegisterAgentActivity,
   RoleName,
@@ -95,7 +95,7 @@ test(
       installed_app_id,
       agent_key,
     });
-    const status: InstalledAppInfoStatus = installedApp.status;
+    const status: AppInfoStatus = installedApp.status;
     t.deepEqual(
       status,
       { type: "disabled", value: { reason: { type: "never_started" } } },

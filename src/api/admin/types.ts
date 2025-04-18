@@ -56,41 +56,39 @@ export type EnableAppResponse = {
 /**
  * @public
  */
-export type DeactivationReason =
-  | "never_activated"
-  | "normal"
-  | { quarantined: { error: string } };
-
-/**
- * @public
- */
 export type PausedAppReason = {
-  error: string;
+  type: "error";
+  value: string;
 };
 
 /**
  * @public
  */
 export type DisabledAppReason =
-  | "never_started"
-  | "user"
-  | "not_started_after_providing_memproofs"
-  | { error: string };
+  | { type: "never_started" }
+  | { type: "user" }
+  | { type: "not_started_after_providing_memproofs" }
+  | {
+      type: "error";
+      value: string;
+    };
 
 /**
  * @public
  */
-export type InstalledAppInfoStatus =
+export type AppInfoStatus =
   | {
-      paused: { reason: PausedAppReason };
+      type: "paused";
+      value: { reason: PausedAppReason };
     }
   | {
-      disabled: {
+      type: "disabled";
+      value: {
         reason: DisabledAppReason;
       };
     }
-  | "awaiting_memproofs"
-  | "running";
+  | { type: "awaiting_memproofs" }
+  | { type: "running" };
 /**
  * @public
  */
@@ -154,7 +152,7 @@ export type AppInfo = {
   agent_pub_key: AgentPubKey;
   installed_app_id: InstalledAppId;
   cell_info: Record<RoleName, Array<CellInfo>>;
-  status: InstalledAppInfoStatus;
+  status: AppInfoStatus;
   installed_at: Timestamp;
 };
 
