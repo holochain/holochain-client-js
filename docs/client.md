@@ -1536,6 +1536,16 @@ This type is meant to be opaque
 </td></tr>
 <tr><td>
 
+[AppInfoStatus](./client.appinfostatus.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
 [AppManifest](./client.appmanifest.md)
 
 
@@ -1777,16 +1787,6 @@ This type is meant to be opaque
 <tr><td>
 
 [CreateCloneCellResponse](./client.createclonecellresponse.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[DeactivationReason](./client.deactivationreason.md)
 
 
 </td><td>
@@ -2329,16 +2329,6 @@ Cell id for which the countersigning session state is requested.
 <tr><td>
 
 [InstalledAppId](./client.installedappid.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[InstalledAppInfoStatus](./client.installedappinfostatus.md)
 
 
 </td><td>

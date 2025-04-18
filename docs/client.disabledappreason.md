@@ -8,7 +8,14 @@
 **Signature:**
 
 ```typescript
-export type DisabledAppReason = "never_started" | "user" | "not_started_after_providing_memproofs" | {
-    error: string;
+export type DisabledAppReason = {
+    type: "never_started";
+} | {
+    type: "user";
+} | {
+    type: "not_started_after_providing_memproofs";
+} | {
+    type: "error";
+    value: string;
 };
 ```
