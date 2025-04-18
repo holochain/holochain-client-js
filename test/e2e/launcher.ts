@@ -1,5 +1,10 @@
 import test from "tape";
-import { AdminWebsocket, AppWebsocket, CallZomeRequest, CallZomeRequestSigned } from "../../src/index.js";
+import {
+  AdminWebsocket,
+  AppWebsocket,
+  CallZomeRequest,
+  CallZomeRequestSigned,
+} from "../../src/index.js";
 import {
   withConductor,
   createAppInterfaceAndInstallApp,
@@ -33,7 +38,7 @@ test(
     // @ts-ignore-next-line
     globalThis.window = { Blob };
 
-    const { installed_app_id, cell_id, appPort, appAuthentication } =
+    const { installed_app_id, appPort, appAuthentication } =
       await createAppInterfaceAndInstallApp(ADMIN_PORT);
 
     globalThis.window.__HC_LAUNCHER_ENV__ = {
@@ -59,15 +64,15 @@ test(
     let signerWasCalled = false;
 
     globalThis.window.__HC_ZOME_CALL_SIGNER__ = {
-      signZomeCall: async (request: CallZomeRequest) => {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      signZomeCall: async (_request: CallZomeRequest) => {
         signerWasCalled = true;
 
         return {} as CallZomeRequestSigned;
-      }
-    }
+      },
+    };
 
-    const { installed_app_id, cell_id, client } =
-      await createAppWsAndInstallApp(ADMIN_PORT);
+    const { cell_id, client } = await createAppWsAndInstallApp(ADMIN_PORT);
 
     const request: CallZomeRequest = {
       cell_id,
@@ -78,8 +83,9 @@ test(
     };
     try {
       await client.callZome(request, 500);
-    } catch(e) {}
-    
+      // eslint-disable-next-line no-empty
+    } catch (e) {}
+
     t.assert(signerWasCalled, "__HC_ZOME_CALL_SIGNER__.signZomeCall called");
   })
 );

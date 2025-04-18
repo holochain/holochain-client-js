@@ -9,6 +9,7 @@
 
 ```typescript
 export type PausedAppReason = {
-    error: string;
+    type: "error";
+    value: string;
 };
 ```
