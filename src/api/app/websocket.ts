@@ -1,6 +1,6 @@
 import { decode, encode } from "@msgpack/msgpack";
 import Emittery, { UnsubscribeFunction } from "emittery";
-import { sha512 } from "js-sha512";
+import sha512 from "js-sha512";
 import _sodium from "libsodium-wrappers";
 import { omit } from "lodash-es";
 import {
