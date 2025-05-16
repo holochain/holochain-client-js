@@ -9,10 +9,13 @@ The definition of a storage arc compatible with the concept of storage and query
 **Signature:**
 
 ```typescript
-export type DhtArc = {
-    type: "empty";
-} | {
-    type: "arc";
-    value: [number, number];
-};
+export type DhtArc = /**
+ * No DHT locations are contained within this arc.
+ */ null
+/**
+ * A specific range of DHT locations are contained within this arc.
+ *
+ * The lower and upper bounds are inclusive.
+ */
+ | [number, number];
 ```
