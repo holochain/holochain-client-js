@@ -10,6 +10,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Changed
 ### Removed
 
+## 2025-04-22: v0.19.1
+### Fixed
+- Fix the typing for `DhtArc`
 
 ## 2025-04-22: v0.19.0
 
