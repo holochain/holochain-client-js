@@ -1068,22 +1068,17 @@ export interface DumpNetworkMetricsRequest {
  * @public
  */
 export type DhtArc =
-  | {
-      /**
-       * No DHT locations are contained within this arc.
-       */
-      type: "empty";
-    }
-  | {
-      /**
-       * A specific range of DHT locations are contained within this arc.
-       *
-       * The lower and upper bounds are inclusive.
-       */
-      type: "arc";
-      value: [number, number];
-    };
-
+  |
+  /**
+   * No DHT locations are contained within this arc.
+   */
+  null
+  /**
+   * A specific range of DHT locations are contained within this arc.
+   *
+   * The lower and upper bounds are inclusive.
+   */
+  | [number, number];
 /**
  * Summary of a local agent's network state.
  *
