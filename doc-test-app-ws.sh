@@ -8,8 +8,6 @@ HC_ID=$!
 echo "HC_ID is $HC_ID"
 sleep 5
 
-set +e
-
 npm run build
 npx tsx doc-test-app-ws.ts
 
