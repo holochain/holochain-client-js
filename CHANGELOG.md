@@ -4,10 +4,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## \[Unreleased\]
 
-
 ### Added
+- AppWebsocket call to query agent infos
+- bootstrap-srv to Nix flake
 ### Fixed
+- Set request param to `DnaHash[]` for agent info request in AdminWebsocket.
+- Replace `bundle` by `path` in manifests.
+- Set `GetOptions` for `delete_link`
+- Tests of examples in README didn't return error exit codes. A breaking change went unnoticed. Tests now return error code and examples are up-to-date.
 ### Changed
+- Run all tests with local bootstrap and signaling services.
+- Upgrade to HDK 0.6.0
 ### Removed
 
 ## 2025-04-22: v0.19.1
