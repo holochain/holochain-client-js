@@ -8,7 +8,7 @@ roles:
       strategy: create
       deferred: false
     dna:
-      bundled: ./test.dna
+      path: ./test.dna
       modifiers:
         properties: ~
         network_seed: ~
