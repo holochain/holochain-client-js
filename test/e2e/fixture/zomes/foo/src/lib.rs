@@ -126,7 +126,7 @@ pub fn create_and_delete_link() -> ExternResult<ActionHash> {
     let link_base = agent_info()?.agent_initial_pubkey;
     let link_target = link_base.clone();
     let create_link_action_hash = create_link(link_base.clone(), link_target, LinkTypes::A, ())?;
-    delete_link(create_link_action_hash.clone())
+    delete_link(create_link_action_hash.clone(), GetOptions::local())
 }
 
 #[hdk_extern]
