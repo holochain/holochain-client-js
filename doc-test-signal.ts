@@ -8,15 +8,18 @@ const agent_key = await adminWs.generateAgentPubKey();
 const role_name = "foo";
 const installed_app_id = "test-app";
 const appInfo = await adminWs.installApp({
+  source: {
+    type: "path",
+    value: "./test/e2e/fixture/test.happ",
+  },
   agent_key,
-  path: "./test/e2e/fixture/test.happ",
   installed_app_id,
 });
 await adminWs.enableApp({ installed_app_id });
-if (!(CellType.Provisioned in appInfo.cell_info[role_name][0])) {
+if (appInfo.cell_info[role_name][0].type !== CellType.Provisioned) {
   throw new Error(`No cell found under role name ${role_name}`);
 }
-const { cell_id } = appInfo.cell_info[role_name][0][CellType.Provisioned];
+const { cell_id } = appInfo.cell_info[role_name][0].value;
 await adminWs.authorizeSigningCredentials(cell_id);
 await adminWs.attachAppInterface({ port: 65001, allowed_origins: "my-happ" });
 const issuedToken = await adminWs.issueAppAuthenticationToken({
