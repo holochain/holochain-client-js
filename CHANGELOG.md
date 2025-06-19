@@ -4,10 +4,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## \[Unreleased\]
 
-
 ### Added
+- bootstrap-srv to Nix flake
 ### Fixed
+- Tests of examples in README didn't return error exit codes. A breaking change went unnoticed. Tests now return error code and examples are up-to-date.
 ### Changed
+- Run all tests with local bootstrap and signaling services.
 ### Removed
 
 ## 2025-04-22: v0.19.1
