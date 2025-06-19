@@ -5,6 +5,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## \[Unreleased\]
 
 ### Added
+### Fixed
+### Changed
+### Removed
+
+## 2025-06-19: v0.20.0-dev.0
+### Added
 - AppWebsocket call to query agent infos
 - bootstrap-srv to Nix flake
 ### Fixed
@@ -15,7 +21,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Changed
 - Run all tests with local bootstrap and signaling services.
 - Upgrade to HDK 0.6.0
-### Removed
 
 ## 2025-04-22: v0.19.1
 ### Fixed
