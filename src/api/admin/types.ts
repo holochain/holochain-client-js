@@ -6,7 +6,6 @@ import {
   DnaHash,
   DnaHashB64,
   DnaProperties,
-  Duration,
   HoloHash,
   HoloHashB64,
   InstalledAppId,
@@ -637,7 +636,7 @@ export type AgentInfoSigned = unknown;
 /**
  * @public
  */
-export type AgentInfoRequest = { cell_id: CellId | null };
+export type AgentInfoRequest = { dna_hashes: DnaHash[] | null };
 
 /**
  * @public
@@ -1068,8 +1067,7 @@ export interface DumpNetworkMetricsRequest {
  * @public
  */
 export type DhtArc =
-  |
-  /**
+  | /**
    * No DHT locations are contained within this arc.
    */
   null
