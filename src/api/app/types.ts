@@ -401,6 +401,9 @@ export type SessionCompletionDecision =
   | SessionCompletionDecisionType.Indeterminate
   | SessionCompletionDecisionType.Failed;
 
+/**
+ * @public
+ */
 export enum SignalType {
   App = "app",
   System = "system",
