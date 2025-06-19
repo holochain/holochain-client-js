@@ -1,23 +1,86 @@
+import fs from "fs";
 import assert from "node:assert/strict";
-import { spawn } from "node:child_process";
+import { ChildProcessWithoutNullStreams, spawn } from "node:child_process";
 import { Test } from "tape";
 import {
   AdminWebsocket,
+  AppWebsocket,
   CellId,
   CellType,
+  CoordinatorBundle,
   InstalledAppId,
   IssueAppAuthenticationTokenResponse,
 } from "../../src";
-import { AppWebsocket, CoordinatorBundle } from "../../src";
-import fs from "fs";
 
 export const FIXTURE_PATH = "./test/e2e/fixture";
 
+const BOOTSTRAP_SERVER_STARTUP_STRING = "#kitsune2_bootstrap_srv#listening#";
 const LAIR_PASSPHRASE = "passphrase";
 
-export const launch = async (port: number) => {
+export const runLocalServices = async () => {
+  const servicesProcess = spawn("kitsune2-bootstrap-srv");
+  return new Promise<{
+    servicesProcess: ChildProcessWithoutNullStreams;
+    bootstrapServerUrl: URL;
+    signalingServerUrl: URL;
+  }>((resolve, reject) => {
+    servicesProcess.on("error", () => {
+      reject("Failed to spawn kitsune2-bootstrap-srv");
+    });
+    servicesProcess.stdout.on("data", (data: Buffer) => {
+      console.log(data.toString());
+      const processData = data.toString();
+      if (processData.includes(BOOTSTRAP_SERVER_STARTUP_STRING)) {
+        const listeningAddress = processData
+          .split(BOOTSTRAP_SERVER_STARTUP_STRING)[1]
+          .split("#")[0];
+        const bootstrapServerUrl = new URL(`http://${listeningAddress}`);
+        const signalingServerUrl = new URL(`ws://${listeningAddress}`);
+        resolve({
+          servicesProcess,
+          bootstrapServerUrl,
+          signalingServerUrl,
+        });
+      }
+    });
+    servicesProcess.stderr.on("data", (data) => console.log(data.toString()));
+  });
+};
+
+export const stopLocalServices = (
+  localServicesProcess: ChildProcessWithoutNullStreams
+) => {
+  if (localServicesProcess.pid === undefined) {
+    return null;
+  }
+  return new Promise<number | null>((resolve) => {
+    localServicesProcess.on("exit", (code) => {
+      localServicesProcess?.removeAllListeners();
+      localServicesProcess?.stdout.removeAllListeners();
+      localServicesProcess?.stderr.removeAllListeners();
+      resolve(code);
+    });
+    localServicesProcess.kill();
+  });
+};
+
+export const launch = async (
+  port: number,
+  bootstrapServerUrl: URL,
+  signalingServerUrl: URL
+) => {
   // create sandbox conductor
-  const args = ["sandbox", "--piped", "create", "--in-process-lair"];
+  const args = [
+    "sandbox",
+    "--piped",
+    "create",
+    "--in-process-lair",
+    "network",
+    "--bootstrap",
+    bootstrapServerUrl.href,
+    "webrtc",
+    signalingServerUrl.href,
+  ];
   const createConductorProcess = spawn("hc", args);
   createConductorProcess.stdin.write(LAIR_PASSPHRASE);
   createConductorProcess.stdin.end();
@@ -83,13 +146,21 @@ export const cleanSandboxConductors = () => {
 
 export const withConductor =
   (port: number, f: (t: Test) => Promise<void>) => async (t: Test) => {
-    const conductorProcess = await launch(port);
+    // Start local bootstrap + signaling server
+    const localServices = await runLocalServices();
+    // Start conductor
+    const conductorProcess = await launch(
+      port,
+      localServices.bootstrapServerUrl,
+      localServices.signalingServerUrl
+    );
     try {
       await f(t);
     } catch (e) {
       console.error("Test caught exception: ", e);
       throw e;
     } finally {
+      await stopLocalServices(localServices.servicesProcess);
       if (conductorProcess.pid && !conductorProcess.killed) {
         process.kill(-conductorProcess.pid);
       }
