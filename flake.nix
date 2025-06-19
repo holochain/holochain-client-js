@@ -17,6 +17,7 @@
             packages = [
               inputs'.holonix.packages.holochain
               inputs'.holonix.packages.hc
+              inputs'.holonix.packages.bootstrap-srv
               inputs'.holonix.packages.lair-keystore
               inputs'.holonix.packages.rust
               # add further packages from nixpkgs
