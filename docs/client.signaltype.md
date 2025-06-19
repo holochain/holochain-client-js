@@ -4,6 +4,7 @@
 
 ## SignalType enum
 
+
 **Signature:**
 
 ```typescript
