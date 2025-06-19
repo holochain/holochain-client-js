@@ -43,6 +43,8 @@ import {
   installAppAndDna,
   launch,
   makeCoordinatorZomeBundle,
+  runLocalServices,
+  stopLocalServices,
   withConductor,
 } from "./common.js";
 
@@ -902,7 +904,12 @@ test(
 );
 
 test("can inject agents", async (t) => {
-  const conductor1 = await launch(ADMIN_PORT);
+  const localServices = await runLocalServices();
+  const conductor1 = await launch(
+    ADMIN_PORT,
+    localServices.bootstrapServerUrl,
+    localServices.signalingServerUrl
+  );
   const installed_app_id = "app";
   const admin1 = await AdminWebsocket.connect({
     url: ADMIN_WS_URL,
@@ -945,7 +952,11 @@ test("can inject agents", async (t) => {
   });
   t.deepEqual(cellAgentInfos, agentInfos1);
 
-  const conductor2 = await launch(ADMIN_PORT_1);
+  const conductor2 = await launch(
+    ADMIN_PORT_1,
+    localServices.bootstrapServerUrl,
+    localServices.signalingServerUrl
+  );
   const admin2 = await AdminWebsocket.connect({
     url: new URL(`ws://localhost:${ADMIN_PORT_1}`),
     wsClientOptions: { origin: "client-test-admin" },
@@ -956,8 +967,12 @@ test("can inject agents", async (t) => {
 
   await admin2.addAgentInfo({ agent_infos: agentInfos1 });
   agentInfos2 = await admin2.agentInfo({ cell_id: null });
-  t.assert(agentInfos2.length === 1);
+  t.assert(
+    agentInfos2.length === 1,
+    "number of agent infos on conductor 2 is 1"
+  );
 
+  await stopLocalServices(localServices.servicesProcess);
   if (conductor1.pid) {
     process.kill(-conductor1.pid);
   }
