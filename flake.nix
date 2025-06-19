@@ -2,7 +2,7 @@
   description = "Nix shell for Holochain app development";
 
   inputs = {
-    holonix.url = "github:holochain/holonix?ref=main";
+    holonix.url = "github:holochain/holonix?ref=main-0.5";
     nixpkgs.follows = "holonix/nixpkgs";
   };
 
@@ -16,6 +16,7 @@
           devShells.default = pkgs.mkShell {
             packages = [
               inputs'.holonix.packages.holochain
+              inputs'.holonix.packages.hc
               inputs'.holonix.packages.lair-keystore
               inputs'.holonix.packages.rust
               # add further packages from nixpkgs
