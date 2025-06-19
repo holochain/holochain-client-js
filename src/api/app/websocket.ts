@@ -314,7 +314,8 @@ export class AppWebsocket implements AppClient {
   /**
    * Request the currently known agents of the app.
    *
-   * @returns The app's {@link AgentInfo}.
+   * @param req - An array of DNA hashes or null
+   * @returns The app's agent infos as JSON string.
    */
   async agentInfo(req: AgentInfoRequest, timeout?: number) {
     const agentInfos = await this.agentInfoRequester(req, timeout);

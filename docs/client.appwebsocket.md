@@ -168,6 +168,20 @@ In the countersigning workflow it will first be attempted to resolve the session
 </td></tr>
 <tr><td>
 
+[agentInfo(req, timeout)](./client.appwebsocket.agentinfo.md)
+
+
+</td><td>
+
+
+</td><td>
+
+Request the currently known agents of the app.
+
+
+</td></tr>
+<tr><td>
+
 [appInfo(timeout)](./client.appwebsocket.appinfo.md)
 
 
