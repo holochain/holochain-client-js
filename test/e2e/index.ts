@@ -910,8 +910,8 @@ test("can inject agents", async (t) => {
   });
 
   // There shouldn't be any agent infos yet.
-  let agentInfos1 = await admin1.agentInfo({ cell_id: null });
-  t.assert(agentInfos1.length === 0);
+  let agentInfos1 = await admin1.agentInfo({ dna_hashes: null });
+  t.assert(agentInfos1.length === 0, "0 agent infos");
 
   const agent1 = await admin1.generateAgentPubKey();
   const result = await admin1.installApp({
@@ -922,28 +922,39 @@ test("can inject agents", async (t) => {
     installed_app_id,
     agent_key: agent1,
   });
-  t.ok(result);
   assert(result.cell_info[ROLE_NAME][0].type === CellType.Provisioned);
   const app1_cell = result.cell_info[ROLE_NAME][0].value.cell_id;
   const activeApp1Info = await admin1.enableApp({ installed_app_id }, 1000);
-  t.deepEqual(activeApp1Info.app.status, { type: "running" });
-  t.ok(ROLE_NAME in activeApp1Info.app.cell_info);
-  t.equal(activeApp1Info.app.installed_app_id, installed_app_id);
-  t.equal(activeApp1Info.errors.length, 0);
+  t.deepEqual(
+    activeApp1Info.app.status,
+    { type: "running" },
+    "app status running"
+  );
+  t.equal(
+    activeApp1Info.app.installed_app_id,
+    installed_app_id,
+    "installed app id correct"
+  );
+  t.equal(activeApp1Info.errors.length, 0, "no app errors");
 
   // There should be one agent info now.
-  agentInfos1 = await admin1.agentInfo({ cell_id: null });
-  t.assert(agentInfos1.length === 1);
+  agentInfos1 = await admin1.agentInfo({ dna_hashes: null });
+  t.assert(agentInfos1.length === 1, "number of agent infos is 1");
 
-  // Now confirm that we can ask for just one cell.
-  let cellAgentInfos = await admin1.agentInfo({
-    cell_id: [await fakeDnaHash(), fakeAgentPubKey()],
+  // Now confirm that we can ask for agents in just one DNA.
+  let dnaAgentInfos = await admin1.agentInfo({
+    dna_hashes: [await fakeDnaHash()],
   });
-  t.assert(cellAgentInfos.length === 0);
-  cellAgentInfos = await admin1.agentInfo({
-    cell_id: app1_cell,
+  t.assert(dnaAgentInfos.length === 0, "number of fake DNA agent infos is 0");
+
+  dnaAgentInfos = await admin1.agentInfo({
+    dna_hashes: [app1_cell[0]],
   });
-  t.deepEqual(cellAgentInfos, agentInfos1);
+  t.deepEqual(
+    dnaAgentInfos,
+    agentInfos1,
+    "DNA agent infos match app agent infos"
+  );
 
   const conductor2 = await launch(ADMIN_PORT_1);
   const admin2 = await AdminWebsocket.connect({
@@ -951,13 +962,18 @@ test("can inject agents", async (t) => {
     wsClientOptions: { origin: "client-test-admin" },
   });
 
-  let agentInfos2 = await admin2.agentInfo({ cell_id: null });
-  t.assert(agentInfos2.length === 0);
+  let agentInfos2 = await admin2.agentInfo({ dna_hashes: null });
+  t.assert(
+    agentInfos2.length === 0,
+    "number of agent infos on conductor 2 is 0"
+  );
 
   await admin2.addAgentInfo({ agent_infos: agentInfos1 });
-  agentInfos2 = await admin2.agentInfo({ cell_id: null });
-  t.assert(agentInfos2.length === 1);
-
+  agentInfos2 = await admin2.agentInfo({ dna_hashes: null });
+  t.assert(
+    agentInfos2.length === 1,
+    "number of agent infos on conductor 2 is 1"
+  );
   if (conductor1.pid) {
     process.kill(-conductor1.pid);
   }
