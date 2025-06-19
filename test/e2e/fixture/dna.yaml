@@ -5,4 +5,4 @@ integrity:
   network_seed: 9a28aac8-337c-11eb-adc1-0Z02acw20115
   zomes:
     - name: foo
-      bundled: "../../../target/wasm32-unknown-unknown/release/test_wasm_foo.wasm"
+      path: "../../../target/wasm32-unknown-unknown/release/test_wasm_foo.wasm"

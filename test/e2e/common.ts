@@ -216,7 +216,7 @@ export async function makeCoordinatorZomeBundle(): Promise<CoordinatorBundle> {
     manifest: {
       zomes: [
         {
-          bundled: "coordinator2",
+          path: "coordinator2",
           name: "coordinator2",
           dependencies: [],
         },

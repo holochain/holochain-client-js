@@ -647,7 +647,7 @@ test(
               deferred: false,
             },
             dna: {
-              bundled: "dna_1",
+              path: "dna_1",
               modifiers: { network_seed: "some_seed" },
             },
           },
