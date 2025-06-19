@@ -9,9 +9,11 @@ The definition of a storage arc compatible with the concept of storage and query
 **Signature:**
 
 ```typescript
-export type DhtArc = /**
+export type DhtArc = 
+/**
  * No DHT locations are contained within this arc.
- */ null
+ */
+null
 /**
  * A specific range of DHT locations are contained within this arc.
  *
