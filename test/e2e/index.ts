@@ -43,6 +43,8 @@ import {
   installAppAndDna,
   launch,
   makeCoordinatorZomeBundle,
+  runLocalServices,
+  stopLocalServices,
   withConductor,
 } from "./common.js";
 
@@ -902,7 +904,12 @@ test(
 );
 
 test("can inject agents", async (t) => {
-  const conductor1 = await launch(ADMIN_PORT);
+  const localServices = await runLocalServices();
+  const conductor1 = await launch(
+    ADMIN_PORT,
+    localServices.bootstrapServerUrl,
+    localServices.signalingServerUrl
+  );
   const installed_app_id = "app";
   const admin1 = await AdminWebsocket.connect({
     url: ADMIN_WS_URL,
@@ -956,7 +963,11 @@ test("can inject agents", async (t) => {
     "DNA agent infos match app agent infos"
   );
 
-  const conductor2 = await launch(ADMIN_PORT_1);
+  const conductor2 = await launch(
+    ADMIN_PORT_1,
+    localServices.bootstrapServerUrl,
+    localServices.signalingServerUrl
+  );
   const admin2 = await AdminWebsocket.connect({
     url: new URL(`ws://localhost:${ADMIN_PORT_1}`),
     wsClientOptions: { origin: "client-test-admin" },
@@ -974,6 +985,8 @@ test("can inject agents", async (t) => {
     agentInfos2.length === 1,
     "number of agent infos on conductor 2 is 1"
   );
+
+  await stopLocalServices(localServices.servicesProcess);
   if (conductor1.pid) {
     process.kill(-conductor1.pid);
   }
@@ -982,6 +995,39 @@ test("can inject agents", async (t) => {
   }
   await cleanSandboxConductors();
 });
+
+test(
+  "can query agents over app ws",
+  withConductor(ADMIN_PORT, async (t) => {
+    const { client, admin, cell_id } = await installAppAndDna(ADMIN_PORT);
+    await admin.authorizeSigningCredentials(cell_id);
+
+    // There should be one agent info.
+    const agentInfos = await client.agentInfo({ dna_hashes: null });
+    t.assert(agentInfos.length === 1, "number of agent infos of app is 1");
+
+    const agentInfosForFakeDna = await client.agentInfo({
+      dna_hashes: [await fakeDnaHash()],
+    });
+    t.assert(
+      agentInfosForFakeDna.length === 0,
+      "number of agent infos for fake DNA is 0"
+    );
+
+    const appInfo = await client.appInfo();
+    const cell = appInfo.cell_info[ROLE_NAME][0];
+    assert(cell.type === CellType.Provisioned);
+    const dnaHash = cell.value.cell_id[0];
+    const agentInfosForDna = await client.agentInfo({
+      dna_hashes: [dnaHash],
+    });
+    t.assert(
+      agentInfosForDna.length === 1,
+      "number of agent infos for app's DNA is 1"
+    );
+    t.deepEqual(agentInfos, agentInfosForDna);
+  })
+);
 
 test(
   "create link",
