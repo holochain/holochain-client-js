@@ -983,6 +983,39 @@ test("can inject agents", async (t) => {
 });
 
 test(
+  "can query agents over app ws",
+  withConductor(ADMIN_PORT, async (t) => {
+    const { client, admin, cell_id } = await installAppAndDna(ADMIN_PORT);
+    await admin.authorizeSigningCredentials(cell_id);
+
+    // There should be one agent info.
+    const agentInfos = await client.agentInfo({ dna_hashes: null });
+    t.assert(agentInfos.length === 1, "number of agent infos of app is 1");
+
+    const agentInfosForFakeDna = await client.agentInfo({
+      dna_hashes: [await fakeDnaHash()],
+    });
+    t.assert(
+      agentInfosForFakeDna.length === 0,
+      "number of agent infos for fake DNA is 0"
+    );
+
+    const appInfo = await client.appInfo();
+    const cell = appInfo.cell_info[ROLE_NAME][0];
+    assert(cell.type === CellType.Provisioned);
+    const dnaHash = cell.value.cell_id[0];
+    const agentInfosForDna = await client.agentInfo({
+      dna_hashes: [dnaHash],
+    });
+    t.assert(
+      agentInfosForDna.length === 1,
+      "number of agent infos for app's DNA is 1"
+    );
+    t.deepEqual(agentInfos, agentInfosForDna);
+  })
+);
+
+test(
   "create link",
   withConductor(ADMIN_PORT, async (t) => {
     const { cell_id, client, admin } = await installAppAndDna(ADMIN_PORT);

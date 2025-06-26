@@ -10,6 +10,7 @@ import {
 import { AgentPubKey, InstalledAppId, RoleName } from "../../types.js";
 import { encodeHashToBase64 } from "../../utils/index.js";
 import {
+  AgentInfoResponse,
   AppInfo,
   CellType,
   // Required to TSDoc generation.
@@ -41,6 +42,7 @@ import {
 import {
   AbandonCountersigningSessionStateRequest,
   AbandonCountersigningSessionStateResponse,
+  AppAgentInfoRequest,
   AppClient,
   AppEvents,
   AppInfoResponse,
@@ -91,6 +93,10 @@ export class AppWebsocket implements AppClient {
   cachedAppInfo?: AppInfo | null;
 
   private readonly appInfoRequester: Requester<null, AppInfoResponse>;
+  private readonly agentInfoRequester: Requester<
+    AppAgentInfoRequest,
+    AgentInfoResponse
+  >;
   private readonly callZomeRequester: Requester<
     CallZomeRequest | CallZomeRequestSigned,
     CallZomeResponse
@@ -150,6 +156,11 @@ export class AppWebsocket implements AppClient {
     this.appInfoRequester = AppWebsocket.requester(
       this.client,
       "app_info",
+      this.defaultTimeout
+    );
+    this.agentInfoRequester = AppWebsocket.requester(
+      this.client,
+      "agent_info",
       this.defaultTimeout
     );
     this.callZomeRequester = AppWebsocket.requester(
@@ -298,6 +309,17 @@ export class AppWebsocket implements AppClient {
 
     this.cachedAppInfo = appInfo;
     return appInfo;
+  }
+
+  /**
+   * Request the currently known agents of the app.
+   *
+   * @param req - An array of DNA hashes or null
+   * @returns The app's agent infos as JSON string.
+   */
+  async agentInfo(req: AppAgentInfoRequest, timeout?: number) {
+    const agentInfos = await this.agentInfoRequester(req, timeout);
+    return agentInfos;
   }
 
   /**

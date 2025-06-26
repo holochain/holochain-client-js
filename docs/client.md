@@ -1477,6 +1477,16 @@ This type is meant to be opaque
 </td></tr>
 <tr><td>
 
+[AppAgentInfoRequest](./client.appagentinforequest.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
 [AppAuthenticationToken](./client.appauthenticationtoken.md)
 
 

@@ -85,6 +85,11 @@ export type AppInfoResponse = AppInfo | null;
 /**
  * @public
  */
+export type AppAgentInfoRequest = { dna_hashes: DnaHash[] | null };
+
+/**
+ * @public
+ */
 export type ProvideMemproofsRequest = MemproofMap;
 /**
  * @public

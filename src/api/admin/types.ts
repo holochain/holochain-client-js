@@ -1068,8 +1068,7 @@ export interface DumpNetworkMetricsRequest {
  * @public
  */
 export type DhtArc =
-  |
-  /**
+  | /**
    * No DHT locations are contained within this arc.
    */
   null
