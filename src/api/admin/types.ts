@@ -657,6 +657,30 @@ export type AddAgentInfoResponse = unknown;
 /**
  * @public
  */
+export interface AgentMetaInfoRequest {
+  url: string;
+  dna_hashes?: DnaHash[];
+}
+
+/**
+ * @public
+ */
+export type AgentMetaInfoResponse = Record<
+  DnaHashB64,
+  Record<string, AgentMetaInfo>
+>;
+
+/**
+ * @public
+ */
+export interface AgentMetaInfo {
+  meta_value: string;
+  expires_at: number;
+}
+
+/**
+ * @public
+ */
 export interface DeleteCloneCellRequest {
   /**
    * The app id that the clone cell belongs to

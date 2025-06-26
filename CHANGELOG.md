@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Added
 - bootstrap-srv to Nix flake
 - Add `AgentInfo` call to the conductor's app interface to retrieve the discovered peers of the app's various DNAs.
+- Add `AgentMetaInfo` calls to the conductor's app and admin interfaces to retrieve info about peers from the peer meta store.
 ### Fixed
 - Tests of examples in README didn't return error exit codes. A breaking change went unnoticed. Tests now return error code and examples are up-to-date.
 ### Changed

@@ -36,13 +36,16 @@ import {
   encodeHashToBase64,
   CloneIdHelper,
   SignalType,
+  Record,
 } from "../../src";
 import {
   FIXTURE_PATH,
   cleanSandboxConductors,
+  createAppWsAndInstallApp,
   installAppAndDna,
   launch,
   makeCoordinatorZomeBundle,
+  retryUntilTimeout,
   runLocalServices,
   stopLocalServices,
   withConductor,
@@ -971,6 +974,100 @@ test("can inject agents", async (t) => {
     agentInfos2.length === 1,
     "number of agent infos on conductor 2 is 1"
   );
+
+  await stopLocalServices(localServices.servicesProcess);
+  if (conductor1.pid) {
+    process.kill(-conductor1.pid);
+  }
+  if (conductor2.pid) {
+    process.kill(-conductor2.pid);
+  }
+  await cleanSandboxConductors();
+});
+
+test("can query agent meta info over admin and app websocket", async (t) => {
+  const localServices = await runLocalServices();
+  const conductor1 = await launch(
+    ADMIN_PORT,
+    localServices.bootstrapServerUrl,
+    localServices.signalingServerUrl
+  );
+  const {
+    cell_id: cell_id1,
+    client: appClient1,
+    admin: admin1,
+  } = await createAppWsAndInstallApp(ADMIN_PORT);
+
+  await admin1.authorizeSigningCredentials(cell_id1);
+
+  // Retrieve the peer URL of the agent
+  const agentInfos1 = await admin1.agentInfo({ cell_id: null });
+  const agentInfo1 = JSON.parse(agentInfos1[0]).agentInfo;
+  const agentUrl1 = JSON.parse(agentInfo1).url;
+  console.log("agentUrl1: ", agentUrl1);
+
+  // Start a second conductor and install the same app
+  const conductor2 = await launch(
+    ADMIN_PORT_1,
+    localServices.bootstrapServerUrl,
+    localServices.signalingServerUrl
+  );
+
+  const {
+    cell_id: cell_id2,
+    client: appClient2,
+    admin: admin2,
+  } = await createAppWsAndInstallApp(ADMIN_PORT_1);
+
+  await admin2.authorizeSigningCredentials(cell_id2);
+
+  // Now create an entry with agent 1 to get some gossip flowing
+  const acionHash = await appClient1.callZome({
+    cell_id: cell_id1,
+    provenance: cell_id1[1],
+    zome_name: TEST_ZOME_NAME,
+    fn_name: "create_an_entry",
+    payload: null,
+  });
+
+  // Wait until the second agent can get it to make sure that they
+  // have exchanged peer info
+  await retryUntilTimeout<Record>(
+    () =>
+      appClient2.callZome({
+        cell_id: cell_id2,
+        provenance: cell_id2[1],
+        zome_name: TEST_ZOME_NAME,
+        fn_name: "get_an_entry",
+        payload: acionHash,
+      }),
+    null,
+    "agent 2 wasn't able to get the entry of agent 1",
+    200,
+    20_000
+  );
+
+  // Now have agent 2 get peer meta info for agent 1 via the admin websocket
+  const agentMetaInfos = await admin2.agentMetaInfo({ url: agentUrl1 });
+
+  // Check that it contains gossip meta info
+  const metaInfosForDna = agentMetaInfos[encodeHashToBase64(cell_id2[0])];
+  t.assert(metaInfosForDna);
+  t.assert(metaInfosForDna["gossip:completed_rounds"].meta_value);
+  t.assert(metaInfosForDna["gossip:completed_rounds"].expires_at);
+  t.assert(metaInfosForDna["gossip:last_timestamp"].meta_value);
+  t.assert(metaInfosForDna["gossip:last_timestamp"].expires_at);
+
+  // Now have agent 2 get peer meta info for agent 1 via the app websocket
+  const agentMetaInfosApp = await appClient2.agentMetaInfo({ url: agentUrl1 });
+
+  // Check that it contains gossip meta info
+  const metaInfosForDnaApp = agentMetaInfosApp[encodeHashToBase64(cell_id2[0])];
+  t.assert(metaInfosForDnaApp);
+  t.assert(metaInfosForDnaApp["gossip:completed_rounds"].meta_value);
+  t.assert(metaInfosForDnaApp["gossip:completed_rounds"].expires_at);
+  t.assert(metaInfosForDnaApp["gossip:last_timestamp"].meta_value);
+  t.assert(metaInfosForDnaApp["gossip:last_timestamp"].expires_at);
 
   await stopLocalServices(localServices.servicesProcess);
   if (conductor1.pid) {
