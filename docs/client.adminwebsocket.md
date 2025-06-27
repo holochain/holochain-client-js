@@ -76,6 +76,25 @@ Request all available info about an agent.
 </td></tr>
 <tr><td>
 
+[agentMetaInfo](./client.adminwebsocket.agentmetainfo.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[Requester](./client.requester.md)<!-- -->&lt;[AgentMetaInfoRequest](./client.agentmetainforequest.md)<!-- -->, [AgentMetaInfoReqsponse](./client.agentmetainforeqsponse.md)<!-- -->&gt;
+
+
+</td><td>
+
+Request agent meta info about an agent.
+
+
+</td></tr>
+<tr><td>
+
 [attachAppInterface](./client.adminwebsocket.attachappinterface.md)
 
 

@@ -11,6 +11,7 @@ import { AgentPubKey, InstalledAppId, RoleName } from "../../types.js";
 import { encodeHashToBase64 } from "../../utils/index.js";
 import {
   AgentInfoResponse,
+  AgentMetaInfoRequest,
   AppInfo,
   CellType,
   // Required to TSDoc generation.
@@ -97,6 +98,10 @@ export class AppWebsocket implements AppClient {
     AppAgentInfoRequest,
     AgentInfoResponse
   >;
+  private readonly agentMetaInfoRequester: Requester<
+    AgentMetaInfoRequest,
+    AgentInfoResponse
+  >;
   private readonly callZomeRequester: Requester<
     CallZomeRequest | CallZomeRequestSigned,
     CallZomeResponse
@@ -161,6 +166,11 @@ export class AppWebsocket implements AppClient {
     this.agentInfoRequester = AppWebsocket.requester(
       this.client,
       "agent_info",
+      this.defaultTimeout
+    );
+    this.agentMetaInfoRequester = AppWebsocket.requester(
+      this.client,
+      "agent_meta_info",
       this.defaultTimeout
     );
     this.callZomeRequester = AppWebsocket.requester(
@@ -319,6 +329,17 @@ export class AppWebsocket implements AppClient {
    */
   async agentInfo(req: AppAgentInfoRequest, timeout?: number) {
     const agentInfos = await this.agentInfoRequester(req, timeout);
+    return agentInfos;
+  }
+
+  /**
+   * Request agent meta info for an agent by peer Url.
+   *
+   * @param req - The peer Url of the agent and an optional array of DNA hashes
+   * @returns The app's agent infos as JSON string.
+   */
+  async agentMetaInfo(req: AgentMetaInfoRequest, timeout?: number) {
+    const agentInfos = await this.agentMetaInfoRequester(req, timeout);
     return agentInfos;
   }
 

@@ -53,6 +53,11 @@ fn create_an_entry() -> ExternResult<ActionHash> {
 }
 
 #[hdk_extern]
+fn get_an_entry(action_hash: ActionHash) -> ExternResult<Option<Record>> {
+    get(action_hash, GetOptions::network())
+}
+
+#[hdk_extern]
 fn emitter() -> ExternResult<TestString> {
     match emit_signal(&TestString::from(String::from("i am a signal"))) {
         Ok(()) => Ok(TestString::from(String::from("bar"))),
