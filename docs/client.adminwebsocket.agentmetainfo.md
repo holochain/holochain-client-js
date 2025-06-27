@@ -9,5 +9,5 @@ Request agent meta info about an agent.
 **Signature:**
 
 ```typescript
-agentMetaInfo: Requester<AgentMetaInfoRequest, AgentMetaInfoReqsponse>;
+agentMetaInfo: Requester<AgentMetaInfoRequest, AgentMetaInfoResponse>;
 ```
