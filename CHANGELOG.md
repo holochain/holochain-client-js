@@ -10,6 +10,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Add `AgentMetaInfo` calls to the conductor's app and admin interfaces to retrieve info about peers from the peer meta store.
 ### Fixed
 - Tests of examples in README didn't return error exit codes. A breaking change went unnoticed. Tests now return error code and examples are up-to-date.
+- Fixed the logic to reconnect the AppWebsocket automatically in the browser ([#354](https://github.com/holochain/holochain-client-js/pull/354))
 ### Changed
 - Run all tests with local bootstrap and signaling services.
 ### Removed
