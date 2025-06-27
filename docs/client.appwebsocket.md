@@ -182,6 +182,20 @@ Request the currently known agents of the app.
 </td></tr>
 <tr><td>
 
+[agentMetaInfo(req, timeout)](./client.appwebsocket.agentmetainfo.md)
+
+
+</td><td>
+
+
+</td><td>
+
+Request agent meta info for an agent by peer Url.
+
+
+</td></tr>
+<tr><td>
+
 [appInfo(timeout)](./client.appwebsocket.appinfo.md)
 
 

@@ -1427,6 +1427,36 @@ This type is meant to be opaque
 </td></tr>
 <tr><td>
 
+[AgentMetaInfo](./client.agentmetainfo.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[AgentMetaInfoReqsponse](./client.agentmetainforeqsponse.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[AgentMetaInfoRequest](./client.agentmetainforequest.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
 [AgentPubKey](./client.agentpubkey.md)
 
 
@@ -1468,6 +1498,16 @@ This type is meant to be opaque
 <tr><td>
 
 [AnyLinkableHash](./client.anylinkablehash.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[AppAgentInfoRequest](./client.appagentinforequest.md)
 
 
 </td><td>
