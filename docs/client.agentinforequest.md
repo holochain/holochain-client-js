@@ -9,8 +9,8 @@
 
 ```typescript
 export type AgentInfoRequest = {
-    dna_hashes: DnaHash[] | null;
+    cell_id: CellId | null;
 };
 ```
-**References:** [DnaHash](./client.dnahash.md)
+**References:** [CellId](./client.cellid.md)
 

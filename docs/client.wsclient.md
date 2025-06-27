@@ -82,7 +82,7 @@ Description
 
 </td><td>
 
-[WsClientOptions](./client.wsclientoptions.md)
+[WsClientOptions](./client.wsclientoptions.md) \| undefined
 
 
 </td><td>
