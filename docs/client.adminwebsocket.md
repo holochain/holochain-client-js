@@ -84,7 +84,7 @@ Request all available info about an agent.
 
 </td><td>
 
-[Requester](./client.requester.md)<!-- -->&lt;[AgentMetaInfoRequest](./client.agentmetainforequest.md)<!-- -->, [AgentMetaInfoReqsponse](./client.agentmetainforeqsponse.md)<!-- -->&gt;
+[Requester](./client.requester.md)<!-- -->&lt;[AgentMetaInfoRequest](./client.agentmetainforequest.md)<!-- -->, [AgentMetaInfoResponse](./client.agentmetainforesponse.md)<!-- -->&gt;
 
 
 </td><td>
