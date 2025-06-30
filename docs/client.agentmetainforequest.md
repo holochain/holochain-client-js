@@ -2,16 +2,72 @@
 
 [Home](./index.md) &gt; [@holochain/client](./client.md) &gt; [AgentMetaInfoRequest](./client.agentmetainforequest.md)
 
-## AgentMetaInfoRequest type
+## AgentMetaInfoRequest interface
 
 
 **Signature:**
 
 ```typescript
-export type AgentMetaInfoRequest = {
-    url: string;
-    dna_hashes?: DnaHash[];
-};
+export interface AgentMetaInfoRequest 
 ```
-**References:** [DnaHash](./client.dnahash.md)
 
+## Properties
+
+<table><thead><tr><th>
+
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[dna\_hashes?](./client.agentmetainforequest.dna_hashes.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[DnaHash](./client.dnahash.md)<!-- -->\[\]
+
+
+</td><td>
+
+_(Optional)_
+
+
+</td></tr>
+<tr><td>
+
+[url](./client.agentmetainforequest.url.md)
+
+
+</td><td>
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>

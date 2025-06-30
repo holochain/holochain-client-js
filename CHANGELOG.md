@@ -5,19 +5,22 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## \[Unreleased\]
 
 ### Added
+### Fixed
+### Changed
+### Removed
+
+## 2025-06-30: v0.19.1
+### Added
 - bootstrap-srv to Nix flake
 - Add `AgentInfo` call to the conductor's app interface to retrieve the discovered peers of the app's various DNAs.
 - Add `AgentMetaInfo` calls to the conductor's app and admin interfaces to retrieve info about peers from the peer meta store.
 ### Fixed
+- Fix the typing for `DhtArc`
 - Tests of examples in README didn't return error exit codes. A breaking change went unnoticed. Tests now return error code and examples are up-to-date.
 - Fixed the logic to reconnect the AppWebsocket automatically in the browser ([#354](https://github.com/holochain/holochain-client-js/pull/354))
 ### Changed
 - Run all tests with local bootstrap and signaling services.
 ### Removed
-
-## 2025-04-22: v0.19.1
-### Fixed
-- Fix the typing for `DhtArc`
 
 ## 2025-04-22: v0.19.0
 

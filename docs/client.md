@@ -534,6 +534,26 @@ Description
 </td></tr>
 <tr><td>
 
+[AgentMetaInfo](./client.agentmetainfo.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[AgentMetaInfoRequest](./client.agentmetainforequest.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
 [AgentValidationPkg](./client.agentvalidationpkg.md)
 
 
@@ -1427,27 +1447,7 @@ This type is meant to be opaque
 </td></tr>
 <tr><td>
 
-[AgentMetaInfo](./client.agentmetainfo.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[AgentMetaInfoReqsponse](./client.agentmetainforeqsponse.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[AgentMetaInfoRequest](./client.agentmetainforequest.md)
+[AgentMetaInfoResponse](./client.agentmetainforesponse.md)
 
 
 </td><td>
