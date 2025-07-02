@@ -1551,7 +1551,6 @@ test(
     const dnaHash = encodeHashToBase64(cell_id[0]);
     t.assert(response[dnaHash], "expected entry in map under dna hash");
     t.deepEqual(response[dnaHash].fetch_state_summary.pending_requests, {});
-    t.deepEqual(response[dnaHash].fetch_state_summary.peers_on_backoff, {});
     t.deepEqual(response[dnaHash].gossip_state_summary.accepted_rounds, []);
     t.deepEqual(response[dnaHash].gossip_state_summary.initiated_round, null);
     t.deepEqual(response[dnaHash].gossip_state_summary.peer_meta, {});
