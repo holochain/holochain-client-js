@@ -9,7 +9,7 @@ Request the currently known agents of the app.
 **Signature:**
 
 ```typescript
-agentInfo(req: AppAgentInfoRequest, timeout?: number): Promise<AgentInfoResponse>;
+agentInfo(req: AgentInfoRequest, timeout?: number): Promise<AgentInfoResponse>;
 ```
 
 ## Parameters
@@ -37,7 +37,7 @@ req
 
 </td><td>
 
-[AppAgentInfoRequest](./client.appagentinforequest.md)
+[AgentInfoRequest](./client.agentinforequest.md)
 
 
 </td><td>

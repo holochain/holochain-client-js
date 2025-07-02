@@ -1,5 +1,5 @@
 ---
-manifest_version: "1"
+manifest_version: "0"
 name: test-dna
 integrity:
   network_seed: 9a28aac8-337c-11eb-adc1-0Z02acw20115
