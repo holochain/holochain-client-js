@@ -59,6 +59,8 @@ import {
   ListCellIdsResponse,
   ListDnasRequest,
   ListDnasResponse,
+  RevokeZomeCallCapabilityRequest,
+  RevokeZomeCallCapabilityResponse,
   RegisterDnaRequest,
   RegisterDnaResponse,
   RevokeAgentKeyRequest,
@@ -69,6 +71,8 @@ import {
   UninstallAppResponse,
   UpdateCoordinatorsRequest,
   UpdateCoordinatorsResponse,
+  ListCapabilityGrantsRequest,
+  ListCapabilityGrantsResponse,
 } from "./types.js";
 
 /**
@@ -281,6 +285,23 @@ export class AdminWebsocket implements AdminApi {
     GrantZomeCallCapabilityRequest,
     GrantZomeCallCapabilityResponse
   > = this._requester("grant_zome_call_capability");
+
+  /**
+   * Revoke a zome call capability for an agent, which was previously granted
+   * using {@link AdminWebsocket.grantZomeCallCapability}.
+   */
+  revokeZomeCallCapability: Requester<
+    RevokeZomeCallCapabilityRequest,
+    RevokeZomeCallCapabilityResponse
+  > = this._requester("revoke_zome_call_capability");
+
+  /**
+   * List all capability grants for all cells.
+   */
+  listCapabilityGrants: Requester<
+    ListCapabilityGrantsRequest,
+    ListCapabilityGrantsResponse
+  > = this._requester("list_capability_grants");
 
   storageInfo: Requester<StorageInfoRequest, StorageInfoResponse> =
     this._requester("storage_info");

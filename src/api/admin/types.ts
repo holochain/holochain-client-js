@@ -719,6 +719,62 @@ export type GrantZomeCallCapabilityResponse = void;
 /**
  * @public
  */
+export interface RevokeZomeCallCapabilityRequest {
+  /**
+   * The action hash of the capability to revoke.
+   */
+  action_hash: ActionHash;
+}
+
+/**
+ * @public
+ */
+export type RevokeZomeCallCapabilityResponse = void;
+
+/**
+ * @public
+ */
+export interface ListCapabilityGrantsRequest {
+  /**
+   * The app id for which to list the capability grants.
+   */
+  app_id: InstalledAppId;
+  /**
+   * Whether to include also revoked grants in the response.
+   */
+  include_revoked: boolean;
+}
+
+/**
+ * @public
+ */
+export type ListCapabilityGrantsResponse = Array<[CellId, [CapGrantInfo]]>;
+
+/**
+ * @public
+ */
+export interface CapGrantInfo {
+  /**
+   * The cap grant data.
+   */
+  cap_grant: ZomeCallCapGrant;
+  /**
+   * The action hash of the cap grant.
+   */
+  action_hash: ActionHash;
+  /**
+   * The timestamp when the cap grant was created.
+   */
+  created_at: Timestamp;
+  /**
+   * The timestamp when the cap grant was revoked, if it was revoked.
+   */
+  revoked_at?: Timestamp;
+}
+
+/**
+ * @public
+ */
 export type InstallAppDnaPayload = {
   hash: HoloHash;
   role_name: RoleName;
@@ -1318,6 +1374,14 @@ export interface AdminApi {
   grantZomeCallCapability: Requester<
     GrantZomeCallCapabilityRequest,
     GrantZomeCallCapabilityResponse
+  >;
+  revokeZomeCallCapability: Requester<
+    RevokeZomeCallCapabilityRequest,
+    RevokeZomeCallCapabilityResponse
+  >;
+  listCapabilityGrants: Requester<
+    ListCapabilityGrantsRequest,
+    ListCapabilityGrantsResponse
   >;
   storageInfo: Requester<StorageInfoRequest, StorageInfoResponse>;
   issueAppAuthenticationToken: Requester<

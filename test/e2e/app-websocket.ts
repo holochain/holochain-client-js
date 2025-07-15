@@ -9,6 +9,9 @@ import {
   CloneIdHelper,
   CreateCloneCellRequest,
   fakeAgentPubKey,
+  GrantZomeCallCapabilityRequest,
+  ListCapabilityGrantsRequest,
+  RevokeZomeCallCapabilityRequest,
   RoleName,
   RoleNameCallZomeRequest,
   SignalCb,
@@ -287,6 +290,90 @@ test(
     });
     await appWs.callZome(params);
     t.pass("re-enabled clone can be called");
+  })
+);
+
+test(
+  "can grant and revoke zome call capabilities",
+  withConductor(ADMIN_PORT, async (t) => {
+    const { admin, client: appWs } = await createAppWsAndInstallApp(ADMIN_PORT);
+
+    const info = await appWs.appInfo();
+    const cellId = appWs.getCellIdFromRoleName(ROLE_NAME, info);
+
+    // grant capability
+    const grantRequest: GrantZomeCallCapabilityRequest = {
+      cell_id: cellId,
+      cap_grant: {
+        tag: "test-grant",
+        access: {
+          type: "unrestricted",
+        },
+        functions: {
+          type: "all",
+        },
+      },
+    };
+
+    await admin.grantZomeCallCapability(grantRequest);
+
+    // list capability grants
+    const listRequest: ListCapabilityGrantsRequest = {
+      app_id: info.installed_app_id,
+      include_revoked: true,
+    };
+    const capabilityGrants = await admin.listCapabilityGrants(listRequest);
+    // should have 1 item
+    t.equal(
+      capabilityGrants.length,
+      1,
+      "should have one capability grant after granting"
+    );
+    const [cellIdFromGrants, grants] = capabilityGrants[0];
+    t.deepEqual(cellIdFromGrants, cellId, "cell id matches");
+    t.equal(grants.length, 1, "should have one grant");
+    const [capGrantInfo] = grants;
+    t.equal(capGrantInfo.cap_grant.tag, "test-grant", "grant tag matches");
+    t.equal(
+      capGrantInfo.cap_grant.access.type,
+      "unrestricted",
+      "grant access type matches"
+    );
+    t.equal(
+      capGrantInfo.cap_grant.functions.type,
+      "all",
+      "grant functions type matches"
+    );
+
+    // revoke capability
+    const revokeRequest: RevokeZomeCallCapabilityRequest = {
+      action_hash: capGrantInfo.action_hash,
+    };
+    await admin.revokeZomeCallCapability(revokeRequest);
+
+    // list capability grants again
+    const capabilityGrantsAfterRevoke = await admin.listCapabilityGrants(
+      listRequest
+    );
+    // should have 1 item, but the grant should be revoked
+    t.equal(
+      capabilityGrantsAfterRevoke.length,
+      1,
+      "should still have one capability grant after revoking"
+    );
+    // check if has revoked_at
+    const [cellIdFromGrantsAfterRevoke, grantsAfterRevoke] =
+      capabilityGrantsAfterRevoke[0];
+    t.deepEqual(
+      cellIdFromGrantsAfterRevoke,
+      cellId,
+      "cell id matches after revoke"
+    );
+    t.notEqual(
+      grantsAfterRevoke[0].revoked_at,
+      undefined,
+      "grant should be revoked"
+    );
   })
 );
 

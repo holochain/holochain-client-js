@@ -5,6 +5,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## \[Unreleased\]
 
 ### Added
+
+- Added `revokeZomeCallCapability` to the admin websocket to revoke zome call capabilities for an agent [#360](https://github.com/holochain/holochain-client-js/pull/360)
+- Added `listCapabilityGrants` to the admin websocket to list all zome call capabilities granted to an agent [#360](https://github.com/holochain/holochain-client-js/pull/360)
+
 ### Fixed
 ### Changed
 ### Removed
