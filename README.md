@@ -182,6 +182,7 @@ You need a version (`stable` toolchain) of Rust available.
 You need `holochain` and `hc` on your path, best to get them from nix with `nix-shell`.
 
 To perform the pre-requisite DNA compilation steps, and run the Nodejs test, run:
+
 ```bash
 nix develop
 ./build-fixture.sh

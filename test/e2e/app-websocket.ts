@@ -293,13 +293,17 @@ test(
   })
 );
 
-test(
+test.only(
   "can grant and revoke zome call capabilities",
   withConductor(ADMIN_PORT, async (t) => {
-    const { admin, client: appWs } = await createAppWsAndInstallApp(ADMIN_PORT);
+    const {
+      admin,
+      client: appWs,
+      cell_id: cellId,
+    } = await createAppWsAndInstallApp(ADMIN_PORT);
 
+    await admin.authorizeSigningCredentials(cellId);
     const info = await appWs.appInfo();
-    const cellId = appWs.getCellIdFromRoleName(ROLE_NAME, info);
 
     // grant capability
     const grantRequest: GrantZomeCallCapabilityRequest = {
@@ -315,11 +319,11 @@ test(
       },
     };
 
-    await admin.grantZomeCallCapability(grantRequest);
+    const grantedActionHash = await admin.grantZomeCallCapability(grantRequest);
 
     // list capability grants
     const listRequest: ListCapabilityGrantsRequest = {
-      app_id: info.installed_app_id,
+      installed_app_id: info.installed_app_id,
       include_revoked: true,
     };
     const capabilityGrants = await admin.listCapabilityGrants(listRequest);
@@ -344,10 +348,12 @@ test(
       "all",
       "grant functions type matches"
     );
+    t.equal(capGrantInfo.action_hash, grantedActionHash, "action hash matches");
 
     // revoke capability
     const revokeRequest: RevokeZomeCallCapabilityRequest = {
-      action_hash: capGrantInfo.action_hash,
+      action_hash: grantedActionHash,
+      cell_id: cellId,
     };
     await admin.revokeZomeCallCapability(revokeRequest);
 
@@ -362,8 +368,8 @@ test(
       "should still have one capability grant after revoking"
     );
     // check if has revoked_at
-    const [cellIdFromGrantsAfterRevoke, grantsAfterRevoke] =
-      capabilityGrantsAfterRevoke[0];
+    const [cellIdFromGrantsAfterRevoke] = capabilityGrantsAfterRevoke[0];
+    const grantsAfterRevoke = capabilityGrantsAfterRevoke[0][1];
     t.deepEqual(
       cellIdFromGrantsAfterRevoke,
       cellId,

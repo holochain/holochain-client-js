@@ -714,7 +714,7 @@ export interface GrantZomeCallCapabilityRequest {
 /**
  * @public
  */
-export type GrantZomeCallCapabilityResponse = void;
+export type GrantZomeCallCapabilityResponse = ActionHash;
 
 /**
  * @public
@@ -724,6 +724,10 @@ export interface RevokeZomeCallCapabilityRequest {
    * The action hash of the capability to revoke.
    */
   action_hash: ActionHash;
+  /**
+   * Cell ID of the cell for which to revoke the capability.
+   */
+  cell_id: CellId;
 }
 
 /**
@@ -738,7 +742,7 @@ export interface ListCapabilityGrantsRequest {
   /**
    * The app id for which to list the capability grants.
    */
-  app_id: InstalledAppId;
+  installed_app_id: InstalledAppId;
   /**
    * Whether to include also revoked grants in the response.
    */
