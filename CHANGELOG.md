@@ -9,6 +9,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Changed
 ### Removed
 
+## 2025-07-21: v0.19.2
+### Fixed
+- Fixed the `AppWebsocket::agentMetaInfo` typing to return an `AgentMetaInfoResponse` instead of an `AgentInfoResponse`.
+
 ## 2025-06-30: v0.19.1
 ### Added
 - bootstrap-srv to Nix flake
