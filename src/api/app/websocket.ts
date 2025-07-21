@@ -12,11 +12,9 @@ import { encodeHashToBase64 } from "../../utils/index.js";
 import {
   AgentInfoResponse,
   AgentMetaInfoRequest,
+  AgentMetaInfoResponse,
   AppInfo,
   CellType,
-  // Required to TSDoc generation.
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  ClonedCell,
   DumpNetworkMetricsRequest,
   DumpNetworkMetricsResponse,
   DumpNetworkStatsRequest,
@@ -100,7 +98,7 @@ export class AppWebsocket implements AppClient {
   >;
   private readonly agentMetaInfoRequester: Requester<
     AgentMetaInfoRequest,
-    AgentInfoResponse
+    AgentMetaInfoResponse
   >;
   private readonly callZomeRequester: Requester<
     CallZomeRequest | CallZomeRequestSigned,
@@ -250,7 +248,6 @@ export class AppWebsocket implements AppClient {
   /**
    * Instance factory for creating an {@link AppWebsocket}.
    *
-   * @param token - A token to authenticate the websocket connection. Get a token using AdminWebsocket#issueAppAuthenticationToken.
    * @param options - {@link (WebsocketConnectionOptions:interface)}
    * @returns A new instance of an AppWebsocket.
    */
@@ -325,22 +322,22 @@ export class AppWebsocket implements AppClient {
    * Request the currently known agents of the app.
    *
    * @param req - An array of DNA hashes or null
+   * @param timeout - A timeout to override the default.
    * @returns The app's agent infos as JSON string.
    */
   async agentInfo(req: AppAgentInfoRequest, timeout?: number) {
-    const agentInfos = await this.agentInfoRequester(req, timeout);
-    return agentInfos;
+    return await this.agentInfoRequester(req, timeout);
   }
 
   /**
    * Request agent meta info for an agent by peer Url.
    *
    * @param req - The peer Url of the agent and an optional array of DNA hashes
-   * @returns The app's agent infos as JSON string.
+   * @param timeout - A timeout to override the default.
+   * @returns The meta info stored for this peer URL.
    */
   async agentMetaInfo(req: AgentMetaInfoRequest, timeout?: number) {
-    const agentInfos = await this.agentMetaInfoRequester(req, timeout);
-    return agentInfos;
+    return await this.agentMetaInfoRequester(req, timeout);
   }
 
   /**
