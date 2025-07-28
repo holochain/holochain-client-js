@@ -12,9 +12,9 @@ export type AppStatus = {
     type: "disabled";
     value: DisabledAppReason;
 } | {
-    type: "awaiting_memproofs";
+    type: "enabled";
 } | {
-    type: "running";
+    type: "awaiting_memproofs";
 };
 ```
 **References:** [DisabledAppReason](./client.disabledappreason.md)
