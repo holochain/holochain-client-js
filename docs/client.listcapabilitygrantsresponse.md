@@ -8,7 +8,7 @@
 **Signature:**
 
 ```typescript
-export type ListCapabilityGrantsResponse = Array<[CellId, [CapGrantInfo]]>;
+export type ListCapabilityGrantsResponse = Array<[CellId, CapGrantInfo[]]>;
 ```
 **References:** [CellId](./client.cellid.md)<!-- -->, [CapGrantInfo](./client.capgrantinfo.md)
 

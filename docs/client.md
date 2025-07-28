@@ -1597,16 +1597,6 @@ This type is meant to be opaque
 </td></tr>
 <tr><td>
 
-[AppInfoStatus](./client.appinfostatus.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
 [AppManifest](./client.appmanifest.md)
 
 
@@ -1638,6 +1628,16 @@ This type is meant to be opaque
 <tr><td>
 
 [AppSignal](./client.appsignal.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[AppStatus](./client.appstatus.md)
 
 
 </td><td>

@@ -142,7 +142,7 @@ export type AppInfo = {
   agent_pub_key: AgentPubKey;
   installed_app_id: InstalledAppId;
   cell_info: Record<RoleName, Array<CellInfo>>;
-  status: AppInfoStatus;
+  status: AppStatus;
   installed_at: Timestamp;
 };
 
