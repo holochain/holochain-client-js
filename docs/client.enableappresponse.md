@@ -8,10 +8,7 @@
 **Signature:**
 
 ```typescript
-export type EnableAppResponse = {
-    app: AppInfo;
-    errors: Array<[CellId, string]>;
-};
+export type EnableAppResponse = AppInfo;
 ```
-**References:** [AppInfo](./client.appinfo.md)<!-- -->, [CellId](./client.cellid.md)
+**References:** [AppInfo](./client.appinfo.md)
 

@@ -103,13 +103,15 @@ test(
     const status: AppInfoStatus = installedApp.status;
     t.deepEqual(
       status,
-      { type: "disabled", value: { reason: { type: "never_started" } } },
+      { type: "disabled", value: { type: "never_started" } },
       "app installed"
     );
 
+    console.log("hanging");
     const runningApps = await admin.listApps({
-      status_filter: AppStatusFilter.Running,
+      status_filter: AppStatusFilter.Enabled,
     });
+    console.log("hanging done");
     t.equal(runningApps.length, 0, "no running apps");
 
     let allAppsInfo = await admin.listApps({});
@@ -126,42 +128,36 @@ test(
     );
     t.deepEqual(
       disabledAppsInfo[0].status,
-      { type: "disabled", value: { reason: { type: "never_started" } } },
+      { type: "disabled", value: { type: "never_started" } },
       "disabled app never started"
     );
 
-    const pausedAppsInfo = await admin.listApps({
-      status_filter: AppStatusFilter.Paused,
-    });
-    t.equal(pausedAppsInfo.length, 0, "0 paused apps");
-
-    const { app, errors } = await admin.enableApp({ installed_app_id });
-    t.deepEqual(app.status, { type: "running" });
+    const app = await admin.enableApp({ installed_app_id });
+    t.deepEqual(app.status, { type: "enabled" });
     t.ok(ROLE_NAME in app.cell_info);
     t.ok(Array.isArray(app.cell_info[ROLE_NAME]));
     t.equal(app.installed_app_id, installed_app_id);
-    t.equal(errors.length, 0);
 
     const activeApps2 = await admin.listApps({
-      status_filter: AppStatusFilter.Running,
+      status_filter: AppStatusFilter.Enabled,
     });
     t.equal(activeApps2.length, 1);
     t.equal(activeApps2[0].installed_app_id, installed_app_id);
 
     const runningAppsInfo2 = await admin.listApps({
-      status_filter: AppStatusFilter.Running,
+      status_filter: AppStatusFilter.Enabled,
     });
     const disabledAppsInfo2 = await admin.listApps({
       status_filter: AppStatusFilter.Disabled,
     });
     const pausedAppsInfo2 = await admin.listApps({
-      status_filter: AppStatusFilter.Paused,
+      status_filter: AppStatusFilter.Disabled,
     });
     t.equal(pausedAppsInfo2.length, 0);
     t.equal(disabledAppsInfo2.length, 0);
     t.equal(runningAppsInfo2.length, 1);
     t.equal(runningAppsInfo2[0].cell_info[ROLE_NAME].length, 1);
-    t.deepEqual(runningAppsInfo2[0].status, { type: "running" });
+    t.deepEqual(runningAppsInfo2[0].status, { type: "enabled" });
 
     await admin.attachAppInterface({
       port: 0,
@@ -170,27 +166,23 @@ test(
     await admin.disableApp({ installed_app_id });
 
     const runningAppsInfo3 = await admin.listApps({
-      status_filter: AppStatusFilter.Running,
+      status_filter: AppStatusFilter.Enabled,
     });
     const disabledAppsInfo3 = await admin.listApps({
       status_filter: AppStatusFilter.Disabled,
     });
-    const pausedAppsInfo3 = await admin.listApps({
-      status_filter: AppStatusFilter.Paused,
-    });
     t.equal(runningAppsInfo3.length, 0);
-    t.equal(pausedAppsInfo3.length, 0);
     t.equal(disabledAppsInfo3.length, 1);
     t.deepEqual(disabledAppsInfo3[0].status, {
       type: "disabled",
-      value: { reason: { type: "user" } },
+      value: { type: "user" },
     });
 
     let dnas = await admin.listDnas();
     t.equal(dnas.length, 1);
 
     const activeApps3 = await admin.listApps({
-      status_filter: AppStatusFilter.Running,
+      status_filter: AppStatusFilter.Enabled,
     });
     t.equal(activeApps3.length, 0);
     // NB: missing dumpState because it requires a valid cell_id
@@ -240,21 +232,20 @@ test(
     t.ok(installedApp);
     t.deepEqual(installedApp.status, {
       type: "disabled",
-      value: { reason: { type: "never_started" } },
+      value: { type: "never_started" },
     });
 
     const runningApps1 = await admin.listApps({
-      status_filter: AppStatusFilter.Running,
+      status_filter: AppStatusFilter.Enabled,
     });
     t.equal(runningApps1.length, 0);
 
     const enabledAppInfo = await admin.enableApp({ installed_app_id });
-    t.deepEqual(enabledAppInfo.app.status, { type: "running" });
-    t.equal(enabledAppInfo.app.installed_app_id, installed_app_id);
-    t.equal(enabledAppInfo.errors.length, 0);
+    t.deepEqual(enabledAppInfo.status, { type: "enabled" });
+    t.equal(enabledAppInfo.installed_app_id, installed_app_id);
 
     const runningApps2 = await admin.listApps({
-      status_filter: AppStatusFilter.Running,
+      status_filter: AppStatusFilter.Enabled,
     });
     t.equal(runningApps2.length, 1);
     t.equal(runningApps2[0].installed_app_id, installed_app_id);
@@ -281,7 +272,7 @@ test(
     t.equal(dnas.length, 1);
 
     const activeApps3 = await admin.listApps({
-      status_filter: AppStatusFilter.Running,
+      status_filter: AppStatusFilter.Enabled,
     });
     t.equal(activeApps3.length, 0);
   })
@@ -343,19 +334,18 @@ test(
     );
 
     const runningApps1 = await admin.listApps({
-      status_filter: AppStatusFilter.Running,
+      status_filter: AppStatusFilter.Enabled,
     });
     t.equal(runningApps1.length, 0);
 
     const enabledAppInfo: EnableAppResponse = await admin.enableApp({
       installed_app_id,
     });
-    t.deepEqual(enabledAppInfo.app.status, { type: "running" });
-    t.equal(enabledAppInfo.app.installed_app_id, installed_app_id);
-    t.equal(enabledAppInfo.errors.length, 0);
+    t.deepEqual(enabledAppInfo.status, { type: "enabled" });
+    t.equal(enabledAppInfo.installed_app_id, installed_app_id);
 
     const runningApps2 = await admin.listApps({
-      status_filter: AppStatusFilter.Running,
+      status_filter: AppStatusFilter.Enabled,
     });
     t.equal(runningApps2.length, 1);
     t.equal(runningApps2[0].installed_app_id, installed_app_id);
@@ -370,7 +360,7 @@ test(
     t.equal(dnas.length, 1);
 
     const runningApps3 = await admin.listApps({
-      status_filter: AppStatusFilter.Running,
+      status_filter: AppStatusFilter.Enabled,
     });
     t.equal(runningApps3.length, 0);
   })
@@ -394,7 +384,7 @@ test(
       "got correct cell id"
     );
     t.ok(ROLE_NAME in info.cell_info, "role name correct");
-    t.deepEqual(info.status, { type: "running" }, "status is running");
+    t.deepEqual(info.status, { type: "enabled" }, "status is running");
 
     await admin.authorizeSigningCredentials(cell_id);
 
@@ -419,7 +409,7 @@ test(
     assert(info);
     t.deepEqual(
       info.status,
-      { type: "disabled", value: { reason: { type: "user" } } },
+      { type: "disabled", value: { type: "user" } },
       "disabled reason user"
     );
   })
@@ -577,7 +567,7 @@ test(
         "error is an instance of HolochainError"
       );
       assert(error instanceof HolochainError);
-      t.equal(error.name, "ribosome_error", "error has correct name");
+      t.equal(error.name, "internal_error", "error has correct name");
     }
   })
 );
@@ -690,7 +680,7 @@ test(
     let appInfo = await client.appInfo();
     t.deepEqual(
       appInfo.status,
-      { type: "disabled", value: { reason: { type: "never_started" } } },
+      { type: "disabled", value: { type: "never_started" } },
       "app is in status awaiting_memproofs"
     );
 
@@ -713,14 +703,14 @@ test(
       appInfo.status,
       {
         type: "disabled",
-        value: { reason: { type: "not_started_after_providing_memproofs" } },
+        value: { type: "not_started_after_providing_memproofs" },
       },
       "app is disabled after providing memproofs"
     );
 
     await client.enableApp();
     appInfo = await client.appInfo();
-    t.deepEqual(appInfo.status, { type: "running" }, "app is running");
+    t.deepEqual(appInfo.status, { type: "enabled" }, "app is running");
   })
 );
 
@@ -798,7 +788,7 @@ test(
     assert(info.cell_info[ROLE_NAME][0].type === CellType.Provisioned);
     t.deepEqual(info.cell_info[ROLE_NAME][0].value.cell_id, cell_id);
     t.ok(ROLE_NAME in info.cell_info);
-    t.deepEqual(info.status, { type: "running" });
+    t.deepEqual(info.status, { type: "enabled" });
     const zomeCallPayload: CallZomeRequest = {
       cell_id,
       zome_name: TEST_ZOME_NAME,
@@ -935,17 +925,12 @@ test("can inject agents", async (t) => {
   assert(result.cell_info[ROLE_NAME][0].type === CellType.Provisioned);
   const app1_cell = result.cell_info[ROLE_NAME][0].value.cell_id;
   const activeApp1Info = await admin1.enableApp({ installed_app_id }, 1000);
-  t.deepEqual(
-    activeApp1Info.app.status,
-    { type: "running" },
-    "app status running"
-  );
+  t.deepEqual(activeApp1Info.status, { type: "enabled" }, "app status running");
   t.equal(
-    activeApp1Info.app.installed_app_id,
+    activeApp1Info.installed_app_id,
     installed_app_id,
     "installed app id correct"
   );
-  t.equal(activeApp1Info.errors.length, 0, "no app errors");
 
   // There should be one agent info now.
   agentInfos1 = await admin1.agentInfo({ dna_hashes: null });
@@ -1231,7 +1216,7 @@ test(
     assert(info.cell_info[ROLE_NAME][0].type === CellType.Provisioned);
     t.deepEqual(info.cell_info[ROLE_NAME][0].value.cell_id, cell_id);
     t.ok(ROLE_NAME in info.cell_info);
-    t.deepEqual(info.status, { type: "running" });
+    t.deepEqual(info.status, { type: "enabled" });
     await admin.authorizeSigningCredentials(cell_id);
     const zomeCallPayload: CallZomeRequest = {
       cell_id,
@@ -1248,7 +1233,7 @@ test(
     assert(info);
     t.deepEqual(info.status, {
       type: "disabled",
-      value: { reason: { type: "user" } },
+      value: { type: "user" },
     });
   })
 );

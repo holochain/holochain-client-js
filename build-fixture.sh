@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 set -e
 
+export RUSTFLAGS="-C opt-level=z --cfg getrandom_backend=\"custom\""
+
 # build fixture
 cd test/e2e/fixture/zomes/foo
 cargo build --release --target wasm32-unknown-unknown

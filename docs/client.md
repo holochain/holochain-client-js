@@ -634,6 +634,16 @@ Description
 </td></tr>
 <tr><td>
 
+[CapGrantInfo](./client.capgrantinfo.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
 [CellProvisioning](./client.cellprovisioning.md)
 
 
@@ -979,6 +989,16 @@ Gossip state summary.
 </td></tr>
 <tr><td>
 
+[ListCapabilityGrantsRequest](./client.listcapabilitygrantsrequest.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
 [LocalAgentSummary](./client.localagentsummary.md)
 
 
@@ -1073,6 +1093,16 @@ Peer metadata dump.
 <tr><td>
 
 [RegisterAgentActivity](./client.registeragentactivity.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[RevokeZomeCallCapabilityRequest](./client.revokezomecallcapabilityrequest.md)
 
 
 </td><td>
@@ -1567,16 +1597,6 @@ This type is meant to be opaque
 </td></tr>
 <tr><td>
 
-[AppInfoStatus](./client.appinfostatus.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
 [AppManifest](./client.appmanifest.md)
 
 
@@ -1608,6 +1628,16 @@ This type is meant to be opaque
 <tr><td>
 
 [AppSignal](./client.appsignal.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[AppStatus](./client.appstatus.md)
 
 
 </td><td>
@@ -2490,6 +2520,16 @@ An internal link type index within the DNA, from 0 to 255.
 </td></tr>
 <tr><td>
 
+[ListCapabilityGrantsResponse](./client.listcapabilitygrantsresponse.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
 [ListCellIdsRequest](./client.listcellidsrequest.md)
 
 
@@ -2769,6 +2809,16 @@ Cell id for which the countersigning session should be published.
 Contains a list of errors of the cells where deletion was unsuccessful.
 
 If the key could not be deleted from all cells, the call [RevokeAgentKeyRequest](./client.revokeagentkeyrequest.md) can be re-attempted to delete the key from the remaining cells.
+
+
+</td></tr>
+<tr><td>
+
+[RevokeZomeCallCapabilityResponse](./client.revokezomecallcapabilityresponse.md)
+
+
+</td><td>
+
 
 
 </td></tr>

@@ -47,10 +47,7 @@ export type EnableAppRequest = { installed_app_id: InstalledAppId };
 /**
  * @public
  */
-export type EnableAppResponse = {
-  app: AppInfo;
-  errors: Array<[CellId, string]>;
-};
+export type EnableAppResponse = AppInfo;
 
 /**
  * @public
@@ -75,19 +72,13 @@ export type DisabledAppReason =
 /**
  * @public
  */
-export type AppInfoStatus =
-  | {
-      type: "paused";
-      value: { reason: PausedAppReason };
-    }
+export type AppStatus =
   | {
       type: "disabled";
-      value: {
-        reason: DisabledAppReason;
-      };
+      value: DisabledAppReason;
     }
-  | { type: "awaiting_memproofs" }
-  | { type: "running" };
+  | { type: "enabled" }
+  | { type: "awaiting_memproofs" };
 /**
  * @public
  */
@@ -151,7 +142,7 @@ export type AppInfo = {
   agent_pub_key: AgentPubKey;
   installed_app_id: InstalledAppId;
   cell_info: Record<RoleName, Array<CellInfo>>;
-  status: AppInfoStatus;
+  status: AppStatus;
   installed_at: Timestamp;
 };
 
@@ -585,9 +576,6 @@ export type ListActiveAppsResponse = Array<InstalledAppId>;
 export enum AppStatusFilter {
   Enabled = "enabled",
   Disabled = "disabled",
-  Running = "running",
-  Stopped = "stopped",
-  Paused = "paused",
 }
 
 /**
@@ -714,7 +702,67 @@ export interface GrantZomeCallCapabilityRequest {
 /**
  * @public
  */
-export type GrantZomeCallCapabilityResponse = void;
+export type GrantZomeCallCapabilityResponse = ActionHash;
+
+/**
+ * @public
+ */
+export interface RevokeZomeCallCapabilityRequest {
+  /**
+   * The action hash of the capability to revoke.
+   */
+  action_hash: ActionHash;
+  /**
+   * Cell ID of the cell for which to revoke the capability.
+   */
+  cell_id: CellId;
+}
+
+/**
+ * @public
+ */
+export type RevokeZomeCallCapabilityResponse = void;
+
+/**
+ * @public
+ */
+export interface ListCapabilityGrantsRequest {
+  /**
+   * The app id for which to list the capability grants.
+   */
+  installed_app_id: InstalledAppId;
+  /**
+   * Whether to include also revoked grants in the response.
+   */
+  include_revoked: boolean;
+}
+
+/**
+ * @public
+ */
+export type ListCapabilityGrantsResponse = Array<[CellId, CapGrantInfo[]]>;
+
+/**
+ * @public
+ */
+export interface CapGrantInfo {
+  /**
+   * The cap grant data.
+   */
+  cap_grant: ZomeCallCapGrant;
+  /**
+   * The action hash of the cap grant.
+   */
+  action_hash: ActionHash;
+  /**
+   * The timestamp when the cap grant was created.
+   */
+  created_at: Timestamp;
+  /**
+   * The timestamp when the cap grant was revoked, if it was revoked.
+   */
+  revoked_at?: Timestamp;
+}
 
 /**
  * @public
@@ -1318,6 +1366,14 @@ export interface AdminApi {
   grantZomeCallCapability: Requester<
     GrantZomeCallCapabilityRequest,
     GrantZomeCallCapabilityResponse
+  >;
+  revokeZomeCallCapability: Requester<
+    RevokeZomeCallCapabilityRequest,
+    RevokeZomeCallCapabilityResponse
+  >;
+  listCapabilityGrants: Requester<
+    ListCapabilityGrantsRequest,
+    ListCapabilityGrantsResponse
   >;
   storageInfo: Requester<StorageInfoRequest, StorageInfoResponse>;
   issueAppAuthenticationToken: Requester<
