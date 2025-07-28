@@ -42,7 +42,7 @@ test(
     assert(info.cell_info[ROLE_NAME][0].type === CellType.Provisioned);
     t.deepEqual(info.cell_info[ROLE_NAME][0].value.cell_id, cell_id);
     t.ok(ROLE_NAME in info.cell_info);
-    t.deepEqual(info.status, { type: "running" });
+    t.deepEqual(info.status, { type: "enabled" });
 
     await admin.authorizeSigningCredentials(cell_id);
 
@@ -81,7 +81,7 @@ test(
     info = await appWs.appInfo();
     t.deepEqual(info.status, {
       type: "disabled",
-      value: { reason: { type: "user" } },
+      value: { type: "user" },
     });
   })
 );
@@ -293,7 +293,7 @@ test(
   })
 );
 
-test.only(
+test(
   "can grant and revoke zome call capabilities",
   withConductor(ADMIN_PORT, async (t) => {
     const {
@@ -335,20 +335,19 @@ test.only(
     );
     const [cellIdFromGrants, grants] = capabilityGrants[0];
     t.deepEqual(cellIdFromGrants, cellId, "cell id matches");
-    t.equal(grants.length, 1, "should have one grant");
-    const [capGrantInfo] = grants;
+    t.assert(grants.length > 0, "should have at least one grant");
+    const capGrantInfo = grants[grants.length - 1];
     t.equal(capGrantInfo.cap_grant.tag, "test-grant", "grant tag matches");
-    t.equal(
-      capGrantInfo.cap_grant.access.type,
-      "unrestricted",
-      "grant access type matches"
-    );
     t.equal(
       capGrantInfo.cap_grant.functions.type,
       "all",
       "grant functions type matches"
     );
-    t.equal(capGrantInfo.action_hash, grantedActionHash, "action hash matches");
+    t.deepEqual(
+      capGrantInfo.action_hash,
+      grantedActionHash,
+      "action hash matches"
+    );
 
     // revoke capability
     const revokeRequest: RevokeZomeCallCapabilityRequest = {

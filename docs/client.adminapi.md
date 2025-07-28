@@ -308,6 +308,23 @@ Description
 </td></tr>
 <tr><td>
 
+[listCapabilityGrants](./client.adminapi.listcapabilitygrants.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[Requester](./client.requester.md)<!-- -->&lt;[ListCapabilityGrantsRequest](./client.listcapabilitygrantsrequest.md)<!-- -->, [ListCapabilityGrantsResponse](./client.listcapabilitygrantsresponse.md)<!-- -->&gt;
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
 [listCellIds](./client.adminapi.listcellids.md)
 
 
@@ -351,6 +368,23 @@ Description
 </td><td>
 
 [Requester](./client.requester.md)<!-- -->&lt;[RegisterDnaRequest](./client.registerdnarequest.md)<!-- -->, [RegisterDnaResponse](./client.registerdnaresponse.md)<!-- -->&gt;
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[revokeZomeCallCapability](./client.adminapi.revokezomecallcapability.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[Requester](./client.requester.md)<!-- -->&lt;[RevokeZomeCallCapabilityRequest](./client.revokezomecallcapabilityrequest.md)<!-- -->, [RevokeZomeCallCapabilityResponse](./client.revokezomecallcapabilityresponse.md)<!-- -->&gt;
 
 
 </td><td>

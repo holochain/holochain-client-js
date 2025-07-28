@@ -47,10 +47,7 @@ export type EnableAppRequest = { installed_app_id: InstalledAppId };
 /**
  * @public
  */
-export type EnableAppResponse = {
-  app: AppInfo;
-  errors: Array<[CellId, string]>;
-};
+export type EnableAppResponse = AppInfo;
 
 /**
  * @public
@@ -77,14 +74,8 @@ export type DisabledAppReason =
  */
 export type AppInfoStatus =
   | {
-      type: "paused";
-      value: { reason: PausedAppReason };
-    }
-  | {
       type: "disabled";
-      value: {
-        reason: DisabledAppReason;
-      };
+      value: DisabledAppReason;
     }
   | { type: "awaiting_memproofs" }
   | { type: "running" };
@@ -585,9 +576,6 @@ export type ListActiveAppsResponse = Array<InstalledAppId>;
 export enum AppStatusFilter {
   Enabled = "enabled",
   Disabled = "disabled",
-  Running = "running",
-  Stopped = "stopped",
-  Paused = "paused",
 }
 
 /**

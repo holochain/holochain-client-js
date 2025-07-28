@@ -10,6 +10,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Added `listCapabilityGrants` to the admin websocket to list all zome call capabilities granted to an agent [#360](https://github.com/holochain/holochain-client-js/pull/360)
 
 ### Fixed
+
+- Fixed types for `list_apps` to match the new API
+
 ### Changed
 
 - Changed return type of `grantZomeCallCapability` to `ActionHash` [#360](https://github.com/holochain/holochain-client-js/pull/360)

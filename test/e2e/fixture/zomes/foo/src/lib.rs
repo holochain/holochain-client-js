@@ -116,10 +116,8 @@ pub fn create_and_get_link(tag: Vec<u8>) -> ExternResult<Link> {
         LinkTypes::A,
         LinkTag::from(tag),
     )?;
-    let get_links_input = GetLinksInputBuilder::try_new(link_base, LinkTypes::A)?
-        .get_options(GetStrategy::Local)
-        .build();
-    let links = get_links(get_links_input)?;
+    let get_links_input = LinkQuery::try_new(link_base, LinkTypes::A)?;
+    let links = get_links(get_links_input, GetStrategy::default())?;
     links
         .into_iter()
         .find(|link| link.create_link_hash == create_link_action_hash)

@@ -8,3 +8,4 @@ opt-level = "z"
 
 [workspace.dependencies]
 hdk = "0.6.0-dev.11"
+holochain_serialized_bytes = "0.0.56"

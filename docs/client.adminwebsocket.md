@@ -452,6 +452,25 @@ List all installed apps.
 </td></tr>
 <tr><td>
 
+[listCapabilityGrants](./client.adminwebsocket.listcapabilitygrants.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[Requester](./client.requester.md)<!-- -->&lt;[ListCapabilityGrantsRequest](./client.listcapabilitygrantsrequest.md)<!-- -->, [ListCapabilityGrantsResponse](./client.listcapabilitygrantsresponse.md)<!-- -->&gt;
+
+
+</td><td>
+
+List all capability grants for all cells.
+
+
+</td></tr>
+<tr><td>
+
 [listCellIds](./client.adminwebsocket.listcellids.md)
 
 
@@ -525,6 +544,25 @@ Stores the given DNA into the Holochain DNA database and returns the hash of it.
 </td><td>
 
 Generate a new agent pub key.
+
+
+</td></tr>
+<tr><td>
+
+[revokeZomeCallCapability](./client.adminwebsocket.revokezomecallcapability.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[Requester](./client.requester.md)<!-- -->&lt;[RevokeZomeCallCapabilityRequest](./client.revokezomecallcapabilityrequest.md)<!-- -->, [RevokeZomeCallCapabilityResponse](./client.revokezomecallcapabilityresponse.md)<!-- -->&gt;
+
+
+</td><td>
+
+Revoke a zome call capability for an agent, which was previously granted using [AdminWebsocket.grantZomeCallCapability](./client.adminwebsocket.grantzomecallcapability.md)<!-- -->.
 
 
 </td></tr>

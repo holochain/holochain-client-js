@@ -8,5 +8,7 @@
 **Signature:**
 
 ```typescript
-export type GrantZomeCallCapabilityResponse = void;
+export type GrantZomeCallCapabilityResponse = ActionHash;
 ```
+**References:** [ActionHash](./client.actionhash.md)
+

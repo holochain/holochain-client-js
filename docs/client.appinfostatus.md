@@ -9,20 +9,13 @@
 
 ```typescript
 export type AppInfoStatus = {
-    type: "paused";
-    value: {
-        reason: PausedAppReason;
-    };
-} | {
     type: "disabled";
-    value: {
-        reason: DisabledAppReason;
-    };
+    value: DisabledAppReason;
 } | {
     type: "awaiting_memproofs";
 } | {
     type: "running";
 };
 ```
-**References:** [PausedAppReason](./client.pausedappreason.md)<!-- -->, [DisabledAppReason](./client.disabledappreason.md)
+**References:** [DisabledAppReason](./client.disabledappreason.md)
 

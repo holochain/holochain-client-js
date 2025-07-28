@@ -908,6 +908,7 @@ name = "test_wasm_foo"
 version = "0.0.1"
 dependencies = [
  "hdk",
+ "holochain_serialized_bytes",
  "serde",
 ]
 
