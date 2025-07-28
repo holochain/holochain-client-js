@@ -78,7 +78,7 @@ export type AppStatus =
       value: DisabledAppReason;
     }
   | { type: "awaiting_memproofs" }
-  | { type: "running" };
+;
 /**
  * @public
  */
