@@ -740,7 +740,7 @@ export interface ListCapabilityGrantsRequest {
 /**
  * @public
  */
-export type ListCapabilityGrantsResponse = Array<[CellId, [CapGrantInfo]]>;
+export type ListCapabilityGrantsResponse = Array<[CellId, CapGrantInfo[]]>;
 
 /**
  * @public
