@@ -72,7 +72,7 @@ export type DisabledAppReason =
 /**
  * @public
  */
-export type AppInfoStatus =
+export type AppStatus =
   | {
       type: "disabled";
       value: DisabledAppReason;
