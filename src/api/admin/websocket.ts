@@ -23,8 +23,8 @@ import {
   AdminApi,
   AgentInfoRequest,
   AgentInfoResponse,
-  AgentMetaInfoResponse,
-  AgentMetaInfoRequest,
+  PeerMetaInfoResponse,
+  PeerMetaInfoRequest,
   AttachAppInterfaceRequest,
   AttachAppInterfaceResponse,
   DeleteCloneCellRequest,
@@ -266,10 +266,10 @@ export class AdminWebsocket implements AdminApi {
     this._requester("add_agent_info");
 
   /**
-   * Request agent meta info about an agent.
+   * Request peer meta info for a peer.
    */
-  agentMetaInfo: Requester<AgentMetaInfoRequest, AgentMetaInfoResponse> =
-    this._requester("agent_meta_info");
+  peerMetaInfo: Requester<PeerMetaInfoRequest, PeerMetaInfoResponse> =
+    this._requester("peer_meta_info");
 
   /**
    * Delete a disabled clone cell.

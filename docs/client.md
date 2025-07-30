@@ -534,26 +534,6 @@ Description
 </td></tr>
 <tr><td>
 
-[AgentMetaInfo](./client.agentmetainfo.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[AgentMetaInfoRequest](./client.agentmetainforequest.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
 [AgentValidationPkg](./client.agentvalidationpkg.md)
 
 
@@ -1052,6 +1032,26 @@ Peer metadata dump.
 </td></tr>
 <tr><td>
 
+[PeerMetaInfo](./client.peermetainfo.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[PeerMetaInfoRequest](./client.peermetainforequest.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
 [PreflightRequest](./client.preflightrequest.md)
 
 
@@ -1472,16 +1472,6 @@ Action hash with the signature of the action at that hash
 </td><td>
 
 This type is meant to be opaque
-
-
-</td></tr>
-<tr><td>
-
-[AgentMetaInfoResponse](./client.agentmetainforesponse.md)
-
-
-</td><td>
-
 
 
 </td></tr>
@@ -2631,6 +2621,16 @@ An internal link type index within the DNA, from 0 to 255.
 <tr><td>
 
 [PausedAppReason](./client.pausedappreason.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[PeerMetaInfoResponse](./client.peermetainforesponse.md)
 
 
 </td><td>

@@ -359,6 +359,23 @@ Description
 </td></tr>
 <tr><td>
 
+[peerMetaInfo](./client.adminapi.peermetainfo.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[Requester](./client.requester.md)<!-- -->&lt;[PeerMetaInfoRequest](./client.peermetainforequest.md)<!-- -->, [PeerMetaInfoResponse](./client.peermetainforesponse.md)<!-- -->&gt;
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
 [registerDna](./client.adminapi.registerdna.md)
 
 

@@ -19,7 +19,6 @@ import {
   EnableAppResponse,
   FullStateDump,
   HolochainError,
-  AppInfoStatus,
   Link,
   RegisterAgentActivity,
   RoleName,
@@ -37,6 +36,7 @@ import {
   CloneIdHelper,
   SignalType,
   Record,
+  AppStatus,
 } from "../../src";
 import {
   FIXTURE_PATH,
@@ -100,7 +100,7 @@ test(
       installed_app_id,
       agent_key,
     });
-    const status: AppInfoStatus = installedApp.status;
+    const status: AppStatus = installedApp.status;
     t.deepEqual(
       status,
       { type: "disabled", value: { type: "never_started" } },
@@ -984,7 +984,7 @@ test("can inject agents", async (t) => {
   await cleanSandboxConductors();
 });
 
-test("can query agent meta info over admin and app websocket", async (t) => {
+test("can query peer meta info over admin and app websocket", async (t) => {
   const localServices = await runLocalServices();
   const conductor1 = await launch(
     ADMIN_PORT,
@@ -1047,10 +1047,10 @@ test("can query agent meta info over admin and app websocket", async (t) => {
   );
 
   // Now have agent 2 get peer meta info for agent 1 via the admin websocket
-  const agentMetaInfos = await admin2.agentMetaInfo({ url: agentUrl1 });
+  const peerMetaInfos = await admin2.peerMetaInfo({ url: agentUrl1 });
 
   // Check that it contains gossip meta info
-  const metaInfosForDna = agentMetaInfos[encodeHashToBase64(cell_id2[0])];
+  const metaInfosForDna = peerMetaInfos[encodeHashToBase64(cell_id2[0])];
   t.assert(metaInfosForDna);
   t.assert(metaInfosForDna["gossip:completed_rounds"].meta_value);
   t.assert(metaInfosForDna["gossip:completed_rounds"].expires_at);
@@ -1058,10 +1058,10 @@ test("can query agent meta info over admin and app websocket", async (t) => {
   t.assert(metaInfosForDna["gossip:last_timestamp"].expires_at);
 
   // Now have agent 2 get peer meta info for agent 1 via the app websocket
-  const agentMetaInfosApp = await appClient2.agentMetaInfo({ url: agentUrl1 });
+  const peerMetaInfosApp = await appClient2.peerMetaInfo({ url: agentUrl1 });
 
   // Check that it contains gossip meta info
-  const metaInfosForDnaApp = agentMetaInfosApp[encodeHashToBase64(cell_id2[0])];
+  const metaInfosForDnaApp = peerMetaInfosApp[encodeHashToBase64(cell_id2[0])];
   t.assert(metaInfosForDnaApp);
   t.assert(metaInfosForDnaApp["gossip:completed_rounds"].meta_value);
   t.assert(metaInfosForDnaApp["gossip:completed_rounds"].expires_at);

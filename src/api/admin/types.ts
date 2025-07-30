@@ -644,7 +644,7 @@ export type AddAgentInfoResponse = unknown;
 /**
  * @public
  */
-export interface AgentMetaInfoRequest {
+export interface PeerMetaInfoRequest {
   url: string;
   dna_hashes?: DnaHash[];
 }
@@ -652,17 +652,17 @@ export interface AgentMetaInfoRequest {
 /**
  * @public
  */
-export type AgentMetaInfoResponse = Record<
+export type PeerMetaInfoResponse = Record<
   DnaHashB64,
-  Record<string, AgentMetaInfo>
+  Record<string, PeerMetaInfo>
 >;
 
 /**
  * @public
  */
-export interface AgentMetaInfo {
+export interface PeerMetaInfo {
   meta_value: string;
-  expires_at: number;
+  expires_at: Timestamp;
 }
 
 /**
@@ -1362,6 +1362,7 @@ export interface AdminApi {
   >;
   agentInfo: Requester<AgentInfoRequest, AgentInfoResponse>;
   addAgentInfo: Requester<AddAgentInfoRequest, AddAgentInfoResponse>;
+  peerMetaInfo: Requester<PeerMetaInfoRequest, PeerMetaInfoResponse>;
   deleteCloneCell: Requester<DeleteCloneCellRequest, DeleteCloneCellResponse>;
   grantZomeCallCapability: Requester<
     GrantZomeCallCapabilityRequest,
