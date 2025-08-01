@@ -12,8 +12,8 @@ import { encodeHashToBase64 } from "../../utils/index.js";
 import {
   AgentInfoRequest,
   AgentInfoResponse,
-  AgentMetaInfoRequest,
-  AgentMetaInfoResponse,
+  PeerMetaInfoRequest,
+  PeerMetaInfoResponse,
   AppInfo,
   CellType,
   DumpNetworkMetricsRequest,
@@ -96,9 +96,9 @@ export class AppWebsocket implements AppClient {
     AgentInfoRequest,
     AgentInfoResponse
   >;
-  private readonly agentMetaInfoRequester: Requester<
-    AgentMetaInfoRequest,
-    AgentMetaInfoResponse
+  private readonly peerMetaInfoRequester: Requester<
+    PeerMetaInfoRequest,
+    PeerMetaInfoResponse
   >;
   private readonly callZomeRequester: Requester<
     CallZomeRequest | CallZomeRequestSigned,
@@ -166,9 +166,9 @@ export class AppWebsocket implements AppClient {
       "agent_info",
       this.defaultTimeout
     );
-    this.agentMetaInfoRequester = AppWebsocket.requester(
+    this.peerMetaInfoRequester = AppWebsocket.requester(
       this.client,
-      "agent_meta_info",
+      "peer_meta_info",
       this.defaultTimeout
     );
     this.callZomeRequester = AppWebsocket.requester(
@@ -330,14 +330,14 @@ export class AppWebsocket implements AppClient {
   }
 
   /**
-   * Request agent meta info for an agent by peer Url.
+   * Request peer meta info for a peer by Url.
    *
    * @param req - The peer Url of the agent and an optional array of DNA hashes
    * @param timeout - A timeout to override the default.
    * @returns The meta info stored for this peer URL.
    */
-  async agentMetaInfo(req: AgentMetaInfoRequest, timeout?: number) {
-    return await this.agentMetaInfoRequester(req, timeout);
+  async peerMetaInfo(req: PeerMetaInfoRequest, timeout?: number) {
+    return await this.peerMetaInfoRequester(req, timeout);
   }
 
   /**

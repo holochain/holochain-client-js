@@ -76,25 +76,6 @@ Request all available info about an agent.
 </td></tr>
 <tr><td>
 
-[agentMetaInfo](./client.adminwebsocket.agentmetainfo.md)
-
-
-</td><td>
-
-
-</td><td>
-
-[Requester](./client.requester.md)<!-- -->&lt;[AgentMetaInfoRequest](./client.agentmetainforequest.md)<!-- -->, [AgentMetaInfoResponse](./client.agentmetainforesponse.md)<!-- -->&gt;
-
-
-</td><td>
-
-Request agent meta info about an agent.
-
-
-</td></tr>
-<tr><td>
-
 [attachAppInterface](./client.adminwebsocket.attachappinterface.md)
 
 
@@ -504,6 +485,25 @@ List all installed cell ids.
 </td><td>
 
 List all registered DNAs.
+
+
+</td></tr>
+<tr><td>
+
+[peerMetaInfo](./client.adminwebsocket.peermetainfo.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[Requester](./client.requester.md)<!-- -->&lt;[PeerMetaInfoRequest](./client.peermetainforequest.md)<!-- -->, [PeerMetaInfoResponse](./client.peermetainforesponse.md)<!-- -->&gt;
+
+
+</td><td>
+
+Request peer meta info for a peer.
 
 
 </td></tr>
