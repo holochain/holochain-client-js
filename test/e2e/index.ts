@@ -14,9 +14,7 @@ import {
   CallZomeRequest,
   CellProvisioningStrategy,
   CreateCloneCellRequest,
-  DnaBundle,
   DumpStateResponse,
-  EnableAppResponse,
   FullStateDump,
   HolochainError,
   Link,
@@ -71,7 +69,7 @@ const TEST_ZOME_NAME = "foo";
 export const ADMIN_WS_URL = new URL(`ws://localhost:${ADMIN_PORT}`);
 
 test(
-  "admin smoke test: registerDna + installApp + uninstallApp",
+  "admin smoke test: installApp + uninstallApp",
   withConductor(ADMIN_PORT, async (t) => {
     const installed_app_id = "app";
     const admin = await AdminWebsocket.connect({
@@ -81,16 +79,6 @@ test(
 
     const agent_key = await admin.generateAgentPubKey();
     t.ok(agent_key, "agent key generated");
-
-    const path = `${FIXTURE_PATH}/test.dna`;
-    const hash = await admin.registerDna({
-      source: {
-        type: "path",
-        value: path,
-      },
-      modifiers: {},
-    });
-    t.ok(hash, "dna registered");
 
     const installedApp = await admin.installApp({
       source: {
@@ -178,7 +166,7 @@ test(
       value: { type: "user" },
     });
 
-    let dnas = await admin.listDnas();
+    const dnas = await admin.listDnas();
     t.equal(dnas.length, 1);
 
     const activeApps3 = await admin.listApps({
@@ -186,21 +174,6 @@ test(
     });
     t.equal(activeApps3.length, 0);
     // NB: missing dumpState because it requires a valid cell_id
-
-    // install from hash and network seed
-    const newHash = await admin.registerDna({
-      source: {
-        type: "hash",
-        value: hash,
-      },
-      modifiers: {
-        network_seed: "123456",
-      },
-    });
-    t.ok(newHash);
-
-    dnas = await admin.listDnas();
-    t.equal(dnas.length, 2);
 
     await admin.uninstallApp({ installed_app_id });
     allAppsInfo = await admin.listApps({});
@@ -275,94 +248,6 @@ test(
       status_filter: AppStatusFilter.Enabled,
     });
     t.equal(activeApps3.length, 0);
-  })
-);
-
-test(
-  "admin register dna with full binary bundle + get dna def",
-  withConductor(ADMIN_PORT, async (t) => {
-    const installed_app_id = "app";
-    const admin = await AdminWebsocket.connect({
-      url: ADMIN_WS_URL,
-      wsClientOptions: { origin: "client-test-admin" },
-    });
-
-    const agent_key = await admin.generateAgentPubKey();
-    t.ok(agent_key);
-
-    const path = `${FIXTURE_PATH}/test.dna`;
-
-    const zippedDnaBundle = fs.readFileSync(path);
-    const encodedDnaBundle = zlib.gunzipSync(zippedDnaBundle);
-
-    const dnaBundle = decode(encodedDnaBundle.buffer) as DnaBundle;
-    const hash = await admin.registerDna({
-      source: {
-        type: "bundle",
-        value: dnaBundle,
-      },
-      modifiers: {},
-    });
-    t.ok(hash);
-
-    await admin.installApp({
-      source: {
-        type: "path",
-        value: `${FIXTURE_PATH}/test.happ`,
-      },
-      installed_app_id,
-      agent_key,
-    });
-
-    const dnaDefinition = await admin.getDnaDefinition(hash);
-    t.equal(dnaDefinition.name, "test-dna", "dna definition: name matches");
-    t.equal(
-      dnaDefinition.modifiers.network_seed,
-      "9a28aac8-337c-11eb-adc1-0Z02acw20115",
-      "dna definition: network seed matches"
-    );
-    assert(Buffer.isBuffer(dnaDefinition.modifiers.properties));
-    t.equal(
-      decode(dnaDefinition.modifiers.properties),
-      null,
-      "dna definition: properties match"
-    );
-    t.equal(
-      dnaDefinition.integrity_zomes[0][0],
-      "foo",
-      "dna definition: integrity zome matches"
-    );
-
-    const runningApps1 = await admin.listApps({
-      status_filter: AppStatusFilter.Enabled,
-    });
-    t.equal(runningApps1.length, 0);
-
-    const enabledAppInfo: EnableAppResponse = await admin.enableApp({
-      installed_app_id,
-    });
-    t.deepEqual(enabledAppInfo.status, { type: "enabled" });
-    t.equal(enabledAppInfo.installed_app_id, installed_app_id);
-
-    const runningApps2 = await admin.listApps({
-      status_filter: AppStatusFilter.Enabled,
-    });
-    t.equal(runningApps2.length, 1);
-    t.equal(runningApps2[0].installed_app_id, installed_app_id);
-
-    await admin.attachAppInterface({
-      port: 0,
-      allowed_origins: "client-test-app",
-    });
-    await admin.disableApp({ installed_app_id });
-
-    const dnas = await admin.listDnas();
-    t.equal(dnas.length, 1);
-
-    const runningApps3 = await admin.listApps({
-      status_filter: AppStatusFilter.Enabled,
-    });
-    t.equal(runningApps3.length, 0);
   })
 );
 

@@ -20,6 +20,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Removed
 
+- **BREAKING** Removed `RegisterDna` admin call ([#367](https://github.com/holochain/holochain-client-js/pull/367))
+
 ## 2025-07-02: v0.20.0-dev.1
 ### Added
 - Add `AgentMetaInfo` calls to the conductor's app and admin interfaces to retrieve info about peers from the peer meta store.

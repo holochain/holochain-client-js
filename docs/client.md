@@ -2741,26 +2741,6 @@ Cell id for which the countersigning session should be published.
 </td></tr>
 <tr><td>
 
-[RegisterDnaRequest](./client.registerdnarequest.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[RegisterDnaResponse](./client.registerdnaresponse.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
 [Requester](./client.requester.md)
 
 

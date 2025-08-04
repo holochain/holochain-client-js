@@ -61,8 +61,6 @@ import {
   ListDnasResponse,
   RevokeZomeCallCapabilityRequest,
   RevokeZomeCallCapabilityResponse,
-  RegisterDnaRequest,
-  RegisterDnaResponse,
   RevokeAgentKeyRequest,
   RevokeAgentKeyResponse,
   StorageInfoRequest,
@@ -190,14 +188,6 @@ export class AdminWebsocket implements AdminApi {
    */
   revokeAgentKey: Requester<RevokeAgentKeyRequest, RevokeAgentKeyResponse> =
     this._requester("revoke_agent_key");
-
-  /**
-   * Register a DNA for later app installation.
-   *
-   * Stores the given DNA into the Holochain DNA database and returns the hash of it.
-   */
-  registerDna: Requester<RegisterDnaRequest, RegisterDnaResponse> =
-    this._requester("register_dna");
 
   /**
    * Get the DNA definition for the specified DNA hash.
