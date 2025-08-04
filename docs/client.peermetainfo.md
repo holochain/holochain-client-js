@@ -44,7 +44,7 @@ Description
 
 </td><td>
 
-[Timestamp](./client.timestamp.md)
+[Timestamp](./client.timestamp.md) \| null
 
 
 </td><td>

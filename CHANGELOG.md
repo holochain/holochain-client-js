@@ -11,6 +11,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Fixed
 
+- Fixed `expires_at` field in `PeerMetaInfo` type to allow it being `undefined` ([#368](https://github.com/holochain/holochain-client-js/pull/368))
 - Fixed types for `list_apps` to match the new API
 
 ### Changed
