@@ -261,22 +261,6 @@ export type RevokeAgentKeyResponse = [CellId, string][];
 /**
  * @public
  */
-export type RegisterDnaRequest = {
-  source: DnaSource;
-  modifiers?: {
-    network_seed?: string;
-    properties?: DnaProperties;
-  };
-};
-
-/**
- * @public
- */
-export type RegisterDnaResponse = HoloHash;
-
-/**
- * @public
- */
 export type DnaModifiers = {
   network_seed: NetworkSeed;
   properties: Uint8Array;
@@ -1346,7 +1330,6 @@ export interface AdminApi {
     GenerateAgentPubKeyRequest,
     GenerateAgentPubKeyResponse
   >;
-  registerDna: Requester<RegisterDnaRequest, RegisterDnaResponse>;
   getDnaDefinition: Requester<
     GetDnaDefinitionRequest,
     GetDnaDefinitionResponse

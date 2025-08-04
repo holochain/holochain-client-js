@@ -376,23 +376,6 @@ Description
 </td></tr>
 <tr><td>
 
-[registerDna](./client.adminapi.registerdna.md)
-
-
-</td><td>
-
-
-</td><td>
-
-[Requester](./client.requester.md)<!-- -->&lt;[RegisterDnaRequest](./client.registerdnarequest.md)<!-- -->, [RegisterDnaResponse](./client.registerdnaresponse.md)<!-- -->&gt;
-
-
-</td><td>
-
-
-</td></tr>
-<tr><td>
-
 [revokeZomeCallCapability](./client.adminapi.revokezomecallcapability.md)
 
 
