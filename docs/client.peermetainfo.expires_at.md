@@ -7,5 +7,5 @@
 **Signature:**
 
 ```typescript
-expires_at: Timestamp;
+expires_at: Timestamp | null;
 ```

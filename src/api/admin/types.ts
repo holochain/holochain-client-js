@@ -646,7 +646,7 @@ export type PeerMetaInfoResponse = Record<
  */
 export interface PeerMetaInfo {
   meta_value: string;
-  expires_at: Timestamp;
+  expires_at: Timestamp | null;
 }
 
 /**
