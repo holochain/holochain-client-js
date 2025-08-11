@@ -8,7 +8,7 @@
 **Signature:**
 
 ```typescript
-export type GetDnaDefinitionRequest = DnaHash;
+export type GetDnaDefinitionRequest = CellId;
 ```
-**References:** [DnaHash](./client.dnahash.md)
+**References:** [CellId](./client.cellid.md)
 
