@@ -16,6 +16,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Changed
 
+- **BREAKING**: `GetDnaDefinitionRequest` now takes a `CellId` as argument instead of a `DnaHash` ([#369](https://github.com/holochain/holochain-client-js/pull/369))
+- **BREAKING**: `UpdateCoordinatorsRequest` now takes a `CellId` as argument instead of a `DnaHash` ([#369](https://github.com/holochain/holochain-client-js/pull/369))
 - Updated hc sandbox command used in internal tests according to changes introduced with holochain 0.6.0-dev.16 ([#370](https://github.com/holochain/holochain-client-js/pull/370))
 - **BREAKING**: Renamed `AgentMetaInfo` to `PeerMetaInfo` ([#364](https://github.com/holochain/holochain-client-js/pull/364))
 - Changed return type of `grantZomeCallCapability` to `ActionHash` [#360](https://github.com/holochain/holochain-client-js/pull/360)

@@ -10,8 +10,8 @@
 ```typescript
 export type UpdateCoordinatorsRequest = {
     source: CoordinatorSource;
-    dna_hash: DnaHash;
+    cell_id: CellId;
 };
 ```
-**References:** [CoordinatorSource](./client.coordinatorsource.md)<!-- -->, [DnaHash](./client.dnahash.md)
+**References:** [CoordinatorSource](./client.coordinatorsource.md)<!-- -->, [CellId](./client.cellid.md)
 
