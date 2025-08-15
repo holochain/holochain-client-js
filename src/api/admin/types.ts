@@ -304,7 +304,7 @@ export type DnaDefinition = {
 /**
  * @public
  */
-export type GetDnaDefinitionRequest = DnaHash;
+export type GetDnaDefinitionRequest = CellId;
 /**
  * @public
  */
@@ -326,7 +326,7 @@ export type UninstallAppResponse = null;
  */
 export type UpdateCoordinatorsRequest = {
   source: CoordinatorSource;
-  dna_hash: DnaHash;
+  cell_id: CellId;
 };
 
 /**
