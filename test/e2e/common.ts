@@ -102,10 +102,22 @@ export const launch = async (
   });
   await createConductorPromise;
 
+  // Find out the conductor index of the created conductor
+  const dotHcFileContentLines = fs
+    .readFileSync(".hc", "utf-8")
+    .split(/\r?\n/)
+    .map((l) => l.trim());
+  const conductorIndex = dotHcFileContentLines.findIndex(
+    (line) => line === conductorDir
+  );
+
+  if (conductorIndex === -1)
+    throw new Error("Failed to determine index of recently started conductor.");
+
   // start sandbox conductor
   const runConductorProcess = spawn(
     "hc",
-    ["sandbox", "--piped", `-f=${port}`, "run", "-e", conductorDir],
+    ["sandbox", "--piped", `-f=${port}`, "run", `${conductorIndex}`],
     {
       detached: true, // create a process group; without this option, killing
       // the process doesn't kill the conductor
