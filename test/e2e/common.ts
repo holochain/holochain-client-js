@@ -1,4 +1,5 @@
 import fs from "fs";
+import * as readline from "node:readline";
 import assert from "node:assert/strict";
 import { ChildProcessWithoutNullStreams, spawn } from "node:child_process";
 import { Test } from "tape";
@@ -85,15 +86,29 @@ export const launch = async (
   createConductorProcess.stdin.write(LAIR_PASSPHRASE);
   createConductorProcess.stdin.end();
 
-  let conductorDir = "";
+  let conductorIndex: number | undefined;
+
   const createConductorPromise = new Promise<void>((resolve) => {
     createConductorProcess.stderr.on("data", (data) => {
       console.error("[hc sandbox] ERROR: ", data.toString());
     });
-    createConductorProcess.stdout.on("data", (data) => {
-      const tmpDirMatches = data.toString().match(/Created.+"(.+)"/);
-      if (tmpDirMatches) {
-        conductorDir = tmpDirMatches[1];
+
+    const rl = readline.createInterface({
+      input: createConductorProcess.stdout,
+    });
+    let sandboxCreatedPreviousLine = false;
+    rl.on("line", (line) => {
+      console.log(line);
+      if (sandboxCreatedPreviousLine) {
+        // We expect a string like 0:/tmp/nix-shell.Rv7Omo/8wBJlBfszYZi1I6gZr3Cc now
+        // where the number in front of the ':' is the conductor index
+        conductorIndex = parseInt(line.split(":")[0]);
+        sandboxCreatedPreviousLine = false;
+      }
+      // If this string occurs, then the next line will contain the conductor
+      // index and directory
+      if (line.includes("Created 1 sandbox")) {
+        sandboxCreatedPreviousLine = true;
       }
     });
     createConductorProcess.stdout.on("end", () => {
@@ -102,16 +117,11 @@ export const launch = async (
   });
   await createConductorPromise;
 
-  // Find out the conductor index of the created conductor
-  const dotHcFileContentLines = fs
-    .readFileSync(".hc", "utf-8")
-    .split(/\r?\n/)
-    .map((l) => l.trim());
-  const conductorIndex = dotHcFileContentLines.findIndex(
-    (line) => line === conductorDir
-  );
-
-  if (conductorIndex === -1)
+  if (
+    typeof conductorIndex !== "number" ||
+    !Number.isInteger(conductorIndex) ||
+    conductorIndex < 0
+  )
     throw new Error("Failed to determine index of recently started conductor.");
 
   // start sandbox conductor

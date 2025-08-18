@@ -1457,14 +1457,14 @@ test(
     const bundle = await makeCoordinatorZomeBundle();
 
     await admin.updateCoordinators({
-      dna_hash: cell_id[0],
+      cell_id,
       source: {
         type: "bundle",
         value: bundle,
       },
     });
 
-    const dnaDef = await admin.getDnaDefinition(cell_id[0]);
+    const dnaDef = await admin.getDnaDefinition(cell_id);
     const zomeNames = dnaDef.coordinator_zomes.map((x) => x[0]);
 
     t.ok(
