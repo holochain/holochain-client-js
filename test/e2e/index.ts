@@ -577,7 +577,7 @@ test(
         "error is an instance of HolochainError"
       );
       assert(error instanceof HolochainError);
-      t.equal(error.name, "ribosome_error", "error has correct name");
+      t.equal(error.name, "internal_error", "error has correct name");
     }
   })
 );

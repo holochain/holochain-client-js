@@ -9,7 +9,7 @@ Request agent meta info for an agent by peer Url.
 **Signature:**
 
 ```typescript
-agentMetaInfo(req: AgentMetaInfoRequest, timeout?: number): Promise<AgentInfoResponse>;
+agentMetaInfo(req: AgentMetaInfoRequest, timeout?: number): Promise<AgentMetaInfoResponse>;
 ```
 
 ## Parameters
@@ -58,14 +58,14 @@ number
 
 </td><td>
 
-_(Optional)_
+_(Optional)_ A timeout to override the default.
 
 
 </td></tr>
 </tbody></table>
 **Returns:**
 
-Promise&lt;[AgentInfoResponse](./client.agentinforesponse.md)<!-- -->&gt;
+Promise&lt;[AgentMetaInfoResponse](./client.agentmetainforesponse.md)<!-- -->&gt;
 
-The app's agent infos as JSON string.
+The meta info stored for this peer URL.
 

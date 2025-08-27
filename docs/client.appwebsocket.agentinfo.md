@@ -58,7 +58,7 @@ number
 
 </td><td>
 
-_(Optional)_
+_(Optional)_ A timeout to override the default.
 
 
 </td></tr>
