@@ -37,7 +37,7 @@ Description
 </th></tr></thead>
 <tbody><tr><td>
 
-[dna?](./client.dumpnetworkmetricsrequest.dna.md)
+[dna\_hash?](./client.dumpnetworkmetricsrequest.dna_hash.md)
 
 
 </td><td>
