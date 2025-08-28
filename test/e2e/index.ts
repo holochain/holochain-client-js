@@ -577,7 +577,7 @@ test(
         "error is an instance of HolochainError"
       );
       assert(error instanceof HolochainError);
-      t.equal(error.name, "ribosome_error", "error has correct name");
+      t.equal(error.name, "internal_error", "error has correct name");
     }
   })
 );
@@ -1531,6 +1531,7 @@ test(
   withConductor(ADMIN_PORT, async (t) => {
     const { admin, cell_id, client } = await installAppAndDna(ADMIN_PORT);
 
+    // Call it without dna_hash field
     const response = await admin.dumpNetworkMetrics({
       include_dht_summary: true,
     });
@@ -1545,10 +1546,26 @@ test(
       { agent: cell_id[1], storage_arc: null, target_arc: [0, 4294967295] },
     ]);
 
+    // call it with dna_hash field
+    const response2 = await admin.dumpNetworkMetrics({
+      dna_hash: cell_id[0],
+      include_dht_summary: true,
+    });
+
+    t.deepEqual(response, response2);
+
+    // call it on the app websocket as well, the response should be identical
     const appWsResponse = await client.dumpNetworkMetrics({
       include_dht_summary: true,
     });
     t.deepEqual(appWsResponse, response);
+
+    // call it with dna_hash field
+    const appWsResponse2 = await client.dumpNetworkMetrics({
+      dna_hash: cell_id[0],
+      include_dht_summary: true,
+    });
+    t.deepEqual(appWsResponse2, response);
   })
 );
 

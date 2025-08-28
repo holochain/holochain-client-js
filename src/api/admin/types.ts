@@ -1077,7 +1077,7 @@ export interface DumpNetworkMetricsRequest {
   /**
    * The DNA hash of the app network to dump.
    */
-  dna?: DnaHash;
+  dna_hash?: DnaHash;
 
   /**
    * Include DHT summary in the response.
