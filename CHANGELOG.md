@@ -5,26 +5,25 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## \[Unreleased\]
 
 ### Added
+### Fixed
+### Changed
+### Removed
 
+## 2025-09-04: v0.20.0-dev.2
+### Added
 - Added `revokeZomeCallCapability` to the admin websocket to revoke zome call capabilities for an agent [#360](https://github.com/holochain/holochain-client-js/pull/360)
 - Added `listCapabilityGrants` to the admin websocket to list all zome call capabilities granted to an agent [#360](https://github.com/holochain/holochain-client-js/pull/360)
-
 ### Fixed
-
 - Fixed `dna_hash` field in `DumpNetworkMetricsRequest` type ([#371](https://github.com/holochain/holochain-client-js/pull/371))
 - Fixed `expires_at` field in `PeerMetaInfo` type to allow it being `undefined` ([#368](https://github.com/holochain/holochain-client-js/pull/368))
 - Fixed types for `list_apps` to match the new API
-
 ### Changed
-
 - **BREAKING**: `GetDnaDefinitionRequest` now takes a `CellId` as argument instead of a `DnaHash` ([#369](https://github.com/holochain/holochain-client-js/pull/369))
 - **BREAKING**: `UpdateCoordinatorsRequest` now takes a `CellId` as argument instead of a `DnaHash` ([#369](https://github.com/holochain/holochain-client-js/pull/369))
 - Updated hc sandbox command used in internal tests according to changes introduced with holochain 0.6.0-dev.16 ([#370](https://github.com/holochain/holochain-client-js/pull/370))
 - **BREAKING**: Renamed `AgentMetaInfo` to `PeerMetaInfo` ([#364](https://github.com/holochain/holochain-client-js/pull/364))
 - Changed return type of `grantZomeCallCapability` to `ActionHash` [#360](https://github.com/holochain/holochain-client-js/pull/360)
-
 ### Removed
-
 - **BREAKING** Removed `RegisterDna` admin call ([#367](https://github.com/holochain/holochain-client-js/pull/367))
 
 ## 2025-07-02: v0.20.0-dev.1
