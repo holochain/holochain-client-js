@@ -9,7 +9,7 @@
 
 ```typescript
 export type DnaManifest = {
-    manifest_version: string;
+    manifest_version: "0";
     name: string;
     network_seed?: NetworkSeed;
     properties?: DnaProperties;

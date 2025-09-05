@@ -440,8 +440,7 @@ export type AppRoleManifest = {
  * @public
  */
 export type AppManifest = {
-  // Currently "1" is supported
-  manifest_version: string;
+  manifest_version: "0";
 
   name: string;
   description?: string;
@@ -811,9 +810,9 @@ export type CoordinatorSource =
  */
 export type DnaManifest = {
   /**
-   * Currently one "1" is supported
+   * No finalized version yet, hence only "0" is supported.
    */
-  manifest_version: string;
+  manifest_version: "0";
 
   /**
    * The friendly "name" of a Holochain DNA.
