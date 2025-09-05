@@ -9,7 +9,7 @@
 
 ```typescript
 export type AppManifest = {
-    manifest_version: string;
+    manifest_version: "0";
     name: string;
     description?: string;
     roles: Array<AppRoleManifest>;

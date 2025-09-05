@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Added
 ### Fixed
 ### Changed
+- **BREAKING**: Set "0" as the only possible value for `manifest_version` in types `DnaManifest` and `AppManifest`. (#375)
 ### Removed
 
 ## 2025-09-04: v0.20.0-dev.2
