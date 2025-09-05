@@ -6,9 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Added
 ### Fixed
-- Fixed `dna_hash` field in `DumpNetworkMetricsRequest` type ([#372](https://github.com/holochain/holochain-client-js/pull/372))
 ### Changed
 ### Removed
+
+## 2025-09-04: v0.19.3
+### Fixed
+- Fixed `dna_hash` field in `DumpNetworkMetricsRequest` type ([#372](https://github.com/holochain/holochain-client-js/pull/372))
 
 ## 2025-07-21: v0.19.2
 ### Fixed
