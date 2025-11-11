@@ -6,6 +6,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Added
 ### Fixed
+- Fix `ZomeManifest` and `AppRoleDnaManifest` types [#378](https://github.com/holochain/holochain-client-js/pull/378)
 ### Changed
 - **BREAKING**: Set "0" as the only possible value for `manifest_version` in types `DnaManifest` and `AppManifest`. (#375)
 ### Removed

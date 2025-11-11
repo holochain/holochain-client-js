@@ -10,9 +10,10 @@
 ```typescript
 export type ZomeManifest = {
     name: string;
+    path: string;
     hash?: string;
     dependencies?: ZomeDependency[];
-} & ZomeLocation;
+};
 ```
-**References:** [ZomeDependency](./client.zomedependency.md)<!-- -->, [ZomeLocation](./client.zomelocation.md)
+**References:** [ZomeDependency](./client.zomedependency.md)
 

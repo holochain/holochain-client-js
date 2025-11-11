@@ -2560,16 +2560,6 @@ An internal link type index within the DNA, from 0 to 255.
 </td></tr>
 <tr><td>
 
-[Location\_2](./client.location_2.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
 [MembraneProof](./client.membraneproof.md)
 
 
@@ -3081,16 +3071,6 @@ Any value that is serializable to a Yaml value
 </td><td>
 
 An internal zome index within the DNA, from 0 to 255.
-
-
-</td></tr>
-<tr><td>
-
-[ZomeLocation](./client.zomelocation.md)
-
-
-</td><td>
-
 
 
 </td></tr>
