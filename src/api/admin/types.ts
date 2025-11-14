@@ -386,29 +386,6 @@ export interface CellProvisioning {
 /**
  * @public
  */
-export type Location =
-  | {
-      /**
-       * Expect file to be part of this bundle
-       */
-      bundled: string;
-    }
-  | {
-      /**
-       * Get file from local filesystem (not bundled)
-       */
-      path: string;
-    }
-  | {
-      /**
-       * Get file from URL
-       */
-      url: string;
-    };
-
-/**
- * @public
- */
 export type DnaVersionSpec = Array<HoloHashB64>;
 /**
  * @public
@@ -424,10 +401,11 @@ export type DnaVersionFlexible =
  * @public
  */
 export type AppRoleDnaManifest = {
-  clone_limit?: number;
+  path?: string;
   modifiers?: Partial<DnaModifiers>;
-  version?: DnaVersionFlexible;
-} & Location;
+  installed_hash?: DnaHash;
+  clone_limit?: number;
+};
 /**
  * @public
  */
@@ -759,11 +737,6 @@ export type InstallAppDnaPayload = {
 /**
  * @public
  */
-export type ZomeLocation = Location;
-
-/**
- * @public
- */
 export interface ZomeDependency {
   name: ZomeName;
 }
@@ -773,9 +746,10 @@ export interface ZomeDependency {
  */
 export type ZomeManifest = {
   name: string;
+  path: string;
   hash?: string;
   dependencies?: ZomeDependency[];
-} & ZomeLocation;
+};
 
 /**
  * @public

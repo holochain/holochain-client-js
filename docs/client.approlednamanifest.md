@@ -9,10 +9,11 @@
 
 ```typescript
 export type AppRoleDnaManifest = {
-    clone_limit?: number;
+    path?: string;
     modifiers?: Partial<DnaModifiers>;
-    version?: DnaVersionFlexible;
-} & Location;
+    installed_hash?: DnaHash;
+    clone_limit?: number;
+};
 ```
-**References:** [DnaModifiers](./client.dnamodifiers.md)<!-- -->, [DnaVersionFlexible](./client.dnaversionflexible.md)<!-- -->, [Location](./client.location_2.md)
+**References:** [DnaModifiers](./client.dnamodifiers.md)<!-- -->, [DnaHash](./client.dnahash.md)
 
