@@ -999,6 +999,40 @@ export interface IssueAppAuthenticationTokenResponse {
  */
 export type DumpNetworkStatsRequest = void;
 
+export interface ApiTransportStats {
+  /**
+   * Stats from the configured transport implementation.
+   */
+  transport_stats: TransportStats;
+
+  /**
+   * Blocked message counts.
+   */
+  blocked_message_counts: Record<Url, Record<SpaceId, MessageBlockCount>>;
+}
+
+/**
+ * Peer Url
+ */
+type Url = string;
+
+/**
+ * kitsune2 space id
+ */
+type SpaceId = string;
+
+export interface MessageBlockCount {
+  /**
+   * Count of incoming messages that have been blocked and dropped.
+   */
+  incoming: number;
+
+  /**
+   * Count of outgoing messages that have been blocked and dropped.
+   */
+  outgoing: number;
+}
+
 /**
  * Stats for a transport connection.
  *
@@ -1070,7 +1104,12 @@ export interface TransportConnectionStats {
 /**
  * @public
  */
-export type DumpNetworkStatsResponse = TransportStats;
+export type DumpNetworkStatsResponse = ApiTransportStats;
+
+/**
+ * @public
+ */
+export type AppDumpNetworkStatsResponse = TransportStats;
 
 /**
  * Arguments for dumping network metrics.

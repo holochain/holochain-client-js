@@ -19,7 +19,7 @@ import {
   DumpNetworkMetricsRequest,
   DumpNetworkMetricsResponse,
   DumpNetworkStatsRequest,
-  DumpNetworkStatsResponse,
+  AppDumpNetworkStatsResponse,
   MemproofMap,
 } from "../admin/index.js";
 import { WsClient } from "../client.js";
@@ -123,7 +123,7 @@ export class AppWebsocket implements AppClient {
   >;
   private readonly dumpNetworkStatsRequester: Requester<
     DumpNetworkStatsRequest,
-    DumpNetworkStatsResponse
+    AppDumpNetworkStatsResponse
   >;
   private readonly dumpNetworkMetricsRequester: Requester<
     DumpNetworkMetricsRequest,
@@ -345,7 +345,9 @@ export class AppWebsocket implements AppClient {
    *
    * @returns The conductor's {@link TransportStats}.
    */
-  async dumpNetworkStats(timeout?: number): Promise<DumpNetworkStatsResponse> {
+  async dumpNetworkStats(
+    timeout?: number
+  ): Promise<AppDumpNetworkStatsResponse> {
     return await this.dumpNetworkStatsRequester(undefined, timeout);
   }
 

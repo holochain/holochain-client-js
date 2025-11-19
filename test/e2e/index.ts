@@ -1397,16 +1397,16 @@ test(
   withConductor(ADMIN_PORT, async (t) => {
     const { admin, client } = await installAppAndDna(ADMIN_PORT);
 
-    const response = await admin.dumpNetworkStats();
+    const adminWsResponse = await admin.dumpNetworkStats();
 
-    t.assert(response.backend, "BackendLibDataChannel");
-    t.assert(response.peer_urls.length === 1);
-    const peerUrl = new URL(response.peer_urls[0]);
+    t.assert(adminWsResponse.transport_stats.backend, "BackendLibDataChannel");
+    t.assert(adminWsResponse.transport_stats.peer_urls.length === 1);
+    const peerUrl = new URL(adminWsResponse.transport_stats.peer_urls[0]);
     t.assert(peerUrl.origin, "wss://dev-test-bootstrap2.holochain.org");
-    t.deepEqual(response.connections, []);
+    t.deepEqual(adminWsResponse.transport_stats.connections, []);
 
     const appWsResponse = await client.dumpNetworkStats();
-    t.deepEqual(appWsResponse, response);
+    t.deepEqual(appWsResponse, adminWsResponse.transport_stats);
   })
 );
 

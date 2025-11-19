@@ -23,7 +23,7 @@ import {
   PreflightRequest,
   SignedAction,
   SignedActionHashed,
-  DumpNetworkStatsResponse,
+  AppDumpNetworkStatsResponse,
   DumpNetworkMetricsResponse,
   DumpNetworkMetricsRequest,
 } from "../../index.js";
@@ -482,7 +482,7 @@ export interface AppClient {
   myPubKey: AgentPubKey;
   installedAppId: InstalledAppId;
 
-  dumpNetworkStats(): Promise<DumpNetworkStatsResponse>;
+  dumpNetworkStats(): Promise<AppDumpNetworkStatsResponse>;
   dumpNetworkMetrics(
     args: DumpNetworkMetricsRequest
   ): Promise<DumpNetworkMetricsResponse>;

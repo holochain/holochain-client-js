@@ -8,7 +8,7 @@
 **Signature:**
 
 ```typescript
-export type DumpNetworkStatsResponse = TransportStats;
+export type DumpNetworkStatsResponse = ApiTransportStats;
 ```
-**References:** [TransportStats](./client.transportstats.md)
+**References:** [ApiTransportStats](./client.apitransportstats.md)
 
