@@ -10,6 +10,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Update response type of `AdminWebsocket.dumpNetworkStats` to `ApiTransportStats` [#383](https://github.com/holochain/holochain-client-js/pull/383)
 ### Removed
 
+## 2025-11-14: v0.20.0
+### Changed
+- bumped package version to 0.20.0
+
 ## 2025-11-14: v0.20.0-rc.0
 ### Fixed
 - Fix `ZomeManifest` and `AppRoleDnaManifest` types [#378](https://github.com/holochain/holochain-client-js/pull/378)
