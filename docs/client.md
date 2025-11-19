@@ -544,6 +544,15 @@ Description
 </td></tr>
 <tr><td>
 
+[ApiTransportStats](./client.apitransportstats.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
 [AppAuthenticationRequest](./client.appauthenticationrequest.md)
 
 
@@ -985,6 +994,15 @@ Gossip state summary.
 </td><td>
 
 Summary of a local agent's network state.
+
+
+</td></tr>
+<tr><td>
+
+[MessageBlockCount](./client.messageblockcount.md)
+
+
+</td><td>
 
 
 </td></tr>
@@ -1548,6 +1566,16 @@ This type is meant to be opaque
 <tr><td>
 
 [AppBundleSource](./client.appbundlesource.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[AppDumpNetworkStatsResponse](./client.appdumpnetworkstatsresponse.md)
 
 
 </td><td>
