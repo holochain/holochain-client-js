@@ -1,6 +1,7 @@
 import { CapClaim, ZomeCallCapGrant } from "./capabilities.js";
 import { AgentPubKey } from "../types.js";
 import { CounterSigningSessionData } from "./countersigning.js";
+import { SignedActionHashed } from "./action.js";
 
 /**
  * @public
@@ -41,3 +42,23 @@ export type Entry =
   | EntryContent<"CounterSign", [CounterSigningSessionData, Uint8Array]>
   | EntryContent<"CapGrant", ZomeCallCapGrant>
   | EntryContent<"CapClaim", CapClaim>;
+
+/**
+ * @public
+ */
+export enum EntryDhtStatus {
+  Live = "live",
+  Dead = "dead",
+}
+
+/**
+ * @public
+ */
+export interface EntryDetails {
+  entry: Entry;
+  actions: Array<SignedActionHashed>;
+  rejected_actions: Array<SignedActionHashed>;
+  deletes: Array<SignedActionHashed>;
+  updates: Array<SignedActionHashed>;
+  entry_dht_status: EntryDhtStatus;
+}

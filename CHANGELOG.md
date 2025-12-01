@@ -5,6 +5,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## \[Unreleased\]
 
 ### Added
+- Added missing types `DetailsType`, `Details`, `EntryDhtStatus`, `EntryDetails`, `RecordDetails`, `ValidationStatus`, `ValidationReceipt`.
+- Added missing type aliases `DhtOpHash` and `DhtOpHashB64`.
+- Added type alias `DnaDefinition`, which is deprecated and will be removed in 0.22.0
 ### Fixed
 ### Changed
 - Update response type of `AdminWebsocket.dumpNetworkStats` to `ApiTransportStats` [#383](https://github.com/holochain/holochain-client-js/pull/383)

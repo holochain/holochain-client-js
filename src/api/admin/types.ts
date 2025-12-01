@@ -293,7 +293,7 @@ export type CoordinatorZome = ZomeDefinition;
 /**
  * @public
  */
-export type DnaDefinition = {
+export type DnaDef = {
   name: string;
   modifiers: DnaModifiers;
   lineage: DnaHashB64[];
@@ -303,12 +303,19 @@ export type DnaDefinition = {
 
 /**
  * @public
+ *
+ * @deprecated Renamed to DnaDef. This alias will be removed in 0.22.0
+ */
+export type DnaDefinition = DnaDef;
+
+/**
+ * @public
  */
 export type GetDnaDefinitionRequest = CellId;
 /**
  * @public
  */
-export type GetDnaDefinitionResponse = DnaDefinition;
+export type GetDnaDefinitionResponse = DnaDef;
 
 /**
  * @public
