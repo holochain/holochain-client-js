@@ -32,7 +32,7 @@ export const HASH_TYPE_PREFIX = {
  * @public
  */
 export function sliceHashType(
-  hash: AgentPubKey | EntryHash | ActionHash
+  hash: AgentPubKey | EntryHash | ActionHash,
 ): Uint8Array {
   return Uint8Array.from(hash.slice(0, 3));
 }
@@ -48,7 +48,7 @@ export function sliceHashType(
  * @public
  */
 export function sliceCore32(
-  hash: AgentPubKey | EntryHash | ActionHash
+  hash: AgentPubKey | EntryHash | ActionHash,
 ): Uint8Array {
   const start = HASH_TYPE_START + HASH_TYPE_BYTE_LENGTH;
   const end = start + CORE_HASH_BYTE_LENGTH;
@@ -66,7 +66,7 @@ export function sliceCore32(
  * @public
  */
 export function sliceDhtLocation(
-  hash: AgentPubKey | EntryHash | ActionHash
+  hash: AgentPubKey | EntryHash | ActionHash,
 ): Uint8Array {
   const start = HASH_TYPE_START + HASH_TYPE_BYTE_LENGTH + CORE_HASH_BYTE_LENGTH;
   const end = start + DHT_LOCATION_BYTE_LENGTH;
@@ -111,7 +111,7 @@ export function dhtLocationFrom32(hashCore: Uint8Array): Uint8Array {
  */
 export function hashFrom32AndType(
   hashCore: AgentPubKey | EntryHash | ActionHash,
-  hashType: "Agent" | "Entry" | "Dna" | "Action" | "External"
+  hashType: "Agent" | "Entry" | "Dna" | "Action" | "External",
 ): Uint8Array {
   return Uint8Array.from([
     ...HASH_TYPE_PREFIX[hashType],

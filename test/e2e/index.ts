@@ -56,8 +56,8 @@ const fakeAgentPubKey = () =>
     [0x84, 0x20, 0x24].concat(
       "000000000000000000000000000000000000"
         .split("")
-        .map((x) => parseInt(x, 10))
-    )
+        .map((x) => parseInt(x, 10)),
+    ),
   );
 
 const ADMIN_PORT = 33001;
@@ -92,7 +92,7 @@ test(
     t.deepEqual(
       status,
       { type: "disabled", value: { type: "never_started" } },
-      "app installed"
+      "app installed",
     );
 
     console.log("hanging");
@@ -112,12 +112,12 @@ test(
     t.equal(
       disabledAppsInfo[0].cell_info[ROLE_NAME].length,
       1,
-      "expected cell in disabled app info"
+      "expected cell in disabled app info",
     );
     t.deepEqual(
       disabledAppsInfo[0].status,
       { type: "disabled", value: { type: "never_started" } },
-      "disabled app never started"
+      "disabled app never started",
     );
 
     const app = await admin.enableApp({ installed_app_id });
@@ -178,7 +178,7 @@ test(
     await admin.uninstallApp({ installed_app_id });
     allAppsInfo = await admin.listApps({});
     t.equal(allAppsInfo.length, 0);
-  })
+  }),
 );
 
 test(
@@ -231,9 +231,9 @@ test(
         isSameCell(
           cellId,
           (installedApp.cell_info[ROLE_NAME][0].value as ProvisionedCell)
-            .cell_id
-        )
-      )
+            .cell_id,
+        ),
+      ),
     );
 
     await admin.attachAppInterface({
@@ -248,25 +248,24 @@ test(
       status_filter: AppStatusFilter.Enabled,
     });
     t.equal(activeApps3.length, 0);
-  })
+  }),
 );
 
 test(
   "can call a zome function and then deactivate",
   withConductor(ADMIN_PORT, async (t) => {
-    const { installed_app_id, cell_id, client, admin } = await installAppAndDna(
-      ADMIN_PORT
-    );
+    const { installed_app_id, cell_id, client, admin } =
+      await installAppAndDna(ADMIN_PORT);
     let info = await client.appInfo(1000);
     assert(info, "got app info");
     assert(
       info.cell_info[ROLE_NAME][0].type === CellType.Provisioned,
-      "got expected cell"
+      "got expected cell",
     );
     t.deepEqual(
       info.cell_info[ROLE_NAME][0].value.cell_id,
       cell_id,
-      "got correct cell id"
+      "got correct cell id",
     );
     t.ok(ROLE_NAME in info.cell_info, "role name correct");
     t.deepEqual(info.status, { type: "enabled" }, "status is running");
@@ -295,9 +294,9 @@ test(
     t.deepEqual(
       info.status,
       { type: "disabled", value: { type: "user" } },
-      "disabled reason user"
+      "disabled reason user",
     );
-  })
+  }),
 );
 
 test(
@@ -332,7 +331,7 @@ test(
 
     response = await client.callZome(zomeCallPayload, 30000);
     t.equal(response, "foo", "zome can be called with all parameters");
-  })
+  }),
 );
 
 test(
@@ -352,7 +351,7 @@ test(
       token: issued.token,
     });
     t.pass("can connect an app websocket to attached port");
-  })
+  }),
 );
 
 test(
@@ -374,7 +373,7 @@ test(
       assert(error instanceof HolochainError);
       t.equal(error.name, "InvalidTokenError", "expected InvalidTokenError");
     }
-  })
+  }),
 );
 
 test(
@@ -398,7 +397,7 @@ test(
     } catch (error) {
       t.fail("app websocket connection should have been established");
     }
-  })
+  }),
 );
 
 test(
@@ -422,7 +421,7 @@ test(
       t.assert(error instanceof HolochainError, "expected a HolochainError");
       t.pass("app websocket connection failed as expected");
     }
-  })
+  }),
 );
 
 test(
@@ -449,12 +448,12 @@ test(
     } catch (error) {
       t.ok(
         error instanceof HolochainError,
-        "error is an instance of HolochainError"
+        "error is an instance of HolochainError",
       );
       assert(error instanceof HolochainError);
       t.equal(error.name, "internal_error", "error has correct name");
     }
-  })
+  }),
 );
 
 test(
@@ -497,9 +496,9 @@ test(
     t.equal(provisionedCell.dna_modifiers.network_seed, "hello");
     t.deepEqual(
       yaml.load(decode(provisionedCell.dna_modifiers.properties) as string),
-      { progenitor: progenitorKey }
+      { progenitor: progenitorKey },
     );
-  })
+  }),
 );
 
 test(
@@ -566,7 +565,7 @@ test(
     t.deepEqual(
       appInfo.status,
       { type: "disabled", value: { type: "never_started" } },
-      "app is in status awaiting_memproofs"
+      "app is in status awaiting_memproofs",
     );
 
     try {
@@ -576,7 +575,7 @@ test(
       t.equal(
         error.message,
         "Other: app not in correct state to enable",
-        "enabling app fails while memproofs not provided"
+        "enabling app fails while memproofs not provided",
       );
     }
 
@@ -590,13 +589,13 @@ test(
         type: "disabled",
         value: { type: "not_started_after_providing_memproofs" },
       },
-      "app is disabled after providing memproofs"
+      "app is disabled after providing memproofs",
     );
 
     await client.enableApp();
     appInfo = await client.appInfo();
     t.deepEqual(appInfo.status, { type: "enabled" }, "app is running");
-  })
+  }),
 );
 
 test(
@@ -609,7 +608,7 @@ test(
     const agent = await admin.generateAgentPubKey();
     const [, signingKey] = await generateSigningKeyPair(agent);
     t.deepEqual(signingKey.subarray(35), Uint8Array.from(agent.subarray(35)));
-  })
+  }),
 );
 
 test(
@@ -661,7 +660,7 @@ test(
 
     const response = await client.callZome(zomeCallPayload, 30000);
     t.equal(response, "foo", "zome call succeeds");
-  })
+  }),
 );
 
 test(
@@ -692,7 +691,7 @@ test(
     });
     t.equal(state[0].source_chain_dump.records.length, 5);
     t.equal(state[0].source_chain_dump.records[0].action.type, "Dna");
-  })
+  }),
 );
 
 test(
@@ -705,7 +704,7 @@ test(
     for (const dhtOp of state.integration_dump.integrated) {
       t.assert("ChainOp" in dhtOp, "dht op is a chain op");
     }
-  })
+  }),
 );
 
 test(
@@ -714,7 +713,7 @@ test(
     const { admin, cell_id, client } = await installAppAndDna(ADMIN_PORT);
     let resolveSignalPromise: (value?: unknown) => void | undefined;
     const signalReceivedPromise = new Promise(
-      (resolve) => (resolveSignalPromise = resolve)
+      (resolve) => (resolveSignalPromise = resolve),
     );
     const signalCb = (signal: Signal) => {
       assert(signal.type === SignalType.App);
@@ -738,7 +737,7 @@ test(
       payload: null,
     });
     await signalReceivedPromise;
-  })
+  }),
 );
 
 // test without conductor
@@ -778,7 +777,7 @@ test(
     } catch (error) {
       t.pass("zome call timed out");
     }
-  })
+  }),
 );
 
 test("can inject agents", async (t) => {
@@ -786,7 +785,7 @@ test("can inject agents", async (t) => {
   const conductor1 = await launch(
     ADMIN_PORT,
     localServices.bootstrapServerUrl,
-    localServices.signalingServerUrl
+    localServices.signalingServerUrl,
   );
   const installed_app_id = "app";
   const admin1 = await AdminWebsocket.connect({
@@ -814,7 +813,7 @@ test("can inject agents", async (t) => {
   t.equal(
     activeApp1Info.installed_app_id,
     installed_app_id,
-    "installed app id correct"
+    "installed app id correct",
   );
 
   // There should be one agent info now.
@@ -833,13 +832,13 @@ test("can inject agents", async (t) => {
   t.deepEqual(
     dnaAgentInfos,
     agentInfos1,
-    "DNA agent infos match app agent infos"
+    "DNA agent infos match app agent infos",
   );
 
   const conductor2 = await launch(
     ADMIN_PORT_1,
     localServices.bootstrapServerUrl,
-    localServices.signalingServerUrl
+    localServices.signalingServerUrl,
   );
   const admin2 = await AdminWebsocket.connect({
     url: new URL(`ws://localhost:${ADMIN_PORT_1}`),
@@ -849,14 +848,14 @@ test("can inject agents", async (t) => {
   let agentInfos2 = await admin2.agentInfo({ dna_hashes: null });
   t.assert(
     agentInfos2.length === 0,
-    "number of agent infos on conductor 2 is 0"
+    "number of agent infos on conductor 2 is 0",
   );
 
   await admin2.addAgentInfo({ agent_infos: agentInfos1 });
   agentInfos2 = await admin2.agentInfo({ dna_hashes: null });
   t.assert(
     agentInfos2.length === 1,
-    "number of agent infos on conductor 2 is 1"
+    "number of agent infos on conductor 2 is 1",
   );
 
   await stopLocalServices(localServices.servicesProcess);
@@ -874,7 +873,7 @@ test("can query peer meta info over admin and app websocket", async (t) => {
   const conductor1 = await launch(
     ADMIN_PORT,
     localServices.bootstrapServerUrl,
-    localServices.signalingServerUrl
+    localServices.signalingServerUrl,
   );
   const {
     cell_id: cell_id1,
@@ -894,7 +893,7 @@ test("can query peer meta info over admin and app websocket", async (t) => {
   const conductor2 = await launch(
     ADMIN_PORT_1,
     localServices.bootstrapServerUrl,
-    localServices.signalingServerUrl
+    localServices.signalingServerUrl,
   );
 
   const {
@@ -928,7 +927,7 @@ test("can query peer meta info over admin and app websocket", async (t) => {
     null,
     "agent 2 wasn't able to get the entry of agent 1",
     200,
-    20_000
+    20_000,
   );
 
   // Now have agent 2 get peer meta info for agent 1 via the admin websocket
@@ -978,7 +977,7 @@ test(
     });
     t.assert(
       agentInfosForFakeDna.length === 0,
-      "number of agent infos for fake DNA is 0"
+      "number of agent infos for fake DNA is 0",
     );
 
     const appInfo = await client.appInfo();
@@ -990,10 +989,10 @@ test(
     });
     t.assert(
       agentInfosForDna.length === 1,
-      "number of agent infos for app's DNA is 1"
+      "number of agent infos for app's DNA is 1",
     );
     t.deepEqual(agentInfos, agentInfosForDna);
-  })
+  }),
 );
 
 test(
@@ -1015,13 +1014,13 @@ test(
     t.deepEqual(
       Array.from(link.create_link_hash.subarray(0, 3)),
       [132, 41, 36],
-      "create link hash is valid"
+      "create link hash is valid",
     );
     t.deepEqual(link.link_type, 0, "link type is correct");
     t.deepEqual(link.zome_index, 0, "zome index is correct");
     t.ok("BYTES_PER_ELEMENT" in link.tag, "tag is a byte array");
     t.deepEqual(link.tag.toString(), tag, "tag is correct");
-  })
+  }),
 );
 
 test(
@@ -1048,23 +1047,23 @@ test(
     t.equal(
       lastAction.action.hashed.content.type,
       ActionType.DeleteLink,
-      "last action is DeleteLink"
+      "last action is DeleteLink",
     );
     const secondLastAction = activity[1];
     t.equal(
       secondLastAction.action.hashed.content.type,
       ActionType.CreateLink,
-      "second last action is CreateLink"
+      "second last action is CreateLink",
     );
     assert(
-      secondLastAction.action.hashed.content.type === ActionType.CreateLink
+      secondLastAction.action.hashed.content.type === ActionType.CreateLink,
     );
     t.equal(
       secondLastAction.action.hashed.content.link_type,
       0,
-      "link type is 0"
+      "link type is 0",
     );
-  })
+  }),
 );
 
 test(
@@ -1087,15 +1086,14 @@ test(
     t.true(interfaces[0].port > 0);
     t.equal(interfaces[0].allowed_origins, "client-test-app");
     t.equal(interfaces[0].installed_app_id, null);
-  })
+  }),
 );
 
 test(
   "can use some of the defined js bindings",
   withConductor(ADMIN_PORT, async (t) => {
-    const { installed_app_id, cell_id, client, admin } = await installAppAndDna(
-      ADMIN_PORT
-    );
+    const { installed_app_id, cell_id, client, admin } =
+      await installAppAndDna(ADMIN_PORT);
     let info = await client.appInfo(1000);
     assert(info);
     assert(info.cell_info[ROLE_NAME][0].type === CellType.Provisioned);
@@ -1120,7 +1118,7 @@ test(
       type: "disabled",
       value: { type: "user" },
     });
-  })
+  }),
 );
 
 test(
@@ -1155,9 +1153,9 @@ test(
     assert(installedApp2.cell_info[ROLE_NAME][0].type === CellType.Provisioned);
     t.isNotDeepEqual(
       installedApp1.cell_info[ROLE_NAME][0].value.cell_id[0],
-      installedApp2.cell_info[ROLE_NAME][0].value.cell_id[0]
+      installedApp2.cell_info[ROLE_NAME][0].value.cell_id[0],
     );
-  })
+  }),
 );
 
 test(
@@ -1181,7 +1179,7 @@ test(
     t.deepEqual(
       cloneCell.cell_id[1],
       appInfo.cell_info[ROLE_NAME][0].value.cell_id[1],
-      "clone cell agent key matches base cell agent key"
+      "clone cell agent key matches base cell agent key",
     );
     const zomeCallPayload: CallZomeRequest = {
       cell_id: cloneCell.cell_id,
@@ -1195,9 +1193,9 @@ test(
     t.equal(
       response,
       "foo",
-      "clone cell can be called with same zome call as base cell"
+      "clone cell can be called with same zome call as base cell",
     );
-  })
+  }),
 );
 
 test(
@@ -1226,7 +1224,7 @@ test(
     t.equal(
       appInfo.cell_info[ROLE_NAME].length,
       2,
-      "disabled clone cell is still part of app info"
+      "disabled clone cell is still part of app info",
     );
     const params: CallZomeRequest = {
       cell_id: cloneCell.cell_id,
@@ -1241,7 +1239,7 @@ test(
     } catch (error) {
       t.pass("disabled clone call cannot be called");
     }
-  })
+  }),
 );
 
 test(
@@ -1274,7 +1272,7 @@ test(
     t.equal(
       appInfo.cell_info[ROLE_NAME].length,
       2,
-      "clone cell is part of app info"
+      "clone cell is part of app info",
     );
     const params: CallZomeRequest = {
       cell_id: enabledCloneCell.cell_id,
@@ -1286,15 +1284,14 @@ test(
     await admin.authorizeSigningCredentials(cloneCell.cell_id);
     const response = await client.callZome(params);
     t.equal(response, "foo", "enabled clone cell can be called");
-  })
+  }),
 );
 
 test(
   "can delete archived clone cells of an app",
   withConductor(ADMIN_PORT, async (t) => {
-    const { installed_app_id, client, admin } = await installAppAndDna(
-      ADMIN_PORT
-    );
+    const { installed_app_id, client, admin } =
+      await installAppAndDna(ADMIN_PORT);
     const createCloneCellParams: CreateCloneCellRequest = {
       role_name: ROLE_NAME,
       modifiers: {
@@ -1320,7 +1317,7 @@ test(
     } catch (error) {
       t.pass("deleted clone cell cannot be enabled");
     }
-  })
+  }),
 );
 
 test(
@@ -1337,7 +1334,7 @@ test(
         provenance: cell_id[1],
         payload: null,
       },
-      1000
+      1000,
     );
     const call2 = client.callZome(
       {
@@ -1347,7 +1344,7 @@ test(
         provenance: cell_id[1],
         payload: null,
       },
-      1000
+      1000,
     );
 
     await delay(100);
@@ -1356,7 +1353,7 @@ test(
     await client.client.close(closeEventCode);
     t.ok(
       client.client.socket.readyState !== client.client.socket.OPEN,
-      "ws is not open"
+      "ws is not open",
     );
 
     const [res1, res2] = await Promise.allSettled([call1, call2]);
@@ -1365,15 +1362,15 @@ test(
     t.equal(
       res1.reason.name,
       "ClientClosedWithPendingRequests",
-      "res1 is correct holochain error"
+      "res1 is correct holochain error",
     );
     assert(res2.status === "rejected");
     t.equal(
       res2.reason.name,
       "ClientClosedWithPendingRequests",
-      "res1 is correct holochain error"
+      "res1 is correct holochain error",
     );
-  })
+  }),
 );
 
 test(
@@ -1386,10 +1383,10 @@ test(
     t.equal(response.blobs.length, 1);
     t.assert(
       response.blobs.some((blob) =>
-        blob.value.used_by.includes(installed_app_id)
-      )
+        blob.value.used_by.includes(installed_app_id),
+      ),
     );
-  })
+  }),
 );
 
 test(
@@ -1407,7 +1404,7 @@ test(
 
     const appWsResponse = await client.dumpNetworkStats();
     t.deepEqual(appWsResponse, adminWsResponse.transport_stats);
-  })
+  }),
 );
 
 test(
@@ -1449,7 +1446,7 @@ test(
       include_dht_summary: true,
     });
     t.deepEqual(appWsResponse2, response);
-  })
+  }),
 );
 
 test(
@@ -1486,7 +1483,7 @@ test(
 
     t.ok(
       zomeNames.includes("coordinator2"),
-      "coordinator zomes can be updated"
+      "coordinator zomes can be updated",
     );
 
     const response = await client.callZome({
@@ -1498,7 +1495,7 @@ test(
     });
 
     t.equal(response, "hi", "updated coordinator zomes can be called");
-  })
+  }),
 );
 
 test(
@@ -1507,7 +1504,7 @@ test(
     const { cell_id, client, admin } = await installAppAndDna(
       ADMIN_PORT,
       false,
-      0
+      0,
     );
     await admin.authorizeSigningCredentials(cell_id);
     await client.client.close();
@@ -1524,7 +1521,7 @@ test(
     } catch (error) {
       t.fail(`websocket was not reconnected: ${error}`);
     }
-  })
+  }),
 );
 
 test(
@@ -1548,12 +1545,12 @@ test(
       console.log();
       await client.callZome(callParams);
       t.fail(
-        "reconnecting to websocket should have failed due to an invalid token."
+        "reconnecting to websocket should have failed due to an invalid token.",
       );
     } catch (error) {
       t.assert(
         error instanceof HolochainError,
-        "error should be of type HolochainError"
+        "error should be of type HolochainError",
       );
       assert(error instanceof HolochainError);
       t.equal(error.name, "InvalidTokenError", "expected an InvalidTokenError");
@@ -1567,16 +1564,16 @@ test(
     } catch (error) {
       t.assert(
         error instanceof HolochainError,
-        "error should be of type HolochainError"
+        "error should be of type HolochainError",
       );
       assert(error instanceof HolochainError);
       t.equal(
         error.name,
         "WebsocketClosedError",
-        "expected a WebsocketClosedError"
+        "expected a WebsocketClosedError",
       );
     }
-  })
+  }),
 );
 
 test(
@@ -1594,5 +1591,5 @@ test(
       payload: serializationEnumInputVariant,
     });
     t.deepEqual(response, { Output: "success" });
-  })
+  }),
 );

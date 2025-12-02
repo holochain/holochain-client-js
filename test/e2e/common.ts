@@ -49,7 +49,7 @@ export const runLocalServices = async () => {
 };
 
 export const stopLocalServices = (
-  localServicesProcess: ChildProcessWithoutNullStreams
+  localServicesProcess: ChildProcessWithoutNullStreams,
 ) => {
   if (localServicesProcess.pid === undefined) {
     return null;
@@ -68,7 +68,7 @@ export const stopLocalServices = (
 export const launch = async (
   port: number,
   bootstrapServerUrl: URL,
-  signalingServerUrl: URL
+  signalingServerUrl: URL,
 ) => {
   // create sandbox conductor
   const args = [
@@ -131,7 +131,7 @@ export const launch = async (
     {
       detached: true, // create a process group; without this option, killing
       // the process doesn't kill the conductor
-    }
+    },
   );
   runConductorProcess.stdin.write(LAIR_PASSPHRASE);
   runConductorProcess.stdin.end();
@@ -174,7 +174,7 @@ export const withConductor =
     const conductorProcess = await launch(
       port,
       localServices.bootstrapServerUrl,
-      localServices.signalingServerUrl
+      localServices.signalingServerUrl,
     );
     try {
       await f(t);
@@ -200,7 +200,7 @@ export const installAppAndDna = async (
   /**
    * expiry seconds of the app authentication token
    */
-  expirySeconds = 30
+  expirySeconds = 30,
 ): Promise<{
   installed_app_id: InstalledAppId;
   cell_id: CellId;
@@ -244,7 +244,7 @@ export const installAppAndDna = async (
 };
 
 export const createAppInterfaceAndInstallApp = async (
-  adminPort: number
+  adminPort: number,
 ): Promise<{
   installed_app_id: InstalledAppId;
   cell_id: CellId;
@@ -281,7 +281,7 @@ export const createAppInterfaceAndInstallApp = async (
 };
 
 export const createAppWsAndInstallApp = async (
-  adminPort: number
+  adminPort: number,
 ): Promise<{
   installed_app_id: InstalledAppId;
   cell_id: CellId;
@@ -302,7 +302,7 @@ export const createAppWsAndInstallApp = async (
 export async function makeCoordinatorZomeBundle(): Promise<CoordinatorBundle> {
   const wasm = fs.readFileSync(
     `${process.cwd()}/target/wasm32-unknown-unknown/release/coordinator2.wasm`,
-    null
+    null,
   );
 
   return {
@@ -326,7 +326,7 @@ export async function retryUntilTimeout<T>(
   whileValue: any,
   timeoutMsg: string,
   intervalMs: number,
-  timeoutMs: number
+  timeoutMs: number,
 ): Promise<T> {
   const startTime = Date.now();
   let value = await cb();

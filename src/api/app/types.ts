@@ -469,12 +469,12 @@ export type SignalCb = (signal: Signal) => void;
 export interface AppClient {
   callZome(
     args: CallZomeRequest | RoleNameCallZomeRequest,
-    timeout?: number
+    timeout?: number,
   ): Promise<any>;
 
   on<Name extends keyof AppEvents>(
     eventName: Name | readonly Name[],
-    listener: SignalCb
+    listener: SignalCb,
   ): UnsubscribeFunction;
 
   appInfo(): Promise<AppInfoResponse>;
@@ -484,24 +484,23 @@ export interface AppClient {
 
   dumpNetworkStats(): Promise<AppDumpNetworkStatsResponse>;
   dumpNetworkMetrics(
-    args: DumpNetworkMetricsRequest
+    args: DumpNetworkMetricsRequest,
   ): Promise<DumpNetworkMetricsResponse>;
   createCloneCell(
-    args: CreateCloneCellRequest
+    args: CreateCloneCellRequest,
   ): Promise<CreateCloneCellResponse>;
   enableCloneCell(
-    args: EnableCloneCellRequest
+    args: EnableCloneCellRequest,
   ): Promise<EnableCloneCellResponse>;
   disableCloneCell(
-    args: DisableCloneCellRequest
+    args: DisableCloneCellRequest,
   ): Promise<DisableCloneCellResponse>;
 }
 
 /**
  * @public
  */
-export interface AppWebsocketConnectionOptions
-  extends WebsocketConnectionOptions {
+export interface AppWebsocketConnectionOptions extends WebsocketConnectionOptions {
   token?: AppAuthenticationToken;
   callZomeTransform?: CallZomeTransform;
 }
