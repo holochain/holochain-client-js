@@ -213,6 +213,16 @@ Decision about an incomplete countersigning session.
 
 
 </td></tr>
+<tr><td>
+
+[ValidationStatus](./client.validationstatus.md)
+
+
+</td><td>
+
+
+
+</td></tr>
 </tbody></table>
 
 ## Functions
@@ -568,6 +578,7 @@ Description
 
 
 </td><td>
+
 
 
 </td></tr>
@@ -1035,6 +1046,7 @@ Summary of a local agent's network state.
 </td><td>
 
 
+
 </td></tr>
 <tr><td>
 
@@ -1299,6 +1311,16 @@ This is intended to be a state dump that gives some insight into what the transp
 <tr><td>
 
 [UpdateBase](./client.updatebase.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[ValidationReceipt](./client.validationreceipt.md)
 
 
 </td><td>
@@ -2737,6 +2759,17 @@ An internal link type index within the DNA, from 0 to 255.
 </td></tr>
 <tr><td>
 
+[PeerUrl](./client.peerurl.md)
+
+
+</td><td>
+
+Peer Url
+
+
+</td></tr>
+<tr><td>
+
 [PreflightBytes](./client.preflightbytes.md)
 
 
@@ -2986,6 +3019,17 @@ If the key could not be deleted from all cells, the call [RevokeAgentKeyRequest]
 
 </td><td>
 
+
+
+</td></tr>
+<tr><td>
+
+[SpaceId](./client.spaceid.md)
+
+
+</td><td>
+
+kitsune2 space id
 
 
 </td></tr>

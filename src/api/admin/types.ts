@@ -1006,6 +1006,9 @@ export interface IssueAppAuthenticationTokenResponse {
  */
 export type DumpNetworkStatsRequest = void;
 
+/**
+ * @public
+ */
 export interface ApiTransportStats {
   /**
    * Stats from the configured transport implementation.
@@ -1015,19 +1018,26 @@ export interface ApiTransportStats {
   /**
    * Blocked message counts.
    */
-  blocked_message_counts: Record<Url, Record<SpaceId, MessageBlockCount>>;
+  blocked_message_counts: Record<PeerUrl, Record<SpaceId, MessageBlockCount>>;
 }
 
 /**
  * Peer Url
+ * 
+ * @public
  */
-type Url = string;
+export type PeerUrl = string;
 
 /**
  * kitsune2 space id
+ *
+ * @public
  */
-type SpaceId = string;
+export type SpaceId = string;
 
+/**
+ * @public
+ */
 export interface MessageBlockCount {
   /**
    * Count of incoming messages that have been blocked and dropped.
