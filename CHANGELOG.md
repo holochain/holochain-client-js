@@ -5,8 +5,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## \[Unreleased\]
 
 ### Added
+- Added enum `HoloHashType` with all available HoloHash variants.
+- Added utility function `getHashType` to derive the `HoloHashType` from a given HoloHash.
+- Added utility function `hashFromContentAndType` to generate a valid `HoloHash` from some content and a `HoloHashType`.
 ### Fixed
 ### Changed
+- Added missing `HoloHashType` hash prefixes to `HASH_TYPE_PREFIX` map: `DhtOp`, `Warrant`, `Dna`, `Wasm`, and `External`.
 - Update response type of `AdminWebsocket.dumpNetworkStats` to `ApiTransportStats` [#383](https://github.com/holochain/holochain-client-js/pull/383)
 ### Removed
 

@@ -1,16 +1,22 @@
 import test from "tape";
 import {
+  dhtLocationFrom32,
   fakeActionHash,
   fakeAgentPubKey,
   fakeDnaHash,
   fakeEntryHash,
+  getHashType,
   hashFrom32AndType,
+  hashFromContentAndType,
+  HoloHashType,
   sliceCore32,
   sliceDhtLocation,
   sliceHashType,
 } from "../../src";
 import { installAppAndDna, withConductor } from "./common.js";
 import { range } from "lodash-es";
+import { encode } from "@msgpack/msgpack";
+import blake2b from "@bitgo/blake2b";
 
 const ADMIN_PORT = 33001;
 
@@ -219,14 +225,193 @@ test("sliceDhtLocation, sliceCore32, sliceHashType extract components of a hash"
 
 test("hashFrom32AndType generates valid hash with type and 32 core bytes", async (t) => {
   const core = Uint8Array.from(range(0, 32).map(() => 1));
-  const fullHash = hashFrom32AndType(core, "Agent");
+  let hash = hashFrom32AndType(core, HoloHashType.Agent);
 
   t.deepEqual(
-    fullHash,
+    hash,
     Uint8Array.from([
       132, 32, 36, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
       1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 126, 207, 206, 190,
     ]),
     "generated full valid hash"
   );
+
+  hash = hashFrom32AndType(core, HoloHashType.Entry);
+  t.deepEqual(
+    hash,
+    Uint8Array.from([
+      132, 33, 36, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+      1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 126, 207, 206, 190,
+    ]),
+    "generated full valid hash"
+  );
+
+  hash = hashFrom32AndType(core, HoloHashType.DhtOp);
+  t.deepEqual(
+    hash,
+    Uint8Array.from([
+      132, 36, 36, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+      1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 126, 207, 206, 190,
+    ]),
+    "generated full valid hash"
+  );
+
+  hash = hashFrom32AndType(core, HoloHashType.Warrant);
+  t.deepEqual(
+    hash,
+    Uint8Array.from([
+      132, 44, 36, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+      1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 126, 207, 206, 190,
+    ]),
+    "generated full valid hash"
+  );
+
+  hash = hashFrom32AndType(core, HoloHashType.Dna);
+  t.deepEqual(
+    hash,
+    Uint8Array.from([
+      132, 45, 36, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+      1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 126, 207, 206, 190,
+    ]),
+    "generated full valid hash"
+  );
+
+  hash = hashFrom32AndType(core, HoloHashType.Action);
+  t.deepEqual(
+    hash,
+    Uint8Array.from([
+      132, 41, 36, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+      1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 126, 207, 206, 190,
+    ]),
+    "generated full valid hash"
+  );
+
+  hash = hashFrom32AndType(core, HoloHashType.Wasm);
+  t.deepEqual(
+    hash,
+    Uint8Array.from([
+      132, 42, 36, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+      1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 126, 207, 206, 190,
+    ]),
+    "generated full valid hash"
+  );
+
+  hash = hashFrom32AndType(core, HoloHashType.External);
+  t.deepEqual(
+    hash,
+    Uint8Array.from([
+      132, 47, 36, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+      1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 126, 207, 206, 190,
+    ]),
+    "generated full valid hash"
+  );
+});
+
+test("getHashType determines hash type name from valid 39 byte hash", async (t) => {
+  const core = Uint8Array.from(range(0, 32).map(() => 1));
+  const fullHash = hashFrom32AndType(core, HoloHashType.Agent);
+
+  let hashType = getHashType(
+    Uint8Array.from([
+      132, 32, 36, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+      1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 126, 207, 206, 190,
+    ])
+  );
+  t.equal(hashType, HoloHashType.Agent);
+
+  hashType = getHashType(
+    Uint8Array.from([
+      132, 33, 36, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+      1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 126, 207, 206, 190,
+    ])
+  );
+  t.equal(hashType, HoloHashType.Entry);
+
+  hashType = getHashType(
+    Uint8Array.from([
+      132, 36, 36, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+      1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 126, 207, 206, 190,
+    ])
+  );
+  t.equal(hashType, HoloHashType.DhtOp);
+
+  hashType = getHashType(
+    Uint8Array.from([
+      132, 44, 36, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+      1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 126, 207, 206, 190,
+    ])
+  );
+  t.equal(hashType, HoloHashType.Warrant);
+
+  hashType = getHashType(
+    Uint8Array.from([
+      132, 45, 36, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+      1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 126, 207, 206, 190,
+    ])
+  );
+  t.equal(hashType, HoloHashType.Dna);
+
+  hashType = getHashType(
+    Uint8Array.from([
+      132, 41, 36, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+      1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 126, 207, 206, 190,
+    ])
+  );
+  t.equal(hashType, HoloHashType.Action);
+
+  hashType = getHashType(
+    Uint8Array.from([
+      132, 42, 36, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+      1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 126, 207, 206, 190,
+    ])
+  );
+  t.equal(hashType, HoloHashType.Wasm);
+
+  hashType = getHashType(
+    Uint8Array.from([
+      132, 47, 36, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+      1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 126, 207, 206, 190,
+    ])
+  );
+  t.equal(hashType, HoloHashType.External);
+});
+
+test("getHashType throws error on hash with invalid 3 byte prefix", async (t) => {
+  // Invalid hash type prefix throws error
+  t.throws(() => {
+    getHashType(
+      Uint8Array.from([
+        0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 126, 207, 206, 190,
+      ])
+    );
+  });
+});
+
+test("hashFromContentAndType generates valid HoloHash with specified type", async (t) => {
+  const content = {
+    name: "Joe",
+    age: 20,
+    hobbies: ["Ice Skating", "Basketball", "Dance"],
+  };
+
+  // Determine expected hash by hashing manually with blake2
+  const expectedHash = new Uint8Array(32);
+  blake2b(expectedHash.length).update(encode(content)).digest(expectedHash);
+
+  // Hash from util function
+  const hash = hashFromContentAndType(content, HoloHashType.Entry);
+
+  // Valid type bytes
+  const hashType = getHashType(hash);
+  t.deepEqual(hashType, HoloHashType.Entry);
+
+  // Valid hash bytes
+  const core = sliceCore32(hash);
+  t.deepEqual(core.length, 32);
+  t.deepEqual(core, expectedHash);
+
+  // Valid location bytes
+  const loc = sliceDhtLocation(hash);
+  t.deepEqual(loc, dhtLocationFrom32(expectedHash));
 });

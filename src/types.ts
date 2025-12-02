@@ -1,3 +1,5 @@
+/** HoloHash Types */
+
 /**
  * @public
  */
@@ -30,6 +32,31 @@ export type AnyDhtHash = HoloHash;
  * @public
  */
 export type ExternalHash = HoloHash;
+/**
+ * @public
+ */
+export type DhtOpHash = HoloHash;
+/**
+ * @public
+ */
+export type WarrantHash = HoloHash;
+/**
+ * HoloHash type names
+ *
+ * From https://github.com/holochain/holochain/blob/develop/crates/holo_hash/src/hash_type/primitive.rs
+ *
+ * @public
+ */
+export enum HoloHashType {
+  Agent = "agent",
+  Entry = "entry",
+  DhtOp = "dhtop",
+  Warrant = "warrant",
+  Dna = "dna",
+  Action = "action",
+  Wasm = "wasm",
+  External = "external",
+}
 
 /**
  * @public

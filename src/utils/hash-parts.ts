@@ -1,24 +1,52 @@
-import { ActionHash, AgentPubKey, EntryHash } from "../types.js";
+import { encode } from "@msgpack/msgpack";
+import { HoloHash, HoloHashType } from "../types.js";
 import blake2b from "@bitgo/blake2b";
+import isEqual from "lodash-es/isEqual.js";
 
 const HASH_TYPE_START = 0;
 const HASH_TYPE_BYTE_LENGTH = 3;
 const CORE_HASH_BYTE_LENGTH = 32;
 const DHT_LOCATION_BYTE_LENGTH = 4;
 
+const HASH_TYPE_PREFIX_U8 = {
+  [HoloHashType.Agent]: [132, 32, 36],
+  [HoloHashType.Entry]: [132, 33, 36],
+  [HoloHashType.DhtOp]: [132, 36, 36],
+  [HoloHashType.Warrant]: [132, 44, 36],
+  [HoloHashType.Dna]: [132, 45, 36],
+  [HoloHashType.Action]: [132, 41, 36],
+  [HoloHashType.Wasm]: [132, 42, 36],
+  [HoloHashType.External]: [132, 47, 36],
+};
+
 /**
- * Hash type labels and their 3 byte values (forming the first 3 bytes of hash).
+ * Hash type labels mapped to their 3 byte values (forming the first 3 bytes of hash).
  *
  * From https://github.com/holochain/holochain/blob/develop/crates/holo_hash/src/hash_type/primitive.rs
  *
  * @public
  */
 export const HASH_TYPE_PREFIX = {
-  Agent: Uint8Array.from([132, 32, 36]),
-  Entry: Uint8Array.from([132, 33, 36]),
-  Dna: Uint8Array.from([132, 45, 36]),
-  Action: Uint8Array.from([132, 41, 36]),
-  External: Uint8Array.from([132, 47, 36]),
+  [HoloHashType.Agent]: Uint8Array.from(
+    HASH_TYPE_PREFIX_U8[HoloHashType.Agent]
+  ),
+  [HoloHashType.Entry]: Uint8Array.from(
+    HASH_TYPE_PREFIX_U8[HoloHashType.Entry]
+  ),
+  [HoloHashType.DhtOp]: Uint8Array.from(
+    HASH_TYPE_PREFIX_U8[HoloHashType.DhtOp]
+  ),
+  [HoloHashType.Warrant]: Uint8Array.from(
+    HASH_TYPE_PREFIX_U8[HoloHashType.Warrant]
+  ),
+  [HoloHashType.Dna]: Uint8Array.from(HASH_TYPE_PREFIX_U8[HoloHashType.Dna]),
+  [HoloHashType.Action]: Uint8Array.from(
+    HASH_TYPE_PREFIX_U8[HoloHashType.Action]
+  ),
+  [HoloHashType.Wasm]: Uint8Array.from(HASH_TYPE_PREFIX_U8[HoloHashType.Wasm]),
+  [HoloHashType.External]: Uint8Array.from(
+    HASH_TYPE_PREFIX_U8[HoloHashType.External]
+  ),
 };
 
 /**
@@ -31,10 +59,31 @@ export const HASH_TYPE_PREFIX = {
  *
  * @public
  */
-export function sliceHashType(
-  hash: AgentPubKey | EntryHash | ActionHash
-): Uint8Array {
+export function sliceHashType(hash: HoloHash): Uint8Array {
   return Uint8Array.from(hash.slice(0, 3));
+}
+
+/**
+ * Get hash type of a hash, by reading the first 3 bytes.
+ *
+ * From https://github.com/holochain/holochain/blob/develop/crates/holo_hash/src/hash_type/primitive.rs
+ *
+ * @param hash - The full 39 byte hash.
+ * @returns The HashType
+ *
+ * @public
+ */
+export function getHashType(hash: HoloHash): HoloHashType {
+  const hashTypeBytes = Array.from(hash.slice(0, 3));
+  const res = Object.entries(HASH_TYPE_PREFIX_U8).find(([, val]) =>
+    isEqual(val, hashTypeBytes)
+  );
+
+  if (res === undefined) {
+    throw new Error("First 3 bytes of hash do not match any known HashType");
+  }
+
+  return res[0] as HoloHashType;
 }
 
 /**
@@ -47,9 +96,7 @@ export function sliceHashType(
  *
  * @public
  */
-export function sliceCore32(
-  hash: AgentPubKey | EntryHash | ActionHash
-): Uint8Array {
+export function sliceCore32(hash: HoloHash): Uint8Array {
   const start = HASH_TYPE_START + HASH_TYPE_BYTE_LENGTH;
   const end = start + CORE_HASH_BYTE_LENGTH;
   return Uint8Array.from(hash.slice(start, end));
@@ -65,9 +112,7 @@ export function sliceCore32(
  *
  * @public
  */
-export function sliceDhtLocation(
-  hash: AgentPubKey | EntryHash | ActionHash
-): Uint8Array {
+export function sliceDhtLocation(hash: HoloHash): Uint8Array {
   const start = HASH_TYPE_START + HASH_TYPE_BYTE_LENGTH + CORE_HASH_BYTE_LENGTH;
   const end = start + DHT_LOCATION_BYTE_LENGTH;
   return Uint8Array.from(hash.slice(start, end));
@@ -110,9 +155,34 @@ export function dhtLocationFrom32(hashCore: Uint8Array): Uint8Array {
  * @public
  */
 export function hashFrom32AndType(
-  hashCore: AgentPubKey | EntryHash | ActionHash,
-  hashType: "Agent" | "Entry" | "Dna" | "Action" | "External"
+  hashCore: HoloHash,
+  hashType: HoloHashType
 ): Uint8Array {
+  return Uint8Array.from([
+    ...HASH_TYPE_PREFIX[hashType],
+    ...hashCore,
+    ...dhtLocationFrom32(hashCore),
+  ]);
+}
+
+/**
+ * Generate full hash from some data content and hash type label.
+ *
+ * From https://github.com/holochain/holochain/blob/develop/crates/holo_hash/src/hash_type/primitive.rs
+ *
+ * @param content - The data to hash.
+ * @param hashType - The type of the hash.
+ * @returns The full 39 byte hash.
+ *
+ * @public
+ */
+export function hashFromContentAndType(
+  content: any,
+  hashType: HoloHashType
+): Uint8Array {
+  const hashCore = new Uint8Array(32);
+  blake2b(hashCore.length).update(encode(content)).digest(hashCore);
+
   return Uint8Array.from([
     ...HASH_TYPE_PREFIX[hashType],
     ...hashCore,

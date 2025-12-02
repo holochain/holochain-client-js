@@ -163,6 +163,19 @@ Description
 </td></tr>
 <tr><td>
 
+[HoloHashType](./client.holohashtype.md)
+
+
+</td><td>
+
+HoloHash type names
+
+From https://github.com/holochain/holochain/blob/develop/crates/holo\_hash/src/hash\_type/primitive.rs
+
+
+</td></tr>
+<tr><td>
+
 [ResolutionRequiredReason](./client.resolutionrequiredreason.md)
 
 
@@ -353,6 +366,19 @@ Parse a clone id and get the role name part of it.
 </td></tr>
 <tr><td>
 
+[getHashType(hash)](./client.gethashtype.md)
+
+
+</td><td>
+
+Get hash type of a hash, by reading the first 3 bytes.
+
+From https://github.com/holochain/holochain/blob/develop/crates/holo\_hash/src/hash\_type/primitive.rs
+
+
+</td></tr>
+<tr><td>
+
 [getNonceExpiration()](./client.getnonceexpiration.md)
 
 
@@ -380,6 +406,19 @@ Get credentials for signing zome calls.
 </td><td>
 
 Generate full hash from a core hash (middle 32 bytes) and hash type label.
+
+From https://github.com/holochain/holochain/blob/develop/crates/holo\_hash/src/hash\_type/primitive.rs
+
+
+</td></tr>
+<tr><td>
+
+[hashFromContentAndType(content, hashType)](./client.hashfromcontentandtype.md)
+
+
+</td><td>
+
+Generate full hash from some data content and hash type label.
 
 From https://github.com/holochain/holochain/blob/develop/crates/holo\_hash/src/hash\_type/primitive.rs
 
@@ -1339,7 +1378,7 @@ Description
 
 </td><td>
 
-Hash type labels and their 3 byte values (forming the first 3 bytes of hash).
+Hash type labels mapped to their 3 byte values (forming the first 3 bytes of hash).
 
 From https://github.com/holochain/holochain/blob/develop/crates/holo\_hash/src/hash\_type/primitive.rs
 
@@ -1897,6 +1936,16 @@ The definition of a storage arc compatible with the concept of storage and query
 <tr><td>
 
 [DhtOp](./client.dhtop.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[DhtOpHash](./client.dhtophash.md)
 
 
 </td><td>
@@ -3023,6 +3072,16 @@ If the key could not be deleted from all cells, the call [RevokeAgentKeyRequest]
 <tr><td>
 
 [ValidationType](./client.validationtype.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[WarrantHash](./client.warranthash.md)
 
 
 </td><td>
