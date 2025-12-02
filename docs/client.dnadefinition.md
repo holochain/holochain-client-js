@@ -4,17 +4,15 @@
 
 ## DnaDefinition type
 
+> Warning: This API is now obsolete.
+> 
+> Renamed to DnaDef. This alias will be removed in 0.22.0
+> 
 
 **Signature:**
 
 ```typescript
-export type DnaDefinition = {
-    name: string;
-    modifiers: DnaModifiers;
-    lineage: DnaHashB64[];
-    integrity_zomes: IntegrityZome[];
-    coordinator_zomes: CoordinatorZome[];
-};
+export type DnaDefinition = DnaDef;
 ```
-**References:** [DnaModifiers](./client.dnamodifiers.md)<!-- -->, [DnaHashB64](./client.dnahashb64.md)<!-- -->, [IntegrityZome](./client.integrityzome.md)<!-- -->, [CoordinatorZome](./client.coordinatorzome.md)
+**References:** [DnaDef](./client.dnadef.md)
 

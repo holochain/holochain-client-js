@@ -153,6 +153,26 @@ Description
 </td></tr>
 <tr><td>
 
+[DetailsType](./client.detailstype.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[EntryDhtStatus](./client.entrydhtstatus.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
 [GrantedFunctionsType](./client.grantedfunctionstype.md)
 
 
@@ -855,6 +875,16 @@ Arguments for dumping network metrics.
 </td></tr>
 <tr><td>
 
+[EntryDetails](./client.entrydetails.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
 [FetchPoolInfo](./client.fetchpoolinfo.md)
 
 
@@ -1101,6 +1131,16 @@ Peer metadata dump.
 <tr><td>
 
 [RateWeight](./client.rateweight.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[RecordDetails](./client.recorddetails.md)
 
 
 </td><td>
@@ -1885,6 +1925,16 @@ This type is meant to be opaque
 </td></tr>
 <tr><td>
 
+[Details](./client.details.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
 [DhtArc](./client.dhtarc.md)
 
 
@@ -1897,6 +1947,26 @@ The definition of a storage arc compatible with the concept of storage and query
 <tr><td>
 
 [DhtOp](./client.dhtop.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[DhtOpHash](./client.dhtophash.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[DhtOpHashB64](./client.dhtophashb64.md)
 
 
 </td><td>
@@ -1956,11 +2026,20 @@ The definition of a storage arc compatible with the concept of storage and query
 </td></tr>
 <tr><td>
 
-[DnaDefinition](./client.dnadefinition.md)
+[DnaDef](./client.dnadef.md)
 
 
 </td><td>
 
+
+
+</td></tr>
+<tr><td>
+
+[DnaDefinition](./client.dnadefinition.md)
+
+
+</td><td>
 
 
 </td></tr>
