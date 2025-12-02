@@ -30,6 +30,10 @@ export type AnyDhtHash = HoloHash;
  * @public
  */
 export type ExternalHash = HoloHash;
+/**
+ * @public
+ */
+export type DhtOpHash = HoloHash;
 
 /**
  * @public
@@ -70,6 +74,10 @@ export type ActionHashB64 = HoloHashB64;
  * @public
  */
 export type AnyDhtHashB64 = HoloHashB64;
+/**
+ * @public
+ */
+export type DhtOpHashB64 = HoloHashB64;
 
 /**
  * @public

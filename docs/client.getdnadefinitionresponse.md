@@ -8,7 +8,7 @@
 **Signature:**
 
 ```typescript
-export type GetDnaDefinitionResponse = DnaDefinition;
+export type GetDnaDefinitionResponse = DnaDef;
 ```
-**References:** [DnaDefinition](./client.dnadefinition.md)
+**References:** [DnaDef](./client.dnadef.md)
 
