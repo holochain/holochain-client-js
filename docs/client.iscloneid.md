@@ -47,6 +47,7 @@ The role name to check.
 
 </td></tr>
 </tbody></table>
+
 **Returns:**
 
 boolean

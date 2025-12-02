@@ -65,6 +65,7 @@ args
 
 </td></tr>
 </tbody></table>
+
 **Returns:**
 
 Promise&lt;null&gt;

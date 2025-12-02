@@ -76,3 +76,4 @@ The resolved decision for each authority for the subject agent.
 
 </td></tr>
 </tbody></table>
+

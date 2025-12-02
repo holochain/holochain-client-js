@@ -65,6 +65,7 @@ The type of the hash.
 
 </td></tr>
 </tbody></table>
+
 **Returns:**
 
 Uint8Array

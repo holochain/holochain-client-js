@@ -49,6 +49,7 @@ The authentication request, containing an app authentication token.
 
 </td></tr>
 </tbody></table>
+
 **Returns:**
 
 Promise&lt;void&gt;

@@ -8,7 +8,7 @@
 **Signature:**
 
 ```typescript
-randomByteArray: (length: number) => Promise<Uint8Array>
+randomByteArray: (length: number) => Promise<Uint8Array<ArrayBufferLike>>
 ```
 
 ## Parameters
@@ -44,7 +44,8 @@ number
 
 </td></tr>
 </tbody></table>
+
 **Returns:**
 
-Promise&lt;Uint8Array&gt;
+Promise&lt;Uint8Array&lt;ArrayBufferLike&gt;&gt;
 

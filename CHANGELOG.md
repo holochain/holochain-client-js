@@ -13,6 +13,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Renamed `DnaDefinition` to `DnaDef`.
 - Bumped dependency `@msgpack/msgpack`
 - Update response type of `AdminWebsocket.dumpNetworkStats` to `ApiTransportStats` [#383](https://github.com/holochain/holochain-client-js/pull/383)
+- Update all dependencies to their latest version
 ### Removed
 
 ## 2025-11-14: v0.20.0

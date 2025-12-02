@@ -47,6 +47,7 @@ The request to send over the websocket.
 
 </td></tr>
 </tbody></table>
+
 **Returns:**
 
 Promise&lt;Response&gt;

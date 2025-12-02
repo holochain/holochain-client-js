@@ -44,6 +44,7 @@ op
 
 </td></tr>
 </tbody></table>
+
 **Returns:**
 
 [ChainOpType](./client.chainoptype.md)
