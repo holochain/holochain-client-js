@@ -73,3 +73,4 @@ The app id for which to list the capability grants.
 
 </td></tr>
 </tbody></table>
+

@@ -47,6 +47,7 @@ _(Optional)_ [WebsocketConnectionOptions](./client.websocketconnectionoptions.md
 
 </td></tr>
 </tbody></table>
+
 **Returns:**
 
 Promise&lt;[AdminWebsocket](./client.adminwebsocket.md)<!-- -->&gt;

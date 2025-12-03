@@ -60,14 +60,14 @@ export type ChainOp =
       [ChainOpType.RegisterUpdatedContent]: [
         Signature,
         Update,
-        Entry | undefined
+        Entry | undefined,
       ];
     }
   | {
       [ChainOpType.RegisterUpdatedRecord]: [
         Signature,
         Update,
-        Entry | undefined
+        Entry | undefined,
       ];
     }
   | { [ChainOpType.RegisterDeletedBy]: [Signature, Delete] }

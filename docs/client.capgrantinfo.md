@@ -111,3 +111,4 @@ _(Optional)_ The timestamp when the cap grant was revoked, if it was revoked.
 
 </td></tr>
 </tbody></table>
+

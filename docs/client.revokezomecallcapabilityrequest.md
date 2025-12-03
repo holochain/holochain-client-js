@@ -73,3 +73,4 @@ Cell ID of the cell for which to revoke the capability.
 
 </td></tr>
 </tbody></table>
+

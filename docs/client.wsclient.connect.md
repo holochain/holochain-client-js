@@ -63,6 +63,7 @@ _(Optional)_ Options for the WsClient.
 
 </td></tr>
 </tbody></table>
+
 **Returns:**
 
 Promise&lt;[WsClient](./client.wsclient.md)<!-- -->&gt;

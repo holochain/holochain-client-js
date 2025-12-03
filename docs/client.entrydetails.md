@@ -137,3 +137,4 @@ Array&lt;[SignedActionHashed](./client.signedactionhashed.md)<!-- -->&gt;
 
 </td></tr>
 </tbody></table>
+

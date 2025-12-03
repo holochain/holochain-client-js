@@ -52,3 +52,4 @@ Array&lt;[ZomeManifest](./client.zomemanifest.md)<!-- -->&gt;
 
 </td></tr>
 </tbody></table>
+

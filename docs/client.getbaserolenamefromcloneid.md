@@ -47,6 +47,7 @@ The role name to parse.
 
 </td></tr>
 </tbody></table>
+
 **Returns:**
 
 string

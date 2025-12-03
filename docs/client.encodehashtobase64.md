@@ -47,6 +47,7 @@ The hash to encode to a Base64 string.
 
 </td></tr>
 </tbody></table>
+
 **Returns:**
 
 [HoloHashB64](./client.holohashb64.md)

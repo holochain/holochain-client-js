@@ -47,6 +47,7 @@ Cell id to get credentials of.
 
 </td></tr>
 </tbody></table>
+
 **Returns:**
 
 [SigningCredentials](./client.signingcredentials.md) \| undefined

@@ -7,7 +7,7 @@
 **Signature:**
 
 ```typescript
-_requester<ReqI, ReqO, ResI, ResO>(tag: string, transformer?: Transformer<ReqI, ReqO, ResI, ResO>): (req: ReqI, timeout?: number | undefined) => Promise<ResO>;
+_requester<ReqI, ReqO, ResI, ResO>(tag: string, transformer?: Transformer<ReqI, ReqO, ResI, ResO>): (req: ReqI, timeout?: number) => Promise<ResO>;
 ```
 
 ## Parameters
@@ -59,7 +59,8 @@ _(Optional)_
 
 </td></tr>
 </tbody></table>
+
 **Returns:**
 
-(req: ReqI, timeout?: number \| undefined) =&gt; Promise&lt;ResO&gt;
+(req: ReqI, timeout?: number) =&gt; Promise&lt;ResO&gt;
 

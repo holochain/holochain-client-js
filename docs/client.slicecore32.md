@@ -49,6 +49,7 @@ The full 39 byte hash.
 
 </td></tr>
 </tbody></table>
+
 **Returns:**
 
 Uint8Array

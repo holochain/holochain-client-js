@@ -63,6 +63,7 @@ The function to call when event is triggered.
 
 </td></tr>
 </tbody></table>
+
 **Returns:**
 
 UnsubscribeFunction

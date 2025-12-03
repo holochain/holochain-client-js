@@ -52,3 +52,4 @@ Array&lt;[DnaStorageBlob](./client.dnastorageblob.md)<!-- -->&gt;
 
 </td></tr>
 </tbody></table>
+
