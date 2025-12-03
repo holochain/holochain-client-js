@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Added missing types `DetailsType`, `Details`, `EntryDhtStatus`, `EntryDetails`, `RecordDetails`, `ValidationStatus`, `ValidationReceipt`.
 - Added missing type aliases `DhtOpHash` and `DhtOpHashB64`.
 - Added type alias `DnaDefinition`, which is deprecated and will be removed in 0.22.0
+- Exported types `PeerUrl`, `SpaceId`.
 ### Fixed
 ### Changed
 - Renamed `DnaDefinition` to `DnaDef`.

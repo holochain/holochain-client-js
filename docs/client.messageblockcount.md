@@ -4,6 +4,7 @@
 
 ## MessageBlockCount interface
 
+
 **Signature:**
 
 ```typescript
