@@ -31,23 +31,22 @@ declare global {
     [__HC_ZOME_CALL_SIGNER__]?: HostZomeCallSigner;
     electronAPI?: {
       signZomeCall: (
-        data: CallZomeRequestUnsignedElectron
+        data: CallZomeRequestUnsignedElectron,
       ) => CallZomeRequestSignedElectron;
     };
   }
 }
 
-interface CallZomeRequestSignedElectron
-  extends Omit<
-    CallZomeRequestSigned,
-    | "cap_secret"
-    | "cell_id"
-    | "provenance"
-    | "nonce"
-    | "zome_name"
-    | "fn_name"
-    | "expires_at"
-  > {
+interface CallZomeRequestSignedElectron extends Omit<
+  CallZomeRequestSigned,
+  | "cap_secret"
+  | "cell_id"
+  | "provenance"
+  | "nonce"
+  | "zome_name"
+  | "fn_name"
+  | "expires_at"
+> {
   cellId: [Array<number>, Array<number>];
   provenance: Array<number>;
   zomeName: string;
@@ -56,17 +55,16 @@ interface CallZomeRequestSignedElectron
   expiresAt: number;
 }
 
-interface CallZomeRequestUnsignedElectron
-  extends Omit<
-    CallZomeRequest,
-    | "cap_secret"
-    | "cell_id"
-    | "provenance"
-    | "nonce"
-    | "zome_name"
-    | "fn_name"
-    | "expires_at"
-  > {
+interface CallZomeRequestUnsignedElectron extends Omit<
+  CallZomeRequest,
+  | "cap_secret"
+  | "cell_id"
+  | "provenance"
+  | "nonce"
+  | "zome_name"
+  | "fn_name"
+  | "expires_at"
+> {
   cellId: [Array<number>, Array<number>];
   provenance: Array<number>;
   zomeName: string;

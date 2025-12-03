@@ -33,9 +33,9 @@ test(
     t.deepEqual(
       response,
       Buffer.from(fakeHash),
-      "fakeAgentPubKey generates valid hash that decodes to AgentPubKey"
+      "fakeAgentPubKey generates valid hash that decodes to AgentPubKey",
     );
-  })
+  }),
 );
 
 test(
@@ -55,9 +55,9 @@ test(
     t.deepEqual(
       response,
       Buffer.from(fakeHash),
-      "fakeEntryHash generates valid hash that decodes to EntryHash"
+      "fakeEntryHash generates valid hash that decodes to EntryHash",
     );
-  })
+  }),
 );
 
 test(
@@ -77,9 +77,9 @@ test(
     t.deepEqual(
       response,
       Buffer.from(fakeHash),
-      "fakeActionHash generates valid hash that decodes to ActionHash"
+      "fakeActionHash generates valid hash that decodes to ActionHash",
     );
-  })
+  }),
 );
 
 test(
@@ -99,9 +99,9 @@ test(
     t.deepEqual(
       response,
       Buffer.from(fakeHash),
-      "fakeDnaHash generates valid hash that decodes to DnaHash"
+      "fakeDnaHash generates valid hash that decodes to DnaHash",
     );
-  })
+  }),
 );
 
 test(
@@ -124,9 +124,9 @@ test(
         132, 32, 36, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
         1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 126, 207, 206, 190,
       ]),
-      "fakeAgentPubKey with coreByte set generates deterministic valid hash that decodes to AgentPubKey"
+      "fakeAgentPubKey with coreByte set generates deterministic valid hash that decodes to AgentPubKey",
     );
-  })
+  }),
 );
 
 test(
@@ -149,9 +149,9 @@ test(
         132, 33, 36, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
         1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 126, 207, 206, 190,
       ]),
-      "fakeEntryHash with coreByte set generates deterministic valid hash that decodes to EntryHash"
+      "fakeEntryHash with coreByte set generates deterministic valid hash that decodes to EntryHash",
     );
-  })
+  }),
 );
 
 test(
@@ -174,9 +174,9 @@ test(
         132, 41, 36, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
         1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 126, 207, 206, 190,
       ]),
-      "fakeActionHash with coreByte set generates deterministic valid hash that decodes to ActionHash"
+      "fakeActionHash with coreByte set generates deterministic valid hash that decodes to ActionHash",
     );
-  })
+  }),
 );
 
 test(
@@ -199,9 +199,9 @@ test(
         132, 45, 36, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
         1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 126, 207, 206, 190,
       ]),
-      "fakeDnaHash with coreByte set generates deterministic valid hash that decodes to DnaHash"
+      "fakeDnaHash with coreByte set generates deterministic valid hash that decodes to DnaHash",
     );
-  })
+  }),
 );
 
 test("sliceDhtLocation, sliceCore32, sliceHashType extract components of a hash", async (t) => {
@@ -213,7 +213,7 @@ test("sliceDhtLocation, sliceCore32, sliceHashType extract components of a hash"
   t.deepEqual(
     fakeHash,
     Uint8Array.from([...prefix, ...hash, ...dhtLocation]),
-    "extracted hash type, core hash, and dht location components of a hash concat back into the original hash"
+    "extracted hash type, core hash, and dht location components of a hash concat back into the original hash",
   );
 });
 
@@ -227,6 +227,6 @@ test("hashFrom32AndType generates valid hash with type and 32 core bytes", async
       132, 32, 36, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
       1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 126, 207, 206, 190,
     ]),
-    "generated full valid hash"
+    "generated full valid hash",
   );
 });

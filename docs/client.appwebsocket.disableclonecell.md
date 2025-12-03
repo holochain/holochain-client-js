@@ -47,6 +47,7 @@ Specify the clone cell to disable.
 
 </td></tr>
 </tbody></table>
+
 **Returns:**
 
 Promise&lt;void&gt;

@@ -279,7 +279,7 @@ export type ZomeName = string;
  */
 export type ZomeDefinition = [
   ZomeName,
-  { wasm_hash: WasmHash; dependencies: ZomeName[] }
+  { wasm_hash: WasmHash; dependencies: ZomeName[] },
 ];
 /**
  * @public

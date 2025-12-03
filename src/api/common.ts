@@ -36,7 +36,7 @@ export const requesterTransformer =
   <ReqI, ReqO, ResI, ResO>(
     requester: Requester<Tagged<ReqO>, Tagged<ResI>>,
     tag: string,
-    transform: Transformer<ReqI, ReqO, ResI, ResO> = identityTransformer
+    transform: Transformer<ReqI, ReqO, ResI, ResO> = identityTransformer,
   ) =>
   async (req: ReqI, timeout?: number) => {
     const transformedInput = await transform.input(req);
@@ -78,14 +78,14 @@ export const catchError = (response: any) => {
 export const promiseTimeout = (
   promise: Promise<unknown>,
   tag: string,
-  ms: number
+  ms: number,
 ) => {
   let id: NodeJS.Timeout;
 
   const timeout = new Promise((_, reject) => {
     id = setTimeout(
       () => reject(new Error(`Request timed out in ${ms} ms: ${tag}`)),
-      ms
+      ms,
     );
   });
 
@@ -98,7 +98,7 @@ export const promiseTimeout = (
       .catch((e) => {
         clearTimeout(id);
         return rej(e);
-      })
+      }),
   );
 };
 
@@ -124,7 +124,7 @@ export const getBaseRoleNameFromCloneId = (roleName: RoleName) => {
   if (!isCloneId(roleName)) {
     throw new HolochainError(
       "MissingCloneIdDelimiter",
-      `invalid clone id - no clone id delimiter found in role name ${roleName}`
+      `invalid clone id - no clone id delimiter found in role name ${roleName}`,
     );
   }
   return roleName.split(CLONE_ID_DELIMITER)[0];
@@ -157,7 +157,7 @@ export class CloneIdHelper {
     if (parts.length !== 2) {
       throw new HolochainError(
         "MalformedCloneId",
-        `clone id must consist of 'role_id.clone_index', but got ${roleName}`
+        `clone id must consist of 'role_id.clone_index', but got ${roleName}`,
       );
     }
     return new CloneIdHelper(parts[0], parseInt(parts[1]));

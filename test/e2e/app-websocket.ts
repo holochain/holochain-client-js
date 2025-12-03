@@ -74,7 +74,7 @@ test(
     t.equal(
       response_from_role_name,
       null,
-      "app entry type deserializes correctly"
+      "app entry type deserializes correctly",
     );
 
     await admin.disableApp({ installed_app_id });
@@ -83,7 +83,7 @@ test(
       type: "disabled",
       value: { type: "user" },
     });
-  })
+  }),
 );
 
 test(
@@ -91,7 +91,7 @@ test(
   withConductor(ADMIN_PORT, async (t) => {
     let resolveSignalPromise: (value?: unknown) => void | undefined;
     const signalReceivedPromise = new Promise(
-      (resolve) => (resolveSignalPromise = resolve)
+      (resolve) => (resolveSignalPromise = resolve),
     );
     const signalCb: SignalCb = (signal) => {
       assert(signal.type === SignalType.App);
@@ -121,7 +121,7 @@ test(
       provenance: await fakeAgentPubKey(),
     });
     await signalReceivedPromise;
-  })
+  }),
 );
 
 test(
@@ -208,7 +208,7 @@ test(
     await new Promise((resolve) => setTimeout(resolve, 0));
     t.equal(received1, true);
     t.equal(received2, false);
-  })
+  }),
 );
 
 test(
@@ -232,7 +232,7 @@ test(
     t.deepEqual(
       cloneCell.cell_id[1],
       info.cell_info[ROLE_NAME][0].value.cell_id[1],
-      "clone cell agent key matches base cell agent key"
+      "clone cell agent key matches base cell agent key",
     );
 
     const params: RoleNameCallZomeRequest = {
@@ -244,9 +244,9 @@ test(
     t.equal(
       response,
       "foo",
-      "clone cell can be called with same zome call as base cell, and by clone id"
+      "clone cell can be called with same zome call as base cell, and by clone id",
     );
-  })
+  }),
 );
 
 test(
@@ -271,7 +271,7 @@ test(
     t.equal(
       appInfo.cell_info[ROLE_NAME].length,
       2,
-      "disabled clone cell is part of app info"
+      "disabled clone cell is part of app info",
     );
     const params: CallZomeRequest = {
       cell_id: cloneCell.cell_id,
@@ -290,7 +290,7 @@ test(
     });
     await appWs.callZome(params);
     t.pass("re-enabled clone can be called");
-  })
+  }),
 );
 
 test(
@@ -331,7 +331,7 @@ test(
     t.equal(
       capabilityGrants.length,
       1,
-      "should have one capability grant after granting"
+      "should have one capability grant after granting",
     );
     const [cellIdFromGrants, grants] = capabilityGrants[0];
     t.deepEqual(cellIdFromGrants, cellId, "cell id matches");
@@ -341,12 +341,12 @@ test(
     t.equal(
       capGrantInfo.cap_grant.functions.type,
       "all",
-      "grant functions type matches"
+      "grant functions type matches",
     );
     t.deepEqual(
       capGrantInfo.action_hash,
       grantedActionHash,
-      "action hash matches"
+      "action hash matches",
     );
 
     // revoke capability
@@ -357,14 +357,13 @@ test(
     await admin.revokeZomeCallCapability(revokeRequest);
 
     // list capability grants again
-    const capabilityGrantsAfterRevoke = await admin.listCapabilityGrants(
-      listRequest
-    );
+    const capabilityGrantsAfterRevoke =
+      await admin.listCapabilityGrants(listRequest);
     // should have 1 item, but the grant should be revoked
     t.equal(
       capabilityGrantsAfterRevoke.length,
       1,
-      "should still have one capability grant after revoking"
+      "should still have one capability grant after revoking",
     );
     // check if has revoked_at
     const [cellIdFromGrantsAfterRevoke] = capabilityGrantsAfterRevoke[0];
@@ -372,14 +371,14 @@ test(
     t.deepEqual(
       cellIdFromGrantsAfterRevoke,
       cellId,
-      "cell id matches after revoke"
+      "cell id matches after revoke",
     );
     t.notEqual(
       grantsAfterRevoke[0].revoked_at,
       undefined,
-      "grant should be revoked"
+      "grant should be revoked",
     );
-  })
+  }),
 );
 
 // To test unstable features in Holochain, set env var `TEST_UNSTABLE` to `true`.
@@ -387,9 +386,8 @@ if (process.env.TEST_UNSTABLE === "true") {
   test(
     "countersigning session interaction calls",
     withConductor(ADMIN_PORT, async (t) => {
-      const { client: appWs, cell_id } = await createAppWsAndInstallApp(
-        ADMIN_PORT
-      );
+      const { client: appWs, cell_id } =
+        await createAppWsAndInstallApp(ADMIN_PORT);
 
       const response = await appWs.getCountersigningSessionState(cell_id);
       console.log("response", response);
@@ -402,7 +400,7 @@ if (process.env.TEST_UNSTABLE === "true") {
         assert(error instanceof Error);
         t.assert(
           error.message.includes("SessionNotFound"),
-          "there should not be a countersigning session"
+          "there should not be a countersigning session",
         );
       }
 
@@ -413,9 +411,9 @@ if (process.env.TEST_UNSTABLE === "true") {
         assert(error instanceof Error);
         t.assert(
           error.message.includes("SessionNotFound"),
-          "there should not be a countersigning session"
+          "there should not be a countersigning session",
         );
       }
-    })
+    }),
   );
 }

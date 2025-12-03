@@ -29,7 +29,7 @@ const signingCredentials: Map<string, SigningCredentials> = new Map();
  */
 export const getSigningCredentials = (cellId: CellId) => {
   const cellIdB64 = encodeHashToBase64(cellId[0]).concat(
-    encodeHashToBase64(cellId[1])
+    encodeHashToBase64(cellId[1]),
   );
   return signingCredentials.get(cellIdB64);
 };
@@ -43,10 +43,10 @@ export const getSigningCredentials = (cellId: CellId) => {
  */
 export const setSigningCredentials = (
   cellId: CellId,
-  credentials: SigningCredentials
+  credentials: SigningCredentials,
 ) => {
   const cellIdB64 = encodeHashToBase64(cellId[0]).concat(
-    encodeHashToBase64(cellId[1])
+    encodeHashToBase64(cellId[1]),
   );
   signingCredentials.set(cellIdB64, credentials);
 };
@@ -61,14 +61,14 @@ export const setSigningCredentials = (
  * @public
  */
 export const generateSigningKeyPair: (
-  agentPubKey?: AgentPubKey
+  agentPubKey?: AgentPubKey,
 ) => Promise<[KeyPair, AgentPubKey]> = async (agentPubKey?: AgentPubKey) => {
   await _sodium.ready;
   const sodium = _sodium;
   const keyPair = sodium.crypto_sign_keypair();
   const locationBytes = agentPubKey ? agentPubKey.subarray(35) : [0, 0, 0, 0];
   const signingKey = new Uint8Array(
-    [132, 32, 36].concat(...keyPair.publicKey).concat(...locationBytes)
+    [132, 32, 36].concat(...keyPair.publicKey).concat(...locationBytes),
   );
   return [keyPair, signingKey];
 };

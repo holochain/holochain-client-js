@@ -12,10 +12,10 @@ From https://github.com/holochain/holochain/blob/develop/crates/holo\_hash/src/h
 
 ```typescript
 HASH_TYPE_PREFIX: {
-    Agent: Uint8Array;
-    Entry: Uint8Array;
-    Dna: Uint8Array;
-    Action: Uint8Array;
-    External: Uint8Array;
+    Agent: Uint8Array<ArrayBuffer>;
+    Entry: Uint8Array<ArrayBuffer>;
+    Dna: Uint8Array<ArrayBuffer>;
+    Action: Uint8Array<ArrayBuffer>;
+    External: Uint8Array<ArrayBuffer>;
 }
 ```

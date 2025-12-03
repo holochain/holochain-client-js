@@ -5,7 +5,7 @@ import { dhtLocationFrom32 } from "./hash-parts.js";
 
 async function fakeValidHash<T extends Uint8Array>(
   prefix: number[],
-  coreByte: number | undefined
+  coreByte: number | undefined,
 ): Promise<Uint8Array> {
   let core;
   if (coreByte === undefined) {
@@ -29,7 +29,7 @@ async function fakeValidHash<T extends Uint8Array>(
  * @public
  */
 export async function fakeEntryHash(
-  coreByte: number | undefined = undefined
+  coreByte: number | undefined = undefined,
 ): Promise<EntryHash> {
   return fakeValidHash<EntryHash>([0x84, 0x21, 0x24], coreByte);
 }
@@ -43,7 +43,7 @@ export async function fakeEntryHash(
  * @public
  */
 export async function fakeAgentPubKey(
-  coreByte: number | undefined = undefined
+  coreByte: number | undefined = undefined,
 ): Promise<AgentPubKey> {
   return fakeValidHash<AgentPubKey>([0x84, 0x20, 0x24], coreByte);
 }
@@ -57,7 +57,7 @@ export async function fakeAgentPubKey(
  * @public
  */
 export async function fakeActionHash(
-  coreByte: number | undefined = undefined
+  coreByte: number | undefined = undefined,
 ): Promise<ActionHash> {
   return fakeValidHash<ActionHash>([0x84, 0x29, 0x24], coreByte);
 }
@@ -71,7 +71,7 @@ export async function fakeActionHash(
  * @public
  */
 export async function fakeDnaHash(
-  coreByte: number | undefined = undefined
+  coreByte: number | undefined = undefined,
 ): Promise<DnaHash> {
   return fakeValidHash<DnaHash>([0x84, 0x2d, 0x24], coreByte);
 }

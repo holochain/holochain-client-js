@@ -93,3 +93,4 @@ _(Optional)_ Options to pass to the underlying websocket connection.
 
 </td></tr>
 </tbody></table>
+

@@ -44,6 +44,7 @@ op
 
 </td></tr>
 </tbody></table>
+
 **Returns:**
 
 [Entry](./client.entry.md) \| undefined

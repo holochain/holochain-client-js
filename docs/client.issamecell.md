@@ -63,6 +63,7 @@ Cell id 1 to compare.
 
 </td></tr>
 </tbody></table>
+
 **Returns:**
 
 boolean

@@ -47,6 +47,7 @@ Specify the cell to clone.
 
 </td></tr>
 </tbody></table>
+
 **Returns:**
 
 Promise&lt;import("../admin/types.js").[ClonedCell](./client.clonedcell.md)<!-- -->&gt;

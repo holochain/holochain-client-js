@@ -101,7 +101,7 @@ export class AdminWebsocket implements AdminApi {
    * @returns A promise for a new connected instance.
    */
   static async connect(
-    options: WebsocketConnectionOptions = {}
+    options: WebsocketConnectionOptions = {},
   ): Promise<AdminWebsocket> {
     // Check if we are in the launcher's environment, and if so, redirect the url to connect to
     const env = getLauncherEnvironment();
@@ -113,30 +113,30 @@ export class AdminWebsocket implements AdminApi {
     if (!options.url) {
       throw new HolochainError(
         "ConnectionUrlMissing",
-        `unable to connect to Conductor API - no url provided and not in a launcher environment.`
+        `unable to connect to Conductor API - no url provided and not in a launcher environment.`,
       );
     }
 
     const wsClient = await WsClient.connect(
       options.url,
-      options.wsClientOptions
+      options.wsClientOptions,
     );
     return new AdminWebsocket(wsClient, options.defaultTimeout);
   }
 
   _requester<ReqI, ReqO, ResI, ResO>(
     tag: string,
-    transformer?: Transformer<ReqI, ReqO, ResI, ResO>
+    transformer?: Transformer<ReqI, ReqO, ResI, ResO>,
   ) {
     return requesterTransformer(
       (req, timeout) =>
         promiseTimeout(
           this.client.request(req),
           tag,
-          timeout || this.defaultTimeout
+          timeout || this.defaultTimeout,
         ).then(catchError),
       tag,
-      transformer
+      transformer,
     );
   }
 
@@ -165,7 +165,7 @@ export class AdminWebsocket implements AdminApi {
    */
   dumpState: Requester<DumpStateRequest, DumpStateResponse> = this._requester(
     "dump_state",
-    dumpStateTransform
+    dumpStateTransform,
   );
 
   /**
@@ -324,7 +324,7 @@ export class AdminWebsocket implements AdminApi {
   grantSigningKey = async (
     cellId: CellId,
     functions: GrantedFunctions,
-    signingKey: AgentPubKey
+    signingKey: AgentPubKey,
   ): Promise<CapSecret> => {
     const capSecret = await randomCapSecret();
     await this.grantZomeCallCapability({
@@ -354,13 +354,13 @@ export class AdminWebsocket implements AdminApi {
    */
   authorizeSigningCredentials = async (
     cellId: CellId,
-    functions?: GrantedFunctions
+    functions?: GrantedFunctions,
   ) => {
     const [keyPair, signingKey] = await generateSigningKeyPair();
     const capSecret = await this.grantSigningKey(
       cellId,
       functions || { type: "all" },
-      signingKey
+      signingKey,
     );
     setSigningCredentials(cellId, { capSecret, keyPair, signingKey });
   };
