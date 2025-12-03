@@ -19,6 +19,26 @@ Description
 </th></tr></thead>
 <tbody><tr><td>
 
+[ActionHashB64Map](./client.actionhashb64map.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[ActionHashMap](./client.actionhashmap.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
 [AdminWebsocket](./client.adminwebsocket.md)
 
 
@@ -30,12 +50,62 @@ A class for interacting with a conductor's Admin API.
 </td></tr>
 <tr><td>
 
+[AgentPubKeyB64Map](./client.agentpubkeyb64map.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[AgentPubKeyMap](./client.agentpubkeymap.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[AnyDhtHashB64Map](./client.anydhthashb64map.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[AnyDhtHashMap](./client.anydhthashmap.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
 [AppWebsocket](./client.appwebsocket.md)
 
 
 </td><td>
 
 A class to establish a websocket connection to an App interface, for a specific agent and app.
+
+
+</td></tr>
+<tr><td>
+
+[CellMap](./client.cellmap.md)
+
+
+</td><td>
+
 
 
 </td></tr>
@@ -54,12 +124,358 @@ Example: `profiles.0`
 </td></tr>
 <tr><td>
 
+[DhtOpHashB64Map](./client.dhtophashb64map.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[DhtOpHashMap](./client.dhtophashmap.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[DnaActionHashMap](./client.dnaactionhashmap.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[DnaAgentPubKeyMap](./client.dnaagentpubkeymap.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[DnaAnyDhtHashMap](./client.dnaanydhthashmap.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[DnaDhtOpHashMap](./client.dnadhtophashmap.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[DnaDnaHashMap](./client.dnadnahashmap.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[DnaEntryHashMap](./client.dnaentryhashmap.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[DnaExternalHashMap](./client.dnaexternalhashmap.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[DnaHashB64Map](./client.dnahashb64map.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[DnaHashMap](./client.dnahashmap.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[DnaHoloHashMap](./client.dnaholohashmap.md)
+
+
+</td><td>
+
+A Map of DnaHash to HoloHashMap.
+
+i.e. A Map of DnaHash to a Map of HoloHash to a value.
+
+
+</td></tr>
+<tr><td>
+
+[DnaWarrantHashMap](./client.dnawarranthashmap.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[DnaWasmHashMap](./client.dnawasmhashmap.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[EntryHashB64Map](./client.entryhashb64map.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[EntryHashMap](./client.entryhashmap.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[ExternalHashB64Map](./client.externalhashb64map.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[ExternalHashMap](./client.externalhashmap.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
 [HolochainError](./client.holochainerror.md)
 
 
 </td><td>
 
 Error thrown when response from Holochain is an error.
+
+
+</td></tr>
+<tr><td>
+
+[HoloHashB64Map](./client.holohashb64map.md)
+
+
+</td><td>
+
+A Map of HoloHashB64 to a value.
+
+
+</td></tr>
+<tr><td>
+
+[HoloHashMap](./client.holohashmap.md)
+
+
+</td><td>
+
+A Map of HoloHash to a value.
+
+
+</td></tr>
+<tr><td>
+
+[LazyActionHashMap](./client.lazyactionhashmap.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[LazyAgentPubKeyMap](./client.lazyagentpubkeymap.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[LazyAnyDhtHashMap](./client.lazyanydhthashmap.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[LazyDhtOpHashMap](./client.lazydhtophashmap.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[LazyDnaHashMap](./client.lazydnahashmap.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[LazyEntryHashMap](./client.lazyentryhashmap.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[LazyExternalHashMap](./client.lazyexternalhashmap.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[LazyHoloHashMap](./client.lazyholohashmap.md)
+
+
+</td><td>
+
+A HoloHashMap that will fetch and store a value if it is not found in a 'get' call.
+
+
+</td></tr>
+<tr><td>
+
+[LazyWarrantHashMap](./client.lazywarranthashmap.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[LazyWasmHashMap](./client.lazywasmhashmap.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[WarrantHashB64Map](./client.warranthashb64map.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[WarrantHashMap](./client.warranthashmap.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[WasmHashB64Map](./client.wasmhashb64map.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[WasmHashMap](./client.wasmhashmap.md)
+
+
+</td><td>
+
 
 
 </td></tr>
@@ -174,6 +590,16 @@ Description
 <tr><td>
 
 [GrantedFunctionsType](./client.grantedfunctionstype.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[HoloHashType](./client.holohashtype.md)
 
 
 </td><td>
@@ -383,6 +809,19 @@ Parse a clone id and get the role name part of it.
 </td></tr>
 <tr><td>
 
+[getHashType(hash)](./client.gethashtype.md)
+
+
+</td><td>
+
+Get hash type of a hash, by reading the first 3 bytes.
+
+From https://github.com/holochain/holochain/blob/develop/crates/holo\_hash/src/hash\_type/primitive.rs
+
+
+</td></tr>
+<tr><td>
+
 [getNonceExpiration()](./client.getnonceexpiration.md)
 
 
@@ -410,6 +849,19 @@ Get credentials for signing zome calls.
 </td><td>
 
 Generate full hash from a core hash (middle 32 bytes) and hash type label.
+
+From https://github.com/holochain/holochain/blob/develop/crates/holo\_hash/src/hash\_type/primitive.rs
+
+
+</td></tr>
+<tr><td>
+
+[hashFromContentAndType(content, hashType)](./client.hashfromcontentandtype.md)
+
+
+</td><td>
+
+Generate full hash from some data content and hash type label.
 
 From https://github.com/holochain/holochain/blob/develop/crates/holo\_hash/src/hash\_type/primitive.rs
 
@@ -1401,7 +1853,7 @@ Description
 
 </td><td>
 
-Hash type labels and their 3 byte values (forming the first 3 bytes of hash).
+Hash type labels mapped to their 3 byte values (forming the first 3 bytes of hash).
 
 From https://github.com/holochain/holochain/blob/develop/crates/holo\_hash/src/hash\_type/primitive.rs
 
@@ -2367,6 +2819,16 @@ The definition of a storage arc compatible with the concept of storage and query
 </td></tr>
 <tr><td>
 
+[ExternalHashB64](./client.externalhashb64.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
 [FunctionName](./client.functionname.md)
 
 
@@ -3146,6 +3608,26 @@ kitsune2 space id
 <tr><td>
 
 [ValidationType](./client.validationtype.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[WarrantHash](./client.warranthash.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[WarrantHashB64](./client.warranthashb64.md)
 
 
 </td><td>

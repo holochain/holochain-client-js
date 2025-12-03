@@ -1,3 +1,5 @@
+/** HoloHash Types */
+
 /**
  * @public
  */
@@ -34,6 +36,23 @@ export type ExternalHash = HoloHash;
  * @public
  */
 export type DhtOpHash = HoloHash;
+/**
+ * @public
+ */
+export type WarrantHash = HoloHash;
+/**
+ * @public
+ */
+export enum HoloHashType {
+  Agent = "agent",
+  Entry = "entry",
+  DhtOp = "dhtop",
+  Warrant = "warrant",
+  Dna = "dna",
+  Action = "action",
+  Wasm = "wasm",
+  External = "external",
+}
 
 /**
  * @public
@@ -77,7 +96,15 @@ export type AnyDhtHashB64 = HoloHashB64;
 /**
  * @public
  */
+export type ExternalHashB64 = HoloHashB64;
+/**
+ * @public
+ */
 export type DhtOpHashB64 = HoloHashB64;
+/**
+ * @public
+ */
+export type WarrantHashB64 = HoloHashB64;
 
 /**
  * @public

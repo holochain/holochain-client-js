@@ -1023,7 +1023,7 @@ export interface ApiTransportStats {
 
 /**
  * Peer Url
- * 
+ *
  * @public
  */
 export type PeerUrl = string;
