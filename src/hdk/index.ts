@@ -6,3 +6,4 @@ export * from "./dht-ops.js";
 export * from "./entry.js";
 export * from "./link.js";
 export * from "./record.js";
+export * from "./validation-receipts.js";
