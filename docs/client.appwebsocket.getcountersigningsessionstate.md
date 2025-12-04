@@ -45,6 +45,7 @@ args
 
 </td></tr>
 </tbody></table>
+
 **Returns:**
 
 Promise&lt;[GetCountersigningSessionStateResponse](./client.getcountersigningsessionstateresponse.md)<!-- -->&gt;

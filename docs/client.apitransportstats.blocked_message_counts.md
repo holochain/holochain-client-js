@@ -9,5 +9,5 @@ Blocked message counts.
 **Signature:**
 
 ```typescript
-blocked_message_counts: Record<Url, Record<SpaceId, MessageBlockCount>>;
+blocked_message_counts: Record<PeerUrl, Record<SpaceId, MessageBlockCount>>;
 ```

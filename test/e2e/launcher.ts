@@ -28,7 +28,7 @@ test(
     });
 
     t.equal(admin.client.url?.href, `ws://localhost:${ADMIN_PORT}/`);
-  })
+  }),
 );
 
 test(
@@ -51,7 +51,7 @@ test(
     });
 
     t.equal(appWs.client.url?.href, `ws://localhost:${appPort}/`);
-  })
+  }),
 );
 
 test(
@@ -87,5 +87,5 @@ test(
     } catch (e) {}
 
     t.assert(signerWasCalled, "__HC_ZOME_CALL_SIGNER__.signZomeCall called");
-  })
+  }),
 );

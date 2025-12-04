@@ -47,6 +47,7 @@ _(Optional)_
 
 </td></tr>
 </tbody></table>
+
 **Returns:**
 
 Promise&lt;[AppDumpNetworkStatsResponse](./client.appdumpnetworkstatsresponse.md)<!-- -->&gt;

@@ -4,7 +4,7 @@
 
 ## HASH\_TYPE\_PREFIX variable
 
-Hash type labels and their 3 byte values (forming the first 3 bytes of hash).
+Hash type labels mapped to their 3 byte values (forming the first 3 bytes of hash).
 
 From https://github.com/holochain/holochain/blob/develop/crates/holo\_hash/src/hash\_type/primitive.rs
 
@@ -12,10 +12,13 @@ From https://github.com/holochain/holochain/blob/develop/crates/holo\_hash/src/h
 
 ```typescript
 HASH_TYPE_PREFIX: {
-    Agent: Uint8Array;
-    Entry: Uint8Array;
-    Dna: Uint8Array;
-    Action: Uint8Array;
-    External: Uint8Array;
+    agent: Uint8Array<ArrayBuffer>;
+    entry: Uint8Array<ArrayBuffer>;
+    dhtop: Uint8Array<ArrayBuffer>;
+    warrant: Uint8Array<ArrayBuffer>;
+    dna: Uint8Array<ArrayBuffer>;
+    action: Uint8Array<ArrayBuffer>;
+    wasm: Uint8Array<ArrayBuffer>;
+    external: Uint8Array<ArrayBuffer>;
 }
 ```

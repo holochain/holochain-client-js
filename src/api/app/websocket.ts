@@ -146,7 +146,7 @@ export class AppWebsocket implements AppClient {
     client: WsClient,
     appInfo: AppInfo,
     callZomeTransform?: CallZomeTransform,
-    defaultTimeout?: number
+    defaultTimeout?: number,
   ) {
     this.client = client;
     this.myPubKey = appInfo.agent_pub_key;
@@ -159,73 +159,73 @@ export class AppWebsocket implements AppClient {
     this.appInfoRequester = AppWebsocket.requester(
       this.client,
       "app_info",
-      this.defaultTimeout
+      this.defaultTimeout,
     );
     this.agentInfoRequester = AppWebsocket.requester(
       this.client,
       "agent_info",
-      this.defaultTimeout
+      this.defaultTimeout,
     );
     this.peerMetaInfoRequester = AppWebsocket.requester(
       this.client,
       "peer_meta_info",
-      this.defaultTimeout
+      this.defaultTimeout,
     );
     this.callZomeRequester = AppWebsocket.requester(
       this.client,
       "call_zome",
       this.defaultTimeout,
-      this.callZomeTransform
+      this.callZomeTransform,
     );
     this.provideMemproofRequester = AppWebsocket.requester(
       this.client,
       "provide_memproofs",
-      this.defaultTimeout
+      this.defaultTimeout,
     );
     this.enableAppRequester = AppWebsocket.requester(
       this.client,
       "enable_app",
-      this.defaultTimeout
+      this.defaultTimeout,
     );
     this.createCloneCellRequester = AppWebsocket.requester(
       this.client,
       "create_clone_cell",
-      this.defaultTimeout
+      this.defaultTimeout,
     );
     this.enableCloneCellRequester = AppWebsocket.requester(
       this.client,
       "enable_clone_cell",
-      this.defaultTimeout
+      this.defaultTimeout,
     );
     this.disableCloneCellRequester = AppWebsocket.requester(
       this.client,
       "disable_clone_cell",
-      this.defaultTimeout
+      this.defaultTimeout,
     );
     this.dumpNetworkStatsRequester = AppWebsocket.requester(
       this.client,
       "dump_network_stats",
-      this.defaultTimeout
+      this.defaultTimeout,
     );
     this.dumpNetworkMetricsRequester = AppWebsocket.requester(
       this.client,
       "dump_network_metrics",
-      this.defaultTimeout
+      this.defaultTimeout,
     );
     this.getCountersigningSessionStateRequester = AppWebsocket.requester(
       this.client,
       "get_countersigning_session_state",
-      this.defaultTimeout
+      this.defaultTimeout,
     );
     this.abandonCountersigningSessionRequester = AppWebsocket.requester(
       this.client,
       "abandon_countersigning_session",
-      this.defaultTimeout
+      this.defaultTimeout,
     );
     this.publishCountersigningSessionRequester = AppWebsocket.requester(
       this.client,
       "publish_countersigning_session",
-      this.defaultTimeout
+      this.defaultTimeout,
     );
 
     // Ensure all super methods are bound to this instance because Emittery relies on `this` being the instance.
@@ -262,7 +262,7 @@ export class AppWebsocket implements AppClient {
     if (!options.url) {
       throw new HolochainError(
         "ConnectionUrlMissing",
-        `unable to connect to Conductor API - no url provided and not in a launcher environment.`
+        `unable to connect to Conductor API - no url provided and not in a launcher environment.`,
       );
     }
 
@@ -273,7 +273,7 @@ export class AppWebsocket implements AppClient {
     if (!token)
       throw new HolochainError(
         "AppAuthenticationTokenMissing",
-        `unable to connect to Conductor API - no app authentication token provided.`
+        `unable to connect to Conductor API - no app authentication token provided.`,
       );
 
     await client.authenticate({ token });
@@ -287,7 +287,7 @@ export class AppWebsocket implements AppClient {
     if (!appInfo) {
       throw new HolochainError(
         "AppNotFound",
-        `The app your connection token was issued for was not found. The app needs to be installed and enabled.`
+        `The app your connection token was issued for was not found. The app needs to be installed and enabled.`,
       );
     }
 
@@ -295,7 +295,7 @@ export class AppWebsocket implements AppClient {
       client,
       appInfo,
       options.callZomeTransform,
-      options.defaultTimeout
+      options.defaultTimeout,
     );
   }
 
@@ -310,7 +310,7 @@ export class AppWebsocket implements AppClient {
     if (!appInfo) {
       throw new HolochainError(
         "AppNotFound",
-        `App info not found. App needs to be installed and enabled.`
+        `App info not found. App needs to be installed and enabled.`,
       );
     }
 
@@ -346,7 +346,7 @@ export class AppWebsocket implements AppClient {
    * @returns The conductor's {@link TransportStats}.
    */
   async dumpNetworkStats(
-    timeout?: number
+    timeout?: number,
   ): Promise<AppDumpNetworkStatsResponse> {
     return await this.dumpNetworkStatsRequester(undefined, timeout);
   }
@@ -358,7 +358,7 @@ export class AppWebsocket implements AppClient {
    */
   async dumpNetworkMetrics(
     req: DumpNetworkMetricsRequest,
-    timeout?: number
+    timeout?: number,
   ): Promise<DumpNetworkMetricsResponse> {
     return await this.dumpNetworkMetricsRequester(req, timeout);
   }
@@ -393,16 +393,16 @@ export class AppWebsocket implements AppClient {
       if (!(baseRoleName in appInfo.cell_info)) {
         throw new HolochainError(
           "NoCellForRoleName",
-          `no cell found with role_name ${roleName}`
+          `no cell found with role_name ${roleName}`,
         );
       }
       const cloneCell = appInfo.cell_info[baseRoleName].find(
-        (c) => c.type === CellType.Cloned && c.value.clone_id === roleName
+        (c) => c.type === CellType.Cloned && c.value.clone_id === roleName,
       );
       if (!cloneCell || cloneCell.type !== CellType.Cloned) {
         throw new HolochainError(
           "NoCellForCloneId",
-          `no clone cell found with clone id ${roleName}`
+          `no clone cell found with clone id ${roleName}`,
         );
       }
       return cloneCell.value.cell_id;
@@ -411,16 +411,16 @@ export class AppWebsocket implements AppClient {
     if (!(roleName in appInfo.cell_info)) {
       throw new HolochainError(
         "NoCellForRoleName",
-        `no cell found with role_name ${roleName}`
+        `no cell found with role_name ${roleName}`,
       );
     }
     const cell = appInfo.cell_info[roleName].find(
-      (c) => c.type === CellType.Provisioned
+      (c) => c.type === CellType.Provisioned,
     );
     if (!cell || cell.type !== CellType.Provisioned) {
       throw new HolochainError(
         "NoProvisionedCellForRoleName",
-        `no provisioned cell found with role_name ${roleName}`
+        `no provisioned cell found with role_name ${roleName}`,
       );
     }
     return cell.value.cell_id;
@@ -435,7 +435,7 @@ export class AppWebsocket implements AppClient {
    */
   async callZome<ReturnType>(
     request: CallZomeRequest | RoleNameCallZomeRequest,
-    timeout?: number
+    timeout?: number,
   ): Promise<ReturnType> {
     if (!("provenance" in request)) {
       request = {
@@ -454,7 +454,7 @@ export class AppWebsocket implements AppClient {
     } else if (!("cell_id" in request)) {
       throw new HolochainError(
         "MissingRoleNameOrCellId",
-        "callZome requires a role_name or cell_id argument"
+        "callZome requires a role_name or cell_id argument",
       );
     }
     return this.callZomeRequester(request, timeout);
@@ -503,7 +503,7 @@ export class AppWebsocket implements AppClient {
    * Get the state of a countersigning session.
    */
   async getCountersigningSessionState(
-    args: GetCountersigningSessionStateRequest
+    args: GetCountersigningSessionStateRequest,
   ) {
     return this.getCountersigningSessionStateRequester(args);
   }
@@ -545,7 +545,7 @@ export class AppWebsocket implements AppClient {
    * automatically has not been made.
    */
   async abandonCountersigningSession(
-    args: AbandonCountersigningSessionStateRequest
+    args: AbandonCountersigningSessionStateRequest,
   ) {
     return this.abandonCountersigningSessionRequester(args);
   }
@@ -587,7 +587,7 @@ export class AppWebsocket implements AppClient {
    * automatically has not been made.
    */
   async publishCountersigningSession(
-    args: PublishCountersigningSessionStateRequest
+    args: PublishCountersigningSessionStateRequest,
   ) {
     return this.publishCountersigningSessionRequester(args);
   }
@@ -601,7 +601,7 @@ export class AppWebsocket implements AppClient {
    */
   on<Name extends keyof AppEvents>(
     eventName: Name | readonly Name[],
-    listener: SignalCb
+    listener: SignalCb,
   ): UnsubscribeFunction {
     return this.emitter.on(eventName, listener);
   }
@@ -610,17 +610,17 @@ export class AppWebsocket implements AppClient {
     client: WsClient,
     tag: string,
     defaultTimeout: number,
-    transformer?: Transformer<ReqI, ReqO, ResI, ResO>
+    transformer?: Transformer<ReqI, ReqO, ResI, ResO>,
   ) {
     return requesterTransformer(
       (req, timeout) =>
         promiseTimeout(
           client.request(req),
           tag,
-          timeout || defaultTimeout
+          timeout || defaultTimeout,
         ).then(catchError),
       tag,
-      transformer
+      transformer,
     );
   }
 }
@@ -657,8 +657,8 @@ export const signZomeCall = async (request: CallZomeRequest) => {
     throw new HolochainError(
       "NoSigningCredentialsForCell",
       `no signing credentials have been authorized for cell [${encodeHashToBase64(
-        request.cell_id[0]
-      )}, ${encodeHashToBase64(request.cell_id[1])}]`
+        request.cell_id[0],
+      )}, ${encodeHashToBase64(request.cell_id[1])}]`,
     );
   }
   const zome_call_params: CallZomeRequest = {

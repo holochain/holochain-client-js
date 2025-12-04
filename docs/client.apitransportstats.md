@@ -4,6 +4,7 @@
 
 ## ApiTransportStats interface
 
+
 **Signature:**
 
 ```typescript
@@ -43,7 +44,7 @@ Description
 
 </td><td>
 
-Record&lt;Url, Record&lt;SpaceId, [MessageBlockCount](./client.messageblockcount.md)<!-- -->&gt;&gt;
+Record&lt;[PeerUrl](./client.peerurl.md)<!-- -->, Record&lt;[SpaceId](./client.spaceid.md)<!-- -->, [MessageBlockCount](./client.messageblockcount.md)<!-- -->&gt;&gt;
 
 
 </td><td>
@@ -72,3 +73,4 @@ Stats from the configured transport implementation.
 
 </td></tr>
 </tbody></table>
+

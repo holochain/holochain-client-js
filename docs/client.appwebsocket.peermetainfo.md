@@ -63,6 +63,7 @@ _(Optional)_ A timeout to override the default.
 
 </td></tr>
 </tbody></table>
+
 **Returns:**
 
 Promise&lt;[PeerMetaInfoResponse](./client.peermetainforesponse.md)<!-- -->&gt;

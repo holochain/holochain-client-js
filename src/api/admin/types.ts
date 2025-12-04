@@ -279,7 +279,7 @@ export type ZomeName = string;
  */
 export type ZomeDefinition = [
   ZomeName,
-  { wasm_hash: WasmHash; dependencies: ZomeName[] }
+  { wasm_hash: WasmHash; dependencies: ZomeName[] },
 ];
 /**
  * @public
@@ -293,7 +293,7 @@ export type CoordinatorZome = ZomeDefinition;
 /**
  * @public
  */
-export type DnaDefinition = {
+export type DnaDef = {
   name: string;
   modifiers: DnaModifiers;
   lineage: DnaHashB64[];
@@ -303,12 +303,19 @@ export type DnaDefinition = {
 
 /**
  * @public
+ *
+ * @deprecated Renamed to DnaDef. This alias will be removed in 0.22.0
+ */
+export type DnaDefinition = DnaDef;
+
+/**
+ * @public
  */
 export type GetDnaDefinitionRequest = CellId;
 /**
  * @public
  */
-export type GetDnaDefinitionResponse = DnaDefinition;
+export type GetDnaDefinitionResponse = DnaDef;
 
 /**
  * @public
@@ -999,6 +1006,9 @@ export interface IssueAppAuthenticationTokenResponse {
  */
 export type DumpNetworkStatsRequest = void;
 
+/**
+ * @public
+ */
 export interface ApiTransportStats {
   /**
    * Stats from the configured transport implementation.
@@ -1008,19 +1018,26 @@ export interface ApiTransportStats {
   /**
    * Blocked message counts.
    */
-  blocked_message_counts: Record<Url, Record<SpaceId, MessageBlockCount>>;
+  blocked_message_counts: Record<PeerUrl, Record<SpaceId, MessageBlockCount>>;
 }
 
 /**
  * Peer Url
+ *
+ * @public
  */
-type Url = string;
+export type PeerUrl = string;
 
 /**
  * kitsune2 space id
+ *
+ * @public
  */
-type SpaceId = string;
+export type SpaceId = string;
 
+/**
+ * @public
+ */
 export interface MessageBlockCount {
   /**
    * Count of incoming messages that have been blocked and dropped.

@@ -43,6 +43,7 @@ args
 
 </td></tr>
 </tbody></table>
+
 **Returns:**
 
 Promise&lt;[DumpNetworkMetricsResponse](./client.dumpnetworkmetricsresponse.md)<!-- -->&gt;

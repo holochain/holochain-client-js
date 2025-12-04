@@ -49,6 +49,7 @@ The core 32 bytes of the hash.
 
 </td></tr>
 </tbody></table>
+
 **Returns:**
 
 Uint8Array

@@ -47,6 +47,7 @@ Role id to parse.
 
 </td></tr>
 </tbody></table>
+
 **Returns:**
 
 [CloneIdHelper](./client.cloneidhelper.md)

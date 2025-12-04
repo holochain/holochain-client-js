@@ -68,8 +68,8 @@ export class WsClient extends Emittery {
         reject(
           new HolochainError(
             "ConnectionError",
-            `could not connect to Holochain Conductor API at ${url} - ${errorEvent.error}`
-          )
+            `could not connect to Holochain Conductor API at ${url} - ${errorEvent.error}`,
+          ),
         );
       });
       socket.addEventListener(
@@ -78,7 +78,7 @@ export class WsClient extends Emittery {
           const client = new WsClient(socket, url, options);
           resolve(client);
         },
-        { once: true }
+        { once: true },
       );
     });
   }
@@ -107,14 +107,14 @@ export class WsClient extends Emittery {
     this.authenticationToken = request.token;
     return this.exchange(request, (request, resolve, reject) => {
       const invalidTokenCloseListener = (
-        closeEvent: IsoWebSocket.CloseEvent
+        closeEvent: IsoWebSocket.CloseEvent,
       ) => {
         this.authenticationToken = undefined;
         reject(
           new HolochainError(
             "InvalidTokenError",
-            `could not connect to ${this.url} due to an invalid app authentication token - close code ${closeEvent.code}`
-          )
+            `could not connect to ${this.url} due to an invalid app authentication token - close code ${closeEvent.code}`,
+          ),
         );
       };
       this.socket.addEventListener("close", invalidTokenCloseListener, {
@@ -141,8 +141,8 @@ export class WsClient extends Emittery {
       this.socket.addEventListener(
         "close",
         (closeEvent) => resolve(closeEvent),
-        { once: true }
-      )
+        { once: true },
+      ),
     );
     this.socket.close(code);
     return closedPromise;
@@ -163,8 +163,8 @@ export class WsClient extends Emittery {
     sendHandler: (
       request: unknown,
       resolve: RequestResolver,
-      reject: RequestRejecter
-    ) => void
+      reject: RequestRejecter,
+    ) => void,
   ): Promise<Response> {
     if (this.socket.readyState === this.socket.OPEN) {
       const promise = new Promise((resolve, reject) => {
@@ -176,12 +176,12 @@ export class WsClient extends Emittery {
       this.registerMessageListener(this.socket);
       this.registerCloseListener(this.socket);
       const promise = new Promise((resolve, reject) =>
-        sendHandler(request, resolve, reject)
+        sendHandler(request, resolve, reject),
       );
       return promise as Promise<Response>;
     } else {
       return Promise.reject(
-        new HolochainError("WebsocketClosedError", "Websocket is not open")
+        new HolochainError("WebsocketClosedError", "Websocket is not open"),
       );
     }
   }
@@ -189,7 +189,7 @@ export class WsClient extends Emittery {
   private sendMessage(
     request: unknown,
     resolve: RequestResolver,
-    reject: RequestRejecter
+    reject: RequestRejecter,
   ) {
     const id = this.index;
     const encodedMsg = encode({
@@ -220,7 +220,7 @@ export class WsClient extends Emittery {
         } else {
           throw new HolochainError(
             "UnknownMessageFormat",
-            `incoming message has unknown message format - ${deserializedData}`
+            `incoming message has unknown message format - ${deserializedData}`,
           );
         }
       }
@@ -232,7 +232,7 @@ export class WsClient extends Emittery {
         if (message.data === null) {
           throw new HolochainError(
             "UnknownSignalFormat",
-            "incoming signal has no data"
+            "incoming signal has no data",
           );
         }
         const deserializedSignal = decode(message.data);
@@ -264,7 +264,7 @@ export class WsClient extends Emittery {
       } else {
         throw new HolochainError(
           "UnknownMessageType",
-          `incoming message has unknown type - ${message.type}`
+          `incoming message has unknown type - ${message.type}`,
         );
       }
     };
@@ -275,20 +275,20 @@ export class WsClient extends Emittery {
       "close",
       (closeEvent) => {
         const pendingRequestIds = Object.keys(this.pendingRequests).map((id) =>
-          parseInt(id)
+          parseInt(id),
         );
         if (pendingRequestIds.length) {
           pendingRequestIds.forEach((id) => {
             const error = new HolochainError(
               "ClientClosedWithPendingRequests",
-              `client closed with pending requests - close event code: ${closeEvent.code}, request id: ${id}`
+              `client closed with pending requests - close event code: ${closeEvent.code}, request id: ${id}`,
             );
             this.pendingRequests[id].reject(error);
             delete this.pendingRequests[id];
           });
         }
       },
-      { once: true }
+      { once: true },
     );
   }
 
@@ -303,22 +303,22 @@ export class WsClient extends Emittery {
           reject(
             new HolochainError(
               "ConnectionError",
-              `could not connect to Holochain Conductor API at ${url} - ${errorEvent.message}`
-            )
+              `could not connect to Holochain Conductor API at ${url} - ${errorEvent.message}`,
+            ),
           );
         },
-        { once: true }
+        { once: true },
       );
 
       const invalidTokenCloseListener = (
-        closeEvent: IsoWebSocket.CloseEvent
+        closeEvent: IsoWebSocket.CloseEvent,
       ) => {
         this.authenticationToken = undefined;
         reject(
           new HolochainError(
             "InvalidTokenError",
-            `could not connect to ${this.url} due to an invalid app authentication token - close code ${closeEvent.code}`
-          )
+            `could not connect to ${this.url} due to an invalid app authentication token - close code ${closeEvent.code}`,
+          ),
         );
       };
       this.socket.addEventListener("close", invalidTokenCloseListener, {
@@ -339,7 +339,7 @@ export class WsClient extends Emittery {
             resolve();
           }, 10);
         },
-        { once: true }
+        { once: true },
       );
     });
   }
@@ -349,7 +349,7 @@ export class WsClient extends Emittery {
     if (this.pendingRequests[id]) {
       if (msg.data === null || msg.data === undefined) {
         this.pendingRequests[id].reject(
-          new Error("Response canceled by responder")
+          new Error("Response canceled by responder"),
         );
       } else {
         this.pendingRequests[id].resolve(
@@ -365,23 +365,23 @@ export class WsClient extends Emittery {
               throw new HolochainError(
                 "DeserializationError",
                 "Encountered map with key of type 'object', but not HoloHash " +
-                  key
+                  key,
               );
             },
-          })
+          }),
         );
       }
       delete this.pendingRequests[id];
     } else {
       console.error(
-        `got response with no matching request. id = ${id} msg = ${msg}`
+        `got response with no matching request. id = ${id} msg = ${msg}`,
       );
     }
   }
 }
 
 function assertHolochainMessage(
-  message: unknown
+  message: unknown,
 ): asserts message is HolochainMessage {
   if (
     typeof message === "object" &&
@@ -396,8 +396,8 @@ function assertHolochainMessage(
     `incoming message has unknown message format ${JSON.stringify(
       message,
       null,
-      4
-    )}`
+      4,
+    )}`,
   );
 }
 
@@ -416,8 +416,8 @@ function assertHolochainSignal(signal: unknown): asserts signal is RawSignal {
     `incoming signal has unknown signal format ${JSON.stringify(
       signal,
       null,
-      4
-    )}`
+      4,
+    )}`,
   );
 }
 

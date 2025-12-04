@@ -47,6 +47,7 @@ A map of [MembraneProof](./client.membraneproof.md)<!-- -->s.
 
 </td></tr>
 </tbody></table>
+
 **Returns:**
 
 Promise&lt;void&gt;

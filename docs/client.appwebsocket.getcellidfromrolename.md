@@ -63,6 +63,7 @@ The app info containing all cell infos.
 
 </td></tr>
 </tbody></table>
+
 **Returns:**
 
 import("../../types.js").[CellId](./client.cellid.md)

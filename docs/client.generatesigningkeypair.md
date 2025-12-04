@@ -47,6 +47,7 @@ _(Optional)_ The agent pub key to take 4 last bytes (= DHT location) from (optio
 
 </td></tr>
 </tbody></table>
+
 **Returns:**
 
 Promise&lt;\[KeyPair, [AgentPubKey](./client.agentpubkey.md)<!-- -->\]&gt;

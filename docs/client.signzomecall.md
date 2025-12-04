@@ -44,6 +44,7 @@ request
 
 </td></tr>
 </tbody></table>
+
 **Returns:**
 
 Promise&lt;[CallZomeRequestSigned](./client.callzomerequestsigned.md)<!-- -->&gt;
