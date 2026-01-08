@@ -15,6 +15,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Added type alias `DnaDefinition`, which is deprecated and will be removed in 0.22.0. [#388](https://github.com/holochain/holochain-client-js/pull/388)
 - Exported types `PeerUrl`, `SpaceId`. [#391](https://github.com/holochain/holochain-client-js/pull/391)
 ### Fixed
+- Bump `libsodium` to `0.8`
 ### Changed
 - Renamed `DnaDefinition` to `DnaDef`. [#388](https://github.com/holochain/holochain-client-js/pull/388)
 - Update response type of `AdminWebsocket.dumpNetworkStats` to `ApiTransportStats` [#383](https://github.com/holochain/holochain-client-js/pull/383)
