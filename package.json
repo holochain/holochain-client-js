@@ -1,6 +1,6 @@
 {
   "name": "@holochain/client",
-  "version": "0.20.1",
+  "version": "0.20.2",
   "description": "A JavaScript client for the Holochain Conductor API",
   "author": "Holochain Foundation <info@holochain.org> (https://holochain.org)",
   "license": "CAL-1.0",
@@ -48,7 +48,7 @@
     "isomorphic-ws": "^5.0.0",
     "js-base64": "^3.7.8",
     "js-sha512": "^0.9.0",
-    "libsodium-wrappers": "^0.7.15",
+    "libsodium-wrappers": "^0.8",
     "lodash-es": "^4.17.21",
     "ws": "^8.18.3"
   },
