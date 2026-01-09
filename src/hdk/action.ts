@@ -1,3 +1,4 @@
+import { MembraneProof } from "../api/index.js";
 import {
   AgentPubKey,
   DnaHash,
@@ -96,7 +97,7 @@ export interface AgentValidationPkg {
   action_seq: number;
   prev_action: ActionHash;
 
-  membrane_proof: any;
+  membrane_proof?: MembraneProof;
 }
 
 /**
