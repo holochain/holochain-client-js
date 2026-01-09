@@ -13,7 +13,7 @@ export type AppManifest = {
     name: string;
     description?: string;
     roles: Array<AppRoleManifest>;
-    membrane_proofs_deferred: boolean;
+    allow_deferred_memproofs: boolean;
 };
 ```
 **References:** [AppRoleManifest](./client.approlemanifest.md)

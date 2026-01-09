@@ -323,6 +323,7 @@ export async function makeCoordinatorZomeBundle(): Promise<CoordinatorBundle> {
 
 export async function retryUntilTimeout<T>(
   cb: () => Promise<T>,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   whileValue: any,
   timeoutMsg: string,
   intervalMs: number,
