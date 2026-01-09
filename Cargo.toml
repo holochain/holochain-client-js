@@ -7,5 +7,5 @@ resolver = "2"
 opt-level = "z"
 
 [workspace.dependencies]
-hdk = "0.6.0-dev.11"
+hdk = "0.7.0-dev.4"
 holochain_serialized_bytes = "0.0.56"

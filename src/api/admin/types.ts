@@ -218,6 +218,7 @@ export type DumpStateRequest = { cell_id: CellId };
 /**
  * @public
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type DumpStateResponse = any;
 
 /**
@@ -430,7 +431,7 @@ export type AppManifest = {
   name: string;
   description?: string;
   roles: Array<AppRoleManifest>;
-  membrane_proofs_deferred: boolean;
+  allow_deferred_memproofs: boolean;
 };
 /**
  * @public

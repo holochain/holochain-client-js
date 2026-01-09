@@ -394,7 +394,7 @@ test(
         token: issued.token,
       });
       t.pass("app websocket connection established");
-    } catch (error) {
+    } catch {
       t.fail("app websocket connection should have been established");
     }
   }),
@@ -531,7 +531,7 @@ test(
             },
           },
         ],
-        membrane_proofs_deferred: true,
+        allow_deferred_memproofs: true,
       },
       resources: {
         dna_1: zippedDnaBundle,
@@ -564,8 +564,8 @@ test(
     let appInfo = await client.appInfo();
     t.deepEqual(
       appInfo.status,
-      { type: "disabled", value: { type: "never_started" } },
-      "app is in status awaiting_memproofs",
+      { type: "awaiting_memproofs" },
+      "app is not in status awaiting_memproofs",
     );
 
     try {
@@ -774,7 +774,7 @@ test(
     try {
       await client.callZome(zomeCallPayload, 1);
       t.fail("zome call did not time out");
-    } catch (error) {
+    } catch {
       t.pass("zome call timed out");
     }
   }),
@@ -1236,7 +1236,7 @@ test(
     try {
       await client.callZome(params);
       t.fail();
-    } catch (error) {
+    } catch {
       t.pass("disabled clone call cannot be called");
     }
   }),
@@ -1314,7 +1314,7 @@ test(
         clone_cell_id: { type: "dna_hash", value: cloneCell.cell_id[0] },
       });
       t.fail();
-    } catch (error) {
+    } catch {
       t.pass("deleted clone cell cannot be enabled");
     }
   }),
@@ -1396,10 +1396,15 @@ test(
 
     const adminWsResponse = await admin.dumpNetworkStats();
 
-    t.assert(adminWsResponse.transport_stats.backend, "BackendLibDataChannel");
+    t.equal(
+      adminWsResponse.transport_stats.backend,
+      "BackendLibDataChannel",
+      "unexpected transport backend",
+    );
     t.assert(adminWsResponse.transport_stats.peer_urls.length === 1);
     const peerUrl = new URL(adminWsResponse.transport_stats.peer_urls[0]);
-    t.assert(peerUrl.origin, "wss://dev-test-bootstrap2.holochain.org");
+    t.equal(peerUrl.hostname, "127.0.0.1");
+    t.equal(peerUrl.protocol, "ws:");
     t.deepEqual(adminWsResponse.transport_stats.connections, []);
 
     const appWsResponse = await client.dumpNetworkStats();
@@ -1464,7 +1469,7 @@ test(
         payload: null,
       });
       t.fail();
-    } catch (error) {
+    } catch {
       t.pass("coordinator2 zome does not exist yet");
     }
 

@@ -281,7 +281,7 @@ test(
     try {
       await appWs.callZome(params);
       t.fail();
-    } catch (error) {
+    } catch {
       t.pass("disabled clone call cannot be called");
     }
 

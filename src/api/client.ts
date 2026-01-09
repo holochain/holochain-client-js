@@ -74,7 +74,7 @@ export class WsClient extends Emittery {
       });
       socket.addEventListener(
         "open",
-        (_) => {
+        () => {
           const client = new WsClient(socket, url, options);
           resolve(client);
         },
@@ -327,7 +327,7 @@ export class WsClient extends Emittery {
 
       this.socket.addEventListener(
         "open",
-        async (_) => {
+        async () => {
           const encodedMsg = encode({
             type: "authenticate",
             data: encode({ token }),

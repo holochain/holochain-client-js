@@ -12,5 +12,4 @@ roles:
       modifiers:
         properties: ~
         network_seed: ~
-      version: ~
       clone_limit: 10

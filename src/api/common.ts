@@ -45,6 +45,7 @@ export const requesterTransformer =
     return transform.output(response.value);
   };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const identity = (x: any) => x;
 const identityTransformer = {
   input: identity,
@@ -65,6 +66,7 @@ export class HolochainError extends Error {
 }
 
 // this determines the error format of all error responses
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const catchError = (response: any) => {
   if (response.type === ERROR_TYPE) {
     const errorName = response.value.type;

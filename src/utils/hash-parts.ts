@@ -177,6 +177,7 @@ export function hashFrom32AndType(
  * @public
  */
 export function hashFromContentAndType(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   content: any,
   hashType: HoloHashType,
 ): Uint8Array {

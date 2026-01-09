@@ -5,6 +5,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## \[Unreleased\]
 
 ### Added
+### Fixed
+### Changed
+### Removed
+
+## 2026-01-09: v0.21.0-dev.0
+### Added
 - Added alias utility classes for ergonomic use of the new utility classes outlined below, keyed to specific types: `AgentPubKeyB64Map`, `DnaHashB64Map`, `WasmHashB64Map`, `EntryHashB64Map`, `ActionHashB64Map`, `AnyDhtHashB64Map`, `ExternalHashB64Map`, `DhtOpHashB64Map`, `WarrantHashB64Map`, `AgentPubKeyMap`, `DnaHashMap`, `WasmHashMap`, `EntryHashMap`, `ActionHashMap`, `AnyDhtHashMap`, `ExternalHashMap`, `DhtOpHashMap`, `WarrantHashMap`, `LazyAgentPubKeyMap`, `LazyDnaHashMap`, `LazyWasmHashMap`, `LazyEntryHashMap`, `LazyActionHashMap`, `LazyAnyDhtHashMap`, `LazyExternalHashMap`, `LazyDhtOpHashMap`, `LazyWarrantHashMap`. [#392](https://github.com/holochain/holochain-client-js/pull/392)
 - Added utility classes `HoloHashB64Map`, `HoloHashMap`, `MemoizedHoloHashMap`, `DnaHoloHashMap` which provide ergonomic Maps for common use cases where data is keyed by `HoloHash`. [#392](https://github.com/holochain/holochain-client-js/pull/392)
 - Added utility functions `getHashType`, `hashFromContentAndType` for getting `HoloHashType` for a hash, and for generating a hash from a `HoloHashType`. [#392](https://github.com/holochain/holochain-client-js/pull/392)
