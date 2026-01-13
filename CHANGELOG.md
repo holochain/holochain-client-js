@@ -9,6 +9,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Changed
 ### Removed
 
+## 2026-01-13: v0.21.0-dev.1
+### Fixed
+- Upgrade `libsodium-wrapper` to v0.8. Current version became incompatible.
+
 ## 2026-01-09: v0.21.0-dev.0
 ### Added
 - Added alias utility classes for ergonomic use of the new utility classes outlined below, keyed to specific types: `AgentPubKeyB64Map`, `DnaHashB64Map`, `WasmHashB64Map`, `EntryHashB64Map`, `ActionHashB64Map`, `AnyDhtHashB64Map`, `ExternalHashB64Map`, `DhtOpHashB64Map`, `WarrantHashB64Map`, `AgentPubKeyMap`, `DnaHashMap`, `WasmHashMap`, `EntryHashMap`, `ActionHashMap`, `AnyDhtHashMap`, `ExternalHashMap`, `DhtOpHashMap`, `WarrantHashMap`, `LazyAgentPubKeyMap`, `LazyDnaHashMap`, `LazyWasmHashMap`, `LazyEntryHashMap`, `LazyActionHashMap`, `LazyAnyDhtHashMap`, `LazyExternalHashMap`, `LazyDhtOpHashMap`, `LazyWarrantHashMap`. [#392](https://github.com/holochain/holochain-client-js/pull/392)
