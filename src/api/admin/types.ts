@@ -1114,9 +1114,9 @@ export interface TransportConnectionStats {
   opened_at_s: number;
 
   /**
-   * True if this connection has successfully upgraded to webrtc.
+   * True if this connection has successfully upgraded to a direct connection.
    */
-  is_webrtc: boolean;
+  is_direct: boolean;
 }
 
 /**

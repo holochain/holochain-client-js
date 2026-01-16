@@ -9,6 +9,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Changed
 ### Removed
 
+## 2026-01-15: v0.21.0-dev.2
+### Fixed
+- **BREAKING:** Property `is_webrtc` in `TransportStats` has been renamed to `is_direct`.
+
 ## 2026-01-13: v0.21.0-dev.1
 ### Fixed
 - Upgrade `libsodium-wrapper` to v0.8. Current version became incompatible.

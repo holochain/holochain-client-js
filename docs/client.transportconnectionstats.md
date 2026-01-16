@@ -37,7 +37,7 @@ Description
 </th></tr></thead>
 <tbody><tr><td>
 
-[is\_webrtc](./client.transportconnectionstats.is_webrtc.md)
+[is\_direct](./client.transportconnectionstats.is_direct.md)
 
 
 </td><td>
@@ -50,7 +50,7 @@ boolean
 
 </td><td>
 
-True if this connection has successfully upgraded to webrtc.
+True if this connection has successfully upgraded to a direct connection.
 
 
 </td></tr>
