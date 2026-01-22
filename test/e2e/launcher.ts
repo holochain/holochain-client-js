@@ -84,7 +84,7 @@ test(
     try {
       await client.callZome(request, 500);
       // eslint-disable-next-line no-empty
-    } catch (e) {}
+    } catch {}
 
     t.assert(signerWasCalled, "__HC_ZOME_CALL_SIGNER__.signZomeCall called");
   }),

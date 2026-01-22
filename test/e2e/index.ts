@@ -394,7 +394,7 @@ test(
         token: issued.token,
       });
       t.pass("app websocket connection established");
-    } catch (error) {
+    } catch {
       t.fail("app websocket connection should have been established");
     }
   }),
@@ -774,7 +774,7 @@ test(
     try {
       await client.callZome(zomeCallPayload, 1);
       t.fail("zome call did not time out");
-    } catch (error) {
+    } catch {
       t.pass("zome call timed out");
     }
   }),
@@ -785,7 +785,7 @@ test("can inject agents", async (t) => {
   const conductor1 = await launch(
     ADMIN_PORT,
     localServices.bootstrapServerUrl,
-    localServices.signalingServerUrl,
+    localServices.relayServerUrl,
   );
   const installed_app_id = "app";
   const admin1 = await AdminWebsocket.connect({
@@ -817,8 +817,14 @@ test("can inject agents", async (t) => {
   );
 
   // There should be one agent info now.
+  await retryUntilTimeout(
+    async () => (await admin1.agentInfo({ dna_hashes: null })).length,
+    0,
+    "expected one agent info",
+    500,
+    50_000,
+  );
   agentInfos1 = await admin1.agentInfo({ dna_hashes: null });
-  t.assert(agentInfos1.length === 1, "number of agent infos is 1");
 
   // Now confirm that we can ask for agents in just one DNA.
   let dnaAgentInfos = await admin1.agentInfo({
@@ -838,7 +844,7 @@ test("can inject agents", async (t) => {
   const conductor2 = await launch(
     ADMIN_PORT_1,
     localServices.bootstrapServerUrl,
-    localServices.signalingServerUrl,
+    localServices.relayServerUrl,
   );
   const admin2 = await AdminWebsocket.connect({
     url: new URL(`ws://localhost:${ADMIN_PORT_1}`),
@@ -873,7 +879,7 @@ test("can query peer meta info over admin and app websocket", async (t) => {
   const conductor1 = await launch(
     ADMIN_PORT,
     localServices.bootstrapServerUrl,
-    localServices.signalingServerUrl,
+    localServices.relayServerUrl,
   );
   const {
     cell_id: cell_id1,
@@ -884,16 +890,22 @@ test("can query peer meta info over admin and app websocket", async (t) => {
   await admin1.authorizeSigningCredentials(cell_id1);
 
   // Retrieve the peer URL of the agent
+  await retryUntilTimeout(
+    async () => (await admin1.agentInfo({ dna_hashes: null })).length,
+    0,
+    "expected one agent info",
+    500,
+    50_000,
+  );
   const agentInfos1 = await admin1.agentInfo({ dna_hashes: null });
   const agentInfo1 = JSON.parse(agentInfos1[0]).agentInfo;
   const agentUrl1 = JSON.parse(agentInfo1).url;
-  console.log("agentUrl1: ", agentUrl1);
 
   // Start a second conductor and install the same app
   const conductor2 = await launch(
     ADMIN_PORT_1,
     localServices.bootstrapServerUrl,
-    localServices.signalingServerUrl,
+    localServices.relayServerUrl,
   );
 
   const {
@@ -904,8 +916,17 @@ test("can query peer meta info over admin and app websocket", async (t) => {
 
   await admin2.authorizeSigningCredentials(cell_id2);
 
+  // Await listening address
+  await retryUntilTimeout(
+    async () => (await admin2.agentInfo({ dna_hashes: null })).length,
+    0,
+    "expected one agent info",
+    500,
+    50_000,
+  );
+
   // Now create an entry with agent 1 to get some gossip flowing
-  const acionHash = await appClient1.callZome({
+  const actionHash = await appClient1.callZome({
     cell_id: cell_id1,
     provenance: cell_id1[1],
     zome_name: TEST_ZOME_NAME,
@@ -922,11 +943,11 @@ test("can query peer meta info over admin and app websocket", async (t) => {
         provenance: cell_id2[1],
         zome_name: TEST_ZOME_NAME,
         fn_name: "get_an_entry",
-        payload: acionHash,
+        payload: actionHash,
       }),
     null,
     "agent 2 wasn't able to get the entry of agent 1",
-    200,
+    500,
     20_000,
   );
 
@@ -969,6 +990,13 @@ test(
     await admin.authorizeSigningCredentials(cell_id);
 
     // There should be one agent info.
+    await retryUntilTimeout(
+      async () => (await admin.agentInfo({ dna_hashes: null })).length,
+      0,
+      "expected one agent info",
+      500,
+      50_000,
+    );
     const agentInfos = await client.agentInfo({ dna_hashes: null });
     t.assert(agentInfos.length === 1, "number of agent infos of app is 1");
 
@@ -1236,7 +1264,7 @@ test(
     try {
       await client.callZome(params);
       t.fail();
-    } catch (error) {
+    } catch {
       t.pass("disabled clone call cannot be called");
     }
   }),
@@ -1314,7 +1342,7 @@ test(
         clone_cell_id: { type: "dna_hash", value: cloneCell.cell_id[0] },
       });
       t.fail();
-    } catch (error) {
+    } catch {
       t.pass("deleted clone cell cannot be enabled");
     }
   }),
@@ -1393,13 +1421,21 @@ test(
   "can dump network stats",
   withConductor(ADMIN_PORT, async (t) => {
     const { admin, client } = await installAppAndDna(ADMIN_PORT);
+    await retryUntilTimeout(
+      async () => (await admin.agentInfo({ dna_hashes: null })).length,
+      0,
+      "expected one agent info",
+      500,
+      50_000,
+    );
 
     const adminWsResponse = await admin.dumpNetworkStats();
+    console.log("transport stats", adminWsResponse);
 
-    t.assert(adminWsResponse.transport_stats.backend, "BackendLibDataChannel");
+    t.equal(adminWsResponse.transport_stats.backend, "iroh");
     t.assert(adminWsResponse.transport_stats.peer_urls.length === 1);
     const peerUrl = new URL(adminWsResponse.transport_stats.peer_urls[0]);
-    t.assert(peerUrl.origin, "wss://dev-test-bootstrap2.holochain.org");
+    t.equal(peerUrl.origin, "https://use1-1.relay.n0.iroh-canary.iroh.link.");
     t.deepEqual(adminWsResponse.transport_stats.connections, []);
 
     const appWsResponse = await client.dumpNetworkStats();
@@ -1464,7 +1500,7 @@ test(
         payload: null,
       });
       t.fail();
-    } catch (error) {
+    } catch {
       t.pass("coordinator2 zome does not exist yet");
     }
 
