@@ -218,6 +218,7 @@ export type DumpStateRequest = { cell_id: CellId };
 /**
  * @public
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type DumpStateResponse = any;
 
 /**

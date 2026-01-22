@@ -23,7 +23,7 @@ export const runLocalServices = async () => {
   return new Promise<{
     servicesProcess: ChildProcessWithoutNullStreams;
     bootstrapServerUrl: URL;
-    signalingServerUrl: URL;
+    relayServerUrl: URL;
   }>((resolve, reject) => {
     servicesProcess.on("error", () => {
       reject("Failed to spawn kitsune2-bootstrap-srv");
@@ -36,11 +36,15 @@ export const runLocalServices = async () => {
           .split(BOOTSTRAP_SERVER_STARTUP_STRING)[1]
           .split("#")[0];
         const bootstrapServerUrl = new URL(`http://${listeningAddress}`);
-        const signalingServerUrl = new URL(`ws://${listeningAddress}`);
+        // While the kitsune2 bootstrap/relay server doesn't support QUIC
+        // yet, use the public iroh relay server.
+        const relayServerUrl = new URL(
+          `https://use1-1.relay.n0.iroh-canary.iroh.link.`,
+        );
         resolve({
           servicesProcess,
           bootstrapServerUrl,
-          signalingServerUrl,
+          relayServerUrl,
         });
       }
     });
@@ -68,7 +72,7 @@ export const stopLocalServices = (
 export const launch = async (
   port: number,
   bootstrapServerUrl: URL,
-  signalingServerUrl: URL,
+  relayServerUrl: URL,
 ) => {
   // create sandbox conductor
   const args = [
@@ -79,8 +83,8 @@ export const launch = async (
     "network",
     "--bootstrap",
     bootstrapServerUrl.href,
-    "webrtc",
-    signalingServerUrl.href,
+    "quic",
+    relayServerUrl.href,
   ];
   const createConductorProcess = spawn("hc", args);
   createConductorProcess.stdin.write(LAIR_PASSPHRASE);
@@ -174,7 +178,7 @@ export const withConductor =
     const conductorProcess = await launch(
       port,
       localServices.bootstrapServerUrl,
-      localServices.signalingServerUrl,
+      localServices.relayServerUrl,
     );
     try {
       await f(t);
@@ -323,7 +327,7 @@ export async function makeCoordinatorZomeBundle(): Promise<CoordinatorBundle> {
 
 export async function retryUntilTimeout<T>(
   cb: () => Promise<T>,
-  whileValue: any,
+  whileValue: unknown,
   timeoutMsg: string,
   intervalMs: number,
   timeoutMs: number,

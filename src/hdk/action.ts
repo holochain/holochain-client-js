@@ -96,6 +96,7 @@ export interface AgentValidationPkg {
   action_seq: number;
   prev_action: ActionHash;
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   membrane_proof: any;
 }
 

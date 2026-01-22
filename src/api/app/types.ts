@@ -51,6 +51,7 @@ export type CallZomeRequestGeneric<Payload> = {
 /**
  * @public
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type CallZomeRequest = CallZomeRequestGeneric<any>;
 
 /**
@@ -75,6 +76,7 @@ export type CallZomeResponseGeneric<Payload> = Payload;
 /**
  * @public
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type CallZomeResponse = CallZomeResponseGeneric<any>;
 
 /**
@@ -470,6 +472,7 @@ export interface AppClient {
   callZome(
     args: CallZomeRequest | RoleNameCallZomeRequest,
     timeout?: number,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ): Promise<any>;
 
   on<Name extends keyof AppEvents>(
