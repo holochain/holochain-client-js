@@ -9,6 +9,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Changed
 ### Removed
 
+## 2026-01-23: v0.20.4-rc.0
+### Fixed
+- **BREAKING:** Property `is_webrtc` in `TransportStats` has been renamed to `is_direct`.
+
 ## 2026-01-21: v0.20.3-rc.0
 - No API changes. Updated tests to work with iroh transport.
 
