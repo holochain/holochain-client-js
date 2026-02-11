@@ -191,6 +191,35 @@ export const withConductor =
     t.end();
   };
 
+export const withConductorBatch =
+  (ports: number[], f: (t: Test) => Promise<void>) => async (t: Test) => {
+    // Start local bootstrap + relay server
+    const localServices = await runLocalServices();
+    // Start conductor
+    const conductorProcesses = await Promise.all(ports.map((port) => 
+      launch(
+        port,
+        localServices.bootstrapServerUrl,
+        localServices.relayServerUrl,
+      )
+    ));
+    try {
+      await f(t);
+    } catch (e) {
+      console.error("Test caught exception: ", e);
+      throw e;
+    } finally {
+      await stopLocalServices(localServices.servicesProcess);
+      for (const i in conductorProcesses) {
+        if (conductorProcesses[i].pid && !conductorProcesses[i].killed) {
+          process.kill(-conductorProcesses[i].pid);
+        }
+      }
+      await cleanSandboxConductors();
+    }
+    t.end();
+  };
+
 export const installAppAndDna = async (
   adminPort: number,
   /**
