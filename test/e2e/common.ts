@@ -23,7 +23,7 @@ export const runLocalServices = async () => {
   return new Promise<{
     servicesProcess: ChildProcessWithoutNullStreams;
     bootstrapServerUrl: URL;
-    signalingServerUrl: URL;
+    relayServerUrl: URL;
   }>((resolve, reject) => {
     servicesProcess.on("error", () => {
       reject("Failed to spawn kitsune2-bootstrap-srv");
@@ -36,11 +36,11 @@ export const runLocalServices = async () => {
           .split(BOOTSTRAP_SERVER_STARTUP_STRING)[1]
           .split("#")[0];
         const bootstrapServerUrl = new URL(`http://${listeningAddress}`);
-        const signalingServerUrl = new URL(`ws://${listeningAddress}`);
+        const relayServerUrl = new URL(`http://${listeningAddress}`);
         resolve({
           servicesProcess,
           bootstrapServerUrl,
-          signalingServerUrl,
+          relayServerUrl,
         });
       }
     });
@@ -68,7 +68,7 @@ export const stopLocalServices = (
 export const launch = async (
   port: number,
   bootstrapServerUrl: URL,
-  signalingServerUrl: URL,
+  relayServerUrl: URL,
 ) => {
   // create sandbox conductor
   const args = [
@@ -79,8 +79,8 @@ export const launch = async (
     "network",
     "--bootstrap",
     bootstrapServerUrl.href,
-    "webrtc",
-    signalingServerUrl.href,
+    "quic",
+    relayServerUrl.href,
   ];
   const createConductorProcess = spawn("hc", args);
   createConductorProcess.stdin.write(LAIR_PASSPHRASE);
@@ -168,13 +168,13 @@ export const cleanSandboxConductors = () => {
 
 export const withConductor =
   (port: number, f: (t: Test) => Promise<void>) => async (t: Test) => {
-    // Start local bootstrap + signaling server
+    // Start local bootstrap + relay server
     const localServices = await runLocalServices();
     // Start conductor
     const conductorProcess = await launch(
       port,
       localServices.bootstrapServerUrl,
-      localServices.signalingServerUrl,
+      localServices.relayServerUrl,
     );
     try {
       await f(t);
