@@ -21,7 +21,7 @@ const LAIR_PASSPHRASE = "passphrase";
 export interface ConnectionServices {
   servicesProcess: ChildProcessWithoutNullStreams;
   bootstrapServerUrl: URL;
-  signalingServerUrl: URL;
+  relayServerUrl: URL;
 }
 
 export const runLocalServices = async () => {
@@ -39,11 +39,11 @@ export const runLocalServices = async () => {
           .split(BOOTSTRAP_SERVER_STARTUP_STRING)[1]
           .split("#")[0];
         const bootstrapServerUrl = new URL(`http://${listeningAddress}`);
-        const signalingServerUrl = new URL(`http://${listeningAddress}`);
+        const relayServerUrl = new URL(`http://${listeningAddress}`);
         resolve({
           servicesProcess,
           bootstrapServerUrl,
-          signalingServerUrl,
+          relayServerUrl,
         });
       }
     });
@@ -71,7 +71,7 @@ export const stopLocalServices = (
 export const launch = async (
   port: number,
   bootstrapServerUrl: URL,
-  signalingServerUrl: URL,
+  relayServerUrl: URL,
 ) => {
   // create sandbox conductor
   const args = [
@@ -83,7 +83,7 @@ export const launch = async (
     "--bootstrap",
     bootstrapServerUrl.href,
     "quic",
-    signalingServerUrl.href,
+    relayServerUrl.href,
   ];
   const createConductorProcess = spawn("hc", args);
   createConductorProcess.stdin.write(LAIR_PASSPHRASE);
@@ -203,7 +203,7 @@ export const withApp =
   ) =>
   async () => {
     const adminPort = await getPort({ port: [30_000, 31_000] });
-    // Start local bootstrap + signaling server
+    // Start local bootstrap + relay server
     const localServices = await runLocalServices();
     let conductor: ChildProcessWithoutNullStreams | undefined;
     try {
@@ -211,7 +211,7 @@ export const withApp =
       conductor = await launch(
         adminPort,
         localServices.bootstrapServerUrl,
-        localServices.signalingServerUrl,
+        localServices.relayServerUrl,
       );
       const testCase = await createAppWsAndInstallApp(
         adminPort,
@@ -234,7 +234,7 @@ export const withApp =
 
 export const withConductor =
   (port: number, f: () => Promise<void>) => async () => {
-    // Start local bootstrap + signaling server
+    // Start local bootstrap + relay server
     const localServices = await runLocalServices();
     let conductor: ChildProcessWithoutNullStreams | undefined;
     try {
@@ -242,7 +242,7 @@ export const withConductor =
       conductor = await launch(
         port,
         localServices.bootstrapServerUrl,
-        localServices.signalingServerUrl,
+        localServices.relayServerUrl,
       );
       await f();
     } catch (e) {

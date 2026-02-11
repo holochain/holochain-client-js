@@ -721,7 +721,7 @@ test("can inject agent info", async () => {
   const conductor1 = await launch(
     adminPort1,
     localServices.bootstrapServerUrl,
-    localServices.signalingServerUrl,
+    localServices.relayServerUrl,
   );
   const installed_app_id = "app";
   const admin1 = await AdminWebsocket.connect({
@@ -782,7 +782,7 @@ test("can inject agent info", async () => {
   const conductor2 = await launch(
     adminPort2,
     localServices.bootstrapServerUrl,
-    localServices.signalingServerUrl,
+    localServices.relayServerUrl,
   );
   const admin2 = await AdminWebsocket.connect({
     url: getAdminWsUrl(adminPort2),
@@ -848,7 +848,7 @@ test("can query peer meta info over admin and app websocket", async () => {
   const conductor1 = await launch(
     adminPort1,
     localServices.bootstrapServerUrl,
-    localServices.signalingServerUrl,
+    localServices.relayServerUrl,
   );
   const {
     cell_id: cell_id1,
@@ -877,7 +877,7 @@ test("can query peer meta info over admin and app websocket", async () => {
   const conductor2 = await launch(
     adminPort2,
     localServices.bootstrapServerUrl,
-    localServices.signalingServerUrl,
+    localServices.relayServerUrl,
   );
 
   const {
