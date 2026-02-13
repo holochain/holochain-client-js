@@ -30,6 +30,7 @@ const TEST_ZOME_NAME = "foo";
 
 test(
   "can call a zome function and get app info",
+  { timeout: 60_000 },
   withConductor(ADMIN_PORT, async (t) => {
     const {
       installed_app_id,
@@ -88,6 +89,7 @@ test(
 
 test(
   "can receive a signal",
+  { timeout: 60_000 },
   withConductor(ADMIN_PORT, async (t) => {
     let resolveSignalPromise: (value?: unknown) => void | undefined;
     const signalReceivedPromise = new Promise(
@@ -126,6 +128,7 @@ test(
 
 test(
   "cells only receive their own signals",
+  { timeout: 60_000 },
   withConductor(ADMIN_PORT, async (t) => {
     const role_name = "foo";
     const admin = await AdminWebsocket.connect({
@@ -213,6 +216,7 @@ test(
 
 test(
   "can create a callable clone cell and call it by clone id",
+  { timeout: 60_000 },
   withConductor(ADMIN_PORT, async (t) => {
     const { admin, client: appWs } = await createAppWsAndInstallApp(ADMIN_PORT);
     const info = await appWs.appInfo();
@@ -251,6 +255,7 @@ test(
 
 test(
   "can disable and re-enable a clone cell",
+  { timeout: 60_000 },
   withConductor(ADMIN_PORT, async (t) => {
     const { admin, client: appWs } = await createAppWsAndInstallApp(ADMIN_PORT);
 
@@ -295,6 +300,7 @@ test(
 
 test(
   "can grant and revoke zome call capabilities",
+  { timeout: 60_000 },
   withConductor(ADMIN_PORT, async (t) => {
     const {
       admin,
@@ -385,6 +391,7 @@ test(
 if (process.env.TEST_UNSTABLE === "true") {
   test(
     "countersigning session interaction calls",
+    { timeout: 60_000 },
     withConductor(ADMIN_PORT, async (t) => {
       const { client: appWs, cell_id } =
         await createAppWsAndInstallApp(ADMIN_PORT);

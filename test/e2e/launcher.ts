@@ -16,6 +16,7 @@ const TEST_ZOME_NAME = "foo";
 
 test(
   "AdminWebsocket connects with options provided by window.__HC_LAUNCHER_ENV__",
+  { timeout: 60_000 },
   withConductor(ADMIN_PORT, async (t) => {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore-next-line
@@ -33,6 +34,7 @@ test(
 
 test(
   "AppWebsocket connects with options provided by window.__HC_LAUNCHER_ENV__",
+  { timeout: 60_000 },
   withConductor(ADMIN_PORT, async (t) => {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore-next-line
@@ -56,6 +58,7 @@ test(
 
 test(
   "AppWebsocket uses the zome call signer function provided by window.__HC_ZOME_CALL_SIGNER__",
+  { timeout: 60_000 },
   withConductor(ADMIN_PORT, async (t) => {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore-next-line

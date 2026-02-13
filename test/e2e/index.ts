@@ -70,6 +70,7 @@ export const ADMIN_WS_URL = new URL(`ws://localhost:${ADMIN_PORT}`);
 
 test(
   "admin smoke test: installApp + uninstallApp",
+  { timeout: 60_000 },
   withConductor(ADMIN_PORT, async (t) => {
     const installed_app_id = "app";
     const admin = await AdminWebsocket.connect({
@@ -183,6 +184,7 @@ test(
 
 test(
   "admin smoke test: installBundle",
+  { timeout: 60_000 },
   withConductor(ADMIN_PORT, async (t) => {
     const installed_app_id = "app";
     const admin = await AdminWebsocket.connect({
@@ -253,6 +255,7 @@ test(
 
 test(
   "can call a zome function and then deactivate",
+  { timeout: 60_000 },
   withConductor(ADMIN_PORT, async (t) => {
     const { installed_app_id, cell_id, client, admin } =
       await installAppAndDna(ADMIN_PORT);
@@ -301,6 +304,7 @@ test(
 
 test(
   "can call a zome function with different sets of params",
+  { timeout: 60_000 },
   withConductor(ADMIN_PORT, async (t) => {
     const { cell_id, client, admin } = await installAppAndDna(ADMIN_PORT);
     await admin.authorizeSigningCredentials(cell_id);
@@ -336,6 +340,7 @@ test(
 
 test(
   "can call attachAppInterface without specific port",
+  { timeout: 60_000 },
   withConductor(ADMIN_PORT, async (t) => {
     const { admin, installed_app_id } = await installAppAndDna(ADMIN_PORT);
     const { port } = await admin.attachAppInterface({
@@ -356,6 +361,7 @@ test(
 
 test(
   "invalid app authentication token fails",
+  { timeout: 60_000 },
   withConductor(ADMIN_PORT, async (t) => {
     const { admin } = await installAppAndDna(ADMIN_PORT);
     const { port } = await admin.attachAppInterface({
@@ -378,6 +384,7 @@ test(
 
 test(
   "app websocket connection from allowed origin is established",
+  { timeout: 60_000 },
   withConductor(ADMIN_PORT, async (t) => {
     const { admin, installed_app_id } = await installAppAndDna(ADMIN_PORT);
     const allowedOrigin = "client-test-app";
@@ -402,6 +409,7 @@ test(
 
 test(
   "app websocket connection from disallowed origin is rejected",
+  { timeout: 60_000 },
   withConductor(ADMIN_PORT, async (t) => {
     const { admin, installed_app_id } = await installAppAndDna(ADMIN_PORT);
     const { port } = await admin.attachAppInterface({
@@ -426,6 +434,7 @@ test(
 
 test(
   "client errors are HolochainErrors",
+  { timeout: 60_000 },
   withConductor(ADMIN_PORT, async (t) => {
     const { cell_id, client, admin } = await installAppAndDna(ADMIN_PORT);
     const info = await client.appInfo(1000);
@@ -458,6 +467,7 @@ test(
 
 test(
   "can install app with roles_settings",
+  { timeout: 60_000 },
   withConductor(ADMIN_PORT, async (t) => {
     const installed_app_id = "app";
     const admin = await AdminWebsocket.connect({
@@ -503,6 +513,7 @@ test(
 
 test(
   "memproofs can be provided after app installation",
+  { timeout: 60_000 },
   withConductor(ADMIN_PORT, async (t) => {
     const role_name = "foo";
     const installed_app_id = "app";
@@ -600,6 +611,7 @@ test(
 
 test(
   "generated signing key has same location bytes as original agent pub key",
+  { timeout: 60_000 },
   withConductor(ADMIN_PORT, async (t) => {
     const admin = await AdminWebsocket.connect({
       url: ADMIN_WS_URL,
@@ -613,6 +625,7 @@ test(
 
 test(
   "install app from bytes",
+  { timeout: 60_000 },
   withConductor(ADMIN_PORT, async (t) => {
     const role_name = "foo";
     const installed_app_id = "app";
@@ -665,6 +678,7 @@ test(
 
 test(
   "stateDump",
+  { timeout: 60_000 },
   withConductor(ADMIN_PORT, async (t) => {
     const { cell_id, client, admin } = await installAppAndDna(ADMIN_PORT);
     const info = await client.appInfo();
@@ -696,6 +710,7 @@ test(
 
 test(
   "fullStateDump with ChainOps",
+  { timeout: 60_000 },
   withConductor(ADMIN_PORT, async (t) => {
     const { cell_id, admin } = await installAppAndDna(ADMIN_PORT);
     const state: FullStateDump = await admin.dumpFullState({
@@ -709,6 +724,7 @@ test(
 
 test(
   "can receive a signal using event handler",
+  { timeout: 60_000 },
   withConductor(ADMIN_PORT, async (t) => {
     const { admin, cell_id, client } = await installAppAndDna(ADMIN_PORT);
     let resolveSignalPromise: (value?: unknown) => void | undefined;
@@ -741,26 +757,31 @@ test(
 );
 
 // test without conductor
-test("error is catchable when holochain socket is unavailable", async (t) => {
-  try {
-    await AdminWebsocket.connect({ url: ADMIN_WS_URL });
-    t.fail("websocket connection should have failed");
-  } catch (e) {
-    t.assert(e instanceof HolochainError, "expected a HolochainError");
-    t.pass("websocket connection failed as expected");
-  }
+test(
+  "error is catchable when holochain socket is unavailable",
+  { timeout: 60_000 },
+  async (t) => {
+    try {
+      await AdminWebsocket.connect({ url: ADMIN_WS_URL });
+      t.fail("websocket connection should have failed");
+    } catch (e) {
+      t.assert(e instanceof HolochainError, "expected a HolochainError");
+      t.pass("websocket connection failed as expected");
+    }
 
-  try {
-    await AppWebsocket.connect({ url: ADMIN_WS_URL });
-    t.fail("websocket connection should have failed");
-  } catch (e) {
-    t.assert(e instanceof HolochainError, "expected a HolochainError");
-    t.pass("websocket connection failed as expected");
-  }
-});
+    try {
+      await AppWebsocket.connect({ url: ADMIN_WS_URL });
+      t.fail("websocket connection should have failed");
+    } catch (e) {
+      t.assert(e instanceof HolochainError, "expected a HolochainError");
+      t.pass("websocket connection failed as expected");
+    }
+  },
+);
 
 test(
   "zome call timeout can be overridden",
+  { timeout: 60_000 },
   withConductor(ADMIN_PORT, async (t) => {
     const { client, admin, cell_id } = await installAppAndDna(ADMIN_PORT);
     await admin.authorizeSigningCredentials(cell_id);
@@ -780,7 +801,7 @@ test(
   }),
 );
 
-test("can inject agents", async (t) => {
+test("can inject agents", { timeout: 60_000 }, async (t) => {
   const localServices = await runLocalServices();
   const conductor1 = await launch(
     ADMIN_PORT,
@@ -868,102 +889,108 @@ test("can inject agents", async (t) => {
   await cleanSandboxConductors();
 });
 
-test("can query peer meta info over admin and app websocket", async (t) => {
-  const localServices = await runLocalServices();
-  const conductor1 = await launch(
-    ADMIN_PORT,
-    localServices.bootstrapServerUrl,
-    localServices.signalingServerUrl,
-  );
-  const {
-    cell_id: cell_id1,
-    client: appClient1,
-    admin: admin1,
-  } = await createAppWsAndInstallApp(ADMIN_PORT);
+test(
+  "can query peer meta info over admin and app websocket",
+  { timeout: 60_000 },
+  async (t) => {
+    const localServices = await runLocalServices();
+    const conductor1 = await launch(
+      ADMIN_PORT,
+      localServices.bootstrapServerUrl,
+      localServices.signalingServerUrl,
+    );
+    const {
+      cell_id: cell_id1,
+      client: appClient1,
+      admin: admin1,
+    } = await createAppWsAndInstallApp(ADMIN_PORT);
 
-  await admin1.authorizeSigningCredentials(cell_id1);
+    await admin1.authorizeSigningCredentials(cell_id1);
 
-  // Retrieve the peer URL of the agent
-  const agentInfos1 = await admin1.agentInfo({ dna_hashes: null });
-  const agentInfo1 = JSON.parse(agentInfos1[0]).agentInfo;
-  const agentUrl1 = JSON.parse(agentInfo1).url;
-  console.log("agentUrl1: ", agentUrl1);
+    // Retrieve the peer URL of the agent
+    const agentInfos1 = await admin1.agentInfo({ dna_hashes: null });
+    const agentInfo1 = JSON.parse(agentInfos1[0]).agentInfo;
+    const agentUrl1 = JSON.parse(agentInfo1).url;
+    console.log("agentUrl1: ", agentUrl1);
 
-  // Start a second conductor and install the same app
-  const conductor2 = await launch(
-    ADMIN_PORT_1,
-    localServices.bootstrapServerUrl,
-    localServices.signalingServerUrl,
-  );
+    // Start a second conductor and install the same app
+    const conductor2 = await launch(
+      ADMIN_PORT_1,
+      localServices.bootstrapServerUrl,
+      localServices.signalingServerUrl,
+    );
 
-  const {
-    cell_id: cell_id2,
-    client: appClient2,
-    admin: admin2,
-  } = await createAppWsAndInstallApp(ADMIN_PORT_1);
+    const {
+      cell_id: cell_id2,
+      client: appClient2,
+      admin: admin2,
+    } = await createAppWsAndInstallApp(ADMIN_PORT_1);
 
-  await admin2.authorizeSigningCredentials(cell_id2);
+    await admin2.authorizeSigningCredentials(cell_id2);
 
-  // Now create an entry with agent 1 to get some gossip flowing
-  const acionHash = await appClient1.callZome({
-    cell_id: cell_id1,
-    provenance: cell_id1[1],
-    zome_name: TEST_ZOME_NAME,
-    fn_name: "create_an_entry",
-    payload: null,
-  });
+    // Now create an entry with agent 1 to get some gossip flowing
+    const acionHash = await appClient1.callZome({
+      cell_id: cell_id1,
+      provenance: cell_id1[1],
+      zome_name: TEST_ZOME_NAME,
+      fn_name: "create_an_entry",
+      payload: null,
+    });
 
-  // Wait until the second agent can get it to make sure that they
-  // have exchanged peer info
-  await retryUntilTimeout<Record>(
-    () =>
-      appClient2.callZome({
-        cell_id: cell_id2,
-        provenance: cell_id2[1],
-        zome_name: TEST_ZOME_NAME,
-        fn_name: "get_an_entry",
-        payload: acionHash,
-      }),
-    null,
-    "agent 2 wasn't able to get the entry of agent 1",
-    200,
-    20_000,
-  );
+    // Wait until the second agent can get it to make sure that they
+    // have exchanged peer info
+    await retryUntilTimeout<Record>(
+      () =>
+        appClient2.callZome({
+          cell_id: cell_id2,
+          provenance: cell_id2[1],
+          zome_name: TEST_ZOME_NAME,
+          fn_name: "get_an_entry",
+          payload: acionHash,
+        }),
+      null,
+      "agent 2 wasn't able to get the entry of agent 1",
+      200,
+      20_000,
+    );
 
-  // Now have agent 2 get peer meta info for agent 1 via the admin websocket
-  const peerMetaInfos = await admin2.peerMetaInfo({ url: agentUrl1 });
+    // Now have agent 2 get peer meta info for agent 1 via the admin websocket
+    const peerMetaInfos = await admin2.peerMetaInfo({ url: agentUrl1 });
 
-  // Check that it contains gossip meta info
-  const metaInfosForDna = peerMetaInfos[encodeHashToBase64(cell_id2[0])];
-  t.assert(metaInfosForDna);
-  t.assert(metaInfosForDna["gossip:completed_rounds"].meta_value);
-  t.assert(metaInfosForDna["gossip:completed_rounds"].expires_at);
-  t.assert(metaInfosForDna["gossip:last_timestamp"].meta_value);
-  t.assert(metaInfosForDna["gossip:last_timestamp"].expires_at);
+    // Check that it contains gossip meta info
+    const metaInfosForDna = peerMetaInfos[encodeHashToBase64(cell_id2[0])];
+    t.assert(metaInfosForDna);
+    t.assert(metaInfosForDna["gossip:completed_rounds"].meta_value);
+    t.assert(metaInfosForDna["gossip:completed_rounds"].expires_at);
+    t.assert(metaInfosForDna["gossip:last_timestamp"].meta_value);
+    t.assert(metaInfosForDna["gossip:last_timestamp"].expires_at);
 
-  // Now have agent 2 get peer meta info for agent 1 via the app websocket
-  const peerMetaInfosApp = await appClient2.peerMetaInfo({ url: agentUrl1 });
+    // Now have agent 2 get peer meta info for agent 1 via the app websocket
+    const peerMetaInfosApp = await appClient2.peerMetaInfo({ url: agentUrl1 });
 
-  // Check that it contains gossip meta info
-  const metaInfosForDnaApp = peerMetaInfosApp[encodeHashToBase64(cell_id2[0])];
-  t.assert(metaInfosForDnaApp);
-  t.assert(metaInfosForDnaApp["gossip:completed_rounds"].meta_value);
-  t.assert(metaInfosForDnaApp["gossip:completed_rounds"].expires_at);
-  t.assert(metaInfosForDnaApp["gossip:last_timestamp"].meta_value);
-  t.assert(metaInfosForDnaApp["gossip:last_timestamp"].expires_at);
+    // Check that it contains gossip meta info
+    const metaInfosForDnaApp =
+      peerMetaInfosApp[encodeHashToBase64(cell_id2[0])];
+    t.assert(metaInfosForDnaApp);
+    t.assert(metaInfosForDnaApp["gossip:completed_rounds"].meta_value);
+    t.assert(metaInfosForDnaApp["gossip:completed_rounds"].expires_at);
+    t.assert(metaInfosForDnaApp["gossip:last_timestamp"].meta_value);
+    t.assert(metaInfosForDnaApp["gossip:last_timestamp"].expires_at);
 
-  await stopLocalServices(localServices.servicesProcess);
-  if (conductor1.pid) {
-    process.kill(-conductor1.pid);
-  }
-  if (conductor2.pid) {
-    process.kill(-conductor2.pid);
-  }
-  await cleanSandboxConductors();
-});
+    await stopLocalServices(localServices.servicesProcess);
+    if (conductor1.pid) {
+      process.kill(-conductor1.pid);
+    }
+    if (conductor2.pid) {
+      process.kill(-conductor2.pid);
+    }
+    await cleanSandboxConductors();
+  },
+);
 
 test(
   "can query agents over app ws",
+  { timeout: 60_000 },
   withConductor(ADMIN_PORT, async (t) => {
     const { client, admin, cell_id } = await installAppAndDna(ADMIN_PORT);
     await admin.authorizeSigningCredentials(cell_id);
@@ -997,6 +1024,7 @@ test(
 
 test(
   "create link",
+  { timeout: 60_000 },
   withConductor(ADMIN_PORT, async (t) => {
     const { cell_id, client, admin } = await installAppAndDna(ADMIN_PORT);
     await admin.authorizeSigningCredentials(cell_id);
@@ -1025,6 +1053,7 @@ test(
 
 test(
   "create and delete link",
+  { timeout: 60_000 },
   withConductor(ADMIN_PORT, async (t) => {
     const { cell_id, client, admin } = await installAppAndDna(ADMIN_PORT);
     await admin.authorizeSigningCredentials(cell_id);
@@ -1068,6 +1097,7 @@ test(
 
 test(
   "admin smoke test: listAppInterfaces + attachAppInterface",
+  { timeout: 60_000 },
   withConductor(ADMIN_PORT, async (t) => {
     const admin = await AdminWebsocket.connect({
       url: ADMIN_WS_URL,
@@ -1091,6 +1121,7 @@ test(
 
 test(
   "can use some of the defined js bindings",
+  { timeout: 60_000 },
   withConductor(ADMIN_PORT, async (t) => {
     const { installed_app_id, cell_id, client, admin } =
       await installAppAndDna(ADMIN_PORT);
@@ -1123,6 +1154,7 @@ test(
 
 test(
   "admin smoke test: install 2 hApp bundles with different network seeds",
+  { timeout: 60_000 },
   withConductor(ADMIN_PORT, async (t) => {
     const admin = await AdminWebsocket.connect({
       url: ADMIN_WS_URL,
@@ -1160,6 +1192,7 @@ test(
 
 test(
   "can create a callable clone cell",
+  { timeout: 60_000 },
   withConductor(ADMIN_PORT, async (t) => {
     const { client, admin } = await installAppAndDna(ADMIN_PORT);
     const appInfo = await client.appInfo();
@@ -1200,6 +1233,7 @@ test(
 
 test(
   "can disable a clone cell",
+  { timeout: 60_000 },
   withConductor(ADMIN_PORT, async (t) => {
     const { client, admin } = await installAppAndDna(ADMIN_PORT);
     const createCloneCellParams: CreateCloneCellRequest = {
@@ -1244,6 +1278,7 @@ test(
 
 test(
   "can enable a disabled clone cell",
+  { timeout: 60_000 },
   withConductor(ADMIN_PORT, async (t) => {
     const { client, admin } = await installAppAndDna(ADMIN_PORT);
     const createCloneCellParams: CreateCloneCellRequest = {
@@ -1289,6 +1324,7 @@ test(
 
 test(
   "can delete archived clone cells of an app",
+  { timeout: 60_000 },
   withConductor(ADMIN_PORT, async (t) => {
     const { installed_app_id, client, admin } =
       await installAppAndDna(ADMIN_PORT);
@@ -1322,6 +1358,7 @@ test(
 
 test(
   "requests get canceled if the websocket closes while waiting for a response",
+  { timeout: 60_000 },
   withConductor(ADMIN_PORT, async (t) => {
     const { cell_id, client, admin } = await installAppAndDna(ADMIN_PORT);
     await admin.authorizeSigningCredentials(cell_id);
@@ -1375,6 +1412,7 @@ test(
 
 test(
   "can fetch storage info",
+  { timeout: 60_000 },
   withConductor(ADMIN_PORT, async (t) => {
     const { installed_app_id, admin } = await installAppAndDna(ADMIN_PORT);
 
@@ -1391,6 +1429,7 @@ test(
 
 test(
   "can dump network stats",
+  { timeout: 60_000 },
   withConductor(ADMIN_PORT, async (t) => {
     const { admin, client } = await installAppAndDna(ADMIN_PORT);
 
@@ -1414,6 +1453,7 @@ test(
 
 test(
   "can dump network metrics",
+  { timeout: 60_000 },
   withConductor(ADMIN_PORT, async (t) => {
     const { admin, cell_id, client } = await installAppAndDna(ADMIN_PORT);
 
@@ -1456,6 +1496,7 @@ test(
 
 test(
   "can update coordinators of an app",
+  { timeout: 60_000 },
   withConductor(ADMIN_PORT, async (t) => {
     const { client, admin, cell_id } = await installAppAndDna(ADMIN_PORT);
     await admin.authorizeSigningCredentials(cell_id);
@@ -1505,6 +1546,7 @@ test(
 
 test(
   "client reconnects websocket if closed before making a zome call",
+  { timeout: 60_000 },
   withConductor(ADMIN_PORT, async (t) => {
     const { cell_id, client, admin } = await installAppAndDna(
       ADMIN_PORT,
@@ -1531,6 +1573,7 @@ test(
 
 test(
   "client fails to reconnect to websocket if closed before making a zome call if the provided token is invalid",
+  { timeout: 60_000 },
   withConductor(ADMIN_PORT, async (t) => {
     const { cell_id, client, admin } = await installAppAndDna(ADMIN_PORT);
     await admin.authorizeSigningCredentials(cell_id);
@@ -1583,6 +1626,7 @@ test(
 
 test(
   "Rust enums are serialized correctly",
+  { timeout: 60_000 },
   withConductor(ADMIN_PORT, async (t) => {
     const { client, admin, cell_id } = await installAppAndDna(ADMIN_PORT);
     await admin.authorizeSigningCredentials(cell_id);
