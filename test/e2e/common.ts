@@ -2,7 +2,6 @@ import fs from "fs";
 import * as readline from "node:readline";
 import assert from "node:assert/strict";
 import { ChildProcessWithoutNullStreams, spawn } from "node:child_process";
-import { Test } from "tape";
 import {
   AdminWebsocket,
   AppWebsocket,
@@ -36,7 +35,7 @@ export const runLocalServices = async () => {
           .split(BOOTSTRAP_SERVER_STARTUP_STRING)[1]
           .split("#")[0];
         const bootstrapServerUrl = new URL(`http://${listeningAddress}`);
-        const signalingServerUrl = new URL(`ws://${listeningAddress}`);
+        const signalingServerUrl = new URL(`http://${listeningAddress}`);
         resolve({
           servicesProcess,
           bootstrapServerUrl,
@@ -79,7 +78,7 @@ export const launch = async (
     "network",
     "--bootstrap",
     bootstrapServerUrl.href,
-    "webrtc",
+    "quic",
     signalingServerUrl.href,
   ];
   const createConductorProcess = spawn("hc", args);
@@ -167,7 +166,7 @@ export const cleanSandboxConductors = () => {
 };
 
 export const withConductor =
-  (port: number, f: (t: Test) => Promise<void>) => async (t: Test) => {
+  (port: number, f: () => Promise<void>) => async () => {
     // Start local bootstrap + signaling server
     const localServices = await runLocalServices();
     // Start conductor
@@ -177,18 +176,15 @@ export const withConductor =
       localServices.signalingServerUrl,
     );
     try {
-      await f(t);
+      await f();
     } catch (e) {
       console.error("Test caught exception: ", e);
       throw e;
     } finally {
+      await stopConductor(conductorProcess);
       await stopLocalServices(localServices.servicesProcess);
-      if (conductorProcess.pid && !conductorProcess.killed) {
-        process.kill(-conductorProcess.pid);
-      }
       await cleanSandboxConductors();
     }
-    t.end();
   };
 
 export const installAppAndDna = async (
