@@ -1,5 +1,4 @@
-import assert from "node:assert";
-import test from "tape";
+import { assert, test } from "vitest";
 import {
   AdminWebsocket,
   AppEntryDef,
@@ -16,7 +15,7 @@ import {
   RoleNameCallZomeRequest,
   SignalCb,
   SignalType,
-} from "../../src";
+} from "../../src/index.js";
 import {
   createAppWsAndInstallApp,
   FIXTURE_PATH,
@@ -30,7 +29,7 @@ const TEST_ZOME_NAME = "foo";
 
 test(
   "can call a zome function and get app info",
-  withConductor(ADMIN_PORT, async (t) => {
+  withConductor(ADMIN_PORT, async () => {
     const {
       installed_app_id,
       cell_id,
@@ -40,9 +39,9 @@ test(
 
     let info = await appWs.appInfo();
     assert(info.cell_info[ROLE_NAME][0].type === CellType.Provisioned);
-    t.deepEqual(info.cell_info[ROLE_NAME][0].value.cell_id, cell_id);
-    t.ok(ROLE_NAME in info.cell_info);
-    t.deepEqual(info.status, { type: "enabled" });
+    assert.deepEqual(info.cell_info[ROLE_NAME][0].value.cell_id, cell_id);
+    assert.ok(ROLE_NAME in info.cell_info);
+    assert.deepEqual(info.status, { type: "enabled" });
 
     await admin.authorizeSigningCredentials(cell_id);
 
@@ -59,10 +58,10 @@ test(
       payload: appEntryDef,
     });
 
-    t.equal(response, null, "app entry type deserializes correctly");
+    assert.equal(response, null, "app entry type deserializes correctly");
 
     const cellIdFromRoleName = appWs.getCellIdFromRoleName(ROLE_NAME, info);
-    t.deepEqual(cellIdFromRoleName, cell_id);
+    assert.deepEqual(cellIdFromRoleName, cell_id);
 
     const response_from_role_name = await appWs.callZome({
       role_name: ROLE_NAME,
@@ -71,7 +70,7 @@ test(
       payload: appEntryDef,
     });
 
-    t.equal(
+    assert.equal(
       response_from_role_name,
       null,
       "app entry type deserializes correctly",
@@ -79,7 +78,7 @@ test(
 
     await admin.disableApp({ installed_app_id });
     info = await appWs.appInfo();
-    t.deepEqual(info.status, {
+    assert.deepEqual(info.status, {
       type: "disabled",
       value: { type: "user" },
     });
@@ -88,14 +87,14 @@ test(
 
 test(
   "can receive a signal",
-  withConductor(ADMIN_PORT, async (t) => {
+  withConductor(ADMIN_PORT, async () => {
     let resolveSignalPromise: (value?: unknown) => void | undefined;
     const signalReceivedPromise = new Promise(
       (resolve) => (resolveSignalPromise = resolve),
     );
     const signalCb: SignalCb = (signal) => {
       assert(signal.type === SignalType.App);
-      t.deepEqual(signal.value, {
+      assert.deepEqual(signal.value, {
         cell_id,
         zome_name: TEST_ZOME_NAME,
         payload: "i am a signal",
@@ -126,7 +125,7 @@ test(
 
 test(
   "cells only receive their own signals",
-  withConductor(ADMIN_PORT, async (t) => {
+  withConductor(ADMIN_PORT, async () => {
     const role_name = "foo";
     const admin = await AdminWebsocket.connect({
       url: new URL(`ws://localhost:${ADMIN_PORT}`),
@@ -206,14 +205,14 @@ test(
 
     // signals are received before the timeout step in the JS event loop is completed
     await new Promise((resolve) => setTimeout(resolve, 0));
-    t.equal(received1, true);
-    t.equal(received2, false);
+    assert.equal(received1, true);
+    assert.equal(received2, false);
   }),
 );
 
 test(
   "can create a callable clone cell and call it by clone id",
-  withConductor(ADMIN_PORT, async (t) => {
+  withConductor(ADMIN_PORT, async () => {
     const { admin, client: appWs } = await createAppWsAndInstallApp(ADMIN_PORT);
     const info = await appWs.appInfo();
 
@@ -227,9 +226,9 @@ test(
     await admin.authorizeSigningCredentials(cloneCell.cell_id);
 
     const expectedCloneId = new CloneIdHelper(ROLE_NAME, 0).toString();
-    t.equal(cloneCell.clone_id, expectedCloneId, "correct clone id");
+    assert.equal(cloneCell.clone_id, expectedCloneId, "correct clone id");
     assert(info.cell_info[ROLE_NAME][0].type === CellType.Provisioned);
-    t.deepEqual(
+    assert.deepEqual(
       cloneCell.cell_id[1],
       info.cell_info[ROLE_NAME][0].value.cell_id[1],
       "clone cell agent key matches base cell agent key",
@@ -241,7 +240,7 @@ test(
       fn_name: "foo",
     };
     const response = await appWs.callZome(params);
-    t.equal(
+    assert.equal(
       response,
       "foo",
       "clone cell can be called with same zome call as base cell, and by clone id",
@@ -251,7 +250,7 @@ test(
 
 test(
   "can disable and re-enable a clone cell",
-  withConductor(ADMIN_PORT, async (t) => {
+  withConductor(ADMIN_PORT, async () => {
     const { admin, client: appWs } = await createAppWsAndInstallApp(ADMIN_PORT);
 
     const createCloneCellParams: CreateCloneCellRequest = {
@@ -268,7 +267,7 @@ test(
     });
 
     const appInfo = await appWs.appInfo();
-    t.equal(
+    assert.equal(
       appInfo.cell_info[ROLE_NAME].length,
       2,
       "disabled clone cell is part of app info",
@@ -280,22 +279,22 @@ test(
     };
     try {
       await appWs.callZome(params);
-      t.fail();
+      assert.fail();
     } catch {
-      t.pass("disabled clone call cannot be called");
+      assert("disabled clone call cannot be called");
     }
 
     await appWs.enableCloneCell({
       clone_cell_id: { type: "dna_hash", value: cloneCell.cell_id[0] },
     });
     await appWs.callZome(params);
-    t.pass("re-enabled clone can be called");
+    assert("re-enabled clone can be called");
   }),
 );
 
 test(
   "can grant and revoke zome call capabilities",
-  withConductor(ADMIN_PORT, async (t) => {
+  withConductor(ADMIN_PORT, async () => {
     const {
       admin,
       client: appWs,
@@ -326,24 +325,22 @@ test(
       installed_app_id: info.installed_app_id,
       include_revoked: true,
     };
+
     const capabilityGrants = await admin.listCapabilityGrants(listRequest);
-    // should have 1 item
-    t.equal(
-      capabilityGrants.length,
-      1,
-      "should have one capability grant after granting",
-    );
+    console.debug("cap grants", capabilityGrants);
+    // should have 1 item = grants for 1 cell
+    assert.equal(capabilityGrants.length, 1, "should have grants for 1 cell");
     const [cellIdFromGrants, grants] = capabilityGrants[0];
-    t.deepEqual(cellIdFromGrants, cellId, "cell id matches");
-    t.assert(grants.length > 0, "should have at least one grant");
-    const capGrantInfo = grants[grants.length - 1];
-    t.equal(capGrantInfo.cap_grant.tag, "test-grant", "grant tag matches");
-    t.equal(
+    assert.deepEqual(cellIdFromGrants, cellId, "cell id matches");
+    assert.equal(grants.length, 2, "should have 2 grants");
+    const capGrantInfo = grants[1];
+    assert.equal(capGrantInfo.cap_grant.tag, "test-grant", "grant tag matches");
+    assert.equal(
       capGrantInfo.cap_grant.functions.type,
       "all",
       "grant functions type matches",
     );
-    t.deepEqual(
+    assert.deepEqual(
       capGrantInfo.action_hash,
       grantedActionHash,
       "action hash matches",
@@ -354,29 +351,33 @@ test(
       action_hash: grantedActionHash,
       cell_id: cellId,
     };
-    await admin.revokeZomeCallCapability(revokeRequest);
+    const response = await admin.revokeZomeCallCapability(revokeRequest);
+    console.debug("response", response);
 
     // list capability grants again
     const capabilityGrantsAfterRevoke =
       await admin.listCapabilityGrants(listRequest);
-    // should have 1 item, but the grant should be revoked
-    t.equal(
+    console.debug("grants after revoke", capabilityGrantsAfterRevoke[0]);
+    // should have 1 item for 1 cell still, but the grant should be revoked
+    assert.equal(
       capabilityGrantsAfterRevoke.length,
       1,
       "should still have one capability grant after revoking",
     );
-    // check if has revoked_at
-    const [cellIdFromGrantsAfterRevoke] = capabilityGrantsAfterRevoke[0];
-    const grantsAfterRevoke = capabilityGrantsAfterRevoke[0][1];
-    t.deepEqual(
+    const [cellIdFromGrantsAfterRevoke, grantsAfterRevoke] =
+      capabilityGrantsAfterRevoke[0];
+    assert.deepEqual(
       cellIdFromGrantsAfterRevoke,
       cellId,
       "cell id matches after revoke",
     );
-    t.notEqual(
-      grantsAfterRevoke[0].revoked_at,
-      undefined,
-      "grant should be revoked",
+    // check if has revoked_at
+    const grant = grantsAfterRevoke.find(
+      (info) => info.cap_grant.tag === "test-grant",
+    );
+    assert(
+      grant && grant.revoked_at,
+      `grant should be revoked but is ${grant?.revoked_at}`,
     );
   }),
 );
@@ -385,20 +386,26 @@ test(
 if (process.env.TEST_UNSTABLE === "true") {
   test(
     "countersigning session interaction calls",
-    withConductor(ADMIN_PORT, async (t) => {
+    withConductor(ADMIN_PORT, async () => {
       const { client: appWs, cell_id } =
         await createAppWsAndInstallApp(ADMIN_PORT);
 
       const response = await appWs.getCountersigningSessionState(cell_id);
       console.log("response", response);
-      t.equals(response, null, "countersigning session state should be null");
+      assert.equal(
+        response,
+        null,
+        "countersigning session state should be null",
+      );
 
       try {
         await appWs.abandonCountersigningSession(cell_id);
-        t.fail("there should not be a countersigning session to be abandoned");
+        assert.fail(
+          "there should not be a countersigning session to be abandoned",
+        );
       } catch (error) {
         assert(error instanceof Error);
-        t.assert(
+        assert.isTrue(
           error.message.includes("SessionNotFound"),
           "there should not be a countersigning session",
         );
@@ -406,10 +413,12 @@ if (process.env.TEST_UNSTABLE === "true") {
 
       try {
         await appWs.publishCountersigningSession(cell_id);
-        t.fail("there should not be a countersigning session to be published");
+        assert.fail(
+          "there should not be a countersigning session to be published",
+        );
       } catch (error) {
         assert(error instanceof Error);
-        t.assert(
+        assert.isTrue(
           error.message.includes("SessionNotFound"),
           "there should not be a countersigning session",
         );

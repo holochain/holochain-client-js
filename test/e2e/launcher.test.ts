@@ -1,4 +1,4 @@
-import test from "tape";
+import { assert, test } from "vitest";
 import {
   AdminWebsocket,
   AppWebsocket,
@@ -6,9 +6,9 @@ import {
   CallZomeRequestSigned,
 } from "../../src/index.js";
 import {
-  withConductor,
   createAppInterfaceAndInstallApp,
   createAppWsAndInstallApp,
+  withConductor,
 } from "./common.js";
 
 const ADMIN_PORT = 33001;
@@ -16,7 +16,7 @@ const TEST_ZOME_NAME = "foo";
 
 test(
   "AdminWebsocket connects with options provided by window.__HC_LAUNCHER_ENV__",
-  withConductor(ADMIN_PORT, async (t) => {
+  withConductor(ADMIN_PORT, async () => {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore-next-line
     globalThis.window = { Blob };
@@ -27,13 +27,13 @@ test(
       wsClientOptions: { origin: "client-test-admin" },
     });
 
-    t.equal(admin.client.url?.href, `ws://localhost:${ADMIN_PORT}/`);
+    assert.equal(admin.client.url?.href, `ws://localhost:${ADMIN_PORT}/`);
   }),
 );
 
 test(
   "AppWebsocket connects with options provided by window.__HC_LAUNCHER_ENV__",
-  withConductor(ADMIN_PORT, async (t) => {
+  withConductor(ADMIN_PORT, async () => {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore-next-line
     globalThis.window = { Blob };
@@ -50,13 +50,13 @@ test(
       wsClientOptions: { origin: "client-test-app" },
     });
 
-    t.equal(appWs.client.url?.href, `ws://localhost:${appPort}/`);
+    assert.equal(appWs.client.url?.href, `ws://localhost:${appPort}/`);
   }),
 );
 
 test(
   "AppWebsocket uses the zome call signer function provided by window.__HC_ZOME_CALL_SIGNER__",
-  withConductor(ADMIN_PORT, async (t) => {
+  withConductor(ADMIN_PORT, async () => {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore-next-line
     globalThis.window = { Blob };
@@ -86,6 +86,6 @@ test(
       // eslint-disable-next-line no-empty
     } catch {}
 
-    t.assert(signerWasCalled, "__HC_ZOME_CALL_SIGNER__.signZomeCall called");
+    assert(signerWasCalled, "__HC_ZOME_CALL_SIGNER__.signZomeCall called");
   }),
 );

@@ -1,4 +1,7 @@
-import test from "tape";
+import blake2b from "@bitgo/blake2b";
+import { encode } from "@msgpack/msgpack";
+import { isEqual, range } from "lodash-es";
+import { assert, test } from "vitest";
 import {
   AgentPubKey,
   AgentPubKeyB64,
@@ -19,11 +22,8 @@ import {
   sliceCore32,
   sliceDhtLocation,
   sliceHashType,
-} from "../../src";
+} from "../../src/index.js";
 import { installAppAndDna, withConductor } from "./common.js";
-import { isEqual, range } from "lodash-es";
-import { encode } from "@msgpack/msgpack";
-import blake2b from "@bitgo/blake2b";
 
 const ADMIN_PORT = 33001;
 
@@ -31,7 +31,7 @@ const TEST_ZOME_NAME = "foo";
 
 test(
   "fakeAgentPubKey generates valid AgentPubKey",
-  withConductor(ADMIN_PORT, async (t) => {
+  withConductor(ADMIN_PORT, async () => {
     const { client, admin, cell_id } = await installAppAndDna(ADMIN_PORT);
     await admin.authorizeSigningCredentials(cell_id);
 
@@ -43,7 +43,7 @@ test(
       payload: Array.from(fakeHash),
       provenance: cell_id[0],
     });
-    t.deepEqual(
+    assert.deepEqual(
       response,
       Buffer.from(fakeHash),
       "fakeAgentPubKey generates valid hash that decodes to AgentPubKey",
@@ -53,7 +53,7 @@ test(
 
 test(
   "fakeEntryHash generates valid EntryHash",
-  withConductor(ADMIN_PORT, async (t) => {
+  withConductor(ADMIN_PORT, async () => {
     const { client, admin, cell_id } = await installAppAndDna(ADMIN_PORT);
     await admin.authorizeSigningCredentials(cell_id);
 
@@ -65,7 +65,7 @@ test(
       payload: Array.from(fakeHash),
       provenance: cell_id[0],
     });
-    t.deepEqual(
+    assert.deepEqual(
       response,
       Buffer.from(fakeHash),
       "fakeEntryHash generates valid hash that decodes to EntryHash",
@@ -75,7 +75,7 @@ test(
 
 test(
   "fakeActionHash generates valid ActionHash",
-  withConductor(ADMIN_PORT, async (t) => {
+  withConductor(ADMIN_PORT, async () => {
     const { client, admin, cell_id } = await installAppAndDna(ADMIN_PORT);
     await admin.authorizeSigningCredentials(cell_id);
 
@@ -87,7 +87,7 @@ test(
       payload: Array.from(fakeHash),
       provenance: cell_id[0],
     });
-    t.deepEqual(
+    assert.deepEqual(
       response,
       Buffer.from(fakeHash),
       "fakeActionHash generates valid hash that decodes to ActionHash",
@@ -97,7 +97,7 @@ test(
 
 test(
   "fakeDnaHash generates valid DnaHash",
-  withConductor(ADMIN_PORT, async (t) => {
+  withConductor(ADMIN_PORT, async () => {
     const { client, admin, cell_id } = await installAppAndDna(ADMIN_PORT);
     await admin.authorizeSigningCredentials(cell_id);
 
@@ -109,7 +109,7 @@ test(
       payload: Array.from(fakeHash),
       provenance: cell_id[0],
     });
-    t.deepEqual(
+    assert.deepEqual(
       response,
       Buffer.from(fakeHash),
       "fakeDnaHash generates valid hash that decodes to DnaHash",
@@ -119,7 +119,7 @@ test(
 
 test(
   "fakeAgentPubKey generates deterministic valid AgentPubKey when coreByte defined",
-  withConductor(ADMIN_PORT, async (t) => {
+  withConductor(ADMIN_PORT, async () => {
     const { client, admin, cell_id } = await installAppAndDna(ADMIN_PORT);
     await admin.authorizeSigningCredentials(cell_id);
 
@@ -131,7 +131,7 @@ test(
       payload: Array.from(fakeHash),
       provenance: cell_id[0],
     });
-    t.deepEqual(
+    assert.deepEqual(
       response,
       Buffer.from([
         132, 32, 36, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
@@ -144,7 +144,7 @@ test(
 
 test(
   "fakeEntryHash generates deterministic valid EntryHash when coreByte defined",
-  withConductor(ADMIN_PORT, async (t) => {
+  withConductor(ADMIN_PORT, async () => {
     const { client, admin, cell_id } = await installAppAndDna(ADMIN_PORT);
     await admin.authorizeSigningCredentials(cell_id);
 
@@ -156,7 +156,7 @@ test(
       payload: Array.from(fakeHash),
       provenance: cell_id[0],
     });
-    t.deepEqual(
+    assert.deepEqual(
       response,
       Buffer.from([
         132, 33, 36, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
@@ -169,7 +169,7 @@ test(
 
 test(
   "fakeActionHash generates deterministic valid ActionHash  when coreByte defined",
-  withConductor(ADMIN_PORT, async (t) => {
+  withConductor(ADMIN_PORT, async () => {
     const { client, admin, cell_id } = await installAppAndDna(ADMIN_PORT);
     await admin.authorizeSigningCredentials(cell_id);
 
@@ -181,7 +181,7 @@ test(
       payload: Array.from(fakeHash),
       provenance: cell_id[0],
     });
-    t.deepEqual(
+    assert.deepEqual(
       response,
       Buffer.from([
         132, 41, 36, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
@@ -194,7 +194,7 @@ test(
 
 test(
   "fakeDnaHash generates deterministic valid DnaHash when coreByte defined",
-  withConductor(ADMIN_PORT, async (t) => {
+  withConductor(ADMIN_PORT, async () => {
     const { client, admin, cell_id } = await installAppAndDna(ADMIN_PORT);
     await admin.authorizeSigningCredentials(cell_id);
 
@@ -206,7 +206,7 @@ test(
       payload: Array.from(fakeHash),
       provenance: cell_id[0],
     });
-    t.deepEqual(
+    assert.deepEqual(
       response,
       Buffer.from([
         132, 45, 36, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
@@ -217,24 +217,24 @@ test(
   }),
 );
 
-test("sliceDhtLocation, sliceCore32, sliceHashType extract components of a hash", async (t) => {
+test("sliceDhtLocation, sliceCore32, sliceHashType extract components of a hash", async () => {
   const fakeHash = await fakeDnaHash(1);
   const prefix = sliceHashType(fakeHash);
   const hash = sliceCore32(fakeHash);
   const dhtLocation = sliceDhtLocation(fakeHash);
 
-  t.deepEqual(
+  assert.deepEqual(
     fakeHash,
     Uint8Array.from([...prefix, ...hash, ...dhtLocation]),
     "extracted hash type, core hash, and dht location components of a hash concat back into the original hash",
   );
 });
 
-test("hashFrom32AndType generates valid hash with type and 32 core bytes", async (t) => {
+test("hashFrom32AndType generates valid hash with type and 32 core bytes", async () => {
   const core = Uint8Array.from(range(0, 32).map(() => 1));
 
   let hash = hashFrom32AndType(core, HoloHashType.Agent);
-  t.deepEqual(
+  assert.deepEqual(
     hash,
     Uint8Array.from([
       132, 32, 36, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
@@ -244,7 +244,7 @@ test("hashFrom32AndType generates valid hash with type and 32 core bytes", async
   );
 
   hash = hashFrom32AndType(core, HoloHashType.Entry);
-  t.deepEqual(
+  assert.deepEqual(
     hash,
     Uint8Array.from([
       132, 33, 36, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
@@ -254,7 +254,7 @@ test("hashFrom32AndType generates valid hash with type and 32 core bytes", async
   );
 
   hash = hashFrom32AndType(core, HoloHashType.DhtOp);
-  t.deepEqual(
+  assert.deepEqual(
     hash,
     Uint8Array.from([
       132, 36, 36, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
@@ -264,7 +264,7 @@ test("hashFrom32AndType generates valid hash with type and 32 core bytes", async
   );
 
   hash = hashFrom32AndType(core, HoloHashType.Warrant);
-  t.deepEqual(
+  assert.deepEqual(
     hash,
     Uint8Array.from([
       132, 44, 36, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
@@ -274,7 +274,7 @@ test("hashFrom32AndType generates valid hash with type and 32 core bytes", async
   );
 
   hash = hashFrom32AndType(core, HoloHashType.Dna);
-  t.deepEqual(
+  assert.deepEqual(
     hash,
     Uint8Array.from([
       132, 45, 36, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
@@ -284,7 +284,7 @@ test("hashFrom32AndType generates valid hash with type and 32 core bytes", async
   );
 
   hash = hashFrom32AndType(core, HoloHashType.Action);
-  t.deepEqual(
+  assert.deepEqual(
     hash,
     Uint8Array.from([
       132, 41, 36, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
@@ -294,7 +294,7 @@ test("hashFrom32AndType generates valid hash with type and 32 core bytes", async
   );
 
   hash = hashFrom32AndType(core, HoloHashType.Wasm);
-  t.deepEqual(
+  assert.deepEqual(
     hash,
     Uint8Array.from([
       132, 42, 36, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
@@ -304,7 +304,7 @@ test("hashFrom32AndType generates valid hash with type and 32 core bytes", async
   );
 
   hash = hashFrom32AndType(core, HoloHashType.External);
-  t.deepEqual(
+  assert.deepEqual(
     hash,
     Uint8Array.from([
       132, 47, 36, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
@@ -314,14 +314,14 @@ test("hashFrom32AndType generates valid hash with type and 32 core bytes", async
   );
 });
 
-test("getHashType determines hash type name from valid 39 byte hash", async (t) => {
+test("getHashType determines hash type name from valid 39 byte hash", async () => {
   let hashType = getHashType(
     Uint8Array.from([
       132, 32, 36, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
       1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 126, 207, 206, 190,
     ]),
   );
-  t.equal(hashType, HoloHashType.Agent);
+  assert.equal(hashType, HoloHashType.Agent);
 
   hashType = getHashType(
     Uint8Array.from([
@@ -329,7 +329,7 @@ test("getHashType determines hash type name from valid 39 byte hash", async (t) 
       1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 126, 207, 206, 190,
     ]),
   );
-  t.equal(hashType, HoloHashType.Entry);
+  assert.equal(hashType, HoloHashType.Entry);
 
   hashType = getHashType(
     Uint8Array.from([
@@ -337,7 +337,7 @@ test("getHashType determines hash type name from valid 39 byte hash", async (t) 
       1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 126, 207, 206, 190,
     ]),
   );
-  t.equal(hashType, HoloHashType.DhtOp);
+  assert.equal(hashType, HoloHashType.DhtOp);
 
   hashType = getHashType(
     Uint8Array.from([
@@ -345,7 +345,7 @@ test("getHashType determines hash type name from valid 39 byte hash", async (t) 
       1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 126, 207, 206, 190,
     ]),
   );
-  t.equal(hashType, HoloHashType.Warrant);
+  assert.equal(hashType, HoloHashType.Warrant);
 
   hashType = getHashType(
     Uint8Array.from([
@@ -353,7 +353,7 @@ test("getHashType determines hash type name from valid 39 byte hash", async (t) 
       1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 126, 207, 206, 190,
     ]),
   );
-  t.equal(hashType, HoloHashType.Dna);
+  assert.equal(hashType, HoloHashType.Dna);
 
   hashType = getHashType(
     Uint8Array.from([
@@ -361,7 +361,7 @@ test("getHashType determines hash type name from valid 39 byte hash", async (t) 
       1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 126, 207, 206, 190,
     ]),
   );
-  t.equal(hashType, HoloHashType.Action);
+  assert.equal(hashType, HoloHashType.Action);
 
   hashType = getHashType(
     Uint8Array.from([
@@ -369,7 +369,7 @@ test("getHashType determines hash type name from valid 39 byte hash", async (t) 
       1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 126, 207, 206, 190,
     ]),
   );
-  t.equal(hashType, HoloHashType.Wasm);
+  assert.equal(hashType, HoloHashType.Wasm);
 
   hashType = getHashType(
     Uint8Array.from([
@@ -377,12 +377,12 @@ test("getHashType determines hash type name from valid 39 byte hash", async (t) 
       1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 126, 207, 206, 190,
     ]),
   );
-  t.equal(hashType, HoloHashType.External);
+  assert.equal(hashType, HoloHashType.External);
 });
 
-test("getHashType throws error on hash with invalid 3 byte prefix", async (t) => {
+test("getHashType throws error on hash with invalid 3 byte prefix", async () => {
   // Invalid hash type prefix throws error
-  t.throws(() => {
+  assert.throws(() => {
     getHashType(
       Uint8Array.from([
         0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
@@ -392,7 +392,7 @@ test("getHashType throws error on hash with invalid 3 byte prefix", async (t) =>
   });
 });
 
-test("hashFromContentAndType generates valid HoloHash with specified type", async (t) => {
+test("hashFromContentAndType generates valid HoloHash with specified type", async () => {
   const content = {
     name: "Joe",
     age: 20,
@@ -408,19 +408,19 @@ test("hashFromContentAndType generates valid HoloHash with specified type", asyn
 
   // Valid type bytes
   const hashType = getHashType(hash);
-  t.deepEqual(hashType, HoloHashType.Entry);
+  assert.deepEqual(hashType, HoloHashType.Entry);
 
   // Valid hash bytes
   const core = sliceCore32(hash);
-  t.deepEqual(core.length, 32);
-  t.deepEqual(core, expectedHash);
+  assert.deepEqual(core.length, 32);
+  assert.deepEqual(core, expectedHash);
 
   // Valid location bytes
   const loc = sliceDhtLocation(hash);
-  t.deepEqual(loc, dhtLocationFrom32(expectedHash));
+  assert.deepEqual(loc, dhtLocationFrom32(expectedHash));
 });
 
-test("HoloHashB64Map is a map from HoloHashB64 to a value", async (t) => {
+test("HoloHashB64Map is a map from HoloHashB64 to a value", async () => {
   interface Person {
     name: string;
   }
@@ -432,25 +432,25 @@ test("HoloHashB64Map is a map from HoloHashB64 to a value", async (t) => {
   const hhmap = new HoloHashB64Map<AgentPubKeyB64, Person>([[bobKey, bobVal]]);
 
   // Get
-  t.deepEqual(hhmap.get(bobKey), bobVal);
+  assert.deepEqual(hhmap.get(bobKey), bobVal);
 
   // Set
   const aliceKey = encodeHashToBase64(await fakeAgentPubKey(2));
   const aliceVal = { name: "Alice" };
   hhmap.set(aliceKey, aliceVal);
-  t.deepEqual(hhmap.get(aliceKey), aliceVal);
+  assert.deepEqual(hhmap.get(aliceKey), aliceVal);
 
   // Size
-  t.equal(hhmap.size, 2);
+  assert.equal(hhmap.size, 2);
 
   // Keys
-  t.deepEqual(Array.from(hhmap.keys()), [bobKey, aliceKey]);
+  assert.deepEqual(Array.from(hhmap.keys()), [bobKey, aliceKey]);
 
   // Values
-  t.deepEqual(Array.from(hhmap.values()), [bobVal, aliceVal]);
+  assert.deepEqual(Array.from(hhmap.values()), [bobVal, aliceVal]);
 
   // Entries
-  t.deepEqual(Array.from(hhmap.entries()), [
+  assert.deepEqual(Array.from(hhmap.entries()), [
     [bobKey, bobVal],
     [aliceKey, aliceVal],
   ]);
@@ -460,25 +460,25 @@ test("HoloHashB64Map is a map from HoloHashB64 to a value", async (t) => {
   hhmap.forEach((_v, k) => {
     keys.push(k);
   });
-  t.equal(keys.length, 2);
+  assert.equal(keys.length, 2);
 
   // for..of
   const keys2 = [];
   for (const [k] of hhmap) {
     keys2.push(k);
   }
-  t.equal(keys2.length, 2);
+  assert.equal(keys2.length, 2);
 
   // Delete by key
-  t.true(hhmap.delete(aliceKey));
-  t.equal(hhmap.get(aliceKey), undefined);
+  assert.isTrue(hhmap.delete(aliceKey));
+  assert.equal(hhmap.get(aliceKey), undefined);
 
   // Clear
   hhmap.clear();
-  t.equal(hhmap.size, 0);
+  assert.equal(hhmap.size, 0);
 });
 
-test("HoloHashMap is a map from HoloHash to a value", async (t) => {
+test("HoloHashMap is a map from HoloHash to a value", async () => {
   interface Person {
     name: string;
   }
@@ -490,28 +490,28 @@ test("HoloHashMap is a map from HoloHash to a value", async (t) => {
   const hhmap = new HoloHashMap<AgentPubKey, Person>([[bobKey, bobVal]]);
 
   // Get
-  t.deepEqual(hhmap.get(bobKey), bobVal);
+  assert.deepEqual(hhmap.get(bobKey), bobVal);
 
   // Set
   const aliceKey = await fakeAgentPubKey(2);
   const aliceVal = { name: "Alice" };
   hhmap.set(aliceKey, aliceVal);
-  t.deepEqual(hhmap.get(aliceKey), aliceVal);
+  assert.deepEqual(hhmap.get(aliceKey), aliceVal);
 
   // Has
-  t.true(hhmap.has(aliceKey));
+  assert.isTrue(hhmap.has(aliceKey));
 
   // Size
-  t.equal(hhmap.size, 2);
+  assert.equal(hhmap.size, 2);
 
   // Keys
-  t.deepEqual(Array.from(hhmap.keys()), [bobKey, aliceKey]);
+  assert.deepEqual(Array.from(hhmap.keys()), [bobKey, aliceKey]);
 
   // Values
-  t.deepEqual(Array.from(hhmap.values()), [bobVal, aliceVal]);
+  assert.deepEqual(Array.from(hhmap.values()), [bobVal, aliceVal]);
 
   // Entries
-  t.deepEqual(Array.from(hhmap.entries()), [
+  assert.deepEqual(Array.from(hhmap.entries()), [
     [bobKey, bobVal],
     [aliceKey, aliceVal],
   ]);
@@ -521,25 +521,25 @@ test("HoloHashMap is a map from HoloHash to a value", async (t) => {
   hhmap.forEach((_v, k) => {
     keys.push(k);
   });
-  t.equal(keys.length, 2);
+  assert.equal(keys.length, 2);
 
   // for..of
   const keys2 = [];
   for (const [k] of hhmap) {
     keys2.push(k);
   }
-  t.equal(keys2.length, 2);
+  assert.equal(keys2.length, 2);
 
   // Delete by key
-  t.true(hhmap.delete(aliceKey));
-  t.equal(hhmap.get(aliceKey), undefined);
+  assert.isTrue(hhmap.delete(aliceKey));
+  assert.equal(hhmap.get(aliceKey), undefined);
 
   // Clear
   hhmap.clear();
-  t.equal(hhmap.size, 0);
+  assert.equal(hhmap.size, 0);
 });
 
-test("LazyHoloHashMap is a map from HoloHash to a value that fetches the value if not available", async (t) => {
+test("LazyHoloHashMap is a map from HoloHash to a value that fetches the value if not available", async () => {
   interface Person {
     name: string;
   }
@@ -561,13 +561,13 @@ test("LazyHoloHashMap is a map from HoloHash to a value that fetches the value i
     // Set initial entries
     [[bobKey, bobVal]],
   );
-  t.deepEqual(hhmap.get(bobKey), bobVal);
+  assert.deepEqual(hhmap.get(bobKey), bobVal);
 
   // Get fetches the value if missing
-  t.deepEqual(hhmap.get(aliceKey), aliceVal);
+  assert.deepEqual(hhmap.get(aliceKey), aliceVal);
 });
 
-test("DnaHoloHashMap is a map from a DnaHash to a HoloHashMap", async (t) => {
+test("DnaHoloHashMap is a map from a DnaHash to a HoloHashMap", async () => {
   interface Person {
     name: string;
   }
@@ -582,28 +582,28 @@ test("DnaHoloHashMap is a map from a DnaHash to a HoloHashMap", async (t) => {
   ]);
 
   // Get
-  t.deepEqual(hhmap.get([homeDna, bobKey]), bobVal);
+  assert.deepEqual(hhmap.get([homeDna, bobKey]), bobVal);
 
   // Set
   const aliceKey = await fakeAgentPubKey(2);
   const aliceVal = { name: "Alice" };
   hhmap.set([homeDna, aliceKey], aliceVal);
-  t.deepEqual(hhmap.get([homeDna, aliceKey]), aliceVal);
+  assert.deepEqual(hhmap.get([homeDna, aliceKey]), aliceVal);
 
   // Has
-  t.true(hhmap.has([homeDna, aliceKey]));
+  assert.isTrue(hhmap.has([homeDna, aliceKey]));
 
   // Keys
-  t.deepEqual(hhmap.keys(), [
+  assert.deepEqual(hhmap.keys(), [
     [homeDna, bobKey],
     [homeDna, aliceKey],
   ]);
 
   // Values
-  t.deepEqual(hhmap.values(), [bobVal, aliceVal]);
+  assert.deepEqual(hhmap.values(), [bobVal, aliceVal]);
 
   // Entries
-  t.deepEqual(hhmap.entries(), [
+  assert.deepEqual(hhmap.entries(), [
     [[homeDna, bobKey], bobVal],
     [[homeDna, aliceKey], aliceVal],
   ]);
@@ -613,40 +613,40 @@ test("DnaHoloHashMap is a map from a DnaHash to a HoloHashMap", async (t) => {
   const sueKey = await fakeAgentPubKey(3);
   const sueVal = { name: "Sue" };
   hhmap.set([workDna, sueKey], sueVal);
-  t.deepEqual(hhmap.get([workDna, sueKey]), sueVal);
+  assert.deepEqual(hhmap.get([workDna, sueKey]), sueVal);
 
   // Keys for Dna
-  t.deepEqual(hhmap.keysForDna(homeDna), [bobKey, aliceKey]);
-  t.deepEqual(hhmap.keysForDna(workDna), [sueKey]);
+  assert.deepEqual(hhmap.keysForDna(homeDna), [bobKey, aliceKey]);
+  assert.deepEqual(hhmap.keysForDna(workDna), [sueKey]);
 
   // Values for Dna
-  t.deepEqual(hhmap.valuesForDna(homeDna), [bobVal, aliceVal]);
-  t.deepEqual(hhmap.valuesForDna(workDna), [sueVal]);
+  assert.deepEqual(hhmap.valuesForDna(homeDna), [bobVal, aliceVal]);
+  assert.deepEqual(hhmap.valuesForDna(workDna), [sueVal]);
 
   // Entries for Dna
-  t.deepEqual(hhmap.entriesForDna(homeDna), [
+  assert.deepEqual(hhmap.entriesForDna(homeDna), [
     [bobKey, bobVal],
     [aliceKey, aliceVal],
   ]);
-  t.deepEqual(hhmap.entriesForDna(workDna), [[sueKey, sueVal]]);
+  assert.deepEqual(hhmap.entriesForDna(workDna), [[sueKey, sueVal]]);
 
   // filter
   const res2 = hhmap.filter((v) => isEqual(v, bobVal));
-  t.equal(res2.get([homeDna, aliceKey]), undefined);
+  assert.equal(res2.get([homeDna, aliceKey]), undefined);
 
   // map
   const res3 = hhmap.map((v) => (isEqual(v, bobVal) ? { name: "Tom" } : v));
-  t.deepEqual(res3.get([homeDna, bobKey]), { name: "Tom" });
+  assert.deepEqual(res3.get([homeDna, bobKey]), { name: "Tom" });
 
   // Delete by key
-  t.equal(true, hhmap.delete([homeDna, bobKey]));
-  t.equal(hhmap.get([homeDna, bobKey]), undefined);
+  assert.isTrue(hhmap.delete([homeDna, bobKey]));
+  assert.equal(hhmap.get([homeDna, bobKey]), undefined);
 
   // Clear for Dna
   hhmap.clearForDna(homeDna);
-  t.equal(hhmap.get([homeDna, bobKey]), undefined);
+  assert.equal(hhmap.get([homeDna, bobKey]), undefined);
 
   // Clear
   hhmap.clear();
-  t.equal(hhmap.size, 0);
+  assert.equal(hhmap.size, 0);
 });

@@ -18,7 +18,7 @@
   },
   "homepage": "https://github.com/holochain/holochain-client-js#readme",
   "engines": {
-    "node": ">=20.0.0 || >=22.0.0 || >= 24.0.0"
+    "node": ">=20.0.0"
   },
   "main": "lib/index.js",
   "module": "lib/index.js",
@@ -74,6 +74,7 @@
     "rimraf": "^6.1.2",
     "tape": "^5.9.0",
     "tsx": "^4.21.0",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.18"
   }
 }
