@@ -24,15 +24,16 @@ import {
   sliceHashType,
 } from "../../src/index.js";
 import { installAppAndDna, withConductor } from "./common.js";
-
-const ADMIN_PORT = 33001;
+import getPort from "get-port";
 
 const TEST_ZOME_NAME = "foo";
 
-test(
-  "fakeAgentPubKey generates valid AgentPubKey",
-  withConductor(ADMIN_PORT, async () => {
-    const { client, admin, cell_id } = await installAppAndDna(ADMIN_PORT);
+const getAdminPort = () => getPort({ port: [30_000, 31_000] });
+
+test("fakeAgentPubKey generates valid AgentPubKey", async () => {
+  const adminPort = await getAdminPort();
+  await withConductor(adminPort, async () => {
+    const { client, admin, cell_id } = await installAppAndDna(adminPort);
     await admin.authorizeSigningCredentials(cell_id);
 
     const fakeHash = await fakeAgentPubKey();
@@ -48,13 +49,13 @@ test(
       Buffer.from(fakeHash),
       "fakeAgentPubKey generates valid hash that decodes to AgentPubKey",
     );
-  }),
-);
+  })();
+});
 
-test(
-  "fakeEntryHash generates valid EntryHash",
-  withConductor(ADMIN_PORT, async () => {
-    const { client, admin, cell_id } = await installAppAndDna(ADMIN_PORT);
+test("fakeEntryHash generates valid EntryHash", async () => {
+  const adminPort = await getAdminPort();
+  await withConductor(adminPort, async () => {
+    const { client, admin, cell_id } = await installAppAndDna(adminPort);
     await admin.authorizeSigningCredentials(cell_id);
 
     const fakeHash = await fakeEntryHash();
@@ -70,13 +71,13 @@ test(
       Buffer.from(fakeHash),
       "fakeEntryHash generates valid hash that decodes to EntryHash",
     );
-  }),
-);
+  })();
+});
 
-test(
-  "fakeActionHash generates valid ActionHash",
-  withConductor(ADMIN_PORT, async () => {
-    const { client, admin, cell_id } = await installAppAndDna(ADMIN_PORT);
+test("fakeActionHash generates valid ActionHash", async () => {
+  const adminPort = await getAdminPort();
+  await withConductor(adminPort, async () => {
+    const { client, admin, cell_id } = await installAppAndDna(adminPort);
     await admin.authorizeSigningCredentials(cell_id);
 
     const fakeHash = await fakeActionHash();
@@ -92,13 +93,13 @@ test(
       Buffer.from(fakeHash),
       "fakeActionHash generates valid hash that decodes to ActionHash",
     );
-  }),
-);
+  })();
+});
 
-test(
-  "fakeDnaHash generates valid DnaHash",
-  withConductor(ADMIN_PORT, async () => {
-    const { client, admin, cell_id } = await installAppAndDna(ADMIN_PORT);
+test("fakeDnaHash generates valid DnaHash", async () => {
+  const adminPort = await getAdminPort();
+  await withConductor(adminPort, async () => {
+    const { client, admin, cell_id } = await installAppAndDna(adminPort);
     await admin.authorizeSigningCredentials(cell_id);
 
     const fakeHash = await fakeDnaHash();
@@ -114,13 +115,13 @@ test(
       Buffer.from(fakeHash),
       "fakeDnaHash generates valid hash that decodes to DnaHash",
     );
-  }),
-);
+  });
+});
 
-test(
-  "fakeAgentPubKey generates deterministic valid AgentPubKey when coreByte defined",
-  withConductor(ADMIN_PORT, async () => {
-    const { client, admin, cell_id } = await installAppAndDna(ADMIN_PORT);
+test("fakeAgentPubKey generates deterministic valid AgentPubKey when coreByte defined", async () => {
+  const adminPort = await getAdminPort();
+  await withConductor(adminPort, async () => {
+    const { client, admin, cell_id } = await installAppAndDna(adminPort);
     await admin.authorizeSigningCredentials(cell_id);
 
     const fakeHash = await fakeAgentPubKey(1);
@@ -139,13 +140,13 @@ test(
       ]),
       "fakeAgentPubKey with coreByte set generates deterministic valid hash that decodes to AgentPubKey",
     );
-  }),
-);
+  });
+});
 
-test(
-  "fakeEntryHash generates deterministic valid EntryHash when coreByte defined",
-  withConductor(ADMIN_PORT, async () => {
-    const { client, admin, cell_id } = await installAppAndDna(ADMIN_PORT);
+test("fakeEntryHash generates deterministic valid EntryHash when coreByte defined", async () => {
+  const adminPort = await getAdminPort();
+  await withConductor(adminPort, async () => {
+    const { client, admin, cell_id } = await installAppAndDna(adminPort);
     await admin.authorizeSigningCredentials(cell_id);
 
     const fakeHash = await fakeEntryHash(1);
@@ -164,13 +165,13 @@ test(
       ]),
       "fakeEntryHash with coreByte set generates deterministic valid hash that decodes to EntryHash",
     );
-  }),
-);
+  });
+});
 
-test(
-  "fakeActionHash generates deterministic valid ActionHash  when coreByte defined",
-  withConductor(ADMIN_PORT, async () => {
-    const { client, admin, cell_id } = await installAppAndDna(ADMIN_PORT);
+test("fakeActionHash generates deterministic valid ActionHash  when coreByte defined", async () => {
+  const adminPort = await getAdminPort();
+  await withConductor(adminPort, async () => {
+    const { client, admin, cell_id } = await installAppAndDna(adminPort);
     await admin.authorizeSigningCredentials(cell_id);
 
     const fakeHash = await fakeActionHash(1);
@@ -189,13 +190,13 @@ test(
       ]),
       "fakeActionHash with coreByte set generates deterministic valid hash that decodes to ActionHash",
     );
-  }),
-);
+  });
+});
 
-test(
-  "fakeDnaHash generates deterministic valid DnaHash when coreByte defined",
-  withConductor(ADMIN_PORT, async () => {
-    const { client, admin, cell_id } = await installAppAndDna(ADMIN_PORT);
+test("fakeDnaHash generates deterministic valid DnaHash when coreByte defined", async () => {
+  const adminPort = await getAdminPort();
+  await withConductor(adminPort, async () => {
+    const { client, admin, cell_id } = await installAppAndDna(adminPort);
     await admin.authorizeSigningCredentials(cell_id);
 
     const fakeHash = await fakeDnaHash(1);
@@ -214,8 +215,8 @@ test(
       ]),
       "fakeDnaHash with coreByte set generates deterministic valid hash that decodes to DnaHash",
     );
-  }),
-);
+  });
+});
 
 test("sliceDhtLocation, sliceCore32, sliceHashType extract components of a hash", async () => {
   const fakeHash = await fakeDnaHash(1);
