@@ -21,22 +21,22 @@ import {
   FIXTURE_PATH,
   withConductor,
 } from "./common.js";
-
-const ADMIN_PORT = 33001;
+import getPort from "get-port";
 
 const ROLE_NAME: RoleName = "foo";
 const TEST_ZOME_NAME = "foo";
 
-test(
-  "can call a zome function and get app info",
-  withConductor(ADMIN_PORT, async () => {
+const getAdminPort = () => getPort({ port: [30_000, 31_000] });
+
+test("can call a zome function and get app info", async () => {
+  const adminPort = await getAdminPort();
+  await withConductor(adminPort, async () => {
     const {
       installed_app_id,
       cell_id,
       client: appWs,
       admin,
-    } = await createAppWsAndInstallApp(ADMIN_PORT);
-
+    } = await createAppWsAndInstallApp(adminPort);
     let info = await appWs.appInfo();
     assert(info.cell_info[ROLE_NAME][0].type === CellType.Provisioned);
     assert.deepEqual(info.cell_info[ROLE_NAME][0].value.cell_id, cell_id);
@@ -82,12 +82,12 @@ test(
       type: "disabled",
       value: { type: "user" },
     });
-  }),
-);
+  })();
+});
 
-test(
-  "can receive a signal",
-  withConductor(ADMIN_PORT, async () => {
+test("can receive a signal", async () => {
+  const adminPort = await getAdminPort();
+  await withConductor(adminPort, async () => {
     let resolveSignalPromise: (value?: unknown) => void | undefined;
     const signalReceivedPromise = new Promise(
       (resolve) => (resolveSignalPromise = resolve),
@@ -106,7 +106,7 @@ test(
       admin,
       cell_id,
       client: appWs,
-    } = await createAppWsAndInstallApp(ADMIN_PORT);
+    } = await createAppWsAndInstallApp(adminPort);
 
     await admin.authorizeSigningCredentials(cell_id);
 
@@ -120,15 +120,15 @@ test(
       provenance: await fakeAgentPubKey(),
     });
     await signalReceivedPromise;
-  }),
-);
+  })();
+});
 
-test(
-  "cells only receive their own signals",
-  withConductor(ADMIN_PORT, async () => {
+test("cells only receive their own signals", async () => {
+  const adminPort = await getAdminPort();
+  await withConductor(adminPort, async () => {
     const role_name = "foo";
     const admin = await AdminWebsocket.connect({
-      url: new URL(`ws://localhost:${ADMIN_PORT}`),
+      url: new URL(`ws://localhost:${adminPort}`),
       wsClientOptions: { origin: "client-test-admin" },
     });
     const path = `${FIXTURE_PATH}/test.happ`;
@@ -207,13 +207,13 @@ test(
     await new Promise((resolve) => setTimeout(resolve, 0));
     assert.equal(received1, true);
     assert.equal(received2, false);
-  }),
-);
+  })();
+});
 
-test(
-  "can create a callable clone cell and call it by clone id",
-  withConductor(ADMIN_PORT, async () => {
-    const { admin, client: appWs } = await createAppWsAndInstallApp(ADMIN_PORT);
+test("can create a callable clone cell and call it by clone id", async () => {
+  const adminPort = await getAdminPort();
+  await withConductor(adminPort, async () => {
+    const { admin, client: appWs } = await createAppWsAndInstallApp(adminPort);
     const info = await appWs.appInfo();
 
     const createCloneCellParams: CreateCloneCellRequest = {
@@ -245,13 +245,13 @@ test(
       "foo",
       "clone cell can be called with same zome call as base cell, and by clone id",
     );
-  }),
-);
+  })();
+});
 
-test(
-  "can disable and re-enable a clone cell",
-  withConductor(ADMIN_PORT, async () => {
-    const { admin, client: appWs } = await createAppWsAndInstallApp(ADMIN_PORT);
+test("can disable and re-enable a clone cell", async () => {
+  const adminPort = await getAdminPort();
+  await withConductor(adminPort, async () => {
+    const { admin, client: appWs } = await createAppWsAndInstallApp(adminPort);
 
     const createCloneCellParams: CreateCloneCellRequest = {
       role_name: ROLE_NAME,
@@ -289,17 +289,17 @@ test(
     });
     await appWs.callZome(params);
     assert("re-enabled clone can be called");
-  }),
-);
+  })();
+});
 
-test(
-  "can grant and revoke zome call capabilities",
-  withConductor(ADMIN_PORT, async () => {
+test("can grant and revoke zome call capabilities", async () => {
+  const adminPort = await getAdminPort();
+  await withConductor(adminPort, async () => {
     const {
       admin,
       client: appWs,
       cell_id: cellId,
-    } = await createAppWsAndInstallApp(ADMIN_PORT);
+    } = await createAppWsAndInstallApp(adminPort);
 
     await admin.authorizeSigningCredentials(cellId);
     const info = await appWs.appInfo();
@@ -379,16 +379,16 @@ test(
       grant && grant.revoked_at,
       `grant should be revoked but is ${grant?.revoked_at}`,
     );
-  }),
-);
+  })();
+});
 
 // To test unstable features in Holochain, set env var `TEST_UNSTABLE` to `true`.
 if (process.env.TEST_UNSTABLE === "true") {
-  test(
-    "countersigning session interaction calls",
-    withConductor(ADMIN_PORT, async () => {
+  test("countersigning session interaction calls", async () => {
+    const adminPort = await getAdminPort();
+    await withConductor(adminPort, async () => {
       const { client: appWs, cell_id } =
-        await createAppWsAndInstallApp(ADMIN_PORT);
+        await createAppWsAndInstallApp(adminPort);
 
       const response = await appWs.getCountersigningSessionState(cell_id);
       console.log("response", response);
@@ -423,6 +423,6 @@ if (process.env.TEST_UNSTABLE === "true") {
           "there should not be a countersigning session",
         );
       }
-    }),
-  );
+    })();
+  });
 }

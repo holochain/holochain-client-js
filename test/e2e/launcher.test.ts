@@ -10,36 +10,38 @@ import {
   createAppWsAndInstallApp,
   withConductor,
 } from "./common.js";
+import getPort from "get-port";
 
-const ADMIN_PORT = 33001;
 const TEST_ZOME_NAME = "foo";
 
-test(
-  "AdminWebsocket connects with options provided by window.__HC_LAUNCHER_ENV__",
-  withConductor(ADMIN_PORT, async () => {
+const getAdminPort = () => getPort({ port: [30_000, 31_000] });
+
+test("AdminWebsocket connects with options provided by window.__HC_LAUNCHER_ENV__", async () => {
+  const adminPort = await getAdminPort();
+  await withConductor(adminPort, async () => {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore-next-line
     globalThis.window = { Blob };
     globalThis.window.__HC_LAUNCHER_ENV__ = {
-      ADMIN_INTERFACE_PORT: ADMIN_PORT,
+      ADMIN_INTERFACE_PORT: adminPort,
     };
     const admin = await AdminWebsocket.connect({
       wsClientOptions: { origin: "client-test-admin" },
     });
 
-    assert.equal(admin.client.url?.href, `ws://localhost:${ADMIN_PORT}/`);
-  }),
-);
+    assert.equal(admin.client.url?.href, `ws://localhost:${adminPort}/`);
+  })();
+});
 
-test(
-  "AppWebsocket connects with options provided by window.__HC_LAUNCHER_ENV__",
-  withConductor(ADMIN_PORT, async () => {
+test("AppWebsocket connects with options provided by window.__HC_LAUNCHER_ENV__", async () => {
+  const adminPort = await getAdminPort();
+  await withConductor(adminPort, async () => {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore-next-line
     globalThis.window = { Blob };
 
     const { installed_app_id, appPort, appAuthentication } =
-      await createAppInterfaceAndInstallApp(ADMIN_PORT);
+      await createAppInterfaceAndInstallApp(adminPort);
 
     globalThis.window.__HC_LAUNCHER_ENV__ = {
       APP_INTERFACE_PORT: appPort,
@@ -51,12 +53,12 @@ test(
     });
 
     assert.equal(appWs.client.url?.href, `ws://localhost:${appPort}/`);
-  }),
-);
+  })();
+});
 
-test(
-  "AppWebsocket uses the zome call signer function provided by window.__HC_ZOME_CALL_SIGNER__",
-  withConductor(ADMIN_PORT, async () => {
+test("AppWebsocket uses the zome call signer function provided by window.__HC_ZOME_CALL_SIGNER__", async () => {
+  const adminPort = await getAdminPort();
+  await withConductor(adminPort, async () => {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore-next-line
     globalThis.window = { Blob };
@@ -72,7 +74,7 @@ test(
       },
     };
 
-    const { cell_id, client } = await createAppWsAndInstallApp(ADMIN_PORT);
+    const { cell_id, client } = await createAppWsAndInstallApp(adminPort);
 
     const request: CallZomeRequest = {
       cell_id,
@@ -87,5 +89,5 @@ test(
     } catch {}
 
     assert(signerWasCalled, "__HC_ZOME_CALL_SIGNER__.signZomeCall called");
-  }),
-);
+  })();
+});

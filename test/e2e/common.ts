@@ -1,7 +1,7 @@
 import fs from "fs";
-import * as readline from "node:readline";
 import assert from "node:assert/strict";
 import { ChildProcessWithoutNullStreams, spawn } from "node:child_process";
+import * as readline from "node:readline";
 import {
   AdminWebsocket,
   AppWebsocket,
@@ -17,13 +17,15 @@ export const FIXTURE_PATH = "./test/e2e/fixture";
 const BOOTSTRAP_SERVER_STARTUP_STRING = "#kitsune2_bootstrap_srv#listening#";
 const LAIR_PASSPHRASE = "passphrase";
 
+export interface ConnectionServices {
+  servicesProcess: ChildProcessWithoutNullStreams;
+  bootstrapServerUrl: URL;
+  signalingServerUrl: URL;
+}
+
 export const runLocalServices = async () => {
   const servicesProcess = spawn("kitsune2-bootstrap-srv");
-  return new Promise<{
-    servicesProcess: ChildProcessWithoutNullStreams;
-    bootstrapServerUrl: URL;
-    signalingServerUrl: URL;
-  }>((resolve, reject) => {
+  return new Promise<ConnectionServices>((resolve, reject) => {
     servicesProcess.on("error", () => {
       reject("Failed to spawn kitsune2-bootstrap-srv");
     });
@@ -50,8 +52,8 @@ export const runLocalServices = async () => {
 export const stopLocalServices = (
   localServicesProcess: ChildProcessWithoutNullStreams,
 ) => {
-  if (localServicesProcess.pid === undefined) {
-    return null;
+  if (localServicesProcess.pid === undefined || localServicesProcess.killed) {
+    return Promise.resolve(null);
   }
   return new Promise<number | null>((resolve) => {
     localServicesProcess.on("exit", (code) => {
@@ -165,12 +167,36 @@ export const cleanSandboxConductors = () => {
   });
 };
 
+export const stopConductor = (
+  conductorProcess: ChildProcessWithoutNullStreams,
+) => {
+  if (!conductorProcess.pid || conductorProcess.killed) {
+    return Promise.resolve(null);
+  }
+
+  return new Promise<number | null>((resolve) => {
+    // Set up exit handler before killing
+    conductorProcess.on("exit", (code) => {
+      conductorProcess.removeAllListeners();
+      conductorProcess.stdout.removeAllListeners();
+      conductorProcess.stderr.removeAllListeners();
+
+      resolve(code);
+    });
+
+    if (conductorProcess.pid) {
+      // Kill the entire process group with SIGKILL immediately for faster cleanup
+      process.kill(-conductorProcess.pid);
+    }
+  });
+};
+
 export const withConductor =
   (port: number, f: () => Promise<void>) => async () => {
     // Start local bootstrap + signaling server
     const localServices = await runLocalServices();
     // Start conductor
-    const conductorProcess = await launch(
+    const conductor = await launch(
       port,
       localServices.bootstrapServerUrl,
       localServices.signalingServerUrl,
@@ -181,7 +207,7 @@ export const withConductor =
       console.error("Test caught exception: ", e);
       throw e;
     } finally {
-      await stopConductor(conductorProcess);
+      await stopConductor(conductor);
       await stopLocalServices(localServices.servicesProcess);
       await cleanSandboxConductors();
     }
