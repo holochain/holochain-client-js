@@ -5,8 +5,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## \[Unreleased\]
 
 ### Added
+- Test utility `withConductorBatch` for starting multiple conductors.
 ### Fixed
 ### Changed
+- Tests now use holochain with iroh transport.
+- Additional assertions of response data in test of `dumpNetworkStats` call.
 ### Removed
 
 ## 2026-01-15: v0.21.0-dev.2

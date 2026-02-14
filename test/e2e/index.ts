@@ -35,6 +35,7 @@ import {
   SignalType,
   Record,
   AppStatus,
+  decodeHashFromBase64,
 } from "../../src";
 import {
   FIXTURE_PATH,
@@ -47,6 +48,7 @@ import {
   runLocalServices,
   stopLocalServices,
   withConductor,
+  withConductorBatch,
 } from "./common.js";
 
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -1430,24 +1432,46 @@ test(
 test(
   "can dump network stats",
   { timeout: 60_000 },
-  withConductor(ADMIN_PORT, async (t) => {
-    const { admin, client } = await installAppAndDna(ADMIN_PORT);
+  withConductorBatch([ADMIN_PORT, ADMIN_PORT + 1], async (t) => {
+    const startTimestamp = Math.floor(new Date().getTime() / 1000);
 
-    const adminWsResponse = await admin.dumpNetworkStats();
+    const { admin: alice_admin, client: alice_client } = await installAppAndDna(ADMIN_PORT);
+    await installAppAndDna(ADMIN_PORT + 1);
 
-    t.equal(
-      adminWsResponse.transport_stats.backend,
-      "BackendLibDataChannel",
-      "unexpected transport backend",
-    );
+    // Wait for connection
+    await retryUntilTimeout(async () => {
+      let networkStats = await alice_admin.dumpNetworkStats();
+      return networkStats.transport_stats.connections.length;
+    }, 0, "Connection never established", 500, 30000);
+
+    const connectedTimestamp = Math.floor(new Date().getTime() / 1000);
+
+    // Dump network stats
+    const adminWsResponse = await alice_admin.dumpNetworkStats();
+
+    // Assert backend
+    t.equal(adminWsResponse.transport_stats.backend, "iroh");
+    
+    // Assert peer urls
     t.assert(adminWsResponse.transport_stats.peer_urls.length === 1);
     const peerUrl = new URL(adminWsResponse.transport_stats.peer_urls[0]);
     t.equal(peerUrl.hostname, "127.0.0.1");
-    t.equal(peerUrl.protocol, "ws:");
-    t.deepEqual(adminWsResponse.transport_stats.connections, []);
+    t.equal(peerUrl.protocol, "http:");
 
-    const appWsResponse = await client.dumpNetworkStats();
-    t.deepEqual(appWsResponse, adminWsResponse.transport_stats);
+    // Assert connection
+    t.ok(adminWsResponse.transport_stats.connections[0].send_message_count > 0);
+    t.ok(adminWsResponse.transport_stats.connections[0].send_bytes > 0);
+    t.ok(adminWsResponse.transport_stats.connections[0].recv_message_count > 0);
+    t.ok(adminWsResponse.transport_stats.connections[0].recv_bytes > 0);
+    t.ok(adminWsResponse.transport_stats.connections[0].opened_at_s > startTimestamp &&
+      adminWsResponse.transport_stats.connections[0].opened_at_s <= connectedTimestamp);
+    t.equal(adminWsResponse.transport_stats.connections[0].is_direct, true);
+
+    const pubKeyBytes = decodeHashFromBase64(adminWsResponse.transport_stats.connections[0].pub_key);
+    t.equal(pubKeyBytes.length, 47);
+
+    const appWsResponse = await alice_client.dumpNetworkStats();
+    t.deepEqual(appWsResponse, adminWsResponse);
   }),
 );
 
