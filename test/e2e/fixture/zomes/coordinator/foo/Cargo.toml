@@ -10,5 +10,4 @@ name = "test_wasm_foo"
 
 [dependencies]
 hdk = { workspace = true }
-holochain_serialized_bytes = { workspace = true }
-serde = "1"
+test_wasm_foo_integrity = { workspace = true }

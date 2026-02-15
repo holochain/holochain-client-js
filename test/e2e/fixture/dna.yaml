@@ -4,5 +4,11 @@ name: test-dna
 integrity:
   network_seed: 9a28aac8-337c-11eb-adc1-0Z02acw20115
   zomes:
+    - name: foo_integrity
+      path: "../../../target/wasm32-unknown-unknown/release/test_wasm_foo_integrity.wasm"
+coordinator:
+  zomes:
     - name: foo
       path: "../../../target/wasm32-unknown-unknown/release/test_wasm_foo.wasm"
+      dependencies:
+        - name: foo_integrity
