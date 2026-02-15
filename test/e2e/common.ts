@@ -1,8 +1,7 @@
 import fs from "fs";
-import * as readline from "node:readline";
 import assert from "node:assert/strict";
 import { ChildProcessWithoutNullStreams, spawn } from "node:child_process";
-import { Test } from "tape";
+import * as readline from "node:readline";
 import {
   AdminWebsocket,
   AppWebsocket,
@@ -12,31 +11,35 @@ import {
   InstalledAppId,
   IssueAppAuthenticationTokenResponse,
 } from "../../src";
+import getPort from "get-port";
 
 export const FIXTURE_PATH = "./test/e2e/fixture";
 
 const BOOTSTRAP_SERVER_STARTUP_STRING = "#kitsune2_bootstrap_srv#listening#";
 const LAIR_PASSPHRASE = "passphrase";
 
+export interface ConnectionServices {
+  servicesProcess: ChildProcessWithoutNullStreams;
+  bootstrapServerUrl: URL;
+  signalingServerUrl: URL;
+}
+
 export const runLocalServices = async () => {
   const servicesProcess = spawn("kitsune2-bootstrap-srv");
-  return new Promise<{
-    servicesProcess: ChildProcessWithoutNullStreams;
-    bootstrapServerUrl: URL;
-    signalingServerUrl: URL;
-  }>((resolve, reject) => {
+  return new Promise<ConnectionServices>((resolve, reject) => {
     servicesProcess.on("error", () => {
       reject("Failed to spawn kitsune2-bootstrap-srv");
     });
     servicesProcess.stdout.on("data", (data: Buffer) => {
-      console.log(data.toString());
+      // uncomment for debug output
+      // console.log(data.toString());
       const processData = data.toString();
       if (processData.includes(BOOTSTRAP_SERVER_STARTUP_STRING)) {
         const listeningAddress = processData
           .split(BOOTSTRAP_SERVER_STARTUP_STRING)[1]
           .split("#")[0];
         const bootstrapServerUrl = new URL(`http://${listeningAddress}`);
-        const signalingServerUrl = new URL(`ws://${listeningAddress}`);
+        const signalingServerUrl = new URL(`http://${listeningAddress}`);
         resolve({
           servicesProcess,
           bootstrapServerUrl,
@@ -51,8 +54,8 @@ export const runLocalServices = async () => {
 export const stopLocalServices = (
   localServicesProcess: ChildProcessWithoutNullStreams,
 ) => {
-  if (localServicesProcess.pid === undefined) {
-    return null;
+  if (localServicesProcess.pid === undefined || localServicesProcess.killed) {
+    return Promise.resolve(null);
   }
   return new Promise<number | null>((resolve) => {
     localServicesProcess.on("exit", (code) => {
@@ -79,7 +82,7 @@ export const launch = async (
     "network",
     "--bootstrap",
     bootstrapServerUrl.href,
-    "webrtc",
+    "quic",
     signalingServerUrl.href,
   ];
   const createConductorProcess = spawn("hc", args);
@@ -98,7 +101,8 @@ export const launch = async (
     });
     let sandboxCreatedPreviousLine = false;
     rl.on("line", (line) => {
-      console.log(line);
+      // uncomment for debug output
+      // console.log(line);
       if (sandboxCreatedPreviousLine) {
         // We expect a string like 0:/tmp/nix-shell.Rv7Omo/8wBJlBfszYZi1I6gZr3Cc now
         // where the number in front of the ':' is the conductor index
@@ -147,9 +151,10 @@ export const launch = async (
       }
     });
   });
-  runConductorProcess.stdout.on("data", (data: Buffer) => {
-    console.log(data.toString());
-  });
+  // uncomment for conductor debug output
+  // runConductorProcess.stdout.on("data", (data: Buffer) => {
+  // console.log(data.toString());
+  // });
   runConductorProcess.stderr.on("data", (data: Buffer) => {
     console.error(data.toString());
   });
@@ -166,85 +171,103 @@ export const cleanSandboxConductors = () => {
   });
 };
 
-export const withConductor =
-  (port: number, f: (t: Test) => Promise<void>) => async (t: Test) => {
+export const stopConductor = (
+  conductorProcess: ChildProcessWithoutNullStreams,
+) => {
+  if (!conductorProcess.pid || conductorProcess.killed) {
+    return Promise.resolve(null);
+  }
+
+  return new Promise<number | null>((resolve) => {
+    // Set up exit handler before killing
+    conductorProcess.on("exit", (code) => {
+      conductorProcess.removeAllListeners();
+      conductorProcess.stdout.removeAllListeners();
+      conductorProcess.stderr.removeAllListeners();
+
+      resolve(code);
+    });
+
+    if (conductorProcess.pid) {
+      // Kill the entire process group with SIGKILL immediately for faster cleanup
+      process.kill(-conductorProcess.pid, "SIGKILL");
+    }
+  });
+};
+
+export const withApp =
+  (
+    f: (testConductor: TestCase) => Promise<void>,
+    singleUse?: boolean,
+    expirySeconds?: number,
+  ) =>
+  async () => {
+    const adminPort = await getPort({ port: [30_000, 31_000] });
     // Start local bootstrap + signaling server
     const localServices = await runLocalServices();
-    // Start conductor
-    const conductorProcess = await launch(
-      port,
-      localServices.bootstrapServerUrl,
-      localServices.signalingServerUrl,
-    );
+    let conductor: ChildProcessWithoutNullStreams | undefined;
     try {
-      await f(t);
+      // Start conductor
+      conductor = await launch(
+        adminPort,
+        localServices.bootstrapServerUrl,
+        localServices.signalingServerUrl,
+      );
+      const testCase = await createAppWsAndInstallApp(
+        adminPort,
+        singleUse,
+        expirySeconds,
+      );
+      await testCase.admin_ws.authorizeSigningCredentials(testCase.cell_id);
+      await f(testCase);
     } catch (e) {
       console.error("Test caught exception: ", e);
       throw e;
     } finally {
-      await stopLocalServices(localServices.servicesProcess);
-      if (conductorProcess.pid && !conductorProcess.killed) {
-        process.kill(-conductorProcess.pid);
+      if (conductor) {
+        await stopConductor(conductor);
       }
+      await stopLocalServices(localServices.servicesProcess);
       await cleanSandboxConductors();
     }
-    t.end();
   };
 
-export const installAppAndDna = async (
-  adminPort: number,
-  /**
-   * Whether the app authentication token is single use or not
-   */
-  singleUse = true,
-  /**
-   * expiry seconds of the app authentication token
-   */
-  expirySeconds = 30,
-): Promise<{
+export const withConductor =
+  (port: number, f: () => Promise<void>) => async () => {
+    // Start local bootstrap + signaling server
+    const localServices = await runLocalServices();
+    let conductor: ChildProcessWithoutNullStreams | undefined;
+    try {
+      // Start conductor
+      conductor = await launch(
+        port,
+        localServices.bootstrapServerUrl,
+        localServices.signalingServerUrl,
+      );
+      await f();
+    } catch (e) {
+      console.error("Test caught exception: ", e);
+      throw e;
+    } finally {
+      if (conductor) {
+        await stopConductor(conductor);
+      }
+      await stopLocalServices(localServices.servicesProcess);
+      await cleanSandboxConductors();
+    }
+  };
+
+export interface TestCase {
   installed_app_id: InstalledAppId;
   cell_id: CellId;
-  client: AppWebsocket;
-  admin: AdminWebsocket;
-}> => {
-  const role_name = "foo";
-  const installed_app_id = "app";
-  const admin = await AdminWebsocket.connect({
-    url: new URL(`ws://localhost:${adminPort}`),
-    wsClientOptions: { origin: "client-test-admin" },
-  });
-  const path = `${FIXTURE_PATH}/test.happ`;
-  const agent = await admin.generateAgentPubKey();
-  const app = await admin.installApp({
-    installed_app_id,
-    agent_key: agent,
-    source: {
-      type: "path",
-      value: path,
-    },
-  });
-  assert(app.cell_info[role_name][0].type === CellType.Provisioned);
-  const cell_id = app.cell_info[role_name][0].value.cell_id;
-  await admin.enableApp({ installed_app_id });
-  // destructure to get whatever open port was assigned to the interface
-  const { port: appPort } = await admin.attachAppInterface({
-    allowed_origins: "client-test-app",
-  });
-  const issued = await admin.issueAppAuthenticationToken({
-    installed_app_id,
-    single_use: singleUse,
-    expiry_seconds: expirySeconds,
-  });
-  const client = await AppWebsocket.connect({
-    url: new URL(`ws://localhost:${appPort}`),
-    wsClientOptions: { origin: "client-test-app" },
-    token: issued.token,
-  });
-  return { installed_app_id, cell_id, client, admin };
-};
+  app_ws: AppWebsocket;
+  admin_ws: AdminWebsocket;
+}
 
 export const createAppInterfaceAndInstallApp = async (
   adminPort: number,
+  single_use?: boolean,
+  expiry_seconds?: number,
 ): Promise<{
   installed_app_id: InstalledAppId;
   cell_id: CellId;
@@ -276,27 +299,27 @@ export const createAppInterfaceAndInstallApp = async (
   });
   const appAuthentication = await admin.issueAppAuthenticationToken({
     installed_app_id,
+    // only add properties if provided, otherwise deserialization fails
+    ...(single_use !== undefined && { single_use }),
+    ...(expiry_seconds !== undefined && { expiry_seconds }),
   });
   return { installed_app_id, cell_id, appPort, appAuthentication, admin };
 };
 
 export const createAppWsAndInstallApp = async (
   adminPort: number,
-): Promise<{
-  installed_app_id: InstalledAppId;
-  cell_id: CellId;
-  client: AppWebsocket;
-  admin: AdminWebsocket;
-}> => {
+  singleUse?: boolean,
+  expirySeconds?: number,
+): Promise<TestCase> => {
   const { installed_app_id, cell_id, appPort, appAuthentication, admin } =
-    await createAppInterfaceAndInstallApp(adminPort);
+    await createAppInterfaceAndInstallApp(adminPort, singleUse, expirySeconds);
   const client = await AppWebsocket.connect({
     url: new URL(`ws://localhost:${appPort}`),
     wsClientOptions: { origin: "client-test-app" },
     defaultTimeout: 12000,
     token: appAuthentication.token,
   });
-  return { installed_app_id, cell_id, client, admin };
+  return { installed_app_id, cell_id, app_ws: client, admin_ws: admin };
 };
 
 export async function makeCoordinatorZomeBundle(): Promise<CoordinatorBundle> {
@@ -321,17 +344,16 @@ export async function makeCoordinatorZomeBundle(): Promise<CoordinatorBundle> {
   };
 }
 
-export async function retryUntilTimeout<T>(
-  cb: () => Promise<T>,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  whileValue: any,
+export async function retryUntilTimeout(
+  cb: () => Promise<boolean>,
   timeoutMsg: string,
   intervalMs: number,
   timeoutMs: number,
-): Promise<T> {
+): Promise<void> {
   const startTime = Date.now();
-  let value = await cb();
-  while (value === whileValue) {
+  let result;
+  do {
+    result = await cb();
     const currentTime = Date.now();
     if (currentTime - startTime >= timeoutMs)
       throw Error(`Timeout of ${timeoutMs} ms has passed, but ${timeoutMsg}`);
@@ -339,7 +361,5 @@ export async function retryUntilTimeout<T>(
     await new Promise((resolve) => {
       setTimeout(resolve, intervalMs);
     });
-    value = await cb();
-  }
-  return value;
+  } while (!result);
 }

@@ -1,0 +1,14 @@
+[package]
+authors = ["thedavidmeister", "thedavidmeister@gmail.com"]
+edition = "2021"
+name = "test_wasm_foo_integrity"
+version = "0.0.1"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+name = "test_wasm_foo_integrity"
+
+[dependencies]
+hdi = { workspace = true }
+holochain_serialized_bytes = { workspace = true }
+serde = "1"

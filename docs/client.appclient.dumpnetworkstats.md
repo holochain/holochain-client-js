@@ -7,9 +7,9 @@
 **Signature:**
 
 ```typescript
-dumpNetworkStats(): Promise<AppDumpNetworkStatsResponse>;
+dumpNetworkStats(): Promise<DumpNetworkStatsResponse>;
 ```
 **Returns:**
 
-Promise&lt;[AppDumpNetworkStatsResponse](./client.appdumpnetworkstatsresponse.md)<!-- -->&gt;
+Promise&lt;[DumpNetworkStatsResponse](./client.dumpnetworkstatsresponse.md)<!-- -->&gt;
 
