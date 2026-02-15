@@ -1536,7 +1536,7 @@ test(
 );
 
 test(
-  "app_wsfails to reconnect to websocket if closed before making a zome call if the provided token is invalid",
+  "app fails to reconnect to websocket if closed before making a zome call if the provided token is invalid",
   withApp(async (testCase) => {
     const { app_ws, cell_id } = testCase;
 
