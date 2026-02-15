@@ -1,5 +1,9 @@
 [workspace]
-members = ["test/e2e/fixture/zomes/foo", "test/e2e/fixture2/coordinator2"]
+members = [
+    "test/e2e/fixture/zomes/coordinator/foo",
+    "test/e2e/fixture/zomes/integrity/foo",
+    "test/e2e/fixture2/coordinator2",
+]
 
 resolver = "2"
 
@@ -7,5 +11,8 @@ resolver = "2"
 opt-level = "z"
 
 [workspace.dependencies]
-hdk = "0.7.0-dev.4"
+hdi = "0.8.0-dev.4"
+hdk = "0.7.0-dev.6"
 holochain_serialized_bytes = "0.0.56"
+
+test_wasm_foo_integrity = { path = "test/e2e/fixture/zomes/integrity/foo" }
