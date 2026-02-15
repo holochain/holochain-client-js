@@ -22,7 +22,6 @@ import {
   HolochainError,
   Link,
   ProvisionedCell,
-  Record,
   RegisterAgentActivity,
   RoleName,
   Signal,
@@ -760,9 +759,8 @@ test("can inject agent info", async () => {
   await retryUntilTimeout(
     async () => {
       const agentInfos = await admin1.agentInfo({ dna_hashes: null });
-      return agentInfos.length;
+      return agentInfos.length > 0;
     },
-    0,
     "agent infos didn't make it to the peer store",
     500,
     15_000,
@@ -811,9 +809,8 @@ test("can inject agent info", async () => {
   await retryUntilTimeout(
     async () => {
       const agentInfos = await admin2.agentInfo({ dna_hashes: null });
-      return agentInfos.length;
+      return agentInfos.length > 0;
     },
-    0,
     "agent infos didn't make it to the peer store",
     500,
     15_000,
@@ -853,12 +850,11 @@ test("can query peer meta info over admin_wsand app websocket", async () => {
   await retryUntilTimeout(
     async () => {
       const agentInfos = await admin1.agentInfo({ dna_hashes: null });
-      return agentInfos.length;
+      return agentInfos.length > 0;
     },
-    0,
     "agent infos didn't make it to the peer store",
     500,
-    15000,
+    15_000,
   );
   const agentInfos1 = await admin1.agentInfo({ dna_hashes: null });
   const agentInfo1 = JSON.parse(agentInfos1[0]).agentInfo;
@@ -891,16 +887,15 @@ test("can query peer meta info over admin_wsand app websocket", async () => {
 
   // Wait until the second agent can get it to make sure that they
   // have exchanged peer info
-  await retryUntilTimeout<Record>(
-    () =>
-      appClient2.callZome({
+  await retryUntilTimeout(
+    async () =>
+      (await appClient2.callZome({
         cell_id: cell_id2,
         provenance: cell_id2[1],
         zome_name: TEST_ZOME_NAME,
         fn_name: "get_an_entry",
         payload: acionHash,
-      }),
-    null,
+      })) !== null,
     "agent 2 wasn't able to get the entry of agent 1",
     200,
     20_000,
@@ -941,9 +936,8 @@ test(
     await retryUntilTimeout(
       async () => {
         const agentInfos = await app_ws.agentInfo({ dna_hashes: null });
-        return agentInfos.length;
+        return agentInfos.length > 0;
       },
-      0,
       "agent infos didn't make it to the peer store",
       500,
       15_000,
@@ -1381,9 +1375,8 @@ test(
     await retryUntilTimeout(
       async () => {
         const adminWsResponse = await admin_ws.dumpNetworkStats();
-        return adminWsResponse.transport_stats.peer_urls.length;
+        return adminWsResponse.transport_stats.peer_urls.length > 0;
       },
-      0,
       "no peer URL received",
       500,
       15_000,

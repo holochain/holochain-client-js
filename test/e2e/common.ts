@@ -334,17 +334,16 @@ export async function makeCoordinatorZomeBundle(): Promise<CoordinatorBundle> {
   };
 }
 
-export async function retryUntilTimeout<T>(
-  cb: () => Promise<T>,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  whileValue: any,
+export async function retryUntilTimeout(
+  cb: () => Promise<boolean>,
   timeoutMsg: string,
   intervalMs: number,
   timeoutMs: number,
-): Promise<T> {
+): Promise<void> {
   const startTime = Date.now();
-  let value = await cb();
-  while (value === whileValue) {
+  let result;
+  do {
+    result = await cb();
     const currentTime = Date.now();
     if (currentTime - startTime >= timeoutMs)
       throw Error(`Timeout of ${timeoutMs} ms has passed, but ${timeoutMsg}`);
@@ -352,7 +351,5 @@ export async function retryUntilTimeout<T>(
     await new Promise((resolve) => {
       setTimeout(resolve, intervalMs);
     });
-    value = await cb();
-  }
-  return value;
+  } while (!result);
 }
