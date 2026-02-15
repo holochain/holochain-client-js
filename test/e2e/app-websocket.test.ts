@@ -1,6 +1,5 @@
 import { assert, test } from "vitest";
 import {
-  AdminWebsocket,
   AppEntryDef,
   AppWebsocket,
   CallZomeRequest,
@@ -16,34 +15,25 @@ import {
   SignalCb,
   SignalType,
 } from "../../src/index.js";
-import {
-  createAppWsAndInstallApp,
-  FIXTURE_PATH,
-  withConductor,
-} from "./common.js";
-import getPort from "get-port";
+import { FIXTURE_PATH, withApp } from "./common.js";
 
 const ROLE_NAME: RoleName = "foo";
 const TEST_ZOME_NAME = "foo";
 
-const getAdminPort = () => getPort({ port: [30_000, 31_000] });
-
-test("can call a zome function and get app info", async () => {
-  const adminPort = await getAdminPort();
-  await withConductor(adminPort, async () => {
+test(
+  "can call a zome function and get app info",
+  withApp(async (testCase) => {
     const {
       installed_app_id,
       cell_id,
-      client: appWs,
-      admin,
-    } = await createAppWsAndInstallApp(adminPort);
+      app_ws: appWs,
+      admin_ws: admin,
+    } = testCase;
     let info = await appWs.appInfo();
     assert(info.cell_info[ROLE_NAME][0].type === CellType.Provisioned);
     assert.deepEqual(info.cell_info[ROLE_NAME][0].value.cell_id, cell_id);
     assert.ok(ROLE_NAME in info.cell_info);
     assert.deepEqual(info.status, { type: "enabled" });
-
-    await admin.authorizeSigningCredentials(cell_id);
 
     const appEntryDef: AppEntryDef = {
       entry_index: 0,
@@ -82,12 +72,14 @@ test("can call a zome function and get app info", async () => {
       type: "disabled",
       value: { type: "user" },
     });
-  })();
-});
+  }),
+);
 
-test("can receive a signal", async () => {
-  const adminPort = await getAdminPort();
-  await withConductor(adminPort, async () => {
+test(
+  "can receive a signal",
+  withApp(async (testCase) => {
+    const { cell_id, app_ws: appWs } = testCase;
+
     let resolveSignalPromise: (value?: unknown) => void | undefined;
     const signalReceivedPromise = new Promise(
       (resolve) => (resolveSignalPromise = resolve),
@@ -102,14 +94,6 @@ test("can receive a signal", async () => {
       resolveSignalPromise();
     };
 
-    const {
-      admin,
-      cell_id,
-      client: appWs,
-    } = await createAppWsAndInstallApp(adminPort);
-
-    await admin.authorizeSigningCredentials(cell_id);
-
     appWs.on("signal", signalCb);
 
     // trigger an emit_signal
@@ -120,35 +104,17 @@ test("can receive a signal", async () => {
       provenance: await fakeAgentPubKey(),
     });
     await signalReceivedPromise;
-  })();
-});
+  }),
+);
 
-test("cells only receive their own signals", async () => {
-  const adminPort = await getAdminPort();
-  await withConductor(adminPort, async () => {
-    const role_name = "foo";
-    const admin = await AdminWebsocket.connect({
-      url: new URL(`ws://localhost:${adminPort}`),
-      wsClientOptions: { origin: "client-test-admin" },
-    });
-    const path = `${FIXTURE_PATH}/test.happ`;
-    const { port: appPort } = await admin.attachAppInterface({
-      allowed_origins: "client-test-app",
-    });
-
-    const app_id1 = "app1";
-    const agent1 = await admin.generateAgentPubKey();
-    const app1 = await admin.installApp({
+test(
+  "cells only receive their own signals",
+  withApp(async (testCase) => {
+    const {
       installed_app_id: app_id1,
-      agent_key: agent1,
-      source: {
-        type: "path",
-        value: path,
-      },
-    });
-    assert(app1.cell_info[role_name][0].type === CellType.Provisioned);
-    const cell_id1 = app1.cell_info[role_name][0].value.cell_id;
-    await admin.enableApp({ installed_app_id: app_id1 });
+      cell_id: cell_id1,
+      admin_ws: admin,
+    } = testCase;
 
     let received1 = false;
     const signalCb1: SignalCb = () => {
@@ -162,7 +128,7 @@ test("cells only receive their own signals", async () => {
       agent_key: agent2,
       source: {
         type: "path",
-        value: path,
+        value: `${FIXTURE_PATH}/test.happ`,
       },
     });
     await admin.enableApp({ installed_app_id: app_id2 });
@@ -172,10 +138,11 @@ test("cells only receive their own signals", async () => {
       received2 = true;
     };
 
-    await admin.authorizeSigningCredentials(cell_id1);
-
     const issued1 = await admin.issueAppAuthenticationToken({
       installed_app_id: app_id1,
+    });
+    const { port: appPort } = await admin.attachAppInterface({
+      allowed_origins: "client-test-app",
     });
     const clientUrl = new URL(`ws://localhost:${appPort}`);
     const appWs1 = await AppWebsocket.connect({
@@ -207,13 +174,13 @@ test("cells only receive their own signals", async () => {
     await new Promise((resolve) => setTimeout(resolve, 0));
     assert.equal(received1, true);
     assert.equal(received2, false);
-  })();
-});
+  }),
+);
 
-test("can create a callable clone cell and call it by clone id", async () => {
-  const adminPort = await getAdminPort();
-  await withConductor(adminPort, async () => {
-    const { admin, client: appWs } = await createAppWsAndInstallApp(adminPort);
+test(
+  "can create a callable clone cell and call it by clone id",
+  withApp(async (testCase) => {
+    const { app_ws: appWs, admin_ws: admin } = testCase;
     const info = await appWs.appInfo();
 
     const createCloneCellParams: CreateCloneCellRequest = {
@@ -245,13 +212,12 @@ test("can create a callable clone cell and call it by clone id", async () => {
       "foo",
       "clone cell can be called with same zome call as base cell, and by clone id",
     );
-  })();
-});
+  }),
+);
 
 test("can disable and re-enable a clone cell", async () => {
-  const adminPort = await getAdminPort();
-  await withConductor(adminPort, async () => {
-    const { admin, client: appWs } = await createAppWsAndInstallApp(adminPort);
+  withApp(async (testCase) => {
+    const { app_ws: appWs, admin_ws: admin } = testCase;
 
     const createCloneCellParams: CreateCloneCellRequest = {
       role_name: ROLE_NAME,
@@ -292,21 +258,15 @@ test("can disable and re-enable a clone cell", async () => {
   })();
 });
 
-test("can grant and revoke zome call capabilities", async () => {
-  const adminPort = await getAdminPort();
-  await withConductor(adminPort, async () => {
-    const {
-      admin,
-      client: appWs,
-      cell_id: cellId,
-    } = await createAppWsAndInstallApp(adminPort);
-
-    await admin.authorizeSigningCredentials(cellId);
+test(
+  "can grant and revoke zome call capabilities",
+  withApp(async (testCase) => {
+    const { cell_id, app_ws: appWs, admin_ws: admin } = testCase;
     const info = await appWs.appInfo();
 
     // grant capability
     const grantRequest: GrantZomeCallCapabilityRequest = {
-      cell_id: cellId,
+      cell_id,
       cap_grant: {
         tag: "test-grant",
         access: {
@@ -327,11 +287,10 @@ test("can grant and revoke zome call capabilities", async () => {
     };
 
     const capabilityGrants = await admin.listCapabilityGrants(listRequest);
-    console.debug("cap grants", capabilityGrants);
     // should have 1 item = grants for 1 cell
     assert.equal(capabilityGrants.length, 1, "should have grants for 1 cell");
     const [cellIdFromGrants, grants] = capabilityGrants[0];
-    assert.deepEqual(cellIdFromGrants, cellId, "cell id matches");
+    assert.deepEqual(cellIdFromGrants, cell_id, "cell id matches");
     assert.equal(grants.length, 2, "should have 2 grants");
     const capGrantInfo = grants[1];
     assert.equal(capGrantInfo.cap_grant.tag, "test-grant", "grant tag matches");
@@ -349,15 +308,13 @@ test("can grant and revoke zome call capabilities", async () => {
     // revoke capability
     const revokeRequest: RevokeZomeCallCapabilityRequest = {
       action_hash: grantedActionHash,
-      cell_id: cellId,
+      cell_id: cell_id,
     };
-    const response = await admin.revokeZomeCallCapability(revokeRequest);
-    console.debug("response", response);
+    await admin.revokeZomeCallCapability(revokeRequest);
 
     // list capability grants again
     const capabilityGrantsAfterRevoke =
       await admin.listCapabilityGrants(listRequest);
-    console.debug("grants after revoke", capabilityGrantsAfterRevoke[0]);
     // should have 1 item for 1 cell still, but the grant should be revoked
     assert.equal(
       capabilityGrantsAfterRevoke.length,
@@ -368,7 +325,7 @@ test("can grant and revoke zome call capabilities", async () => {
       capabilityGrantsAfterRevoke[0];
     assert.deepEqual(
       cellIdFromGrantsAfterRevoke,
-      cellId,
+      cell_id,
       "cell id matches after revoke",
     );
     // check if has revoked_at
@@ -379,19 +336,16 @@ test("can grant and revoke zome call capabilities", async () => {
       grant && grant.revoked_at,
       `grant should be revoked but is ${grant?.revoked_at}`,
     );
-  })();
-});
+  }),
+);
 
 // To test unstable features in Holochain, set env var `TEST_UNSTABLE` to `true`.
 if (process.env.TEST_UNSTABLE === "true") {
-  test("countersigning session interaction calls", async () => {
-    const adminPort = await getAdminPort();
-    await withConductor(adminPort, async () => {
-      const { client: appWs, cell_id } =
-        await createAppWsAndInstallApp(adminPort);
-
+  test(
+    "countersigning session interaction calls",
+    withApp(async (testCase) => {
+      const { cell_id, app_ws: appWs } = testCase;
       const response = await appWs.getCountersigningSessionState(cell_id);
-      console.log("response", response);
       assert.equal(
         response,
         null,
@@ -423,6 +377,6 @@ if (process.env.TEST_UNSTABLE === "true") {
           "there should not be a countersigning session",
         );
       }
-    })();
-  });
+    }),
+  );
 }

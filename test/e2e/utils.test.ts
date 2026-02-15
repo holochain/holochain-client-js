@@ -23,114 +23,101 @@ import {
   sliceDhtLocation,
   sliceHashType,
 } from "../../src/index.js";
-import { installAppAndDna, withConductor } from "./common.js";
-import getPort from "get-port";
+import { withApp } from "./common.js";
 
 const TEST_ZOME_NAME = "foo";
 
-const getAdminPort = () => getPort({ port: [30_000, 31_000] });
-
-test("fakeAgentPubKey generates valid AgentPubKey", async () => {
-  const adminPort = await getAdminPort();
-  await withConductor(adminPort, async () => {
-    const { client, admin, cell_id } = await installAppAndDna(adminPort);
-    await admin.authorizeSigningCredentials(cell_id);
-
+test(
+  "fakeAgentPubKey generates valid AgentPubKey",
+  withApp(async (testCase) => {
+    const { app_ws } = testCase;
     const fakeHash = await fakeAgentPubKey();
-    const response = await client.callZome({
-      cell_id,
+    const response = await app_ws.callZome({
+      cell_id: testCase.cell_id,
       zome_name: TEST_ZOME_NAME,
       fn_name: "decode_as_agentpubkey",
       payload: Array.from(fakeHash),
-      provenance: cell_id[0],
+      provenance: testCase.cell_id[0],
     });
     assert.deepEqual(
       response,
       Buffer.from(fakeHash),
       "fakeAgentPubKey generates valid hash that decodes to AgentPubKey",
     );
-  })();
-});
+  }),
+);
 
-test("fakeEntryHash generates valid EntryHash", async () => {
-  const adminPort = await getAdminPort();
-  await withConductor(adminPort, async () => {
-    const { client, admin, cell_id } = await installAppAndDna(adminPort);
-    await admin.authorizeSigningCredentials(cell_id);
-
+test(
+  "fakeEntryHash generates valid EntryHash",
+  withApp(async (testCase) => {
+    const { cell_id, app_ws } = testCase;
     const fakeHash = await fakeEntryHash();
-    const response = await client.callZome({
+    const response = await app_ws.callZome({
       cell_id,
       zome_name: TEST_ZOME_NAME,
       fn_name: "decode_as_entryhash",
       payload: Array.from(fakeHash),
-      provenance: cell_id[0],
+      provenance: testCase.cell_id[0],
     });
     assert.deepEqual(
       response,
       Buffer.from(fakeHash),
       "fakeEntryHash generates valid hash that decodes to EntryHash",
     );
-  })();
-});
+  }),
+);
 
-test("fakeActionHash generates valid ActionHash", async () => {
-  const adminPort = await getAdminPort();
-  await withConductor(adminPort, async () => {
-    const { client, admin, cell_id } = await installAppAndDna(adminPort);
-    await admin.authorizeSigningCredentials(cell_id);
-
+test(
+  "fakeActionHash generates valid ActionHash",
+  withApp(async (testCase) => {
+    const { cell_id, app_ws } = testCase;
     const fakeHash = await fakeActionHash();
-    const response = await client.callZome({
+    const response = await app_ws.callZome({
       cell_id,
       zome_name: TEST_ZOME_NAME,
       fn_name: "decode_as_actionhash",
       payload: Array.from(fakeHash),
-      provenance: cell_id[0],
+      provenance: testCase.cell_id[0],
     });
     assert.deepEqual(
       response,
       Buffer.from(fakeHash),
       "fakeActionHash generates valid hash that decodes to ActionHash",
     );
-  })();
-});
+  }),
+);
 
-test("fakeDnaHash generates valid DnaHash", async () => {
-  const adminPort = await getAdminPort();
-  await withConductor(adminPort, async () => {
-    const { client, admin, cell_id } = await installAppAndDna(adminPort);
-    await admin.authorizeSigningCredentials(cell_id);
-
+test(
+  "fakeDnaHash generates valid DnaHash",
+  withApp(async (testCase) => {
+    const { cell_id, app_ws } = testCase;
     const fakeHash = await fakeDnaHash();
-    const response = await client.callZome({
+    const response = await app_ws.callZome({
       cell_id,
       zome_name: TEST_ZOME_NAME,
       fn_name: "decode_as_dnahash",
       payload: Array.from(fakeHash),
-      provenance: cell_id[0],
+      provenance: testCase.cell_id[0],
     });
     assert.deepEqual(
       response,
       Buffer.from(fakeHash),
       "fakeDnaHash generates valid hash that decodes to DnaHash",
     );
-  });
-});
+  }),
+);
 
-test("fakeAgentPubKey generates deterministic valid AgentPubKey when coreByte defined", async () => {
-  const adminPort = await getAdminPort();
-  await withConductor(adminPort, async () => {
-    const { client, admin, cell_id } = await installAppAndDna(adminPort);
-    await admin.authorizeSigningCredentials(cell_id);
-
+test(
+  "fakeAgentPubKey generates deterministic valid AgentPubKey when coreByte defined",
+  withApp(async (testCase) => {
+    const { cell_id, app_ws } = testCase;
     const fakeHash = await fakeAgentPubKey(1);
-    const response = await client.callZome({
+    const response = await app_ws.callZome({
       cell_id,
       zome_name: TEST_ZOME_NAME,
       fn_name: "decode_as_agentpubkey",
       payload: Array.from(fakeHash),
-      provenance: cell_id[0],
+      provenance: testCase.cell_id[0],
     });
     assert.deepEqual(
       response,
@@ -140,22 +127,20 @@ test("fakeAgentPubKey generates deterministic valid AgentPubKey when coreByte de
       ]),
       "fakeAgentPubKey with coreByte set generates deterministic valid hash that decodes to AgentPubKey",
     );
-  });
-});
+  }),
+);
 
-test("fakeEntryHash generates deterministic valid EntryHash when coreByte defined", async () => {
-  const adminPort = await getAdminPort();
-  await withConductor(adminPort, async () => {
-    const { client, admin, cell_id } = await installAppAndDna(adminPort);
-    await admin.authorizeSigningCredentials(cell_id);
-
+test(
+  "fakeEntryHash generates deterministic valid EntryHash when coreByte defined",
+  withApp(async (testCase) => {
+    const { cell_id, app_ws } = testCase;
     const fakeHash = await fakeEntryHash(1);
-    const response = await client.callZome({
+    const response = await app_ws.callZome({
       cell_id,
       zome_name: TEST_ZOME_NAME,
       fn_name: "decode_as_entryhash",
       payload: Array.from(fakeHash),
-      provenance: cell_id[0],
+      provenance: testCase.cell_id[0],
     });
     assert.deepEqual(
       response,
@@ -165,22 +150,20 @@ test("fakeEntryHash generates deterministic valid EntryHash when coreByte define
       ]),
       "fakeEntryHash with coreByte set generates deterministic valid hash that decodes to EntryHash",
     );
-  });
-});
+  }),
+);
 
-test("fakeActionHash generates deterministic valid ActionHash  when coreByte defined", async () => {
-  const adminPort = await getAdminPort();
-  await withConductor(adminPort, async () => {
-    const { client, admin, cell_id } = await installAppAndDna(adminPort);
-    await admin.authorizeSigningCredentials(cell_id);
-
+test(
+  "fakeActionHash generates deterministic valid ActionHash  when coreByte defined",
+  withApp(async (testCase) => {
+    const { cell_id, app_ws } = testCase;
     const fakeHash = await fakeActionHash(1);
-    const response = await client.callZome({
+    const response = await app_ws.callZome({
       cell_id,
       zome_name: TEST_ZOME_NAME,
       fn_name: "decode_as_actionhash",
       payload: Array.from(fakeHash),
-      provenance: cell_id[0],
+      provenance: testCase.cell_id[0],
     });
     assert.deepEqual(
       response,
@@ -190,22 +173,20 @@ test("fakeActionHash generates deterministic valid ActionHash  when coreByte def
       ]),
       "fakeActionHash with coreByte set generates deterministic valid hash that decodes to ActionHash",
     );
-  });
-});
+  }),
+);
 
-test("fakeDnaHash generates deterministic valid DnaHash when coreByte defined", async () => {
-  const adminPort = await getAdminPort();
-  await withConductor(adminPort, async () => {
-    const { client, admin, cell_id } = await installAppAndDna(adminPort);
-    await admin.authorizeSigningCredentials(cell_id);
-
+test(
+  "fakeDnaHash generates deterministic valid DnaHash when coreByte defined",
+  withApp(async (testCase) => {
+    const { cell_id, app_ws } = testCase;
     const fakeHash = await fakeDnaHash(1);
-    const response = await client.callZome({
+    const response = await app_ws.callZome({
       cell_id,
       zome_name: TEST_ZOME_NAME,
       fn_name: "decode_as_dnahash",
       payload: Array.from(fakeHash),
-      provenance: cell_id[0],
+      provenance: testCase.cell_id[0],
     });
     assert.deepEqual(
       response,
@@ -215,8 +196,8 @@ test("fakeDnaHash generates deterministic valid DnaHash when coreByte defined", 
       ]),
       "fakeDnaHash with coreByte set generates deterministic valid hash that decodes to DnaHash",
     );
-  });
-});
+  }),
+);
 
 test("sliceDhtLocation, sliceCore32, sliceHashType extract components of a hash", async () => {
   const fakeHash = await fakeDnaHash(1);

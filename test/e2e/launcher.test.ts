@@ -74,7 +74,7 @@ test("AppWebsocket uses the zome call signer function provided by window.__HC_ZO
       },
     };
 
-    const { cell_id, client } = await createAppWsAndInstallApp(adminPort);
+    const { cell_id, app_ws } = await createAppWsAndInstallApp(adminPort);
 
     const request: CallZomeRequest = {
       cell_id,
@@ -84,7 +84,7 @@ test("AppWebsocket uses the zome call signer function provided by window.__HC_ZO
       payload: null,
     };
     try {
-      await client.callZome(request, 500);
+      await app_ws.callZome(request, 500);
       // eslint-disable-next-line no-empty
     } catch {}
 
