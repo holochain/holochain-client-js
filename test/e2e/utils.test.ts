@@ -37,7 +37,7 @@ test(
       zome_name: TEST_ZOME_NAME,
       fn_name: "decode_as_agentpubkey",
       payload: Array.from(fakeHash),
-      provenance: testCase.cell_id[0],
+      provenance: testCase.cell_id[1],
     });
     assert.deepEqual(
       response,
