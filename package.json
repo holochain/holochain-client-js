@@ -33,9 +33,9 @@
   "scripts": {
     "lint": "eslint --fix --ext .ts src test eslint.config.cjs",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
-    "test:app-agent": "RUST_LOG=error RUST_BACKTRACE=1 tsx test/e2e/app-websocket.ts",
-    "test:utils": "RUST_LOG=error RUST_BACKTRACE=1 tsx test/e2e/utils.ts",
-    "test": "RUST_LOG=error RUST_BACKTRACE=1 vitest run",
+    "test:app-agent": "RUST_BACKTRACE=1 vitest run app-websocket",
+    "test:utils": "RUST_BACKTRACE=1 vitest run utils",
+    "test": "RUST_BACKTRACE=1 vitest run",
     "build:lib": "rimraf ./lib && tsc -p tsconfig.build.json",
     "build:docs": "api-extractor run --local && api-documenter markdown -i docs/temp -o docs",
     "build": "npm run build:lib && npm run build:docs",

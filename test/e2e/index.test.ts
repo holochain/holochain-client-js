@@ -66,7 +66,7 @@ const ROLE_NAME: RoleName = "foo";
 const TEST_ZOME_NAME = "foo";
 
 test(
-  "admin_wssmoke test: installApp + uninstallApp",
+  "admin smoke test: installApp + uninstallApp",
   withApp(async (testCase) => {
     const { admin_ws } = testCase;
     const installed_app_id = testCase.installed_app_id;
@@ -135,7 +135,7 @@ test(
 );
 
 test(
-  "admin_wssmoke test: installBundle",
+  "admin smoke test: installBundle",
   withApp(async (testCase) => {
     const { admin_ws, installed_app_id, app_ws } = testCase;
     const installedApp = await app_ws.appInfo();
@@ -358,7 +358,7 @@ test(
 );
 
 test(
-  "app_wserrors are HolochainErrors",
+  "app errors are HolochainErrors",
   withApp(async (testCase) => {
     const { cell_id, app_ws, admin_ws } = testCase;
     const info = await app_ws.appInfo(1000);
@@ -710,7 +710,7 @@ test(
       await app_ws.callZome(zomeCallPayload, 1);
       assert.fail("zome call did not time out");
     } catch {
-      assert("zome call timed out");
+      // zome call timed out
     }
   }),
 );
@@ -733,14 +733,12 @@ test("can inject agent info", async () => {
   let agentInfos1 = await admin1.agentInfo({ dna_hashes: null });
   assert.equal(agentInfos1.length, 0, "0 agent infos");
 
-  const agent1 = await admin1.generateAgentPubKey();
   const result1 = await admin1.installApp({
     source: {
       type: "path",
       value: `${FIXTURE_PATH}/test.happ`,
     },
     installed_app_id,
-    agent_key: agent1,
   });
   assert(result1.cell_info[ROLE_NAME][0].type === CellType.Provisioned);
   const app1_cell = result1.cell_info[ROLE_NAME][0].value.cell_id;
@@ -802,9 +800,15 @@ test("can inject agent info", async () => {
       type: "path",
       value: `${FIXTURE_PATH}/test.happ`,
     },
+    installed_app_id,
   });
-  assert.deepEqual(result1.cell_info[0], result2.cell_info[0]);
-  await admin2.enableApp({ installed_app_id: result2.installed_app_id }, 1000);
+  assert(result2.cell_info[ROLE_NAME][0].type === CellType.Provisioned);
+  // Double-check DNA hashes match
+  assert.deepEqual(
+    result1.cell_info[ROLE_NAME][0].value.cell_id[0],
+    result2.cell_info[ROLE_NAME][0].value.cell_id[0],
+  );
+  await admin2.enableApp({ installed_app_id }, 1000);
 
   await retryUntilTimeout(
     async () => {
@@ -817,20 +821,28 @@ test("can inject agent info", async () => {
   );
 
   await admin2.addAgentInfo({ agent_infos: agentInfos1 });
-  agentInfos2 = await admin2.agentInfo({ dna_hashes: null });
+  await retryUntilTimeout(
+    async () => {
+      agentInfos2 = await admin2.agentInfo({ dna_hashes: null });
+      return agentInfos2.length === 2;
+    },
+    "agent info wasn't added",
+    500,
+    15_000,
+  );
   assert.equal(
     agentInfos2.length,
-    1,
-    "number of agent infos on conductor 2 is 1",
+    2,
+    "number of agent infos on conductor 2 is 2",
   );
 
-  await stopLocalServices(localServices.servicesProcess);
   await stopConductor(conductor1);
   await stopConductor(conductor2);
+  await stopLocalServices(localServices.servicesProcess);
   await cleanSandboxConductors();
 });
 
-test("can query peer meta info over admin_wsand app websocket", async () => {
+test("can query peer meta info over admin and app websocket", async () => {
   const localServices = await runLocalServices();
   const adminPort1 = await getAdminPort();
   const conductor1 = await launch(
@@ -901,7 +913,7 @@ test("can query peer meta info over admin_wsand app websocket", async () => {
     20_000,
   );
 
-  // Now have agent 2 get peer meta info for agent 1 via the admin_wswebsocket
+  // Now have agent 2 get peer meta info for agent 1 via the admin websocket
   const peerMetaInfos = await admin2.peerMetaInfo({ url: agentUrl1 });
 
   // Check that it contains gossip meta info
@@ -948,7 +960,7 @@ test(
     assert.equal(
       agentInfos.length,
       1,
-      `expected 1 agent info bug got ${agentInfos.length}`,
+      `expected 1 agent info but got ${agentInfos.length}`,
     );
 
     try {
@@ -957,7 +969,7 @@ test(
       });
       assert.fail("querying for non-existing space should fail");
     } catch {
-      assert("querying for non-existing space should fail");
+      // querying for non-existing space should fail
     }
 
     const appInfo = await app_ws.appInfo();
@@ -1214,7 +1226,7 @@ test(
       await app_ws.callZome(params);
       assert.fail();
     } catch {
-      assert("disabled clone call cannot be called");
+      // disabled clone call cannot be called
     }
   }),
 );
@@ -1291,7 +1303,7 @@ test(
       });
       assert.fail();
     } catch {
-      assert("deleted clone cell cannot be enabled");
+      // deleted clone cell cannot be enabled
     }
   }),
 );
@@ -1465,7 +1477,7 @@ test(
       });
       assert.fail();
     } catch {
-      assert("coordinator2 zome does not exist yet");
+      // coordinator2 zome does not exist yet
     }
 
     const bundle = await makeCoordinatorZomeBundle();
@@ -1499,7 +1511,7 @@ test(
 );
 
 test(
-  "app_wsreconnects websocket if closed before making a zome call",
+  "app reconnects websocket if closed before making a zome call",
   withApp(
     async (testCase) => {
       const { app_ws, cell_id } = testCase;
@@ -1540,8 +1552,6 @@ test(
     // Websocket is closed and app authentication token has expired. Websocket reconnection
     // should fail.
     try {
-      console.log("now calling");
-      console.log();
       await app_ws.callZome(callParams);
       assert.fail(
         "reconnecting to websocket should have failed due to an invalid token.",

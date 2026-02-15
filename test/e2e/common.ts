@@ -31,7 +31,8 @@ export const runLocalServices = async () => {
       reject("Failed to spawn kitsune2-bootstrap-srv");
     });
     servicesProcess.stdout.on("data", (data: Buffer) => {
-      console.log(data.toString());
+      // uncomment for debug output
+      // console.log(data.toString());
       const processData = data.toString();
       if (processData.includes(BOOTSTRAP_SERVER_STARTUP_STRING)) {
         const listeningAddress = processData
@@ -100,7 +101,8 @@ export const launch = async (
     });
     let sandboxCreatedPreviousLine = false;
     rl.on("line", (line) => {
-      console.log(line);
+      // uncomment for debug output
+      // console.log(line);
       if (sandboxCreatedPreviousLine) {
         // We expect a string like 0:/tmp/nix-shell.Rv7Omo/8wBJlBfszYZi1I6gZr3Cc now
         // where the number in front of the ':' is the conductor index
@@ -149,9 +151,10 @@ export const launch = async (
       }
     });
   });
-  runConductorProcess.stdout.on("data", (data: Buffer) => {
-    console.log(data.toString());
-  });
+  // uncomment for conductor debug output
+  // runConductorProcess.stdout.on("data", (data: Buffer) => {
+  // console.log(data.toString());
+  // });
   runConductorProcess.stderr.on("data", (data: Buffer) => {
     console.error(data.toString());
   });
@@ -187,7 +190,7 @@ export const stopConductor = (
 
     if (conductorProcess.pid) {
       // Kill the entire process group with SIGKILL immediately for faster cleanup
-      process.kill(-conductorProcess.pid);
+      process.kill(-conductorProcess.pid, "SIGKILL");
     }
   });
 };
@@ -202,25 +205,28 @@ export const withApp =
     const adminPort = await getPort({ port: [30_000, 31_000] });
     // Start local bootstrap + signaling server
     const localServices = await runLocalServices();
-    // Start conductor
-    const conductor = await launch(
-      adminPort,
-      localServices.bootstrapServerUrl,
-      localServices.signalingServerUrl,
-    );
-    const testCase = await createAppWsAndInstallApp(
-      adminPort,
-      singleUse,
-      expirySeconds,
-    );
-    await testCase.admin_ws.authorizeSigningCredentials(testCase.cell_id);
+    let conductor: ChildProcessWithoutNullStreams | undefined;
     try {
+      // Start conductor
+      conductor = await launch(
+        adminPort,
+        localServices.bootstrapServerUrl,
+        localServices.signalingServerUrl,
+      );
+      const testCase = await createAppWsAndInstallApp(
+        adminPort,
+        singleUse,
+        expirySeconds,
+      );
+      await testCase.admin_ws.authorizeSigningCredentials(testCase.cell_id);
       await f(testCase);
     } catch (e) {
       console.error("Test caught exception: ", e);
       throw e;
     } finally {
-      await stopConductor(conductor);
+      if (conductor) {
+        await stopConductor(conductor);
+      }
       await stopLocalServices(localServices.servicesProcess);
       await cleanSandboxConductors();
     }
@@ -230,19 +236,22 @@ export const withConductor =
   (port: number, f: () => Promise<void>) => async () => {
     // Start local bootstrap + signaling server
     const localServices = await runLocalServices();
-    // Start conductor
-    const conductor = await launch(
-      port,
-      localServices.bootstrapServerUrl,
-      localServices.signalingServerUrl,
-    );
+    let conductor: ChildProcessWithoutNullStreams | undefined;
     try {
+      // Start conductor
+      conductor = await launch(
+        port,
+        localServices.bootstrapServerUrl,
+        localServices.signalingServerUrl,
+      );
       await f();
     } catch (e) {
       console.error("Test caught exception: ", e);
       throw e;
     } finally {
-      await stopConductor(conductor);
+      if (conductor) {
+        await stopConductor(conductor);
+      }
       await stopLocalServices(localServices.servicesProcess);
       await cleanSandboxConductors();
     }
@@ -290,6 +299,7 @@ export const createAppInterfaceAndInstallApp = async (
   });
   const appAuthentication = await admin.issueAppAuthenticationToken({
     installed_app_id,
+    // only add properties if provided, otherwise deserialization fails
     ...(single_use !== undefined && { single_use }),
     ...(expiry_seconds !== undefined && { expiry_seconds }),
   });
