@@ -11,6 +11,7 @@ import {
   InstalledAppId,
   IssueAppAuthenticationTokenResponse,
 } from "../../src";
+import getPort from "get-port";
 
 export const FIXTURE_PATH = "./test/e2e/fixture";
 
@@ -191,6 +192,40 @@ export const stopConductor = (
   });
 };
 
+export const withApp =
+  (
+    f: (testConductor: TestCase) => Promise<void>,
+    singleUse?: boolean,
+    expirySeconds?: number,
+  ) =>
+  async () => {
+    const adminPort = await getPort({ port: [30_000, 31_000] });
+    // Start local bootstrap + signaling server
+    const localServices = await runLocalServices();
+    // Start conductor
+    const conductor = await launch(
+      adminPort,
+      localServices.bootstrapServerUrl,
+      localServices.signalingServerUrl,
+    );
+    const testCase = await createAppWsAndInstallApp(
+      adminPort,
+      singleUse,
+      expirySeconds,
+    );
+    await testCase.admin_ws.authorizeSigningCredentials(testCase.cell_id);
+    try {
+      await f(testCase);
+    } catch (e) {
+      console.error("Test caught exception: ", e);
+      throw e;
+    } finally {
+      await stopConductor(conductor);
+      await stopLocalServices(localServices.servicesProcess);
+      await cleanSandboxConductors();
+    }
+  };
+
 export const withConductor =
   (port: number, f: () => Promise<void>) => async () => {
     // Start local bootstrap + signaling server
@@ -213,60 +248,17 @@ export const withConductor =
     }
   };
 
-export const installAppAndDna = async (
-  adminPort: number,
-  /**
-   * Whether the app authentication token is single use or not
-   */
-  singleUse = true,
-  /**
-   * expiry seconds of the app authentication token
-   */
-  expirySeconds = 30,
-): Promise<{
+export interface TestCase {
   installed_app_id: InstalledAppId;
   cell_id: CellId;
-  client: AppWebsocket;
-  admin: AdminWebsocket;
-}> => {
-  const role_name = "foo";
-  const installed_app_id = "app";
-  const admin = await AdminWebsocket.connect({
-    url: new URL(`ws://localhost:${adminPort}`),
-    wsClientOptions: { origin: "client-test-admin" },
-  });
-  const path = `${FIXTURE_PATH}/test.happ`;
-  const agent = await admin.generateAgentPubKey();
-  const app = await admin.installApp({
-    installed_app_id,
-    agent_key: agent,
-    source: {
-      type: "path",
-      value: path,
-    },
-  });
-  assert(app.cell_info[role_name][0].type === CellType.Provisioned);
-  const cell_id = app.cell_info[role_name][0].value.cell_id;
-  await admin.enableApp({ installed_app_id });
-  // destructure to get whatever open port was assigned to the interface
-  const { port: appPort } = await admin.attachAppInterface({
-    allowed_origins: "client-test-app",
-  });
-  const issued = await admin.issueAppAuthenticationToken({
-    installed_app_id,
-    single_use: singleUse,
-    expiry_seconds: expirySeconds,
-  });
-  const client = await AppWebsocket.connect({
-    url: new URL(`ws://localhost:${appPort}`),
-    wsClientOptions: { origin: "client-test-app" },
-    token: issued.token,
-  });
-  return { installed_app_id, cell_id, client, admin };
-};
+  app_ws: AppWebsocket;
+  admin_ws: AdminWebsocket;
+}
 
 export const createAppInterfaceAndInstallApp = async (
   adminPort: number,
+  single_use?: boolean,
+  expiry_seconds?: number,
 ): Promise<{
   installed_app_id: InstalledAppId;
   cell_id: CellId;
@@ -298,27 +290,26 @@ export const createAppInterfaceAndInstallApp = async (
   });
   const appAuthentication = await admin.issueAppAuthenticationToken({
     installed_app_id,
+    ...(single_use !== undefined && { single_use }),
+    ...(expiry_seconds !== undefined && { expiry_seconds }),
   });
   return { installed_app_id, cell_id, appPort, appAuthentication, admin };
 };
 
 export const createAppWsAndInstallApp = async (
   adminPort: number,
-): Promise<{
-  installed_app_id: InstalledAppId;
-  cell_id: CellId;
-  client: AppWebsocket;
-  admin: AdminWebsocket;
-}> => {
+  singleUse?: boolean,
+  expirySeconds?: number,
+): Promise<TestCase> => {
   const { installed_app_id, cell_id, appPort, appAuthentication, admin } =
-    await createAppInterfaceAndInstallApp(adminPort);
+    await createAppInterfaceAndInstallApp(adminPort, singleUse, expirySeconds);
   const client = await AppWebsocket.connect({
     url: new URL(`ws://localhost:${appPort}`),
     wsClientOptions: { origin: "client-test-app" },
     defaultTimeout: 12000,
     token: appAuthentication.token,
   });
-  return { installed_app_id, cell_id, client, admin };
+  return { installed_app_id, cell_id, app_ws: client, admin_ws: admin };
 };
 
 export async function makeCoordinatorZomeBundle(): Promise<CoordinatorBundle> {

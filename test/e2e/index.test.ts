@@ -1,54 +1,53 @@
 import { decode, encode } from "@msgpack/msgpack";
-import fs from "node:fs";
-import { test, assert } from "vitest";
+import getPort from "get-port";
 import yaml from "js-yaml";
+import fs from "node:fs";
+import { assert, test } from "vitest";
 import zlib from "zlib";
 import {
   ActionHash,
   ActionType,
   AdminWebsocket,
+  AppBundle,
   AppEntryDef,
   AppStatusFilter,
   AppWebsocket,
   CallZomeRequest,
   CellProvisioningStrategy,
+  CellType,
+  CloneIdHelper,
   CreateCloneCellRequest,
   DumpStateResponse,
   FullStateDump,
   HolochainError,
   Link,
+  ProvisionedCell,
+  Record,
   RegisterAgentActivity,
   RoleName,
-  generateSigningKeyPair,
   Signal,
-  isSameCell,
-  getSigningCredentials,
-  randomNonce,
-  getNonceExpiration,
-  ProvisionedCell,
-  CellType,
-  AppBundle,
-  fakeDnaHash,
-  encodeHashToBase64,
-  CloneIdHelper,
   SignalType,
-  Record,
-  AppStatus,
+  encodeHashToBase64,
+  fakeDnaHash,
+  generateSigningKeyPair,
+  getNonceExpiration,
+  getSigningCredentials,
+  isSameCell,
+  randomNonce,
 } from "../../src/index.js";
 import {
   FIXTURE_PATH,
   cleanSandboxConductors,
   createAppWsAndInstallApp,
-  installAppAndDna,
   launch,
   makeCoordinatorZomeBundle,
   retryUntilTimeout,
   runLocalServices,
   stopConductor,
   stopLocalServices,
+  withApp,
   withConductor,
 } from "./common.js";
-import getPort from "get-port";
 
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -67,93 +66,51 @@ const getAdminWsUrl = (port: number) => new URL(`ws://localhost:${port}`);
 const ROLE_NAME: RoleName = "foo";
 const TEST_ZOME_NAME = "foo";
 
-test("admin smoke test: installApp + uninstallApp", async () => {
-  const adminPort = await getAdminPort();
-  await withConductor(adminPort, async () => {
-    const installed_app_id = "app";
-    const admin = await AdminWebsocket.connect({
-      url: getAdminWsUrl(adminPort),
-      wsClientOptions: { origin: "client-test-admin" },
-    });
+test(
+  "admin_wssmoke test: installApp + uninstallApp",
+  withApp(async (testCase) => {
+    const { admin_ws } = testCase;
+    const installed_app_id = testCase.installed_app_id;
 
-    const agent_key = await admin.generateAgentPubKey();
-    assert.ok(agent_key, "agent key generated");
-
-    const installedApp = await admin.installApp({
-      source: {
-        type: "path",
-        value: `${FIXTURE_PATH}/test.happ`,
-      },
-      installed_app_id,
-      agent_key,
-    });
-    const status: AppStatus = installedApp.status;
-    assert.deepEqual(
-      status,
-      { type: "disabled", value: { type: "never_started" } },
-      "app installed",
-    );
-
-    const runningApps = await admin.listApps({
-      status_filter: AppStatusFilter.Enabled,
-    });
-    assert.equal(runningApps.length, 0, "no running apps");
-
-    let allAppsInfo = await admin.listApps({});
+    let allAppsInfo = await admin_ws.listApps({});
     assert.equal(allAppsInfo.length, 1, "all apps listed");
 
-    const disabledAppsInfo = await admin.listApps({
+    const disabledAppsInfo = await admin_ws.listApps({
       status_filter: AppStatusFilter.Disabled,
     });
-    assert.equal(disabledAppsInfo.length, 1, "1 disabled app");
-    assert.equal(
-      disabledAppsInfo[0].cell_info[ROLE_NAME].length,
-      1,
-      "expected cell in disabled app info",
-    );
-    assert.deepEqual(
-      disabledAppsInfo[0].status,
-      { type: "disabled", value: { type: "never_started" } },
-      "disabled app never started",
-    );
+    assert.equal(disabledAppsInfo.length, 0, "0 disabled app");
 
-    const app = await admin.enableApp({ installed_app_id });
-    assert.deepEqual(app.status, { type: "enabled" });
-    assert.ok(ROLE_NAME in app.cell_info);
-    assert.ok(Array.isArray(app.cell_info[ROLE_NAME]));
-    assert.equal(app.installed_app_id, installed_app_id);
-
-    const activeApps2 = await admin.listApps({
+    const activeApps = await admin_ws.listApps({
       status_filter: AppStatusFilter.Enabled,
     });
-    assert.equal(activeApps2.length, 1);
-    assert.equal(activeApps2[0].installed_app_id, installed_app_id);
+    assert.equal(activeApps.length, 1);
+    assert.equal(activeApps[0].installed_app_id, installed_app_id);
 
-    const runningAppsInfo2 = await admin.listApps({
+    const runningAppsInfo = await admin_ws.listApps({
       status_filter: AppStatusFilter.Enabled,
     });
-    const disabledAppsInfo2 = await admin.listApps({
+    const disabledAppsInfo2 = await admin_ws.listApps({
       status_filter: AppStatusFilter.Disabled,
     });
-    const pausedAppsInfo2 = await admin.listApps({
+    const pausedAppsInfo2 = await admin_ws.listApps({
       status_filter: AppStatusFilter.Disabled,
     });
     assert.equal(pausedAppsInfo2.length, 0);
     assert.equal(disabledAppsInfo2.length, 0);
-    assert.equal(runningAppsInfo2.length, 1);
-    assert.equal(runningAppsInfo2[0].cell_info[ROLE_NAME].length, 1);
-    assert.deepEqual(runningAppsInfo2[0].status, { type: "enabled" });
+    assert.equal(runningAppsInfo.length, 1);
+    assert.equal(runningAppsInfo[0].cell_info[ROLE_NAME].length, 1);
+    assert.deepEqual(runningAppsInfo[0].status, { type: "enabled" });
 
-    await admin.attachAppInterface({
+    await admin_ws.attachAppInterface({
       port: 0,
       allowed_origins: "client-test-app",
     });
-    await admin.disableApp({ installed_app_id });
+    await admin_ws.disableApp({ installed_app_id });
 
-    const runningAppsInfo3 = await admin.listApps({
+    const runningAppsInfo3 = await admin_ws.listApps({
       status_filter: AppStatusFilter.Enabled,
     });
-    const disabledAppsInfo3 = await admin.listApps({
+    const disabledAppsInfo3 = await admin_ws.listApps({
       status_filter: AppStatusFilter.Disabled,
     });
     assert.equal(runningAppsInfo3.length, 0);
@@ -163,64 +120,42 @@ test("admin smoke test: installApp + uninstallApp", async () => {
       value: { type: "user" },
     });
 
-    const dnas = await admin.listDnas();
+    const dnas = await admin_ws.listDnas();
     assert.equal(dnas.length, 1);
 
-    const activeApps3 = await admin.listApps({
+    const activeApps3 = await admin_ws.listApps({
       status_filter: AppStatusFilter.Enabled,
     });
     assert.equal(activeApps3.length, 0);
     // NB: missing dumpState because it requires a valid cell_id
 
-    await admin.uninstallApp({ installed_app_id });
-    allAppsInfo = await admin.listApps({});
+    await admin_ws.uninstallApp({ installed_app_id });
+    allAppsInfo = await admin_ws.listApps({});
     assert.equal(allAppsInfo.length, 0);
-  })();
-});
+  }),
+);
 
-test("admin smoke test: installBundle", async () => {
-  const adminPort = await getAdminPort();
-  await withConductor(adminPort, async () => {
-    const installed_app_id = "app";
-    const admin = await AdminWebsocket.connect({
-      url: getAdminWsUrl(adminPort),
-      wsClientOptions: { origin: "client-test-admin" },
-    });
-
-    const agent_key = await admin.generateAgentPubKey();
-    assert.ok(agent_key);
-
-    const path = `${FIXTURE_PATH}/test.happ`;
-    const installedApp = await admin.installApp({
-      source: {
-        type: "path",
-        value: path,
-      },
-      agent_key,
-      installed_app_id,
-    });
-    assert.ok(installedApp);
-    assert.deepEqual(installedApp.status, {
-      type: "disabled",
-      value: { type: "never_started" },
-    });
-
-    const runningApps1 = await admin.listApps({
+test(
+  "admin_wssmoke test: installBundle",
+  withApp(async (testCase) => {
+    const { admin_ws, installed_app_id, app_ws } = testCase;
+    const installedApp = await app_ws.appInfo();
+    const runningApps1 = await admin_ws.listApps({
       status_filter: AppStatusFilter.Enabled,
     });
-    assert.equal(runningApps1.length, 0);
+    assert.equal(runningApps1.length, 1);
 
-    const enabledAppInfo = await admin.enableApp({ installed_app_id });
+    const enabledAppInfo = await admin_ws.enableApp({ installed_app_id });
     assert.deepEqual(enabledAppInfo.status, { type: "enabled" });
     assert.equal(enabledAppInfo.installed_app_id, installed_app_id);
 
-    const runningApps2 = await admin.listApps({
+    const runningApps2 = await admin_ws.listApps({
       status_filter: AppStatusFilter.Enabled,
     });
     assert.equal(runningApps2.length, 1);
     assert.equal(runningApps2[0].installed_app_id, installed_app_id);
 
-    const cellIds = await admin.listCellIds();
+    const cellIds = await admin_ws.listCellIds();
     assert.equal(cellIds.length, 1);
     assert(installedApp.cell_info[ROLE_NAME][0].type === CellType.Provisioned);
     assert.isTrue(
@@ -233,27 +168,26 @@ test("admin smoke test: installBundle", async () => {
       ),
     );
 
-    await admin.attachAppInterface({
+    await admin_ws.attachAppInterface({
       allowed_origins: "client-test-app",
     });
-    await admin.disableApp({ installed_app_id });
+    await admin_ws.disableApp({ installed_app_id });
 
-    const dnas = await admin.listDnas();
+    const dnas = await admin_ws.listDnas();
     assert.equal(dnas.length, 1);
 
-    const activeApps3 = await admin.listApps({
+    const activeApps3 = await admin_ws.listApps({
       status_filter: AppStatusFilter.Enabled,
     });
     assert.equal(activeApps3.length, 0);
-  })();
-});
+  }),
+);
 
-test("can call a zome function and then deactivate", async () => {
-  const adminPort = await getAdminPort();
-  await withConductor(adminPort, async () => {
-    const { installed_app_id, cell_id, client, admin } =
-      await installAppAndDna(adminPort);
-    let info = await client.appInfo(1000);
+test(
+  "can call a zome function and then deactivate",
+  withApp(async (testCase) => {
+    const { installed_app_id, cell_id, app_ws, admin_ws } = testCase;
+    let info = await app_ws.appInfo(1000);
     assert(info, "got app info");
     assert(
       info.cell_info[ROLE_NAME][0].type === CellType.Provisioned,
@@ -267,7 +201,7 @@ test("can call a zome function and then deactivate", async () => {
     assert.ok(ROLE_NAME in info.cell_info, "role name correct");
     assert.deepEqual(info.status, { type: "enabled" }, "status is running");
 
-    await admin.authorizeSigningCredentials(cell_id);
+    await admin_ws.authorizeSigningCredentials(cell_id);
 
     const appEntryDef: AppEntryDef = {
       entry_index: 0,
@@ -282,25 +216,24 @@ test("can call a zome function and then deactivate", async () => {
       payload: appEntryDef,
     };
 
-    const response = await client.callZome(zomeCallPayload, 30000);
+    const response = await app_ws.callZome(zomeCallPayload, 30000);
     assert.equal(response, null, "app entry def deserializes correctly");
 
-    await admin.disableApp({ installed_app_id });
-    info = await client.appInfo(1000);
+    await admin_ws.disableApp({ installed_app_id });
+    info = await app_ws.appInfo(1000);
     assert(info);
     assert.deepEqual(
       info.status,
       { type: "disabled", value: { type: "user" } },
       "disabled reason user",
     );
-  })();
-});
+  }),
+);
 
-test("can call a zome function with different sets of params", async () => {
-  const adminPort = await getAdminPort();
-  await withConductor(adminPort, async () => {
-    const { cell_id, client, admin } = await installAppAndDna(adminPort);
-    await admin.authorizeSigningCredentials(cell_id);
+test(
+  "can call a zome function with different sets of params",
+  withApp(async (testCase) => {
+    const { cell_id, app_ws } = testCase;
 
     const request: CallZomeRequest = {
       cell_id,
@@ -309,7 +242,7 @@ test("can call a zome function with different sets of params", async () => {
       provenance: cell_id[1],
       payload: null,
     };
-    let response = await client.callZome(request, 30000);
+    let response = await app_ws.callZome(request, 30000);
     assert.equal(response, "foo", "zome can be called with all parameters");
 
     const cap_secret = getSigningCredentials(cell_id)?.capSecret;
@@ -326,20 +259,20 @@ test("can call a zome function with different sets of params", async () => {
       expires_at: getNonceExpiration(),
     };
 
-    response = await client.callZome(zomeCallPayload, 30000);
+    response = await app_ws.callZome(zomeCallPayload, 30000);
     assert.equal(response, "foo", "zome can be called with all parameters");
-  })();
-});
+  }),
+);
 
-test("can call attachAppInterface without specific port", async () => {
-  const adminPort = await getAdminPort();
-  await withConductor(adminPort, async () => {
-    const { admin, installed_app_id } = await installAppAndDna(adminPort);
-    const { port } = await admin.attachAppInterface({
+test(
+  "can call attachAppInterface without specific port",
+  withApp(async (testCase) => {
+    const { admin_ws, installed_app_id } = testCase;
+    const { port } = await admin_ws.attachAppInterface({
       allowed_origins: "client-test-app",
     });
     assert.isTrue(typeof port === "number", "returned a valid app port");
-    const issued = await admin.issueAppAuthenticationToken({
+    const issued = await admin_ws.issueAppAuthenticationToken({
       installed_app_id,
     });
     await AppWebsocket.connect({
@@ -347,14 +280,14 @@ test("can call attachAppInterface without specific port", async () => {
       wsClientOptions: { origin: "client-test-app" },
       token: issued.token,
     });
-  })();
-});
+  }),
+);
 
-test("invalid app authentication token fails", async () => {
-  const adminPort = await getAdminPort();
-  await withConductor(adminPort, async () => {
-    const { admin } = await installAppAndDna(adminPort);
-    const { port } = await admin.attachAppInterface({
+test(
+  "invalid app authentication token fails",
+  withApp(async (testCase) => {
+    const { admin_ws } = testCase;
+    const { port } = await admin_ws.attachAppInterface({
       allowed_origins: "client-test-app",
     });
     try {
@@ -373,18 +306,18 @@ test("invalid app authentication token fails", async () => {
         "expected InvalidTokenError",
       );
     }
-  })();
-});
+  }),
+);
 
-test("app websocket connection from allowed origin is established", async () => {
-  const adminPort = await getAdminPort();
-  await withConductor(adminPort, async () => {
-    const { admin, installed_app_id } = await installAppAndDna(adminPort);
+test(
+  "app websocket connection from allowed origin is established",
+  withApp(async (testCase) => {
+    const { admin_ws, installed_app_id } = testCase;
     const allowedOrigin = "client-test-app";
-    const { port } = await admin.attachAppInterface({
+    const { port } = await admin_ws.attachAppInterface({
       allowed_origins: allowedOrigin,
     });
-    const issued = await admin.issueAppAuthenticationToken({
+    const issued = await admin_ws.issueAppAuthenticationToken({
       installed_app_id,
     });
     try {
@@ -396,17 +329,17 @@ test("app websocket connection from allowed origin is established", async () => 
     } catch {
       assert.fail("app websocket connection should have been established");
     }
-  })();
-});
+  }),
+);
 
-test("app websocket connection from disallowed origin is rejected", async () => {
-  const adminPort = await getAdminPort();
-  await withConductor(adminPort, async () => {
-    const { admin, installed_app_id } = await installAppAndDna(adminPort);
-    const { port } = await admin.attachAppInterface({
+test(
+  "app websocket connection from disallowed origin is rejected",
+  withApp(async (testCase) => {
+    const { admin_ws, installed_app_id } = testCase;
+    const { port } = await admin_ws.attachAppInterface({
       allowed_origins: "client-test-app",
     });
-    const issued = await admin.issueAppAuthenticationToken({
+    const issued = await admin_ws.issueAppAuthenticationToken({
       installed_app_id,
     });
     try {
@@ -422,14 +355,14 @@ test("app websocket connection from disallowed origin is rejected", async () => 
         "expected a HolochainError",
       );
     }
-  })();
-});
+  }),
+);
 
-test("client errors are HolochainErrors", async () => {
-  const adminPort = await getAdminPort();
-  await withConductor(adminPort, async () => {
-    const { cell_id, client, admin } = await installAppAndDna(adminPort);
-    const info = await client.appInfo(1000);
+test(
+  "app_wserrors are HolochainErrors",
+  withApp(async (testCase) => {
+    const { cell_id, app_ws, admin_ws } = testCase;
+    const info = await app_ws.appInfo(1000);
     assert(info);
     assert(info.cell_info[ROLE_NAME][0].type === CellType.Provisioned);
 
@@ -441,10 +374,10 @@ test("client errors are HolochainErrors", async () => {
       payload: null,
     };
 
-    await admin.authorizeSigningCredentials(cell_id);
+    await admin_ws.authorizeSigningCredentials(cell_id);
 
     try {
-      await client.callZome(zomeCallPayload);
+      await app_ws.callZome(zomeCallPayload);
       assert.fail("This zome call should have thrown an error.");
     } catch (error) {
       assert.ok(
@@ -454,22 +387,22 @@ test("client errors are HolochainErrors", async () => {
       assert(error instanceof HolochainError);
       assert.equal(error.name, "internal_error", "error has correct name");
     }
-  })();
-});
+  }),
+);
 
 test("can install app with roles_settings", async () => {
   const adminPort = await getAdminPort();
   await withConductor(adminPort, async () => {
     const installed_app_id = "app";
-    const admin = await AdminWebsocket.connect({
+    const admin_ws = await AdminWebsocket.connect({
       url: getAdminWsUrl(adminPort),
       wsClientOptions: { origin: "client-test-admin" },
     });
-    const agent = await admin.generateAgentPubKey();
+    const agent = await admin_ws.generateAgentPubKey();
 
     const progenitorKey = Uint8Array.from(fakeAgentPubKey());
 
-    await admin.installApp({
+    await admin_ws.installApp({
       installed_app_id,
       agent_key: agent,
       source: {
@@ -490,7 +423,7 @@ test("can install app with roles_settings", async () => {
       },
     });
 
-    const apps = await admin.listApps({});
+    const apps = await admin_ws.listApps({});
     const appInfo = apps[0];
     const provisionedCell = appInfo.cell_info["foo"][0]
       .value as ProvisionedCell;
@@ -507,11 +440,11 @@ test("memproofs can be provided after app installation", async () => {
   await withConductor(adminPort, async () => {
     const role_name = "foo";
     const installed_app_id = "app";
-    const admin = await AdminWebsocket.connect({
+    const admin_ws = await AdminWebsocket.connect({
       url: getAdminWsUrl(adminPort),
       wsClientOptions: { origin: "client-test-admin" },
     });
-    const agent = await admin.generateAgentPubKey();
+    const agent = await admin_ws.generateAgentPubKey();
 
     const zippedDnaBundle = fs.readFileSync("test/e2e/fixture/test.dna");
 
@@ -541,7 +474,7 @@ test("memproofs can be provided after app installation", async () => {
 
     const zippedAppBundle = zlib.gzipSync(encode(appBundle));
 
-    await admin.installApp({
+    await admin_ws.installApp({
       installed_app_id,
       agent_key: agent,
       source: {
@@ -550,19 +483,19 @@ test("memproofs can be provided after app installation", async () => {
       },
     });
 
-    const { port: appPort } = await admin.attachAppInterface({
+    const { port: appPort } = await admin_ws.attachAppInterface({
       allowed_origins: "client-test-app",
     });
-    const issued = await admin.issueAppAuthenticationToken({
+    const issued = await admin_ws.issueAppAuthenticationToken({
       installed_app_id,
     });
-    const client = await AppWebsocket.connect({
+    const app_ws = await AppWebsocket.connect({
       url: new URL(`ws://localhost:${appPort}`),
       wsClientOptions: { origin: "client-test-app" },
       token: issued.token,
     });
 
-    let appInfo = await client.appInfo();
+    let appInfo = await app_ws.appInfo();
     assert.deepEqual(
       appInfo.status,
       { type: "awaiting_memproofs" },
@@ -570,7 +503,7 @@ test("memproofs can be provided after app installation", async () => {
     );
 
     try {
-      await client.enableApp();
+      await app_ws.enableApp();
       assert.fail("enabling app should fail while memproofs not provided");
     } catch (error) {
       assert(error instanceof Error);
@@ -581,10 +514,10 @@ test("memproofs can be provided after app installation", async () => {
       );
     }
 
-    const response = await client.provideMemproofs({});
+    const response = await app_ws.provideMemproofs({});
     assert.equal(response, undefined, "memproofs provided successfully");
 
-    appInfo = await client.appInfo();
+    appInfo = await app_ws.appInfo();
     assert.deepEqual(
       appInfo.status,
       {
@@ -594,8 +527,8 @@ test("memproofs can be provided after app installation", async () => {
       "app is disabled after providing memproofs",
     );
 
-    await client.enableApp();
-    appInfo = await client.appInfo();
+    await app_ws.enableApp();
+    appInfo = await app_ws.appInfo();
     assert.deepEqual(appInfo.status, { type: "enabled" }, "app is running");
   })();
 });
@@ -603,11 +536,11 @@ test("memproofs can be provided after app installation", async () => {
 test("generated signing key has same location bytes as original agent pub key", async () => {
   const adminPort = await getAdminPort();
   await withConductor(adminPort, async () => {
-    const admin = await AdminWebsocket.connect({
+    const admin_ws = await AdminWebsocket.connect({
       url: getAdminWsUrl(adminPort),
       wsClientOptions: { origin: "client-test-admin" },
     });
-    const agent = await admin.generateAgentPubKey();
+    const agent = await admin_ws.generateAgentPubKey();
     const [, signingKey] = await generateSigningKeyPair(agent);
     assert.deepEqual(
       signingKey.subarray(35),
@@ -621,15 +554,15 @@ test("install app from bytes", async () => {
   await withConductor(adminPort, async () => {
     const role_name = "foo";
     const installed_app_id = "app";
-    const admin = await AdminWebsocket.connect({
+    const admin_ws = await AdminWebsocket.connect({
       url: getAdminWsUrl(adminPort),
       wsClientOptions: { origin: "client-test-admin" },
     });
-    const agent = await admin.generateAgentPubKey();
+    const agent = await admin_ws.generateAgentPubKey();
 
     const appBundleBytes = fs.readFileSync(`${FIXTURE_PATH}/test.happ`);
 
-    const app = await admin.installApp({
+    const app = await admin_ws.installApp({
       installed_app_id,
       agent_key: agent,
       source: {
@@ -637,14 +570,14 @@ test("install app from bytes", async () => {
         value: appBundleBytes,
       },
     });
-    await admin.enableApp({ installed_app_id });
-    const { port: appPort } = await admin.attachAppInterface({
+    await admin_ws.enableApp({ installed_app_id });
+    const { port: appPort } = await admin_ws.attachAppInterface({
       allowed_origins: "client-test-app",
     });
-    const issued = await admin.issueAppAuthenticationToken({
+    const issued = await admin_ws.issueAppAuthenticationToken({
       installed_app_id,
     });
-    const client = await AppWebsocket.connect({
+    const app_ws = await AppWebsocket.connect({
       url: new URL(`ws://localhost:${appPort}`),
       wsClientOptions: { origin: "client-test-app" },
       token: issued.token,
@@ -661,18 +594,18 @@ test("install app from bytes", async () => {
       payload: null,
     };
 
-    await admin.authorizeSigningCredentials(cell_id);
+    await admin_ws.authorizeSigningCredentials(cell_id);
 
-    const response = await client.callZome(zomeCallPayload, 30000);
+    const response = await app_ws.callZome(zomeCallPayload, 30000);
     assert.equal(response, "foo", "zome call succeeds");
   })();
 });
 
-test("stateDump", async () => {
-  const adminPort = await getAdminPort();
-  await withConductor(adminPort, async () => {
-    const { cell_id, client, admin } = await installAppAndDna(adminPort);
-    const info = await client.appInfo();
+test(
+  "stateDump",
+  withApp(async (testCase) => {
+    const { app_ws, cell_id, admin_ws } = testCase;
+    const info = await app_ws.appInfo();
     assert(info);
     assert(info.cell_info[ROLE_NAME][0].type === CellType.Provisioned);
     assert.deepEqual(info.cell_info[ROLE_NAME][0].value.cell_id, cell_id);
@@ -686,36 +619,36 @@ test("stateDump", async () => {
       payload: null,
     };
 
-    await admin.authorizeSigningCredentials(cell_id);
+    await admin_ws.authorizeSigningCredentials(cell_id);
 
-    const response = await client.callZome(zomeCallPayload);
+    const response = await app_ws.callZome(zomeCallPayload);
     assert.equal(response, "foo");
 
-    const state: DumpStateResponse = await admin.dumpState({
+    const state: DumpStateResponse = await admin_ws.dumpState({
       cell_id: (info.cell_info[ROLE_NAME][0].value as ProvisionedCell).cell_id,
     });
-    assert.equal(state[0].source_chain_dump.records.length, 5);
+    assert.equal(state[0].source_chain_dump.records.length, 6);
     assert.equal(state[0].source_chain_dump.records[0].action.type, "Dna");
-  })();
-});
+  }),
+);
 
-test("fullStateDump with ChainOps", async () => {
-  const adminPort = await getAdminPort();
-  await withConductor(adminPort, async () => {
-    const { cell_id, admin } = await installAppAndDna(adminPort);
-    const state: FullStateDump = await admin.dumpFullState({
+test(
+  "fullStateDump with ChainOps",
+  withApp(async (testCase) => {
+    const { admin_ws, cell_id } = testCase;
+    const state: FullStateDump = await admin_ws.dumpFullState({
       cell_id,
     });
     for (const dhtOp of state.integration_dump.integrated) {
       assert.isTrue("ChainOp" in dhtOp, "dht op is a chain op");
     }
-  })();
-});
+  }),
+);
 
-test("can receive a signal using event handler", async () => {
-  const adminPort = await getAdminPort();
-  await withConductor(adminPort, async () => {
-    const { admin, cell_id, client } = await installAppAndDna(adminPort);
+test(
+  "can receive a signal using event handler",
+  withApp(async (testCase) => {
+    const { cell_id, admin_ws, app_ws } = testCase;
     let resolveSignalPromise: (value?: unknown) => void | undefined;
     const signalReceivedPromise = new Promise(
       (resolve) => (resolveSignalPromise = resolve),
@@ -729,12 +662,12 @@ test("can receive a signal using event handler", async () => {
       });
       resolveSignalPromise();
     };
-    await admin.authorizeSigningCredentials(cell_id);
+    await admin_ws.authorizeSigningCredentials(cell_id);
 
-    client.on("signal", signalCb);
+    app_ws.on("signal", signalCb);
 
     // trigger an emit_signal
-    await client.callZome({
+    await app_ws.callZome({
       cell_id,
       zome_name: TEST_ZOME_NAME,
       fn_name: "emitter",
@@ -742,8 +675,8 @@ test("can receive a signal using event handler", async () => {
       payload: null,
     });
     await signalReceivedPromise;
-  })();
-});
+  }),
+);
 
 // test without conductor
 test("error is catchable when holochain socket is unavailable", async () => {
@@ -763,11 +696,10 @@ test("error is catchable when holochain socket is unavailable", async () => {
   }
 });
 
-test("zome call timeout can be overridden", async () => {
-  const adminPort = await getAdminPort();
-  await withConductor(adminPort, async () => {
-    const { client, admin, cell_id } = await installAppAndDna(adminPort);
-    await admin.authorizeSigningCredentials(cell_id);
+test(
+  "zome call timeout can be overridden",
+  withApp(async (testCase) => {
+    const { app_ws, cell_id } = testCase;
     const zomeCallPayload: CallZomeRequest = {
       cell_id,
       zome_name: TEST_ZOME_NAME,
@@ -776,34 +708,34 @@ test("zome call timeout can be overridden", async () => {
       payload: null,
     };
     try {
-      await client.callZome(zomeCallPayload, 1);
+      await app_ws.callZome(zomeCallPayload, 1);
       assert.fail("zome call did not time out");
     } catch {
       assert("zome call timed out");
     }
-  })();
-});
+  }),
+);
 
-test("can inject agents", async () => {
+test("can inject agent info", async () => {
   const localServices = await runLocalServices();
-  const adminPort = await getAdminPort();
-  const conductor = await launch(
-    adminPort,
+  const adminPort1 = await getAdminPort();
+  const conductor1 = await launch(
+    adminPort1,
     localServices.bootstrapServerUrl,
     localServices.signalingServerUrl,
   );
   const installed_app_id = "app";
   const admin1 = await AdminWebsocket.connect({
-    url: getAdminWsUrl(adminPort),
+    url: getAdminWsUrl(adminPort1),
     wsClientOptions: { origin: "client-test-admin" },
   });
 
   // There shouldn't be any agent infos yet.
   let agentInfos1 = await admin1.agentInfo({ dna_hashes: null });
-  assert.isTrue(agentInfos1.length === 0, "0 agent infos");
+  assert.equal(agentInfos1.length, 0, "0 agent infos");
 
   const agent1 = await admin1.generateAgentPubKey();
-  const result = await admin1.installApp({
+  const result1 = await admin1.installApp({
     source: {
       type: "path",
       value: `${FIXTURE_PATH}/test.happ`,
@@ -811,8 +743,8 @@ test("can inject agents", async () => {
     installed_app_id,
     agent_key: agent1,
   });
-  assert(result.cell_info[ROLE_NAME][0].type === CellType.Provisioned);
-  const app1_cell = result.cell_info[ROLE_NAME][0].value.cell_id;
+  assert(result1.cell_info[ROLE_NAME][0].type === CellType.Provisioned);
+  const app1_cell = result1.cell_info[ROLE_NAME][0].value.cell_id;
   const activeApp1Info = await admin1.enableApp({ installed_app_id }, 1000);
   assert.deepEqual(
     activeApp1Info.status,
@@ -831,18 +763,14 @@ test("can inject agents", async () => {
       return agentInfos.length;
     },
     0,
-    "waiting for agent info in peer store",
+    "agent infos didn't make it to the peer store",
     500,
-    15000,
+    15_000,
   );
 
   // There should be one agent info now.
   agentInfos1 = await admin1.agentInfo({ dna_hashes: null });
-  assert.equal(
-    agentInfos1.length,
-    1,
-    `expected 1 agent info, got ${agentInfos1.length}`,
-  );
+  assert.equal(agentInfos1.length, 1, "number of agent infos is 1");
 
   // Now confirm that we can ask for agents in just one DNA.
   const dnaAgentInfos = await admin1.agentInfo({
@@ -854,12 +782,58 @@ test("can inject agents", async () => {
     "DNA agent infos match app agent infos",
   );
 
+  const adminPort2 = await getAdminPort();
+  const conductor2 = await launch(
+    adminPort2,
+    localServices.bootstrapServerUrl,
+    localServices.signalingServerUrl,
+  );
+  const admin2 = await AdminWebsocket.connect({
+    url: getAdminWsUrl(adminPort2),
+    wsClientOptions: { origin: "client-test-admin" },
+  });
+  let agentInfos2 = await admin2.agentInfo({ dna_hashes: null });
+  assert.equal(
+    agentInfos2.length,
+    0,
+    "number of agent infos on conductor 2 is 0",
+  );
+
+  const result2 = await admin2.installApp({
+    source: {
+      type: "path",
+      value: `${FIXTURE_PATH}/test.happ`,
+    },
+  });
+  assert.deepEqual(result1.cell_info[0], result2.cell_info[0]);
+  await admin2.enableApp({ installed_app_id: result2.installed_app_id }, 1000);
+
+  await retryUntilTimeout(
+    async () => {
+      const agentInfos = await admin2.agentInfo({ dna_hashes: null });
+      return agentInfos.length;
+    },
+    0,
+    "agent infos didn't make it to the peer store",
+    500,
+    15_000,
+  );
+
+  await admin2.addAgentInfo({ agent_infos: agentInfos1 });
+  agentInfos2 = await admin2.agentInfo({ dna_hashes: null });
+  assert.equal(
+    agentInfos2.length,
+    1,
+    "number of agent infos on conductor 2 is 1",
+  );
+
   await stopLocalServices(localServices.servicesProcess);
-  await stopConductor(conductor);
+  await stopConductor(conductor1);
+  await stopConductor(conductor2);
   await cleanSandboxConductors();
 });
 
-test("can query peer meta info over admin and app websocket", async () => {
+test("can query peer meta info over admin_wsand app websocket", async () => {
   const localServices = await runLocalServices();
   const adminPort1 = await getAdminPort();
   const conductor1 = await launch(
@@ -869,8 +843,8 @@ test("can query peer meta info over admin and app websocket", async () => {
   );
   const {
     cell_id: cell_id1,
-    client: appClient1,
-    admin: admin1,
+    app_ws: appClient1,
+    admin_ws: admin1,
   } = await createAppWsAndInstallApp(adminPort1);
 
   await admin1.authorizeSigningCredentials(cell_id1);
@@ -887,10 +861,8 @@ test("can query peer meta info over admin and app websocket", async () => {
     15000,
   );
   const agentInfos1 = await admin1.agentInfo({ dna_hashes: null });
-  console.debug("agent infos", agentInfos1);
   const agentInfo1 = JSON.parse(agentInfos1[0]).agentInfo;
   const agentUrl1 = JSON.parse(agentInfo1).url;
-  console.log("agentUrl1: ", agentUrl1);
 
   // Start a second conductor and install the same app
   const adminPort2 = await getAdminPort();
@@ -902,8 +874,8 @@ test("can query peer meta info over admin and app websocket", async () => {
 
   const {
     cell_id: cell_id2,
-    client: appClient2,
-    admin: admin2,
+    app_ws: appClient2,
+    admin_ws: admin2,
   } = await createAppWsAndInstallApp(adminPort2);
 
   await admin2.authorizeSigningCredentials(cell_id2);
@@ -934,7 +906,7 @@ test("can query peer meta info over admin and app websocket", async () => {
     20_000,
   );
 
-  // Now have agent 2 get peer meta info for agent 1 via the admin websocket
+  // Now have agent 2 get peer meta info for agent 1 via the admin_wswebsocket
   const peerMetaInfos = await admin2.peerMetaInfo({ url: agentUrl1 });
 
   // Check that it contains gossip meta info
@@ -962,15 +934,13 @@ test("can query peer meta info over admin and app websocket", async () => {
   await cleanSandboxConductors();
 });
 
-test("can query agents over app ws", async () => {
-  const adminPort = await getAdminPort();
-  await withConductor(adminPort, async () => {
-    const { client, admin, cell_id } = await installAppAndDna(adminPort);
-    await admin.authorizeSigningCredentials(cell_id);
-
+test(
+  "can query agents over app ws",
+  withApp(async (testCase) => {
+    const { app_ws } = testCase;
     await retryUntilTimeout(
       async () => {
-        const agentInfos = await client.agentInfo({ dna_hashes: null });
+        const agentInfos = await app_ws.agentInfo({ dna_hashes: null });
         return agentInfos.length;
       },
       0,
@@ -980,7 +950,7 @@ test("can query agents over app ws", async () => {
     );
 
     // There should be one agent info.
-    const agentInfos = await client.agentInfo({ dna_hashes: null });
+    const agentInfos = await app_ws.agentInfo({ dna_hashes: null });
     assert.equal(
       agentInfos.length,
       1,
@@ -988,7 +958,7 @@ test("can query agents over app ws", async () => {
     );
 
     try {
-      await client.agentInfo({
+      await app_ws.agentInfo({
         dna_hashes: [await fakeDnaHash()],
       });
       assert.fail("querying for non-existing space should fail");
@@ -996,11 +966,11 @@ test("can query agents over app ws", async () => {
       assert("querying for non-existing space should fail");
     }
 
-    const appInfo = await client.appInfo();
+    const appInfo = await app_ws.appInfo();
     const cell = appInfo.cell_info[ROLE_NAME][0];
     assert(cell.type === CellType.Provisioned);
     const dnaHash = cell.value.cell_id[0];
-    const agentInfosForDna = await client.agentInfo({
+    const agentInfosForDna = await app_ws.agentInfo({
       dna_hashes: [dnaHash],
     });
     assert.isTrue(
@@ -1008,17 +978,16 @@ test("can query agents over app ws", async () => {
       "number of agent infos for app's DNA is 1",
     );
     assert.deepEqual(agentInfos, agentInfosForDna);
-  })();
-});
+  }),
+);
 
-test("create link", async () => {
-  const adminPort = await getAdminPort();
-  await withConductor(adminPort, async () => {
-    const { cell_id, client, admin } = await installAppAndDna(adminPort);
-    await admin.authorizeSigningCredentials(cell_id);
+test(
+  "create link",
+  withApp(async (testCase) => {
+    const { app_ws, cell_id } = testCase;
 
     const tag = "test_tag";
-    const link: Link = await client.callZome({
+    const link: Link = await app_ws.callZome({
       cell_id,
       provenance: cell_id[1],
       zome_name: TEST_ZOME_NAME,
@@ -1036,23 +1005,22 @@ test("create link", async () => {
     assert.deepEqual(link.zome_index, 0, "zome index is correct");
     assert.ok("BYTES_PER_ELEMENT" in link.tag, "tag is a byte array");
     assert.deepEqual(link.tag.toString(), tag, "tag is correct");
-  })();
-});
+  }),
+);
 
-test("create and delete link", async () => {
-  const adminPort = await getAdminPort();
-  await withConductor(adminPort, async () => {
-    const { cell_id, client, admin } = await installAppAndDna(adminPort);
-    await admin.authorizeSigningCredentials(cell_id);
+test(
+  "create and delete link",
+  withApp(async (testCase) => {
+    const { app_ws, cell_id } = testCase;
 
-    const linkHash: ActionHash = await client.callZome({
+    const linkHash: ActionHash = await app_ws.callZome({
       cell_id,
       provenance: cell_id[1],
       zome_name: TEST_ZOME_NAME,
       fn_name: "create_and_delete_link",
       payload: null,
     });
-    const activity: RegisterAgentActivity[] = await client.callZome({
+    const activity: RegisterAgentActivity[] = await app_ws.callZome({
       cell_id,
       provenance: cell_id[1],
       zome_name: TEST_ZOME_NAME,
@@ -1079,25 +1047,25 @@ test("create and delete link", async () => {
       0,
       "link type is 0",
     );
-  })();
-});
+  }),
+);
 
-test("admin smoke test: listAppInterfaces + attachAppInterface", async () => {
+test("admin_wssmoke test: listAppInterfaces + attachAppInterface", async () => {
   const adminPort = await getAdminPort();
   await withConductor(adminPort, async () => {
-    const admin = await AdminWebsocket.connect({
+    const admin_ws = await AdminWebsocket.connect({
       url: getAdminWsUrl(adminPort),
       wsClientOptions: { origin: "client-test-admin" },
     });
 
-    let interfaces = await admin.listAppInterfaces();
+    let interfaces = await admin_ws.listAppInterfaces();
     assert.equal(interfaces.length, 0);
 
-    await admin.attachAppInterface({
+    await admin_ws.attachAppInterface({
       allowed_origins: "client-test-app",
     });
 
-    interfaces = await admin.listAppInterfaces();
+    interfaces = await admin_ws.listAppInterfaces();
     assert.equal(interfaces.length, 1);
     assert.isTrue(interfaces[0].port > 0);
     assert.equal(interfaces[0].allowed_origins, "client-test-app");
@@ -1105,18 +1073,17 @@ test("admin smoke test: listAppInterfaces + attachAppInterface", async () => {
   })();
 });
 
-test("can use some of the defined js bindings", async () => {
-  const adminPort = await getAdminPort();
-  await withConductor(adminPort, async () => {
-    const { installed_app_id, cell_id, client, admin } =
-      await installAppAndDna(adminPort);
-    let info = await client.appInfo(1000);
+test(
+  "can use some of the defined js bindings",
+  withApp(async (testCase) => {
+    const { app_ws, cell_id, admin_ws, installed_app_id } = testCase;
+    let info = await app_ws.appInfo(1000);
     assert(info);
     assert(info.cell_info[ROLE_NAME][0].type === CellType.Provisioned);
     assert.deepEqual(info.cell_info[ROLE_NAME][0].value.cell_id, cell_id);
     assert.ok(ROLE_NAME in info.cell_info);
     assert.deepEqual(info.status, { type: "enabled" });
-    await admin.authorizeSigningCredentials(cell_id);
+    await admin_ws.authorizeSigningCredentials(cell_id);
     const zomeCallPayload: CallZomeRequest = {
       cell_id,
       zome_name: TEST_ZOME_NAME,
@@ -1124,29 +1091,29 @@ test("can use some of the defined js bindings", async () => {
       provenance: fakeAgentPubKey(),
       payload: null,
     };
-    const response = await client.callZome(zomeCallPayload, 30000);
+    const response = await app_ws.callZome(zomeCallPayload, 30000);
     assert.equal(response, "foo");
 
-    await admin.disableApp({ installed_app_id });
-    info = await client.appInfo(1000);
+    await admin_ws.disableApp({ installed_app_id });
+    info = await app_ws.appInfo(1000);
     assert(info);
     assert.deepEqual(info.status, {
       type: "disabled",
       value: { type: "user" },
     });
-  })();
-});
+  }),
+);
 
-test("admin smoke test: install 2 hApp bundles with different network seeds", async () => {
+test("admin_wssmoke test: install 2 hApp bundles with different network seeds", async () => {
   const adminPort = await getAdminPort();
   await withConductor(adminPort, async () => {
-    const admin = await AdminWebsocket.connect({
+    const admin_ws = await AdminWebsocket.connect({
       url: getAdminWsUrl(adminPort),
       wsClientOptions: { origin: "client-test-admin" },
     });
-    const agent_key = await admin.generateAgentPubKey();
+    const agent_key = await admin_ws.generateAgentPubKey();
 
-    const installedApp1 = await admin.installApp({
+    const installedApp1 = await admin_ws.installApp({
       source: {
         type: "path",
         value: `${FIXTURE_PATH}/test.happ`,
@@ -1155,7 +1122,7 @@ test("admin smoke test: install 2 hApp bundles with different network seeds", as
       installed_app_id: "test-app1",
       network_seed: "1",
     });
-    const installedApp2 = await admin.installApp({
+    const installedApp2 = await admin_ws.installApp({
       source: {
         type: "path",
         value: `${FIXTURE_PATH}/test.happ`,
@@ -1174,11 +1141,11 @@ test("admin smoke test: install 2 hApp bundles with different network seeds", as
   })();
 });
 
-test("can create a callable clone cell", async () => {
-  const adminPort = await getAdminPort();
-  await withConductor(adminPort, async () => {
-    const { client, admin } = await installAppAndDna(adminPort);
-    const appInfo = await client.appInfo();
+test(
+  "can create a callable clone cell",
+  withApp(async (testCase) => {
+    const { app_ws, admin_ws } = testCase;
+    const appInfo = await app_ws.appInfo();
     assert(appInfo);
 
     const createCloneCellParams: CreateCloneCellRequest = {
@@ -1187,7 +1154,7 @@ test("can create a callable clone cell", async () => {
         network_seed: "clone-0",
       },
     };
-    const cloneCell = await client.createCloneCell(createCloneCellParams);
+    const cloneCell = await app_ws.createCloneCell(createCloneCellParams);
 
     const expectedCloneId = new CloneIdHelper(ROLE_NAME, 0).toString();
     assert.equal(cloneCell.clone_id, expectedCloneId, "correct clone id");
@@ -1204,38 +1171,38 @@ test("can create a callable clone cell", async () => {
       provenance: fakeAgentPubKey(),
       payload: null,
     };
-    await admin.authorizeSigningCredentials(cloneCell.cell_id);
-    const response = await client.callZome(zomeCallPayload);
+    await admin_ws.authorizeSigningCredentials(cloneCell.cell_id);
+    const response = await app_ws.callZome(zomeCallPayload);
     assert.equal(
       response,
       "foo",
       "clone cell can be called with same zome call as base cell",
     );
-  })();
-});
+  }),
+);
 
-test("can disable a clone cell", async () => {
-  const adminPort = await getAdminPort();
-  await withConductor(adminPort, async () => {
-    const { client, admin } = await installAppAndDna(adminPort);
+test(
+  "can disable a clone cell",
+  withApp(async (testCase) => {
+    const { app_ws, admin_ws } = testCase;
     const createCloneCellParams: CreateCloneCellRequest = {
       role_name: ROLE_NAME,
       modifiers: {
         network_seed: "clone-0",
       },
     };
-    const cloneCell = await client.createCloneCell(createCloneCellParams);
+    const cloneCell = await app_ws.createCloneCell(createCloneCellParams);
 
-    await admin.authorizeSigningCredentials(cloneCell.cell_id);
+    await admin_ws.authorizeSigningCredentials(cloneCell.cell_id);
 
-    await client.disableCloneCell({
+    await app_ws.disableCloneCell({
       clone_cell_id: {
         type: "dna_hash",
         value: cloneCell.cell_id[0],
       },
     });
 
-    const appInfo = await client.appInfo();
+    const appInfo = await app_ws.appInfo();
     assert(appInfo);
     assert.equal(
       appInfo.cell_info[ROLE_NAME].length,
@@ -1250,40 +1217,40 @@ test("can disable a clone cell", async () => {
       payload: null,
     };
     try {
-      await client.callZome(params);
+      await app_ws.callZome(params);
       assert.fail();
     } catch {
       assert("disabled clone call cannot be called");
     }
-  })();
-});
+  }),
+);
 
-test("can enable a disabled clone cell", async () => {
-  const adminPort = await getAdminPort();
-  await withConductor(adminPort, async () => {
-    const { client, admin } = await installAppAndDna(adminPort);
+test(
+  "can enable a disabled clone cell",
+  withApp(async (testCase) => {
+    const { app_ws, admin_ws } = testCase;
     const createCloneCellParams: CreateCloneCellRequest = {
       role_name: ROLE_NAME,
       modifiers: {
         network_seed: "clone-0",
       },
     };
-    const cloneCell = await client.createCloneCell(createCloneCellParams);
-    await client.disableCloneCell({
+    const cloneCell = await app_ws.createCloneCell(createCloneCellParams);
+    await app_ws.disableCloneCell({
       clone_cell_id: {
         type: "dna_hash",
         value: cloneCell.cell_id[0],
       },
     });
 
-    const enabledCloneCell = await client.enableCloneCell({
+    const enabledCloneCell = await app_ws.enableCloneCell({
       clone_cell_id: {
         type: "clone_id",
         value: CloneIdHelper.fromRoleName(cloneCell.clone_id).toString(),
       },
     });
 
-    const appInfo = await client.appInfo();
+    const appInfo = await app_ws.appInfo();
     assert(appInfo);
     assert.equal(
       appInfo.cell_info[ROLE_NAME].length,
@@ -1297,52 +1264,50 @@ test("can enable a disabled clone cell", async () => {
       provenance: fakeAgentPubKey(),
       payload: null,
     };
-    await admin.authorizeSigningCredentials(cloneCell.cell_id);
-    const response = await client.callZome(params);
+    await admin_ws.authorizeSigningCredentials(cloneCell.cell_id);
+    const response = await app_ws.callZome(params);
     assert.equal(response, "foo", "enabled clone cell can be called");
-  })();
-});
+  }),
+);
 
-test("can delete archived clone cells of an app", async () => {
-  const adminPort = await getAdminPort();
-  await withConductor(adminPort, async () => {
-    const { installed_app_id, client, admin } =
-      await installAppAndDna(adminPort);
+test(
+  "can delete archived clone cells of an app",
+  withApp(async (testCase) => {
+    const { app_ws, admin_ws, installed_app_id } = testCase;
     const createCloneCellParams: CreateCloneCellRequest = {
       role_name: ROLE_NAME,
       modifiers: {
         network_seed: "clone-0",
       },
     };
-    const cloneCell = await client.createCloneCell(createCloneCellParams);
+    const cloneCell = await app_ws.createCloneCell(createCloneCellParams);
     createCloneCellParams.modifiers.network_seed = "clone-1";
-    await client.disableCloneCell({
+    await app_ws.disableCloneCell({
       clone_cell_id: { type: "dna_hash", value: cloneCell.cell_id[0] },
     });
 
-    await admin.deleteCloneCell({
+    await admin_ws.deleteCloneCell({
       app_id: installed_app_id,
       clone_cell_id: { type: "dna_hash", value: cloneCell.cell_id[0] },
     });
 
     try {
-      await client.enableCloneCell({
+      await app_ws.enableCloneCell({
         clone_cell_id: { type: "dna_hash", value: cloneCell.cell_id[0] },
       });
       assert.fail();
     } catch {
       assert("deleted clone cell cannot be enabled");
     }
-  })();
-});
+  }),
+);
 
-test("requests get canceled if the websocket closes while waiting for a response", async () => {
-  const adminPort = await getAdminPort();
-  await withConductor(adminPort, async () => {
-    const { cell_id, client, admin } = await installAppAndDna(adminPort);
-    await admin.authorizeSigningCredentials(cell_id);
+test(
+  "requests get canceled if the websocket closes while waiting for a response",
+  withApp(async (testCase) => {
+    const { app_ws, cell_id } = testCase;
 
-    const call1 = client.callZome(
+    const call1 = app_ws.callZome(
       {
         cell_id,
         zome_name: TEST_ZOME_NAME,
@@ -1352,7 +1317,7 @@ test("requests get canceled if the websocket closes while waiting for a response
       },
       1000,
     );
-    const call2 = client.callZome(
+    const call2 = app_ws.callZome(
       {
         cell_id,
         zome_name: TEST_ZOME_NAME,
@@ -1366,9 +1331,9 @@ test("requests get canceled if the websocket closes while waiting for a response
     await delay(100);
 
     const closeEventCode = 1000;
-    await client.client.close(closeEventCode);
+    await app_ws.client.close(closeEventCode);
     assert.ok(
-      client.client.socket.readyState !== client.client.socket.OPEN,
+      app_ws.client.socket.readyState !== app_ws.client.socket.OPEN,
       "ws is not open",
     );
 
@@ -1389,15 +1354,15 @@ test("requests get canceled if the websocket closes while waiting for a response
       "ClientClosedWithPendingRequests",
       "res1 is correct holochain error",
     );
-  })();
-});
+  }),
+);
 
-test("can fetch storage info", async () => {
-  const adminPort = await getAdminPort();
-  await withConductor(adminPort, async () => {
-    const { installed_app_id, admin } = await installAppAndDna(adminPort);
+test(
+  "can fetch storage info",
+  withApp(async (testCase) => {
+    const { installed_app_id, admin_ws } = testCase;
 
-    const response = await admin.storageInfo();
+    const response = await admin_ws.storageInfo();
 
     assert.equal(response.blobs.length, 1);
     assert.isTrue(
@@ -1405,17 +1370,17 @@ test("can fetch storage info", async () => {
         blob.value.used_by.includes(installed_app_id),
       ),
     );
-  })();
-});
+  }),
+);
 
-test("can dump network stats", async () => {
-  const adminPort = await getAdminPort();
-  await withConductor(adminPort, async () => {
-    const { admin, client } = await installAppAndDna(adminPort);
+test(
+  "can dump network stats",
+  withApp(async (testCase) => {
+    const { app_ws, admin_ws } = testCase;
 
     await retryUntilTimeout(
       async () => {
-        const adminWsResponse = await admin.dumpNetworkStats();
+        const adminWsResponse = await admin_ws.dumpNetworkStats();
         return adminWsResponse.transport_stats.peer_urls.length;
       },
       0,
@@ -1423,7 +1388,7 @@ test("can dump network stats", async () => {
       500,
       15_000,
     );
-    const adminWsResponse = await admin.dumpNetworkStats();
+    const adminWsResponse = await admin_ws.dumpNetworkStats();
 
     assert.equal(
       adminWsResponse.transport_stats.backend,
@@ -1436,18 +1401,18 @@ test("can dump network stats", async () => {
     assert.equal(peerUrl.protocol, "http:");
     assert.deepEqual(adminWsResponse.transport_stats.connections, []);
 
-    const appWsResponse = await client.dumpNetworkStats();
+    const appWsResponse = await app_ws.dumpNetworkStats();
     assert.deepEqual(appWsResponse, adminWsResponse);
-  })();
-});
+  }),
+);
 
-test("can dump network metrics", async () => {
-  const adminPort = await getAdminPort();
-  await withConductor(adminPort, async () => {
-    const { admin, cell_id, client } = await installAppAndDna(adminPort);
+test(
+  "can dump network metrics",
+  withApp(async (testCase) => {
+    const { app_ws, admin_ws, cell_id } = testCase;
 
     // Call it without dna_hash field
-    const response = await admin.dumpNetworkMetrics({
+    const response = await admin_ws.dumpNetworkMetrics({
       include_dht_summary: true,
     });
     const dnaHash = encodeHashToBase64(cell_id[0]);
@@ -1470,7 +1435,7 @@ test("can dump network metrics", async () => {
     ]);
 
     // call it with dna_hash field
-    const response2 = await admin.dumpNetworkMetrics({
+    const response2 = await admin_ws.dumpNetworkMetrics({
       dna_hash: cell_id[0],
       include_dht_summary: true,
     });
@@ -1478,28 +1443,27 @@ test("can dump network metrics", async () => {
     assert.deepEqual(response, response2);
 
     // call it on the app websocket as well, the response should be identical
-    const appWsResponse = await client.dumpNetworkMetrics({
+    const appWsResponse = await app_ws.dumpNetworkMetrics({
       include_dht_summary: true,
     });
     assert.deepEqual(appWsResponse, response);
 
     // call it with dna_hash field
-    const appWsResponse2 = await client.dumpNetworkMetrics({
+    const appWsResponse2 = await app_ws.dumpNetworkMetrics({
       dna_hash: cell_id[0],
       include_dht_summary: true,
     });
     assert.deepEqual(appWsResponse2, response);
-  })();
-});
+  }),
+);
 
-test("can update coordinators of an app", async () => {
-  const adminPort = await getAdminPort();
-  await withConductor(adminPort, async () => {
-    const { client, admin, cell_id } = await installAppAndDna(adminPort);
-    await admin.authorizeSigningCredentials(cell_id);
+test(
+  "can update coordinators of an app",
+  withApp(async (testCase) => {
+    const { app_ws, admin_ws, cell_id } = testCase;
 
     try {
-      await client.callZome({
+      await app_ws.callZome({
         cell_id,
         zome_name: "coordinator2",
         fn_name: "echo_hi",
@@ -1513,7 +1477,7 @@ test("can update coordinators of an app", async () => {
 
     const bundle = await makeCoordinatorZomeBundle();
 
-    await admin.updateCoordinators({
+    await admin_ws.updateCoordinators({
       cell_id,
       source: {
         type: "bundle",
@@ -1521,7 +1485,7 @@ test("can update coordinators of an app", async () => {
       },
     });
 
-    const dnaDef = await admin.getDnaDefinition(cell_id);
+    const dnaDef = await admin_ws.getDnaDefinition(cell_id);
     const zomeNames = dnaDef.coordinator_zomes.map((x) => x[0]);
 
     assert.ok(
@@ -1529,7 +1493,7 @@ test("can update coordinators of an app", async () => {
       "coordinator zomes can be updated",
     );
 
-    const response = await client.callZome({
+    const response = await app_ws.callZome({
       cell_id,
       zome_name: "coordinator2",
       fn_name: "echo_hi",
@@ -1538,40 +1502,40 @@ test("can update coordinators of an app", async () => {
     });
 
     assert.equal(response, "hi", "updated coordinator zomes can be called");
-  })();
-});
+  }),
+);
 
-test("client reconnects websocket if closed before making a zome call", async () => {
-  const adminPort = await getAdminPort();
-  await withConductor(adminPort, async () => {
-    const { cell_id, client, admin } = await installAppAndDna(
-      adminPort,
-      false,
-      0,
-    );
-    await admin.authorizeSigningCredentials(cell_id);
-    await client.client.close();
-    const callParams = {
-      cell_id,
-      zome_name: TEST_ZOME_NAME,
-      fn_name: "bar",
-      provenance: cell_id[1],
-      payload: null,
-    };
-    try {
-      await client.callZome(callParams);
-    } catch (error) {
-      assert.fail(`websocket was not reconnected: ${error}`);
-    }
-  })();
-});
+test(
+  "app_wsreconnects websocket if closed before making a zome call",
+  withApp(
+    async (testCase) => {
+      const { app_ws, cell_id } = testCase;
 
-test("client fails to reconnect to websocket if closed before making a zome call if the provided token is invalid", async () => {
-  const adminPort = await getAdminPort();
-  await withConductor(adminPort, async () => {
-    const { cell_id, client, admin } = await installAppAndDna(adminPort);
-    await admin.authorizeSigningCredentials(cell_id);
-    await client.client.close();
+      await app_ws.client.close();
+      const callParams = {
+        cell_id,
+        zome_name: TEST_ZOME_NAME,
+        fn_name: "bar",
+        provenance: cell_id[1],
+        payload: null,
+      };
+      try {
+        await app_ws.callZome(callParams);
+      } catch (error) {
+        assert.fail(`websocket was not reconnected: ${error}`);
+      }
+    },
+    false,
+    0,
+  ),
+);
+
+test(
+  "app_wsfails to reconnect to websocket if closed before making a zome call if the provided token is invalid",
+  withApp(async (testCase) => {
+    const { app_ws, cell_id } = testCase;
+
+    await app_ws.client.close();
     const callParams = {
       cell_id,
       zome_name: TEST_ZOME_NAME,
@@ -1585,7 +1549,7 @@ test("client fails to reconnect to websocket if closed before making a zome call
     try {
       console.log("now calling");
       console.log();
-      await client.callZome(callParams);
+      await app_ws.callZome(callParams);
       assert.fail(
         "reconnecting to websocket should have failed due to an invalid token.",
       );
@@ -1605,7 +1569,7 @@ test("client fails to reconnect to websocket if closed before making a zome call
     // Websocket reconnection has failed and subsequent calls should just return a websocket
     // closed error.
     try {
-      await client.callZome(callParams);
+      await app_ws.callZome(callParams);
       assert.fail("should not be attempted to reconnect websocket");
     } catch (error) {
       assert.isTrue(
@@ -1619,17 +1583,16 @@ test("client fails to reconnect to websocket if closed before making a zome call
         "expected a WebsocketClosedError",
       );
     }
-  })();
-});
+  }),
+);
 
-test("Rust enums are serialized correctly", async () => {
-  const adminPort = await getAdminPort();
-  await withConductor(adminPort, async () => {
-    const { client, admin, cell_id } = await installAppAndDna(adminPort);
-    await admin.authorizeSigningCredentials(cell_id);
+test(
+  "Rust enums are serialized correctly",
+  withApp(async (testCase) => {
+    const { app_ws, cell_id } = testCase;
 
     const serializationEnumInputVariant = "Input";
-    const response = await client.callZome({
+    const response = await app_ws.callZome({
       cell_id,
       zome_name: TEST_ZOME_NAME,
       fn_name: "enum_serialization",
@@ -1637,5 +1600,5 @@ test("Rust enums are serialized correctly", async () => {
       payload: serializationEnumInputVariant,
     });
     assert.deepEqual(response, { Output: "success" });
-  })();
-});
+  }),
+);
