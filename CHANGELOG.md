@@ -6,9 +6,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Added
 ### Fixed
-- Fixed `AppWebsocket.dumpNetworkStats` to use the correct return type `DumpNetworkStatsResponse` instead of `AppDumpNetworkStatsResponse`. `AppDumpNetworkStatsResponse` was removed.
+- After change in Holochain, fixed `AppWebsocket.dumpNetworkStats` to use the correct return type `DumpNetworkStatsResponse` instead of `AppDumpNetworkStatsResponse`. `AppDumpNetworkStatsResponse` was removed.
 ### Changed
-- **BREAKING:** Migrated test suite from tape to vitest.
+- Migrated test suite from tape to vitest.
 ### Removed
 
 ## 2026-01-15: v0.21.0-dev.2

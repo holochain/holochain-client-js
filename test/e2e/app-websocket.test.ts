@@ -247,14 +247,14 @@ test("can disable and re-enable a clone cell", async () => {
       await appWs.callZome(params);
       assert.fail();
     } catch {
-      assert("disabled clone call cannot be called");
+      // disabled clone call cannot be called
     }
 
     await appWs.enableCloneCell({
       clone_cell_id: { type: "dna_hash", value: cloneCell.cell_id[0] },
     });
     await appWs.callZome(params);
-    assert("re-enabled clone can be called");
+    // re-enabled clone can be called
   })();
 });
 
