@@ -26,6 +26,7 @@ import {
   RoleName,
   Signal,
   SignalType,
+  decodeHashFromBase64,
   encodeHashToBase64,
   fakeDnaHash,
   generateSigningKeyPair,
@@ -45,6 +46,7 @@ import {
   stopConductor,
   stopLocalServices,
   withApp,
+  withAppBatch,
   withConductor,
 } from "./common.js";
 
@@ -1379,37 +1381,66 @@ test(
   }),
 );
 
-test(
-  "can dump network stats",
-  withApp(async (testCase) => {
-    const { app_ws, admin_ws } = testCase;
+test("can dump network stats", () => {
+  const startTimestamp = Math.floor(new Date().getTime() / 1000);
 
+  return withAppBatch(2, async (testCase) => {
+    const [{ app_ws, admin_ws }] = testCase;
+
+    // Wait for connection
     await retryUntilTimeout(
       async () => {
-        const adminWsResponse = await admin_ws.dumpNetworkStats();
-        return adminWsResponse.transport_stats.peer_urls.length > 0;
+        const networkStats = await admin_ws.dumpNetworkStats();
+        return networkStats.transport_stats.connections.length == 1;
       },
-      "no peer URL received",
+      "Connection never established",
       500,
-      15_000,
+      30_000,
     );
+
+    const connectedTimestamp = Math.floor(new Date().getTime() / 1000);
+
+    // Dump network stats
     const adminWsResponse = await admin_ws.dumpNetworkStats();
 
-    assert.equal(
-      adminWsResponse.transport_stats.backend,
-      "iroh",
-      "unexpected transport backend",
-    );
-    assert.equal(adminWsResponse.transport_stats.peer_urls.length, 1);
+    // Assert backend
+    assert.equal(adminWsResponse.transport_stats.backend, "iroh");
+
+    // Assert peer urls
+    assert(adminWsResponse.transport_stats.peer_urls.length === 1);
     const peerUrl = new URL(adminWsResponse.transport_stats.peer_urls[0]);
     assert.equal(peerUrl.hostname, "127.0.0.1");
     assert.equal(peerUrl.protocol, "http:");
-    assert.deepEqual(adminWsResponse.transport_stats.connections, []);
+
+    // Assert connection
+    assert.isOk(
+      adminWsResponse.transport_stats.connections[0].send_message_count > 0,
+    );
+    assert.isOk(adminWsResponse.transport_stats.connections[0].send_bytes > 0);
+    assert.isOk(
+      adminWsResponse.transport_stats.connections[0].recv_message_count > 0,
+    );
+    assert.isOk(adminWsResponse.transport_stats.connections[0].recv_bytes > 0);
+    assert.isOk(
+      adminWsResponse.transport_stats.connections[0].opened_at_s >
+        startTimestamp &&
+        adminWsResponse.transport_stats.connections[0].opened_at_s <=
+          connectedTimestamp,
+    );
+    assert.equal(
+      adminWsResponse.transport_stats.connections[0].is_direct,
+      true,
+    );
+
+    const pubKeyBytes = decodeHashFromBase64(
+      adminWsResponse.transport_stats.connections[0].pub_key,
+    );
+    assert.equal(pubKeyBytes.length, 47);
 
     const appWsResponse = await app_ws.dumpNetworkStats();
     assert.deepEqual(appWsResponse, adminWsResponse);
-  }),
-);
+  })();
+});
 
 test(
   "can dump network metrics",
