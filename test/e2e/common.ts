@@ -232,6 +232,61 @@ export const withApp =
     }
   };
 
+/**
+ * Start multiple conductors and install the same app in all.
+ * Then run the provided function.
+ * 
+ * @param count Number of conductors to start
+ * @param f Function to call once conductors are ready
+ * @param singleUse Is the app ws authentication token single use
+ * @param expirySeconds App ws authentication token expiration
+ * @returns 
+ */
+export const withAppBatch =
+  (
+    count: number,
+    f: (testConductors: TestCase[]) => Promise<void>,
+    singleUse?: boolean,
+    expirySeconds?: number,
+  ) =>
+  async () => {
+    // Start local bootstrap + relay server
+    const localServices = await runLocalServices();
+    const conductors: ChildProcessWithoutNullStreams[] = [];
+    const testCases: TestCase[] = [];
+    try {
+      // Start conductors
+      for (let i = 0; i < count; i++) {
+        const adminPort = await getPort({ port: [30_000, 31_000] });
+        const conductor = await launch(
+          adminPort,
+          localServices.bootstrapServerUrl,
+          localServices.relayServerUrl,
+        );
+        const testCase = await createAppWsAndInstallApp(
+          adminPort,
+          singleUse,
+          expirySeconds,
+        );
+        await testCase.admin_ws.authorizeSigningCredentials(testCase.cell_id);
+        conductors.push(conductor);
+        testCases.push(testCase);
+      }
+      await f(testCases);
+    } catch (e) {
+      console.error("Test caught exception: ", e);
+      throw e;
+    } finally {
+      for (const i in conductors) {
+        if (conductors[i]) {
+          await stopConductor(conductors[i]);
+        }
+      }
+      await stopLocalServices(localServices.servicesProcess);
+      await cleanSandboxConductors();
+    }
+  };
+
 export const withConductor =
   (port: number, f: () => Promise<void>) => async () => {
     // Start local bootstrap + relay server
