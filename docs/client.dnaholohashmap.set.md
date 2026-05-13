@@ -9,7 +9,7 @@ Sets a value for a \[DnaHash, HoloHash\] key pair.
 **Signature:**
 
 ```typescript
-set([dnaHash, key]: [DnaHash, K], value: T): this;
+set(input: [DnaHash, K], value: T): this;
 ```
 
 ## Parameters
@@ -33,6 +33,20 @@ Description
 <tbody><tr><td>
 
 \[dnaHash, key\]
+
+
+</td><td>
+
+(not declared)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+input
 
 
 </td><td>

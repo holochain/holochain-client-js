@@ -142,7 +142,7 @@ Removes all entries for a specific DNA.
 </td></tr>
 <tr><td>
 
-[delete(\[dnaHash, key\])](./client.dnaholohashmap.delete.md)
+[delete(\[dnaHash, key\], input)](./client.dnaholohashmap.delete.md)
 
 
 </td><td>
@@ -198,7 +198,7 @@ Creates a new DnaHoloHashMap containing only entries that match the filter predi
 </td></tr>
 <tr><td>
 
-[get(\[dnaHash, key\])](./client.dnaholohashmap.get.md)
+[get(\[dnaHash, key\], input)](./client.dnaholohashmap.get.md)
 
 
 </td><td>
@@ -212,7 +212,7 @@ Gets the value associated with a \[DnaHash, HoloHash\] key pair.
 </td></tr>
 <tr><td>
 
-[has(\[dnaHash, key\])](./client.dnaholohashmap.has.md)
+[has(\[dnaHash, key\], input)](./client.dnaholohashmap.has.md)
 
 
 </td><td>
@@ -268,7 +268,7 @@ Creates a new DnaHoloHashMap with values transformed by the mapping function.
 </td></tr>
 <tr><td>
 
-[set(\[dnaHash, key\], value)](./client.dnaholohashmap.set.md)
+[set(\[dnaHash, key\], input, value)](./client.dnaholohashmap.set.md)
 
 
 </td><td>

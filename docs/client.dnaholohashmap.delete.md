@@ -9,7 +9,7 @@ Deletes an entry from the map. If this was the last entry for a DNA, the DNA ent
 **Signature:**
 
 ```typescript
-delete([dnaHash, key]: [DnaHash, K]): boolean;
+delete(input: [DnaHash, K]): boolean;
 ```
 
 ## Parameters
@@ -33,6 +33,20 @@ Description
 <tbody><tr><td>
 
 \[dnaHash, key\]
+
+
+</td><td>
+
+(not declared)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+input
 
 
 </td><td>

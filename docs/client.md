@@ -666,6 +666,16 @@ Description
 </th></tr></thead>
 <tbody><tr><td>
 
+[\_kp()](./client._kp.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
 [decodeHashFromBase64(hash)](./client.decodehashfrombase64.md)
 
 
@@ -2991,6 +3001,16 @@ Cell id for which the countersigning session state is requested.
 <tr><td>
 
 [IntegrityZome](./client.integrityzome.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[KeyPair](./client.keypair.md)
 
 
 </td><td>
