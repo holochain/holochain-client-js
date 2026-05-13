@@ -1,4 +1,4 @@
-import _sodium, { type KeyPair } from "libsodium-wrappers";
+import _sodium from "libsodium-wrappers";
 import type { CapSecret } from "../hdk/capabilities.js";
 import type { AgentPubKey, CellId } from "../types.js";
 import { encodeHashToBase64 } from "../utils/base64.js";
@@ -7,6 +7,16 @@ import { encodeHashToBase64 } from "../utils/base64.js";
  * @public
  */
 export type Nonce256Bit = Uint8Array;
+
+/**
+ * @public
+ */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export const _kp = () => _sodium.crypto_sign_keypair();
+/**
+ * @public
+ */
+export type KeyPair = ReturnType<typeof _kp>;
 
 /**
  * @public

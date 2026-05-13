@@ -9,7 +9,7 @@ Gets the value associated with a \[DnaHash, HoloHash\] key pair.
 **Signature:**
 
 ```typescript
-get([dnaHash, key]: [DnaHash, K]): T | undefined;
+get(input: [DnaHash, K]): T | undefined;
 ```
 
 ## Parameters
@@ -33,6 +33,20 @@ Description
 <tbody><tr><td>
 
 \[dnaHash, key\]
+
+
+</td><td>
+
+(not declared)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+input
 
 
 </td><td>

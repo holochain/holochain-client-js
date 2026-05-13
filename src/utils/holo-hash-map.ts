@@ -204,7 +204,7 @@ export class HoloHashMap<K extends HoloHash, V> implements Map<K, V> {
     }, thisArg);
   }
 
-  [Symbol.iterator](): IterableIterator<[K, V]> {
+  [Symbol.iterator](): MapIterator<[K, V]> {
     return this.entries();
   }
 
