@@ -215,6 +215,10 @@ Sends data as a signal.
 
 Send requests to the connected websocket.
 
+If the underlying socket is closed when this method is called, the client transparently reconnects and re-authenticates using the cached token. Transient reconnect errors are surfaced as a `ConnectionError` and the cached token is retained, so a subsequent call can retry the reconnect.
+
+If the conductor rejects the cached token during the reconnect (signalled by an immediate close after the `authenticate` handshake), the cached token is cleared and the call rejects with an `InvalidTokenError`<!-- -->. The consumer must rebuild the `AppWebsocket` with a fresh token; further calls on this client will reject with `WebsocketClosedError`<!-- -->.
+
 
 </td></tr>
 </tbody></table>

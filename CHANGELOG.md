@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Test utility `withAppBatch` for starting multiple conductors and installing the same app on each.
 ### Fixed
 - After change in Holochain, fixed `AppWebsocket.dumpNetworkStats` to use the correct return type `DumpNetworkStatsResponse` instead of `AppDumpNetworkStatsResponse`. `AppDumpNetworkStatsResponse` was removed.
+- `WsClient` no longer permanently wedges after a transient reconnect failure: the cached app authentication token is now retained on generic connection errors and only cleared when the conductor actually rejects it (close within 10ms of the `authenticate` handshake). Concurrent reconnect attempts are also deduplicated so parallel requests share a single new socket. [#412](https://github.com/holochain/holochain-client-js/issues/412)
 ### Changed
 - Additional assertions of response data in test of `dumpNetworkStats` call.
 - The field `signalingServerUrl` in `ConnectionServices` has been renamed to `relayServerUrl`.
