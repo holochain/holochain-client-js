@@ -195,6 +195,67 @@ export const withConductor =
     t.end();
   };
 
+/**
+ * A fully provisioned test app: an app websocket connected to a freshly
+ * installed app, plus the admin websocket and cell id used to set it up.
+ */
+export interface TestCase {
+  installed_app_id: InstalledAppId;
+  cell_id: CellId;
+  app_ws: AppWebsocket;
+  admin_ws: AdminWebsocket;
+}
+
+const WITH_APP_ADMIN_PORT = 33010;
+
+/**
+ * Spin up a dedicated conductor with the test app installed, run the provided
+ * function against it, then tear everything down. Mirrors `withConductor` but
+ * hands the test a ready-to-use {@link TestCase} instead of a bare conductor.
+ *
+ * @param f Function to call once the app is ready.
+ * @param singleUse Whether the app authentication token is single use.
+ * @param expirySeconds Expiry seconds of the app authentication token.
+ */
+export const withApp =
+  (
+    f: (testCase: TestCase) => Promise<void>,
+    singleUse?: boolean,
+    expirySeconds?: number,
+  ) =>
+  async () => {
+    const localServices = await runLocalServices();
+    const conductorProcess = await launch(
+      WITH_APP_ADMIN_PORT,
+      localServices.bootstrapServerUrl,
+      localServices.relayServerUrl,
+    );
+    try {
+      const { installed_app_id, cell_id, client, admin } =
+        await installAppAndDna(
+          WITH_APP_ADMIN_PORT,
+          singleUse,
+          expirySeconds,
+        );
+      await admin.authorizeSigningCredentials(cell_id);
+      await f({
+        installed_app_id,
+        cell_id,
+        app_ws: client,
+        admin_ws: admin,
+      });
+    } catch (e) {
+      console.error("Test caught exception: ", e);
+      throw e;
+    } finally {
+      await stopLocalServices(localServices.servicesProcess);
+      if (conductorProcess.pid && !conductorProcess.killed) {
+        process.kill(-conductorProcess.pid);
+      }
+      await cleanSandboxConductors();
+    }
+  };
+
 export const installAppAndDna = async (
   adminPort: number,
   /**

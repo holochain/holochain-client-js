@@ -46,6 +46,7 @@ import {
   retryUntilTimeout,
   runLocalServices,
   stopLocalServices,
+  withApp,
   withConductor,
 } from "./common.js";
 
@@ -1610,6 +1611,54 @@ test(
       );
     }
   }),
+);
+
+test(
+  "app client recovers after a transient reconnect failure (regression #412)",
+  withApp(
+    async (testCase) => {
+      const { app_ws, cell_id } = testCase;
+
+      const callParams = {
+        cell_id,
+        zome_name: TEST_ZOME_NAME,
+        fn_name: "bar",
+        provenance: cell_id[1],
+        payload: null,
+      };
+
+      // Baseline: healthy call.
+      await app_ws.callZome(callParams);
+
+      // Induce a transient reconnect failure: point at a closed port and
+      // close the live socket. The next request reconnects to a bad URL,
+      // emits `error`, and (today) clears the auth token, wedging the client.
+      const goodUrl = app_ws.client.url!;
+      const badUrl = new URL("ws://127.0.0.1:1");
+      app_ws.client.url = badUrl;
+      await app_ws.client.close();
+
+      try {
+        await app_ws.callZome(callParams);
+        assert.fail("call against sabotaged URL should have failed");
+      } catch (error) {
+        assert(error instanceof HolochainError);
+        // Either ConnectionError or WebsocketClosedError is acceptable here;
+        // the point is the call failed transiently.
+      }
+
+      // Restore the good URL. Conductor is up, token must still be valid.
+      app_ws.client.url = goodUrl;
+
+      // With the fix, the next call should reconnect and succeed.
+      await app_ws.callZome(callParams);
+
+      // And a follow-up call must also succeed (no residual wedge).
+      await app_ws.callZome(callParams);
+    },
+    false,
+    0,
+  ),
 );
 
 test(
