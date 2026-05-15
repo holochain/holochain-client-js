@@ -5,6 +5,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## \[Unreleased\]
 
 ### Added
+### Fixed
+### Changed
+### Removed
+
+## 2026-05-15: v0.21.0-dev.3
+
+### Added
 - Test utility `withAppBatch` for starting multiple conductors and installing the same app on each.
 ### Fixed
 - After change in Holochain, fixed `AppWebsocket.dumpNetworkStats` to use the correct return type `DumpNetworkStatsResponse` instead of `AppDumpNetworkStatsResponse`. `AppDumpNetworkStatsResponse` was removed.
@@ -14,6 +21,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - The field `signalingServerUrl` in `ConnectionServices` has been renamed to `relayServerUrl`.
 - Migrated test suite from tape to vitest.
 ### Removed
+- Type `AppDumpNetworkStatsResponse` removed because it is now unused.
 
 ## 2026-01-15: v0.21.0-dev.2
 ### Fixed
