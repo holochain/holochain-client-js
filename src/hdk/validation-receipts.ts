@@ -1,4 +1,4 @@
-import { AgentPubKey, DhtOpHash, Timestamp } from "../types";
+import { AgentPubKey, DhtOpHash, Timestamp } from "../types.js";
 
 /**
  * @public

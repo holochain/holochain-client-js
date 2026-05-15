@@ -42,6 +42,7 @@ export class WsClient extends Emittery {
   private pendingRequests: Record<number, HolochainRequest>;
   private index: number;
   private authenticationToken: AppAuthenticationToken | undefined;
+  private reconnectPromise: Promise<void> | undefined;
 
   constructor(socket: IsoWebSocket, url?: URL, options?: WsClientOptions) {
     super();
@@ -151,8 +152,21 @@ export class WsClient extends Emittery {
   /**
    * Send requests to the connected websocket.
    *
+   * If the underlying socket is closed when this method is called, the
+   * client transparently reconnects and re-authenticates using the cached
+   * token. Transient reconnect errors are surfaced as a `ConnectionError`
+   * and the cached token is retained, so a subsequent call can retry the
+   * reconnect.
+   *
+   * If the conductor rejects the cached token during the reconnect
+   * (signalled by an immediate close after the `authenticate` handshake),
+   * the cached token is cleared and the call rejects with an
+   * `InvalidTokenError`. The consumer must rebuild the `AppWebsocket`
+   * with a fresh token; further calls on this client will reject with
+   * `WebsocketClosedError`.
+   *
    * @param request - The request to send over the websocket.
-   * @returns
+   * @returns The decoded response payload.
    */
   async request<Response>(request: unknown): Promise<Response> {
     return this.exchange(request, this.sendMessage.bind(this));
@@ -172,7 +186,18 @@ export class WsClient extends Emittery {
       });
       return promise as Promise<Response>;
     } else if (this.url && this.authenticationToken) {
-      await this.reconnectWebsocket(this.url, this.authenticationToken);
+      // Dedupe concurrent reconnect attempts. The first caller into this
+      // branch starts a single reconnect; further callers await the same
+      // promise so we never create multiple sockets in parallel.
+      if (!this.reconnectPromise) {
+        this.reconnectPromise = this.reconnectWebsocket(
+          this.url,
+          this.authenticationToken,
+        ).finally(() => {
+          this.reconnectPromise = undefined;
+        });
+      }
+      await this.reconnectPromise;
       this.registerMessageListener(this.socket);
       this.registerCloseListener(this.socket);
       const promise = new Promise((resolve, reject) =>
@@ -295,11 +320,16 @@ export class WsClient extends Emittery {
   private async reconnectWebsocket(url: URL, token: AppAuthenticationToken) {
     return new Promise<void>((resolve, reject) => {
       this.socket = new IsoWebSocket(url, this.options);
+
+      // Track whether the "open" event has fired. The invalidTokenCloseListener
+      // must only clear the token when the connection did open and the conductor
+      // then closed it quickly.
+      let openFired = false;
+
       // This error event never occurs in tests. Could be removed?
       this.socket.addEventListener(
         "error",
         (errorEvent) => {
-          this.authenticationToken = undefined;
           reject(
             new HolochainError(
               "ConnectionError",
@@ -313,13 +343,22 @@ export class WsClient extends Emittery {
       const invalidTokenCloseListener = (
         closeEvent: IsoWebSocket.CloseEvent,
       ) => {
-        this.authenticationToken = undefined;
-        reject(
-          new HolochainError(
-            "InvalidTokenError",
-            `could not connect to ${this.url} due to an invalid app authentication token - close code ${closeEvent.code}`,
-          ),
-        );
+        if (openFired) {
+          this.authenticationToken = undefined;
+          reject(
+            new HolochainError(
+              "InvalidTokenError",
+              `could not connect to ${this.url} due to an invalid app authentication token - close code ${closeEvent.code}`,
+            ),
+          );
+        } else {
+          reject(
+            new HolochainError(
+              "ConnectionError",
+              `could not connect to Holochain Conductor API at ${url} - close code ${closeEvent.code}`,
+            ),
+          );
+        }
       };
       this.socket.addEventListener("close", invalidTokenCloseListener, {
         once: true,
@@ -328,6 +367,7 @@ export class WsClient extends Emittery {
       this.socket.addEventListener(
         "open",
         async () => {
+          openFired = true;
           const encodedMsg = encode({
             type: "authenticate",
             data: encode({ token }),
