@@ -1125,11 +1125,6 @@ export interface TransportConnectionStats {
 export type DumpNetworkStatsResponse = ApiTransportStats;
 
 /**
- * @public
- */
-export type AppDumpNetworkStatsResponse = TransportStats;
-
-/**
  * Arguments for dumping network metrics.
  *
  * @public

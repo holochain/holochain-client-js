@@ -2089,16 +2089,6 @@ This type is meant to be opaque
 </td></tr>
 <tr><td>
 
-[AppDumpNetworkStatsResponse](./client.appdumpnetworkstatsresponse.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
 [AppEntryDef](./client.appentrydef.md)
 
 
