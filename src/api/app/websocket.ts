@@ -7,6 +7,11 @@ import {
   getHostZomeCallSigner,
   getLauncherEnvironment,
 } from "../../environments/launcher.js";
+import {
+  getTauriHolochainEnvironment,
+  isTauriHolochain,
+} from "../../environments/tauri.js";
+import { TauriAppTransport } from "./tauri-transport.js";
 import { AgentPubKey, InstalledAppId, RoleName } from "../../types.js";
 import { encodeHashToBase64 } from "../../utils/index.js";
 import {
@@ -43,6 +48,7 @@ import {
   AbandonCountersigningSessionStateRequest,
   AbandonCountersigningSessionStateResponse,
   AppClient,
+  AppClientTransport,
   AppEvents,
   AppInfoResponse,
   AppWebsocketConnectionOptions,
@@ -77,7 +83,7 @@ import {
  * @public
  */
 export class AppWebsocket implements AppClient {
-  readonly client: WsClient;
+  readonly client: AppClientTransport;
   readonly myPubKey: AgentPubKey;
   readonly installedAppId: InstalledAppId;
   private readonly defaultTimeout: number;
@@ -143,7 +149,7 @@ export class AppWebsocket implements AppClient {
   >;
 
   private constructor(
-    client: WsClient,
+    client: AppClientTransport,
     appInfo: AppInfo,
     callZomeTransform?: CallZomeTransform,
     defaultTimeout?: number,
@@ -252,6 +258,38 @@ export class AppWebsocket implements AppClient {
    * @returns A new instance of an AppWebsocket.
    */
   static async connect(options: AppWebsocketConnectionOptions = {}) {
+    // In a Tauri webview wired to an in-process conductor, reach the App API
+    // through Tauri IPC instead of a websocket. The conductor is in the same
+    // process, so there is no port to dial and no token to authenticate — the
+    // request is scoped to this window on the Rust side.
+    if (isTauriHolochain()) {
+      const tauriEnv = getTauriHolochainEnvironment();
+      const client = new TauriAppTransport(
+        tauriEnv?.PLUGIN_NAME ?? "holochain",
+      );
+
+      const appInfo = await (
+        AppWebsocket.requester(
+          client,
+          "app_info",
+          options.defaultTimeout ?? DEFAULT_TIMEOUT,
+        ) as Requester<null, AppInfoResponse>
+      )(null);
+      if (!appInfo) {
+        throw new HolochainError(
+          "AppNotFound",
+          `The app this Tauri webview is bound to was not found. The app needs to be installed and enabled.`,
+        );
+      }
+
+      return new AppWebsocket(
+        client,
+        appInfo,
+        options.callZomeTransform,
+        options.defaultTimeout,
+      );
+    }
+
     // Check if we are in the launcher's environment, and if so, redirect the url to connect to
     const env = getLauncherEnvironment();
 
@@ -607,7 +645,7 @@ export class AppWebsocket implements AppClient {
   }
 
   private static requester<ReqI, ReqO, ResI, ResO>(
-    client: WsClient,
+    client: AppClientTransport,
     tag: string,
     defaultTimeout: number,
     transformer?: Transformer<ReqI, ReqO, ResI, ResO>,

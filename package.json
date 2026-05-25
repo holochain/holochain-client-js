@@ -35,6 +35,7 @@
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "test:app-agent": "RUST_LOG=error RUST_BACKTRACE=1 tsx test/e2e/app-websocket.ts",
     "test:utils": "RUST_LOG=error RUST_BACKTRACE=1 tsx test/e2e/utils.ts",
+    "test:tauri": "tsx test/tauri.ts",
     "test": "RUST_LOG=error RUST_BACKTRACE=1 tsx test/index.ts",
     "build:lib": "rimraf ./lib && tsc -p tsconfig.build.json",
     "build:docs": "api-extractor run --local && api-documenter markdown -i docs/temp -o docs",

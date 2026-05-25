@@ -501,6 +501,19 @@ export interface AppClient {
 }
 
 /**
+ * The transport an {@link AppClient} uses to reach the conductor: either a
+ * websocket (`WsClient`) or Tauri IPC ({@link TauriAppTransport}). It must
+ * carry tagged App API requests and surface `signal` events. This is the only
+ * surface {@link AppWebsocket} needs from its transport.
+ *
+ * @public
+ */
+export interface AppClientTransport {
+  request<Response>(request: unknown): Promise<Response>;
+  on(eventName: "signal", listener: SignalCb): UnsubscribeFunction;
+}
+
+/**
  * @public
  */
 export interface AppWebsocketConnectionOptions extends WebsocketConnectionOptions {
