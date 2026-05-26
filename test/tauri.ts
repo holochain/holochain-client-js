@@ -245,3 +245,51 @@ test("AppWebsocket.callZome signs with the host signer and routes the call over 
   t.ok(callZomeSeen, "a call_zome request was sent over Tauri IPC");
   t.deepEqual(result, zomeResult, "the zome response was decoded and returned");
 });
+
+test("TauriAppTransport delivers app signals from the plugin's signal bridge", async (t) => {
+  let captured: ((bytes: Uint8Array) => void) | undefined;
+  const cellId = [fakeHash(1), fakeHash(2)];
+  const zomeName = "posts";
+  const payload = { EntryCreated: { hash: "abc" } };
+
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore-next-line
+  globalThis.window = {
+    __HC_TAURI_HOLOCHAIN__: {
+      INSTALLED_APP_ID: "my-app",
+      subscribeSignals: (cb: (bytes: Uint8Array) => void) => {
+        captured = cb;
+        return () => {};
+      },
+    },
+    __TAURI_INTERNALS__: { invoke: async () => [] },
+  };
+
+  const transport = new TauriAppTransport("holochain");
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const received: any[] = [];
+  transport.on("signal", (s) => received.push(s));
+
+  t.ok(captured, "transport subscribed to the plugin signal bridge");
+
+  // The bytes the plugin forwards are the msgpack of holochain's Signal:
+  // { type: "app", value: { cell_id, zome_name, signal: <encoded payload> } }.
+  const rawSignal = {
+    type: "app",
+    value: { cell_id: cellId, zome_name: zomeName, signal: encode(payload) },
+  };
+  captured!(encode(rawSignal));
+
+  // Emittery delivers on a microtask.
+  await new Promise((resolve) => setTimeout(resolve, 0));
+
+  t.equal(received.length, 1, "one signal was emitted");
+  t.equal(received[0].type, "app", "emitted as an app signal");
+  t.equal(received[0].value.zome_name, zomeName, "zome name preserved");
+  t.deepEqual(
+    received[0].value.payload,
+    payload,
+    "inner app signal payload decoded",
+  );
+});

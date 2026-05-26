@@ -17,6 +17,16 @@ export interface TauriHolochainEnvironment {
    * `"holochain"` when not provided.
    */
   PLUGIN_NAME?: string;
+  /**
+   * Subscribe to the conductor's signal stream for this window, provided by the
+   * plugin's injected env (it bridges the plugin's Tauri signal events). The
+   * callback receives each signal as the msgpack bytes the app websocket would
+   * have carried. Returns a function that unsubscribes.
+   *
+   * Absent when the plugin injects no signal bridge; the transport then simply
+   * delivers no signals.
+   */
+  subscribeSignals?: (cb: (bytes: Uint8Array) => void) => () => void;
 }
 
 /**
