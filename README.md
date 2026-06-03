@@ -175,6 +175,21 @@ setSigningCredentials(cell_id, signingCredentials);
 localStorage.setItem(cellIdB64, JSON.stringify(signingCredentials));
 ```
 
+### Connecting from a Tauri app with an in-process conductor
+
+When the UI runs inside a Tauri webview served by [`tauri-plugin-holochain`](https://github.com/holochain/android-service-runtime) — which runs the conductor in the same process — `AppWebsocket.connect` automatically routes the App API through Tauri IPC instead of opening a websocket. No code change is required:
+
+```typescript
+// Inside a tauri-plugin-holochain webview, this returns an AppWebsocket backed
+// by a TauriAppTransport rather than a WsClient. callZome, appInfo, signals,
+// clone cells, etc. all work unchanged.
+const appWs = await AppWebsocket.connect();
+```
+
+The plugin injects a `__HC_TAURI_HOLOCHAIN__` marker on `window`; `isTauriHolochain()` detects it and `connect()` constructs a `TauriAppTransport` that moves the same msgpack `{ type, value }` payloads a websocket would carry over the `plugin:holochain|app_request` command.
+
+**Trust model.** The websocket path is scoped by a per-app auth token. The Tauri path replaces that with two guarantees enforced on the Rust side: the conductor derives the app id from the **calling window's label** (never from a JS-supplied argument), and Tauri's capability/permission system gates the `app_request` command to the intended windows. Zome calls are still signed by the in-process keystore via the host signer, so no signing key is exposed to the webview. The websocket transport is unchanged and remains the path for the separated client + service deployment and any non-Tauri consumer.
+
 ## Running tests
 
 You need a version (`stable` toolchain) of Rust available.

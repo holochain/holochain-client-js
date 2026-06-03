@@ -64,6 +64,9 @@ jobs:
       - name: Run tests
         run: nix develop -c $SHELL -c "npm t"
 
+      - name: Run Tauri transport unit tests
+        run: nix develop -c $SHELL -c "npm run test:tauri"
+
       - name: Run doc test of app websocket
         run: nix develop -c $SHELL -c "./doc-test-app-ws.sh"
 
