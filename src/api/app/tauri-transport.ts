@@ -4,15 +4,8 @@ import {
   getTauriHolochainEnvironment,
   getTauriInvoke,
 } from "../../environments/tauri.js";
-import { encodeHashToBase64 } from "../../utils/base64.js";
-import { HolochainError } from "../common.js";
-import {
-  AppClientTransport,
-  AppSignal,
-  RawSignal,
-  Signal,
-  SignalType,
-} from "./types.js";
+import { decodeSignal, holoHashMapKeyConverter } from "./decode.js";
+import { AppClientTransport } from "./types.js";
 
 /**
  * Carries the App API over Tauri IPC into a Holochain conductor running in the
@@ -45,35 +38,28 @@ export class TauriAppTransport extends Emittery implements AppClientTransport {
     );
   }
 
-  /** Stop receiving signals. */
+  /**
+   * Stop receiving signals.
+   *
+   * Not reachable through {@link AppClientTransport} (the public transport
+   * surface is `request` + `on`), and {@link AppWebsocket} exposes no app-level
+   * disconnect — same as the websocket path. In practice the subscription lives
+   * for the lifetime of the webview. This is kept for explicit teardown in
+   * tests and any future wiring of a disconnect through the interface.
+   */
   close() {
     this.unsubscribeSignals?.();
   }
 
   /**
    * Decode a signal delivered by the plugin and emit it. The bytes are the same
-   * the websocket carries, so this mirrors `WsClient`'s signal handling
-   * (src/api/client.ts): app signals have their inner payload decoded; system
-   * signals pass through.
+   * the websocket carries, so this reuses the shared `decodeSignal` helper
+   * (src/api/app/decode.ts): app signals have their inner payload decoded;
+   * system signals pass through. Malformed signals throw, exactly as on the
+   * websocket path.
    */
   private handleSignalBytes(bytes: Uint8Array) {
-    const raw = decode(bytes) as RawSignal;
-    if (raw.type === SignalType.System) {
-      this.emit("signal", { type: SignalType.System, value: raw.value }).catch(
-        console.error,
-      );
-      return;
-    }
-    const encodedAppSignal = raw.value;
-    const signal: AppSignal = {
-      cell_id: encodedAppSignal.cell_id,
-      zome_name: encodedAppSignal.zome_name,
-      payload: decode(encodedAppSignal.signal),
-    };
-    this.emit("signal", {
-      type: SignalType.App,
-      value: signal,
-    } as Signal).catch(console.error);
+    this.emit("signal", decodeSignal(decode(bytes))).catch(console.error);
   }
 
   /**
@@ -90,26 +76,7 @@ export class TauriAppTransport extends Emittery implements AppClientTransport {
       request: requestBytes,
     });
     return decode(Uint8Array.from(responseBytes), {
-      mapKeyConverter,
+      mapKeyConverter: holoHashMapKeyConverter,
     }) as Response;
   }
 }
-
-/**
- * Convert msgpack map keys exactly as the websocket client does: byte-array
- * keys are HoloHashes and are returned in their Base64 string form. Mirrors the
- * converter in `WsClient.handleResponse` (src/api/client.ts) so decoded
- * responses match the websocket path byte for byte.
- */
-const mapKeyConverter = (key: unknown) => {
-  if (typeof key === "string" || typeof key === "number") {
-    return key;
-  }
-  if (key && typeof key === "object" && key instanceof Uint8Array) {
-    return encodeHashToBase64(key);
-  }
-  throw new HolochainError(
-    "DeserializationError",
-    "Encountered map with key of type 'object', but not HoloHash " + key,
-  );
-};

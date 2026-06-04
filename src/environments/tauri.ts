@@ -33,7 +33,7 @@ export interface TauriHolochainEnvironment {
  * The slice of Tauri's internal IPC bridge this client uses: the `invoke`
  * function.
  *
- * @public
+ * @internal
  */
 export type TauriInvokeFn = <T>(
   cmd: string,
@@ -70,7 +70,10 @@ export const getTauriHolochainEnvironment = ():
  * Get Tauri's `invoke` from the webview, bound to its IPC bridge. Throws a
  * {@link HolochainError} if the Tauri IPC bridge is not present.
  *
- * @public
+ * Internal to the transport; not part of the package's public API (it is not
+ * re-exported from index.ts).
+ *
+ * @internal
  */
 export const getTauriInvoke = (): TauriInvokeFn => {
   const internals = globalThis.window?.[__TAURI_INTERNALS__];

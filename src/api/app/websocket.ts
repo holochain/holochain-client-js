@@ -254,6 +254,11 @@ export class AppWebsocket implements AppClient {
   /**
    * Instance factory for creating an {@link AppWebsocket}.
    *
+   * Note: in a Tauri webview wired to an in-process conductor
+   * ({@link isTauriHolochain}), the App API is transparently routed over Tauri
+   * IPC and `options.url` and `options.token` are ignored — there is no port to
+   * dial and no token to authenticate. Pass them only for the websocket path.
+   *
    * @param options - {@link (WebsocketConnectionOptions:interface)}
    * @returns A new instance of an AppWebsocket.
    */
@@ -261,7 +266,8 @@ export class AppWebsocket implements AppClient {
     // In a Tauri webview wired to an in-process conductor, reach the App API
     // through Tauri IPC instead of a websocket. The conductor is in the same
     // process, so there is no port to dial and no token to authenticate — the
-    // request is scoped to this window on the Rust side.
+    // request is scoped to this window on the Rust side. Any options.url /
+    // options.token a caller passed are intentionally ignored here.
     if (isTauriHolochain()) {
       const tauriEnv = getTauriHolochainEnvironment();
       const client = new TauriAppTransport(

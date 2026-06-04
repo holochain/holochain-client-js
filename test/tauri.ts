@@ -293,3 +293,134 @@ test("TauriAppTransport delivers app signals from the plugin's signal bridge", a
     "inner app signal payload decoded",
   );
 });
+
+test("TauriAppTransport passes system signals through unchanged", async (t) => {
+  let captured: ((bytes: Uint8Array) => void) | undefined;
+  const systemValue = { Activity: { agent: "alice" } };
+
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore-next-line
+  globalThis.window = {
+    __HC_TAURI_HOLOCHAIN__: {
+      INSTALLED_APP_ID: "my-app",
+      subscribeSignals: (cb: (bytes: Uint8Array) => void) => {
+        captured = cb;
+        return () => {};
+      },
+    },
+    __TAURI_INTERNALS__: { invoke: async () => [] },
+  };
+
+  const transport = new TauriAppTransport("holochain");
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const received: any[] = [];
+  transport.on("signal", (s) => received.push(s));
+
+  // A system signal carries no inner app payload: { type: "system", value }.
+  captured!(encode({ type: "system", value: systemValue }));
+  await new Promise((resolve) => setTimeout(resolve, 0));
+
+  t.equal(received.length, 1, "one signal was emitted");
+  t.equal(received[0].type, "system", "emitted as a system signal");
+  t.deepEqual(
+    received[0].value,
+    systemValue,
+    "system signal value passed through unchanged, not decoded as an app signal",
+  );
+});
+
+test("AppWebsocket.connect rejects with a HolochainError when app_info returns an error response", async (t) => {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore-next-line
+  globalThis.window = {
+    __HC_TAURI_HOLOCHAIN__: { INSTALLED_APP_ID: "my-app" },
+    __TAURI_INTERNALS__: {
+      // The conductor's tagged error response: { type: "error", value: { type, value } }.
+      invoke: async () =>
+        Array.from(
+          encode({
+            type: "error",
+            value: { type: "ribosome_error", value: "boom" },
+          }),
+        ),
+    },
+  };
+
+  try {
+    await AppWebsocket.connect();
+    t.fail("connect should have rejected on an error response");
+  } catch (err) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const e = err as any;
+    t.equal(
+      e.name,
+      "ribosome_error",
+      "catchError turns the error response into a HolochainError with the response's error type",
+    );
+    t.equal(e.message, "boom", "the error value becomes the message");
+  }
+});
+
+test("AppWebsocket.connect throws AppNotFound when app_info is empty", async (t) => {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore-next-line
+  globalThis.window = {
+    __HC_TAURI_HOLOCHAIN__: { INSTALLED_APP_ID: "my-app" },
+    __TAURI_INTERNALS__: {
+      invoke: async () => Array.from(encode({ type: "app_info", value: null })),
+    },
+  };
+
+  try {
+    await AppWebsocket.connect();
+    t.fail("connect should have rejected when no app is bound");
+  } catch (err) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    t.equal(
+      (err as any).name,
+      "AppNotFound",
+      "throws AppNotFound when app_info returns no app",
+    );
+  }
+});
+
+test("TauriAppTransport.request throws TauriInternalsMissing without the Tauri bridge", async (t) => {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore-next-line
+  globalThis.window = {}; // no __TAURI_INTERNALS__
+
+  const transport = new TauriAppTransport("holochain");
+  try {
+    await transport.request({ type: "app_info", value: null });
+    t.fail("request should have thrown without the Tauri IPC bridge");
+  } catch (err) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    t.equal(
+      (err as any).name,
+      "TauriInternalsMissing",
+      "request throws when window.__TAURI_INTERNALS__ is absent",
+    );
+  }
+});
+
+test("TauriAppTransport.close unsubscribes from the signal bridge", (t) => {
+  let unsubscribed = false;
+
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore-next-line
+  globalThis.window = {
+    __HC_TAURI_HOLOCHAIN__: {
+      INSTALLED_APP_ID: "my-app",
+      subscribeSignals: () => () => {
+        unsubscribed = true;
+      },
+    },
+    __TAURI_INTERNALS__: { invoke: async () => [] },
+  };
+
+  const transport = new TauriAppTransport("holochain");
+  t.notOk(unsubscribed, "not unsubscribed before close()");
+  transport.close();
+  t.ok(unsubscribed, "close() invokes the bridge's unsubscribe function");
+  t.end();
+});
