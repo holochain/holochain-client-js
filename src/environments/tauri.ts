@@ -69,6 +69,8 @@ export const getTauriHolochainEnvironment = ():
 /**
  * Get Tauri's `invoke` from the webview, bound to its IPC bridge. Throws a
  * {@link HolochainError} if the Tauri IPC bridge is not present.
+ *
+ * @public
  */
 export const getTauriInvoke = (): TauriInvokeFn => {
   const internals = globalThis.window?.[__TAURI_INTERNALS__];
