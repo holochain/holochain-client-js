@@ -3,8 +3,7 @@ import Emittery from "emittery";
 import IsoWebSocket from "isomorphic-ws";
 import { HolochainError, WsClientOptions } from "./common.js";
 import { AppAuthenticationToken } from "./admin/index.js";
-import { AppSignal, RawSignal, Signal, SignalType } from "./app/index.js";
-import { encodeHashToBase64 } from "../utils/base64.js";
+import { decodeSignal, holoHashMapKeyConverter } from "./app/decode.js";
 
 interface HolochainMessage {
   id: number;
@@ -260,30 +259,7 @@ export class WsClient extends Emittery {
             "incoming signal has no data",
           );
         }
-        const deserializedSignal = decode(message.data);
-        assertHolochainSignal(deserializedSignal);
-
-        if (deserializedSignal.type === SignalType.System) {
-          this.emit("signal", {
-            type: SignalType.System,
-            value: deserializedSignal.value,
-          } as Signal);
-        } else {
-          const encodedAppSignal = deserializedSignal.value;
-
-          // In order to return readable content to the UI, the signal payload must also be deserialized.
-          const payload = decode(encodedAppSignal.signal);
-
-          const signal: AppSignal = {
-            cell_id: encodedAppSignal.cell_id,
-            zome_name: encodedAppSignal.zome_name,
-            payload,
-          };
-          this.emit("signal", {
-            type: SignalType.App,
-            value: signal,
-          } as Signal);
-        }
+        this.emit("signal", decodeSignal(decode(message.data)));
       } else if (message.type === "response") {
         this.handleResponse(message);
       } else {
@@ -393,22 +369,7 @@ export class WsClient extends Emittery {
         );
       } else {
         this.pendingRequests[id].resolve(
-          decode(msg.data, {
-            mapKeyConverter: (key: unknown) => {
-              if (typeof key === "string" || typeof key === "number") {
-                return key;
-              }
-              if (key && typeof key === "object" && key instanceof Uint8Array) {
-                // Key of type byte array, must be a HoloHash.
-                return encodeHashToBase64(key);
-              }
-              throw new HolochainError(
-                "DeserializationError",
-                "Encountered map with key of type 'object', but not HoloHash " +
-                  key,
-              );
-            },
-          }),
+          decode(msg.data, { mapKeyConverter: holoHashMapKeyConverter }),
         );
       }
       delete this.pendingRequests[id];
@@ -435,26 +396,6 @@ function assertHolochainMessage(
     "UnknownMessageFormat",
     `incoming message has unknown message format ${JSON.stringify(
       message,
-      null,
-      4,
-    )}`,
-  );
-}
-
-function assertHolochainSignal(signal: unknown): asserts signal is RawSignal {
-  if (
-    typeof signal === "object" &&
-    signal !== null &&
-    "type" in signal &&
-    "value" in signal &&
-    [SignalType.App, SignalType.System].some((type) => signal.type === type)
-  ) {
-    return;
-  }
-  throw new HolochainError(
-    "UnknownSignalFormat",
-    `incoming signal has unknown signal format ${JSON.stringify(
-      signal,
       null,
       4,
     )}`,

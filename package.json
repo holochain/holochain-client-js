@@ -35,8 +35,10 @@
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "test:app-agent": "RUST_LOG=error RUST_BACKTRACE=1 vitest run app-websocket",
     "test:utils": "RUST_LOG=error RUST_BACKTRACE=1 vitest run utils",
+    "test:tauri": "vitest run tauri",
     "test": "RUST_LOG=error RUST_BACKTRACE=1 vitest run",
     "build:lib": "rimraf ./lib && tsc -p tsconfig.build.json",
+    "prepare": "npm run build:lib",
     "build:docs": "api-extractor run --local && api-documenter markdown -i docs/temp -o docs",
     "build": "npm run build:lib && npm run build:docs",
     "prepublishOnly": "npm run lint && npm run build"
