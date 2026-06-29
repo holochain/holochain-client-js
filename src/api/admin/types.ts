@@ -152,6 +152,19 @@ export type AppInfo = {
 export type MembraneProof = Uint8Array;
 
 /**
+ * Opaque, app-defined bytes made available to a cell during its `init` callback.
+ *
+ * Supplied per role at install time in the `init_properties` field on
+ * `RoleSettings`, persisted by the conductor alongside the app, never written
+ * to the DHT, and read back during `init` via the
+ * `hdk::migrate::get_init_properties` host function.
+ *
+ *
+ * @public
+ */
+export type InitProperties = Uint8Array;
+
+/**
  * @public
  */
 export type MemproofMap = { [key: RoleName]: MembraneProof };
@@ -176,6 +189,7 @@ export type RoleSettings =
       value: {
         membrane_proof?: MembraneProof;
         modifiers?: DnaModifiersOpt;
+        init_properties?: InitProperties;
       };
     };
 
