@@ -4,11 +4,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## \[Unreleased\]
 
-### Added
-- Added `InitProperties` type and `init_properties` optional field to `RoleSettings` provisioned variant, reflecting the new DNA migration feature in Holochain 0.6.2-rc.0.
-### Fixed
+## 2026-06-30: v0.20.6
+
 ### Changed
-### Removed
+- Release for Holochain v0.6.2-rc.0.
+
+### Added
+
+- Added `InitProperties` type and `init_properties` optional field to `RoleSettings` provisioned variant, reflecting the new DNA migration feature in Holochain v0.6.2-rc.0.
 
 ## 2026-05-15: v0.20.5
 ### Fixed
