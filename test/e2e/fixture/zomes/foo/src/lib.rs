@@ -3,6 +3,9 @@ use hdk::prelude::{holo_hash::DnaHash, *};
 #[hdk_entry_helper]
 pub struct TestString(pub String);
 
+#[hdk_entry_helper]
+pub struct StoredInitProperties(pub Vec<u8>);
+
 #[derive(Debug, Serialize, Deserialize)]
 pub enum SerializationEnum {
     Input,
@@ -25,6 +28,7 @@ impl From<&str> for TestString {
 #[unit_enum(UnitEntryTypes)]
 enum EntryTypes {
     Test(TestString),
+    InitProps(StoredInitProperties),
 }
 
 #[hdk_link_types]
@@ -34,7 +38,25 @@ enum LinkTypes {
 
 #[hdk_extern]
 fn init() -> ExternResult<InitCallbackResult> {
+    if let Some(props) = get_init_properties()? {
+        create_entry(EntryTypes::InitProps(StoredInitProperties(
+            props.0.bytes().to_vec(),
+        )))?;
+    }
     Ok(InitCallbackResult::Pass)
+}
+
+#[hdk_extern]
+fn retrieve_init_properties(_: ()) -> ExternResult<Option<Vec<u8>>> {
+    let records = query(
+        ChainQueryFilter::new()
+            .entry_type(UnitEntryTypes::InitProps.try_into().unwrap())
+            .include_entries(true),
+    )?;
+    Ok(records.into_iter().find_map(|r| {
+        let entry = r.entry.into_option()?;
+        StoredInitProperties::try_from(entry).ok().map(|p| p.0)
+    }))
 }
 
 #[hdk_extern]
