@@ -11,7 +11,7 @@ export type Nonce256Bit = Uint8Array;
 /**
  * @public
  */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+
 export const _kp = () => _sodium.crypto_sign_keypair();
 /**
  * @public
