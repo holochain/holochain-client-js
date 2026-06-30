@@ -232,11 +232,7 @@ export const withApp =
     );
     try {
       const { installed_app_id, cell_id, client, admin } =
-        await installAppAndDna(
-          WITH_APP_ADMIN_PORT,
-          singleUse,
-          expirySeconds,
-        );
+        await installAppAndDna(WITH_APP_ADMIN_PORT, singleUse, expirySeconds);
       await admin.authorizeSigningCredentials(cell_id);
       await f({
         installed_app_id,

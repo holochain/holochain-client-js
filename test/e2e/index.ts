@@ -536,7 +536,9 @@ test(
     const { port: appPort } = await admin.attachAppInterface({
       allowed_origins: "client-test-app",
     });
-    const issued = await admin.issueAppAuthenticationToken({ installed_app_id });
+    const issued = await admin.issueAppAuthenticationToken({
+      installed_app_id,
+    });
     const client = await AppWebsocket.connect({
       url: new URL(`ws://localhost:${appPort}`),
       wsClientOptions: { origin: "client-test-app" },
