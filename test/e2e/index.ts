@@ -503,6 +503,67 @@ test(
 );
 
 test(
+  "can install app with init_properties and retrieve them via zome call",
+  withConductor(ADMIN_PORT, async (t) => {
+    const installed_app_id = "app";
+    const admin = await AdminWebsocket.connect({
+      url: ADMIN_WS_URL,
+      wsClientOptions: { origin: "client-test-admin" },
+    });
+    const agent = await admin.generateAgentPubKey();
+
+    const initPropsBytes = new Uint8Array([1, 2, 3, 4, 5]);
+
+    const installedApp = await admin.installApp({
+      installed_app_id,
+      agent_key: agent,
+      source: {
+        type: "path",
+        value: `${FIXTURE_PATH}/test.happ`,
+      },
+      roles_settings: {
+        foo: {
+          type: "provisioned",
+          value: {
+            init_properties: initPropsBytes,
+          },
+        },
+      },
+    });
+
+    await admin.enableApp({ installed_app_id });
+
+    const { port: appPort } = await admin.attachAppInterface({
+      allowed_origins: "client-test-app",
+    });
+    const issued = await admin.issueAppAuthenticationToken({ installed_app_id });
+    const client = await AppWebsocket.connect({
+      url: new URL(`ws://localhost:${appPort}`),
+      wsClientOptions: { origin: "client-test-app" },
+      token: issued.token,
+    });
+
+    assert(installedApp.cell_info[ROLE_NAME][0].type === CellType.Provisioned);
+    const cell_id = installedApp.cell_info[ROLE_NAME][0].value.cell_id;
+    await admin.authorizeSigningCredentials(cell_id);
+
+    const result: number[] = await client.callZome({
+      cell_id,
+      zome_name: TEST_ZOME_NAME,
+      fn_name: "retrieve_init_properties",
+      provenance: cell_id[1],
+      payload: null,
+    });
+
+    t.deepEqual(
+      result,
+      Array.from(initPropsBytes),
+      "init_properties bytes retrieved correctly",
+    );
+  }),
+);
+
+test(
   "memproofs can be provided after app installation",
   withConductor(ADMIN_PORT, async (t) => {
     const role_name = "foo";
