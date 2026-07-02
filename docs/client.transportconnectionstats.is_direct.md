@@ -4,7 +4,7 @@
 
 ## TransportConnectionStats.is\_direct property
 
-\* True if this connection has successfully upgraded to a direct connection.
+True if this connection has successfully upgraded to a direct connection.
 
 **Signature:**
 

@@ -18,9 +18,8 @@ export type RoleSettings = {
     value: {
         membrane_proof?: MembraneProof;
         modifiers?: DnaModifiersOpt;
-        init_properties?: InitProperties;
     };
 };
 ```
-**References:** [CellId](./client.cellid.md)<!-- -->, [MembraneProof](./client.membraneproof.md)<!-- -->, [DnaModifiersOpt](./client.dnamodifiersopt.md)<!-- -->, [InitProperties](./client.initproperties.md)
+**References:** [CellId](./client.cellid.md)<!-- -->, [MembraneProof](./client.membraneproof.md)<!-- -->, [DnaModifiersOpt](./client.dnamodifiersopt.md)
 

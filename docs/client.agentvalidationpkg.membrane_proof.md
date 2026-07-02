@@ -7,5 +7,5 @@
 **Signature:**
 
 ```typescript
-membrane_proof: any;
+membrane_proof?: MembraneProof;
 ```

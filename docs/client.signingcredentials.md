@@ -61,7 +61,7 @@ Description
 
 </td><td>
 
-[KeyPair](./client.keypair.md)
+KeyPair
 
 
 </td><td>
