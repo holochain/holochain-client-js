@@ -50,7 +50,7 @@ _(Optional)_ The agent pub key to take 4 last bytes (= DHT location) from (optio
 
 **Returns:**
 
-Promise&lt;\[[KeyPair](./client.keypair.md)<!-- -->, [AgentPubKey](./client.agentpubkey.md)<!-- -->\]&gt;
+Promise&lt;\[KeyPair, [AgentPubKey](./client.agentpubkey.md)<!-- -->\]&gt;
 
 The signing key pair and an agent pub key based on the public key.
 

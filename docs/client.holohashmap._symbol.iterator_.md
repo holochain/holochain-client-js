@@ -7,9 +7,9 @@
 **Signature:**
 
 ```typescript
-[Symbol.iterator](): MapIterator<[K, V]>;
+[Symbol.iterator](): IterableIterator<[K, V]>;
 ```
 **Returns:**
 
-MapIterator&lt;\[K, V\]&gt;
+IterableIterator&lt;\[K, V\]&gt;
 
