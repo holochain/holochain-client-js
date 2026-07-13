@@ -1,0 +1,22 @@
+# Actions
+.github/workflows/*.yaml @holochain/holochain-devs
+.github/workflows/*.yml  @holochain/holochain-devs
+
+# Nix
+flake.*                  @holochain/holochain-devs
+
+# NPM/Yarn
+package.json             @holochain/holochain-devs
+**/package.json          @holochain/holochain-devs
+package-lock.json        @holochain/holochain-devs
+yarn.lock                @holochain/holochain-devs
+
+# Rust
+**/Cargo.toml            @holochain/holochain-devs
+Cargo.toml               @holochain/holochain-devs
+Cargo.lock               @holochain/holochain-devs
+rust-toolchain.toml      @holochain/holochain-devs
+
+# Go
+go.mod                   @holochain/holochain-devs
+go.sum                   @holochain/holochain-devs
