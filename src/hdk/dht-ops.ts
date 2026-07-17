@@ -1,13 +1,6 @@
 import { ActionHash, AgentPubKey, Signature, Timestamp } from "../types.js";
 import { Entry } from "./entry.js";
-import {
-  CreateLink,
-  Delete,
-  DeleteLink,
-  Action,
-  Update,
-  SignedAction,
-} from "./action.js";
+import { Action, SignedAction } from "./action.js";
 
 // https://github.com/holochain/holochain/blob/develop/crates/types/src/dht_op.rs
 
