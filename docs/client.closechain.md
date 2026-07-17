@@ -36,7 +36,7 @@ Description
 </th></tr></thead>
 <tbody><tr><td>
 
-[action\_seq](./client.closechain.action_seq.md)
+[new\_target?](./client.closechain.new_target.md)
 
 
 </td><td>
@@ -44,78 +44,12 @@ Description
 
 </td><td>
 
-number
+[MigrationTarget](./client.migrationtarget.md)
 
 
 </td><td>
 
-
-</td></tr>
-<tr><td>
-
-[author](./client.closechain.author.md)
-
-
-</td><td>
-
-
-</td><td>
-
-[AgentPubKey](./client.agentpubkey.md)
-
-
-</td><td>
-
-
-</td></tr>
-<tr><td>
-
-[new\_dna\_hash](./client.closechain.new_dna_hash.md)
-
-
-</td><td>
-
-
-</td><td>
-
-[DnaHash](./client.dnahash.md)
-
-
-</td><td>
-
-
-</td></tr>
-<tr><td>
-
-[prev\_action](./client.closechain.prev_action.md)
-
-
-</td><td>
-
-
-</td><td>
-
-[ActionHash](./client.actionhash.md)
-
-
-</td><td>
-
-
-</td></tr>
-<tr><td>
-
-[timestamp](./client.closechain.timestamp.md)
-
-
-</td><td>
-
-
-</td><td>
-
-[Timestamp](./client.timestamp.md)
-
-
-</td><td>
+_(Optional)_
 
 
 </td></tr>

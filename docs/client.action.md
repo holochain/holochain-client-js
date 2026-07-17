@@ -2,13 +2,71 @@
 
 [Home](./index.md) &gt; [@holochain/client](./client.md) &gt; [Action](./client.action.md)
 
-## Action type
+## Action interface
 
 
 **Signature:**
 
 ```typescript
-export type Action = Dna | AgentValidationPkg | InitZomesComplete | CreateLink | DeleteLink | OpenChain | CloseChain | Delete | NewEntryAction;
+export interface Action 
 ```
-**References:** [Dna](./client.dna.md)<!-- -->, [AgentValidationPkg](./client.agentvalidationpkg.md)<!-- -->, [InitZomesComplete](./client.initzomescomplete.md)<!-- -->, [CreateLink](./client.createlink.md)<!-- -->, [DeleteLink](./client.deletelink.md)<!-- -->, [OpenChain](./client.openchain.md)<!-- -->, [CloseChain](./client.closechain.md)<!-- -->, [Delete](./client.delete.md)<!-- -->, [NewEntryAction](./client.newentryaction.md)
+
+## Properties
+
+<table><thead><tr><th>
+
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[data](./client.action.data.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[ActionData](./client.actiondata.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[header](./client.action.header.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[ActionHeader](./client.actionheader.md)
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>
 

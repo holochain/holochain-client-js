@@ -629,7 +629,7 @@ test(
       cell_id: (info.cell_info[ROLE_NAME][0].value as ProvisionedCell).cell_id,
     });
     assert.equal(state[0].source_chain_dump.records.length, 6);
-    assert.equal(state[0].source_chain_dump.records[0].action.type, "Dna");
+    assert.equal(state[0].source_chain_dump.records[0].action.data.type, "Dna");
   }),
 );
 
@@ -1037,21 +1037,22 @@ test(
     });
     const lastAction = activity[0];
     assert.equal(
-      lastAction.action.hashed.content.type,
+      lastAction.action.hashed.content.data.type,
       ActionType.DeleteLink,
       "last action is DeleteLink",
     );
     const secondLastAction = activity[1];
     assert.equal(
-      secondLastAction.action.hashed.content.type,
+      secondLastAction.action.hashed.content.data.type,
       ActionType.CreateLink,
       "second last action is CreateLink",
     );
     assert(
-      secondLastAction.action.hashed.content.type === ActionType.CreateLink,
+      secondLastAction.action.hashed.content.data.type ===
+        ActionType.CreateLink,
     );
     assert.equal(
-      secondLastAction.action.hashed.content.link_type,
+      secondLastAction.action.hashed.content.data.link_type,
       0,
       "link type is 0",
     );

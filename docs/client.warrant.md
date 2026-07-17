@@ -36,7 +36,7 @@ Description
 </th></tr></thead>
 <tbody><tr><td>
 
-[ChainIntegrity](./client.warrant.chainintegrity.md)
+[author](./client.warrant.author.md)
 
 
 </td><td>
@@ -44,12 +44,69 @@ Description
 
 </td><td>
 
-[ChainIntegrityWarrant](./client.chainintegritywarrant.md)
+[AgentPubKey](./client.agentpubkey.md)
 
 
 </td><td>
 
-Signifies evidence of a breach of chain integrity
+author of the warrant
+
+
+</td></tr>
+<tr><td>
+
+[proof](./client.warrant.proof.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[WarrantProof](./client.warrantproof.md)
+
+
+</td><td>
+
+The proof for the warrant which was issued
+
+
+</td></tr>
+<tr><td>
+
+[timestamp](./client.warrant.timestamp.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[Timestamp](./client.timestamp.md)
+
+
+</td><td>
+
+Time when the warrant was issued
+
+
+</td></tr>
+<tr><td>
+
+[warrantee](./client.warrant.warrantee.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[AgentPubKey](./client.agentpubkey.md)
+
+
+</td><td>
+
+The warranted agen
 
 
 </td></tr>

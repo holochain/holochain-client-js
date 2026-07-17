@@ -36,40 +36,6 @@ Description
 </th></tr></thead>
 <tbody><tr><td>
 
-[action\_seq](./client.agentvalidationpkg.action_seq.md)
-
-
-</td><td>
-
-
-</td><td>
-
-number
-
-
-</td><td>
-
-
-</td></tr>
-<tr><td>
-
-[author](./client.agentvalidationpkg.author.md)
-
-
-</td><td>
-
-
-</td><td>
-
-[AgentPubKey](./client.agentpubkey.md)
-
-
-</td><td>
-
-
-</td></tr>
-<tr><td>
-
 [membrane\_proof?](./client.agentvalidationpkg.membrane_proof.md)
 
 
@@ -84,40 +50,6 @@ number
 </td><td>
 
 _(Optional)_
-
-
-</td></tr>
-<tr><td>
-
-[prev\_action](./client.agentvalidationpkg.prev_action.md)
-
-
-</td><td>
-
-
-</td><td>
-
-[ActionHash](./client.actionhash.md)
-
-
-</td><td>
-
-
-</td></tr>
-<tr><td>
-
-[timestamp](./client.agentvalidationpkg.timestamp.md)
-
-
-</td><td>
-
-
-</td><td>
-
-[Timestamp](./client.timestamp.md)
-
-
-</td><td>
 
 
 </td></tr>

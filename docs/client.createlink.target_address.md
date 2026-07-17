@@ -7,5 +7,5 @@
 **Signature:**
 
 ```typescript
-target_address: EntryHash;
+target_address: AnyLinkableHash;
 ```

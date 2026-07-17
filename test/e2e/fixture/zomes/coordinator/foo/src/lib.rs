@@ -102,7 +102,7 @@ pub fn create_and_delete_link() -> ExternResult<ActionHash> {
 }
 
 #[hdk_extern]
-pub fn get_agent_activity(chain_top: ActionHash) -> ExternResult<Vec<RegisterAgentActivity>> {
+pub fn get_agent_activity(chain_top: ActionHash) -> ExternResult<Vec<AgentActivity>> {
     let agent = agent_info()?.agent_initial_pubkey;
     must_get_agent_activity(agent, ChainFilter::new(chain_top))
 }

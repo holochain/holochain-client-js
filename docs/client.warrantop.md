@@ -36,7 +36,7 @@ Description
 </th></tr></thead>
 <tbody><tr><td>
 
-[author](./client.warrantop.author.md)
+[data](./client.warrantop.data.md)
 
 
 </td><td>
@@ -44,12 +44,10 @@ Description
 
 </td><td>
 
-[AgentPubKey](./client.agentpubkey.md)
+[Warrant](./client.warrant.md)
 
 
 </td><td>
-
-author of the warrant
 
 
 </td></tr>
@@ -67,46 +65,6 @@ author of the warrant
 
 
 </td><td>
-
-signature of (Warrant, Timestamp) by the author
-
-
-</td></tr>
-<tr><td>
-
-[timestamp](./client.warrantop.timestamp.md)
-
-
-</td><td>
-
-
-</td><td>
-
-[Timestamp](./client.timestamp.md)
-
-
-</td><td>
-
-time when the warrant was issued
-
-
-</td></tr>
-<tr><td>
-
-[warrant](./client.warrantop.warrant.md)
-
-
-</td><td>
-
-
-</td><td>
-
-[Warrant](./client.warrant.md)
-
-
-</td><td>
-
-The warrant which was issued
 
 
 </td></tr>

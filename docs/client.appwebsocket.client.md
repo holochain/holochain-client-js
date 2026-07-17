@@ -7,5 +7,5 @@
 **Signature:**
 
 ```typescript
-readonly client: WsClient;
+readonly client: AppClientTransport;
 ```

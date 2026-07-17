@@ -5,8 +5,8 @@ import {
   Delete,
   DeleteLink,
   Action,
-  NewEntryAction,
   Update,
+  SignedAction,
 } from "./action.js";
 
 // https://github.com/holochain/holochain/blob/develop/crates/types/src/dht_op.rs
@@ -15,15 +15,15 @@ import {
  * @public
  */
 export enum ChainOpType {
-  StoreRecord = "StoreRecord",
-  StoreEntry = "StoreEntry",
-  RegisterAgentActivity = "RegisterAgentActivity",
-  RegisterUpdatedContent = "RegisterUpdatedContent",
-  RegisterUpdatedRecord = "RegisterUpdatedRecord",
-  RegisterDeletedBy = "RegisterDeletedBy",
-  RegisterDeletedEntryAction = "RegisterDeletedEntryAction",
-  RegisterAddLink = "RegisterAddLink",
-  RegisterRemoveLink = "RegisterRemoveLink",
+  CreateRecord = "CreateRecord",
+  CreateEntry = "CreateEntry",
+  AgentActivity = "AgentActivity",
+  UpdateEntry = "UpdateEntry",
+  UpdateRecord = "UpdateRecord",
+  DeleteEntry = "DeleteEntry",
+  DeleteRecord = "DeleteRecord",
+  CreateLink = "CreateLink",
+  DeleteLink = "DeleteLink",
 }
 
 /**
@@ -39,46 +39,63 @@ export type DhtOp =
  * @public
  */
 export interface WarrantOp {
-  /** The warrant which was issued */
-  warrant: Warrant;
-  /** author of the warrant */
-  author: AgentPubKey;
-  /** signature of (Warrant, Timestamp) by the author */
+  data: Warrant;
   signature: Signature;
-  /** time when the warrant was issued */
-  timestamp: Timestamp;
 }
 
 /**
  * @public
  */
-export type ChainOp =
-  | { [ChainOpType.StoreRecord]: [Signature, Action, Entry | undefined] }
-  | { [ChainOpType.StoreEntry]: [Signature, NewEntryAction, Entry] }
-  | { [ChainOpType.RegisterAgentActivity]: [Signature, Action] }
-  | {
-      [ChainOpType.RegisterUpdatedContent]: [
-        Signature,
-        Update,
-        Entry | undefined,
-      ];
-    }
-  | {
-      [ChainOpType.RegisterUpdatedRecord]: [
-        Signature,
-        Update,
-        Entry | undefined,
-      ];
-    }
-  | { [ChainOpType.RegisterDeletedBy]: [Signature, Delete] }
-  | { [ChainOpType.RegisterDeletedEntryAction]: [Signature, Delete] }
-  | { [ChainOpType.RegisterAddLink]: [Signature, CreateLink] }
-  | { [ChainOpType.RegisterRemoveLink]: [Signature, DeleteLink] };
+export interface Warrant {
+  /** The proof for the warrant which was issued */
+  proof: WarrantProof;
+  /** author of the warrant */
+  author: AgentPubKey;
+  /** Time when the warrant was issued */
+  timestamp: Timestamp;
+  /** The warranted agen */
+  warrantee: AgentPubKey;
+}
 
 /**
  * @public
  */
-export interface Warrant {
+export enum OpEntryType {
+  Present = "Present",
+  Hidden = "Hidden",
+  ActionOnly = "ActionOnly",
+}
+
+/**
+ * @public
+ */
+export type OpEntry =
+  | { [OpEntryType.Present]: Entry }
+  | { [OpEntryType.Hidden]: null }
+  | { [OpEntryType.ActionOnly]: null };
+
+/**
+ * @public
+ */
+export type ChainOp =
+  | { [ChainOpType.CreateRecord]: [SignedAction, OpEntry] }
+  | { [ChainOpType.CreateEntry]: [Signature, OpEntry] }
+  | { [ChainOpType.AgentActivity]: [SignedAction] }
+  | {
+      [ChainOpType.UpdateEntry]: [SignedAction, OpEntry];
+    }
+  | {
+      [ChainOpType.UpdateRecord]: [SignedAction, OpEntry];
+    }
+  | { [ChainOpType.DeleteEntry]: [SignedAction] }
+  | { [ChainOpType.DeleteRecord]: [SignedAction] }
+  | { [ChainOpType.CreateLink]: [SignedAction] }
+  | { [ChainOpType.DeleteLink]: [SignedAction] };
+
+/**
+ * @public
+ */
+export interface WarrantProof {
   /**
    * Signifies evidence of a breach of chain integrity
    */
@@ -100,8 +117,10 @@ export type ChainIntegrityWarrant =
         action_author: AgentPubKey;
         /** The hash of the action to fetch by */
         action: ActionHashAndSig;
-        /** Whether to run app or sys validation */
-        validation_type: ValidationType;
+        /** The chain op type that was the validation context for this validation failure */
+        chain_op_type: ChainOpType;
+        /** The reason for the warrant */
+        reason: string;
       };
     }
   | {
@@ -111,6 +130,8 @@ export type ChainIntegrityWarrant =
         chain_author: AgentPubKey;
         /** Two actions of the same seq number which prove the fork */
         action_pair: [ActionHashAndSig, ActionHashAndSig];
+        /** The seq number at which the fork occurs */
+        seq: number;
       };
     };
 
@@ -144,15 +165,15 @@ export function getChainOpAction(op: ChainOp): Action {
   const opType = getChainOpType(op);
   const action = Object.values(op)[0][1];
 
-  if (opType === ChainOpType.RegisterAddLink) {
+  if (opType === ChainOpType.CreateLink) {
     return {
       type: "CreateLink",
       ...action,
     };
   }
   if (
-    opType === ChainOpType.RegisterUpdatedContent ||
-    opType === ChainOpType.RegisterUpdatedRecord
+    opType === ChainOpType.UpdateEntry ||
+    opType === ChainOpType.UpdateRecord
   ) {
     return {
       type: "Update",

@@ -31,26 +31,12 @@ Description
 </th></tr></thead>
 <tbody><tr><td>
 
-RegisterAddLink
+AgentActivity
 
 
 </td><td>
 
-`"RegisterAddLink"`
-
-
-</td><td>
-
-
-</td></tr>
-<tr><td>
-
-RegisterAgentActivity
-
-
-</td><td>
-
-`"RegisterAgentActivity"`
+`"AgentActivity"`
 
 
 </td><td>
@@ -59,26 +45,12 @@ RegisterAgentActivity
 </td></tr>
 <tr><td>
 
-RegisterDeletedBy
+CreateEntry
 
 
 </td><td>
 
-`"RegisterDeletedBy"`
-
-
-</td><td>
-
-
-</td></tr>
-<tr><td>
-
-RegisterDeletedEntryAction
-
-
-</td><td>
-
-`"RegisterDeletedEntryAction"`
+`"CreateEntry"`
 
 
 </td><td>
@@ -87,26 +59,12 @@ RegisterDeletedEntryAction
 </td></tr>
 <tr><td>
 
-RegisterRemoveLink
+CreateLink
 
 
 </td><td>
 
-`"RegisterRemoveLink"`
-
-
-</td><td>
-
-
-</td></tr>
-<tr><td>
-
-RegisterUpdatedContent
-
-
-</td><td>
-
-`"RegisterUpdatedContent"`
+`"CreateLink"`
 
 
 </td><td>
@@ -115,26 +73,12 @@ RegisterUpdatedContent
 </td></tr>
 <tr><td>
 
-RegisterUpdatedRecord
+CreateRecord
 
 
 </td><td>
 
-`"RegisterUpdatedRecord"`
-
-
-</td><td>
-
-
-</td></tr>
-<tr><td>
-
-StoreEntry
-
-
-</td><td>
-
-`"StoreEntry"`
+`"CreateRecord"`
 
 
 </td><td>
@@ -143,12 +87,68 @@ StoreEntry
 </td></tr>
 <tr><td>
 
-StoreRecord
+DeleteEntry
 
 
 </td><td>
 
-`"StoreRecord"`
+`"DeleteEntry"`
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+DeleteLink
+
+
+</td><td>
+
+`"DeleteLink"`
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+DeleteRecord
+
+
+</td><td>
+
+`"DeleteRecord"`
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+UpdateEntry
+
+
+</td><td>
+
+`"UpdateEntry"`
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+UpdateRecord
+
+
+</td><td>
+
+`"UpdateRecord"`
 
 
 </td><td>

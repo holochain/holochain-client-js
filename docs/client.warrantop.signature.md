@@ -4,8 +4,6 @@
 
 ## WarrantOp.signature property
 
-signature of (Warrant, Timestamp) by the author
-
 **Signature:**
 
 ```typescript
