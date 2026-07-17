@@ -36,24 +36,7 @@ Description
 </th></tr></thead>
 <tbody><tr><td>
 
-[author](./client.dna.author.md)
-
-
-</td><td>
-
-
-</td><td>
-
-[AgentPubKey](./client.agentpubkey.md)
-
-
-</td><td>
-
-
-</td></tr>
-<tr><td>
-
-[hash](./client.dna.hash.md)
+[dna\_hash](./client.dna.dna_hash.md)
 
 
 </td><td>
@@ -62,23 +45,6 @@ Description
 </td><td>
 
 [DnaHash](./client.dnahash.md)
-
-
-</td><td>
-
-
-</td></tr>
-<tr><td>
-
-[timestamp](./client.dna.timestamp.md)
-
-
-</td><td>
-
-
-</td><td>
-
-[Timestamp](./client.timestamp.md)
 
 
 </td><td>

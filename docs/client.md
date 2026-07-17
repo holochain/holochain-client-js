@@ -441,6 +441,19 @@ A HoloHashMap that will fetch and store a value if it is not found in a 'get' ca
 </td></tr>
 <tr><td>
 
+[TauriAppTransport](./client.tauriapptransport.md)
+
+
+</td><td>
+
+Carries the App API over Tauri IPC into a Holochain conductor running in the same process, instead of over a websocket.
+
+From [AppWebsocket](./client.appwebsocket.md)<!-- -->'s perspective this is a drop-in for [WsClient](./client.wsclient.md)<!-- -->: it exposes the same `request` method and is an Emittery that emits `signal` events, so every AppWebsocket method works unchanged. Only the pipe differs — the same msgpack-encoded `{ type, value }` payloads a websocket would carry are sent through the `plugin:<name>|app_request` command. No app id is sent: the conductor scopes each request to the calling window on the Rust side, which replaces the per-app websocket auth token.
+
+
+</td></tr>
+<tr><td>
+
 [WarrantHashB64Map](./client.warranthashb64map.md)
 
 
@@ -600,6 +613,16 @@ Description
 <tr><td>
 
 [HoloHashType](./client.holohashtype.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[OpEntryType](./client.opentrytype.md)
 
 
 </td><td>
@@ -843,6 +866,17 @@ Get credentials for signing zome calls.
 </td></tr>
 <tr><td>
 
+[getTauriHolochainEnvironment()](./client.gettauriholochainenvironment.md)
+
+
+</td><td>
+
+The injected [TauriHolochainEnvironment](./client.tauriholochainenvironment.md)<!-- -->, or `undefined` when not in a Tauri holochain webview.
+
+
+</td></tr>
+<tr><td>
+
 [hashFrom32AndType(hashCore, hashType)](./client.hashfrom32andtype.md)
 
 
@@ -886,6 +920,17 @@ Check if a cell's role name is a valid clone id.
 </td><td>
 
 Check if two cell ids are identical.
+
+
+</td></tr>
+<tr><td>
+
+[isTauriHolochain()](./client.istauriholochain.md)
+
+
+</td><td>
+
+Whether the code is running inside a Tauri webview opened by tauri-plugin-holochain. True only when both the Tauri IPC bridge and the plugin's holochain marker are present on `window`<!-- -->.
 
 
 </td></tr>
@@ -996,6 +1041,26 @@ Description
 </th></tr></thead>
 <tbody><tr><td>
 
+[Action](./client.action.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[ActionHeader](./client.actionheader.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
 [AdminApi](./client.adminapi.md)
 
 
@@ -1051,6 +1116,17 @@ Description
 
 </td><td>
 
+
+
+</td></tr>
+<tr><td>
+
+[AppClientTransport](./client.appclienttransport.md)
+
+
+</td><td>
+
+The transport an [AppClient](./client.appclient.md) uses to reach the conductor: either a websocket (`WsClient`<!-- -->) or Tauri IPC ([TauriAppTransport](./client.tauriapptransport.md)<!-- -->). It must carry tagged App API requests and surface `signal` events. This is the only surface [AppWebsocket](./client.appwebsocket.md) needs from its transport.
 
 
 </td></tr>
@@ -1594,16 +1670,6 @@ Peer metadata dump.
 </td></tr>
 <tr><td>
 
-[RateWeight](./client.rateweight.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
 [RecordDetails](./client.recorddetails.md)
 
 
@@ -1728,6 +1794,17 @@ Summary of the workflow's attempts to resolve the outcome a failed countersignin
 </td></tr>
 <tr><td>
 
+[TauriHolochainEnvironment](./client.tauriholochainenvironment.md)
+
+
+</td><td>
+
+Environment injected by the in-process Tauri plugin (tauri-plugin-holochain) into a webview that is wired to a Holochain conductor running in the same process. Its presence signals that the App API should be reached through Tauri IPC rather than by opening a websocket.
+
+
+</td></tr>
+<tr><td>
+
 [TransportConnectionStats](./client.transportconnectionstats.md)
 
 
@@ -1793,6 +1870,16 @@ This is intended to be a state dump that gives some insight into what the transp
 <tr><td>
 
 [WarrantOp](./client.warrantop.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[WarrantProof](./client.warrantproof.md)
 
 
 </td><td>
@@ -1897,7 +1984,7 @@ Cell id for which the countersigning session should be abandoned.
 </td></tr>
 <tr><td>
 
-[Action](./client.action.md)
+[ActionBase](./client.actionbase.md)
 
 
 </td><td>
@@ -1907,7 +1994,7 @@ Cell id for which the countersigning session should be abandoned.
 </td></tr>
 <tr><td>
 
-[ActionBase](./client.actionbase.md)
+[ActionData](./client.actiondata.md)
 
 
 </td><td>
@@ -2004,6 +2091,16 @@ Action hash with the signature of the action at that hash
 </td><td>
 
 This type is meant to be opaque
+
+
+</td></tr>
+<tr><td>
+
+[AgentMigrationTarget](./client.agentmigrationtarget.md)
+
+
+</td><td>
+
 
 
 </td></tr>
@@ -2530,6 +2627,16 @@ The definition of a storage arc compatible with the concept of storage and query
 <tr><td>
 
 [DnaManifest](./client.dnamanifest.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[DnaMigrationTarget](./client.dnamigrationtarget.md)
 
 
 </td><td>
@@ -3161,6 +3268,16 @@ An internal link type index within the DNA, from 0 to 255.
 </td></tr>
 <tr><td>
 
+[MigrationTarget](./client.migrationtarget.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
 [NetworkSeed](./client.networkseed.md)
 
 
@@ -3171,7 +3288,7 @@ An internal link type index within the DNA, from 0 to 255.
 </td></tr>
 <tr><td>
 
-[NewEntryAction](./client.newentryaction.md)
+[Nonce256Bit](./client.nonce256bit.md)
 
 
 </td><td>
@@ -3181,7 +3298,7 @@ An internal link type index within the DNA, from 0 to 255.
 </td></tr>
 <tr><td>
 
-[Nonce256Bit](./client.nonce256bit.md)
+[OpEntry](./client.opentry.md)
 
 
 </td><td>

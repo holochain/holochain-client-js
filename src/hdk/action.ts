@@ -9,7 +9,7 @@ import {
   Timestamp,
 } from "../types.js";
 import { Entry, EntryType } from "./entry.js";
-import { LinkTag, LinkType, RateWeight } from "./link.js";
+import { AnyLinkableHash, LinkTag, LinkType } from "./link.js";
 
 /**
  * @public
@@ -59,7 +59,26 @@ export enum ActionType {
 /**
  * @public
  */
-export type Action =
+export interface Action {
+  header: ActionHeader;
+
+  data: ActionData;
+}
+
+/**
+ * @public
+ */
+export interface ActionHeader {
+  author: AgentPubKey;
+  timestamp: Timestamp;
+  action_seq: number;
+  prev_action?: ActionHash;
+}
+
+/**
+ * @public
+ */
+export type ActionData =
   | Dna
   | AgentValidationPkg
   | InitZomesComplete
@@ -67,13 +86,7 @@ export type Action =
   | DeleteLink
   | OpenChain
   | CloseChain
-  | Delete
-  | NewEntryAction;
-
-/**
- * @public
- */
-export type NewEntryAction = Create | Update;
+  | Delete;
 
 /**
  * @public
@@ -81,9 +94,7 @@ export type NewEntryAction = Create | Update;
 export interface Dna {
   type: ActionType.Dna;
 
-  author: AgentPubKey;
-  timestamp: Timestamp;
-  hash: DnaHash;
+  dna_hash: DnaHash;
 }
 
 /**
@@ -91,11 +102,6 @@ export interface Dna {
  */
 export interface AgentValidationPkg {
   type: ActionType.AgentValidationPkg;
-
-  author: AgentPubKey;
-  timestamp: Timestamp;
-  action_seq: number;
-  prev_action: ActionHash;
 
   membrane_proof?: MembraneProof;
 }
@@ -105,11 +111,6 @@ export interface AgentValidationPkg {
  */
 export interface InitZomesComplete {
   type: ActionType.InitZomesComplete;
-
-  author: AgentPubKey;
-  timestamp: Timestamp;
-  action_seq: number;
-  prev_action: ActionHash;
 }
 
 /**
@@ -118,18 +119,11 @@ export interface InitZomesComplete {
 export interface CreateLink {
   type: ActionType.CreateLink;
 
-  author: AgentPubKey;
-  timestamp: Timestamp;
-  action_seq: number;
-  prev_action: ActionHash;
-
-  base_address: EntryHash;
-  target_address: EntryHash;
+  base_address: AnyLinkableHash;
+  target_address: AnyLinkableHash;
   zome_index: number;
   link_type: LinkType;
   tag: LinkTag;
-
-  weight: RateWeight;
 }
 
 /**
@@ -138,12 +132,7 @@ export interface CreateLink {
 export interface DeleteLink {
   type: ActionType.DeleteLink;
 
-  author: AgentPubKey;
-  timestamp: Timestamp;
-  action_seq: number;
-  prev_action: ActionHash;
-
-  base_address: EntryHash;
+  base_address: AnyLinkableHash;
   link_add_address: ActionHash;
 }
 
@@ -153,13 +142,24 @@ export interface DeleteLink {
 export interface OpenChain {
   type: ActionType.OpenChain;
 
-  author: AgentPubKey;
-  timestamp: Timestamp;
-  action_seq: number;
-  prev_action: ActionHash;
-
-  prev_dna_hash: DnaHash;
+  prev_target: MigrationTarget;
+  close_hash: ActionHash;
 }
+
+/**
+ * @public
+ */
+export type MigrationTarget = DnaMigrationTarget | AgentMigrationTarget;
+
+/**
+ * @public
+ */
+export type DnaMigrationTarget = DnaHash;
+
+/**
+ * @public
+ */
+export type AgentMigrationTarget = AgentPubKey;
 
 /**
  * @public
@@ -167,12 +167,7 @@ export interface OpenChain {
 export interface CloseChain {
   type: ActionType.CloseChain;
 
-  author: AgentPubKey;
-  timestamp: Timestamp;
-  action_seq: number;
-  prev_action: ActionHash;
-
-  new_dna_hash: DnaHash;
+  new_target?: MigrationTarget;
 }
 
 /**
@@ -180,11 +175,6 @@ export interface CloseChain {
  */
 export interface Update {
   type: ActionType.Update;
-
-  author: AgentPubKey;
-  timestamp: Timestamp;
-  action_seq: number;
-  prev_action: ActionHash;
 
   original_action_address: ActionHash;
   original_entry_address: EntryHash;
@@ -199,11 +189,6 @@ export interface Update {
 export interface Delete {
   type: ActionType.Delete;
 
-  author: AgentPubKey;
-  timestamp: Timestamp;
-  action_seq: number;
-  prev_action: ActionHash;
-
   deletes_address: ActionHash;
   deletes_entry_address: EntryHash;
 }
@@ -213,11 +198,6 @@ export interface Delete {
  */
 export interface Create {
   type: ActionType.Create;
-
-  author: AgentPubKey;
-  timestamp: Timestamp;
-  action_seq: number;
-  prev_action: ActionHash;
 
   entry_type: EntryType;
   entry_hash: EntryHash;

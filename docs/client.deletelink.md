@@ -36,40 +36,6 @@ Description
 </th></tr></thead>
 <tbody><tr><td>
 
-[action\_seq](./client.deletelink.action_seq.md)
-
-
-</td><td>
-
-
-</td><td>
-
-number
-
-
-</td><td>
-
-
-</td></tr>
-<tr><td>
-
-[author](./client.deletelink.author.md)
-
-
-</td><td>
-
-
-</td><td>
-
-[AgentPubKey](./client.agentpubkey.md)
-
-
-</td><td>
-
-
-</td></tr>
-<tr><td>
-
 [base\_address](./client.deletelink.base_address.md)
 
 
@@ -78,7 +44,7 @@ number
 
 </td><td>
 
-[EntryHash](./client.entryhash.md)
+[AnyLinkableHash](./client.anylinkablehash.md)
 
 
 </td><td>
@@ -96,40 +62,6 @@ number
 </td><td>
 
 [ActionHash](./client.actionhash.md)
-
-
-</td><td>
-
-
-</td></tr>
-<tr><td>
-
-[prev\_action](./client.deletelink.prev_action.md)
-
-
-</td><td>
-
-
-</td><td>
-
-[ActionHash](./client.actionhash.md)
-
-
-</td><td>
-
-
-</td></tr>
-<tr><td>
-
-[timestamp](./client.deletelink.timestamp.md)
-
-
-</td><td>
-
-
-</td><td>
-
-[Timestamp](./client.timestamp.md)
 
 
 </td><td>

@@ -67,7 +67,7 @@ _(Optional)_
 
 </td><td>
 
-[WsClient](./client.wsclient.md)
+[AppClientTransport](./client.appclienttransport.md)
 
 
 </td><td>
@@ -221,6 +221,8 @@ Call a zome.
 </td><td>
 
 Instance factory for creating an [AppWebsocket](./client.appwebsocket.md)<!-- -->.
+
+Note: in a Tauri webview wired to an in-process conductor ([isTauriHolochain()](./client.istauriholochain.md)<!-- -->), the App API is transparently routed over Tauri IPC and `options.url` and `options.token` are ignored — there is no port to dial and no token to authenticate. Pass them only for the websocket path.
 
 
 </td></tr>

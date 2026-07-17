@@ -36,40 +36,6 @@ Description
 </th></tr></thead>
 <tbody><tr><td>
 
-[action\_seq](./client.create.action_seq.md)
-
-
-</td><td>
-
-
-</td><td>
-
-number
-
-
-</td><td>
-
-
-</td></tr>
-<tr><td>
-
-[author](./client.create.author.md)
-
-
-</td><td>
-
-
-</td><td>
-
-[AgentPubKey](./client.agentpubkey.md)
-
-
-</td><td>
-
-
-</td></tr>
-<tr><td>
-
 [entry\_hash](./client.create.entry_hash.md)
 
 
@@ -96,40 +62,6 @@ number
 </td><td>
 
 [EntryType](./client.entrytype.md)
-
-
-</td><td>
-
-
-</td></tr>
-<tr><td>
-
-[prev\_action](./client.create.prev_action.md)
-
-
-</td><td>
-
-
-</td><td>
-
-[ActionHash](./client.actionhash.md)
-
-
-</td><td>
-
-
-</td></tr>
-<tr><td>
-
-[timestamp](./client.create.timestamp.md)
-
-
-</td><td>
-
-
-</td><td>
-
-[Timestamp](./client.timestamp.md)
 
 
 </td><td>

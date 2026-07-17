@@ -36,40 +36,6 @@ Description
 </th></tr></thead>
 <tbody><tr><td>
 
-[action\_seq](./client.createlink.action_seq.md)
-
-
-</td><td>
-
-
-</td><td>
-
-number
-
-
-</td><td>
-
-
-</td></tr>
-<tr><td>
-
-[author](./client.createlink.author.md)
-
-
-</td><td>
-
-
-</td><td>
-
-[AgentPubKey](./client.agentpubkey.md)
-
-
-</td><td>
-
-
-</td></tr>
-<tr><td>
-
 [base\_address](./client.createlink.base_address.md)
 
 
@@ -78,7 +44,7 @@ number
 
 </td><td>
 
-[EntryHash](./client.entryhash.md)
+[AnyLinkableHash](./client.anylinkablehash.md)
 
 
 </td><td>
@@ -96,23 +62,6 @@ number
 </td><td>
 
 [LinkType](./client.linktype.md)
-
-
-</td><td>
-
-
-</td></tr>
-<tr><td>
-
-[prev\_action](./client.createlink.prev_action.md)
-
-
-</td><td>
-
-
-</td><td>
-
-[ActionHash](./client.actionhash.md)
 
 
 </td><td>
@@ -146,24 +95,7 @@ number
 
 </td><td>
 
-[EntryHash](./client.entryhash.md)
-
-
-</td><td>
-
-
-</td></tr>
-<tr><td>
-
-[timestamp](./client.createlink.timestamp.md)
-
-
-</td><td>
-
-
-</td><td>
-
-[Timestamp](./client.timestamp.md)
+[AnyLinkableHash](./client.anylinkablehash.md)
 
 
 </td><td>
@@ -181,23 +113,6 @@ number
 </td><td>
 
 [ActionType.CreateLink](./client.actiontype.md)
-
-
-</td><td>
-
-
-</td></tr>
-<tr><td>
-
-[weight](./client.createlink.weight.md)
-
-
-</td><td>
-
-
-</td><td>
-
-[RateWeight](./client.rateweight.md)
 
 
 </td><td>

@@ -235,12 +235,12 @@ export const withApp =
 /**
  * Start multiple conductors and install the same app in all.
  * Then run the provided function.
- * 
+ *
  * @param count Number of conductors to start
  * @param f Function to call once conductors are ready
  * @param singleUse Is the app ws authentication token single use
  * @param expirySeconds App ws authentication token expiration
- * @returns 
+ * @returns
  */
 export const withAppBatch =
   (

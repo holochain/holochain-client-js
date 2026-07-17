@@ -12,14 +12,16 @@ export type ChainIntegrityWarrant = {
     InvalidChainOp: {
         action_author: AgentPubKey;
         action: ActionHashAndSig;
-        validation_type: ValidationType;
+        chain_op_type: ChainOpType;
+        reason: string;
     };
 } | {
     ChainFork: {
         chain_author: AgentPubKey;
         action_pair: [ActionHashAndSig, ActionHashAndSig];
+        seq: number;
     };
 };
 ```
-**References:** [AgentPubKey](./client.agentpubkey.md)<!-- -->, [ActionHashAndSig](./client.actionhashandsig.md)<!-- -->, [ValidationType](./client.validationtype.md)
+**References:** [AgentPubKey](./client.agentpubkey.md)<!-- -->, [ActionHashAndSig](./client.actionhashandsig.md)<!-- -->, [ChainOpType](./client.chainoptype.md)
 

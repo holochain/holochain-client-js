@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -e
 
-export RUSTFLAGS="-C opt-level=z --cfg getrandom_backend=\"custom\""
+export RUSTFLAGS="-C opt-level=z -C link-arg=--import-undefined --cfg getrandom_backend=\"custom\""
 
 # build fixture
 cd test/e2e/fixture/zomes/integrity/foo
