@@ -70,7 +70,7 @@ number
 </td></tr>
 <tr><td>
 
-[membrane\_proof?](./client.agentvalidationpkg.membrane_proof.md)
+[membrane\_proof](./client.agentvalidationpkg.membrane_proof.md)
 
 
 </td><td>
@@ -78,12 +78,10 @@ number
 
 </td><td>
 
-[MembraneProof](./client.membraneproof.md)
+any
 
 
 </td><td>
-
-_(Optional)_
 
 
 </td></tr>

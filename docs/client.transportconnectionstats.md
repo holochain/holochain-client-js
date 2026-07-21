@@ -50,7 +50,7 @@ boolean
 
 </td><td>
 
-True if this connection has successfully upgraded to a direct connection.
+\* True if this connection has successfully upgraded to a direct connection.
 
 
 </td></tr>

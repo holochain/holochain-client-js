@@ -666,6 +666,16 @@ Description
 </th></tr></thead>
 <tbody><tr><td>
 
+[\_kp()](./client._kp.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
 [decodeHashFromBase64(hash)](./client.decodehashfrombase64.md)
 
 
@@ -2089,6 +2099,16 @@ This type is meant to be opaque
 </td></tr>
 <tr><td>
 
+[AppDumpNetworkStatsResponse](./client.appdumpnetworkstatsresponse.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
 [AppEntryDef](./client.appentrydef.md)
 
 
@@ -2930,6 +2950,19 @@ Cell id for which the countersigning session state is requested.
 </td></tr>
 <tr><td>
 
+[InitProperties](./client.initproperties.md)
+
+
+</td><td>
+
+Opaque, app-defined bytes made available to a cell during its `init` callback.
+
+Supplied per role at install time in the `init_properties` field on `RoleSettings`<!-- -->, persisted by the conductor alongside the app, never written to the DHT, and read back during `init` via the `hdk::migrate::get_init_properties` host function.
+
+
+</td></tr>
+<tr><td>
+
 [InstallAppDnaPayload](./client.installappdnapayload.md)
 
 
@@ -2981,6 +3014,16 @@ Cell id for which the countersigning session state is requested.
 <tr><td>
 
 [IntegrityZome](./client.integrityzome.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[KeyPair](./client.keypair.md)
 
 
 </td><td>
