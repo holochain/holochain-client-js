@@ -11,8 +11,8 @@ resolver = "2"
 opt-level = "z"
 
 [workspace.dependencies]
-hdi = "0.8.0-rc.1"
-hdk = "0.7.0-rc.1"
+hdi = "0.8.0-rc.2"
+hdk = "0.7.0-rc.2"
 holochain_serialized_bytes = "*"
 
 test_wasm_foo_integrity = { path = "test/e2e/fixture/zomes/integrity/foo" }
