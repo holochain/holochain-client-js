@@ -1,0 +1,17 @@
+name: Publish Release
+
+on:
+  push:
+    branches:
+      - main
+
+permissions: {}
+
+jobs:
+  publish:
+    permissions:
+      contents: write
+      id-token: write
+    uses: holochain/actions/.github/workflows/nodejs-publish-release.yml@e9a629cbd174a20a7027edc5afdc615d51089653 # v1.16.0
+    with:
+      build_script: build

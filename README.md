@@ -204,6 +204,19 @@ nix develop
 npm run test
 ```
 
+## Releasing
+
+1. Open the
+   [Prepare Release workflow](https://github.com/holochain/holochain-client-js/actions/workflows/release-prepare.yml)
+   on GitHub Actions, select the `main` branch, and run it. You may provide an
+   exact version or leave the version empty to infer it from the commits since
+   the latest release.
+2. Review the generated release pull request, including the package version and
+   changelog, then merge it into `main`.
+3. The merge publishes `@holochain/client` to npm with provenance and creates
+   the matching Git tag and GitHub release. Prerelease versions are published
+   with the npm `next` tag.
+
 ## Contribute
 
 Holochain is an open source project.  We welcome all sorts of participation and are actively working on increasing surface area to accept it.  Please see our [contribution guidelines](/CONTRIBUTING.md) for our general practices and protocols on participating in the community, as well as specific expectations around things like code formatting, testing practices, continuous integration, etc.

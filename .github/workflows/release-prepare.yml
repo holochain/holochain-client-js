@@ -1,0 +1,25 @@
+name: Prepare Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Exact version to release (e.g. 1.2.3). Leave empty to infer from commits."
+        required: false
+        type: string
+
+permissions: {}
+
+jobs:
+  prepare:
+    if: github.ref == 'refs/heads/main'
+    permissions:
+      contents: write
+      pull-requests: write
+    uses: holochain/actions/.github/workflows/nodejs-prepare-release.yml@e9a629cbd174a20a7027edc5afdc615d51089653 # v1.16.0
+    with:
+      cliff_config_url: "https://raw.githubusercontent.com/holochain/release-integration/refs/heads/main/pre-1.0-cliff.toml"
+      force_version: ${{ inputs.version }}
+      install_deps: true
+    secrets:
+      GH_TOKEN: ${{ secrets.HRA2_GITHUB_TOKEN }}
