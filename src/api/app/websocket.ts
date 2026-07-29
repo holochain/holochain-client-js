@@ -72,7 +72,6 @@ import {
   PublishCountersigningSessionStateRequest,
   PublishCountersigningSessionStateResponse,
   RoleNameCallZomeRequest,
-  Signal,
   SignalCb,
 } from "./types.js";
 
@@ -246,7 +245,7 @@ export class AppWebsocket implements AppClient {
       }
     });
 
-    this.client.on("signal", (signal: Signal) => {
+    this.client.on("signal", ({ data: signal }) => {
       this.emitter.emit("signal", signal).catch(console.error);
     });
   }
@@ -645,7 +644,9 @@ export class AppWebsocket implements AppClient {
     eventName: Name | readonly Name[],
     listener: SignalCb,
   ): UnsubscribeFunction {
-    return this.emitter.on(eventName, listener);
+    // Emittery v2 hands listeners an `{ name, data }` pair; unwrap it so public
+    // {@link SignalCb} listeners keep receiving the bare signal.
+    return this.emitter.on(eventName, ({ data }) => listener(data));
   }
 
   private static requester<ReqI, ReqO, ResI, ResO>(

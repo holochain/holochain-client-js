@@ -11,9 +11,9 @@ From [AppWebsocket](./client.appwebsocket.md)<!-- -->'s perspective this is a dr
 **Signature:**
 
 ```typescript
-export declare class TauriAppTransport extends Emittery implements AppClientTransport 
+export declare class TauriAppTransport extends Emittery<AppEvents> implements AppClientTransport 
 ```
-**Extends:** Emittery
+**Extends:** Emittery&lt;[AppEvents](./client.appevents.md)<!-- -->&gt;
 
 **Implements:** [AppClientTransport](./client.appclienttransport.md)
 

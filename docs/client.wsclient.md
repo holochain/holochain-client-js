@@ -11,9 +11,9 @@ Uses Holochain's WireMessage for communication.
 **Signature:**
 
 ```typescript
-export declare class WsClient extends Emittery 
+export declare class WsClient extends Emittery<AppEvents> 
 ```
-**Extends:** Emittery
+**Extends:** Emittery&lt;[AppEvents](./client.appevents.md)<!-- -->&gt;
 
 ## Constructors
 

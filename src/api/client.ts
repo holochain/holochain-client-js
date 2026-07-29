@@ -4,6 +4,7 @@ import IsoWebSocket from "isomorphic-ws";
 import { HolochainError, WsClientOptions } from "./common.js";
 import { AppAuthenticationToken } from "./admin/index.js";
 import { decodeSignal, holoHashMapKeyConverter } from "./app/decode.js";
+import type { AppEvents } from "./app/types.js";
 
 interface HolochainMessage {
   id: number;
@@ -34,7 +35,7 @@ export interface AppAuthenticationRequest {
  *
  * @public
  */
-export class WsClient extends Emittery {
+export class WsClient extends Emittery<AppEvents> {
   socket: IsoWebSocket;
   url: URL | undefined;
   options: WsClientOptions | undefined;

@@ -1,4 +1,4 @@
-import { UnsubscribeFunction } from "emittery";
+import { EmitteryEvent, UnsubscribeFunction } from "emittery";
 import {
   AgentPubKey,
   AppAuthenticationToken,
@@ -509,7 +509,14 @@ export interface AppClient {
  */
 export interface AppClientTransport {
   request<Response>(request: unknown): Promise<Response>;
-  on(eventName: "signal", listener: SignalCb): UnsubscribeFunction;
+  // Emittery v2 delivers an `{ name, data }` pair to listeners rather than the
+  // bare event data, so the transport surface mirrors that. `AppWebsocket`
+  // unwraps the pair before invoking the public {@link SignalCb} listeners, so
+  // this does not leak into the app client API.
+  on(
+    eventName: "signal",
+    listener: (event: EmitteryEvent<"signal", Signal>) => void,
+  ): UnsubscribeFunction;
 }
 
 /**
