@@ -5,7 +5,7 @@ import {
   getTauriInvoke,
 } from "../../environments/tauri.js";
 import { decodeSignal, holoHashMapKeyConverter } from "./decode.js";
-import { AppClientTransport } from "./types.js";
+import { AppClientTransport, AppEvents } from "./types.js";
 
 /**
  * Carries the App API over Tauri IPC into a Holochain conductor running in the
@@ -21,7 +21,10 @@ import { AppClientTransport } from "./types.js";
  *
  * @public
  */
-export class TauriAppTransport extends Emittery implements AppClientTransport {
+export class TauriAppTransport
+  extends Emittery<AppEvents>
+  implements AppClientTransport
+{
   private readonly command: string;
   private readonly unsubscribeSignals?: () => void;
 

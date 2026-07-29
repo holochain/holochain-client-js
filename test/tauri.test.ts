@@ -278,7 +278,7 @@ test("TauriAppTransport delivers app signals from the plugin's signal bridge", a
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const received: any[] = [];
-  transport.on("signal", (s) => received.push(s));
+  transport.on("signal", ({ data }) => received.push(data));
 
   assert.ok(captured, "transport subscribed to the plugin signal bridge");
 
@@ -323,7 +323,7 @@ test("TauriAppTransport passes system signals through unchanged", async () => {
   const transport = new TauriAppTransport("holochain");
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const received: any[] = [];
-  transport.on("signal", (s) => received.push(s));
+  transport.on("signal", ({ data }) => received.push(data));
 
   // A system signal carries no inner app payload: { type: "system", value }.
   captured!(encode({ type: "system", value: systemValue }));

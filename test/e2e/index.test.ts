@@ -1,6 +1,6 @@
 import { decode, encode } from "@msgpack/msgpack";
 import getPort from "get-port";
-import yaml from "js-yaml";
+import * as yaml from "js-yaml";
 import fs from "node:fs";
 import { assert, test } from "vitest";
 import zlib from "zlib";
@@ -417,7 +417,12 @@ test("can install app with roles_settings", async () => {
             membrane_proof: new Uint8Array(6),
             modifiers: {
               network_seed: "hello",
-              properties: yaml.dump({ progenitor: progenitorKey }),
+              // The progenitor key round-trips as a `!!binary` scalar, which
+              // lives in YAML 1.1 rather than js-yaml v5's default core schema.
+              properties: yaml.dump(
+                { progenitor: progenitorKey },
+                { schema: yaml.YAML11_SCHEMA },
+              ),
             },
           },
         },
@@ -430,7 +435,9 @@ test("can install app with roles_settings", async () => {
       .value as ProvisionedCell;
     assert.equal(provisionedCell.dna_modifiers.network_seed, "hello");
     assert.deepEqual(
-      yaml.load(decode(provisionedCell.dna_modifiers.properties) as string),
+      yaml.load(decode(provisionedCell.dna_modifiers.properties) as string, {
+        schema: yaml.YAML11_SCHEMA,
+      }),
       { progenitor: progenitorKey },
     );
   })();

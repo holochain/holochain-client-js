@@ -1537,6 +1537,17 @@ Gossip state summary.
 </td></tr>
 <tr><td>
 
+[KeyPair](./client.keypair.md)
+
+
+</td><td>
+
+An Ed25519 key pair, as returned by libsodium's `crypto_sign_keypair`<!-- -->.
+
+
+</td></tr>
+<tr><td>
+
 [Link](./client.link.md)
 
 

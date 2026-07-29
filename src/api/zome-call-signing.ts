@@ -1,7 +1,18 @@
-import _sodium, { type KeyPair } from "libsodium-wrappers";
+import _sodium from "libsodium-wrappers";
 import type { CapSecret } from "../hdk/capabilities.js";
 import type { AgentPubKey, CellId } from "../types.js";
 import { encodeHashToBase64 } from "../utils/base64.js";
+
+/**
+ * An Ed25519 key pair, as returned by libsodium's `crypto_sign_keypair`.
+ *
+ * @public
+ */
+export interface KeyPair {
+  keyType: string;
+  privateKey: Uint8Array;
+  publicKey: Uint8Array;
+}
 
 /**
  * @public

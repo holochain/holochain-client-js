@@ -62,8 +62,7 @@ export const isTauriHolochain = (): boolean =>
  * @public
  */
 export const getTauriHolochainEnvironment = ():
-  | TauriHolochainEnvironment
-  | undefined =>
+  TauriHolochainEnvironment | undefined =>
   isTauriHolochain() ? globalThis.window[__HC_TAURI_HOLOCHAIN__] : undefined;
 
 /**

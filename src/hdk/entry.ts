@@ -20,10 +20,7 @@ export type AppEntryDef = {
  * @public
  */
 export type EntryType =
-  | "Agent"
-  | { App: AppEntryDef }
-  | "CapClaim"
-  | "CapGrant";
+  "Agent" | { App: AppEntryDef } | "CapClaim" | "CapGrant";
 
 /**
  * @public
