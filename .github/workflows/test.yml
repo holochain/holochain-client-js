@@ -20,20 +20,20 @@ jobs:
 
     steps:
       - name: Check out source code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Install nix
-        uses: cachix/install-nix-action@v30
+        uses: cachix/install-nix-action@v31
         with:
           install_url: https://releases.nixos.org/nix/nix-2.25.4/install
 
       - name: Set up cachix
-        uses: cachix/cachix-action@v15
+        uses: cachix/cachix-action@v17
         with:
           name: holochain-ci
 
       - name: Restore test zome build
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@v6
         env:
           cache-name: test-zome
         with:
@@ -49,7 +49,7 @@ jobs:
         run: nix develop -c $SHELL -c "./build-fixture.sh"
 
       - name: Save test zome build
-        uses: actions/cache/save@v4
+        uses: actions/cache/save@v6
         env:
           cache-name: test-zome
         with:
@@ -85,10 +85,10 @@ jobs:
 
     steps:
       - name: Check out source code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Install Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
           node-version: ${{ matrix.node }}
 
@@ -105,7 +105,7 @@ jobs:
         run: npm pack
 
       - name: Upload package tarball
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: client-${{ matrix.os }}-${{ matrix.node }}.tgz
           path: holochain-client-*.tgz
@@ -127,12 +127,12 @@ jobs:
 
     steps:
       - name: Download package tarball
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: client-${{ matrix.os }}-${{ matrix.node }}.tgz
 
       - name: Install Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
           node-version: ${{ matrix.node }}
 
