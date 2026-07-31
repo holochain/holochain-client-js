@@ -11,22 +11,22 @@
 export type ChainOp = {
     [ChainOpType.CreateRecord]: [SignedAction, OpEntry];
 } | {
-    [ChainOpType.CreateEntry]: [Signature, OpEntry];
+    [ChainOpType.CreateEntry]: [SignedAction, OpEntry];
 } | {
-    [ChainOpType.AgentActivity]: [SignedAction];
+    [ChainOpType.AgentActivity]: SignedAction;
 } | {
     [ChainOpType.UpdateEntry]: [SignedAction, OpEntry];
 } | {
     [ChainOpType.UpdateRecord]: [SignedAction, OpEntry];
 } | {
-    [ChainOpType.DeleteEntry]: [SignedAction];
+    [ChainOpType.DeleteEntry]: SignedAction;
 } | {
-    [ChainOpType.DeleteRecord]: [SignedAction];
+    [ChainOpType.DeleteRecord]: SignedAction;
 } | {
-    [ChainOpType.CreateLink]: [SignedAction];
+    [ChainOpType.CreateLink]: SignedAction;
 } | {
-    [ChainOpType.DeleteLink]: [SignedAction];
+    [ChainOpType.DeleteLink]: SignedAction;
 };
 ```
-**References:** [ChainOpType.CreateRecord](./client.chainoptype.md)<!-- -->, [SignedAction](./client.signedaction.md)<!-- -->, [OpEntry](./client.opentry.md)<!-- -->, [ChainOpType.CreateEntry](./client.chainoptype.md)<!-- -->, [Signature](./client.signature.md)<!-- -->, [ChainOpType.AgentActivity](./client.chainoptype.md)<!-- -->, [ChainOpType.UpdateEntry](./client.chainoptype.md)<!-- -->, [ChainOpType.UpdateRecord](./client.chainoptype.md)<!-- -->, [ChainOpType.DeleteEntry](./client.chainoptype.md)<!-- -->, [ChainOpType.DeleteRecord](./client.chainoptype.md)<!-- -->, [ChainOpType.CreateLink](./client.chainoptype.md)<!-- -->, [ChainOpType.DeleteLink](./client.chainoptype.md)
+**References:** [ChainOpType.CreateRecord](./client.chainoptype.md)<!-- -->, [SignedAction](./client.signedaction.md)<!-- -->, [OpEntry](./client.opentry.md)<!-- -->, [ChainOpType.CreateEntry](./client.chainoptype.md)<!-- -->, [ChainOpType.AgentActivity](./client.chainoptype.md)<!-- -->, [ChainOpType.UpdateEntry](./client.chainoptype.md)<!-- -->, [ChainOpType.UpdateRecord](./client.chainoptype.md)<!-- -->, [ChainOpType.DeleteEntry](./client.chainoptype.md)<!-- -->, [ChainOpType.DeleteRecord](./client.chainoptype.md)<!-- -->, [ChainOpType.CreateLink](./client.chainoptype.md)<!-- -->, [ChainOpType.DeleteLink](./client.chainoptype.md)
 

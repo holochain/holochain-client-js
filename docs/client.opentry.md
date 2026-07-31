@@ -10,11 +10,7 @@
 ```typescript
 export type OpEntry = {
     [OpEntryType.Present]: Entry;
-} | {
-    [OpEntryType.Hidden]: null;
-} | {
-    [OpEntryType.ActionOnly]: null;
-};
+} | OpEntryType.Hidden | OpEntryType.ActionOnly;
 ```
 **References:** [OpEntryType.Present](./client.opentrytype.md)<!-- -->, [Entry](./client.entry.md)<!-- -->, [OpEntryType.Hidden](./client.opentrytype.md)<!-- -->, [OpEntryType.ActionOnly](./client.opentrytype.md)
 
