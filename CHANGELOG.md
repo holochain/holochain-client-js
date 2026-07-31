@@ -119,7 +119,7 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ### Documentation
 
-- Add a link to github workflow badges by @Olexandr88 in [#379](https://github.com/holochain/holochain-client-js/pull/379)
+- Add a link to GitHub workflow badges by @Olexandr88 in [#379](https://github.com/holochain/holochain-client-js/pull/379)
 
 ### Other Changes
 
@@ -129,16 +129,6 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 ### First-time Contributors
 
 - @Olexandr88 made their first contribution in [#379](https://github.com/holochain/holochain-client-js/pull/379)
-# Changelog
-
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/). This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
-
-## \[Unreleased\]
-
-### Added
-### Fixed
-### Changed
-### Removed
 
 ## 2026-05-15: v0.21.0-dev.3
 
