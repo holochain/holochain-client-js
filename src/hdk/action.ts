@@ -82,6 +82,8 @@ export type ActionData =
   | Dna
   | AgentValidationPkg
   | InitZomesComplete
+  | Create
+  | Update
   | CreateLink
   | DeleteLink
   | OpenChain

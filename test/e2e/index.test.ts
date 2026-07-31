@@ -15,6 +15,8 @@ import {
   CallZomeRequest,
   CellProvisioningStrategy,
   CellType,
+  ChainOp,
+  ChainOpType,
   CloneIdHelper,
   CreateCloneCellRequest,
   DumpStateResponse,
@@ -30,6 +32,10 @@ import {
   encodeHashToBase64,
   fakeDnaHash,
   generateSigningKeyPair,
+  getChainOpAction,
+  getChainOpEntry,
+  getChainOpSignature,
+  getChainOpType,
   getNonceExpiration,
   getSigningCredentials,
   isSameCell,
@@ -636,13 +642,109 @@ test(
 test(
   "fullStateDump with ChainOps",
   withApp(async (testCase) => {
-    const { admin_ws, cell_id } = testCase;
-    const state: FullStateDump = await admin_ws.dumpFullState({
+    const { admin_ws, app_ws, cell_id } = testCase;
+    await admin_ws.authorizeSigningCredentials(cell_id);
+
+    const createdHash: ActionHash = await app_ws.callZome({
       cell_id,
+      zome_name: TEST_ZOME_NAME,
+      fn_name: "create_an_entry",
+      provenance: fakeAgentPubKey(),
+      payload: null,
     });
-    for (const dhtOp of state.integration_dump.integrated) {
-      assert.isTrue("ChainOp" in dhtOp, "dht op is a chain op");
+    await app_ws.callZome({
+      cell_id,
+      zome_name: TEST_ZOME_NAME,
+      fn_name: "update_an_entry",
+      provenance: fakeAgentPubKey(),
+      payload: createdHash,
+    });
+    await app_ws.callZome({
+      cell_id,
+      zome_name: TEST_ZOME_NAME,
+      fn_name: "delete_an_entry",
+      provenance: fakeAgentPubKey(),
+      payload: createdHash,
+    });
+    await app_ws.callZome({
+      cell_id,
+      zome_name: TEST_ZOME_NAME,
+      fn_name: "create_and_delete_link",
+      provenance: fakeAgentPubKey(),
+      payload: null,
+    });
+
+    // Ops are integrated asynchronously after the zome calls return, so poll
+    // until every ChainOpType shows up in the integration dump.
+    const allOpTypes = Object.values(ChainOpType);
+    let integrated: FullStateDump["integration_dump"]["integrated"] = [];
+    const seenOpTypes = new Set<ChainOpType>();
+    for (let attempt = 0; attempt < 30; attempt += 1) {
+      const state: FullStateDump = await admin_ws.dumpFullState({ cell_id });
+      integrated = state.integration_dump.integrated;
+      seenOpTypes.clear();
+      for (const dhtOp of integrated) {
+        assert.isTrue("ChainOp" in dhtOp, "dht op is a chain op");
+        seenOpTypes.add(
+          getChainOpType((dhtOp as { ChainOp: ChainOp }).ChainOp),
+        );
+      }
+      if (allOpTypes.every((opType) => seenOpTypes.has(opType))) {
+        break;
+      }
+      await delay(500);
     }
+    assert.deepEqual(
+      [...seenOpTypes].sort(),
+      [...allOpTypes].sort(),
+      "all chain op types are integrated",
+    );
+
+    let publicAppEntriesSeen = 0;
+    for (const dhtOp of integrated) {
+      const chainOp = (dhtOp as { ChainOp: ChainOp }).ChainOp;
+      const opType = getChainOpType(chainOp);
+
+      const action = getChainOpAction(chainOp);
+      assert.instanceOf(action.header.author, Uint8Array);
+      assert.isNumber(action.header.timestamp);
+      assert.isNumber(action.header.action_seq);
+      assert.isString(action.data.type);
+
+      const signature = getChainOpSignature(chainOp);
+      assert.instanceOf(signature, Uint8Array);
+      assert.equal(signature.length, 64);
+
+      const entry = getChainOpEntry(chainOp);
+      const entryType =
+        action.data.type === ActionType.Create ||
+        action.data.type === ActionType.Update
+          ? action.data.entry_type
+          : undefined;
+      const isPublicAppEntry =
+        typeof entryType === "object" &&
+        entryType.App.visibility === "Public" &&
+        (opType === ChainOpType.CreateEntry ||
+          opType === ChainOpType.UpdateEntry);
+      if (isPublicAppEntry) {
+        assert.isDefined(entry, `${opType} op carries its public app entry`);
+        publicAppEntriesSeen += 1;
+      }
+      if (
+        opType === ChainOpType.AgentActivity ||
+        opType === ChainOpType.DeleteEntry ||
+        opType === ChainOpType.DeleteRecord ||
+        opType === ChainOpType.CreateLink ||
+        opType === ChainOpType.DeleteLink
+      ) {
+        assert.isUndefined(entry, `${opType} op carries no entry`);
+      }
+    }
+    assert.isAbove(
+      publicAppEntriesSeen,
+      0,
+      "at least one op carries a public app entry",
+    );
   }),
 );
 

@@ -9,7 +9,7 @@ Checks if a \[DnaHash, HoloHash\] key pair exists in the map.
 **Signature:**
 
 ```typescript
-has([dnaHash, key]: [DnaHash, K]): boolean;
+has(input: [DnaHash, K]): boolean;
 ```
 
 ## Parameters
@@ -33,6 +33,20 @@ Description
 <tbody><tr><td>
 
 \[dnaHash, key\]
+
+
+</td><td>
+
+(not declared)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+input
 
 
 </td><td>

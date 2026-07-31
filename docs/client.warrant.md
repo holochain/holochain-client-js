@@ -106,7 +106,7 @@ Time when the warrant was issued
 
 </td><td>
 
-The warranted agen
+The warranted agent
 
 
 </td></tr>

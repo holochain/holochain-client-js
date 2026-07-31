@@ -102,6 +102,19 @@ pub fn create_and_delete_link() -> ExternResult<ActionHash> {
 }
 
 #[hdk_extern]
+pub fn update_an_entry(original_action_hash: ActionHash) -> ExternResult<ActionHash> {
+    update_entry(
+        original_action_hash,
+        EntryTypes::Test(TestString::from(String::from("updated"))),
+    )
+}
+
+#[hdk_extern]
+pub fn delete_an_entry(action_hash: ActionHash) -> ExternResult<ActionHash> {
+    delete_entry(action_hash)
+}
+
+#[hdk_extern]
 pub fn get_agent_activity(chain_top: ActionHash) -> ExternResult<Vec<AgentActivity>> {
     let agent = agent_info()?.agent_initial_pubkey;
     must_get_agent_activity(agent, ChainFilter::new(chain_top))

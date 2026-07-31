@@ -46,7 +46,7 @@ export interface Warrant {
   author: AgentPubKey;
   /** Time when the warrant was issued */
   timestamp: Timestamp;
-  /** The warranted agen */
+  /** The warranted agent */
   warrantee: AgentPubKey;
 }
 
@@ -64,26 +64,22 @@ export enum OpEntryType {
  */
 export type OpEntry =
   | { [OpEntryType.Present]: Entry }
-  | { [OpEntryType.Hidden]: null }
-  | { [OpEntryType.ActionOnly]: null };
+  | OpEntryType.Hidden
+  | OpEntryType.ActionOnly;
 
 /**
  * @public
  */
 export type ChainOp =
   | { [ChainOpType.CreateRecord]: [SignedAction, OpEntry] }
-  | { [ChainOpType.CreateEntry]: [Signature, OpEntry] }
-  | { [ChainOpType.AgentActivity]: [SignedAction] }
-  | {
-      [ChainOpType.UpdateEntry]: [SignedAction, OpEntry];
-    }
-  | {
-      [ChainOpType.UpdateRecord]: [SignedAction, OpEntry];
-    }
-  | { [ChainOpType.DeleteEntry]: [SignedAction] }
-  | { [ChainOpType.DeleteRecord]: [SignedAction] }
-  | { [ChainOpType.CreateLink]: [SignedAction] }
-  | { [ChainOpType.DeleteLink]: [SignedAction] };
+  | { [ChainOpType.CreateEntry]: [SignedAction, OpEntry] }
+  | { [ChainOpType.AgentActivity]: SignedAction }
+  | { [ChainOpType.UpdateEntry]: [SignedAction, OpEntry] }
+  | { [ChainOpType.UpdateRecord]: [SignedAction, OpEntry] }
+  | { [ChainOpType.DeleteEntry]: SignedAction }
+  | { [ChainOpType.DeleteRecord]: SignedAction }
+  | { [ChainOpType.CreateLink]: SignedAction }
+  | { [ChainOpType.DeleteLink]: SignedAction };
 
 /**
  * @public
@@ -151,49 +147,40 @@ export function getChainOpType(op: ChainOp): ChainOpType {
   return Object.keys(op)[0] as ChainOpType;
 }
 
+function getChainOpSignedAction(op: ChainOp): SignedAction {
+  const value = Object.values(op)[0] as SignedAction | [SignedAction, OpEntry];
+  return Array.isArray(value) ? value[0] : value;
+}
+
 /**
  * @public
  */
 export function getChainOpAction(op: ChainOp): Action {
-  const opType = getChainOpType(op);
-  const action = Object.values(op)[0][1];
-
-  if (opType === ChainOpType.CreateLink) {
-    return {
-      type: "CreateLink",
-      ...action,
-    };
-  }
-  if (
-    opType === ChainOpType.UpdateEntry ||
-    opType === ChainOpType.UpdateRecord
-  ) {
-    return {
-      type: "Update",
-      ...action,
-    };
-  }
-
-  if (action.author) return action;
-  else {
-    const actionType = Object.keys(action)[0];
-    return {
-      type: actionType,
-      ...action[actionType],
-    };
-  }
+  return getChainOpSignedAction(op).data;
 }
 
 /**
  * @public
  */
 export function getChainOpEntry(op: ChainOp): Entry | undefined {
-  return Object.values(op)[0][2];
+  const value = Object.values(op)[0] as SignedAction | [SignedAction, OpEntry];
+  if (!Array.isArray(value)) {
+    return undefined;
+  }
+  const opEntry = value[1];
+  if (
+    typeof opEntry === "object" &&
+    opEntry !== null &&
+    OpEntryType.Present in opEntry
+  ) {
+    return opEntry[OpEntryType.Present];
+  }
+  return undefined;
 }
 
 /**
  * @public
  */
 export function getChainOpSignature(op: ChainOp): Signature {
-  return Object.values(op)[0][1];
+  return getChainOpSignedAction(op).signature;
 }
