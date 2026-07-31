@@ -1,5 +1,136 @@
 # Changelog
 
+All notable changes to this project will be documented in this file.
+
+This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## \[[0.21.0](https://github.com/holochain/holochain-client-js/compare/v0.21.0-rc.0...v0.21.0)\] - 2026-07-31
+
+### Features
+
+- Update to Holochain 0.7.0 by @ThetaSinner in [#453](https://github.com/holochain/holochain-client-js/pull/453)
+- Prepare release 0.21.0-rc.1 by @ThetaSinner
+- Update 0.7.0-rc.3 by @ThetaSinner in [#439](https://github.com/holochain/holochain-client-js/pull/439)
+
+### CI
+
+- *(release)* Automate npm releases by @veeso in [#442](https://github.com/holochain/holochain-client-js/pull/442)
+  - Replace manual release preparation and publishing with Holochain reusable workflows.
+  - Regenerate the changelog from reachable tags and document the release process.
+
+### Automated Changes
+
+- *(deps)* Bump the updates group across 1 directory with 7 updates by @dependabot[bot] in [#451](https://github.com/holochain/holochain-client-js/pull/451)
+- *(deps)* Bump the nix group with 2 updates by @dependabot[bot] in [#450](https://github.com/holochain/holochain-client-js/pull/450)
+- Update dependabot.yml with shared content in [#449](https://github.com/holochain/holochain-client-js/pull/449)
+- *(deps-dev)* Bump js-yaml from 4.1.1 to 4.3.0 by @dependabot[bot] in [#447](https://github.com/holochain/holochain-client-js/pull/447)
+- *(deps-dev)* Bump postcss from 8.5.6 to 8.5.25 by @dependabot[bot] in [#446](https://github.com/holochain/holochain-client-js/pull/446)
+- *(deps-dev)* Bump flatted from 3.3.3 to 3.4.3 by @dependabot[bot] in [#445](https://github.com/holochain/holochain-client-js/pull/445)
+- *(deps)* Bump ws from 8.18.3 to 8.21.1 by @dependabot[bot] in [#444](https://github.com/holochain/holochain-client-js/pull/444)
+- *(deps-dev)* Bump rollup from 4.57.1 to 4.62.3 by @dependabot[bot] in [#443](https://github.com/holochain/holochain-client-js/pull/443)
+- *(deps)* Bump picomatch and eslint-plugin-tsdoc by @dependabot[bot] in [#427](https://github.com/holochain/holochain-client-js/pull/427)
+- *(deps)* Bump lodash and @microsoft/api-extractor by @dependabot[bot] in [#420](https://github.com/holochain/holochain-client-js/pull/420)
+- *(deps)* Bump lodash-es from 4.17.21 to 4.18.1 by @dependabot[bot] in [#416](https://github.com/holochain/holochain-client-js/pull/416)
+- *(deps)* Bump esbuild, tsx and vite by @dependabot[bot] in [#448](https://github.com/holochain/holochain-client-js/pull/448)
+
+## \[[0.21.0-rc.0](https://github.com/holochain/holochain-client-js/compare/v0.21.0-dev.2...v0.21.0-rc.0)\] - 2026-07-17
+
+### Features
+
+- Update to use Holochain 0.7.0-rc.1 with new op and action types in use by @ThetaSinner
+- Route App API over Tauri IPC in plugin webviews by @zippy in [#426](https://github.com/holochain/holochain-client-js/pull/426)
+  - Add a transport that carries the App API over Tauri IPC into an in-process Holochain conductor instead of a websocket, for webviews opened by tauri-plugin-holochain.
+  - Environments/tauri.ts: detect the plugin webview (window markers   __HC_TAURI_HOLOCHAIN__ + __TAURI_INTERNALS__) and expose Tauri's invoke.   getTauriInvoke / TauriInvokeFn are transport-internal and are not   re-exported from index.ts; only the environment-detection helpers are public. - api/app/tauri-transport.ts: TauriAppTransport, a drop-in for WsClient from   AppWebsocket's view. request() moves the same msgpack {type,value} payloads   the websocket carries through the plugin:<name>|app_request command. No app   id is sent — the conductor scopes each request to the calling window,   replacing the per-app websocket auth token. It also subscribes to the   plugin's optional signal bridge (env.subscribeSignals) and re-emits each   signal, so AppWebsocket.on("signal", ...) works exactly as over a websocket. - AppWebsocket.connect: when isTauriHolochain(), build the transport and fetch   app_info through it (options.url/token are ignored); the websocket path is   unchanged otherwise. client/constructor/requester are typed to a new   AppClientTransport interface that WsClient already satisfies. - api/app/decode.ts: shared decode helpers (holoHashMapKeyConverter,   assertHolochainSignal, decodeSignal) used by both WsClient and   TauriAppTransport so the two transports decode responses and signals   identically — a malformed signal throws rather than falling through.
+  - Keeps @holochain/client free of @tauri-apps/api: the Tauri event listening lives in the plugin's injected env, which hands the transport plain (bytes) => void / invoke callbacks. Zome-call signing is untouched — the host signer still signs in JS and the signed call rides the same transport.
+  - Package.json adds a prepare script (build:lib) so the branch is installable via a git spec, plus a test:tauri script.
+  - Tests (npm run test:tauri, vitest, no conductor) cover env detection, the request encode/invoke/decode round-trip, the HoloHash map-key converter, connect selecting the transport, a signed callZome over IPC, app- and system-signal delivery, the error-response rejection path, AppNotFound on empty app_info, TauriInternalsMissing, and close() teardown. README documents the connection path and its window-label trust model.
+- Utility to start multiple conductors and install the same app in all by @mattyg
+
+### Bug Fixes
+
+- Prevent WsClient wedge after transient reconnect (#412) by @veeso in [#414](https://github.com/holochain/holochain-client-js/pull/414)
+  - Retain auth token on generic reconnect "error" event; only clear it   when conductor closes immediately after `authenticate` (real   InvalidTokenError signal). - Dedupe concurrent reconnect attempts via shared `reconnectPromise`   so parallel `exchange()` callers share one new socket. - Document `request()` error surface (ConnectionError /   InvalidTokenError / WebsocketClosedError). - Add e2e regressions: wedge recovery + concurrent reconnect dedupe. - Switch tsconfig to NodeNext module/moduleResolution; fix resulting   missing `.js` extension in `src/hdk/validation-receipts.ts`.
+- Rename signalingServerUrl -> relayServerUrl by @mattyg
+- Address feedback by @jost-s
+- Update app network stats response type by @jost-s
+
+### Miscellaneous Tasks
+
+- Prepare release for Holochain 0.7.0-dev.23 by @ThetaSinner in [#415](https://github.com/holochain/holochain-client-js/pull/415)
+- Changelog by @mattyg in [#408](https://github.com/holochain/holochain-client-js/pull/408)
+
+### CI
+
+- Update node by @ThetaSinner in [#435](https://github.com/holochain/holochain-client-js/pull/435)
+
+### Testing
+
+- Dump network stats with connection data structure assertions by @mattyg
+- Simplify common app setup by @jost-s
+- Stabilize conductor management by @jost-s
+- Switch to vitest by @jost-s
+
+### Refactor
+
+- Divide fixture zome into integrity and coordinator by @jost-s in [#410](https://github.com/holochain/holochain-client-js/pull/410)
+- Make retryUntilTimeout more versatile by @jost-s
+
+### Automated Changes
+
+- Update CODEOWNERS with shared content in [#434](https://github.com/holochain/holochain-client-js/pull/434)
+
+## \[[0.21.0-dev.2](https://github.com/holochain/holochain-client-js/compare/v0.21.0-dev.1...v0.21.0-dev.2)\] - 2026-01-16
+
+### Bug Fixes
+
+- \[**BREAKING**\] Rename is_webrtc to is_direct in TransportStats by @jost-s in [#401](https://github.com/holochain/holochain-client-js/pull/401)
+
+## \[[0.21.0-dev.1](https://github.com/holochain/holochain-client-js/compare/v0.20.2...v0.21.0-dev.1)\] - 2026-01-13
+
+### Bug Fixes
+
+- Bump libsodium to 0.8 by @veeso
+  - This fixes a build issue
+
+### Miscellaneous Tasks
+
+- Release v0.21.0-dev.1 by @jost-s in [#400](https://github.com/holochain/holochain-client-js/pull/400)
+- Upgrade to holochain 0.7.0-dev.6 by @jost-s in [#399](https://github.com/holochain/holochain-client-js/pull/399)
+
+### First-time Contributors
+
+- @veeso made their first contribution
+
+## \[[0.20.2](https://github.com/holochain/holochain-client-js/compare/v0.20.1...v0.20.2)\] - 2026-01-06
+
+### Features
+
+- Add holo hash utils and types that were included in holochain-open-dev/utils but missing from this library, refactor, cleanup and add docs and tests (#392) by @mattyg in [#392](https://github.com/holochain/holochain-client-js/pull/392)
+
+### Miscellaneous Tasks
+
+- Bump package version to 0.21.0-dev.0 (#384) by @matthme in [#384](https://github.com/holochain/holochain-client-js/pull/384)
+
+### Build System
+
+- Bump deps (#390) by @mattyg in [#390](https://github.com/holochain/holochain-client-js/pull/390)
+  - Build: bump deps
+  - Build: update eslint config and autofix lint issues
+
+### Documentation
+
+- Add a link to github workflow badges by @Olexandr88 in [#379](https://github.com/holochain/holochain-client-js/pull/379)
+
+### Other Changes
+
+- Build/docs error (#391) by @mattyg in [#391](https://github.com/holochain/holochain-client-js/pull/391)
+- Feat/missing types from holochain open dev core types (#388) by @mattyg in [#388](https://github.com/holochain/holochain-client-js/pull/388)
+
+### First-time Contributors
+
+- @Olexandr88 made their first contribution in [#379](https://github.com/holochain/holochain-client-js/pull/379)
+# Changelog
+
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/). This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## \[Unreleased\]
