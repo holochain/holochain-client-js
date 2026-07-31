@@ -4,7 +4,7 @@
 
 ## Warrant.warrantee property
 
-The warranted agen
+The warranted agent
 
 **Signature:**
 
