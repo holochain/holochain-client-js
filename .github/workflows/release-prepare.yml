@@ -16,7 +16,7 @@ jobs:
     permissions:
       contents: write
       pull-requests: write
-    uses: holochain/actions/.github/workflows/nodejs-prepare-release.yml@e9a629cbd174a20a7027edc5afdc615d51089653 # v1.16.0
+    uses: holochain/actions/.github/workflows/nodejs-prepare-release.yml@e3e5f19ffbf400997ff7a58bdcd489d1ab953eee # v1.17.0
     with:
       cliff_config_url: "https://raw.githubusercontent.com/holochain/release-integration/refs/heads/main/pre-1.0-cliff.toml"
       force_version: ${{ inputs.version }}
