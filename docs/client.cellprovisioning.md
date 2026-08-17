@@ -2,73 +2,20 @@
 
 [Home](./index.md) &gt; [@holochain/client](./client.md) &gt; [CellProvisioning](./client.cellprovisioning.md)
 
-## CellProvisioning interface
+## CellProvisioning type
 
+Rules to determine if and how a Cell will be created for this Dna
 
 **Signature:**
 
 ```typescript
-export interface CellProvisioning 
+export type CellProvisioning = {
+    strategy: "create";
+    deferred: boolean;
+} | {
+    strategy: "use_existing";
+    protected: boolean;
+} | {
+    strategy: "clone_only";
+};
 ```
-
-## Properties
-
-<table><thead><tr><th>
-
-Property
-
-
-</th><th>
-
-Modifiers
-
-
-</th><th>
-
-Type
-
-
-</th><th>
-
-Description
-
-
-</th></tr></thead>
-<tbody><tr><td>
-
-[deferred?](./client.cellprovisioning.deferred.md)
-
-
-</td><td>
-
-
-</td><td>
-
-boolean
-
-
-</td><td>
-
-_(Optional)_
-
-
-</td></tr>
-<tr><td>
-
-[strategy](./client.cellprovisioning.strategy.md)
-
-
-</td><td>
-
-
-</td><td>
-
-[CellProvisioningStrategy](./client.cellprovisioningstrategy.md)
-
-
-</td><td>
-
-
-</td></tr>
-</tbody></table>
-

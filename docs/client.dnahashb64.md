@@ -8,7 +8,5 @@
 **Signature:**
 
 ```typescript
-export type DnaHashB64 = HoloHashB64;
+export type DnaHashB64 = string;
 ```
-**References:** [HoloHashB64](./client.holohashb64.md)
-

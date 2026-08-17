@@ -522,91 +522,12 @@ Description
 </th></tr></thead>
 <tbody><tr><td>
 
-[ActionType](./client.actiontype.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[AppStatusFilter](./client.appstatusfilter.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[CellProvisioningStrategy](./client.cellprovisioningstrategy.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
 [CellType](./client.celltype.md)
 
 
 </td><td>
 
-
-
-</td></tr>
-<tr><td>
-
-[ChainOpType](./client.chainoptype.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[CountersigningSessionStateType](./client.countersigningsessionstatetype.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[DetailsType](./client.detailstype.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[EntryDhtStatus](./client.entrydhtstatus.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[GrantedFunctionsType](./client.grantedfunctionstype.md)
-
-
-</td><td>
-
+The discriminant of a [CellInfo](./client.cellinfo.md) variant.
 
 
 </td></tr>
@@ -622,49 +543,7 @@ Description
 </td></tr>
 <tr><td>
 
-[OpEntryType](./client.opentrytype.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[ResolutionRequiredReason](./client.resolutionrequiredreason.md)
-
-
-</td><td>
-
-The reason why a countersigning session can not be resolved automatically and requires manual resolution.
-
-
-</td></tr>
-<tr><td>
-
-[SessionCompletionDecisionType](./client.sessioncompletiondecisiontype.md)
-
-
-</td><td>
-
-Decision about an incomplete countersigning session.
-
-
-</td></tr>
-<tr><td>
-
 [SignalType](./client.signaltype.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[ValidationStatus](./client.validationstatus.md)
 
 
 </td><td>
@@ -797,6 +676,7 @@ Parse a clone id and get the role name part of it.
 
 </td><td>
 
+Get the action a [ChainOp](./client.chainop.md) carries.
 
 
 </td></tr>
@@ -807,6 +687,7 @@ Parse a clone id and get the role name part of it.
 
 </td><td>
 
+Get the entry a [ChainOp](./client.chainop.md) carries, if it carries one.
 
 
 </td></tr>
@@ -817,6 +698,7 @@ Parse a clone id and get the role name part of it.
 
 </td><td>
 
+Get the signature over the action a [ChainOp](./client.chainop.md) carries.
 
 
 </td></tr>
@@ -827,6 +709,7 @@ Parse a clone id and get the role name part of it.
 
 </td><td>
 
+Get the variant name of a [ChainOp](./client.chainop.md)<!-- -->.
 
 
 </td></tr>
@@ -1041,67 +924,7 @@ Description
 </th></tr></thead>
 <tbody><tr><td>
 
-[Action](./client.action.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[ActionHeader](./client.actionheader.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
 [AdminApi](./client.adminapi.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[AgentInfoDump](./client.agentinfodump.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[AgentValidationPkg](./client.agentvalidationpkg.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[ApiTransportStats](./client.apitransportstats.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[AppAuthenticationRequest](./client.appauthenticationrequest.md)
 
 
 </td><td>
@@ -1142,16 +965,6 @@ The transport an [AppClient](./client.appclient.md) uses to reach the conductor:
 </td></tr>
 <tr><td>
 
-[AppInterfaceInfo](./client.appinterfaceinfo.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
 [AppWebsocketConnectionOptions](./client.appwebsocketconnectionoptions.md)
 
 
@@ -1162,372 +975,7 @@ The transport an [AppClient](./client.appclient.md) uses to reach the conductor:
 </td></tr>
 <tr><td>
 
-[CallZomeRequestSigned](./client.callzomerequestsigned.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[CapClaim](./client.capclaim.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[CapGrantInfo](./client.capgrantinfo.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[CellProvisioning](./client.cellprovisioning.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[ClonedCell](./client.clonedcell.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[CloseChain](./client.closechain.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[CoordinatorBundle](./client.coordinatorbundle.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[CoordinatorManifest](./client.coordinatormanifest.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[CountersigningAgentState](./client.countersigningagentstate.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[CounterSigningSessionData](./client.countersigningsessiondata.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[CounterSigningSessionTimes](./client.countersigningsessiontimes.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[Create](./client.create.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[CreateBase](./client.createbase.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[CreateCloneCellRequest](./client.createclonecellrequest.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[CreateLink](./client.createlink.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[Delete](./client.delete.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[DeleteCloneCellRequest](./client.deleteclonecellrequest.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[DeleteLink](./client.deletelink.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[DhtSegmentState](./client.dhtsegmentstate.md)
-
-
-</td><td>
-
-DHT segment state.
-
-
-</td></tr>
-<tr><td>
-
-[DisableCloneCellRequest](./client.disableclonecellrequest.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[Dna](./client.dna.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[DnaStorageInfo](./client.dnastorageinfo.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[DumpNetworkMetricsRequest](./client.dumpnetworkmetricsrequest.md)
-
-
-</td><td>
-
-Arguments for dumping network metrics.
-
-
-</td></tr>
-<tr><td>
-
 [Duration](./client.duration.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[EntryContent](./client.entrycontent.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[EntryDetails](./client.entrydetails.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[FetchPoolInfo](./client.fetchpoolinfo.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[FetchStateSummary](./client.fetchstatesummary.md)
-
-
-</td><td>
-
-Summary of the fetch state.
-
-
-</td></tr>
-<tr><td>
-
-[FullIntegrationStateDump](./client.fullintegrationstatedump.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[FullStateDump](./client.fullstatedump.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[GossipRoundStateSummary](./client.gossiproundstatesummary.md)
-
-
-</td><td>
-
-Gossip round state summary.
-
-
-</td></tr>
-<tr><td>
-
-[GossipStateSummary](./client.gossipstatesummary.md)
-
-
-</td><td>
-
-Gossip state summary.
-
-
-</td></tr>
-<tr><td>
-
-[GrantZomeCallCapabilityRequest](./client.grantzomecallcapabilityrequest.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[HoloHashed](./client.holohashed.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[InitZomesComplete](./client.initzomescomplete.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[IssueAppAuthenticationTokenRequest](./client.issueappauthenticationtokenrequest.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[IssueAppAuthenticationTokenResponse](./client.issueappauthenticationtokenresponse.md)
 
 
 </td><td>
@@ -1548,254 +996,7 @@ An Ed25519 key pair, as returned by libsodium's `crypto_sign_keypair`<!-- -->.
 </td></tr>
 <tr><td>
 
-[Link](./client.link.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[ListCapabilityGrantsRequest](./client.listcapabilitygrantsrequest.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[LocalAgentSummary](./client.localagentsummary.md)
-
-
-</td><td>
-
-Summary of a local agent's network state.
-
-
-</td></tr>
-<tr><td>
-
-[MessageBlockCount](./client.messageblockcount.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[NetworkMetrics](./client.networkmetrics.md)
-
-
-</td><td>
-
-Network metrics from Kitsune2.
-
-
-</td></tr>
-<tr><td>
-
-[OpenChain](./client.openchain.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[P2pAgentsDump](./client.p2pagentsdump.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[PeerMeta](./client.peermeta.md)
-
-
-</td><td>
-
-Peer metadata dump.
-
-
-</td></tr>
-<tr><td>
-
-[PeerMetaInfo](./client.peermetainfo.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[PeerMetaInfoRequest](./client.peermetainforequest.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[PreflightRequest](./client.preflightrequest.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[PreflightResponse](./client.preflightresponse.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[ProvisionedCell](./client.provisionedcell.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[RecordDetails](./client.recorddetails.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[RegisterAgentActivity](./client.registeragentactivity.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[RevokeZomeCallCapabilityRequest](./client.revokezomecallcapabilityrequest.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[SessionResolutionOutcome](./client.sessionresolutionoutcome.md)
-
-
-</td><td>
-
-The outcome for a single agent who participated in a countersigning session.
-
-\[NUM\_AUTHORITIES\_TO\_QUERY\] authorities are made to agent activity authorities for each agent, and the decisions are collected into \[SessionResolutionOutcome::decisions\].
-
-
-</td></tr>
-<tr><td>
-
-[SessionResolutionSummary](./client.sessionresolutionsummary.md)
-
-
-</td><td>
-
-Summary of the workflow's attempts to resolve the outcome a failed countersigning session. This tracks the numbers of attempts and the outcome of the most recent attempt.
-
-
-</td></tr>
-<tr><td>
-
-[SignedAction](./client.signedaction.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[SignedActionHashed](./client.signedactionhashed.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
 [SigningCredentials](./client.signingcredentials.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[SourceChainJsonDump](./client.sourcechainjsondump.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[SourceChainJsonRecord](./client.sourcechainjsonrecord.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[StemCell](./client.stemcell.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[StorageInfo](./client.storageinfo.md)
 
 
 </td><td>
@@ -1816,116 +1017,12 @@ Environment injected by the in-process Tauri plugin (tauri-plugin-holochain) int
 </td></tr>
 <tr><td>
 
-[TransportConnectionStats](./client.transportconnectionstats.md)
-
-
-</td><td>
-
-Stats for a single transport connection.
-
-
-</td></tr>
-<tr><td>
-
-[TransportStats](./client.transportstats.md)
-
-
-</td><td>
-
-Stats for a transport connection.
-
-This is intended to be a state dump that gives some insight into what the transport is doing.
-
-
-</td></tr>
-<tr><td>
-
-[Update](./client.update.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[UpdateBase](./client.updatebase.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[ValidationReceipt](./client.validationreceipt.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[Warrant](./client.warrant.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[WarrantOp](./client.warrantop.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[WarrantProof](./client.warrantproof.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
 [WebsocketConnectionOptions](./client.websocketconnectionoptions.md)
 
 
 </td><td>
 
 Options for a Websocket connection.
-
-
-</td></tr>
-<tr><td>
-
-[ZomeCallCapGrant](./client.zomecallcapgrant.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[ZomeDependency](./client.zomedependency.md)
-
-
-</td><td>
-
 
 
 </td></tr>
@@ -1974,22 +1071,14 @@ Description
 </th></tr></thead>
 <tbody><tr><td>
 
-[AbandonCountersigningSessionStateRequest](./client.abandoncountersigningsessionstaterequest.md)
+[Action](./client.action.md)
 
 
 </td><td>
 
-Cell id for which the countersigning session should be abandoned.
+Full action content: header + per-variant data.
 
-
-</td></tr>
-<tr><td>
-
-[AbandonCountersigningSessionStateResponse](./client.abandoncountersigningsessionstateresponse.md)
-
-
-</td><td>
-
+The hash is not stored on the struct — use \[`holo_hash::HoloHashed<Action>`<!-- -->\] (or \[`crate::record::SignedHashed<Action>`<!-- -->\]) at call sites so the hash is always derived from the content.
 
 
 </td></tr>
@@ -2000,6 +1089,7 @@ Cell id for which the countersigning session should be abandoned.
 
 </td><td>
 
+Enum to mirror Action for all the shared data required to build session actions. Does NOT hold any agent specific information.
 
 
 </td></tr>
@@ -2010,6 +1100,7 @@ Cell id for which the countersigning session should be abandoned.
 
 </td><td>
 
+Per-variant action data, stored serialized in the `Action.action_data` BLOB column.
 
 
 </td></tr>
@@ -2030,7 +1121,6 @@ Cell id for which the countersigning session should be abandoned.
 
 </td><td>
 
-Action hash with the signature of the action at that hash
 
 
 </td></tr>
@@ -2056,62 +1146,108 @@ Action hash with the signature of the action at that hash
 </td></tr>
 <tr><td>
 
-[AddAgentInfoRequest](./client.addagentinforequest.md)
+[ActionHeader](./client.actionheader.md)
 
 
 </td><td>
 
+Common header fields shared by every action variant.
 
 
 </td></tr>
 <tr><td>
 
-[AddAgentInfoResponse](./client.addagentinforesponse.md)
+[ActionType](./client.actiontype.md)
 
 
 </td><td>
 
+Action-type discriminant.
 
 
 </td></tr>
 <tr><td>
 
-[AgentInfoRequest](./client.agentinforequest.md)
+[AdminInterfaceConfig](./client.admininterfaceconfig.md)
 
 
 </td><td>
 
+Information neeeded to spawn an admin interface
 
 
 </td></tr>
 <tr><td>
 
-[AgentInfoResponse](./client.agentinforesponse.md)
+[AdminRequest](./client.adminrequest.md)
 
 
 </td><td>
 
+Represents the available conductor functions to call over an admin interface.
+
+Enum variants follow a general convention of `verb_noun` as opposed to the `noun_verb` of responses.
+
+\# Errors
+
+Returns an \[`AdminResponse::Error`<!-- -->\] with a reason why the request failed.
 
 
 </td></tr>
 <tr><td>
 
-[AgentInfoSigned](./client.agentinfosigned.md)
+[AdminRequestPayload](./client.adminrequestpayload.md)
 
 
 </td><td>
 
-This type is meant to be opaque
+The payload carried by the [AdminRequest](./client.adminrequest.md) variant tagged `Tag`<!-- -->, or `void` when that variant carries no payload.
 
 
 </td></tr>
 <tr><td>
 
-[AgentMigrationTarget](./client.agentmigrationtarget.md)
+[AdminResponse](./client.adminresponse.md)
 
 
 </td><td>
 
+Represents the possible responses to an \[`AdminRequest`<!-- -->\] and follows a general convention of `noun_verb` as opposed to the `verb_noun` of `AdminRequest`<!-- -->.
+
+Will serialize as an object with any contents of the enum on a key `data` and the enum variant on a key `type`<!-- -->, e.g. `{ type: 'app_interface_attached', data: { port: 4000 } }`
+
+
+</td></tr>
+<tr><td>
+
+[AdminResponsePayload](./client.adminresponsepayload.md)
+
+
+</td><td>
+
+The payload carried by the [AdminResponse](./client.adminresponse.md) variant tagged `Tag`<!-- -->, or `void` when that variant carries no payload.
+
+
+</td></tr>
+<tr><td>
+
+[AgentActivity](./client.agentactivity.md)
+
+
+</td><td>
+
+See \[`Op::AgentActivity`<!-- -->\].
+
+
+</td></tr>
+<tr><td>
+
+[AgentInfoDump](./client.agentinfodump.md)
+
+
+</td><td>
+
+Agent info dump with the agent, space, signed time, expires in and urls printed in a pretty way.
 
 
 </td></tr>
@@ -2128,6 +1264,27 @@ This type is meant to be opaque
 <tr><td>
 
 [AgentPubKeyB64](./client.agentpubkeyb64.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[AgentValidationPkgData](./client.agentvalidationpkgdata.md)
+
+
+</td><td>
+
+Per-variant data for \[`ActionType::AgentValidationPkg`<!-- -->\].
+
+
+</td></tr>
+<tr><td>
+
+[AllowedOrigins](./client.allowedorigins.md)
 
 
 </td><td>
@@ -2167,6 +1324,17 @@ This type is meant to be opaque
 </td></tr>
 <tr><td>
 
+[AppAuthenticationRequest](./client.appauthenticationrequest.md)
+
+
+</td><td>
+
+The request payload sent on a Holochain app websocket to authenticate the connection.
+
+
+</td></tr>
+<tr><td>
+
 [AppAuthenticationToken](./client.appauthenticationtoken.md)
 
 
@@ -2177,11 +1345,23 @@ This type is meant to be opaque
 </td></tr>
 <tr><td>
 
+[AppAuthenticationTokenIssued](./client.appauthenticationtokenissued.md)
+
+
+</td><td>
+
+Response payload for \[AdminResponse::AppAuthenticationTokenIssued\].
+
+
+</td></tr>
+<tr><td>
+
 [AppBundle](./client.appbundle.md)
 
 
 </td><td>
 
+A bundle of an AppManifest and collection of DNAs
 
 
 </td></tr>
@@ -2192,6 +1372,31 @@ This type is meant to be opaque
 
 </td><td>
 
+The possible locations of an AppBundle
+
+
+</td></tr>
+<tr><td>
+
+[AppCapGrantInfo](./client.appcapgrantinfo.md)
+
+
+</td><td>
+
+A list which map a cell ID to their capability grant information.
+
+NOTE: while a map would have been more appropriate, we use a vector here because it is problematic with msgpack encoding.
+
+
+</td></tr>
+<tr><td>
+
+[AppEntryBytes](./client.appentrybytes.md)
+
+
+</td><td>
+
+Newtype for the bytes comprising an App entry
 
 
 </td></tr>
@@ -2202,6 +1407,7 @@ This type is meant to be opaque
 
 </td><td>
 
+Information about a class of Entries provided by the DNA
 
 
 </td></tr>
@@ -2212,16 +1418,18 @@ This type is meant to be opaque
 
 </td><td>
 
+Info about an installed app, returned as part of \[`AppResponse::AppInfo`<!-- -->\]
 
 
 </td></tr>
 <tr><td>
 
-[AppInfoResponse](./client.appinforesponse.md)
+[AppInterfaceInfo](./client.appinterfaceinfo.md)
 
 
 </td><td>
 
+Informational response for listing app interfaces.
 
 
 </td></tr>
@@ -2232,6 +1440,66 @@ This type is meant to be opaque
 
 </td><td>
 
+Container struct which uses the `manifest_version` field to determine which manifest version to deserialize to.
+
+
+</td></tr>
+<tr><td>
+
+[AppManifestV0](./client.appmanifestv0.md)
+
+
+</td><td>
+
+Version 0 of the App manifest schema
+
+
+</td></tr>
+<tr><td>
+
+[AppRequest](./client.apprequest.md)
+
+
+</td><td>
+
+Represents the available conductor functions to call over an app interface and will result in a corresponding \[`AppResponse`<!-- -->\] message being sent back over the interface connection.
+
+\# Errors
+
+Returns an \[`AppResponse::Error`<!-- -->\] with a reason why the request failed.
+
+
+</td></tr>
+<tr><td>
+
+[AppRequestPayload](./client.apprequestpayload.md)
+
+
+</td><td>
+
+The payload carried by the [AppRequest](./client.apprequest.md) variant tagged `Tag`<!-- -->, or `void` when that variant carries no payload.
+
+
+</td></tr>
+<tr><td>
+
+[AppResponse](./client.appresponse.md)
+
+
+</td><td>
+
+Represents the possible responses to an \[`AppRequest`<!-- -->\].
+
+
+</td></tr>
+<tr><td>
+
+[AppResponsePayload](./client.appresponsepayload.md)
+
+
+</td><td>
+
+The payload carried by the [AppResponse](./client.appresponse.md) variant tagged `Tag`<!-- -->, or `void` when that variant carries no payload.
 
 
 </td></tr>
@@ -2242,6 +1510,7 @@ This type is meant to be opaque
 
 </td><td>
 
+The DNA portion of an app role
 
 
 </td></tr>
@@ -2252,6 +1521,7 @@ This type is meant to be opaque
 
 </td><td>
 
+Description of an app "role" defined by this app. Roles get filled according to the provisioning rules, as well as by potential runtime clones.
 
 
 </td></tr>
@@ -2262,6 +1532,7 @@ This type is meant to be opaque
 
 </td><td>
 
+A signal emitted by an app via `emit_signal`
 
 
 </td></tr>
@@ -2272,12 +1543,28 @@ This type is meant to be opaque
 
 </td><td>
 
+The status of an installed app.
+
+Either Enabled or Disabled, set by the user via the conductor admin interface.
 
 
 </td></tr>
 <tr><td>
 
-[AttachAppInterfaceRequest](./client.attachappinterfacerequest.md)
+[AppStatusFilter](./client.appstatusfilter.md)
+
+
+</td><td>
+
+Filter for \[`AdminRequest::ListApps`<!-- -->\].
+
+Apps can be either enabled or disabled, set by the user via the conductor interface.
+
+
+</td></tr>
+<tr><td>
+
+[BlockedMessageCountsMap](./client.blockedmessagecountsmap.md)
 
 
 </td><td>
@@ -2287,7 +1574,7 @@ This type is meant to be opaque
 </td></tr>
 <tr><td>
 
-[AttachAppInterfaceResponse](./client.attachappinterfaceresponse.md)
+[Bundle](./client.bundle.md)
 
 
 </td><td>
@@ -2352,6 +1639,29 @@ This type is meant to be opaque
 
 </td><td>
 
+Represents access requirements for capability grants.
+
+
+</td></tr>
+<tr><td>
+
+[CapAccessInfo](./client.capaccessinfo.md)
+
+
+</td><td>
+
+Represents access info for capability grants .
+
+
+</td></tr>
+<tr><td>
+
+[CapClaim](./client.capclaim.md)
+
+
+</td><td>
+
+System entry to hold a capability token claim for use as a caller. Stored by a claimant so they can remember what's necessary to exercise this capability by sending the secret to the grantor.
 
 
 </td></tr>
@@ -2362,6 +1672,24 @@ This type is meant to be opaque
 
 </td><td>
 
+Represents a \_potentially\_ valid access grant to a zome call. Zome call response will be Unauthorized without a valid grant.
+
+The CapGrant is not always a dedicated entry in the chain. Notably AgentPubKey entries in the current chain act like root access to local zome calls.
+
+A `CapGrant` is valid if it matches the function, agent and secret for a given zome call.
+
+See `.is_valid()`
+
+
+</td></tr>
+<tr><td>
+
+[CapGrantInfo](./client.capgrantinfo.md)
+
+
+</td><td>
+
+Information about a capability grant.
 
 
 </td></tr>
@@ -2372,6 +1700,9 @@ This type is meant to be opaque
 
 </td><td>
 
+A CapSecret is used by a caller to prove to a callee access to a committed CapGrant.
+
+It is a random, unique identifier for the capability, which is shared by the grantor to allow access to others. The grantor can optionally further restrict usage of the secret to specific agents.
 
 
 </td></tr>
@@ -2382,6 +1713,7 @@ This type is meant to be opaque
 
 </td><td>
 
+The unique identifier for a Cell. Cells are uniquely determined by this pair - this pair is necessary and sufficient to refer to a cell in a conductor
 
 
 </td></tr>
@@ -2397,11 +1729,23 @@ This type is meant to be opaque
 </td></tr>
 <tr><td>
 
+[CellProvisioning](./client.cellprovisioning.md)
+
+
+</td><td>
+
+Rules to determine if and how a Cell will be created for this Dna
+
+
+</td></tr>
+<tr><td>
+
 [ChainIntegrityWarrant](./client.chainintegritywarrant.md)
 
 
 </td><td>
 
+A warrant which is sent to agent activity authorities.
 
 
 </td></tr>
@@ -2412,6 +1756,18 @@ This type is meant to be opaque
 
 </td><td>
 
+Chain-level DHT ops. Each variant targets a specific authority.
+
+
+</td></tr>
+<tr><td>
+
+[ChainOpType](./client.chainoptype.md)
+
+
+</td><td>
+
+This enum is used to encode just the enum variant of ChainOp
 
 
 </td></tr>
@@ -2422,6 +1778,18 @@ This type is meant to be opaque
 
 </td><td>
 
+Ways of specifying a clone cell in the context of an app.
+
+
+</td></tr>
+<tr><td>
+
+[ClonedCell](./client.clonedcell.md)
+
+
+</td><td>
+
+Cloned cell that was created from a provisioned cell at runtime.
 
 
 </td></tr>
@@ -2432,6 +1800,44 @@ This type is meant to be opaque
 
 </td><td>
 
+Identifier of a clone cell, composed of the DNA's role name and the index of the clone, starting at 0.
+
+Example: `profiles.0`
+
+
+</td></tr>
+<tr><td>
+
+[CloseChainData](./client.closechaindata.md)
+
+
+</td><td>
+
+Per-variant data for \[`ActionType::CloseChain`<!-- -->\].
+
+The `author`<!-- -->, `timestamp`<!-- -->, `action_seq`<!-- -->, and `prev_action` fields live on \[`ActionHeader`<!-- -->\]; only the chain-close-specific fields go here.
+
+
+</td></tr>
+<tr><td>
+
+[CoordinatorBundle](./client.coordinatorbundle.md)
+
+
+</td><td>
+
+A bundle of coordinator zomes.
+
+
+</td></tr>
+<tr><td>
+
+[CoordinatorManifest](./client.coordinatormanifest.md)
+
+
+</td><td>
+
+Coordinator zomes.
 
 
 </td></tr>
@@ -2442,12 +1848,23 @@ This type is meant to be opaque
 
 </td><td>
 
+The source of coordinators to be installed, either as binary data, or from a path
 
 
 </td></tr>
 <tr><td>
 
 [CoordinatorZome](./client.coordinatorzome.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[CoordinatorZomeDef](./client.coordinatorzomedef.md)
 
 
 </td><td>
@@ -2467,31 +1884,155 @@ This type is meant to be opaque
 </td></tr>
 <tr><td>
 
+[CounterSigningAgentState](./client.countersigningagentstate.md)
+
+
+</td><td>
+
+Every countersigning agent must sign against their chain state. The chain must be frozen until each agent decides to sign or exit the session.
+
+
+</td></tr>
+<tr><td>
+
+[CounterSigningSessionData](./client.countersigningsessiondata.md)
+
+
+</td><td>
+
+All the data required for a countersigning session.
+
+
+</td></tr>
+<tr><td>
+
 [CountersigningSessionState](./client.countersigningsessionstate.md)
 
 
 </td><td>
 
+State and data of an ongoing countersigning session.
 
 
 </td></tr>
 <tr><td>
 
-[CreateCloneCellResponse](./client.createclonecellresponse.md)
+[CounterSigningSessionTimes](./client.countersigningsessiontimes.md)
 
 
 </td><td>
 
+Every countersigning session must complete a full set of actions between the start and end times to be valid.
 
 
 </td></tr>
 <tr><td>
 
-[DeleteCloneCellResponse](./client.deleteclonecellresponse.md)
+[CreateBase](./client.createbase.md)
 
 
 </td><td>
 
+Base data for Create actions.
+
+
+</td></tr>
+<tr><td>
+
+[CreateCloneCellPayload](./client.createclonecellpayload.md)
+
+
+</td><td>
+
+The parameters to create a clone of an existing cell.
+
+
+</td></tr>
+<tr><td>
+
+[CreateData](./client.createdata.md)
+
+
+</td><td>
+
+Per-variant data for \[`ActionType::Create`<!-- -->\].
+
+
+</td></tr>
+<tr><td>
+
+[CreateLinkData](./client.createlinkdata.md)
+
+
+</td><td>
+
+Per-variant data for \[`ActionType::CreateLink`<!-- -->\].
+
+
+</td></tr>
+<tr><td>
+
+[DecodedAppSignal](./client.decodedappsignal.md)
+
+
+</td><td>
+
+The app signal handed to listeners: same shape as the app variant of the generated [Signal](./client.signal.md)<!-- -->, except that the msgpack payload in `signal` has already been decoded by the client, so its type is whatever the emitting zome produced rather than the wire `AppSignal` byte string.
+
+
+</td></tr>
+<tr><td>
+
+[DecodedSignal](./client.decodedsignal.md)
+
+
+</td><td>
+
+The decoded counterpart of the generated [Signal](./client.signal.md)<!-- -->: system signals pass through unchanged, app signals carry a [DecodedAppSignal](./client.decodedappsignal.md)<!-- -->. This is what every [SignalCb](./client.signalcb.md) receives.
+
+
+</td></tr>
+<tr><td>
+
+[DeleteCloneCellPayload](./client.deleteclonecellpayload.md)
+
+
+</td><td>
+
+Parameters to delete a disabled clone cell of an app.
+
+
+</td></tr>
+<tr><td>
+
+[DeleteData](./client.deletedata.md)
+
+
+</td><td>
+
+Per-variant data for \[`ActionType::Delete`<!-- -->\].
+
+
+</td></tr>
+<tr><td>
+
+[DeleteLinkData](./client.deletelinkdata.md)
+
+
+</td><td>
+
+Per-variant data for \[`ActionType::DeleteLink`<!-- -->\].
+
+
+</td></tr>
+<tr><td>
+
+[DesensitizedZomeCallCapGrant](./client.desensitizedzomecallcapgrant.md)
+
+
+</td><td>
+
+The outbound DTO of a ZomeCall capability grant info request. CapAccess secrets are omitted, Access types and assignees are provided under CapAccessInfo.
 
 
 </td></tr>
@@ -2502,6 +2043,7 @@ This type is meant to be opaque
 
 </td><td>
 
+Return type for get\_details calls. ActionHash returns a Record. EntryHash returns an Entry.
 
 
 </td></tr>
@@ -2512,7 +2054,9 @@ This type is meant to be opaque
 
 </td><td>
 
-The definition of a storage arc compatible with the concept of storage and querying of items in a store that fall within that arc.
+Mirror of `kitsune2_api::DhtArc` for the conductor API.
+
+Serializes untagged, exactly like the kitsune2 original: `Empty` maps to null, `Arc(a, b)` maps to `[a, b]`<!-- -->.
 
 
 </td></tr>
@@ -2523,6 +2067,7 @@ The definition of a storage arc compatible with the concept of storage and query
 
 </td><td>
 
+Top-level DHT op.
 
 
 </td></tr>
@@ -2548,31 +2093,36 @@ The definition of a storage arc compatible with the concept of storage and query
 </td></tr>
 <tr><td>
 
-[DisableAppRequest](./client.disableapprequest.md)
+[DhtOpsCursor](./client.dhtopscursor.md)
 
 
 </td><td>
 
+Pagination cursor for all DHT ops in a \[`FullIntegrationStateDump`<!-- -->\].
+
+`(when_received, hash)`<!-- -->.
 
 
 </td></tr>
 <tr><td>
 
-[DisableAppResponse](./client.disableappresponse.md)
+[DhtSegmentState](./client.dhtsegmentstate.md)
 
 
 </td><td>
 
+Mirror of `kitsune2_api::DhtSegmentState`<!-- -->.
 
 
 </td></tr>
 <tr><td>
 
-[DisableCloneCellResponse](./client.disableclonecellresponse.md)
+[DisableCloneCellPayload](./client.disableclonecellpayload.md)
 
 
 </td><td>
 
+Parameters to specify the clone cell to be disabled.
 
 
 </td></tr>
@@ -2583,6 +2133,7 @@ The definition of a storage arc compatible with the concept of storage and query
 
 </td><td>
 
+The reason for an app being in a Disabled state.
 
 
 </td></tr>
@@ -2593,6 +2144,18 @@ The definition of a storage arc compatible with the concept of storage and query
 
 </td><td>
 
+A bundle of Wasm zomes, represented as a file.
+
+
+</td></tr>
+<tr><td>
+
+[DnaData](./client.dnadata.md)
+
+
+</td><td>
+
+Per-variant data for \[`ActionType::Dna`<!-- -->\].
 
 
 </td></tr>
@@ -2603,15 +2166,9 @@ The definition of a storage arc compatible with the concept of storage and query
 
 </td><td>
 
+The definition of a DNA: the hash of this data is what produces the DnaHash.
 
-
-</td></tr>
-<tr><td>
-
-[DnaDefinition](./client.dnadefinition.md)
-
-
-</td><td>
+Historical note: This struct was written before `DnaManifest` appeared. It is included as part of a `DnaFile`<!-- -->. There is still a lot of code that uses this type, but in function, it has mainly been superseded by `DnaManifest`<!-- -->. Hence, this type can basically be thought of as a fully validated, normalized `DnaManifest`
 
 
 </td></tr>
@@ -2642,16 +2199,67 @@ The definition of a storage arc compatible with the concept of storage and query
 
 </td><td>
 
+The enum which encompasses all versions of the DNA manifest, past and present.
 
 
 </td></tr>
 <tr><td>
 
-[DnaMigrationTarget](./client.dnamigrationtarget.md)
+[DnaManifestV0](./client.dnamanifestv0.md)
 
 
 </td><td>
 
+The structure of data that goes in the DNA bundle manifest "dna.yaml".
+
+Navigating through this structure reveals all configurable DNA properties.
+
+\# Examples
+
+An example "dna.yaml" with 2 integrity and 2 coordinator zomes:
+
+```yaml
+manifest_version: "0"
+name: multi integrity dna
+integrity:
+  network_seed: 00000000-0000-0000-0000-000000000000
+  properties: ~
+  zomes:
+    - name: zome1
+      path: ../dna1/zomes/zome1.wasm
+    - name: zome2
+      path: ../dna2/zomes/zome1.wasm
+coordinator:
+  zomes:
+    - name: zome3
+      path: ../dna1/zomes/zome2.wasm
+      dependencies:
+        - name: zome1
+    - name: zome4
+      path: ../dna2/zomes/zome2.wasm
+      dependencies:
+        - name: zome2
+```
+When there's only one integrity zome, it will automatically be a dependency of the coordinator zomes. It doesn't need to be specified explicitly.
+
+Note that while the `dependencies` field is a list, right now there should be \*\*at most one item in this list\*\*.
+
+```yaml
+manifest_version: "0"
+name: single integrity dna
+integrity:
+  network_seed: 00000000-0000-0000-0000-000000000000
+  properties: ~
+  zomes:
+    - name: zome1
+      path: ../dna1/zomes/zome1.wasm
+coordinator:
+  zomes:
+    - name: zome3
+      path: ../dna1/zomes/zome2.wasm
+    - name: zome4
+      path: ../dna2/zomes/zome2.wasm
+```
 
 
 </td></tr>
@@ -2662,6 +2270,7 @@ The definition of a storage arc compatible with the concept of storage and query
 
 </td><td>
 
+Modifiers of this DNA - the network seed, properties and origin time - as opposed to the actual DNA code. These modifiers are included in the DNA hash computation.
 
 
 </td></tr>
@@ -2692,162 +2301,24 @@ The definition of a storage arc compatible with the concept of storage and query
 
 </td><td>
 
+The source of the DNA to be installed, either as binary data, or from a path
 
 
 </td></tr>
 <tr><td>
 
-[DnaStorageBlob](./client.dnastorageblob.md)
+[DnaStorageInfo](./client.dnastorageinfo.md)
 
 
 </td><td>
 
+Storage info for DNA used by one or more hApps.
 
 
 </td></tr>
 <tr><td>
 
-[DnaVersionFlexible](./client.dnaversionflexible.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[DnaVersionSpec](./client.dnaversionspec.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[DumpFullStateRequest](./client.dumpfullstaterequest.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[DumpFullStateResponse](./client.dumpfullstateresponse.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[DumpNetworkMetricsResponse](./client.dumpnetworkmetricsresponse.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[DumpNetworkStatsRequest](./client.dumpnetworkstatsrequest.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[DumpNetworkStatsResponse](./client.dumpnetworkstatsresponse.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[DumpStateRequest](./client.dumpstaterequest.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[DumpStateResponse](./client.dumpstateresponse.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[EnableAppRequest](./client.enableapprequest.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[EnableAppResponse](./client.enableappresponse.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[EnableCloneCellRequest](./client.enableclonecellrequest.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[EnableCloneCellResponse](./client.enableclonecellresponse.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[EnableRequest](./client.enablerequest.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[EnableResponse](./client.enableresponse.md)
+[EnableCloneCellPayload](./client.enableclonecellpayload.md)
 
 
 </td><td>
@@ -2872,6 +2343,39 @@ The definition of a storage arc compatible with the concept of storage and query
 
 </td><td>
 
+Structure holding the entry portion of a chain record.
+
+
+</td></tr>
+<tr><td>
+
+[EntryDefIndex](./client.entrydefindex.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[EntryDetails](./client.entrydetails.md)
+
+
+</td><td>
+
+An Entry with all its metadata.
+
+
+</td></tr>
+<tr><td>
+
+[EntryDhtStatus](./client.entrydhtstatus.md)
+
+
+</td><td>
+
+The status of an \[`Entry`<!-- -->\] in the Dht
 
 
 </td></tr>
@@ -2902,6 +2406,7 @@ The definition of a storage arc compatible with the concept of storage and query
 
 </td><td>
 
+Allows Actions which reference Entries to know what type of Entry it is referencing. Useful for examining Actions without needing to fetch the corresponding Entries.
 
 
 </td></tr>
@@ -2912,6 +2417,17 @@ The definition of a storage arc compatible with the concept of storage and query
 
 </td><td>
 
+
+
+</td></tr>
+<tr><td>
+
+[ExternalApiWireError](./client.externalapiwireerror.md)
+
+
+</td><td>
+
+Error type that goes over the websocket wire. This intends to be application developer facing so it should be readable and relevant
 
 
 </td></tr>
@@ -2937,68 +2453,84 @@ The definition of a storage arc compatible with the concept of storage and query
 </td></tr>
 <tr><td>
 
+[ExternIO](./client.externio.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[FetchStateSummary](./client.fetchstatesummary.md)
+
+
+</td><td>
+
+Mirror of `kitsune2_api::FetchStateSummary`<!-- -->.
+
+Op ids and peer urls are their wire forms: base64url-no-pad strings and url strings respectively.
+
+
+</td></tr>
+<tr><td>
+
+[FullIntegrationStateDump](./client.fullintegrationstatedump.md)
+
+
+</td><td>
+
+A full view of the DHT shard of the Cell. Ops start in the validation limbo then proceed to the integration limbo then finally are integrated.
+
+
+</td></tr>
+<tr><td>
+
+[FullStateDump](./client.fullstatedump.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
 [FunctionName](./client.functionname.md)
 
 
 </td><td>
 
+A single function name.
 
 
 </td></tr>
 <tr><td>
 
-[GenerateAgentPubKeyRequest](./client.generateagentpubkeyrequest.md)
+[GossipRoundStateSummary](./client.gossiproundstatesummary.md)
 
 
 </td><td>
 
+Mirror of `kitsune2_api::GossipRoundStateSummary`<!-- -->.
 
 
 </td></tr>
 <tr><td>
 
-[GenerateAgentPubKeyResponse](./client.generateagentpubkeyresponse.md)
+[GossipStateSummary](./client.gossipstatesummary.md)
 
 
 </td><td>
 
+Mirror of `kitsune2_api::GossipStateSummary`<!-- -->.
 
 
 </td></tr>
 <tr><td>
 
-[GetCountersigningSessionStateRequest](./client.getcountersigningsessionstaterequest.md)
-
-
-</td><td>
-
-Cell id for which the countersigning session state is requested.
-
-
-</td></tr>
-<tr><td>
-
-[GetCountersigningSessionStateResponse](./client.getcountersigningsessionstateresponse.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[GetDnaDefinitionRequest](./client.getdnadefinitionrequest.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[GetDnaDefinitionResponse](./client.getdnadefinitionresponse.md)
+[GrantedFunction](./client.grantedfunction.md)
 
 
 </td><td>
@@ -3013,16 +2545,31 @@ Cell id for which the countersigning session state is requested.
 
 </td><td>
 
+A collection of zome/function pairs
 
 
 </td></tr>
 <tr><td>
 
-[GrantZomeCallCapabilityResponse](./client.grantzomecallcapabilityresponse.md)
+[GrantZomeCallCapabilityPayload](./client.grantzomecallcapabilitypayload.md)
 
 
 </td><td>
 
+Parameters for granting a zome call capability.
+
+
+</td></tr>
+<tr><td>
+
+[HolochainTransportStats](./client.holochaintransportstats.md)
+
+
+</td><td>
+
+Similar struct to \[`ApiTransportStats`<!-- -->\](kitsune2\_api::ApiTransportStats) but with Holochain types.
+
+There is a \[`DnaHash`<!-- -->\] instead of a \[`Space`<!-- -->\](kitsune2\_api::Space) in the `blocked_message_counts` field.
 
 
 </td></tr>
@@ -3048,7 +2595,7 @@ Cell id for which the countersigning session state is requested.
 </td></tr>
 <tr><td>
 
-[InstallAppDnaPayload](./client.installappdnapayload.md)
+[HoloHashed](./client.holohashed.md)
 
 
 </td><td>
@@ -3058,7 +2605,35 @@ Cell id for which the countersigning session state is requested.
 </td></tr>
 <tr><td>
 
-[InstallAppRequest](./client.installapprequest.md)
+[InitProperties](./client.initproperties.md)
+
+
+</td><td>
+
+Opaque, app-defined bytes made available to a cell during its `init` callback.
+
+Supplied per role at install time (the `init_properties` field of `holochain_types::app::RoleSettings::Provisioned`<!-- -->), persisted conductor-side, and read back during `init` via the `hdk::migrate::get_init_properties` host function.
+
+The bytes are never interpreted by the conductor and never written to the DHT. The app alone decides how to decode them. They are one way an app can use to seed a freshly migrated chain, for example by carrying a signed summary and the action hash of the `CloseChain` action from the chain it migrated from.
+
+
+</td></tr>
+<tr><td>
+
+[InitZomesCompleteData](./client.initzomescompletedata.md)
+
+
+</td><td>
+
+Per-variant data for \[`ActionType::InitZomesComplete`<!-- -->\].
+
+Carries no payload — the variant alone signals that all init zomes ran.
+
+
+</td></tr>
+<tr><td>
+
+[InlineHash](./client.inlinehash.md)
 
 
 </td><td>
@@ -3068,11 +2643,23 @@ Cell id for which the countersigning session state is requested.
 </td></tr>
 <tr><td>
 
-[InstallAppResponse](./client.installappresponse.md)
+[InlineZomeDef](./client.inlinezomedef.md)
 
 
 </td><td>
 
+A zome defined by inline Rust code
+
+
+</td></tr>
+<tr><td>
+
+[InstallAppPayload](./client.installapppayload.md)
+
+
+</td><td>
+
+All the information necessary to install an app
 
 
 </td></tr>
@@ -3088,11 +2675,23 @@ Cell id for which the countersigning session state is requested.
 </td></tr>
 <tr><td>
 
-[InstalledCell](./client.installedcell.md)
+[IntegrationStateDump](./client.integrationstatedump.md)
 
 
 </td><td>
 
+A high level view of the incoming ops and where they are currently. Ops start in the validation limbo then proceed to the integration limbo then finally are integrated.
+
+
+</td></tr>
+<tr><td>
+
+[IntegrityManifest](./client.integritymanifest.md)
+
+
+</td><td>
+
+Manifest for all items that will change the \[`DnaHash`<!-- -->\].
 
 
 </td></tr>
@@ -3108,7 +2707,7 @@ Cell id for which the countersigning session state is requested.
 </td></tr>
 <tr><td>
 
-[KitsuneAgent](./client.kitsuneagent.md)
+[IntegrityZomeDef](./client.integrityzomedef.md)
 
 
 </td><td>
@@ -3118,11 +2717,62 @@ Cell id for which the countersigning session state is requested.
 </td></tr>
 <tr><td>
 
-[KitsuneSpace](./client.kitsunespace.md)
+[InterfaceDriver](./client.interfacedriver.md)
 
 
 </td><td>
 
+Configuration for interfaces, specifying the means by which an interface should be opened.
+
+\*\*NB\*\*: This struct is used in both \[`ConductorConfig`<!-- -->\] and \[`ConductorState`<!-- -->\], so any change to the serialization strategy is a breaking change.
+
+\[`ConductorConfig`<!-- -->\]: crate::conductor::ConductorConfig \[`ConductorState`<!-- -->\]: https://docs.rs/holochain/latest/holochain/conductor/state/struct.ConductorState.html
+
+
+</td></tr>
+<tr><td>
+
+[IssueAppAuthenticationTokenPayload](./client.issueappauthenticationtokenpayload.md)
+
+
+</td><td>
+
+Request payload for \[AdminRequest::IssueAppAuthenticationToken\].
+
+
+</td></tr>
+<tr><td>
+
+[JsonDump](./client.jsondump.md)
+
+
+</td><td>
+
+The cell state dump returned by the `DumpState` admin call.
+
+The `StateDumped` response carries this as a `serde_json` string rather than as part of the msgpack response body, so no request or response type reaches it and the client parses the string itself.
+
+
+</td></tr>
+<tr><td>
+
+[Kitsune2NetworkMetrics](./client.kitsune2networkmetrics.md)
+
+
+</td><td>
+
+Network metrics from Kitsune2.
+
+
+</td></tr>
+<tr><td>
+
+[Link](./client.link.md)
+
+
+</td><td>
+
+A link as returned by a link query.
 
 
 </td></tr>
@@ -3133,6 +2783,7 @@ Cell id for which the countersigning session state is requested.
 
 </td><td>
 
+Opaque tag for the link applied at the app layer, used to differentiate between different semantics and validation rules for different links
 
 
 </td></tr>
@@ -3143,117 +2794,17 @@ Cell id for which the countersigning session state is requested.
 
 </td><td>
 
-An internal link type index within the DNA, from 0 to 255.
 
 
 </td></tr>
 <tr><td>
 
-[ListActiveAppsRequest](./client.listactiveappsrequest.md)
+[LocalAgentSummary](./client.localagentsummary.md)
 
 
 </td><td>
 
-
-
-</td></tr>
-<tr><td>
-
-[ListActiveAppsResponse](./client.listactiveappsresponse.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[ListAppInterfacesRequest](./client.listappinterfacesrequest.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[ListAppInterfacesResponse](./client.listappinterfacesresponse.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[ListAppsRequest](./client.listappsrequest.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[ListAppsResponse](./client.listappsresponse.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[ListCapabilityGrantsResponse](./client.listcapabilitygrantsresponse.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[ListCellIdsRequest](./client.listcellidsrequest.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[ListCellIdsResponse](./client.listcellidsresponse.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[ListDnasRequest](./client.listdnasrequest.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[ListDnasResponse](./client.listdnasresponse.md)
-
-
-</td><td>
-
+Summary of a local agent's network state.
 
 
 </td></tr>
@@ -3279,7 +2830,31 @@ An internal link type index within the DNA, from 0 to 255.
 </td></tr>
 <tr><td>
 
+[MessageBlockCount](./client.messageblockcount.md)
+
+
+</td><td>
+
+Mirror of `kitsune2_api::MessageBlockCount`<!-- -->.
+
+
+</td></tr>
+<tr><td>
+
 [MigrationTarget](./client.migrationtarget.md)
+
+
+</td><td>
+
+Description of how to find the previous or next CellId in a migration. In a migration, of the two components of the CellId (dna and agent), always one stays fixed while the other one changes. This enum represents the component that changed.
+
+When used in CloseChain, this contains the new DNA hash or Agent key. When used in OpenChain, this contains the previous DNA hash or Agent key.
+
+
+</td></tr>
+<tr><td>
+
+[NetworkMetricsMap](./client.networkmetricsmap.md)
 
 
 </td><td>
@@ -3309,42 +2884,120 @@ An internal link type index within the DNA, from 0 to 255.
 </td></tr>
 <tr><td>
 
+[Nonce256Bits](./client.nonce256bits.md)
+
+
+</td><td>
+
+256 Bit generic nonce.
+
+
+</td></tr>
+<tr><td>
+
+[OpenChainData](./client.openchaindata.md)
+
+
+</td><td>
+
+Per-variant data for \[`ActionType::OpenChain`<!-- -->\].
+
+The `author`<!-- -->, `timestamp`<!-- -->, `action_seq`<!-- -->, and `prev_action` fields live on \[`ActionHeader`<!-- -->\]; only the chain-open-specific fields go here.
+
+
+</td></tr>
+<tr><td>
+
 [OpEntry](./client.opentry.md)
 
 
 </td><td>
 
+How an entry is represented inside a `ChainOp`<!-- -->.
 
 
 </td></tr>
 <tr><td>
 
-[PausedAppReason](./client.pausedappreason.md)
+[OpTimingDump](./client.optimingdump.md)
 
 
 </td><td>
 
+Lifecycle timings for one DHT op in the DHT arc this conductor is currently holding for a DNA.
+
+The DHT database is shared by every cell running the same DNA, so a dump covers every op this conductor holds for that DNA rather than only the ops of one agent running the DNA.
+
+Ops that are still in a validation limbo report `when_integrated: None` and `validation_status: None`<!-- -->. `locally_validated` is only recorded for integrated chain ops; it is `None` for limbo ops and for warrants. A `Some(false)` value means the op was inserted by the cache rather than validated by this node, which is why its integration time can equal its received time.
 
 
 </td></tr>
 <tr><td>
 
-[PeerMetaInfoResponse](./client.peermetainforesponse.md)
+[OpTimingsCursor](./client.optimingscursor.md)
 
 
 </td><td>
 
+Exclusive pagination cursor for \[`OpTimingsDump`<!-- -->\].
+
+`(when_received, hash)`<!-- -->. The hash breaks ties between ops that share a received timestamp, which is common because received times are stamped per batch of incoming ops rather than per op.
+
+This duplicates the shape of \[`DhtOpsCursor`<!-- -->\] on purpose: the two dumps select different op sets and page through them independently, so their cursors are not interchangeable and must stay separate types.
 
 
 </td></tr>
 <tr><td>
 
-[PeerUrl](./client.peerurl.md)
+[OpTimingsDump](./client.optimingsdump.md)
 
 
 </td><td>
 
-Peer Url
+One page of op timings for a DNA, ordered by `(when_received, op_hash)`<!-- -->.
+
+
+</td></tr>
+<tr><td>
+
+[P2pAgentsDump](./client.p2pagentsdump.md)
+
+
+</td><td>
+
+State dump of all the peer info
+
+
+</td></tr>
+<tr><td>
+
+[PeerMeta](./client.peermeta.md)
+
+
+</td><td>
+
+Mirror of `kitsune2_api::PeerMeta`<!-- -->.
+
+
+</td></tr>
+<tr><td>
+
+[PeerMetaInfo](./client.peermetainfo.md)
+
+
+</td><td>
+
+Peer meta info as stored in the peer meta store for a given (peer\_url, meta\_key) pair
+
+
+</td></tr>
+<tr><td>
+
+[PeerMetaInfoMap](./client.peermetainfomap.md)
+
+
+</td><td>
+
 
 
 </td></tr>
@@ -3355,67 +3008,40 @@ Peer Url
 
 </td><td>
 
+Every preflight request can have optional arbitrary bytes that can be agreed to.
 
 
 </td></tr>
 <tr><td>
 
-[ProvideMemproofsRequest](./client.providememproofsrequest.md)
+[PreflightRequest](./client.preflightrequest.md)
 
 
 </td><td>
 
+The same PreflightRequest is sent to every agent. Each agent signs this data as part of their PreflightResponse. Every preflight must be identical and signed by every agent for a session to be valid.
 
 
 </td></tr>
 <tr><td>
 
-[ProvideMemproofsResponse](./client.providememproofsresponse.md)
+[PreflightResponse](./client.preflightresponse.md)
 
 
 </td><td>
 
+Every agent must send back a preflight response. All the preflight response data is signed by each agent and included in the session data.
 
 
 </td></tr>
 <tr><td>
 
-[PublishCountersigningSessionStateRequest](./client.publishcountersigningsessionstaterequest.md)
+[ProvisionedCell](./client.provisionedcell.md)
 
 
 </td><td>
 
-Cell id for which the countersigning session should be published.
-
-
-</td></tr>
-<tr><td>
-
-[PublishCountersigningSessionStateResponse](./client.publishcountersigningsessionstateresponse.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[RateBucketId](./client.ratebucketid.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[RateUnits](./client.rateunits.md)
-
-
-</td><td>
-
+Provisioned cell, a cell instantiated from a DNA on app installation.
 
 
 </td></tr>
@@ -3436,6 +3062,18 @@ Cell id for which the countersigning session should be published.
 
 </td><td>
 
+A chain record: a signed action plus its entry, if the action has one.
+
+
+</td></tr>
+<tr><td>
+
+[RecordDetails](./client.recorddetails.md)
+
+
+</td><td>
+
+A specific Record with any updates and deletes. This is all the metadata available for a record.
 
 
 </td></tr>
@@ -3446,6 +3084,18 @@ Cell id for which the countersigning session should be published.
 
 </td><td>
 
+Represents the different ways the entry\_address reference within an action can be interpreted
+
+
+</td></tr>
+<tr><td>
+
+[RecordValidity](./client.recordvalidity.md)
+
+
+</td><td>
+
+Record-level validation outcome.
 
 
 </td></tr>
@@ -3461,7 +3111,29 @@ Cell id for which the countersigning session should be published.
 </td></tr>
 <tr><td>
 
+[ResolutionRequiredReason](./client.resolutionrequiredreason.md)
+
+
+</td><td>
+
+The reason why a countersigning session can not be resolved automatically and requires manual resolution.
+
+
+</td></tr>
+<tr><td>
+
 [ResourceBytes](./client.resourcebytes.md)
+
+
+</td><td>
+
+Opaque bytes representing a Resource in a \[`Bundle`<!-- -->\](crate::Bundle)
+
+
+</td></tr>
+<tr><td>
+
+[ResourceIdentifier](./client.resourceidentifier.md)
 
 
 </td><td>
@@ -3481,44 +3153,12 @@ Cell id for which the countersigning session should be published.
 </td></tr>
 <tr><td>
 
-[RevokeAgentKeyRequest](./client.revokeagentkeyrequest.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
-[RevokeAgentKeyResponse](./client.revokeagentkeyresponse.md)
-
-
-</td><td>
-
-Contains a list of errors of the cells where deletion was unsuccessful.
-
-If the key could not be deleted from all cells, the call [RevokeAgentKeyRequest](./client.revokeagentkeyrequest.md) can be re-attempted to delete the key from the remaining cells.
-
-
-</td></tr>
-<tr><td>
-
-[RevokeZomeCallCapabilityResponse](./client.revokezomecallcapabilityresponse.md)
-
-
-</td><td>
-
-
-
-</td></tr>
-<tr><td>
-
 [Role](./client.role.md)
 
 
 </td><td>
 
+Agents can have a role specific to each countersigning session. The role is app defined and opaque to the subconscious.
 
 
 </td></tr>
@@ -3549,6 +3189,7 @@ If the key could not be deleted from all cells, the call [RevokeAgentKeyRequest]
 
 </td><td>
 
+Settings for a Role that may be passed on installation of an app
 
 
 </td></tr>
@@ -3569,6 +3210,33 @@ If the key could not be deleted from all cells, the call [RevokeAgentKeyRequest]
 
 </td><td>
 
+Decision about an incomplete countersigning session.
+
+
+</td></tr>
+<tr><td>
+
+[SessionResolutionOutcome](./client.sessionresolutionoutcome.md)
+
+
+</td><td>
+
+The outcome for a single agent who participated in a countersigning session.
+
+\[NUM\_AUTHORITIES\_TO\_QUERY\] authorities are made to agent activity authorities for each agent, and the decisions are collected into \[SessionResolutionOutcome::decisions\].
+
+
+</td></tr>
+<tr><td>
+
+[SessionResolutionSummary](./client.sessionresolutionsummary.md)
+
+
+</td><td>
+
+Summary of the workflow's attempts to resolve the outcome a failed countersigning session.
+
+This tracks the numbers of attempts and the outcome of the most recent attempt.
 
 
 </td></tr>
@@ -3579,6 +3247,7 @@ If the key could not be deleted from all cells, the call [RevokeAgentKeyRequest]
 
 </td><td>
 
+A Signal is some information emitted from within Holochain out through an Interface
 
 
 </td></tr>
@@ -3599,23 +3268,13 @@ If the key could not be deleted from all cells, the call [RevokeAgentKeyRequest]
 
 </td><td>
 
+The raw bytes of a signature.
 
 
 </td></tr>
 <tr><td>
 
-[SpaceId](./client.spaceid.md)
-
-
-</td><td>
-
-kitsune2 space id
-
-
-</td></tr>
-<tr><td>
-
-[StartAppRequest](./client.startapprequest.md)
+[Signed](./client.signed.md)
 
 
 </td><td>
@@ -3625,7 +3284,7 @@ kitsune2 space id
 </td></tr>
 <tr><td>
 
-[StartAppResponse](./client.startappresponse.md)
+[SignedAction](./client.signedaction.md)
 
 
 </td><td>
@@ -3635,7 +3294,7 @@ kitsune2 space id
 </td></tr>
 <tr><td>
 
-[StorageInfoRequest](./client.storageinforequest.md)
+[SignedActionHashed](./client.signedactionhashed.md)
 
 
 </td><td>
@@ -3645,11 +3304,101 @@ kitsune2 space id
 </td></tr>
 <tr><td>
 
-[StorageInfoResponse](./client.storageinforesponse.md)
+[SignedHashed](./client.signedhashed.md)
 
 
 </td><td>
 
+
+
+</td></tr>
+<tr><td>
+
+[SignedValidationReceipt](./client.signedvalidationreceipt.md)
+
+
+</td><td>
+
+A full, signed validation receipt.
+
+
+</td></tr>
+<tr><td>
+
+[SourceChainCursor](./client.sourcechaincursor.md)
+
+
+</td><td>
+
+Identifies the last source-chain record returned by a paginated dump.
+
+The next page starts strictly after the identified record.
+
+
+</td></tr>
+<tr><td>
+
+[SourceChainDump](./client.sourcechaindump.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[SourceChainDumpRecord](./client.sourcechaindumprecord.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[StateDump](./client.statedump.md)
+
+
+</td><td>
+
+The value returned by the `dump_state` admin call: the structured cell state dump, followed by its human-readable summary string.
+
+Unlike every other admin response, this data does not travel over the msgpack wire: `AdminResponse::StateDumped` carries a `serde_json` string that the client parses itself. `serde_json` renders Rust byte sequences as arrays of numbers, so every byte-bearing field reachable from [JsonDump](./client.jsondump.md) — hashes, signatures, entry bytes — arrives here as a plain `number[]` at runtime, even though the generated types declare `Uint8Array` for the msgpack wire form.
+
+
+</td></tr>
+<tr><td>
+
+[StemCell](./client.stemcell.md)
+
+
+</td><td>
+
+Cell whose instantiation has been deferred. Not yet implemented.
+
+
+</td></tr>
+<tr><td>
+
+[StorageBlob](./client.storageblob.md)
+
+
+</td><td>
+
+The type of storage blob
+
+
+</td></tr>
+<tr><td>
+
+[StorageInfo](./client.storageinfo.md)
+
+
+</td><td>
+
+Response type for storage used by holochain and applications
 
 
 </td></tr>
@@ -3660,6 +3409,7 @@ kitsune2 space id
 
 </td><td>
 
+A Signal which originates from within the Holochain system, as opposed to from within a Cell
 
 
 </td></tr>
@@ -3670,6 +3420,17 @@ kitsune2 space id
 
 </td><td>
 
+A microsecond-precision UTC timestamp for use in Holochain's actions.
+
+It is assumed to be untrustworthy: it may contain times offset from the UNIX epoch with the full +/- i64 range. Most of these times are \*not\* representable by a `chrono::DateTime<Utc>` (which limits itself to a +/- i32 offset in days from Jan 1, 0AD and from 1970AD).
+
+Also, most differences between two Timestamps are \*not\* representable by either a `chrono::Duration` (which limits itself to +/- i64 microseconds), \*nor\* by `core::time::Duration` (which limits itself to +'ve u64 seconds). Many constructions of these chrono and core::time types will panic!, so painful measures must be taken to avoid this outcome -- it is not acceptable for our core Holochain algorithms to panic when accessing DHT Action information committed by other random Holochain nodes!
+
+Timestamp serializes as a bare i64 (microseconds from UNIX Epoch).
+
+`Display` is implemented as an rfc3339 time string when possible (requires the `now` feature).
+
+Supports +/- `chrono::Duration` directly. There is no `Timestamp::now()` method, since this is not supported by WASM; however, `holochain_types` provides a `Timestamp::now()` method.
 
 
 </td></tr>
@@ -3685,51 +3446,111 @@ kitsune2 space id
 </td></tr>
 <tr><td>
 
-[UninstallAppRequest](./client.uninstallapprequest.md)
+[TransportConnectionStats](./client.transportconnectionstats.md)
 
 
 </td><td>
 
+Mirror of `kitsune2_api::TransportConnectionStats`<!-- -->.
 
 
 </td></tr>
 <tr><td>
 
-[UninstallAppResponse](./client.uninstallappresponse.md)
+[TransportStats](./client.transportstats.md)
 
 
 </td><td>
 
+Mirror of `kitsune2_api::TransportStats`<!-- -->.
 
 
 </td></tr>
 <tr><td>
 
-[UpdateCoordinatorsRequest](./client.updatecoordinatorsrequest.md)
+[UnrecoverableCellReason](./client.unrecoverablecellreason.md)
 
 
 </td><td>
 
+Reason a cell's source chain is unrecoverable via restore.
 
 
 </td></tr>
 <tr><td>
 
-[UpdateCoordinatorsResponse](./client.updatecoordinatorsresponse.md)
+[UpdateBase](./client.updatebase.md)
 
 
 </td><td>
 
+Base data for Update actions.
 
 
 </td></tr>
 <tr><td>
 
-[ValidationType](./client.validationtype.md)
+[UpdateCoordinatorsPayload](./client.updatecoordinatorspayload.md)
 
 
 </td><td>
 
+The instructions on how to update coordinators for a cell.
+
+
+</td></tr>
+<tr><td>
+
+[UpdateData](./client.updatedata.md)
+
+
+</td><td>
+
+Per-variant data for \[`ActionType::Update`<!-- -->\].
+
+
+</td></tr>
+<tr><td>
+
+[ValidatedDnaManifest](./client.validateddnamanifest.md)
+
+
+</td><td>
+
+A dna manifest that has been successfully validated.
+
+
+</td></tr>
+<tr><td>
+
+[ValidationReceipt](./client.validationreceipt.md)
+
+
+</td><td>
+
+Validation receipt content - to be signed.
+
+
+</td></tr>
+<tr><td>
+
+[ValidationStatus](./client.validationstatus.md)
+
+
+</td><td>
+
+The validation status for an op or record much of this happens in the subconscious an entry missing validation dependencies may cycle through Pending many times before finally reaching a final validation state or being abandoned
+
+
+</td></tr>
+<tr><td>
+
+[Warrant](./client.warrant.md)
+
+
+</td><td>
+
+A Warrant is an authored, timestamped proof of wrongdoing by another agent.
 
 
 </td></tr>
@@ -3755,11 +3576,36 @@ kitsune2 space id
 </td></tr>
 <tr><td>
 
-[WasmCode](./client.wasmcode.md)
+[WarrantOp](./client.warrantop.md)
 
 
 </td><td>
 
+A Warrant DhtOp
+
+
+</td></tr>
+<tr><td>
+
+[WarrantProof](./client.warrantproof.md)
+
+
+</td><td>
+
+The self-proving part of a Warrant which demonstrates bad behavior by another agent
+
+
+</td></tr>
+<tr><td>
+
+[WarrantSummary](./client.warrantsummary.md)
+
+
+</td><td>
+
+Compact, operator-visible summary of a \[`SignedWarrant`<!-- -->\].
+
+Carries just enough to identify the warrant for debugging; the variant of \[`UnrecoverableCellReason`<!-- -->\] tells the operator what kind it is.
 
 
 </td></tr>
@@ -3785,6 +3631,17 @@ kitsune2 space id
 </td></tr>
 <tr><td>
 
+[WasmZomeDef](./client.wasmzomedef.md)
+
+
+</td><td>
+
+A zome defined by Wasm bytecode
+
+
+</td></tr>
+<tr><td>
+
 [WsClientOptions](./client.wsclientoptions.md)
 
 
@@ -3800,17 +3657,66 @@ kitsune2 space id
 
 </td><td>
 
-Any value that is serializable to a Yaml value
+A type to allow yaml values to be used as \[`derive@SerializedBytes`<!-- -->\]
 
 
 </td></tr>
 <tr><td>
 
-[ZomeDefinition](./client.zomedefinition.md)
+[Zome](./client.zome.md)
 
 
 </td><td>
 
+A Holochain Zome. Includes the ZomeDef as well as the name of the Zome.
+
+
+</td></tr>
+<tr><td>
+
+[ZomeCallCapGrant](./client.zomecallcapgrant.md)
+
+
+</td><td>
+
+The entry for the ZomeCall capability grant. This data is committed to the callee's source chain as a private entry. The remote calling agent must provide a secret and we source their pubkey from the active network connection. This must match the strictness of the CapAccess.
+
+
+</td></tr>
+<tr><td>
+
+[ZomeCallParamsSigned](./client.zomecallparamssigned.md)
+
+
+</td><td>
+
+The data provided over an app interface in order to make a zome call.
+
+
+</td></tr>
+<tr><td>
+
+[ZomeDef](./client.zomedef.md)
+
+
+</td><td>
+
+Just the definition of a Zome, without the name included. This exists mainly for use in HashMaps where ZomeDefs are keyed by ZomeName.
+
+NB: A `ZomeDef` only describes a zome, it does not hold the executable code. A WASM zome carries its `WasmHash` and an inline zome carries an `InlineHash` stand-in (see `InlineZomeDef`<!-- -->). Both variants round-trip through serialization, but deserializing an inline zome only recovers its identifying hash, not the original Rust closures, so the inline implementation must be supplied separately (the closures live on `DnaFile`<!-- -->).
+
+In particular, a real-world DnaFile should only ever contain Wasm zomes!
+
+
+</td></tr>
+<tr><td>
+
+[ZomeDependency](./client.zomedependency.md)
+
+
+</td><td>
+
+Manifest for integrity zomes that another zome depends on.
 
 
 </td></tr>
@@ -3821,7 +3727,7 @@ Any value that is serializable to a Yaml value
 
 </td><td>
 
-An internal zome index within the DNA, from 0 to 255.
+this id is an internal reference, which also serves as a canonical ordering for zome initialization. The value should be auto-generated from the Zome Bundle def
 
 
 </td></tr>
@@ -3832,6 +3738,7 @@ An internal zome index within the DNA, from 0 to 255.
 
 </td><td>
 
+Manifest for an individual Zome
 
 
 </td></tr>
@@ -3842,16 +3749,7 @@ An internal zome index within the DNA, from 0 to 255.
 
 </td><td>
 
-
-
-</td></tr>
-<tr><td>
-
-[Zomes](./client.zomes.md)
-
-
-</td><td>
-
+ZomeName as a String.
 
 
 </td></tr>

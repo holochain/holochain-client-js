@@ -4,6 +4,7 @@
 
 ## ChainIntegrityWarrant type
 
+A warrant which is sent to agent activity authorities.
 
 **Signature:**
 

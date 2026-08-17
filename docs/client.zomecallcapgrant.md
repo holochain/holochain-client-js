@@ -2,88 +2,18 @@
 
 [Home](./index.md) &gt; [@holochain/client](./client.md) &gt; [ZomeCallCapGrant](./client.zomecallcapgrant.md)
 
-## ZomeCallCapGrant interface
+## ZomeCallCapGrant type
 
+The entry for the ZomeCall capability grant. This data is committed to the callee's source chain as a private entry. The remote calling agent must provide a secret and we source their pubkey from the active network connection. This must match the strictness of the CapAccess.
 
 **Signature:**
 
 ```typescript
-export interface ZomeCallCapGrant 
+export type ZomeCallCapGrant = {
+    tag: string;
+    access: CapAccess;
+    functions: GrantedFunctions;
+};
 ```
-
-## Properties
-
-<table><thead><tr><th>
-
-Property
-
-
-</th><th>
-
-Modifiers
-
-
-</th><th>
-
-Type
-
-
-</th><th>
-
-Description
-
-
-</th></tr></thead>
-<tbody><tr><td>
-
-[access](./client.zomecallcapgrant.access.md)
-
-
-</td><td>
-
-
-</td><td>
-
-[CapAccess](./client.capaccess.md)
-
-
-</td><td>
-
-
-</td></tr>
-<tr><td>
-
-[functions](./client.zomecallcapgrant.functions.md)
-
-
-</td><td>
-
-
-</td><td>
-
-[GrantedFunctions](./client.grantedfunctions.md)
-
-
-</td><td>
-
-
-</td></tr>
-<tr><td>
-
-[tag](./client.zomecallcapgrant.tag.md)
-
-
-</td><td>
-
-
-</td><td>
-
-string
-
-
-</td><td>
-
-
-</td></tr>
-</tbody></table>
+**References:** [CapAccess](./client.capaccess.md)<!-- -->, [GrantedFunctions](./client.grantedfunctions.md)
 

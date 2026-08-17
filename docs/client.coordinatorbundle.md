@@ -2,71 +2,14 @@
 
 [Home](./index.md) &gt; [@holochain/client](./client.md) &gt; [CoordinatorBundle](./client.coordinatorbundle.md)
 
-## CoordinatorBundle interface
+## CoordinatorBundle type
 
+A bundle of coordinator zomes.
 
 **Signature:**
 
 ```typescript
-export interface CoordinatorBundle 
+export type CoordinatorBundle = Bundle<CoordinatorManifest>;
 ```
-
-## Properties
-
-<table><thead><tr><th>
-
-Property
-
-
-</th><th>
-
-Modifiers
-
-
-</th><th>
-
-Type
-
-
-</th><th>
-
-Description
-
-
-</th></tr></thead>
-<tbody><tr><td>
-
-[manifest](./client.coordinatorbundle.manifest.md)
-
-
-</td><td>
-
-
-</td><td>
-
-[CoordinatorManifest](./client.coordinatormanifest.md)
-
-
-</td><td>
-
-
-</td></tr>
-<tr><td>
-
-[resources](./client.coordinatorbundle.resources.md)
-
-
-</td><td>
-
-
-</td><td>
-
-[ResourceMap](./client.resourcemap.md)
-
-
-</td><td>
-
-
-</td></tr>
-</tbody></table>
+**References:** [Bundle](./client.bundle.md)<!-- -->, [CoordinatorManifest](./client.coordinatormanifest.md)
 

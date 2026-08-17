@@ -4,6 +4,9 @@
 
 ## DnaDef type
 
+The definition of a DNA: the hash of this data is what produces the DnaHash.
+
+Historical note: This struct was written before `DnaManifest` appeared. It is included as part of a `DnaFile`<!-- -->. There is still a lot of code that uses this type, but in function, it has mainly been superseded by `DnaManifest`<!-- -->. Hence, this type can basically be thought of as a fully validated, normalized `DnaManifest`
 
 **Signature:**
 
@@ -11,10 +14,9 @@
 export type DnaDef = {
     name: string;
     modifiers: DnaModifiers;
-    lineage: DnaHashB64[];
-    integrity_zomes: IntegrityZome[];
-    coordinator_zomes: CoordinatorZome[];
+    integrity_zomes: Array<[ZomeName, IntegrityZomeDef]>;
+    coordinator_zomes: Array<[ZomeName, CoordinatorZomeDef]>;
 };
 ```
-**References:** [DnaModifiers](./client.dnamodifiers.md)<!-- -->, [DnaHashB64](./client.dnahashb64.md)<!-- -->, [IntegrityZome](./client.integrityzome.md)<!-- -->, [CoordinatorZome](./client.coordinatorzome.md)
+**References:** [DnaModifiers](./client.dnamodifiers.md)<!-- -->, [ZomeName](./client.zomename.md)<!-- -->, [IntegrityZomeDef](./client.integrityzomedef.md)<!-- -->, [CoordinatorZomeDef](./client.coordinatorzomedef.md)
 

@@ -2,94 +2,18 @@
 
 [Home](./index.md) &gt; [@holochain/client](./client.md) &gt; [PreflightResponse](./client.preflightresponse.md)
 
-## PreflightResponse interface
+## PreflightResponse type
 
+Every agent must send back a preflight response. All the preflight response data is signed by each agent and included in the session data.
 
 **Signature:**
 
 ```typescript
-export interface PreflightResponse 
+export type PreflightResponse = {
+    request: PreflightRequest;
+    agent_state: CounterSigningAgentState;
+    signature: Signature;
+};
 ```
-
-## Properties
-
-<table><thead><tr><th>
-
-Property
-
-
-</th><th>
-
-Modifiers
-
-
-</th><th>
-
-Type
-
-
-</th><th>
-
-Description
-
-
-</th></tr></thead>
-<tbody><tr><td>
-
-[agent\_state](./client.preflightresponse.agent_state.md)
-
-
-</td><td>
-
-
-</td><td>
-
-[CountersigningAgentState](./client.countersigningagentstate.md)
-
-
-</td><td>
-
-The chain state declaration for the agent that produced this response.
-
-
-</td></tr>
-<tr><td>
-
-[request](./client.preflightresponse.request.md)
-
-
-</td><td>
-
-
-</td><td>
-
-[PreflightRequest](./client.preflightrequest.md)
-
-
-</td><td>
-
-The request associated with this response.
-
-
-</td></tr>
-<tr><td>
-
-[signature](./client.preflightresponse.signature.md)
-
-
-</td><td>
-
-
-</td><td>
-
-[Signature](./client.signature.md)
-
-
-</td><td>
-
-The signature of this response, by the agent that created it.
-
-
-</td></tr>
-</tbody></table>
+**References:** [PreflightRequest](./client.preflightrequest.md)<!-- -->, [CounterSigningAgentState](./client.countersigningagentstate.md)<!-- -->, [Signature](./client.signature.md)
 

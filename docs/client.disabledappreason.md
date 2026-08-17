@@ -4,6 +4,7 @@
 
 ## DisabledAppReason type
 
+The reason for an app being in a Disabled state.
 
 **Signature:**
 
@@ -11,9 +12,9 @@
 export type DisabledAppReason = {
     type: "never_started";
 } | {
-    type: "user";
-} | {
     type: "not_started_after_providing_memproofs";
+} | {
+    type: "user";
 } | {
     type: "error";
     value: string;

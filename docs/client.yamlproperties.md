@@ -4,7 +4,7 @@
 
 ## YamlProperties type
 
-Any value that is serializable to a Yaml value
+A type to allow yaml values to be used as \[`derive@SerializedBytes`<!-- -->\]
 
 **Signature:**
 

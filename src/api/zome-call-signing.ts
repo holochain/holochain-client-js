@@ -1,6 +1,6 @@
 import _sodium from "libsodium-wrappers";
-import type { CapSecret } from "../hdk/capabilities.js";
-import type { AgentPubKey, CellId } from "../types.js";
+import type { CapSecret } from "../generated/hdk/capabilities.js";
+import type { AgentPubKey, CellId } from "../generated/types.js";
 import { encodeHashToBase64 } from "../utils/base64.js";
 
 /**

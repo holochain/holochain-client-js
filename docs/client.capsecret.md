@@ -4,6 +4,9 @@
 
 ## CapSecret type
 
+A CapSecret is used by a caller to prove to a callee access to a committed CapGrant.
+
+It is a random, unique identifier for the capability, which is shared by the grantor to allow access to others. The grantor can optionally further restrict usage of the secret to specific agents.
 
 **Signature:**
 

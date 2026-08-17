@@ -4,11 +4,32 @@
 
 ## ActionData type
 
+Per-variant action data, stored serialized in the `Action.action_data` BLOB column.
 
 **Signature:**
 
 ```typescript
-export type ActionData = Dna | AgentValidationPkg | InitZomesComplete | Create | Update | CreateLink | DeleteLink | OpenChain | CloseChain | Delete;
+export type ActionData = ({
+    type: "Dna";
+} & DnaData) | ({
+    type: "AgentValidationPkg";
+} & AgentValidationPkgData) | ({
+    type: "InitZomesComplete";
+} & InitZomesCompleteData) | ({
+    type: "Create";
+} & CreateData) | ({
+    type: "Update";
+} & UpdateData) | ({
+    type: "Delete";
+} & DeleteData) | ({
+    type: "CreateLink";
+} & CreateLinkData) | ({
+    type: "DeleteLink";
+} & DeleteLinkData) | ({
+    type: "CloseChain";
+} & CloseChainData) | ({
+    type: "OpenChain";
+} & OpenChainData);
 ```
-**References:** [Dna](./client.dna.md)<!-- -->, [AgentValidationPkg](./client.agentvalidationpkg.md)<!-- -->, [InitZomesComplete](./client.initzomescomplete.md)<!-- -->, [Create](./client.create.md)<!-- -->, [Update](./client.update.md)<!-- -->, [CreateLink](./client.createlink.md)<!-- -->, [DeleteLink](./client.deletelink.md)<!-- -->, [OpenChain](./client.openchain.md)<!-- -->, [CloseChain](./client.closechain.md)<!-- -->, [Delete](./client.delete.md)
+**References:** [DnaData](./client.dnadata.md)<!-- -->, [AgentValidationPkgData](./client.agentvalidationpkgdata.md)<!-- -->, [InitZomesCompleteData](./client.initzomescompletedata.md)<!-- -->, [CreateData](./client.createdata.md)<!-- -->, [UpdateData](./client.updatedata.md)<!-- -->, [DeleteData](./client.deletedata.md)<!-- -->, [CreateLinkData](./client.createlinkdata.md)<!-- -->, [DeleteLinkData](./client.deletelinkdata.md)<!-- -->, [CloseChainData](./client.closechaindata.md)<!-- -->, [OpenChainData](./client.openchaindata.md)
 

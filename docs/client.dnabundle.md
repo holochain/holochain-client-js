@@ -4,14 +4,12 @@
 
 ## DnaBundle type
 
+A bundle of Wasm zomes, represented as a file.
 
 **Signature:**
 
 ```typescript
-export type DnaBundle = {
-    manifest: DnaManifest;
-    resources: ResourceMap;
-};
+export type DnaBundle = Bundle<ValidatedDnaManifest>;
 ```
-**References:** [DnaManifest](./client.dnamanifest.md)<!-- -->, [ResourceMap](./client.resourcemap.md)
+**References:** [Bundle](./client.bundle.md)<!-- -->, [ValidatedDnaManifest](./client.validateddnamanifest.md)
 

@@ -1,25 +1,27 @@
 import {
-  ActionHash,
   ActionHashB64,
-  AgentPubKey,
   AgentPubKeyB64,
-  AnyDhtHash,
   AnyDhtHashB64,
-  DhtOpHash,
   DhtOpHashB64,
+  EntryHashB64,
+  ExternalHashB64,
+  HoloHashB64,
+  WarrantHashB64,
+} from "../client-types.js";
+import {
+  ActionHash,
+  AgentPubKey,
+  AnyDhtHash,
+  DhtOpHash,
   DnaHash,
   DnaHashB64,
   EntryHash,
-  EntryHashB64,
   ExternalHash,
-  ExternalHashB64,
   HoloHash,
-  HoloHashB64,
   WarrantHash,
-  WarrantHashB64,
   WasmHash,
   WasmHashB64,
-} from "../types.js";
+} from "../generated/types.js";
 import { encodeHashToBase64, decodeHashFromBase64 } from "./base64.js";
 
 /**

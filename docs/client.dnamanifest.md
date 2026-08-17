@@ -4,18 +4,14 @@
 
 ## DnaManifest type
 
+The enum which encompasses all versions of the DNA manifest, past and present.
 
 **Signature:**
 
 ```typescript
 export type DnaManifest = {
     manifest_version: "0";
-    name: string;
-    network_seed?: NetworkSeed;
-    properties?: DnaProperties;
-    zomes: Array<ZomeManifest>;
-    lineage: DnaHashB64[];
-};
+} & DnaManifestV0;
 ```
-**References:** [NetworkSeed](./client.networkseed.md)<!-- -->, [DnaProperties](./client.dnaproperties.md)<!-- -->, [ZomeManifest](./client.zomemanifest.md)<!-- -->, [DnaHashB64](./client.dnahashb64.md)
+**References:** [DnaManifestV0](./client.dnamanifestv0.md)
 

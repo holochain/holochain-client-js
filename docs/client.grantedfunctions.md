@@ -4,6 +4,7 @@
 
 ## GrantedFunctions type
 
+A collection of zome/function pairs
 
 **Signature:**
 
@@ -12,8 +13,8 @@ export type GrantedFunctions = {
     type: "all";
 } | {
     type: "listed";
-    value: [ZomeName, FunctionName][];
+    value: Array<GrantedFunction>;
 };
 ```
-**References:** [ZomeName](./client.zomename.md)<!-- -->, [FunctionName](./client.functionname.md)
+**References:** [GrantedFunction](./client.grantedfunction.md)
 

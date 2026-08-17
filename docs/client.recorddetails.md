@@ -2,105 +2,19 @@
 
 [Home](./index.md) &gt; [@holochain/client](./client.md) &gt; [RecordDetails](./client.recorddetails.md)
 
-## RecordDetails interface
+## RecordDetails type
 
+A specific Record with any updates and deletes. This is all the metadata available for a record.
 
 **Signature:**
 
 ```typescript
-export interface RecordDetails 
+export type RecordDetails = {
+    record: Record;
+    validation_status: ValidationStatus;
+    deletes: Array<SignedHashed<Action>>;
+    updates: Array<SignedHashed<Action>>;
+};
 ```
-
-## Properties
-
-<table><thead><tr><th>
-
-Property
-
-
-</th><th>
-
-Modifiers
-
-
-</th><th>
-
-Type
-
-
-</th><th>
-
-Description
-
-
-</th></tr></thead>
-<tbody><tr><td>
-
-[deletes](./client.recorddetails.deletes.md)
-
-
-</td><td>
-
-
-</td><td>
-
-Array&lt;[SignedActionHashed](./client.signedactionhashed.md)<!-- -->&gt;
-
-
-</td><td>
-
-
-</td></tr>
-<tr><td>
-
-[record](./client.recorddetails.record.md)
-
-
-</td><td>
-
-
-</td><td>
-
-[Record](./client.record_2.md)
-
-
-</td><td>
-
-
-</td></tr>
-<tr><td>
-
-[updates](./client.recorddetails.updates.md)
-
-
-</td><td>
-
-
-</td><td>
-
-Array&lt;[SignedActionHashed](./client.signedactionhashed.md)<!-- -->&gt;
-
-
-</td><td>
-
-
-</td></tr>
-<tr><td>
-
-[validation\_status](./client.recorddetails.validation_status.md)
-
-
-</td><td>
-
-
-</td><td>
-
-[ValidationStatus](./client.validationstatus.md)
-
-
-</td><td>
-
-
-</td></tr>
-</tbody></table>
+**References:** [Record](./client.record_2.md)<!-- -->, [ValidationStatus](./client.validationstatus.md)<!-- -->, [SignedHashed](./client.signedhashed.md)<!-- -->, [Action](./client.action.md)
 

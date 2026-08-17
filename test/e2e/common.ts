@@ -4,12 +4,12 @@ import { ChildProcessWithoutNullStreams, spawn } from "node:child_process";
 import * as readline from "node:readline";
 import {
   AdminWebsocket,
+  AppAuthenticationTokenIssued,
   AppWebsocket,
   CellId,
   CellType,
   CoordinatorBundle,
   InstalledAppId,
-  IssueAppAuthenticationTokenResponse,
 } from "../../src";
 import getPort from "get-port";
 
@@ -327,7 +327,7 @@ export const createAppInterfaceAndInstallApp = async (
   installed_app_id: InstalledAppId;
   cell_id: CellId;
   appPort: number;
-  appAuthentication: IssueAppAuthenticationTokenResponse;
+  appAuthentication: AppAuthenticationTokenIssued;
   admin: AdminWebsocket;
 }> => {
   const role_name = "foo";

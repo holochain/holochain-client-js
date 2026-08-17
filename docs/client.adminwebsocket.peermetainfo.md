@@ -9,5 +9,5 @@ Request peer meta info for a peer.
 **Signature:**
 
 ```typescript
-peerMetaInfo: Requester<PeerMetaInfoRequest, PeerMetaInfoResponse>;
+peerMetaInfo: Requester<AdminRequestPayload<"peer_meta_info">, PeerMetaInfoMap>;
 ```

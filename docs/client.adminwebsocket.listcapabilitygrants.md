@@ -9,5 +9,5 @@ List all capability grants for all cells.
 **Signature:**
 
 ```typescript
-listCapabilityGrants: Requester<ListCapabilityGrantsRequest, ListCapabilityGrantsResponse>;
+listCapabilityGrants: Requester<AdminRequestPayload<"list_capability_grants">, AppCapGrantInfo>;
 ```

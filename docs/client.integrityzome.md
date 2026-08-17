@@ -8,7 +8,7 @@
 **Signature:**
 
 ```typescript
-export type IntegrityZome = ZomeDefinition;
+export type IntegrityZome = Zome<IntegrityZomeDef>;
 ```
-**References:** [ZomeDefinition](./client.zomedefinition.md)
+**References:** [Zome](./client.zome.md)<!-- -->, [IntegrityZomeDef](./client.integrityzomedef.md)
 

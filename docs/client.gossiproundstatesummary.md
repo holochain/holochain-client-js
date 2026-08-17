@@ -2,57 +2,14 @@
 
 [Home](./index.md) &gt; [@holochain/client](./client.md) &gt; [GossipRoundStateSummary](./client.gossiproundstatesummary.md)
 
-## GossipRoundStateSummary interface
+## GossipRoundStateSummary type
 
-Gossip round state summary.
+Mirror of `kitsune2_api::GossipRoundStateSummary`<!-- -->.
 
 **Signature:**
 
 ```typescript
-export interface GossipRoundStateSummary 
+export type GossipRoundStateSummary = {
+    session_with_peer: string;
+};
 ```
-
-## Properties
-
-<table><thead><tr><th>
-
-Property
-
-
-</th><th>
-
-Modifiers
-
-
-</th><th>
-
-Type
-
-
-</th><th>
-
-Description
-
-
-</th></tr></thead>
-<tbody><tr><td>
-
-[session\_with\_peer](./client.gossiproundstatesummary.session_with_peer.md)
-
-
-</td><td>
-
-
-</td><td>
-
-string
-
-
-</td><td>
-
-The URL of the peer with which the round is initiated.
-
-
-</td></tr>
-</tbody></table>
-

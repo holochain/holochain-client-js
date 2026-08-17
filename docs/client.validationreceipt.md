@@ -2,105 +2,19 @@
 
 [Home](./index.md) &gt; [@holochain/client](./client.md) &gt; [ValidationReceipt](./client.validationreceipt.md)
 
-## ValidationReceipt interface
+## ValidationReceipt type
 
+Validation receipt content - to be signed.
 
 **Signature:**
 
 ```typescript
-export interface ValidationReceipt 
+export type ValidationReceipt = {
+    dht_op_hash: DhtOpHash;
+    validation_status: ValidationStatus;
+    validators: Array<AgentPubKey>;
+    when_integrated: Timestamp;
+};
 ```
-
-## Properties
-
-<table><thead><tr><th>
-
-Property
-
-
-</th><th>
-
-Modifiers
-
-
-</th><th>
-
-Type
-
-
-</th><th>
-
-Description
-
-
-</th></tr></thead>
-<tbody><tr><td>
-
-[dht\_op\_hash](./client.validationreceipt.dht_op_hash.md)
-
-
-</td><td>
-
-
-</td><td>
-
-[DhtOpHash](./client.dhtophash.md)
-
-
-</td><td>
-
-
-</td></tr>
-<tr><td>
-
-[validation\_status](./client.validationreceipt.validation_status.md)
-
-
-</td><td>
-
-
-</td><td>
-
-[ValidationStatus](./client.validationstatus.md)
-
-
-</td><td>
-
-
-</td></tr>
-<tr><td>
-
-[validator](./client.validationreceipt.validator.md)
-
-
-</td><td>
-
-
-</td><td>
-
-[AgentPubKey](./client.agentpubkey.md)
-
-
-</td><td>
-
-
-</td></tr>
-<tr><td>
-
-[when\_integrated](./client.validationreceipt.when_integrated.md)
-
-
-</td><td>
-
-
-</td><td>
-
-[Timestamp](./client.timestamp.md)
-
-
-</td><td>
-
-
-</td></tr>
-</tbody></table>
+**References:** [DhtOpHash](./client.dhtophash.md)<!-- -->, [ValidationStatus](./client.validationstatus.md)<!-- -->, [AgentPubKey](./client.agentpubkey.md)<!-- -->, [Timestamp](./client.timestamp.md)
 

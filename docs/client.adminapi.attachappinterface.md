@@ -7,5 +7,5 @@
 **Signature:**
 
 ```typescript
-attachAppInterface: Requester<AttachAppInterfaceRequest, AttachAppInterfaceResponse>;
+attachAppInterface: Requester<AdminRequestPayload<"attach_app_interface">, AdminResponsePayload<"app_interface_attached">>;
 ```

@@ -1,5 +1,5 @@
 import { HolochainError } from "../api/common.js";
-import { InstalledAppId } from "../types.js";
+import { InstalledAppId } from "../client-types.js";
 
 /**
  * Environment injected by the in-process Tauri plugin (tauri-plugin-holochain)

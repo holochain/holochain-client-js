@@ -4,6 +4,7 @@
 
 ## CapAccess type
 
+Represents access requirements for capability grants.
 
 **Signature:**
 
@@ -19,7 +20,7 @@ export type CapAccess = {
     type: "assigned";
     value: {
         secret: CapSecret;
-        assignees: AgentPubKey[];
+        assignees: Array<AgentPubKey>;
     };
 };
 ```

@@ -4,11 +4,18 @@
 
 ## MigrationTarget type
 
+Description of how to find the previous or next CellId in a migration. In a migration, of the two components of the CellId (dna and agent), always one stays fixed while the other one changes. This enum represents the component that changed.
+
+When used in CloseChain, this contains the new DNA hash or Agent key. When used in OpenChain, this contains the previous DNA hash or Agent key.
 
 **Signature:**
 
 ```typescript
-export type MigrationTarget = DnaMigrationTarget | AgentMigrationTarget;
+export type MigrationTarget = {
+    Dna: DnaHash;
+} | {
+    Agent: AgentPubKey;
+};
 ```
-**References:** [DnaMigrationTarget](./client.dnamigrationtarget.md)<!-- -->, [AgentMigrationTarget](./client.agentmigrationtarget.md)
+**References:** [DnaHash](./client.dnahash.md)<!-- -->, [AgentPubKey](./client.agentpubkey.md)
 

@@ -4,18 +4,26 @@
 
 ## AppStatus type
 
+The status of an installed app.
+
+Either Enabled or Disabled, set by the user via the conductor admin interface.
 
 **Signature:**
 
 ```typescript
 export type AppStatus = {
+    type: "enabled";
+} | {
     type: "disabled";
     value: DisabledAppReason;
 } | {
-    type: "enabled";
-} | {
     type: "awaiting_memproofs";
+} | {
+    type: "awaiting_restore";
+} | {
+    type: "unrecoverable";
+    value: [CellId, UnrecoverableCellReason];
 };
 ```
-**References:** [DisabledAppReason](./client.disabledappreason.md)
+**References:** [DisabledAppReason](./client.disabledappreason.md)<!-- -->, [CellId](./client.cellid.md)<!-- -->, [UnrecoverableCellReason](./client.unrecoverablecellreason.md)
 

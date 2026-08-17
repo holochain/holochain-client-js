@@ -2,192 +2,26 @@
 
 [Home](./index.md) &gt; [@holochain/client](./client.md) &gt; [PeerMeta](./client.peermeta.md)
 
-## PeerMeta interface
+## PeerMeta type
 
-Peer metadata dump.
+Mirror of `kitsune2_api::PeerMeta`<!-- -->.
 
 **Signature:**
 
 ```typescript
-export interface PeerMeta 
+export type PeerMeta = {
+    last_gossip_timestamp: Timestamp | null;
+    new_ops_bookmark: Timestamp | null;
+    peer_behavior_errors: number | null;
+    local_errors: number | null;
+    peer_busy: number | null;
+    peer_terminated: number | null;
+    completed_rounds: number | null;
+    peer_timeouts: number | null;
+    dht_op_count: number | null;
+    is_tombstone: boolean;
+    storage_arc: DhtArc;
+};
 ```
-
-## Properties
-
-<table><thead><tr><th>
-
-Property
-
-
-</th><th>
-
-Modifiers
-
-
-</th><th>
-
-Type
-
-
-</th><th>
-
-Description
-
-
-</th></tr></thead>
-<tbody><tr><td>
-
-[completed\_rounds?](./client.peermeta.completed_rounds.md)
-
-
-</td><td>
-
-
-</td><td>
-
-number
-
-
-</td><td>
-
-_(Optional)_ The number of completed rounds.
-
-
-</td></tr>
-<tr><td>
-
-[last\_gossip\_timestamp?](./client.peermeta.last_gossip_timestamp.md)
-
-
-</td><td>
-
-
-</td><td>
-
-[Timestamp](./client.timestamp.md)
-
-
-</td><td>
-
-_(Optional)_ The timestamp of the last gossip round.
-
-
-</td></tr>
-<tr><td>
-
-[local\_errors?](./client.peermeta.local_errors.md)
-
-
-</td><td>
-
-
-</td><td>
-
-number
-
-
-</td><td>
-
-_(Optional)_ The number of local errors.
-
-
-</td></tr>
-<tr><td>
-
-[new\_ops\_bookmark?](./client.peermeta.new_ops_bookmark.md)
-
-
-</td><td>
-
-
-</td><td>
-
-[Timestamp](./client.timestamp.md)
-
-
-</td><td>
-
-_(Optional)_ The bookmark of the last op bookmark received.
-
-
-</td></tr>
-<tr><td>
-
-[peer\_behavior\_errors?](./client.peermeta.peer_behavior_errors.md)
-
-
-</td><td>
-
-
-</td><td>
-
-number
-
-
-</td><td>
-
-_(Optional)_ The number of behavior errors observed.
-
-
-</td></tr>
-<tr><td>
-
-[peer\_busy?](./client.peermeta.peer_busy.md)
-
-
-</td><td>
-
-
-</td><td>
-
-number
-
-
-</td><td>
-
-_(Optional)_ The number of busy peer errors.
-
-
-</td></tr>
-<tr><td>
-
-[peer\_terminated?](./client.peermeta.peer_terminated.md)
-
-
-</td><td>
-
-
-</td><td>
-
-number
-
-
-</td><td>
-
-_(Optional)_ The number of terminated rounds.
-
-Note that termination is not necessarily an error.
-
-
-</td></tr>
-<tr><td>
-
-[peer\_timeouts?](./client.peermeta.peer_timeouts.md)
-
-
-</td><td>
-
-
-</td><td>
-
-number
-
-
-</td><td>
-
-_(Optional)_ The number of peer timeouts.
-
-
-</td></tr>
-</tbody></table>
+**References:** [Timestamp](./client.timestamp.md)<!-- -->, [DhtArc](./client.dhtarc.md)
 

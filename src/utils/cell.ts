@@ -1,4 +1,4 @@
-import { CellId } from "../types.js";
+import { CellId } from "../generated/types.js";
 import { encodeHashToBase64 } from "./base64.js";
 
 /**

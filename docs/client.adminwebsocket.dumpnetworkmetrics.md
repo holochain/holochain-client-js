@@ -7,5 +7,5 @@
 **Signature:**
 
 ```typescript
-dumpNetworkMetrics: Requester<DumpNetworkMetricsRequest, DumpNetworkMetricsResponse>;
+dumpNetworkMetrics: Requester<AdminRequestPayload<"dump_network_metrics">, NetworkMetricsMap>;
 ```

@@ -4,6 +4,7 @@
 
 ## Role type
 
+Agents can have a role specific to each countersigning session. The role is app defined and opaque to the subconscious.
 
 **Signature:**
 

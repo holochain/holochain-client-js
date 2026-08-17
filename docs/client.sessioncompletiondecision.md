@@ -4,13 +4,14 @@
 
 ## SessionCompletionDecision type
 
+Decision about an incomplete countersigning session.
 
 **Signature:**
 
 ```typescript
 export type SessionCompletionDecision = {
-    [SessionCompletionDecisionType.Complete]: SignedActionHashed;
-} | SessionCompletionDecisionType.Abandoned | SessionCompletionDecisionType.Indeterminate | SessionCompletionDecisionType.Failed;
+    Complete: SignedHashed<Action>;
+} | "Abandoned" | "Indeterminate" | "Failed";
 ```
-**References:** [SessionCompletionDecisionType.Complete](./client.sessioncompletiondecisiontype.md)<!-- -->, [SignedActionHashed](./client.signedactionhashed.md)<!-- -->, [SessionCompletionDecisionType.Abandoned](./client.sessioncompletiondecisiontype.md)<!-- -->, [SessionCompletionDecisionType.Indeterminate](./client.sessioncompletiondecisiontype.md)<!-- -->, [SessionCompletionDecisionType.Failed](./client.sessioncompletiondecisiontype.md)
+**References:** [SignedHashed](./client.signedhashed.md)<!-- -->, [Action](./client.action.md)
 

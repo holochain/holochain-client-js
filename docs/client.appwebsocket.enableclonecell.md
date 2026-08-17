@@ -9,7 +9,7 @@ Enable a disabled clone cell.
 **Signature:**
 
 ```typescript
-enableCloneCell(args: EnableCloneCellRequest): Promise<import("../admin/types.js").ClonedCell>;
+enableCloneCell(args: EnableCloneCellPayload): Promise<ClonedCell>;
 ```
 
 ## Parameters
@@ -37,7 +37,7 @@ args
 
 </td><td>
 
-[EnableCloneCellRequest](./client.enableclonecellrequest.md)
+[EnableCloneCellPayload](./client.enableclonecellpayload.md)
 
 
 </td><td>
@@ -50,7 +50,7 @@ Specify the clone cell to enable.
 
 **Returns:**
 
-Promise&lt;import("../admin/types.js").[ClonedCell](./client.clonedcell.md)<!-- -->&gt;
+Promise&lt;[ClonedCell](./client.clonedcell.md)<!-- -->&gt;
 
 The enabled clone cell.
 

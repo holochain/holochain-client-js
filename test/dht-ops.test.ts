@@ -1,8 +1,6 @@
 import { assert, test } from "vitest";
 import {
-  ActionType,
   ChainOp,
-  ChainOpType,
   Entry,
   fakeActionHash,
   fakeAgentPubKey,
@@ -11,7 +9,6 @@ import {
   getChainOpEntry,
   getChainOpSignature,
   getChainOpType,
-  OpEntryType,
   SignedAction,
 } from "../src";
 
@@ -32,7 +29,7 @@ async function makeCreateSignedAction(): Promise<SignedAction> {
         prev_action: await fakeActionHash(),
       },
       data: {
-        type: ActionType.Create,
+        type: "Create",
         entry_type: {
           App: { entry_index: 0, zome_index: 0, visibility: "Public" },
         },
@@ -53,7 +50,7 @@ async function makeDeleteSignedAction(): Promise<SignedAction> {
         prev_action: await fakeActionHash(),
       },
       data: {
-        type: ActionType.Delete,
+        type: "Delete",
         deletes_address: await fakeActionHash(),
         deletes_entry_address: await fakeEntryHash(),
       },
@@ -65,10 +62,10 @@ async function makeDeleteSignedAction(): Promise<SignedAction> {
 test("chain op helpers on a tuple variant with a present entry", async () => {
   const signedAction = await makeCreateSignedAction();
   const op: ChainOp = {
-    [ChainOpType.CreateEntry]: [signedAction, { Present: APP_ENTRY }],
+    ["CreateEntry"]: [signedAction, { Present: APP_ENTRY }],
   };
 
-  assert.equal(getChainOpType(op), ChainOpType.CreateEntry);
+  assert.equal(getChainOpType(op), "CreateEntry");
   assert.deepEqual(getChainOpAction(op), signedAction.data);
   assert.deepEqual(getChainOpSignature(op), SIGNATURE);
   assert.deepEqual(getChainOpEntry(op), APP_ENTRY);
@@ -77,10 +74,10 @@ test("chain op helpers on a tuple variant with a present entry", async () => {
 test("chain op helpers on a tuple variant with a unit-variant op entry", async () => {
   const signedAction = await makeCreateSignedAction();
   const op: ChainOp = {
-    [ChainOpType.UpdateEntry]: [signedAction, OpEntryType.Hidden],
+    ["UpdateEntry"]: [signedAction, "Hidden"],
   };
 
-  assert.equal(getChainOpType(op), ChainOpType.UpdateEntry);
+  assert.equal(getChainOpType(op), "UpdateEntry");
   assert.deepEqual(getChainOpAction(op), signedAction.data);
   assert.deepEqual(getChainOpSignature(op), SIGNATURE);
   assert.isUndefined(getChainOpEntry(op));
@@ -88,9 +85,9 @@ test("chain op helpers on a tuple variant with a unit-variant op entry", async (
 
 test("chain op helpers on a newtype variant", async () => {
   const signedAction = await makeDeleteSignedAction();
-  const op: ChainOp = { [ChainOpType.DeleteRecord]: signedAction };
+  const op: ChainOp = { ["DeleteRecord"]: signedAction };
 
-  assert.equal(getChainOpType(op), ChainOpType.DeleteRecord);
+  assert.equal(getChainOpType(op), "DeleteRecord");
   assert.deepEqual(getChainOpAction(op), signedAction.data);
   assert.deepEqual(getChainOpSignature(op), SIGNATURE);
   assert.isUndefined(getChainOpEntry(op));
@@ -99,9 +96,9 @@ test("chain op helpers on a newtype variant", async () => {
 test("chain op helpers on an action-only tuple variant", async () => {
   const signedAction = await makeCreateSignedAction();
   const op: ChainOp = {
-    [ChainOpType.CreateRecord]: [signedAction, OpEntryType.ActionOnly],
+    ["CreateRecord"]: [signedAction, "ActionOnly"],
   };
 
-  assert.equal(getChainOpType(op), ChainOpType.CreateRecord);
+  assert.equal(getChainOpType(op), "CreateRecord");
   assert.isUndefined(getChainOpEntry(op));
 });

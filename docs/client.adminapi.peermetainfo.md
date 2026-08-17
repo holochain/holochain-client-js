@@ -7,5 +7,5 @@
 **Signature:**
 
 ```typescript
-peerMetaInfo: Requester<PeerMetaInfoRequest, PeerMetaInfoResponse>;
+peerMetaInfo: Requester<AdminRequestPayload<"peer_meta_info">, PeerMetaInfoMap>;
 ```

@@ -2,107 +2,19 @@
 
 [Home](./index.md) &gt; [@holochain/client](./client.md) &gt; [ActionHeader](./client.actionheader.md)
 
-## ActionHeader interface
+## ActionHeader type
 
+Common header fields shared by every action variant.
 
 **Signature:**
 
 ```typescript
-export interface ActionHeader 
+export type ActionHeader = {
+    author: AgentPubKey;
+    timestamp: Timestamp;
+    action_seq: number;
+    prev_action: ActionHash | null;
+};
 ```
-
-## Properties
-
-<table><thead><tr><th>
-
-Property
-
-
-</th><th>
-
-Modifiers
-
-
-</th><th>
-
-Type
-
-
-</th><th>
-
-Description
-
-
-</th></tr></thead>
-<tbody><tr><td>
-
-[action\_seq](./client.actionheader.action_seq.md)
-
-
-</td><td>
-
-
-</td><td>
-
-number
-
-
-</td><td>
-
-
-</td></tr>
-<tr><td>
-
-[author](./client.actionheader.author.md)
-
-
-</td><td>
-
-
-</td><td>
-
-[AgentPubKey](./client.agentpubkey.md)
-
-
-</td><td>
-
-
-</td></tr>
-<tr><td>
-
-[prev\_action?](./client.actionheader.prev_action.md)
-
-
-</td><td>
-
-
-</td><td>
-
-[ActionHash](./client.actionhash.md)
-
-
-</td><td>
-
-_(Optional)_
-
-
-</td></tr>
-<tr><td>
-
-[timestamp](./client.actionheader.timestamp.md)
-
-
-</td><td>
-
-
-</td><td>
-
-[Timestamp](./client.timestamp.md)
-
-
-</td><td>
-
-
-</td></tr>
-</tbody></table>
+**References:** [AgentPubKey](./client.agentpubkey.md)<!-- -->, [Timestamp](./client.timestamp.md)<!-- -->, [ActionHash](./client.actionhash.md)
 

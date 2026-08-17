@@ -9,7 +9,7 @@ Request the currently known agents of the app.
 **Signature:**
 
 ```typescript
-agentInfo(req: AgentInfoRequest, timeout?: number): Promise<AgentInfoResponse>;
+agentInfo(req: AppRequestPayload<"agent_info">, timeout?: number): Promise<Array<string>>;
 ```
 
 ## Parameters
@@ -37,7 +37,7 @@ req
 
 </td><td>
 
-[AgentInfoRequest](./client.agentinforequest.md)
+[AppRequestPayload](./client.apprequestpayload.md)<!-- -->&lt;"agent\_info"&gt;
 
 
 </td><td>
@@ -66,7 +66,7 @@ _(Optional)_ A timeout to override the default.
 
 **Returns:**
 
-Promise&lt;[AgentInfoResponse](./client.agentinforesponse.md)<!-- -->&gt;
+Promise&lt;Array&lt;string&gt;&gt;
 
 The app's agent infos as JSON string.
 

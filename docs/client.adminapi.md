@@ -44,7 +44,7 @@ Description
 
 </td><td>
 
-[Requester](./client.requester.md)<!-- -->&lt;[AddAgentInfoRequest](./client.addagentinforequest.md)<!-- -->, [AddAgentInfoResponse](./client.addagentinforesponse.md)<!-- -->&gt;
+[Requester](./client.requester.md)<!-- -->&lt;[AdminRequestPayload](./client.adminrequestpayload.md)<!-- -->&lt;"add\_agent\_info"&gt;, void&gt;
 
 
 </td><td>
@@ -61,7 +61,7 @@ Description
 
 </td><td>
 
-[Requester](./client.requester.md)<!-- -->&lt;[AgentInfoRequest](./client.agentinforequest.md)<!-- -->, [AgentInfoResponse](./client.agentinforesponse.md)<!-- -->&gt;
+[Requester](./client.requester.md)<!-- -->&lt;[AdminRequestPayload](./client.adminrequestpayload.md)<!-- -->&lt;"agent\_info"&gt;, Array&lt;string&gt;&gt;
 
 
 </td><td>
@@ -78,7 +78,7 @@ Description
 
 </td><td>
 
-[Requester](./client.requester.md)<!-- -->&lt;[AttachAppInterfaceRequest](./client.attachappinterfacerequest.md)<!-- -->, [AttachAppInterfaceResponse](./client.attachappinterfaceresponse.md)<!-- -->&gt;
+[Requester](./client.requester.md)<!-- -->&lt;[AdminRequestPayload](./client.adminrequestpayload.md)<!-- -->&lt;"attach\_app\_interface"&gt;, [AdminResponsePayload](./client.adminresponsepayload.md)<!-- -->&lt;"app\_interface\_attached"&gt;&gt;
 
 
 </td><td>
@@ -95,7 +95,7 @@ Description
 
 </td><td>
 
-[Requester](./client.requester.md)<!-- -->&lt;[DeleteCloneCellRequest](./client.deleteclonecellrequest.md)<!-- -->, [DeleteCloneCellResponse](./client.deleteclonecellresponse.md)<!-- -->&gt;
+[Requester](./client.requester.md)<!-- -->&lt;[DeleteCloneCellPayload](./client.deleteclonecellpayload.md)<!-- -->, void&gt;
 
 
 </td><td>
@@ -112,7 +112,7 @@ Description
 
 </td><td>
 
-[Requester](./client.requester.md)<!-- -->&lt;[DisableAppRequest](./client.disableapprequest.md)<!-- -->, [DisableAppResponse](./client.disableappresponse.md)<!-- -->&gt;
+[Requester](./client.requester.md)<!-- -->&lt;[AdminRequestPayload](./client.adminrequestpayload.md)<!-- -->&lt;"disable\_app"&gt;, void&gt;
 
 
 </td><td>
@@ -129,7 +129,24 @@ Description
 
 </td><td>
 
-[Requester](./client.requester.md)<!-- -->&lt;[DumpFullStateRequest](./client.dumpfullstaterequest.md)<!-- -->, [DumpFullStateResponse](./client.dumpfullstateresponse.md)<!-- -->&gt;
+[Requester](./client.requester.md)<!-- -->&lt;[AdminRequestPayload](./client.adminrequestpayload.md)<!-- -->&lt;"dump\_full\_state"&gt;, [FullStateDump](./client.fullstatedump.md)<!-- -->&gt;
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[dumpNetworkMetrics](./client.adminapi.dumpnetworkmetrics.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[Requester](./client.requester.md)<!-- -->&lt;[AdminRequestPayload](./client.adminrequestpayload.md)<!-- -->&lt;"dump\_network\_metrics"&gt;, [NetworkMetricsMap](./client.networkmetricsmap.md)<!-- -->&gt;
 
 
 </td><td>
@@ -146,7 +163,7 @@ Description
 
 </td><td>
 
-[Requester](./client.requester.md)<!-- -->&lt;[DumpNetworkStatsRequest](./client.dumpnetworkstatsrequest.md)<!-- -->, [DumpNetworkStatsResponse](./client.dumpnetworkstatsresponse.md)<!-- -->&gt;
+[Requester](./client.requester.md)<!-- -->&lt;void, [HolochainTransportStats](./client.holochaintransportstats.md)<!-- -->&gt;
 
 
 </td><td>
@@ -163,7 +180,7 @@ Description
 
 </td><td>
 
-[Requester](./client.requester.md)<!-- -->&lt;[DumpStateRequest](./client.dumpstaterequest.md)<!-- -->, [DumpStateResponse](./client.dumpstateresponse.md)<!-- -->&gt;
+[Requester](./client.requester.md)<!-- -->&lt;[AdminRequestPayload](./client.adminrequestpayload.md)<!-- -->&lt;"dump\_state"&gt;, [StateDump](./client.statedump.md)<!-- -->&gt;
 
 
 </td><td>
@@ -180,7 +197,7 @@ Description
 
 </td><td>
 
-[Requester](./client.requester.md)<!-- -->&lt;[EnableAppRequest](./client.enableapprequest.md)<!-- -->, [EnableAppResponse](./client.enableappresponse.md)<!-- -->&gt;
+[Requester](./client.requester.md)<!-- -->&lt;[AdminRequestPayload](./client.adminrequestpayload.md)<!-- -->&lt;"enable\_app"&gt;, [AppInfo](./client.appinfo.md)<!-- -->&gt;
 
 
 </td><td>
@@ -197,7 +214,7 @@ Description
 
 </td><td>
 
-[Requester](./client.requester.md)<!-- -->&lt;[GenerateAgentPubKeyRequest](./client.generateagentpubkeyrequest.md)<!-- -->, [GenerateAgentPubKeyResponse](./client.generateagentpubkeyresponse.md)<!-- -->&gt;
+[Requester](./client.requester.md)<!-- -->&lt;void, [AgentPubKey](./client.agentpubkey.md)<!-- -->&gt;
 
 
 </td><td>
@@ -214,7 +231,7 @@ Description
 
 </td><td>
 
-[Requester](./client.requester.md)<!-- -->&lt;[GetDnaDefinitionRequest](./client.getdnadefinitionrequest.md)<!-- -->, [GetDnaDefinitionResponse](./client.getdnadefinitionresponse.md)<!-- -->&gt;
+[Requester](./client.requester.md)<!-- -->&lt;[CellId](./client.cellid.md)<!-- -->, [DnaDef](./client.dnadef.md)<!-- -->&gt;
 
 
 </td><td>
@@ -231,7 +248,7 @@ Description
 
 </td><td>
 
-[Requester](./client.requester.md)<!-- -->&lt;[GrantZomeCallCapabilityRequest](./client.grantzomecallcapabilityrequest.md)<!-- -->, [GrantZomeCallCapabilityResponse](./client.grantzomecallcapabilityresponse.md)<!-- -->&gt;
+[Requester](./client.requester.md)<!-- -->&lt;[GrantZomeCallCapabilityPayload](./client.grantzomecallcapabilitypayload.md)<!-- -->, [ActionHash](./client.actionhash.md)<!-- -->&gt;
 
 
 </td><td>
@@ -248,7 +265,7 @@ Description
 
 </td><td>
 
-[Requester](./client.requester.md)<!-- -->&lt;[InstallAppRequest](./client.installapprequest.md)<!-- -->, [InstallAppResponse](./client.installappresponse.md)<!-- -->&gt;
+[Requester](./client.requester.md)<!-- -->&lt;[InstallAppPayload](./client.installapppayload.md)<!-- -->, [AppInfo](./client.appinfo.md)<!-- -->&gt;
 
 
 </td><td>
@@ -265,7 +282,7 @@ Description
 
 </td><td>
 
-[Requester](./client.requester.md)<!-- -->&lt;[IssueAppAuthenticationTokenRequest](./client.issueappauthenticationtokenrequest.md)<!-- -->, [IssueAppAuthenticationTokenResponse](./client.issueappauthenticationtokenresponse.md)<!-- -->&gt;
+[Requester](./client.requester.md)<!-- -->&lt;[IssueAppAuthenticationTokenPayload](./client.issueappauthenticationtokenpayload.md)<!-- -->, [AppAuthenticationTokenIssued](./client.appauthenticationtokenissued.md)<!-- -->&gt;
 
 
 </td><td>
@@ -282,7 +299,7 @@ Description
 
 </td><td>
 
-[Requester](./client.requester.md)<!-- -->&lt;[ListAppInterfacesRequest](./client.listappinterfacesrequest.md)<!-- -->, [ListAppInterfacesResponse](./client.listappinterfacesresponse.md)<!-- -->&gt;
+[Requester](./client.requester.md)<!-- -->&lt;void, Array&lt;[AppInterfaceInfo](./client.appinterfaceinfo.md)<!-- -->&gt;&gt;
 
 
 </td><td>
@@ -299,7 +316,7 @@ Description
 
 </td><td>
 
-[Requester](./client.requester.md)<!-- -->&lt;[ListAppsRequest](./client.listappsrequest.md)<!-- -->, [ListAppsResponse](./client.listappsresponse.md)<!-- -->&gt;
+[Requester](./client.requester.md)<!-- -->&lt;[AdminRequestPayload](./client.adminrequestpayload.md)<!-- -->&lt;"list\_apps"&gt;, Array&lt;[AppInfo](./client.appinfo.md)<!-- -->&gt;&gt;
 
 
 </td><td>
@@ -316,7 +333,7 @@ Description
 
 </td><td>
 
-[Requester](./client.requester.md)<!-- -->&lt;[ListCapabilityGrantsRequest](./client.listcapabilitygrantsrequest.md)<!-- -->, [ListCapabilityGrantsResponse](./client.listcapabilitygrantsresponse.md)<!-- -->&gt;
+[Requester](./client.requester.md)<!-- -->&lt;[AdminRequestPayload](./client.adminrequestpayload.md)<!-- -->&lt;"list\_capability\_grants"&gt;, [AppCapGrantInfo](./client.appcapgrantinfo.md)<!-- -->&gt;
 
 
 </td><td>
@@ -333,7 +350,7 @@ Description
 
 </td><td>
 
-[Requester](./client.requester.md)<!-- -->&lt;[ListCellIdsRequest](./client.listcellidsrequest.md)<!-- -->, [ListCellIdsResponse](./client.listcellidsresponse.md)<!-- -->&gt;
+[Requester](./client.requester.md)<!-- -->&lt;void, Array&lt;[CellId](./client.cellid.md)<!-- -->&gt;&gt;
 
 
 </td><td>
@@ -350,7 +367,7 @@ Description
 
 </td><td>
 
-[Requester](./client.requester.md)<!-- -->&lt;[ListDnasRequest](./client.listdnasrequest.md)<!-- -->, [ListDnasResponse](./client.listdnasresponse.md)<!-- -->&gt;
+[Requester](./client.requester.md)<!-- -->&lt;void, Array&lt;[DnaHash](./client.dnahash.md)<!-- -->&gt;&gt;
 
 
 </td><td>
@@ -367,7 +384,7 @@ Description
 
 </td><td>
 
-[Requester](./client.requester.md)<!-- -->&lt;[PeerMetaInfoRequest](./client.peermetainforequest.md)<!-- -->, [PeerMetaInfoResponse](./client.peermetainforesponse.md)<!-- -->&gt;
+[Requester](./client.requester.md)<!-- -->&lt;[AdminRequestPayload](./client.adminrequestpayload.md)<!-- -->&lt;"peer\_meta\_info"&gt;, [PeerMetaInfoMap](./client.peermetainfomap.md)<!-- -->&gt;
 
 
 </td><td>
@@ -384,7 +401,7 @@ Description
 
 </td><td>
 
-[Requester](./client.requester.md)<!-- -->&lt;[RevokeZomeCallCapabilityRequest](./client.revokezomecallcapabilityrequest.md)<!-- -->, [RevokeZomeCallCapabilityResponse](./client.revokezomecallcapabilityresponse.md)<!-- -->&gt;
+[Requester](./client.requester.md)<!-- -->&lt;[AdminRequestPayload](./client.adminrequestpayload.md)<!-- -->&lt;"revoke\_zome\_call\_capability"&gt;, void&gt;
 
 
 </td><td>
@@ -401,7 +418,7 @@ Description
 
 </td><td>
 
-[Requester](./client.requester.md)<!-- -->&lt;[StorageInfoRequest](./client.storageinforequest.md)<!-- -->, [StorageInfoResponse](./client.storageinforesponse.md)<!-- -->&gt;
+[Requester](./client.requester.md)<!-- -->&lt;void, [StorageInfo](./client.storageinfo.md)<!-- -->&gt;
 
 
 </td><td>
@@ -418,7 +435,7 @@ Description
 
 </td><td>
 
-[Requester](./client.requester.md)<!-- -->&lt;[UninstallAppRequest](./client.uninstallapprequest.md)<!-- -->, [UninstallAppResponse](./client.uninstallappresponse.md)<!-- -->&gt;
+[Requester](./client.requester.md)<!-- -->&lt;[AdminRequestPayload](./client.adminrequestpayload.md)<!-- -->&lt;"uninstall\_app"&gt;, void&gt;
 
 
 </td><td>

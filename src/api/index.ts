@@ -1,10 +1,6 @@
 export * from "./admin/index.js";
 export * from "./app/index.js";
-export {
-  IsoWebSocket,
-  WsClient,
-  type AppAuthenticationRequest,
-} from "./client.js";
+export { IsoWebSocket, WsClient } from "./client.js";
 export {
   CloneIdHelper,
   HolochainError,

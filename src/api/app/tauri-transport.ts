@@ -4,8 +4,8 @@ import {
   getTauriHolochainEnvironment,
   getTauriInvoke,
 } from "../../environments/tauri.js";
+import { AppClientTransport, AppEvents } from "./client-types.js";
 import { decodeSignal, holoHashMapKeyConverter } from "./decode.js";
-import { AppClientTransport, AppEvents } from "./types.js";
 
 /**
  * Carries the App API over Tauri IPC into a Holochain conductor running in the
@@ -58,11 +58,14 @@ export class TauriAppTransport
    * Decode a signal delivered by the plugin and emit it. The bytes are the same
    * the websocket carries, so this reuses the shared `decodeSignal` helper
    * (src/api/app/decode.ts): app signals have their inner payload decoded;
-   * system signals pass through. Malformed signals throw, exactly as on the
-   * websocket path.
+   * system signals pass through; signals the client cannot surface are dropped.
+   * Malformed signals throw, exactly as on the websocket path.
    */
   private handleSignalBytes(bytes: Uint8Array) {
-    this.emit("signal", decodeSignal(decode(bytes))).catch(console.error);
+    const signal = decodeSignal(decode(bytes));
+    if (signal !== null) {
+      this.emit("signal", signal).catch(console.error);
+    }
   }
 
   /**

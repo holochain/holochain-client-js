@@ -9,5 +9,5 @@ Enable a stopped app.
 **Signature:**
 
 ```typescript
-enableApp: Requester<EnableAppRequest, EnableAppResponse>;
+enableApp: Requester<AdminRequestPayload<"enable_app">, AppInfo>;
 ```

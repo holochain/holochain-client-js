@@ -4,13 +4,34 @@
 
 ## SystemSignal type
 
+A Signal which originates from within the Holochain system, as opposed to from within a Cell
 
 **Signature:**
 
 ```typescript
 export type SystemSignal = {
-    SuccessfulCountersigning: EntryHash;
+    type: "successful_countersigning";
+    value: EntryHash;
+} | {
+    type: "abandoned_countersigning";
+    value: EntryHash;
+} | {
+    type: "restore_complete";
+    value: {
+        cell_id: CellId;
+    };
+} | {
+    type: "app_restore_complete";
+    value: {
+        installed_app_id: string;
+    };
+} | {
+    type: "restore_failed";
+    value: {
+        cell_id: CellId;
+        reason: UnrecoverableCellReason;
+    };
 };
 ```
-**References:** [EntryHash](./client.entryhash.md)
+**References:** [EntryHash](./client.entryhash.md)<!-- -->, [CellId](./client.cellid.md)<!-- -->, [UnrecoverableCellReason](./client.unrecoverablecellreason.md)
 

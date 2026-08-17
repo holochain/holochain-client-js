@@ -2,9 +2,10 @@ import { decode, encode } from "@msgpack/msgpack";
 import Emittery from "emittery";
 import IsoWebSocket from "isomorphic-ws";
 import { HolochainError, WsClientOptions } from "./common.js";
-import { AppAuthenticationToken } from "./admin/index.js";
+import type { AppAuthenticationToken } from "../generated/api/admin/types.js";
+import type { AppEvents } from "./app/client-types.js";
 import { decodeSignal, holoHashMapKeyConverter } from "./app/decode.js";
-import type { AppEvents } from "./app/types.js";
+import type { AppAuthenticationRequest } from "../generated/api/app/types.js";
 
 interface HolochainMessage {
   id: number;
@@ -18,13 +19,6 @@ type RequestRejecter = (error: Error) => void;
 interface HolochainRequest {
   resolve: RequestResolver;
   reject: RequestRejecter;
-}
-
-/**
- * @public
- */
-export interface AppAuthenticationRequest {
-  token: AppAuthenticationToken;
 }
 
 /**
@@ -260,7 +254,10 @@ export class WsClient extends Emittery<AppEvents> {
             "incoming signal has no data",
           );
         }
-        this.emit("signal", decodeSignal(decode(message.data)));
+        const signal = decodeSignal(decode(message.data));
+        if (signal !== null) {
+          this.emit("signal", signal);
+        }
       } else if (message.type === "response") {
         this.handleResponse(message);
       } else {

@@ -7,7 +7,7 @@
 **Signature:**
 
 ```typescript
-on(eventName: "signal", listener: (event: EmitteryEvent<"signal", Signal>) => void): UnsubscribeFunction;
+on(eventName: "signal", listener: (event: EmitteryEvent<"signal", DecodedSignal>) => void): UnsubscribeFunction;
 ```
 
 ## Parameters
@@ -49,7 +49,7 @@ listener
 
 </td><td>
 
-(event: EmitteryEvent&lt;"signal", [Signal](./client.signal.md)<!-- -->&gt;) =&gt; void
+(event: EmitteryEvent&lt;"signal", [DecodedSignal](./client.decodedsignal.md)<!-- -->&gt;) =&gt; void
 
 
 </td><td>

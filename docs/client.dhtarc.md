@@ -4,18 +4,12 @@
 
 ## DhtArc type
 
-The definition of a storage arc compatible with the concept of storage and querying of items in a store that fall within that arc.
+Mirror of `kitsune2_api::DhtArc` for the conductor API.
+
+Serializes untagged, exactly like the kitsune2 original: `Empty` maps to null, `Arc(a, b)` maps to `[a, b]`<!-- -->.
 
 **Signature:**
 
 ```typescript
-export type DhtArc = /**
-   * No DHT locations are contained within this arc.
-   */ null
-/**
- * A specific range of DHT locations are contained within this arc.
- *
- * The lower and upper bounds are inclusive.
- */
- | [number, number];
+export type DhtArc = null | [number, number];
 ```

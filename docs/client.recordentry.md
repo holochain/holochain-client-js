@@ -4,19 +4,14 @@
 
 ## RecordEntry type
 
+Represents the different ways the entry\_address reference within an action can be interpreted
 
 **Signature:**
 
 ```typescript
 export type RecordEntry = {
     Present: Entry;
-} | {
-    Hidden: void;
-} | {
-    NotApplicable: void;
-} | {
-    NotStored: void;
-};
+} | "Hidden" | "NA" | "NotStored";
 ```
 **References:** [Entry](./client.entry.md)
 

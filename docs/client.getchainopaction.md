@@ -4,6 +4,7 @@
 
 ## getChainOpAction() function
 
+Get the action a [ChainOp](./client.chainop.md) carries.
 
 **Signature:**
 
@@ -41,6 +42,8 @@ op
 
 </td><td>
 
+The chain op to inspect.
+
 
 </td></tr>
 </tbody></table>
@@ -48,4 +51,6 @@ op
 **Returns:**
 
 [Action](./client.action.md)
+
+The op's action.
 

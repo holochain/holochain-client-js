@@ -2,56 +2,16 @@
 
 [Home](./index.md) &gt; [@holochain/client](./client.md) &gt; [WarrantProof](./client.warrantproof.md)
 
-## WarrantProof interface
+## WarrantProof type
 
+The self-proving part of a Warrant which demonstrates bad behavior by another agent
 
 **Signature:**
 
 ```typescript
-export interface WarrantProof 
+export type WarrantProof = {
+    ChainIntegrity: ChainIntegrityWarrant;
+};
 ```
-
-## Properties
-
-<table><thead><tr><th>
-
-Property
-
-
-</th><th>
-
-Modifiers
-
-
-</th><th>
-
-Type
-
-
-</th><th>
-
-Description
-
-
-</th></tr></thead>
-<tbody><tr><td>
-
-[ChainIntegrity](./client.warrantproof.chainintegrity.md)
-
-
-</td><td>
-
-
-</td><td>
-
-[ChainIntegrityWarrant](./client.chainintegritywarrant.md)
-
-
-</td><td>
-
-Signifies evidence of a breach of chain integrity
-
-
-</td></tr>
-</tbody></table>
+**References:** [ChainIntegrityWarrant](./client.chainintegritywarrant.md)
 

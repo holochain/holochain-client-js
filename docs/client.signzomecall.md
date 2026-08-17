@@ -8,7 +8,7 @@
 **Signature:**
 
 ```typescript
-signZomeCall: (request: CallZomeRequest) => Promise<CallZomeRequestSigned>
+signZomeCall: (request: CallZomeRequest) => Promise<ZomeCallParamsSigned>
 ```
 
 ## Parameters
@@ -47,5 +47,5 @@ request
 
 **Returns:**
 
-Promise&lt;[CallZomeRequestSigned](./client.callzomerequestsigned.md)<!-- -->&gt;
+Promise&lt;[ZomeCallParamsSigned](./client.zomecallparamssigned.md)<!-- -->&gt;
 

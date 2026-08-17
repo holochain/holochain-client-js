@@ -4,17 +4,18 @@
 
 ## Details type
 
+Return type for get\_details calls. ActionHash returns a Record. EntryHash returns an Entry.
 
 **Signature:**
 
 ```typescript
 export type Details = {
-    type: DetailsType.Record;
+    type: "Record";
     content: RecordDetails;
 } | {
-    type: DetailsType.Entry;
+    type: "Entry";
     content: EntryDetails;
 };
 ```
-**References:** [DetailsType.Record](./client.detailstype.md)<!-- -->, [RecordDetails](./client.recorddetails.md)<!-- -->, [DetailsType.Entry](./client.detailstype.md)<!-- -->, [EntryDetails](./client.entrydetails.md)
+**References:** [RecordDetails](./client.recorddetails.md)<!-- -->, [EntryDetails](./client.entrydetails.md)
 

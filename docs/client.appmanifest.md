@@ -4,17 +4,14 @@
 
 ## AppManifest type
 
+Container struct which uses the `manifest_version` field to determine which manifest version to deserialize to.
 
 **Signature:**
 
 ```typescript
 export type AppManifest = {
     manifest_version: "0";
-    name: string;
-    description?: string;
-    roles: Array<AppRoleManifest>;
-    allow_deferred_memproofs: boolean;
-};
+} & AppManifestV0;
 ```
-**References:** [AppRoleManifest](./client.approlemanifest.md)
+**References:** [AppManifestV0](./client.appmanifestv0.md)
 

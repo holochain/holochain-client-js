@@ -9,5 +9,5 @@ Get the DNA definition for the specified DNA hash.
 **Signature:**
 
 ```typescript
-getDnaDefinition: Requester<GetDnaDefinitionRequest, GetDnaDefinitionResponse>;
+getDnaDefinition: Requester<CellId, DnaDef>;
 ```

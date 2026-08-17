@@ -6,8 +6,12 @@
 
 Dump the state of the specified cell, including its source chain, as JSON.
 
+The conductor answers with a JSON string holding a two-element array, so the resolved value is a [StateDump](./client.statedump.md) tuple of the structured dump and a human-readable summary of it.
+
+Because this payload is JSON rather than msgpack, byte fields nested in the dump (hashes, signatures, entry bytes) arrive as plain `number[]` at runtime, even where the generated types declare `Uint8Array`<!-- -->. See [StateDump](./client.statedump.md)<!-- -->.
+
 **Signature:**
 
 ```typescript
-dumpState: Requester<DumpStateRequest, DumpStateResponse>;
+dumpState: Requester<AdminRequestPayload<"dump_state">, StateDump>;
 ```

@@ -4,6 +4,7 @@
 
 ## CellType enum
 
+The discriminant of a [CellInfo](./client.cellinfo.md) variant.
 
 **Signature:**
 

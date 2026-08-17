@@ -2,75 +2,15 @@
 
 [Home](./index.md) &gt; [@holochain/client](./client.md) &gt; [MessageBlockCount](./client.messageblockcount.md)
 
-## MessageBlockCount interface
+## MessageBlockCount type
 
+Mirror of `kitsune2_api::MessageBlockCount`<!-- -->.
 
 **Signature:**
 
 ```typescript
-export interface MessageBlockCount 
+export type MessageBlockCount = {
+    incoming: number;
+    outgoing: number;
+};
 ```
-
-## Properties
-
-<table><thead><tr><th>
-
-Property
-
-
-</th><th>
-
-Modifiers
-
-
-</th><th>
-
-Type
-
-
-</th><th>
-
-Description
-
-
-</th></tr></thead>
-<tbody><tr><td>
-
-[incoming](./client.messageblockcount.incoming.md)
-
-
-</td><td>
-
-
-</td><td>
-
-number
-
-
-</td><td>
-
-Count of incoming messages that have been blocked and dropped.
-
-
-</td></tr>
-<tr><td>
-
-[outgoing](./client.messageblockcount.outgoing.md)
-
-
-</td><td>
-
-
-</td><td>
-
-number
-
-
-</td><td>
-
-Count of outgoing messages that have been blocked and dropped.
-
-
-</td></tr>
-</tbody></table>
-

@@ -9,5 +9,5 @@ Update coordinators for an installed app.
 **Signature:**
 
 ```typescript
-updateCoordinators: Requester<UpdateCoordinatorsRequest, UpdateCoordinatorsResponse>;
+updateCoordinators: Requester<UpdateCoordinatorsPayload, void>;
 ```

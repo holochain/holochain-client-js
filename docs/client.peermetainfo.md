@@ -2,71 +2,17 @@
 
 [Home](./index.md) &gt; [@holochain/client](./client.md) &gt; [PeerMetaInfo](./client.peermetainfo.md)
 
-## PeerMetaInfo interface
+## PeerMetaInfo type
 
+Peer meta info as stored in the peer meta store for a given (peer\_url, meta\_key) pair
 
 **Signature:**
 
 ```typescript
-export interface PeerMetaInfo 
+export type PeerMetaInfo = {
+    meta_value: unknown;
+    expires_at: Timestamp | null;
+};
 ```
-
-## Properties
-
-<table><thead><tr><th>
-
-Property
-
-
-</th><th>
-
-Modifiers
-
-
-</th><th>
-
-Type
-
-
-</th><th>
-
-Description
-
-
-</th></tr></thead>
-<tbody><tr><td>
-
-[expires\_at](./client.peermetainfo.expires_at.md)
-
-
-</td><td>
-
-
-</td><td>
-
-[Timestamp](./client.timestamp.md) \| null
-
-
-</td><td>
-
-
-</td></tr>
-<tr><td>
-
-[meta\_value](./client.peermetainfo.meta_value.md)
-
-
-</td><td>
-
-
-</td><td>
-
-string
-
-
-</td><td>
-
-
-</td></tr>
-</tbody></table>
+**References:** [Timestamp](./client.timestamp.md)
 

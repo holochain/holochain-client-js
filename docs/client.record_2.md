@@ -4,14 +4,15 @@
 
 ## Record\_2 type
 
+A chain record: a signed action plus its entry, if the action has one.
 
 **Signature:**
 
 ```typescript
 export type Record = {
-    signed_action: SignedActionHashed;
+    signed_action: SignedHashed<Action>;
     entry: RecordEntry;
 };
 ```
-**References:** [SignedActionHashed](./client.signedactionhashed.md)<!-- -->, [RecordEntry](./client.recordentry.md)
+**References:** [SignedHashed](./client.signedhashed.md)<!-- -->, [Action](./client.action.md)<!-- -->, [RecordEntry](./client.recordentry.md)
 

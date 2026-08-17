@@ -1,6 +1,11 @@
 import { getLauncherEnvironment } from "../../environments/launcher.js";
 import { CapSecret, GrantedFunctions } from "../../hdk/index.js";
-import type { AgentPubKey, CellId } from "../../types.js";
+import type {
+  ActionHash,
+  AgentPubKey,
+  CellId,
+  DnaHash,
+} from "../../generated/types.js";
 import { WsClient } from "../client.js";
 import {
   DEFAULT_TIMEOUT,
@@ -17,61 +22,30 @@ import {
   randomCapSecret,
   setSigningCredentials,
 } from "../zome-call-signing.js";
+import type { AppInfo } from "../../generated/api/app/types.js";
 import {
-  AddAgentInfoRequest,
-  AddAgentInfoResponse,
   AdminApi,
-  AgentInfoRequest,
-  AgentInfoResponse,
-  PeerMetaInfoResponse,
-  PeerMetaInfoRequest,
-  AttachAppInterfaceRequest,
-  AttachAppInterfaceResponse,
-  DeleteCloneCellRequest,
-  DeleteCloneCellResponse,
-  DisableAppRequest,
-  DisableAppResponse,
-  DumpFullStateRequest,
-  DumpFullStateResponse,
-  DumpNetworkMetricsRequest,
-  DumpNetworkMetricsResponse,
-  DumpNetworkStatsRequest,
-  DumpNetworkStatsResponse,
-  DumpStateRequest,
-  DumpStateResponse,
-  EnableAppRequest,
-  EnableAppResponse,
-  GenerateAgentPubKeyRequest,
-  GenerateAgentPubKeyResponse,
-  GetDnaDefinitionRequest,
-  GetDnaDefinitionResponse,
-  GrantZomeCallCapabilityRequest,
-  GrantZomeCallCapabilityResponse,
-  InstallAppRequest,
-  InstallAppResponse,
-  IssueAppAuthenticationTokenRequest,
-  IssueAppAuthenticationTokenResponse,
-  ListAppInterfacesRequest,
-  ListAppInterfacesResponse,
-  ListAppsRequest,
-  ListAppsResponse,
-  ListCellIdsRequest,
-  ListCellIdsResponse,
-  ListDnasRequest,
-  ListDnasResponse,
-  RevokeZomeCallCapabilityRequest,
-  RevokeZomeCallCapabilityResponse,
-  RevokeAgentKeyRequest,
-  RevokeAgentKeyResponse,
-  StorageInfoRequest,
-  StorageInfoResponse,
-  UninstallAppRequest,
-  UninstallAppResponse,
-  UpdateCoordinatorsRequest,
-  UpdateCoordinatorsResponse,
-  ListCapabilityGrantsRequest,
-  ListCapabilityGrantsResponse,
-} from "./types.js";
+  AdminRequestPayload,
+  AdminResponsePayload,
+  StateDump,
+} from "./client-types.js";
+import type {
+  AdminRequest,
+  AppAuthenticationTokenIssued,
+  AppCapGrantInfo,
+  AppInterfaceInfo,
+  DeleteCloneCellPayload,
+  DnaDef,
+  FullStateDump,
+  GrantZomeCallCapabilityPayload,
+  HolochainTransportStats,
+  InstallAppPayload,
+  IssueAppAuthenticationTokenPayload,
+  NetworkMetricsMap,
+  PeerMetaInfoMap,
+  StorageInfo,
+  UpdateCoordinatorsPayload,
+} from "../../generated/api/admin/types.js";
 
 /**
  * A class for interacting with a conductor's Admin API.
@@ -125,9 +99,9 @@ export class AdminWebsocket implements AdminApi {
   }
 
   _requester<ReqI, ReqO, ResI, ResO>(
-    tag: string,
+    tag: AdminRequest["type"],
     transformer?: Transformer<ReqI, ReqO, ResI, ResO>,
-  ) {
+  ): Requester<ReqI, ResO> {
     return requesterTransformer(
       (req, timeout) =>
         promiseTimeout(
@@ -144,127 +118,125 @@ export class AdminWebsocket implements AdminApi {
    * Send a request to open the given port for {@link AppWebsocket} connections.
    */
   attachAppInterface: Requester<
-    AttachAppInterfaceRequest,
-    AttachAppInterfaceResponse
+    AdminRequestPayload<"attach_app_interface">,
+    AdminResponsePayload<"app_interface_attached">
   > = this._requester("attach_app_interface");
 
   /**
    * Enable a stopped app.
    */
-  enableApp: Requester<EnableAppRequest, EnableAppResponse> =
+  enableApp: Requester<AdminRequestPayload<"enable_app">, AppInfo> =
     this._requester("enable_app");
 
   /**
    * Disable a running app.
    */
-  disableApp: Requester<DisableAppRequest, DisableAppResponse> =
+  disableApp: Requester<AdminRequestPayload<"disable_app">, void> =
     this._requester("disable_app");
 
   /**
    * Dump the state of the specified cell, including its source chain, as JSON.
+   *
+   * The conductor answers with a JSON string holding a two-element array, so
+   * the resolved value is a {@link StateDump} tuple of the structured dump and
+   * a human-readable summary of it.
+   *
+   * Because this payload is JSON rather than msgpack, byte fields nested in the
+   * dump (hashes, signatures, entry bytes) arrive as plain `number[]` at
+   * runtime, even where the generated types declare `Uint8Array`. See
+   * {@link StateDump}.
    */
-  dumpState: Requester<DumpStateRequest, DumpStateResponse> = this._requester(
-    "dump_state",
-    dumpStateTransform,
-  );
+  dumpState: Requester<AdminRequestPayload<"dump_state">, StateDump> =
+    this._requester("dump_state", dumpStateTransform);
 
   /**
    * Dump the full state of the specified cell, including its chain and DHT
    * shard, as JSON.
    */
-  dumpFullState: Requester<DumpFullStateRequest, DumpFullStateResponse> =
-    this._requester("dump_full_state");
+  dumpFullState: Requester<
+    AdminRequestPayload<"dump_full_state">,
+    FullStateDump
+  > = this._requester("dump_full_state");
 
   /**
    * Generate a new agent pub key.
    */
-  generateAgentPubKey: Requester<
-    GenerateAgentPubKeyRequest,
-    GenerateAgentPubKeyResponse
-  > = this._requester("generate_agent_pub_key");
-
-  /**
-   * Generate a new agent pub key.
-   */
-  revokeAgentKey: Requester<RevokeAgentKeyRequest, RevokeAgentKeyResponse> =
-    this._requester("revoke_agent_key");
+  generateAgentPubKey: Requester<void, AgentPubKey> = this._requester(
+    "generate_agent_pub_key",
+  );
 
   /**
    * Get the DNA definition for the specified DNA hash.
    */
-  getDnaDefinition: Requester<
-    GetDnaDefinitionRequest,
-    GetDnaDefinitionResponse
-  > = this._requester("get_dna_definition");
+  getDnaDefinition: Requester<CellId, DnaDef> =
+    this._requester("get_dna_definition");
 
   /**
    * Uninstall the specified app from Holochain.
    */
-  uninstallApp: Requester<UninstallAppRequest, UninstallAppResponse> =
+  uninstallApp: Requester<AdminRequestPayload<"uninstall_app">, void> =
     this._requester("uninstall_app");
 
   /**
    * Install the specified app into Holochain.
    */
-  installApp: Requester<InstallAppRequest, InstallAppResponse> =
+  installApp: Requester<InstallAppPayload, AppInfo> =
     this._requester("install_app");
 
   /**
    * Update coordinators for an installed app.
    */
-  updateCoordinators: Requester<
-    UpdateCoordinatorsRequest,
-    UpdateCoordinatorsResponse
-  > = this._requester("update_coordinators");
+  updateCoordinators: Requester<UpdateCoordinatorsPayload, void> =
+    this._requester("update_coordinators");
 
   /**
    * List all registered DNAs.
    */
-  listDnas: Requester<ListDnasRequest, ListDnasResponse> =
-    this._requester("list_dnas");
+  listDnas: Requester<void, Array<DnaHash>> = this._requester("list_dnas");
 
   /**
    * List all installed cell ids.
    */
-  listCellIds: Requester<ListCellIdsRequest, ListCellIdsResponse> =
+  listCellIds: Requester<void, Array<CellId>> =
     this._requester("list_cell_ids");
 
   /**
    * List all installed apps.
    */
-  listApps: Requester<ListAppsRequest, ListAppsResponse> =
+  listApps: Requester<AdminRequestPayload<"list_apps">, Array<AppInfo>> =
     this._requester("list_apps");
 
   /**
    * List all attached app interfaces.
    */
-  listAppInterfaces: Requester<
-    ListAppInterfacesRequest,
-    ListAppInterfacesResponse
-  > = this._requester("list_app_interfaces");
+  listAppInterfaces: Requester<void, Array<AppInterfaceInfo>> = this._requester(
+    "list_app_interfaces",
+  );
 
   /**
    * Request all available info about an agent.
    */
-  agentInfo: Requester<AgentInfoRequest, AgentInfoResponse> =
+  agentInfo: Requester<AdminRequestPayload<"agent_info">, Array<string>> =
     this._requester("agent_info");
 
   /**
    * Add an existing agent to Holochain.
    */
-  addAgentInfo: Requester<AddAgentInfoRequest, AddAgentInfoResponse> =
+  addAgentInfo: Requester<AdminRequestPayload<"add_agent_info">, void> =
     this._requester("add_agent_info");
 
   /**
    * Request peer meta info for a peer.
    */
-  peerMetaInfo: Requester<PeerMetaInfoRequest, PeerMetaInfoResponse> =
-    this._requester("peer_meta_info");
+  peerMetaInfo: Requester<
+    AdminRequestPayload<"peer_meta_info">,
+    PeerMetaInfoMap
+  > = this._requester("peer_meta_info");
 
   /**
    * Delete a disabled clone cell.
    */
-  deleteCloneCell: Requester<DeleteCloneCellRequest, DeleteCloneCellResponse> =
+  deleteCloneCell: Requester<DeleteCloneCellPayload, void> =
     this._requester("delete_clone_cell");
 
   /**
@@ -272,8 +244,8 @@ export class AdminWebsocket implements AdminApi {
    * calls.
    */
   grantZomeCallCapability: Requester<
-    GrantZomeCallCapabilityRequest,
-    GrantZomeCallCapabilityResponse
+    GrantZomeCallCapabilityPayload,
+    ActionHash
   > = this._requester("grant_zome_call_capability");
 
   /**
@@ -281,34 +253,31 @@ export class AdminWebsocket implements AdminApi {
    * using {@link AdminWebsocket.grantZomeCallCapability}.
    */
   revokeZomeCallCapability: Requester<
-    RevokeZomeCallCapabilityRequest,
-    RevokeZomeCallCapabilityResponse
+    AdminRequestPayload<"revoke_zome_call_capability">,
+    void
   > = this._requester("revoke_zome_call_capability");
 
   /**
    * List all capability grants for all cells.
    */
   listCapabilityGrants: Requester<
-    ListCapabilityGrantsRequest,
-    ListCapabilityGrantsResponse
+    AdminRequestPayload<"list_capability_grants">,
+    AppCapGrantInfo
   > = this._requester("list_capability_grants");
 
-  storageInfo: Requester<StorageInfoRequest, StorageInfoResponse> =
-    this._requester("storage_info");
+  storageInfo: Requester<void, StorageInfo> = this._requester("storage_info");
 
   issueAppAuthenticationToken: Requester<
-    IssueAppAuthenticationTokenRequest,
-    IssueAppAuthenticationTokenResponse
+    IssueAppAuthenticationTokenPayload,
+    AppAuthenticationTokenIssued
   > = this._requester("issue_app_authentication_token");
 
-  dumpNetworkStats: Requester<
-    DumpNetworkStatsRequest,
-    DumpNetworkStatsResponse
-  > = this._requester("dump_network_stats");
+  dumpNetworkStats: Requester<void, HolochainTransportStats> =
+    this._requester("dump_network_stats");
 
   dumpNetworkMetrics: Requester<
-    DumpNetworkMetricsRequest,
-    DumpNetworkMetricsResponse
+    AdminRequestPayload<"dump_network_metrics">,
+    NetworkMetricsMap
   > = this._requester("dump_network_metrics");
 
   // zome call signing related methods
@@ -355,7 +324,7 @@ export class AdminWebsocket implements AdminApi {
   authorizeSigningCredentials = async (
     cellId: CellId,
     functions?: GrantedFunctions,
-  ) => {
+  ): Promise<void> => {
     const [keyPair, signingKey] = await generateSigningKeyPair();
     const capSecret = await this.grantSigningKey(
       cellId,
@@ -367,13 +336,13 @@ export class AdminWebsocket implements AdminApi {
 }
 
 const dumpStateTransform: Transformer<
-  DumpStateRequest,
-  DumpStateRequest,
+  AdminRequestPayload<"dump_state">,
+  AdminRequestPayload<"dump_state">,
   string,
-  DumpStateResponse
+  StateDump
 > = {
-  input: (req) => req,
-  output: (res: string): DumpStateResponse => {
-    return JSON.parse(res);
-  },
+  input: (req): AdminRequestPayload<"dump_state"> => req,
+  // The conductor serializes a `(JsonDump, String)` pair, which `serde_json`
+  // renders as a two-element array of the dump and its summary.
+  output: (res: string): StateDump => JSON.parse(res),
 };

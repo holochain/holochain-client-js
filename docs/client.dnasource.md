@@ -4,6 +4,7 @@
 
 ## DnaSource type
 
+The source of the DNA to be installed, either as binary data, or from a path
 
 **Signature:**
 
@@ -16,8 +17,8 @@ export type DnaSource = {
     value: DnaBundle;
 } | {
     type: "hash";
-    value: HoloHash;
+    value: DnaHash;
 };
 ```
-**References:** [DnaBundle](./client.dnabundle.md)<!-- -->, [HoloHash](./client.holohash.md)
+**References:** [DnaBundle](./client.dnabundle.md)<!-- -->, [DnaHash](./client.dnahash.md)
 

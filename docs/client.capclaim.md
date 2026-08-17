@@ -2,88 +2,18 @@
 
 [Home](./index.md) &gt; [@holochain/client](./client.md) &gt; [CapClaim](./client.capclaim.md)
 
-## CapClaim interface
+## CapClaim type
 
+System entry to hold a capability token claim for use as a caller. Stored by a claimant so they can remember what's necessary to exercise this capability by sending the secret to the grantor.
 
 **Signature:**
 
 ```typescript
-export interface CapClaim 
+export type CapClaim = {
+    tag: string;
+    grantor: AgentPubKey;
+    secret: CapSecret;
+};
 ```
-
-## Properties
-
-<table><thead><tr><th>
-
-Property
-
-
-</th><th>
-
-Modifiers
-
-
-</th><th>
-
-Type
-
-
-</th><th>
-
-Description
-
-
-</th></tr></thead>
-<tbody><tr><td>
-
-[grantor](./client.capclaim.grantor.md)
-
-
-</td><td>
-
-
-</td><td>
-
-[AgentPubKey](./client.agentpubkey.md)
-
-
-</td><td>
-
-
-</td></tr>
-<tr><td>
-
-[secret](./client.capclaim.secret.md)
-
-
-</td><td>
-
-
-</td><td>
-
-[CapSecret](./client.capsecret.md)
-
-
-</td><td>
-
-
-</td></tr>
-<tr><td>
-
-[tag](./client.capclaim.tag.md)
-
-
-</td><td>
-
-
-</td><td>
-
-string
-
-
-</td><td>
-
-
-</td></tr>
-</tbody></table>
+**References:** [AgentPubKey](./client.agentpubkey.md)<!-- -->, [CapSecret](./client.capsecret.md)
 

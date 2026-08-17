@@ -8,7 +8,7 @@
 **Signature:**
 
 ```typescript
-export type CounterSigningAgents = Array<[AgentPubKey, Array<Role>]>;
+export type CounterSigningAgents = Array<[AgentPubKey, Role[]]>;
 ```
 **References:** [AgentPubKey](./client.agentpubkey.md)<!-- -->, [Role](./client.role.md)
 

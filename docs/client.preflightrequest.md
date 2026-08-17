@@ -2,139 +2,23 @@
 
 [Home](./index.md) &gt; [@holochain/client](./client.md) &gt; [PreflightRequest](./client.preflightrequest.md)
 
-## PreflightRequest interface
+## PreflightRequest type
 
+The same PreflightRequest is sent to every agent. Each agent signs this data as part of their PreflightResponse. Every preflight must be identical and signed by every agent for a session to be valid.
 
 **Signature:**
 
 ```typescript
-export interface PreflightRequest 
+export type PreflightRequest = {
+    app_entry_hash: EntryHash;
+    signing_agents: CounterSigningAgents;
+    optional_signing_agents: CounterSigningAgents;
+    minimum_optional_signing_agents: number;
+    enzymatic: boolean;
+    session_times: CounterSigningSessionTimes;
+    action_base: ActionBase;
+    preflight_bytes: PreflightBytes;
+};
 ```
-
-## Properties
-
-<table><thead><tr><th>
-
-Property
-
-
-</th><th>
-
-Modifiers
-
-
-</th><th>
-
-Type
-
-
-</th><th>
-
-Description
-
-
-</th></tr></thead>
-<tbody><tr><td>
-
-[action\_base](./client.preflightrequest.action_base.md)
-
-
-</td><td>
-
-
-</td><td>
-
-[ActionBase](./client.actionbase.md)
-
-
-</td><td>
-
-
-</td></tr>
-<tr><td>
-
-[app\_entry\_hash](./client.preflightrequest.app_entry_hash.md)
-
-
-</td><td>
-
-
-</td><td>
-
-[EntryHash](./client.entryhash.md)
-
-
-</td><td>
-
-
-</td></tr>
-<tr><td>
-
-[enzyme\_index](./client.preflightrequest.enzyme_index.md)
-
-
-</td><td>
-
-
-</td><td>
-
-number \| undefined
-
-
-</td><td>
-
-
-</td></tr>
-<tr><td>
-
-[preflight\_bytes](./client.preflightrequest.preflight_bytes.md)
-
-
-</td><td>
-
-
-</td><td>
-
-[PreflightBytes](./client.preflightbytes.md)
-
-
-</td><td>
-
-
-</td></tr>
-<tr><td>
-
-[session\_times](./client.preflightrequest.session_times.md)
-
-
-</td><td>
-
-
-</td><td>
-
-[CounterSigningSessionTimes](./client.countersigningsessiontimes.md)
-
-
-</td><td>
-
-
-</td></tr>
-<tr><td>
-
-[signing\_agents](./client.preflightrequest.signing_agents.md)
-
-
-</td><td>
-
-
-</td><td>
-
-[CounterSigningAgents](./client.countersigningagents.md)
-
-
-</td><td>
-
-
-</td></tr>
-</tbody></table>
+**References:** [EntryHash](./client.entryhash.md)<!-- -->, [CounterSigningAgents](./client.countersigningagents.md)<!-- -->, [CounterSigningSessionTimes](./client.countersigningsessiontimes.md)<!-- -->, [ActionBase](./client.actionbase.md)<!-- -->, [PreflightBytes](./client.preflightbytes.md)
 

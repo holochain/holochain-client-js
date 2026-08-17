@@ -2,95 +2,18 @@
 
 [Home](./index.md) &gt; [@holochain/client](./client.md) &gt; [DhtSegmentState](./client.dhtsegmentstate.md)
 
-## DhtSegmentState interface
+## DhtSegmentState type
 
-DHT segment state.
+Mirror of `kitsune2_api::DhtSegmentState`<!-- -->.
 
 **Signature:**
 
 ```typescript
-export interface DhtSegmentState 
+export type DhtSegmentState = {
+    disc_top_hash: Uint8Array;
+    disc_boundary: Timestamp;
+    ring_top_hashes: Uint8Array[];
+};
 ```
-
-## Properties
-
-<table><thead><tr><th>
-
-Property
-
-
-</th><th>
-
-Modifiers
-
-
-</th><th>
-
-Type
-
-
-</th><th>
-
-Description
-
-
-</th></tr></thead>
-<tbody><tr><td>
-
-[disc\_boundary](./client.dhtsegmentstate.disc_boundary.md)
-
-
-</td><td>
-
-
-</td><td>
-
-[Timestamp](./client.timestamp.md)
-
-
-</td><td>
-
-The boundary timestamp of the DHT ring segment.
-
-
-</td></tr>
-<tr><td>
-
-[disc\_top\_hash](./client.dhtsegmentstate.disc_top_hash.md)
-
-
-</td><td>
-
-
-</td><td>
-
-Uint8Array
-
-
-</td><td>
-
-The top hash of the DHT ring segment.
-
-
-</td></tr>
-<tr><td>
-
-[ring\_top\_hashes](./client.dhtsegmentstate.ring_top_hashes.md)
-
-
-</td><td>
-
-
-</td><td>
-
-Uint8Array\[\]
-
-
-</td><td>
-
-The top hashes of each DHT ring segment.
-
-
-</td></tr>
-</tbody></table>
+**References:** [Timestamp](./client.timestamp.md)
 

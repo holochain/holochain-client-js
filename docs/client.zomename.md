@@ -4,6 +4,7 @@
 
 ## ZomeName type
 
+ZomeName as a String.
 
 **Signature:**
 

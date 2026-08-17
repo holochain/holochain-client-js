@@ -1,5 +1,6 @@
 import { Base64 } from "js-base64";
-import { HoloHash, HoloHashB64 } from "../types.js";
+import { HoloHashB64 } from "../client-types.js";
+import { HoloHash } from "../generated/types.js";
 
 /**
  * Decodes a Base64 encoded string to a byte array hash.

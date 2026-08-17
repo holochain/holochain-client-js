@@ -9,5 +9,5 @@ Generate a new agent pub key.
 **Signature:**
 
 ```typescript
-generateAgentPubKey: Requester<GenerateAgentPubKeyRequest, GenerateAgentPubKeyResponse>;
+generateAgentPubKey: Requester<void, AgentPubKey>;
 ```

@@ -9,7 +9,7 @@ Request network metrics.
 **Signature:**
 
 ```typescript
-dumpNetworkMetrics(req: DumpNetworkMetricsRequest, timeout?: number): Promise<DumpNetworkMetricsResponse>;
+dumpNetworkMetrics(req: AppRequestPayload<"dump_network_metrics">, timeout?: number): Promise<NetworkMetricsMap>;
 ```
 
 ## Parameters
@@ -37,7 +37,7 @@ req
 
 </td><td>
 
-[DumpNetworkMetricsRequest](./client.dumpnetworkmetricsrequest.md)
+[AppRequestPayload](./client.apprequestpayload.md)<!-- -->&lt;"dump\_network\_metrics"&gt;
 
 
 </td><td>
@@ -64,7 +64,7 @@ _(Optional)_
 
 **Returns:**
 
-Promise&lt;[DumpNetworkMetricsResponse](./client.dumpnetworkmetricsresponse.md)<!-- -->&gt;
+Promise&lt;[NetworkMetricsMap](./client.networkmetricsmap.md)<!-- -->&gt;
 
-The [NetworkMetrics](./client.networkmetrics.md)<!-- -->.
+The [NetworkMetricsMap](./client.networkmetricsmap.md)<!-- -->.
 

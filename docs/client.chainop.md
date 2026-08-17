@@ -4,29 +4,30 @@
 
 ## ChainOp type
 
+Chain-level DHT ops. Each variant targets a specific authority.
 
 **Signature:**
 
 ```typescript
 export type ChainOp = {
-    [ChainOpType.CreateRecord]: [SignedAction, OpEntry];
+    CreateRecord: [Signed<Action>, OpEntry];
 } | {
-    [ChainOpType.CreateEntry]: [SignedAction, OpEntry];
+    CreateEntry: [Signed<Action>, OpEntry];
 } | {
-    [ChainOpType.AgentActivity]: SignedAction;
+    AgentActivity: Signed<Action>;
 } | {
-    [ChainOpType.UpdateEntry]: [SignedAction, OpEntry];
+    UpdateEntry: [Signed<Action>, OpEntry];
 } | {
-    [ChainOpType.UpdateRecord]: [SignedAction, OpEntry];
+    UpdateRecord: [Signed<Action>, OpEntry];
 } | {
-    [ChainOpType.DeleteEntry]: SignedAction;
+    DeleteEntry: Signed<Action>;
 } | {
-    [ChainOpType.DeleteRecord]: SignedAction;
+    DeleteRecord: Signed<Action>;
 } | {
-    [ChainOpType.CreateLink]: SignedAction;
+    CreateLink: Signed<Action>;
 } | {
-    [ChainOpType.DeleteLink]: SignedAction;
+    DeleteLink: Signed<Action>;
 };
 ```
-**References:** [ChainOpType.CreateRecord](./client.chainoptype.md)<!-- -->, [SignedAction](./client.signedaction.md)<!-- -->, [OpEntry](./client.opentry.md)<!-- -->, [ChainOpType.CreateEntry](./client.chainoptype.md)<!-- -->, [ChainOpType.AgentActivity](./client.chainoptype.md)<!-- -->, [ChainOpType.UpdateEntry](./client.chainoptype.md)<!-- -->, [ChainOpType.UpdateRecord](./client.chainoptype.md)<!-- -->, [ChainOpType.DeleteEntry](./client.chainoptype.md)<!-- -->, [ChainOpType.DeleteRecord](./client.chainoptype.md)<!-- -->, [ChainOpType.CreateLink](./client.chainoptype.md)<!-- -->, [ChainOpType.DeleteLink](./client.chainoptype.md)
+**References:** [Signed](./client.signed.md)<!-- -->, [Action](./client.action.md)<!-- -->, [OpEntry](./client.opentry.md)
 

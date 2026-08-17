@@ -2,88 +2,16 @@
 
 [Home](./index.md) &gt; [@holochain/client](./client.md) &gt; [AgentInfoDump](./client.agentinfodump.md)
 
-## AgentInfoDump interface
+## AgentInfoDump type
 
+Agent info dump with the agent, space, signed time, expires in and urls printed in a pretty way.
 
 **Signature:**
 
 ```typescript
-export interface AgentInfoDump 
+export type AgentInfoDump = {
+    kitsune_agent: string;
+    kitsune_space: string;
+    dump: string;
+};
 ```
-
-## Properties
-
-<table><thead><tr><th>
-
-Property
-
-
-</th><th>
-
-Modifiers
-
-
-</th><th>
-
-Type
-
-
-</th><th>
-
-Description
-
-
-</th></tr></thead>
-<tbody><tr><td>
-
-[dump](./client.agentinfodump.dump.md)
-
-
-</td><td>
-
-
-</td><td>
-
-string
-
-
-</td><td>
-
-
-</td></tr>
-<tr><td>
-
-[kitsune\_agent](./client.agentinfodump.kitsune_agent.md)
-
-
-</td><td>
-
-
-</td><td>
-
-[KitsuneAgent](./client.kitsuneagent.md)
-
-
-</td><td>
-
-
-</td></tr>
-<tr><td>
-
-[kitsune\_space](./client.agentinfodump.kitsune_space.md)
-
-
-</td><td>
-
-
-</td><td>
-
-[KitsuneSpace](./client.kitsunespace.md)
-
-
-</td><td>
-
-
-</td></tr>
-</tbody></table>
-

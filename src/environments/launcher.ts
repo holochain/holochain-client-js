@@ -1,6 +1,9 @@
-import { AppAuthenticationToken, CallZomeRequest } from "../api/index.js";
-import { CallZomeRequestSigned } from "../api/index.js";
-import { InstalledAppId } from "../types.js";
+import {
+  AppAuthenticationToken,
+  CallZomeRequest,
+  ZomeCallParamsSigned,
+} from "../api/index.js";
+import { InstalledAppId } from "../client-types.js";
 
 export interface LauncherEnvironment {
   APP_INTERFACE_PORT?: number;
@@ -10,7 +13,7 @@ export interface LauncherEnvironment {
 }
 
 export interface HostZomeCallSigner {
-  signZomeCall: (request: CallZomeRequest) => Promise<CallZomeRequestSigned>;
+  signZomeCall: (request: CallZomeRequest) => Promise<ZomeCallParamsSigned>;
 }
 
 const __HC_LAUNCHER_ENV__ = "__HC_LAUNCHER_ENV__";
@@ -38,7 +41,7 @@ declare global {
 }
 
 interface CallZomeRequestSignedElectron extends Omit<
-  CallZomeRequestSigned,
+  ZomeCallParamsSigned,
   | "cap_secret"
   | "cell_id"
   | "provenance"

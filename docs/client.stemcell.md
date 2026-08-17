@@ -2,90 +2,18 @@
 
 [Home](./index.md) &gt; [@holochain/client](./client.md) &gt; [StemCell](./client.stemcell.md)
 
-## StemCell interface
+## StemCell type
 
+Cell whose instantiation has been deferred. Not yet implemented.
 
 **Signature:**
 
 ```typescript
-export interface StemCell 
+export type StemCell = {
+    original_dna_hash: DnaHash;
+    dna_modifiers: DnaModifiers;
+    name: string | null;
+};
 ```
-
-## Properties
-
-<table><thead><tr><th>
-
-Property
-
-
-</th><th>
-
-Modifiers
-
-
-</th><th>
-
-Type
-
-
-</th><th>
-
-Description
-
-
-</th></tr></thead>
-<tbody><tr><td>
-
-[dna\_modifiers](./client.stemcell.dna_modifiers.md)
-
-
-</td><td>
-
-
-</td><td>
-
-[DnaModifiers](./client.dnamodifiers.md)
-
-
-</td><td>
-
-
-</td></tr>
-<tr><td>
-
-[dna](./client.stemcell.dna.md)
-
-
-</td><td>
-
-
-</td><td>
-
-[DnaHash](./client.dnahash.md)
-
-
-</td><td>
-
-
-</td></tr>
-<tr><td>
-
-[name?](./client.stemcell.name.md)
-
-
-</td><td>
-
-
-</td><td>
-
-string
-
-
-</td><td>
-
-_(Optional)_
-
-
-</td></tr>
-</tbody></table>
+**References:** [DnaHash](./client.dnahash.md)<!-- -->, [DnaModifiers](./client.dnamodifiers.md)
 

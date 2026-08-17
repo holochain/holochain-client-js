@@ -9,5 +9,5 @@ List all installed cell ids.
 **Signature:**
 
 ```typescript
-listCellIds: Requester<ListCellIdsRequest, ListCellIdsResponse>;
+listCellIds: Requester<void, Array<CellId>>;
 ```

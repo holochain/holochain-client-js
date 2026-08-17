@@ -7,9 +7,9 @@
 **Signature:**
 
 ```typescript
-appInfo(): Promise<AppInfoResponse>;
+appInfo(): Promise<AppInfo | null>;
 ```
 **Returns:**
 
-Promise&lt;[AppInfoResponse](./client.appinforesponse.md)<!-- -->&gt;
+Promise&lt;[AppInfo](./client.appinfo.md) \| null&gt;
 

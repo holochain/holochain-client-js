@@ -4,6 +4,7 @@
 
 ## getChainOpEntry() function
 
+Get the entry a [ChainOp](./client.chainop.md) carries, if it carries one.
 
 **Signature:**
 
@@ -41,6 +42,8 @@ op
 
 </td><td>
 
+The chain op to inspect.
+
 
 </td></tr>
 </tbody></table>
@@ -48,4 +51,6 @@ op
 **Returns:**
 
 [Entry](./client.entry.md) \| undefined
+
+The op's entry, or undefined when the op has none.
 

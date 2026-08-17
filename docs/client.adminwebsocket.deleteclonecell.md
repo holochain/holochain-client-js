@@ -9,5 +9,5 @@ Delete a disabled clone cell.
 **Signature:**
 
 ```typescript
-deleteCloneCell: Requester<DeleteCloneCellRequest, DeleteCloneCellResponse>;
+deleteCloneCell: Requester<DeleteCloneCellPayload, void>;
 ```

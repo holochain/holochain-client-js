@@ -4,13 +4,14 @@
 
 ## OpEntry type
 
+How an entry is represented inside a `ChainOp`<!-- -->.
 
 **Signature:**
 
 ```typescript
 export type OpEntry = {
-    [OpEntryType.Present]: Entry;
-} | OpEntryType.Hidden | OpEntryType.ActionOnly;
+    Present: Entry;
+} | "Hidden" | "ActionOnly";
 ```
-**References:** [OpEntryType.Present](./client.opentrytype.md)<!-- -->, [Entry](./client.entry.md)<!-- -->, [OpEntryType.Hidden](./client.opentrytype.md)<!-- -->, [OpEntryType.ActionOnly](./client.opentrytype.md)
+**References:** [Entry](./client.entry.md)
 

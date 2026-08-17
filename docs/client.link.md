@@ -2,173 +2,23 @@
 
 [Home](./index.md) &gt; [@holochain/client](./client.md) &gt; [Link](./client.link.md)
 
-## Link interface
+## Link type
 
+A link as returned by a link query.
 
 **Signature:**
 
 ```typescript
-export interface Link 
+export type Link = {
+    author: AgentPubKey;
+    base: AnyLinkableHash;
+    target: AnyLinkableHash;
+    timestamp: Timestamp;
+    zome_index: ZomeIndex;
+    link_type: LinkType;
+    tag: LinkTag;
+    create_link_hash: ActionHash;
+};
 ```
-
-## Properties
-
-<table><thead><tr><th>
-
-Property
-
-
-</th><th>
-
-Modifiers
-
-
-</th><th>
-
-Type
-
-
-</th><th>
-
-Description
-
-
-</th></tr></thead>
-<tbody><tr><td>
-
-[author](./client.link.author.md)
-
-
-</td><td>
-
-
-</td><td>
-
-[AgentPubKey](./client.agentpubkey.md)
-
-
-</td><td>
-
-
-</td></tr>
-<tr><td>
-
-[base](./client.link.base.md)
-
-
-</td><td>
-
-
-</td><td>
-
-[AnyLinkableHash](./client.anylinkablehash.md)
-
-
-</td><td>
-
-
-</td></tr>
-<tr><td>
-
-[create\_link\_hash](./client.link.create_link_hash.md)
-
-
-</td><td>
-
-
-</td><td>
-
-[ActionHash](./client.actionhash.md)
-
-
-</td><td>
-
-
-</td></tr>
-<tr><td>
-
-[link\_type](./client.link.link_type.md)
-
-
-</td><td>
-
-
-</td><td>
-
-[LinkType](./client.linktype.md)
-
-
-</td><td>
-
-
-</td></tr>
-<tr><td>
-
-[tag](./client.link.tag.md)
-
-
-</td><td>
-
-
-</td><td>
-
-Uint8Array
-
-
-</td><td>
-
-
-</td></tr>
-<tr><td>
-
-[target](./client.link.target.md)
-
-
-</td><td>
-
-
-</td><td>
-
-[AnyLinkableHash](./client.anylinkablehash.md)
-
-
-</td><td>
-
-
-</td></tr>
-<tr><td>
-
-[timestamp](./client.link.timestamp.md)
-
-
-</td><td>
-
-
-</td><td>
-
-[Timestamp](./client.timestamp.md)
-
-
-</td><td>
-
-
-</td></tr>
-<tr><td>
-
-[zome\_index](./client.link.zome_index.md)
-
-
-</td><td>
-
-
-</td><td>
-
-[ZomeIndex](./client.zomeindex.md)
-
-
-</td><td>
-
-
-</td></tr>
-</tbody></table>
+**References:** [AgentPubKey](./client.agentpubkey.md)<!-- -->, [AnyLinkableHash](./client.anylinkablehash.md)<!-- -->, [Timestamp](./client.timestamp.md)<!-- -->, [ZomeIndex](./client.zomeindex.md)<!-- -->, [LinkType](./client.linktype.md)<!-- -->, [LinkTag](./client.linktag.md)<!-- -->, [ActionHash](./client.actionhash.md)
 

@@ -4,6 +4,7 @@
 
 ## DnaModifiers type
 
+Modifiers of this DNA - the network seed, properties and origin time - as opposed to the actual DNA code. These modifiers are included in the DNA hash computation.
 
 **Signature:**
 

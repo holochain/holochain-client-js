@@ -4,15 +4,16 @@
 
 ## AppRoleManifest type
 
+Description of an app "role" defined by this app. Roles get filled according to the provisioning rules, as well as by potential runtime clones.
 
 **Signature:**
 
 ```typescript
 export type AppRoleManifest = {
-    name: RoleName;
-    provisioning?: CellProvisioning;
+    name: string;
+    provisioning?: CellProvisioning | null;
     dna: AppRoleDnaManifest;
 };
 ```
-**References:** [RoleName](./client.rolename.md)<!-- -->, [CellProvisioning](./client.cellprovisioning.md)<!-- -->, [AppRoleDnaManifest](./client.approlednamanifest.md)
+**References:** [CellProvisioning](./client.cellprovisioning.md)<!-- -->, [AppRoleDnaManifest](./client.approlednamanifest.md)
 
