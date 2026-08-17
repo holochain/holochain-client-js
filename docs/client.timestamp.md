@@ -4,6 +4,17 @@
 
 ## Timestamp type
 
+A microsecond-precision UTC timestamp for use in Holochain's actions.
+
+It is assumed to be untrustworthy: it may contain times offset from the UNIX epoch with the full +/- i64 range. Most of these times are \*not\* representable by a `chrono::DateTime<Utc>` (which limits itself to a +/- i32 offset in days from Jan 1, 0AD and from 1970AD).
+
+Also, most differences between two Timestamps are \*not\* representable by either a `chrono::Duration` (which limits itself to +/- i64 microseconds), \*nor\* by `core::time::Duration` (which limits itself to +'ve u64 seconds). Many constructions of these chrono and core::time types will panic!, so painful measures must be taken to avoid this outcome -- it is not acceptable for our core Holochain algorithms to panic when accessing DHT Action information committed by other random Holochain nodes!
+
+Timestamp serializes as a bare i64 (microseconds from UNIX Epoch).
+
+`Display` is implemented as an rfc3339 time string when possible (requires the `now` feature).
+
+Supports +/- `chrono::Duration` directly. There is no `Timestamp::now()` method, since this is not supported by WASM; however, `holochain_types` provides a `Timestamp::now()` method.
 
 **Signature:**
 

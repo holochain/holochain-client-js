@@ -2,71 +2,16 @@
 
 [Home](./index.md) &gt; [@holochain/client](./client.md) &gt; [HoloHashed](./client.holohashed.md)
 
-## HoloHashed interface
+## HoloHashed type
 
 
 **Signature:**
 
 ```typescript
-export interface HoloHashed<T> 
+export type HoloHashed<C> = {
+    content: C;
+    hash: HoloHash;
+};
 ```
-
-## Properties
-
-<table><thead><tr><th>
-
-Property
-
-
-</th><th>
-
-Modifiers
-
-
-</th><th>
-
-Type
-
-
-</th><th>
-
-Description
-
-
-</th></tr></thead>
-<tbody><tr><td>
-
-[content](./client.holohashed.content.md)
-
-
-</td><td>
-
-
-</td><td>
-
-T
-
-
-</td><td>
-
-
-</td></tr>
-<tr><td>
-
-[hash](./client.holohashed.hash.md)
-
-
-</td><td>
-
-
-</td><td>
-
-[HoloHash](./client.holohash.md)
-
-
-</td><td>
-
-
-</td></tr>
-</tbody></table>
+**References:** [HoloHash](./client.holohash.md)
 

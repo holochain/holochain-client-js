@@ -2,71 +2,14 @@
 
 [Home](./index.md) &gt; [@holochain/client](./client.md) &gt; [WarrantOp](./client.warrantop.md)
 
-## WarrantOp interface
+## WarrantOp type
 
+A Warrant DhtOp
 
 **Signature:**
 
 ```typescript
-export interface WarrantOp 
+export type WarrantOp = Signed<Warrant>;
 ```
-
-## Properties
-
-<table><thead><tr><th>
-
-Property
-
-
-</th><th>
-
-Modifiers
-
-
-</th><th>
-
-Type
-
-
-</th><th>
-
-Description
-
-
-</th></tr></thead>
-<tbody><tr><td>
-
-[data](./client.warrantop.data.md)
-
-
-</td><td>
-
-
-</td><td>
-
-[Warrant](./client.warrant.md)
-
-
-</td><td>
-
-
-</td></tr>
-<tr><td>
-
-[signature](./client.warrantop.signature.md)
-
-
-</td><td>
-
-
-</td><td>
-
-[Signature](./client.signature.md)
-
-
-</td><td>
-
-
-</td></tr>
-</tbody></table>
+**References:** [Signed](./client.signed.md)<!-- -->, [Warrant](./client.warrant.md)
 

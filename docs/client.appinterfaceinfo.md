@@ -2,90 +2,18 @@
 
 [Home](./index.md) &gt; [@holochain/client](./client.md) &gt; [AppInterfaceInfo](./client.appinterfaceinfo.md)
 
-## AppInterfaceInfo interface
+## AppInterfaceInfo type
 
+Informational response for listing app interfaces.
 
 **Signature:**
 
 ```typescript
-export interface AppInterfaceInfo 
+export type AppInterfaceInfo = {
+    port: number;
+    allowed_origins: AllowedOrigins;
+    installed_app_id: string | null;
+};
 ```
-
-## Properties
-
-<table><thead><tr><th>
-
-Property
-
-
-</th><th>
-
-Modifiers
-
-
-</th><th>
-
-Type
-
-
-</th><th>
-
-Description
-
-
-</th></tr></thead>
-<tbody><tr><td>
-
-[allowed\_origins](./client.appinterfaceinfo.allowed_origins.md)
-
-
-</td><td>
-
-
-</td><td>
-
-string
-
-
-</td><td>
-
-
-</td></tr>
-<tr><td>
-
-[installed\_app\_id?](./client.appinterfaceinfo.installed_app_id.md)
-
-
-</td><td>
-
-
-</td><td>
-
-[InstalledAppId](./client.installedappid.md)
-
-
-</td><td>
-
-_(Optional)_
-
-
-</td></tr>
-<tr><td>
-
-[port](./client.appinterfaceinfo.port.md)
-
-
-</td><td>
-
-
-</td><td>
-
-number
-
-
-</td><td>
-
-
-</td></tr>
-</tbody></table>
+**References:** [AllowedOrigins](./client.allowedorigins.md)
 

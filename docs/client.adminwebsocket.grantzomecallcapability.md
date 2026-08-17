@@ -9,5 +9,5 @@ Grant a zome call capability for an agent, to be used for signing zome calls.
 **Signature:**
 
 ```typescript
-grantZomeCallCapability: Requester<GrantZomeCallCapabilityRequest, GrantZomeCallCapabilityResponse>;
+grantZomeCallCapability: Requester<GrantZomeCallCapabilityPayload, ActionHash>;
 ```

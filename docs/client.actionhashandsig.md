@@ -4,7 +4,6 @@
 
 ## ActionHashAndSig type
 
-Action hash with the signature of the action at that hash
 
 **Signature:**
 

@@ -9,7 +9,7 @@ Disable an enabled clone cell.
 **Signature:**
 
 ```typescript
-disableCloneCell(args: DisableCloneCellRequest): Promise<void>;
+disableCloneCell(args: DisableCloneCellPayload): Promise<void>;
 ```
 
 ## Parameters
@@ -37,7 +37,7 @@ args
 
 </td><td>
 
-[DisableCloneCellRequest](./client.disableclonecellrequest.md)
+[DisableCloneCellPayload](./client.disableclonecellpayload.md)
 
 
 </td><td>

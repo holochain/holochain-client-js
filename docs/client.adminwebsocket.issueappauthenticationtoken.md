@@ -7,5 +7,5 @@
 **Signature:**
 
 ```typescript
-issueAppAuthenticationToken: Requester<IssueAppAuthenticationTokenRequest, IssueAppAuthenticationTokenResponse>;
+issueAppAuthenticationToken: Requester<IssueAppAuthenticationTokenPayload, AppAuthenticationTokenIssued>;
 ```

@@ -2,71 +2,13 @@
 
 [Home](./index.md) &gt; [@holochain/client](./client.md) &gt; [SignedActionHashed](./client.signedactionhashed.md)
 
-## SignedActionHashed interface
+## SignedActionHashed type
 
 
 **Signature:**
 
 ```typescript
-export interface SignedActionHashed<H extends Action = Action> 
+export type SignedActionHashed = SignedHashed<Action>;
 ```
-
-## Properties
-
-<table><thead><tr><th>
-
-Property
-
-
-</th><th>
-
-Modifiers
-
-
-</th><th>
-
-Type
-
-
-</th><th>
-
-Description
-
-
-</th></tr></thead>
-<tbody><tr><td>
-
-[hashed](./client.signedactionhashed.hashed.md)
-
-
-</td><td>
-
-
-</td><td>
-
-[HoloHashed](./client.holohashed.md)<!-- -->&lt;H&gt;
-
-
-</td><td>
-
-
-</td></tr>
-<tr><td>
-
-[signature](./client.signedactionhashed.signature.md)
-
-
-</td><td>
-
-
-</td><td>
-
-[Signature](./client.signature.md)
-
-
-</td><td>
-
-
-</td></tr>
-</tbody></table>
+**References:** [SignedHashed](./client.signedhashed.md)<!-- -->, [Action](./client.action.md)
 

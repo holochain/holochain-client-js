@@ -1,15 +1,14 @@
 import { assert, test } from "vitest";
 import {
+  AdminRequestPayload,
   AppEntryDef,
   AppWebsocket,
   CallZomeRequest,
   CellType,
   CloneIdHelper,
-  CreateCloneCellRequest,
+  CreateCloneCellPayload,
   fakeAgentPubKey,
-  GrantZomeCallCapabilityRequest,
-  ListCapabilityGrantsRequest,
-  RevokeZomeCallCapabilityRequest,
+  GrantZomeCallCapabilityPayload,
   RoleName,
   RoleNameCallZomeRequest,
   SignalCb,
@@ -86,11 +85,11 @@ test(
     );
     const signalCb: SignalCb = (signal) => {
       assert(signal.type === SignalType.App);
-      assert.deepEqual(signal.value, {
-        cell_id,
-        zome_name: TEST_ZOME_NAME,
-        payload: "i am a signal",
-      });
+      assert.deepEqual(signal.value.cell_id, cell_id);
+      assert.equal(signal.value.zome_name, TEST_ZOME_NAME);
+      // The client decodes the app signal payload before handing it to the
+      // listener, so this field carries the decoded value, not the wire bytes.
+      assert.equal(signal.value.signal, "i am a signal");
       resolveSignalPromise();
     };
 
@@ -183,7 +182,7 @@ test(
     const { app_ws: appWs, admin_ws: admin } = testCase;
     const info = await appWs.appInfo();
 
-    const createCloneCellParams: CreateCloneCellRequest = {
+    const createCloneCellParams: CreateCloneCellPayload = {
       role_name: ROLE_NAME,
       modifiers: {
         network_seed: "clone-0",
@@ -219,7 +218,7 @@ test("can disable and re-enable a clone cell", async () => {
   withApp(async (testCase) => {
     const { app_ws: appWs, admin_ws: admin } = testCase;
 
-    const createCloneCellParams: CreateCloneCellRequest = {
+    const createCloneCellParams: CreateCloneCellPayload = {
       role_name: ROLE_NAME,
       modifiers: {
         network_seed: "clone-0",
@@ -265,7 +264,7 @@ test(
     const info = await appWs.appInfo();
 
     // grant capability
-    const grantRequest: GrantZomeCallCapabilityRequest = {
+    const grantRequest: GrantZomeCallCapabilityPayload = {
       cell_id,
       cap_grant: {
         tag: "test-grant",
@@ -281,7 +280,7 @@ test(
     const grantedActionHash = await admin.grantZomeCallCapability(grantRequest);
 
     // list capability grants
-    const listRequest: ListCapabilityGrantsRequest = {
+    const listRequest: AdminRequestPayload<"list_capability_grants"> = {
       installed_app_id: info.installed_app_id,
       include_revoked: true,
     };
@@ -306,7 +305,7 @@ test(
     );
 
     // revoke capability
-    const revokeRequest: RevokeZomeCallCapabilityRequest = {
+    const revokeRequest: AdminRequestPayload<"revoke_zome_call_capability"> = {
       action_hash: grantedActionHash,
       cell_id: cell_id,
     };

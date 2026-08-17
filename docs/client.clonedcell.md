@@ -2,139 +2,21 @@
 
 [Home](./index.md) &gt; [@holochain/client](./client.md) &gt; [ClonedCell](./client.clonedcell.md)
 
-## ClonedCell interface
+## ClonedCell type
 
+Cloned cell that was created from a provisioned cell at runtime.
 
 **Signature:**
 
 ```typescript
-export interface ClonedCell 
+export type ClonedCell = {
+    cell_id: CellId;
+    clone_id: CloneId;
+    original_dna_hash: DnaHash;
+    dna_modifiers: DnaModifiers;
+    name: string;
+    enabled: boolean;
+};
 ```
-
-## Properties
-
-<table><thead><tr><th>
-
-Property
-
-
-</th><th>
-
-Modifiers
-
-
-</th><th>
-
-Type
-
-
-</th><th>
-
-Description
-
-
-</th></tr></thead>
-<tbody><tr><td>
-
-[cell\_id](./client.clonedcell.cell_id.md)
-
-
-</td><td>
-
-
-</td><td>
-
-[CellId](./client.cellid.md)
-
-
-</td><td>
-
-
-</td></tr>
-<tr><td>
-
-[clone\_id](./client.clonedcell.clone_id.md)
-
-
-</td><td>
-
-
-</td><td>
-
-[RoleName](./client.rolename.md)
-
-
-</td><td>
-
-
-</td></tr>
-<tr><td>
-
-[dna\_modifiers](./client.clonedcell.dna_modifiers.md)
-
-
-</td><td>
-
-
-</td><td>
-
-[DnaModifiers](./client.dnamodifiers.md)
-
-
-</td><td>
-
-
-</td></tr>
-<tr><td>
-
-[enabled](./client.clonedcell.enabled.md)
-
-
-</td><td>
-
-
-</td><td>
-
-boolean
-
-
-</td><td>
-
-
-</td></tr>
-<tr><td>
-
-[name](./client.clonedcell.name.md)
-
-
-</td><td>
-
-
-</td><td>
-
-string
-
-
-</td><td>
-
-
-</td></tr>
-<tr><td>
-
-[original\_dna\_hash](./client.clonedcell.original_dna_hash.md)
-
-
-</td><td>
-
-
-</td><td>
-
-[DnaHash](./client.dnahash.md)
-
-
-</td><td>
-
-
-</td></tr>
-</tbody></table>
+**References:** [CellId](./client.cellid.md)<!-- -->, [CloneId](./client.cloneid.md)<!-- -->, [DnaHash](./client.dnahash.md)<!-- -->, [DnaModifiers](./client.dnamodifiers.md)
 

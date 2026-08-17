@@ -2,71 +2,19 @@
 
 [Home](./index.md) &gt; [@holochain/client](./client.md) &gt; [Action](./client.action.md)
 
-## Action interface
+## Action type
 
+Full action content: header + per-variant data.
+
+The hash is not stored on the struct — use \[`holo_hash::HoloHashed<Action>`<!-- -->\] (or \[`crate::record::SignedHashed<Action>`<!-- -->\]) at call sites so the hash is always derived from the content.
 
 **Signature:**
 
 ```typescript
-export interface Action 
+export type Action = {
+    header: ActionHeader;
+    data: ActionData;
+};
 ```
-
-## Properties
-
-<table><thead><tr><th>
-
-Property
-
-
-</th><th>
-
-Modifiers
-
-
-</th><th>
-
-Type
-
-
-</th><th>
-
-Description
-
-
-</th></tr></thead>
-<tbody><tr><td>
-
-[data](./client.action.data.md)
-
-
-</td><td>
-
-
-</td><td>
-
-[ActionData](./client.actiondata.md)
-
-
-</td><td>
-
-
-</td></tr>
-<tr><td>
-
-[header](./client.action.header.md)
-
-
-</td><td>
-
-
-</td><td>
-
-[ActionHeader](./client.actionheader.md)
-
-
-</td><td>
-
-
-</td></tr>
-</tbody></table>
+**References:** [ActionHeader](./client.actionheader.md)<!-- -->, [ActionData](./client.actiondata.md)
 

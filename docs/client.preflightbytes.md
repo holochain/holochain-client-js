@@ -4,6 +4,7 @@
 
 ## PreflightBytes type
 
+Every preflight request can have optional arbitrary bytes that can be agreed to.
 
 **Signature:**
 

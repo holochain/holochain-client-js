@@ -2,105 +2,19 @@
 
 [Home](./index.md) &gt; [@holochain/client](./client.md) &gt; [FullIntegrationStateDump](./client.fullintegrationstatedump.md)
 
-## FullIntegrationStateDump interface
+## FullIntegrationStateDump type
 
+A full view of the DHT shard of the Cell. Ops start in the validation limbo then proceed to the integration limbo then finally are integrated.
 
 **Signature:**
 
 ```typescript
-export interface FullIntegrationStateDump 
+export type FullIntegrationStateDump = {
+    validation_limbo: Array<DhtOp>;
+    integration_limbo: Array<DhtOp>;
+    integrated: Array<DhtOp>;
+    dht_ops_cursor: DhtOpsCursor | null;
+};
 ```
-
-## Properties
-
-<table><thead><tr><th>
-
-Property
-
-
-</th><th>
-
-Modifiers
-
-
-</th><th>
-
-Type
-
-
-</th><th>
-
-Description
-
-
-</th></tr></thead>
-<tbody><tr><td>
-
-[dht\_ops\_cursor](./client.fullintegrationstatedump.dht_ops_cursor.md)
-
-
-</td><td>
-
-
-</td><td>
-
-number
-
-
-</td><td>
-
-
-</td></tr>
-<tr><td>
-
-[integrated](./client.fullintegrationstatedump.integrated.md)
-
-
-</td><td>
-
-
-</td><td>
-
-Array&lt;[DhtOp](./client.dhtop.md)<!-- -->&gt;
-
-
-</td><td>
-
-
-</td></tr>
-<tr><td>
-
-[integration\_limbo](./client.fullintegrationstatedump.integration_limbo.md)
-
-
-</td><td>
-
-
-</td><td>
-
-Array&lt;[DhtOp](./client.dhtop.md)<!-- -->&gt;
-
-
-</td><td>
-
-
-</td></tr>
-<tr><td>
-
-[validation\_limbo](./client.fullintegrationstatedump.validation_limbo.md)
-
-
-</td><td>
-
-
-</td><td>
-
-Array&lt;[DhtOp](./client.dhtop.md)<!-- -->&gt;
-
-
-</td><td>
-
-
-</td></tr>
-</tbody></table>
+**References:** [DhtOp](./client.dhtop.md)<!-- -->, [DhtOpsCursor](./client.dhtopscursor.md)
 

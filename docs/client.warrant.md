@@ -2,113 +2,19 @@
 
 [Home](./index.md) &gt; [@holochain/client](./client.md) &gt; [Warrant](./client.warrant.md)
 
-## Warrant interface
+## Warrant type
 
+A Warrant is an authored, timestamped proof of wrongdoing by another agent.
 
 **Signature:**
 
 ```typescript
-export interface Warrant 
+export type Warrant = {
+    proof: WarrantProof;
+    author: AgentPubKey;
+    timestamp: Timestamp;
+    warrantee: AgentPubKey;
+};
 ```
-
-## Properties
-
-<table><thead><tr><th>
-
-Property
-
-
-</th><th>
-
-Modifiers
-
-
-</th><th>
-
-Type
-
-
-</th><th>
-
-Description
-
-
-</th></tr></thead>
-<tbody><tr><td>
-
-[author](./client.warrant.author.md)
-
-
-</td><td>
-
-
-</td><td>
-
-[AgentPubKey](./client.agentpubkey.md)
-
-
-</td><td>
-
-author of the warrant
-
-
-</td></tr>
-<tr><td>
-
-[proof](./client.warrant.proof.md)
-
-
-</td><td>
-
-
-</td><td>
-
-[WarrantProof](./client.warrantproof.md)
-
-
-</td><td>
-
-The proof for the warrant which was issued
-
-
-</td></tr>
-<tr><td>
-
-[timestamp](./client.warrant.timestamp.md)
-
-
-</td><td>
-
-
-</td><td>
-
-[Timestamp](./client.timestamp.md)
-
-
-</td><td>
-
-Time when the warrant was issued
-
-
-</td></tr>
-<tr><td>
-
-[warrantee](./client.warrant.warrantee.md)
-
-
-</td><td>
-
-
-</td><td>
-
-[AgentPubKey](./client.agentpubkey.md)
-
-
-</td><td>
-
-The warranted agent
-
-
-</td></tr>
-</tbody></table>
+**References:** [WarrantProof](./client.warrantproof.md)<!-- -->, [AgentPubKey](./client.agentpubkey.md)<!-- -->, [Timestamp](./client.timestamp.md)
 

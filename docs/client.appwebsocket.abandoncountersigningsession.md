@@ -29,7 +29,7 @@ In the countersigning workflow it will first be attempted to resolve the session
 **Signature:**
 
 ```typescript
-abandonCountersigningSession(args: AbandonCountersigningSessionStateRequest): Promise<null>;
+abandonCountersigningSession(args: AppRequestPayload<"abandon_countersigning_session">): Promise<void>;
 ```
 
 ## Parameters
@@ -57,7 +57,7 @@ args
 
 </td><td>
 
-[AbandonCountersigningSessionStateRequest](./client.abandoncountersigningsessionstaterequest.md)
+[AppRequestPayload](./client.apprequestpayload.md)<!-- -->&lt;"abandon\_countersigning\_session"&gt;
 
 
 </td><td>
@@ -68,5 +68,5 @@ args
 
 **Returns:**
 
-Promise&lt;null&gt;
+Promise&lt;void&gt;
 

@@ -4,15 +4,12 @@
 
 ## AppSignal type
 
+A signal emitted by an app via `emit_signal`
 
 **Signature:**
 
 ```typescript
-export type AppSignal = {
-    cell_id: CellId;
-    zome_name: string;
-    payload: unknown;
-};
+export type AppSignal = ExternIO;
 ```
-**References:** [CellId](./client.cellid.md)
+**References:** [ExternIO](./client.externio.md)
 

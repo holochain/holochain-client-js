@@ -2,54 +2,16 @@
 
 [Home](./index.md) &gt; [@holochain/client](./client.md) &gt; [ZomeDependency](./client.zomedependency.md)
 
-## ZomeDependency interface
+## ZomeDependency type
 
+Manifest for integrity zomes that another zome depends on.
 
 **Signature:**
 
 ```typescript
-export interface ZomeDependency 
+export type ZomeDependency = {
+    name: ZomeName;
+};
 ```
-
-## Properties
-
-<table><thead><tr><th>
-
-Property
-
-
-</th><th>
-
-Modifiers
-
-
-</th><th>
-
-Type
-
-
-</th><th>
-
-Description
-
-
-</th></tr></thead>
-<tbody><tr><td>
-
-[name](./client.zomedependency.name.md)
-
-
-</td><td>
-
-
-</td><td>
-
-[ZomeName](./client.zomename.md)
-
-
-</td><td>
-
-
-</td></tr>
-</tbody></table>
+**References:** [ZomeName](./client.zomename.md)
 

@@ -4,6 +4,7 @@
 
 ## CloneCellId type
 
+Ways of specifying a clone cell in the context of an app.
 
 **Signature:**
 

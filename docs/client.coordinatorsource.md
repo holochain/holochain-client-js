@@ -4,6 +4,7 @@
 
 ## CoordinatorSource type
 
+The source of coordinators to be installed, either as binary data, or from a path
 
 **Signature:**
 

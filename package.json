@@ -32,6 +32,7 @@
   ],
   "scripts": {
     "lint": "eslint --fix --ext .ts src test eslint.config.cjs",
+    "lint:ci": "eslint --ext .ts src test eslint.config.cjs",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "test:app-agent": "RUST_LOG=error RUST_BACKTRACE=1 vitest run app-websocket",
     "test:utils": "RUST_LOG=error RUST_BACKTRACE=1 vitest run utils",
@@ -41,7 +42,8 @@
     "prepare": "npm run build:lib",
     "build:docs": "api-extractor run --local && api-documenter markdown -i docs/temp -o docs",
     "build": "npm run build:lib && npm run build:docs",
-    "prepublishOnly": "npm run lint && npm run build"
+    "prepublishOnly": "npm run lint && npm run build",
+    "regen:types": "nix develop -c hc export-ts-bindings --out-dir src/generated && eslint --fix --ext .ts src"
   },
   "dependencies": {
     "@bitgo/blake2b": "^3.2.4",

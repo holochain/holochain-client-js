@@ -4,11 +4,12 @@
 
 ## EntryType type
 
+Allows Actions which reference Entries to know what type of Entry it is referencing. Useful for examining Actions without needing to fetch the corresponding Entries.
 
 **Signature:**
 
 ```typescript
-export type EntryType = "Agent" | {
+export type EntryType = "AgentPubKey" | {
     App: AppEntryDef;
 } | "CapClaim" | "CapGrant";
 ```

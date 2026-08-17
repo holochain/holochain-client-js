@@ -4,6 +4,7 @@
 
 ## getChainOpType() function
 
+Get the variant name of a [ChainOp](./client.chainop.md)<!-- -->.
 
 **Signature:**
 
@@ -41,6 +42,8 @@ op
 
 </td><td>
 
+The chain op to inspect.
+
 
 </td></tr>
 </tbody></table>
@@ -48,4 +51,6 @@ op
 **Returns:**
 
 [ChainOpType](./client.chainoptype.md)
+
+The op's variant name.
 

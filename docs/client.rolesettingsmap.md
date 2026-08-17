@@ -8,9 +8,7 @@
 **Signature:**
 
 ```typescript
-export type RoleSettingsMap = {
-    [key: RoleName]: RoleSettings;
-};
+export type RoleSettingsMap = Record<string, RoleSettings>;
 ```
-**References:** [RoleName](./client.rolename.md)<!-- -->, [RoleSettings](./client.rolesettings.md)
+**References:** [RoleSettings](./client.rolesettings.md)
 

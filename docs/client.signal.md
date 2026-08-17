@@ -4,17 +4,28 @@
 
 ## Signal type
 
+A Signal is some information emitted from within Holochain out through an Interface
 
 **Signature:**
 
 ```typescript
 export type Signal = {
-    type: SignalType.App;
-    value: AppSignal;
+    type: "app";
+    value: {
+        cell_id: CellId;
+        zome_name: ZomeName;
+        signal: AppSignal;
+    };
 } | {
-    type: SignalType.System;
+    type: "app_direct";
+    value: {
+        cell_id: CellId;
+        signal: Array<number>;
+    };
+} | {
+    type: "system";
     value: SystemSignal;
 };
 ```
-**References:** [SignalType.App](./client.signaltype.md)<!-- -->, [AppSignal](./client.appsignal.md)<!-- -->, [SignalType.System](./client.signaltype.md)<!-- -->, [SystemSignal](./client.systemsignal.md)
+**References:** [CellId](./client.cellid.md)<!-- -->, [ZomeName](./client.zomename.md)<!-- -->, [AppSignal](./client.appsignal.md)<!-- -->, [SystemSignal](./client.systemsignal.md)
 

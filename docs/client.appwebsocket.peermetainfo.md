@@ -9,7 +9,7 @@ Request peer meta info for a peer by Url.
 **Signature:**
 
 ```typescript
-peerMetaInfo(req: PeerMetaInfoRequest, timeout?: number): Promise<PeerMetaInfoResponse>;
+peerMetaInfo(req: AppRequestPayload<"peer_meta_info">, timeout?: number): Promise<PeerMetaInfoMap>;
 ```
 
 ## Parameters
@@ -37,7 +37,7 @@ req
 
 </td><td>
 
-[PeerMetaInfoRequest](./client.peermetainforequest.md)
+[AppRequestPayload](./client.apprequestpayload.md)<!-- -->&lt;"peer\_meta\_info"&gt;
 
 
 </td><td>
@@ -66,7 +66,7 @@ _(Optional)_ A timeout to override the default.
 
 **Returns:**
 
-Promise&lt;[PeerMetaInfoResponse](./client.peermetainforesponse.md)<!-- -->&gt;
+Promise&lt;[PeerMetaInfoMap](./client.peermetainfomap.md)<!-- -->&gt;
 
 The meta info stored for this peer URL.
 

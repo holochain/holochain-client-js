@@ -29,7 +29,7 @@ In the countersigning workflow it will first be attempted to resolve the session
 **Signature:**
 
 ```typescript
-publishCountersigningSession(args: PublishCountersigningSessionStateRequest): Promise<null>;
+publishCountersigningSession(args: AppRequestPayload<"publish_countersigning_session">): Promise<void>;
 ```
 
 ## Parameters
@@ -57,7 +57,7 @@ args
 
 </td><td>
 
-[PublishCountersigningSessionStateRequest](./client.publishcountersigningsessionstaterequest.md)
+[AppRequestPayload](./client.apprequestpayload.md)<!-- -->&lt;"publish\_countersigning\_session"&gt;
 
 
 </td><td>
@@ -68,5 +68,5 @@ args
 
 **Returns:**
 
-Promise&lt;null&gt;
+Promise&lt;void&gt;
 

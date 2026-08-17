@@ -1,6 +1,11 @@
 import { range } from "lodash-es";
 import { randomByteArray } from "../api/zome-call-signing.js";
-import { DnaHash, ActionHash, AgentPubKey, EntryHash } from "../types.js";
+import {
+  DnaHash,
+  ActionHash,
+  AgentPubKey,
+  EntryHash,
+} from "../generated/types.js";
 import { dhtLocationFrom32 } from "./hash-parts.js";
 
 async function fakeValidHash<T extends Uint8Array>(

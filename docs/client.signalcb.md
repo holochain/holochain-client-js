@@ -8,7 +8,7 @@
 **Signature:**
 
 ```typescript
-export type SignalCb = (signal: Signal) => void;
+export type SignalCb = (signal: DecodedSignal) => void;
 ```
-**References:** [Signal](./client.signal.md)
+**References:** [DecodedSignal](./client.decodedsignal.md)
 

@@ -8,7 +8,5 @@
 **Signature:**
 
 ```typescript
-export type WasmHashB64 = HoloHashB64;
+export type WasmHashB64 = string;
 ```
-**References:** [HoloHashB64](./client.holohashb64.md)
-

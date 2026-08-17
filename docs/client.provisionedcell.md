@@ -2,88 +2,18 @@
 
 [Home](./index.md) &gt; [@holochain/client](./client.md) &gt; [ProvisionedCell](./client.provisionedcell.md)
 
-## ProvisionedCell interface
+## ProvisionedCell type
 
+Provisioned cell, a cell instantiated from a DNA on app installation.
 
 **Signature:**
 
 ```typescript
-export interface ProvisionedCell 
+export type ProvisionedCell = {
+    cell_id: CellId;
+    dna_modifiers: DnaModifiers;
+    name: string;
+};
 ```
-
-## Properties
-
-<table><thead><tr><th>
-
-Property
-
-
-</th><th>
-
-Modifiers
-
-
-</th><th>
-
-Type
-
-
-</th><th>
-
-Description
-
-
-</th></tr></thead>
-<tbody><tr><td>
-
-[cell\_id](./client.provisionedcell.cell_id.md)
-
-
-</td><td>
-
-
-</td><td>
-
-[CellId](./client.cellid.md)
-
-
-</td><td>
-
-
-</td></tr>
-<tr><td>
-
-[dna\_modifiers](./client.provisionedcell.dna_modifiers.md)
-
-
-</td><td>
-
-
-</td><td>
-
-[DnaModifiers](./client.dnamodifiers.md)
-
-
-</td><td>
-
-
-</td></tr>
-<tr><td>
-
-[name](./client.provisionedcell.name.md)
-
-
-</td><td>
-
-
-</td><td>
-
-string
-
-
-</td><td>
-
-
-</td></tr>
-</tbody></table>
+**References:** [CellId](./client.cellid.md)<!-- -->, [DnaModifiers](./client.dnamodifiers.md)
 

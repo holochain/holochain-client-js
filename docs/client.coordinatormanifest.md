@@ -2,54 +2,16 @@
 
 [Home](./index.md) &gt; [@holochain/client](./client.md) &gt; [CoordinatorManifest](./client.coordinatormanifest.md)
 
-## CoordinatorManifest interface
+## CoordinatorManifest type
 
+Coordinator zomes.
 
 **Signature:**
 
 ```typescript
-export interface CoordinatorManifest 
+export type CoordinatorManifest = {
+    zomes: Array<ZomeManifest>;
+};
 ```
-
-## Properties
-
-<table><thead><tr><th>
-
-Property
-
-
-</th><th>
-
-Modifiers
-
-
-</th><th>
-
-Type
-
-
-</th><th>
-
-Description
-
-
-</th></tr></thead>
-<tbody><tr><td>
-
-[zomes](./client.coordinatormanifest.zomes.md)
-
-
-</td><td>
-
-
-</td><td>
-
-Array&lt;[ZomeManifest](./client.zomemanifest.md)<!-- -->&gt;
-
-
-</td><td>
-
-
-</td></tr>
-</tbody></table>
+**References:** [ZomeManifest](./client.zomemanifest.md)
 

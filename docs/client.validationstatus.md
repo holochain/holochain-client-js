@@ -2,74 +2,12 @@
 
 [Home](./index.md) &gt; [@holochain/client](./client.md) &gt; [ValidationStatus](./client.validationstatus.md)
 
-## ValidationStatus enum
+## ValidationStatus type
 
+The validation status for an op or record much of this happens in the subconscious an entry missing validation dependencies may cycle through Pending many times before finally reaching a final validation state or being abandoned
 
 **Signature:**
 
 ```typescript
-export declare enum ValidationStatus 
+export type ValidationStatus = "Valid" | "Rejected" | "Abandoned";
 ```
-
-## Enumeration Members
-
-<table><thead><tr><th>
-
-Member
-
-
-</th><th>
-
-Value
-
-
-</th><th>
-
-Description
-
-
-</th></tr></thead>
-<tbody><tr><td>
-
-Abandoned
-
-
-</td><td>
-
-`2`
-
-
-</td><td>
-
-
-</td></tr>
-<tr><td>
-
-Rejected
-
-
-</td><td>
-
-`1`
-
-
-</td><td>
-
-
-</td></tr>
-<tr><td>
-
-Valid
-
-
-</td><td>
-
-`0`
-
-
-</td><td>
-
-
-</td></tr>
-</tbody></table>
-

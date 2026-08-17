@@ -3,7 +3,7 @@ import {
   AdminWebsocket,
   AppWebsocket,
   CallZomeRequest,
-  CallZomeRequestSigned,
+  ZomeCallParamsSigned,
 } from "../../src/index.js";
 import {
   createAppInterfaceAndInstallApp,
@@ -70,7 +70,7 @@ test("AppWebsocket uses the zome call signer function provided by window.__HC_ZO
       signZomeCall: async (_request: CallZomeRequest) => {
         signerWasCalled = true;
 
-        return {} as CallZomeRequestSigned;
+        return {} as ZomeCallParamsSigned;
       },
     };
 

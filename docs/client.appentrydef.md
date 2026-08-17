@@ -4,15 +4,16 @@
 
 ## AppEntryDef type
 
+Information about a class of Entries provided by the DNA
 
 **Signature:**
 
 ```typescript
 export type AppEntryDef = {
-    entry_index: number;
-    zome_index: number;
+    entry_index: EntryDefIndex;
+    zome_index: ZomeIndex;
     visibility: EntryVisibility;
 };
 ```
-**References:** [EntryVisibility](./client.entryvisibility.md)
+**References:** [EntryDefIndex](./client.entrydefindex.md)<!-- -->, [ZomeIndex](./client.zomeindex.md)<!-- -->, [EntryVisibility](./client.entryvisibility.md)
 

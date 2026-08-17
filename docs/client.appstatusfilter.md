@@ -2,60 +2,14 @@
 
 [Home](./index.md) &gt; [@holochain/client](./client.md) &gt; [AppStatusFilter](./client.appstatusfilter.md)
 
-## AppStatusFilter enum
+## AppStatusFilter type
 
+Filter for \[`AdminRequest::ListApps`<!-- -->\].
+
+Apps can be either enabled or disabled, set by the user via the conductor interface.
 
 **Signature:**
 
 ```typescript
-export declare enum AppStatusFilter 
+export type AppStatusFilter = "enabled" | "disabled" | "awaiting_memproofs" | "awaiting_restore" | "unrecoverable";
 ```
-
-## Enumeration Members
-
-<table><thead><tr><th>
-
-Member
-
-
-</th><th>
-
-Value
-
-
-</th><th>
-
-Description
-
-
-</th></tr></thead>
-<tbody><tr><td>
-
-Disabled
-
-
-</td><td>
-
-`"disabled"`
-
-
-</td><td>
-
-
-</td></tr>
-<tr><td>
-
-Enabled
-
-
-</td><td>
-
-`"enabled"`
-
-
-</td><td>
-
-
-</td></tr>
-</tbody></table>
-

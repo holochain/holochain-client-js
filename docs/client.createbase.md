@@ -2,54 +2,16 @@
 
 [Home](./index.md) &gt; [@holochain/client](./client.md) &gt; [CreateBase](./client.createbase.md)
 
-## CreateBase interface
+## CreateBase type
 
+Base data for Create actions.
 
 **Signature:**
 
 ```typescript
-export interface CreateBase 
+export type CreateBase = {
+    entry_type: EntryType;
+};
 ```
-
-## Properties
-
-<table><thead><tr><th>
-
-Property
-
-
-</th><th>
-
-Modifiers
-
-
-</th><th>
-
-Type
-
-
-</th><th>
-
-Description
-
-
-</th></tr></thead>
-<tbody><tr><td>
-
-[entry\_type](./client.createbase.entry_type.md)
-
-
-</td><td>
-
-
-</td><td>
-
-[EntryType](./client.entrytype.md)
-
-
-</td><td>
-
-
-</td></tr>
-</tbody></table>
+**References:** [EntryType](./client.entrytype.md)
 

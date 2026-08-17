@@ -7,5 +7,5 @@
 **Signature:**
 
 ```typescript
-storageInfo: Requester<StorageInfoRequest, StorageInfoResponse>;
+storageInfo: Requester<void, StorageInfo>;
 ```

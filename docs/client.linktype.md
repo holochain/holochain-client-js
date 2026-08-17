@@ -4,7 +4,6 @@
 
 ## LinkType type
 
-An internal link type index within the DNA, from 0 to 255.
 
 **Signature:**
 

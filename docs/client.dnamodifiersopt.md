@@ -8,10 +8,10 @@
 **Signature:**
 
 ```typescript
-export type DnaModifiersOpt = {
-    network_seed?: NetworkSeed;
-    properties?: YamlProperties;
+export type DnaModifiersOpt<P> = {
+    network_seed?: NetworkSeed | null;
+    properties?: P | null;
 };
 ```
-**References:** [NetworkSeed](./client.networkseed.md)<!-- -->, [YamlProperties](./client.yamlproperties.md)
+**References:** [NetworkSeed](./client.networkseed.md)
 

@@ -9,7 +9,7 @@ Get a cell id by its role name or clone id.
 **Signature:**
 
 ```typescript
-getCellIdFromRoleName(roleName: RoleName, appInfo: AppInfo): import("../../types.js").CellId;
+getCellIdFromRoleName(roleName: RoleName, appInfo: AppInfo): CellId;
 ```
 
 ## Parameters
@@ -66,7 +66,7 @@ The app info containing all cell infos.
 
 **Returns:**
 
-import("../../types.js").[CellId](./client.cellid.md)
+[CellId](./client.cellid.md)
 
 The cell id or throws an error if not found.
 

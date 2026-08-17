@@ -2,113 +2,19 @@
 
 [Home](./index.md) &gt; [@holochain/client](./client.md) &gt; [P2pAgentsDump](./client.p2pagentsdump.md)
 
-## P2pAgentsDump interface
+## P2pAgentsDump type
 
+State dump of all the peer info
 
 **Signature:**
 
 ```typescript
-export interface P2pAgentsDump 
+export type P2pAgentsDump = {
+    this_agent_info: AgentInfoDump | null;
+    this_dna: [DnaHash, string] | null;
+    this_agent: [AgentPubKey, string] | null;
+    peers: Array<AgentInfoDump>;
+};
 ```
-
-## Properties
-
-<table><thead><tr><th>
-
-Property
-
-
-</th><th>
-
-Modifiers
-
-
-</th><th>
-
-Type
-
-
-</th><th>
-
-Description
-
-
-</th></tr></thead>
-<tbody><tr><td>
-
-[peers](./client.p2pagentsdump.peers.md)
-
-
-</td><td>
-
-
-</td><td>
-
-Array&lt;[AgentInfoDump](./client.agentinfodump.md)<!-- -->&gt;
-
-
-</td><td>
-
-All other agent info.
-
-
-</td></tr>
-<tr><td>
-
-[this\_agent\_info](./client.p2pagentsdump.this_agent_info.md)
-
-
-</td><td>
-
-
-</td><td>
-
-[AgentInfoDump](./client.agentinfodump.md) \| undefined
-
-
-</td><td>
-
-The info of this agent's cell.
-
-
-</td></tr>
-<tr><td>
-
-[this\_agent](./client.p2pagentsdump.this_agent.md)
-
-
-</td><td>
-
-
-</td><td>
-
-\[[AgentPubKey](./client.agentpubkey.md)<!-- -->, [KitsuneAgent](./client.kitsuneagent.md)<!-- -->\] \| undefined
-
-
-</td><td>
-
-The agent as \[`AgentPubKey`<!-- -->\] and \[`kitsune_p2p::KitsuneAgent`<!-- -->\].
-
-
-</td></tr>
-<tr><td>
-
-[this\_dna](./client.p2pagentsdump.this_dna.md)
-
-
-</td><td>
-
-
-</td><td>
-
-\[[DnaHash](./client.dnahash.md)<!-- -->, [KitsuneSpace](./client.kitsunespace.md)<!-- -->\] \| undefined
-
-
-</td><td>
-
-The dna as a \[`DnaHash`<!-- -->\] and \[`kitsune_p2p::KitsuneSpace`<!-- -->\].
-
-
-</td></tr>
-</tbody></table>
+**References:** [AgentInfoDump](./client.agentinfodump.md)<!-- -->, [DnaHash](./client.dnahash.md)<!-- -->, [AgentPubKey](./client.agentpubkey.md)
 

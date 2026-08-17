@@ -297,7 +297,7 @@ test("TauriAppTransport delivers app signals from the plugin's signal bridge", a
   assert.equal(received[0].type, "app", "emitted as an app signal");
   assert.equal(received[0].value.zome_name, zomeName, "zome name preserved");
   assert.deepEqual(
-    received[0].value.payload,
+    received[0].value.signal,
     payload,
     "inner app signal payload decoded",
   );

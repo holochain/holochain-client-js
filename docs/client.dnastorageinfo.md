@@ -2,156 +2,19 @@
 
 [Home](./index.md) &gt; [@holochain/client](./client.md) &gt; [DnaStorageInfo](./client.dnastorageinfo.md)
 
-## DnaStorageInfo interface
+## DnaStorageInfo type
 
+Storage info for DNA used by one or more hApps.
 
 **Signature:**
 
 ```typescript
-export interface DnaStorageInfo 
+export type DnaStorageInfo = {
+    dht_data_size: number;
+    dht_data_size_on_disk: number;
+    dna_hash: DnaHash;
+    used_by: Array<string>;
+};
 ```
-
-## Properties
-
-<table><thead><tr><th>
-
-Property
-
-
-</th><th>
-
-Modifiers
-
-
-</th><th>
-
-Type
-
-
-</th><th>
-
-Description
-
-
-</th></tr></thead>
-<tbody><tr><td>
-
-[authored\_data\_size\_on\_disk](./client.dnastorageinfo.authored_data_size_on_disk.md)
-
-
-</td><td>
-
-
-</td><td>
-
-number
-
-
-</td><td>
-
-
-</td></tr>
-<tr><td>
-
-[authored\_data\_size](./client.dnastorageinfo.authored_data_size.md)
-
-
-</td><td>
-
-
-</td><td>
-
-number
-
-
-</td><td>
-
-
-</td></tr>
-<tr><td>
-
-[cache\_data\_size\_on\_disk](./client.dnastorageinfo.cache_data_size_on_disk.md)
-
-
-</td><td>
-
-
-</td><td>
-
-number
-
-
-</td><td>
-
-
-</td></tr>
-<tr><td>
-
-[cache\_data\_size](./client.dnastorageinfo.cache_data_size.md)
-
-
-</td><td>
-
-
-</td><td>
-
-number
-
-
-</td><td>
-
-
-</td></tr>
-<tr><td>
-
-[dht\_data\_size\_on\_disk](./client.dnastorageinfo.dht_data_size_on_disk.md)
-
-
-</td><td>
-
-
-</td><td>
-
-number
-
-
-</td><td>
-
-
-</td></tr>
-<tr><td>
-
-[dht\_data\_size](./client.dnastorageinfo.dht_data_size.md)
-
-
-</td><td>
-
-
-</td><td>
-
-number
-
-
-</td><td>
-
-
-</td></tr>
-<tr><td>
-
-[used\_by](./client.dnastorageinfo.used_by.md)
-
-
-</td><td>
-
-
-</td><td>
-
-Array&lt;[InstalledAppId](./client.installedappid.md)<!-- -->&gt;
-
-
-</td><td>
-
-
-</td></tr>
-</tbody></table>
+**References:** [DnaHash](./client.dnahash.md)
 

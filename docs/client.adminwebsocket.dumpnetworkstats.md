@@ -7,5 +7,5 @@
 **Signature:**
 
 ```typescript
-dumpNetworkStats: Requester<DumpNetworkStatsRequest, DumpNetworkStatsResponse>;
+dumpNetworkStats: Requester<void, HolochainTransportStats>;
 ```

@@ -8,9 +8,7 @@
 **Signature:**
 
 ```typescript
-export type ResourceMap = {
-    [key: string]: ResourceBytes;
-};
+export type ResourceMap = Record<ResourceIdentifier, ResourceBytes>;
 ```
-**References:** [ResourceBytes](./client.resourcebytes.md)
+**References:** [ResourceIdentifier](./client.resourceidentifier.md)<!-- -->, [ResourceBytes](./client.resourcebytes.md)
 

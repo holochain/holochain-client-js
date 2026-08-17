@@ -1,5 +1,6 @@
 import { encode } from "@msgpack/msgpack";
-import { HoloHash, HoloHashType } from "../types.js";
+import { HoloHashType } from "../client-types.js";
+import { HoloHash } from "../generated/types.js";
 import blake2b from "@bitgo/blake2b";
 import isEqual from "lodash-es/isEqual.js";
 

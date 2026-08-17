@@ -7,7 +7,7 @@
 **Signature:**
 
 ```typescript
-disableCloneCell(args: DisableCloneCellRequest): Promise<DisableCloneCellResponse>;
+disableCloneCell(args: DisableCloneCellPayload): Promise<void>;
 ```
 
 ## Parameters
@@ -35,7 +35,7 @@ args
 
 </td><td>
 
-[DisableCloneCellRequest](./client.disableclonecellrequest.md)
+[DisableCloneCellPayload](./client.disableclonecellpayload.md)
 
 
 </td><td>
@@ -46,5 +46,5 @@ args
 
 **Returns:**
 
-Promise&lt;[DisableCloneCellResponse](./client.disableclonecellresponse.md)<!-- -->&gt;
+Promise&lt;void&gt;
 

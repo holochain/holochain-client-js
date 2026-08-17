@@ -7,7 +7,7 @@
 **Signature:**
 
 ```typescript
-_requester<ReqI, ReqO, ResI, ResO>(tag: string, transformer?: Transformer<ReqI, ReqO, ResI, ResO>): (req: ReqI, timeout?: number) => Promise<ResO>;
+_requester<ReqI, ReqO, ResI, ResO>(tag: AdminRequest["type"], transformer?: Transformer<ReqI, ReqO, ResI, ResO>): Requester<ReqI, ResO>;
 ```
 
 ## Parameters
@@ -35,7 +35,7 @@ tag
 
 </td><td>
 
-string
+[AdminRequest](./client.adminrequest.md)<!-- -->\["type"\]
 
 
 </td><td>
@@ -62,5 +62,5 @@ _(Optional)_
 
 **Returns:**
 
-(req: ReqI, timeout?: number) =&gt; Promise&lt;ResO&gt;
+[Requester](./client.requester.md)<!-- -->&lt;ReqI, ResO&gt;
 

@@ -7,5 +7,5 @@
 **Signature:**
 
 ```typescript
-disableApp: Requester<DisableAppRequest, DisableAppResponse>;
+disableApp: Requester<AdminRequestPayload<"disable_app">, void>;
 ```

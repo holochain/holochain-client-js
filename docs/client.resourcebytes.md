@@ -4,6 +4,7 @@
 
 ## ResourceBytes type
 
+Opaque bytes representing a Resource in a \[`Bundle`<!-- -->\](crate::Bundle)
 
 **Signature:**
 

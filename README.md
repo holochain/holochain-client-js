@@ -204,6 +204,22 @@ nix develop
 npm run test
 ```
 
+## Regenerating types
+
+The wire types in `src/` (admin/app request and response payloads, HDK
+action/entry/countersigning types, etc.) are generated from the Holochain
+Rust source rather than hand-written. To regenerate them and re-run lint:
+
+```bash
+npm run regen:types
+```
+
+This uses Nix to build Holochain's `hc` binary (the same `hc` provided by
+`nix develop`) with its opt-in `ts_rs` and `unstable-countersigning` Cargo
+features, against the Holochain revision pinned in `flake.lock`, then runs
+its `export-ts-bindings` subcommand, which wipes and recreates
+`src/generated` with the fresh export.
+
 ## Releasing
 
 1. Open the

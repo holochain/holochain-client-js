@@ -2,7 +2,7 @@
   description = "Nix shell for Holochain app development";
 
   inputs = {
-    holonix.url = "github:holochain/holonix?ref=main-0.7";
+    holonix.url = "github:holochain/holonix?ref=main";
     nixpkgs.follows = "holonix/nixpkgs";
   };
 
@@ -11,17 +11,21 @@
       # provide a dev shell for all systems that the holonix flake supports
       systems = builtins.attrNames holonix.devShells;
 
-      perSystem = { inputs', pkgs, ... }:
+      perSystem = { inputs', self', pkgs, ... }:
         {
           devShells.default = pkgs.mkShell {
             packages = [
               inputs'.holonix.packages.holochain
-              inputs'.holonix.packages.hc
+              # `hc`, with its `export-ts-bindings` subcommand enabled via
+              # the opt-in `ts_rs`/`unstable-countersigning` Cargo features.
+              (inputs'.holonix.packages.hc.override {
+                cargoExtraArgs = "--features ts_rs,unstable-countersigning";
+              })
               inputs'.holonix.packages.bootstrap-srv
               inputs'.holonix.packages.lair-keystore
               inputs'.holonix.packages.rust
               # add further packages from nixpkgs
-              pkgs.nodejs
+              pkgs.nodejs_24
             ];
 
             shellHook = ''

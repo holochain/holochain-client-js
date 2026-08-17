@@ -2,88 +2,18 @@
 
 [Home](./index.md) &gt; [@holochain/client](./client.md) &gt; [UpdateBase](./client.updatebase.md)
 
-## UpdateBase interface
+## UpdateBase type
 
+Base data for Update actions.
 
 **Signature:**
 
 ```typescript
-export interface UpdateBase 
+export type UpdateBase = {
+    original_action_address: ActionHash;
+    original_entry_address: EntryHash;
+    entry_type: EntryType;
+};
 ```
-
-## Properties
-
-<table><thead><tr><th>
-
-Property
-
-
-</th><th>
-
-Modifiers
-
-
-</th><th>
-
-Type
-
-
-</th><th>
-
-Description
-
-
-</th></tr></thead>
-<tbody><tr><td>
-
-[entry\_type](./client.updatebase.entry_type.md)
-
-
-</td><td>
-
-
-</td><td>
-
-[EntryType](./client.entrytype.md)
-
-
-</td><td>
-
-
-</td></tr>
-<tr><td>
-
-[original\_action\_address](./client.updatebase.original_action_address.md)
-
-
-</td><td>
-
-
-</td><td>
-
-[ActionHash](./client.actionhash.md)
-
-
-</td><td>
-
-
-</td></tr>
-<tr><td>
-
-[original\_entry\_address](./client.updatebase.original_entry_address.md)
-
-
-</td><td>
-
-
-</td><td>
-
-[EntryHash](./client.entryhash.md)
-
-
-</td><td>
-
-
-</td></tr>
-</tbody></table>
+**References:** [ActionHash](./client.actionhash.md)<!-- -->, [EntryHash](./client.entryhash.md)<!-- -->, [EntryType](./client.entrytype.md)
 

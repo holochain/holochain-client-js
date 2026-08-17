@@ -4,6 +4,9 @@
 
 ## CloneId type
 
+Identifier of a clone cell, composed of the DNA's role name and the index of the clone, starting at 0.
+
+Example: `profiles.0`
 
 **Signature:**
 

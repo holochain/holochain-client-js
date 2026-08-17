@@ -9,7 +9,7 @@ Get the state of a countersigning session.
 **Signature:**
 
 ```typescript
-getCountersigningSessionState(args: GetCountersigningSessionStateRequest): Promise<GetCountersigningSessionStateResponse>;
+getCountersigningSessionState(args: AppRequestPayload<"get_countersigning_session_state">): Promise<AppResponsePayload<"countersigning_session_state">>;
 ```
 
 ## Parameters
@@ -37,7 +37,7 @@ args
 
 </td><td>
 
-[GetCountersigningSessionStateRequest](./client.getcountersigningsessionstaterequest.md)
+[AppRequestPayload](./client.apprequestpayload.md)<!-- -->&lt;"get\_countersigning\_session\_state"&gt;
 
 
 </td><td>
@@ -48,5 +48,5 @@ args
 
 **Returns:**
 
-Promise&lt;[GetCountersigningSessionStateResponse](./client.getcountersigningsessionstateresponse.md)<!-- -->&gt;
+Promise&lt;[AppResponsePayload](./client.appresponsepayload.md)<!-- -->&lt;"countersigning\_session\_state"&gt;&gt;
 

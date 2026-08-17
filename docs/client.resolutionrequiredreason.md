@@ -2,65 +2,12 @@
 
 [Home](./index.md) &gt; [@holochain/client](./client.md) &gt; [ResolutionRequiredReason](./client.resolutionrequiredreason.md)
 
-## ResolutionRequiredReason enum
+## ResolutionRequiredReason type
 
 The reason why a countersigning session can not be resolved automatically and requires manual resolution.
 
 **Signature:**
 
 ```typescript
-export declare enum ResolutionRequiredReason 
+export type ResolutionRequiredReason = "Timeout" | "Unknown";
 ```
-
-## Enumeration Members
-
-<table><thead><tr><th>
-
-Member
-
-
-</th><th>
-
-Value
-
-
-</th><th>
-
-Description
-
-
-</th></tr></thead>
-<tbody><tr><td>
-
-Timeout
-
-
-</td><td>
-
-`"Timeout"`
-
-
-</td><td>
-
-The session has timed out, so we should try to resolve its state before abandoning.
-
-
-</td></tr>
-<tr><td>
-
-Unknown
-
-
-</td><td>
-
-`"Unknown"`
-
-
-</td><td>
-
-Something happened, like a conductor restart, and we lost track of the session.
-
-
-</td></tr>
-</tbody></table>
-

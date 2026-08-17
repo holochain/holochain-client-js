@@ -12,21 +12,16 @@ import {
   isTauriHolochain,
 } from "../../environments/tauri.js";
 import { TauriAppTransport } from "./tauri-transport.js";
-import { AgentPubKey, InstalledAppId, RoleName } from "../../types.js";
+import { InstalledAppId, RoleName } from "../../client-types.js";
+import type { AgentPubKey, CellId, ClonedCell } from "../../generated/types.js";
 import { encodeHashToBase64 } from "../../utils/index.js";
-import {
-  AgentInfoRequest,
-  AgentInfoResponse,
-  PeerMetaInfoRequest,
-  PeerMetaInfoResponse,
-  AppInfo,
-  CellType,
-  DumpNetworkMetricsRequest,
-  DumpNetworkMetricsResponse,
-  DumpNetworkStatsRequest,
-  DumpNetworkStatsResponse,
+import { CellType } from "../admin/client-types.js";
+import type {
+  HolochainTransportStats,
   MemproofMap,
-} from "../admin/index.js";
+  NetworkMetricsMap,
+  PeerMetaInfoMap,
+} from "../../generated/api/admin/types.js";
 import { WsClient } from "../client.js";
 import {
   catchError,
@@ -45,35 +40,27 @@ import {
   randomNonce,
 } from "../zome-call-signing.js";
 import {
-  AbandonCountersigningSessionStateRequest,
-  AbandonCountersigningSessionStateResponse,
   AppClient,
   AppClientTransport,
   AppEvents,
-  AppInfoResponse,
+  AppRequestPayload,
+  AppResponsePayload,
   AppWebsocketConnectionOptions,
   CallZomeRequest,
-  CallZomeRequestSigned,
   CallZomeResponse,
   CallZomeResponseGeneric,
   CallZomeTransform,
-  CreateCloneCellRequest,
-  CreateCloneCellResponse,
-  DisableCloneCellRequest,
-  DisableCloneCellResponse,
-  EnableCloneCellRequest,
-  EnableCloneCellResponse,
-  EnableRequest,
-  EnableResponse,
-  GetCountersigningSessionStateRequest,
-  GetCountersigningSessionStateResponse,
-  ProvideMemproofsRequest,
-  ProvideMemproofsResponse,
-  PublishCountersigningSessionStateRequest,
-  PublishCountersigningSessionStateResponse,
   RoleNameCallZomeRequest,
   SignalCb,
-} from "./types.js";
+} from "./client-types.js";
+import type {
+  AppInfo,
+  AppRequest,
+  CreateCloneCellPayload,
+  DisableCloneCellPayload,
+  EnableCloneCellPayload,
+  ZomeCallParamsSigned,
+} from "../../generated/api/app/types.js";
 
 /**
  * A class to establish a websocket connection to an App interface, for a
@@ -88,63 +75,60 @@ export class AppWebsocket implements AppClient {
   private readonly defaultTimeout: number;
   private readonly emitter: Emittery<AppEvents>;
   private readonly callZomeTransform: Transformer<
-    CallZomeRequest | CallZomeRequestSigned,
-    Promise<CallZomeRequestSigned>,
+    CallZomeRequest | ZomeCallParamsSigned,
+    Promise<ZomeCallParamsSigned>,
     CallZomeResponseGeneric<Uint8Array>,
     CallZomeResponse
   >;
 
   cachedAppInfo?: AppInfo | null;
 
-  private readonly appInfoRequester: Requester<null, AppInfoResponse>;
+  private readonly appInfoRequester: Requester<null, AppInfo | null>;
   private readonly agentInfoRequester: Requester<
-    AgentInfoRequest,
-    AgentInfoResponse
+    AppRequestPayload<"agent_info">,
+    Array<string>
   >;
   private readonly peerMetaInfoRequester: Requester<
-    PeerMetaInfoRequest,
-    PeerMetaInfoResponse
+    AppRequestPayload<"peer_meta_info">,
+    PeerMetaInfoMap
   >;
   private readonly callZomeRequester: Requester<
-    CallZomeRequest | CallZomeRequestSigned,
+    CallZomeRequest | ZomeCallParamsSigned,
     CallZomeResponse
   >;
-  private readonly provideMemproofRequester: Requester<
-    ProvideMemproofsRequest,
-    ProvideMemproofsResponse
-  >;
-  private readonly enableAppRequester: Requester<EnableRequest, EnableResponse>;
+  private readonly provideMemproofRequester: Requester<MemproofMap, void>;
+  private readonly enableAppRequester: Requester<void, void>;
   private readonly createCloneCellRequester: Requester<
-    CreateCloneCellRequest,
-    CreateCloneCellResponse
+    CreateCloneCellPayload,
+    ClonedCell
   >;
   private readonly enableCloneCellRequester: Requester<
-    EnableCloneCellRequest,
-    EnableCloneCellResponse
+    EnableCloneCellPayload,
+    ClonedCell
   >;
   private readonly disableCloneCellRequester: Requester<
-    DisableCloneCellRequest,
-    DisableCloneCellResponse
+    DisableCloneCellPayload,
+    void
   >;
   private readonly dumpNetworkStatsRequester: Requester<
-    DumpNetworkStatsRequest,
-    DumpNetworkStatsResponse
+    void,
+    HolochainTransportStats
   >;
   private readonly dumpNetworkMetricsRequester: Requester<
-    DumpNetworkMetricsRequest,
-    DumpNetworkMetricsResponse
+    AppRequestPayload<"dump_network_metrics">,
+    NetworkMetricsMap
   >;
   private readonly getCountersigningSessionStateRequester: Requester<
-    GetCountersigningSessionStateRequest,
-    GetCountersigningSessionStateResponse
+    AppRequestPayload<"get_countersigning_session_state">,
+    AppResponsePayload<"countersigning_session_state">
   >;
   private readonly abandonCountersigningSessionRequester: Requester<
-    AbandonCountersigningSessionStateRequest,
-    AbandonCountersigningSessionStateResponse
+    AppRequestPayload<"abandon_countersigning_session">,
+    AppResponsePayload<"countersigning_session_abandoned">
   >;
   private readonly publishCountersigningSessionRequester: Requester<
-    PublishCountersigningSessionStateRequest,
-    PublishCountersigningSessionStateResponse
+    AppRequestPayload<"publish_countersigning_session">,
+    AppResponsePayload<"publish_countersigning_session_triggered">
   >;
 
   private constructor(
@@ -261,7 +245,9 @@ export class AppWebsocket implements AppClient {
    * @param options - {@link (WebsocketConnectionOptions:interface)}
    * @returns A new instance of an AppWebsocket.
    */
-  static async connect(options: AppWebsocketConnectionOptions = {}) {
+  static async connect(
+    options: AppWebsocketConnectionOptions = {},
+  ): Promise<AppWebsocket> {
     // In a Tauri webview wired to an in-process conductor, reach the App API
     // through Tauri IPC instead of a websocket. The conductor is in the same
     // process, so there is no port to dial and no token to authenticate — the
@@ -278,7 +264,7 @@ export class AppWebsocket implements AppClient {
           client,
           "app_info",
           options.defaultTimeout ?? DEFAULT_TIMEOUT,
-        ) as Requester<null, AppInfoResponse>
+        ) as Requester<null, AppInfo | null>
       )(null);
       if (!appInfo) {
         throw new HolochainError(
@@ -324,7 +310,7 @@ export class AppWebsocket implements AppClient {
     const appInfo = await (
       AppWebsocket.requester(client, "app_info", DEFAULT_TIMEOUT) as Requester<
         null,
-        AppInfoResponse
+        AppInfo | null
       >
     )(null);
     if (!appInfo) {
@@ -348,7 +334,7 @@ export class AppWebsocket implements AppClient {
    * @param timeout - A timeout to override the default.
    * @returns The app's {@link AppInfo}.
    */
-  async appInfo(timeout?: number) {
+  async appInfo(timeout?: number): Promise<AppInfo> {
     const appInfo = await this.appInfoRequester(null, timeout);
     if (!appInfo) {
       throw new HolochainError(
@@ -368,7 +354,10 @@ export class AppWebsocket implements AppClient {
    * @param timeout - A timeout to override the default.
    * @returns The app's agent infos as JSON string.
    */
-  async agentInfo(req: AgentInfoRequest, timeout?: number) {
+  async agentInfo(
+    req: AppRequestPayload<"agent_info">,
+    timeout?: number,
+  ): Promise<Array<string>> {
     return await this.agentInfoRequester(req, timeout);
   }
 
@@ -379,7 +368,10 @@ export class AppWebsocket implements AppClient {
    * @param timeout - A timeout to override the default.
    * @returns The meta info stored for this peer URL.
    */
-  async peerMetaInfo(req: PeerMetaInfoRequest, timeout?: number) {
+  async peerMetaInfo(
+    req: AppRequestPayload<"peer_meta_info">,
+    timeout?: number,
+  ): Promise<PeerMetaInfoMap> {
     return await this.peerMetaInfoRequester(req, timeout);
   }
 
@@ -388,19 +380,19 @@ export class AppWebsocket implements AppClient {
    *
    * @returns The conductor's {@link TransportStats}.
    */
-  async dumpNetworkStats(timeout?: number): Promise<DumpNetworkStatsResponse> {
+  async dumpNetworkStats(timeout?: number): Promise<HolochainTransportStats> {
     return await this.dumpNetworkStatsRequester(undefined, timeout);
   }
 
   /**
    * Request network metrics.
    *
-   * @returns The {@link NetworkMetrics}.
+   * @returns The {@link NetworkMetricsMap}.
    */
   async dumpNetworkMetrics(
-    req: DumpNetworkMetricsRequest,
+    req: AppRequestPayload<"dump_network_metrics">,
     timeout?: number,
-  ): Promise<DumpNetworkMetricsResponse> {
+  ): Promise<NetworkMetricsMap> {
     return await this.dumpNetworkMetricsRequester(req, timeout);
   }
 
@@ -409,7 +401,7 @@ export class AppWebsocket implements AppClient {
    *
    * @param memproofs - A map of {@link MembraneProof}s.
    */
-  async provideMemproofs(memproofs: MemproofMap) {
+  async provideMemproofs(memproofs: MemproofMap): Promise<void> {
     await this.provideMemproofRequester(memproofs);
   }
 
@@ -417,7 +409,7 @@ export class AppWebsocket implements AppClient {
    * Enable an app only if the app is in the `AppStatus::Disabled(DisabledAppReason::NotStartedAfterProvidingMemproofs)`
    * state. Attempting to enable the app from other states (other than Running) will fail.
    */
-  async enableApp() {
+  async enableApp(): Promise<void> {
     await this.enableAppRequester();
   }
 
@@ -428,7 +420,7 @@ export class AppWebsocket implements AppClient {
    * @param appInfo - The app info containing all cell infos.
    * @returns The cell id or throws an error if not found.
    */
-  getCellIdFromRoleName(roleName: RoleName, appInfo: AppInfo) {
+  getCellIdFromRoleName(roleName: RoleName, appInfo: AppInfo): CellId {
     if (isCloneId(roleName)) {
       const baseRoleName = getBaseRoleNameFromCloneId(roleName);
       if (!(baseRoleName in appInfo.cell_info)) {
@@ -507,7 +499,7 @@ export class AppWebsocket implements AppClient {
    * @param args - Specify the cell to clone.
    * @returns The created clone cell.
    */
-  async createCloneCell(args: CreateCloneCellRequest) {
+  async createCloneCell(args: CreateCloneCellPayload): Promise<ClonedCell> {
     const clonedCell = this.createCloneCellRequester({
       ...args,
     });
@@ -523,7 +515,7 @@ export class AppWebsocket implements AppClient {
    * @param args - Specify the clone cell to enable.
    * @returns The enabled clone cell.
    */
-  async enableCloneCell(args: EnableCloneCellRequest) {
+  async enableCloneCell(args: EnableCloneCellPayload): Promise<ClonedCell> {
     return this.enableCloneCellRequester({
       ...args,
     });
@@ -534,7 +526,7 @@ export class AppWebsocket implements AppClient {
    *
    * @param args - Specify the clone cell to disable.
    */
-  async disableCloneCell(args: DisableCloneCellRequest) {
+  async disableCloneCell(args: DisableCloneCellPayload): Promise<void> {
     return this.disableCloneCellRequester({
       ...args,
     });
@@ -544,8 +536,8 @@ export class AppWebsocket implements AppClient {
    * Get the state of a countersigning session.
    */
   async getCountersigningSessionState(
-    args: GetCountersigningSessionStateRequest,
-  ) {
+    args: AppRequestPayload<"get_countersigning_session_state">,
+  ): Promise<AppResponsePayload<"countersigning_session_state">> {
     return this.getCountersigningSessionStateRequester(args);
   }
 
@@ -586,8 +578,8 @@ export class AppWebsocket implements AppClient {
    * automatically has not been made.
    */
   async abandonCountersigningSession(
-    args: AbandonCountersigningSessionStateRequest,
-  ) {
+    args: AppRequestPayload<"abandon_countersigning_session">,
+  ): Promise<void> {
     return this.abandonCountersigningSessionRequester(args);
   }
 
@@ -628,8 +620,8 @@ export class AppWebsocket implements AppClient {
    * automatically has not been made.
    */
   async publishCountersigningSession(
-    args: PublishCountersigningSessionStateRequest,
-  ) {
+    args: AppRequestPayload<"publish_countersigning_session">,
+  ): Promise<void> {
     return this.publishCountersigningSessionRequester(args);
   }
 
@@ -651,10 +643,10 @@ export class AppWebsocket implements AppClient {
 
   private static requester<ReqI, ReqO, ResI, ResO>(
     client: AppClientTransport,
-    tag: string,
+    tag: AppRequest["type"],
     defaultTimeout: number,
     transformer?: Transformer<ReqI, ReqO, ResI, ResO>,
-  ) {
+  ): Requester<ReqI, ResO> {
     return requesterTransformer(
       (req, timeout) =>
         promiseTimeout(
@@ -671,8 +663,8 @@ export class AppWebsocket implements AppClient {
 const defaultCallZomeTransform: Transformer<
   // either an already signed zome call which is returned as is, or a zome call
   // payload to be signed
-  CallZomeRequest | CallZomeRequestSigned,
-  Promise<CallZomeRequestSigned>,
+  CallZomeRequest | ZomeCallParamsSigned,
+  Promise<ZomeCallParamsSigned>,
   CallZomeResponseGeneric<Uint8Array>,
   CallZomeResponse
 > = {
@@ -694,7 +686,9 @@ const defaultCallZomeTransform: Transformer<
 /**
  * @public
  */
-export const signZomeCall = async (request: CallZomeRequest) => {
+export const signZomeCall = async (
+  request: CallZomeRequest,
+): Promise<ZomeCallParamsSigned> => {
   const signingCredentialsForCell = getSigningCredentials(request.cell_id);
   if (!signingCredentialsForCell) {
     throw new HolochainError(
@@ -722,7 +716,7 @@ export const signZomeCall = async (request: CallZomeRequest) => {
     .crypto_sign(bytesHash, signingCredentialsForCell.keyPair.privateKey)
     .subarray(0, sodium.crypto_sign_BYTES);
 
-  const signedZomeCall: CallZomeRequestSigned = {
+  const signedZomeCall: ZomeCallParamsSigned = {
     bytes,
     signature,
   };

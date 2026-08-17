@@ -2,54 +2,16 @@
 
 [Home](./index.md) &gt; [@holochain/client](./client.md) &gt; [AppAuthenticationRequest](./client.appauthenticationrequest.md)
 
-## AppAuthenticationRequest interface
+## AppAuthenticationRequest type
 
+The request payload sent on a Holochain app websocket to authenticate the connection.
 
 **Signature:**
 
 ```typescript
-export interface AppAuthenticationRequest 
+export type AppAuthenticationRequest = {
+    token: AppAuthenticationToken;
+};
 ```
-
-## Properties
-
-<table><thead><tr><th>
-
-Property
-
-
-</th><th>
-
-Modifiers
-
-
-</th><th>
-
-Type
-
-
-</th><th>
-
-Description
-
-
-</th></tr></thead>
-<tbody><tr><td>
-
-[token](./client.appauthenticationrequest.token.md)
-
-
-</td><td>
-
-
-</td><td>
-
-[AppAuthenticationToken](./client.appauthenticationtoken.md)
-
-
-</td><td>
-
-
-</td></tr>
-</tbody></table>
+**References:** [AppAuthenticationToken](./client.appauthenticationtoken.md)
 

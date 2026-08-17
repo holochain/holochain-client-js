@@ -4,15 +4,16 @@
 
 ## AppBundleSource type
 
+The possible locations of an AppBundle
 
 **Signature:**
 
 ```typescript
 export type AppBundleSource = {
-    type: "path";
-    value: string;
-} | {
     type: "bytes";
     value: Uint8Array;
+} | {
+    type: "path";
+    value: string;
 };
 ```

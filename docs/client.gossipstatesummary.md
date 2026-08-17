@@ -2,114 +2,24 @@
 
 [Home](./index.md) &gt; [@holochain/client](./client.md) &gt; [GossipStateSummary](./client.gossipstatesummary.md)
 
-## GossipStateSummary interface
+## GossipStateSummary type
 
-Gossip state summary.
+Mirror of `kitsune2_api::GossipStateSummary`<!-- -->.
 
 **Signature:**
 
 ```typescript
-export interface GossipStateSummary 
+export type GossipStateSummary = {
+    initiated_round: GossipRoundStateSummary | null;
+    accepted_rounds: Array<GossipRoundStateSummary>;
+    dht_summary: {
+        [key in string]: DhtSegmentState;
+    };
+    peer_meta: {
+        [key in string]: PeerMeta;
+    };
+    local_op_count: number;
+};
 ```
-
-## Properties
-
-<table><thead><tr><th>
-
-Property
-
-
-</th><th>
-
-Modifiers
-
-
-</th><th>
-
-Type
-
-
-</th><th>
-
-Description
-
-
-</th></tr></thead>
-<tbody><tr><td>
-
-[accepted\_rounds](./client.gossipstatesummary.accepted_rounds.md)
-
-
-</td><td>
-
-
-</td><td>
-
-[GossipRoundStateSummary](./client.gossiproundstatesummary.md)<!-- -->\[\]
-
-
-</td><td>
-
-The list of accepted round summaries.
-
-
-</td></tr>
-<tr><td>
-
-[dht\_summary](./client.gossipstatesummary.dht_summary.md)
-
-
-</td><td>
-
-
-</td><td>
-
-Record&lt;string, [DhtSegmentState](./client.dhtsegmentstate.md)<!-- -->&gt;
-
-
-</td><td>
-
-DHT summary.
-
-
-</td></tr>
-<tr><td>
-
-[initiated\_round?](./client.gossipstatesummary.initiated_round.md)
-
-
-</td><td>
-
-
-</td><td>
-
-[GossipRoundStateSummary](./client.gossiproundstatesummary.md)
-
-
-</td><td>
-
-_(Optional)_ The current initiated round summary.
-
-
-</td></tr>
-<tr><td>
-
-[peer\_meta](./client.gossipstatesummary.peer_meta.md)
-
-
-</td><td>
-
-
-</td><td>
-
-Record&lt;string, [PeerMeta](./client.peermeta.md)<!-- -->&gt;
-
-
-</td><td>
-
-Peer metadata dump for each agent in this space.
-
-
-</td></tr>
-</tbody></table>
+**References:** [GossipRoundStateSummary](./client.gossiproundstatesummary.md)<!-- -->, [DhtSegmentState](./client.dhtsegmentstate.md)<!-- -->, [PeerMeta](./client.peermeta.md)
 

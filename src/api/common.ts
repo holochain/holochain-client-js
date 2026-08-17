@@ -1,4 +1,4 @@
-import { RoleName } from "../types.js";
+import { RoleName } from "../client-types.js";
 import { IsoWebSocket } from "./client.js";
 
 const ERROR_TYPE = "error";

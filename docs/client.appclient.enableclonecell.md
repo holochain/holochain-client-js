@@ -7,7 +7,7 @@
 **Signature:**
 
 ```typescript
-enableCloneCell(args: EnableCloneCellRequest): Promise<EnableCloneCellResponse>;
+enableCloneCell(args: EnableCloneCellPayload): Promise<ClonedCell>;
 ```
 
 ## Parameters
@@ -35,7 +35,7 @@ args
 
 </td><td>
 
-[EnableCloneCellRequest](./client.enableclonecellrequest.md)
+[EnableCloneCellPayload](./client.enableclonecellpayload.md)
 
 
 </td><td>
@@ -46,5 +46,5 @@ args
 
 **Returns:**
 
-Promise&lt;[EnableCloneCellResponse](./client.enableclonecellresponse.md)<!-- -->&gt;
+Promise&lt;[ClonedCell](./client.clonedcell.md)<!-- -->&gt;
 

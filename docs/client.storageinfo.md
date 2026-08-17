@@ -2,54 +2,16 @@
 
 [Home](./index.md) &gt; [@holochain/client](./client.md) &gt; [StorageInfo](./client.storageinfo.md)
 
-## StorageInfo interface
+## StorageInfo type
 
+Response type for storage used by holochain and applications
 
 **Signature:**
 
 ```typescript
-export interface StorageInfo 
+export type StorageInfo = {
+    blobs: Array<StorageBlob>;
+};
 ```
-
-## Properties
-
-<table><thead><tr><th>
-
-Property
-
-
-</th><th>
-
-Modifiers
-
-
-</th><th>
-
-Type
-
-
-</th><th>
-
-Description
-
-
-</th></tr></thead>
-<tbody><tr><td>
-
-[blobs](./client.storageinfo.blobs.md)
-
-
-</td><td>
-
-
-</td><td>
-
-Array&lt;[DnaStorageBlob](./client.dnastorageblob.md)<!-- -->&gt;
-
-
-</td><td>
-
-
-</td></tr>
-</tbody></table>
+**References:** [StorageBlob](./client.storageblob.md)
 

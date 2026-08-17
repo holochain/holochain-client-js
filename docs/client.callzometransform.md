@@ -8,7 +8,7 @@
 **Signature:**
 
 ```typescript
-export type CallZomeTransform = Transformer<CallZomeRequest | CallZomeRequestSigned, Promise<CallZomeRequestSigned>, CallZomeResponseGeneric<Uint8Array>, CallZomeResponse>;
+export type CallZomeTransform = Transformer<CallZomeRequest | ZomeCallParamsSigned, Promise<ZomeCallParamsSigned>, CallZomeResponseGeneric<Uint8Array>, CallZomeResponse>;
 ```
-**References:** [Transformer](./client.transformer_2.md)<!-- -->, [CallZomeRequest](./client.callzomerequest.md)<!-- -->, [CallZomeRequestSigned](./client.callzomerequestsigned.md)<!-- -->, [CallZomeResponseGeneric](./client.callzomeresponsegeneric.md)<!-- -->, [CallZomeResponse](./client.callzomeresponse.md)
+**References:** [Transformer](./client.transformer_2.md)<!-- -->, [CallZomeRequest](./client.callzomerequest.md)<!-- -->, [ZomeCallParamsSigned](./client.zomecallparamssigned.md)<!-- -->, [CallZomeResponseGeneric](./client.callzomeresponsegeneric.md)<!-- -->, [CallZomeResponse](./client.callzomeresponse.md)
 

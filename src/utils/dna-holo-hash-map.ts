@@ -10,7 +10,7 @@ import {
   ExternalHash,
   WarrantHash,
   WasmHash,
-} from "../types.js";
+} from "../generated/types.js";
 import { HoloHashMap } from "./holo-hash-map.js";
 
 /**

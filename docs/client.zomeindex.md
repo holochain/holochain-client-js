@@ -4,7 +4,7 @@
 
 ## ZomeIndex type
 
-An internal zome index within the DNA, from 0 to 255.
+this id is an internal reference, which also serves as a canonical ordering for zome initialization. The value should be auto-generated from the Zome Bundle def
 
 **Signature:**
 

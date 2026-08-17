@@ -7,5 +7,5 @@
 **Signature:**
 
 ```typescript
-signal: Signal;
+signal: DecodedSignal;
 ```

@@ -7,5 +7,5 @@
 **Signature:**
 
 ```typescript
-listApps: Requester<ListAppsRequest, ListAppsResponse>;
+listApps: Requester<AdminRequestPayload<"list_apps">, Array<AppInfo>>;
 ```

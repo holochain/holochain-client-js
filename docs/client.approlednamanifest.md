@@ -4,16 +4,17 @@
 
 ## AppRoleDnaManifest type
 
+The DNA portion of an app role
 
 **Signature:**
 
 ```typescript
 export type AppRoleDnaManifest = {
-    path?: string;
-    modifiers?: Partial<DnaModifiers>;
-    installed_hash?: DnaHash;
+    path?: string | null;
+    modifiers?: DnaModifiersOpt<YamlProperties>;
+    installed_hash?: DnaHashB64 | null;
     clone_limit?: number;
 };
 ```
-**References:** [DnaModifiers](./client.dnamodifiers.md)<!-- -->, [DnaHash](./client.dnahash.md)
+**References:** [DnaModifiersOpt](./client.dnamodifiersopt.md)<!-- -->, [YamlProperties](./client.yamlproperties.md)<!-- -->, [DnaHashB64](./client.dnahashb64.md)
 

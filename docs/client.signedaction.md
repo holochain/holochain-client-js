@@ -2,71 +2,13 @@
 
 [Home](./index.md) &gt; [@holochain/client](./client.md) &gt; [SignedAction](./client.signedaction.md)
 
-## SignedAction interface
+## SignedAction type
 
 
 **Signature:**
 
 ```typescript
-export interface SignedAction 
+export type SignedAction = Signed<Action>;
 ```
-
-## Properties
-
-<table><thead><tr><th>
-
-Property
-
-
-</th><th>
-
-Modifiers
-
-
-</th><th>
-
-Type
-
-
-</th><th>
-
-Description
-
-
-</th></tr></thead>
-<tbody><tr><td>
-
-[data](./client.signedaction.data.md)
-
-
-</td><td>
-
-
-</td><td>
-
-[Action](./client.action.md)
-
-
-</td><td>
-
-
-</td></tr>
-<tr><td>
-
-[signature](./client.signedaction.signature.md)
-
-
-</td><td>
-
-
-</td><td>
-
-[Signature](./client.signature.md)
-
-
-</td><td>
-
-
-</td></tr>
-</tbody></table>
+**References:** [Signed](./client.signed.md)<!-- -->, [Action](./client.action.md)
 

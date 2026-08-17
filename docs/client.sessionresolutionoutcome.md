@@ -2,7 +2,7 @@
 
 [Home](./index.md) &gt; [@holochain/client](./client.md) &gt; [SessionResolutionOutcome](./client.sessionresolutionoutcome.md)
 
-## SessionResolutionOutcome interface
+## SessionResolutionOutcome type
 
 The outcome for a single agent who participated in a countersigning session.
 
@@ -11,69 +11,10 @@ The outcome for a single agent who participated in a countersigning session.
 **Signature:**
 
 ```typescript
-export interface SessionResolutionOutcome 
+export type SessionResolutionOutcome = {
+    agent: AgentPubKey;
+    decisions: Array<SessionCompletionDecision>;
+};
 ```
-
-## Properties
-
-<table><thead><tr><th>
-
-Property
-
-
-</th><th>
-
-Modifiers
-
-
-</th><th>
-
-Type
-
-
-</th><th>
-
-Description
-
-
-</th></tr></thead>
-<tbody><tr><td>
-
-[agent](./client.sessionresolutionoutcome.agent.md)
-
-
-</td><td>
-
-
-</td><td>
-
-[AgentPubKey](./client.agentpubkey.md)
-
-
-</td><td>
-
-The agent who participated in the countersigning session and is the subject of this resolution outcome.
-
-
-</td></tr>
-<tr><td>
-
-[decisions](./client.sessionresolutionoutcome.decisions.md)
-
-
-</td><td>
-
-
-</td><td>
-
-[SessionCompletionDecision](./client.sessioncompletiondecision.md)<!-- -->\[\]
-
-
-</td><td>
-
-The resolved decision for each authority for the subject agent.
-
-
-</td></tr>
-</tbody></table>
+**References:** [AgentPubKey](./client.agentpubkey.md)<!-- -->, [SessionCompletionDecision](./client.sessioncompletiondecision.md)
 

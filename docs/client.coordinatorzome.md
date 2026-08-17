@@ -8,7 +8,7 @@
 **Signature:**
 
 ```typescript
-export type CoordinatorZome = ZomeDefinition;
+export type CoordinatorZome = Zome<CoordinatorZomeDef>;
 ```
-**References:** [ZomeDefinition](./client.zomedefinition.md)
+**References:** [Zome](./client.zome.md)<!-- -->, [CoordinatorZomeDef](./client.coordinatorzomedef.md)
 

@@ -4,6 +4,7 @@
 
 ## DhtOp type
 
+Top-level DHT op.
 
 **Signature:**
 

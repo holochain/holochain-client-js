@@ -2,97 +2,18 @@
 
 [Home](./index.md) &gt; [@holochain/client](./client.md) &gt; [TransportStats](./client.transportstats.md)
 
-## TransportStats interface
+## TransportStats type
 
-Stats for a transport connection.
-
-This is intended to be a state dump that gives some insight into what the transport is doing.
+Mirror of `kitsune2_api::TransportStats`<!-- -->.
 
 **Signature:**
 
 ```typescript
-export interface TransportStats 
+export type TransportStats = {
+    backend: string;
+    peer_urls: Array<string>;
+    connections: Array<TransportConnectionStats>;
+};
 ```
-
-## Properties
-
-<table><thead><tr><th>
-
-Property
-
-
-</th><th>
-
-Modifiers
-
-
-</th><th>
-
-Type
-
-
-</th><th>
-
-Description
-
-
-</th></tr></thead>
-<tbody><tr><td>
-
-[backend](./client.transportstats.backend.md)
-
-
-</td><td>
-
-
-</td><td>
-
-string
-
-
-</td><td>
-
-The networking backend that is in use.
-
-
-</td></tr>
-<tr><td>
-
-[connections](./client.transportstats.connections.md)
-
-
-</td><td>
-
-
-</td><td>
-
-[TransportConnectionStats](./client.transportconnectionstats.md)<!-- -->\[\]
-
-
-</td><td>
-
-The list of current connections.
-
-
-</td></tr>
-<tr><td>
-
-[peer\_urls](./client.transportstats.peer_urls.md)
-
-
-</td><td>
-
-
-</td><td>
-
-string\[\]
-
-
-</td><td>
-
-The list of peer urls that this Kitsune2 instance can currently be reached at.
-
-
-</td></tr>
-</tbody></table>
+**References:** [TransportConnectionStats](./client.transportconnectionstats.md)
 

@@ -4,6 +4,7 @@
 
 ## ActionBase type
 
+Enum to mirror Action for all the shared data required to build session actions. Does NOT hold any agent specific information.
 
 **Signature:**
 

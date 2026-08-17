@@ -7,5 +7,5 @@
 **Signature:**
 
 ```typescript
-listAppInterfaces: Requester<ListAppInterfacesRequest, ListAppInterfacesResponse>;
+listAppInterfaces: Requester<void, Array<AppInterfaceInfo>>;
 ```

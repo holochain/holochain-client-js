@@ -9,7 +9,7 @@ Request network stats.
 **Signature:**
 
 ```typescript
-dumpNetworkStats(timeout?: number): Promise<DumpNetworkStatsResponse>;
+dumpNetworkStats(timeout?: number): Promise<HolochainTransportStats>;
 ```
 
 ## Parameters
@@ -50,7 +50,7 @@ _(Optional)_
 
 **Returns:**
 
-Promise&lt;[DumpNetworkStatsResponse](./client.dumpnetworkstatsresponse.md)<!-- -->&gt;
+Promise&lt;[HolochainTransportStats](./client.holochaintransportstats.md)<!-- -->&gt;
 
 The conductor's [TransportStats](./client.transportstats.md)<!-- -->.
 

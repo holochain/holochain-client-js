@@ -7,5 +7,5 @@
 **Signature:**
 
 ```typescript
-uninstallApp: Requester<UninstallAppRequest, UninstallAppResponse>;
+uninstallApp: Requester<AdminRequestPayload<"uninstall_app">, void>;
 ```

@@ -9,5 +9,5 @@ Revoke a zome call capability for an agent, which was previously granted using [
 **Signature:**
 
 ```typescript
-revokeZomeCallCapability: Requester<RevokeZomeCallCapabilityRequest, RevokeZomeCallCapabilityResponse>;
+revokeZomeCallCapability: Requester<AdminRequestPayload<"revoke_zome_call_capability">, void>;
 ```

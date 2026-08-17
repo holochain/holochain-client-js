@@ -8,9 +8,7 @@
 **Signature:**
 
 ```typescript
-export type MemproofMap = {
-    [key: RoleName]: MembraneProof;
-};
+export type MemproofMap = Record<string, MembraneProof>;
 ```
-**References:** [RoleName](./client.rolename.md)<!-- -->, [MembraneProof](./client.membraneproof.md)
+**References:** [MembraneProof](./client.membraneproof.md)
 

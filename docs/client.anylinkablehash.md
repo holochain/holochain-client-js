@@ -8,7 +8,7 @@
 **Signature:**
 
 ```typescript
-export type AnyLinkableHash = EntryHash | ActionHash | ExternalHash;
+export type AnyLinkableHash = HoloHash;
 ```
-**References:** [EntryHash](./client.entryhash.md)<!-- -->, [ActionHash](./client.actionhash.md)<!-- -->, [ExternalHash](./client.externalhash.md)
+**References:** [HoloHash](./client.holohash.md)
 

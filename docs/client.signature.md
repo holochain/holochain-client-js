@@ -4,6 +4,7 @@
 
 ## Signature type
 
+The raw bytes of a signature.
 
 **Signature:**
 

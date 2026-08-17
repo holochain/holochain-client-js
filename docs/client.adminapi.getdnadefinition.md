@@ -7,5 +7,5 @@
 **Signature:**
 
 ```typescript
-getDnaDefinition: Requester<GetDnaDefinitionRequest, GetDnaDefinitionResponse>;
+getDnaDefinition: Requester<CellId, DnaDef>;
 ```

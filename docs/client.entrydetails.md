@@ -2,139 +2,21 @@
 
 [Home](./index.md) &gt; [@holochain/client](./client.md) &gt; [EntryDetails](./client.entrydetails.md)
 
-## EntryDetails interface
+## EntryDetails type
 
+An Entry with all its metadata.
 
 **Signature:**
 
 ```typescript
-export interface EntryDetails 
+export type EntryDetails = {
+    entry: Entry;
+    actions: Array<SignedHashed<Action>>;
+    rejected_actions: Array<SignedHashed<Action>>;
+    deletes: Array<SignedHashed<Action>>;
+    updates: Array<SignedHashed<Action>>;
+    entry_dht_status: EntryDhtStatus;
+};
 ```
-
-## Properties
-
-<table><thead><tr><th>
-
-Property
-
-
-</th><th>
-
-Modifiers
-
-
-</th><th>
-
-Type
-
-
-</th><th>
-
-Description
-
-
-</th></tr></thead>
-<tbody><tr><td>
-
-[actions](./client.entrydetails.actions.md)
-
-
-</td><td>
-
-
-</td><td>
-
-Array&lt;[SignedActionHashed](./client.signedactionhashed.md)<!-- -->&gt;
-
-
-</td><td>
-
-
-</td></tr>
-<tr><td>
-
-[deletes](./client.entrydetails.deletes.md)
-
-
-</td><td>
-
-
-</td><td>
-
-Array&lt;[SignedActionHashed](./client.signedactionhashed.md)<!-- -->&gt;
-
-
-</td><td>
-
-
-</td></tr>
-<tr><td>
-
-[entry\_dht\_status](./client.entrydetails.entry_dht_status.md)
-
-
-</td><td>
-
-
-</td><td>
-
-[EntryDhtStatus](./client.entrydhtstatus.md)
-
-
-</td><td>
-
-
-</td></tr>
-<tr><td>
-
-[entry](./client.entrydetails.entry.md)
-
-
-</td><td>
-
-
-</td><td>
-
-[Entry](./client.entry.md)
-
-
-</td><td>
-
-
-</td></tr>
-<tr><td>
-
-[rejected\_actions](./client.entrydetails.rejected_actions.md)
-
-
-</td><td>
-
-
-</td><td>
-
-Array&lt;[SignedActionHashed](./client.signedactionhashed.md)<!-- -->&gt;
-
-
-</td><td>
-
-
-</td></tr>
-<tr><td>
-
-[updates](./client.entrydetails.updates.md)
-
-
-</td><td>
-
-
-</td><td>
-
-Array&lt;[SignedActionHashed](./client.signedactionhashed.md)<!-- -->&gt;
-
-
-</td><td>
-
-
-</td></tr>
-</tbody></table>
+**References:** [Entry](./client.entry.md)<!-- -->, [SignedHashed](./client.signedhashed.md)<!-- -->, [Action](./client.action.md)<!-- -->, [EntryDhtStatus](./client.entrydhtstatus.md)
 

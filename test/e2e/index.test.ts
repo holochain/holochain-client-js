@@ -6,27 +6,23 @@ import { assert, test } from "vitest";
 import zlib from "zlib";
 import {
   ActionHash,
-  ActionType,
   AdminWebsocket,
+  AgentActivity,
   AppBundle,
   AppEntryDef,
-  AppStatusFilter,
   AppWebsocket,
   CallZomeRequest,
-  CellProvisioningStrategy,
   CellType,
   ChainOp,
   ChainOpType,
   CloneIdHelper,
-  CreateCloneCellRequest,
-  DumpStateResponse,
+  CreateCloneCellPayload,
+  DecodedSignal,
   FullStateDump,
   HolochainError,
   Link,
   ProvisionedCell,
-  RegisterAgentActivity,
   RoleName,
-  Signal,
   SignalType,
   decodeHashFromBase64,
   encodeHashToBase64,
@@ -58,6 +54,18 @@ import {
 
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
+const ALL_CHAIN_OP_TYPES: ChainOpType[] = [
+  "CreateRecord",
+  "CreateEntry",
+  "AgentActivity",
+  "UpdateEntry",
+  "UpdateRecord",
+  "DeleteRecord",
+  "DeleteEntry",
+  "CreateLink",
+  "DeleteLink",
+];
+
 const fakeAgentPubKey = () =>
   Buffer.from(
     [0x84, 0x20, 0x24].concat(
@@ -83,24 +91,24 @@ test(
     assert.equal(allAppsInfo.length, 1, "all apps listed");
 
     const disabledAppsInfo = await admin_ws.listApps({
-      status_filter: AppStatusFilter.Disabled,
+      status_filter: "disabled",
     });
     assert.equal(disabledAppsInfo.length, 0, "0 disabled app");
 
     const activeApps = await admin_ws.listApps({
-      status_filter: AppStatusFilter.Enabled,
+      status_filter: "enabled",
     });
     assert.equal(activeApps.length, 1);
     assert.equal(activeApps[0].installed_app_id, installed_app_id);
 
     const runningAppsInfo = await admin_ws.listApps({
-      status_filter: AppStatusFilter.Enabled,
+      status_filter: "enabled",
     });
     const disabledAppsInfo2 = await admin_ws.listApps({
-      status_filter: AppStatusFilter.Disabled,
+      status_filter: "disabled",
     });
     const pausedAppsInfo2 = await admin_ws.listApps({
-      status_filter: AppStatusFilter.Disabled,
+      status_filter: "disabled",
     });
     assert.equal(pausedAppsInfo2.length, 0);
     assert.equal(disabledAppsInfo2.length, 0);
@@ -115,10 +123,10 @@ test(
     await admin_ws.disableApp({ installed_app_id });
 
     const runningAppsInfo3 = await admin_ws.listApps({
-      status_filter: AppStatusFilter.Enabled,
+      status_filter: "enabled",
     });
     const disabledAppsInfo3 = await admin_ws.listApps({
-      status_filter: AppStatusFilter.Disabled,
+      status_filter: "disabled",
     });
     assert.equal(runningAppsInfo3.length, 0);
     assert.equal(disabledAppsInfo3.length, 1);
@@ -131,7 +139,7 @@ test(
     assert.equal(dnas.length, 1);
 
     const activeApps3 = await admin_ws.listApps({
-      status_filter: AppStatusFilter.Enabled,
+      status_filter: "enabled",
     });
     assert.equal(activeApps3.length, 0);
     // NB: missing dumpState because it requires a valid cell_id
@@ -148,7 +156,7 @@ test(
     const { admin_ws, installed_app_id, app_ws } = testCase;
     const installedApp = await app_ws.appInfo();
     const runningApps1 = await admin_ws.listApps({
-      status_filter: AppStatusFilter.Enabled,
+      status_filter: "enabled",
     });
     assert.equal(runningApps1.length, 1);
 
@@ -157,7 +165,7 @@ test(
     assert.equal(enabledAppInfo.installed_app_id, installed_app_id);
 
     const runningApps2 = await admin_ws.listApps({
-      status_filter: AppStatusFilter.Enabled,
+      status_filter: "enabled",
     });
     assert.equal(runningApps2.length, 1);
     assert.equal(runningApps2[0].installed_app_id, installed_app_id);
@@ -184,7 +192,7 @@ test(
     assert.equal(dnas.length, 1);
 
     const activeApps3 = await admin_ws.listApps({
-      status_filter: AppStatusFilter.Enabled,
+      status_filter: "enabled",
     });
     assert.equal(activeApps3.length, 0);
   }),
@@ -470,7 +478,7 @@ test("memproofs can be provided after app installation", async () => {
           {
             name: role_name,
             provisioning: {
-              strategy: CellProvisioningStrategy.Create,
+              strategy: "create",
               deferred: false,
             },
             dna: {
@@ -638,11 +646,13 @@ test(
     const response = await app_ws.callZome(zomeCallPayload);
     assert.equal(response, "foo");
 
-    const state: DumpStateResponse = await admin_ws.dumpState({
+    // `dumpState` resolves to a `[dump, summary]` tuple.
+    const [dump, summary] = await admin_ws.dumpState({
       cell_id: (info.cell_info[ROLE_NAME][0].value as ProvisionedCell).cell_id,
     });
-    assert.equal(state[0].source_chain_dump.records.length, 6);
-    assert.equal(state[0].source_chain_dump.records[0].action.data.type, "Dna");
+    assert.equal(dump.source_chain_dump.records.length, 6);
+    assert.equal(dump.source_chain_dump.records[0].action.data.type, "Dna");
+    assert.equal(typeof summary, "string");
   }),
 );
 
@@ -683,7 +693,7 @@ test(
 
     // Ops are integrated asynchronously after the zome calls return, so poll
     // until every ChainOpType shows up in the integration dump.
-    const allOpTypes = Object.values(ChainOpType);
+    const allOpTypes = ALL_CHAIN_OP_TYPES;
     let integrated: FullStateDump["integration_dump"]["integrated"] = [];
     const seenOpTypes = new Set<ChainOpType>();
     for (let attempt = 0; attempt < 30; attempt += 1) {
@@ -724,25 +734,23 @@ test(
 
       const entry = getChainOpEntry(chainOp);
       const entryType =
-        action.data.type === ActionType.Create ||
-        action.data.type === ActionType.Update
+        action.data.type === "Create" || action.data.type === "Update"
           ? action.data.entry_type
           : undefined;
       const isPublicAppEntry =
         typeof entryType === "object" &&
         entryType.App.visibility === "Public" &&
-        (opType === ChainOpType.CreateEntry ||
-          opType === ChainOpType.UpdateEntry);
+        (opType === "CreateEntry" || opType === "UpdateEntry");
       if (isPublicAppEntry) {
         assert.isDefined(entry, `${opType} op carries its public app entry`);
         publicAppEntriesSeen += 1;
       }
       if (
-        opType === ChainOpType.AgentActivity ||
-        opType === ChainOpType.DeleteEntry ||
-        opType === ChainOpType.DeleteRecord ||
-        opType === ChainOpType.CreateLink ||
-        opType === ChainOpType.DeleteLink
+        opType === "AgentActivity" ||
+        opType === "DeleteEntry" ||
+        opType === "DeleteRecord" ||
+        opType === "CreateLink" ||
+        opType === "DeleteLink"
       ) {
         assert.isUndefined(entry, `${opType} op carries no entry`);
       }
@@ -763,13 +771,13 @@ test(
     const signalReceivedPromise = new Promise(
       (resolve) => (resolveSignalPromise = resolve),
     );
-    const signalCb = (signal: Signal) => {
+    const signalCb = (signal: DecodedSignal) => {
       assert(signal.type === SignalType.App);
-      assert.deepEqual(signal.value, {
-        cell_id,
-        zome_name: TEST_ZOME_NAME,
-        payload: "i am a signal",
-      });
+      assert.deepEqual(signal.value.cell_id, cell_id);
+      assert.equal(signal.value.zome_name, TEST_ZOME_NAME);
+      // The client decodes the app signal payload before handing it to the
+      // listener, so this field carries the decoded value, not the wire bytes.
+      assert.equal(signal.value.signal, "i am a signal");
       resolveSignalPromise();
     };
     await admin_ws.authorizeSigningCredentials(cell_id);
@@ -1137,7 +1145,7 @@ test(
       fn_name: "create_and_delete_link",
       payload: null,
     });
-    const activity: RegisterAgentActivity[] = await app_ws.callZome({
+    const activity: AgentActivity[] = await app_ws.callZome({
       cell_id,
       provenance: cell_id[1],
       zome_name: TEST_ZOME_NAME,
@@ -1147,19 +1155,16 @@ test(
     const lastAction = activity[0];
     assert.equal(
       lastAction.action.hashed.content.data.type,
-      ActionType.DeleteLink,
+      "DeleteLink",
       "last action is DeleteLink",
     );
     const secondLastAction = activity[1];
     assert.equal(
       secondLastAction.action.hashed.content.data.type,
-      ActionType.CreateLink,
+      "CreateLink",
       "second last action is CreateLink",
     );
-    assert(
-      secondLastAction.action.hashed.content.data.type ===
-        ActionType.CreateLink,
-    );
+    assert(secondLastAction.action.hashed.content.data.type === "CreateLink");
     assert.equal(
       secondLastAction.action.hashed.content.data.link_type,
       0,
@@ -1266,7 +1271,7 @@ test(
     const appInfo = await app_ws.appInfo();
     assert(appInfo);
 
-    const createCloneCellParams: CreateCloneCellRequest = {
+    const createCloneCellParams: CreateCloneCellPayload = {
       role_name: ROLE_NAME,
       modifiers: {
         network_seed: "clone-0",
@@ -1303,7 +1308,7 @@ test(
   "can disable a clone cell",
   withApp(async (testCase) => {
     const { app_ws, admin_ws } = testCase;
-    const createCloneCellParams: CreateCloneCellRequest = {
+    const createCloneCellParams: CreateCloneCellPayload = {
       role_name: ROLE_NAME,
       modifiers: {
         network_seed: "clone-0",
@@ -1347,7 +1352,7 @@ test(
   "can enable a disabled clone cell",
   withApp(async (testCase) => {
     const { app_ws, admin_ws } = testCase;
-    const createCloneCellParams: CreateCloneCellRequest = {
+    const createCloneCellParams: CreateCloneCellPayload = {
       role_name: ROLE_NAME,
       modifiers: {
         network_seed: "clone-0",
@@ -1392,7 +1397,7 @@ test(
   "can delete archived clone cells of an app",
   withApp(async (testCase) => {
     const { app_ws, admin_ws, installed_app_id } = testCase;
-    const createCloneCellParams: CreateCloneCellRequest = {
+    const createCloneCellParams: CreateCloneCellPayload = {
       role_name: ROLE_NAME,
       modifiers: {
         network_seed: "clone-0",
@@ -1548,7 +1553,33 @@ test("can dump network stats", () => {
     assert.equal(pubKeyBytes.length, 47);
 
     const appWsResponse = await app_ws.dumpNetworkStats();
-    assert.deepEqual(appWsResponse, adminWsResponse);
+
+    // admin_ws and app_ws report on the same underlying connection, but
+    // send/recv counters keep advancing between the two calls (e.g. from
+    // gossip/heartbeat traffic), so compare connection identity exactly
+    // and only assert the counters didn't go backwards.
+    assert.equal(
+      appWsResponse.transport_stats.backend,
+      adminWsResponse.transport_stats.backend,
+    );
+    assert.deepEqual(
+      appWsResponse.transport_stats.peer_urls,
+      adminWsResponse.transport_stats.peer_urls,
+    );
+    assert.equal(
+      appWsResponse.transport_stats.connections.length,
+      adminWsResponse.transport_stats.connections.length,
+    );
+
+    const adminConn = adminWsResponse.transport_stats.connections[0];
+    const appConn = appWsResponse.transport_stats.connections[0];
+    assert.equal(appConn.pub_key, adminConn.pub_key);
+    assert.equal(appConn.is_direct, adminConn.is_direct);
+    assert.equal(appConn.opened_at_s, adminConn.opened_at_s);
+    assert.isOk(appConn.send_bytes >= adminConn.send_bytes);
+    assert.isOk(appConn.send_message_count >= adminConn.send_message_count);
+    assert.isOk(appConn.recv_bytes >= adminConn.recv_bytes);
+    assert.isOk(appConn.recv_message_count >= adminConn.recv_message_count);
   })();
 });
 

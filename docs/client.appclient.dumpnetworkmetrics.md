@@ -7,7 +7,7 @@
 **Signature:**
 
 ```typescript
-dumpNetworkMetrics(args: DumpNetworkMetricsRequest): Promise<DumpNetworkMetricsResponse>;
+dumpNetworkMetrics(args: AppRequestPayload<"dump_network_metrics">): Promise<NetworkMetricsMap>;
 ```
 
 ## Parameters
@@ -35,7 +35,7 @@ args
 
 </td><td>
 
-[DumpNetworkMetricsRequest](./client.dumpnetworkmetricsrequest.md)
+[AppRequestPayload](./client.apprequestpayload.md)<!-- -->&lt;"dump\_network\_metrics"&gt;
 
 
 </td><td>
@@ -46,5 +46,5 @@ args
 
 **Returns:**
 
-Promise&lt;[DumpNetworkMetricsResponse](./client.dumpnetworkmetricsresponse.md)<!-- -->&gt;
+Promise&lt;[NetworkMetricsMap](./client.networkmetricsmap.md)<!-- -->&gt;
 

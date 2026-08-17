@@ -9,5 +9,5 @@ Request all available info about an agent.
 **Signature:**
 
 ```typescript
-agentInfo: Requester<AgentInfoRequest, AgentInfoResponse>;
+agentInfo: Requester<AdminRequestPayload<"agent_info">, Array<string>>;
 ```

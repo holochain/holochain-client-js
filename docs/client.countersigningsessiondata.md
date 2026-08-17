@@ -2,71 +2,18 @@
 
 [Home](./index.md) &gt; [@holochain/client](./client.md) &gt; [CounterSigningSessionData](./client.countersigningsessiondata.md)
 
-## CounterSigningSessionData interface
+## CounterSigningSessionData type
 
+All the data required for a countersigning session.
 
 **Signature:**
 
 ```typescript
-export interface CounterSigningSessionData 
+export type CounterSigningSessionData = {
+    preflight_request: PreflightRequest;
+    responses: Array<[CounterSigningAgentState, Signature]>;
+    optional_responses: Array<[CounterSigningAgentState, Signature]>;
+};
 ```
-
-## Properties
-
-<table><thead><tr><th>
-
-Property
-
-
-</th><th>
-
-Modifiers
-
-
-</th><th>
-
-Type
-
-
-</th><th>
-
-Description
-
-
-</th></tr></thead>
-<tbody><tr><td>
-
-[preflight\_request](./client.countersigningsessiondata.preflight_request.md)
-
-
-</td><td>
-
-
-</td><td>
-
-[PreflightRequest](./client.preflightrequest.md)
-
-
-</td><td>
-
-
-</td></tr>
-<tr><td>
-
-[responses](./client.countersigningsessiondata.responses.md)
-
-
-</td><td>
-
-
-</td><td>
-
-Array&lt;\[[CountersigningAgentState](./client.countersigningagentstate.md)<!-- -->, [Signature](./client.signature.md)<!-- -->\]&gt;
-
-
-</td><td>
-
-
-</td></tr>
-</tbody></table>
+**References:** [PreflightRequest](./client.preflightrequest.md)<!-- -->, [CounterSigningAgentState](./client.countersigningagentstate.md)<!-- -->, [Signature](./client.signature.md)
 

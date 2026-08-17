@@ -7,5 +7,5 @@
 **Signature:**
 
 ```typescript
-generateAgentPubKey: Requester<GenerateAgentPubKeyRequest, GenerateAgentPubKeyResponse>;
+generateAgentPubKey: Requester<void, AgentPubKey>;
 ```

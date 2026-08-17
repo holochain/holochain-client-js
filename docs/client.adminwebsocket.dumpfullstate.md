@@ -9,5 +9,5 @@ Dump the full state of the specified cell, including its chain and DHT shard, as
 **Signature:**
 
 ```typescript
-dumpFullState: Requester<DumpFullStateRequest, DumpFullStateResponse>;
+dumpFullState: Requester<AdminRequestPayload<"dump_full_state">, FullStateDump>;
 ```

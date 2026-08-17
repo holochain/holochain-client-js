@@ -4,17 +4,21 @@
 
 ## AppInfo type
 
+Info about an installed app, returned as part of \[`AppResponse::AppInfo`<!-- -->\]
 
 **Signature:**
 
 ```typescript
 export type AppInfo = {
-    agent_pub_key: AgentPubKey;
-    installed_app_id: InstalledAppId;
-    cell_info: Record<RoleName, Array<CellInfo>>;
+    installed_app_id: string;
+    cell_info: {
+        [key in string]: Array<CellInfo>;
+    };
     status: AppStatus;
+    agent_pub_key: AgentPubKey;
+    manifest: AppManifest;
     installed_at: Timestamp;
 };
 ```
-**References:** [AgentPubKey](./client.agentpubkey.md)<!-- -->, [InstalledAppId](./client.installedappid.md)<!-- -->, [RoleName](./client.rolename.md)<!-- -->, [CellInfo](./client.cellinfo.md)<!-- -->, [AppStatus](./client.appstatus.md)<!-- -->, [Timestamp](./client.timestamp.md)
+**References:** [CellInfo](./client.cellinfo.md)<!-- -->, [AppStatus](./client.appstatus.md)<!-- -->, [AgentPubKey](./client.agentpubkey.md)<!-- -->, [AppManifest](./client.appmanifest.md)<!-- -->, [Timestamp](./client.timestamp.md)
 

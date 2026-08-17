@@ -44,7 +44,7 @@ Description
 
 </td><td>
 
-[Signal](./client.signal.md)
+[DecodedSignal](./client.decodedsignal.md)
 
 
 </td><td>

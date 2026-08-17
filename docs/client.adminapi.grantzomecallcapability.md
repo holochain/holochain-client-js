@@ -7,5 +7,5 @@
 **Signature:**
 
 ```typescript
-grantZomeCallCapability: Requester<GrantZomeCallCapabilityRequest, GrantZomeCallCapabilityResponse>;
+grantZomeCallCapability: Requester<GrantZomeCallCapabilityPayload, ActionHash>;
 ```

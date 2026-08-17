@@ -4,14 +4,12 @@
 
 ## AppBundle type
 
+A bundle of an AppManifest and collection of DNAs
 
 **Signature:**
 
 ```typescript
-export type AppBundle = {
-    manifest: AppManifest;
-    resources: ResourceMap;
-};
+export type AppBundle = Bundle<AppManifest>;
 ```
-**References:** [AppManifest](./client.appmanifest.md)<!-- -->, [ResourceMap](./client.resourcemap.md)
+**References:** [Bundle](./client.bundle.md)<!-- -->, [AppManifest](./client.appmanifest.md)
 

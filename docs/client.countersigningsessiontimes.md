@@ -2,71 +2,17 @@
 
 [Home](./index.md) &gt; [@holochain/client](./client.md) &gt; [CounterSigningSessionTimes](./client.countersigningsessiontimes.md)
 
-## CounterSigningSessionTimes interface
+## CounterSigningSessionTimes type
 
+Every countersigning session must complete a full set of actions between the start and end times to be valid.
 
 **Signature:**
 
 ```typescript
-export interface CounterSigningSessionTimes 
+export type CounterSigningSessionTimes = {
+    start: Timestamp;
+    end: Timestamp;
+};
 ```
-
-## Properties
-
-<table><thead><tr><th>
-
-Property
-
-
-</th><th>
-
-Modifiers
-
-
-</th><th>
-
-Type
-
-
-</th><th>
-
-Description
-
-
-</th></tr></thead>
-<tbody><tr><td>
-
-[end](./client.countersigningsessiontimes.end.md)
-
-
-</td><td>
-
-
-</td><td>
-
-[Timestamp](./client.timestamp.md)
-
-
-</td><td>
-
-
-</td></tr>
-<tr><td>
-
-[start](./client.countersigningsessiontimes.start.md)
-
-
-</td><td>
-
-
-</td><td>
-
-[Timestamp](./client.timestamp.md)
-
-
-</td><td>
-
-
-</td></tr>
-</tbody></table>
+**References:** [Timestamp](./client.timestamp.md)
 

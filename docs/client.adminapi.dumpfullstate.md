@@ -7,5 +7,5 @@
 **Signature:**
 
 ```typescript
-dumpFullState: Requester<DumpFullStateRequest, DumpFullStateResponse>;
+dumpFullState: Requester<AdminRequestPayload<"dump_full_state">, FullStateDump>;
 ```

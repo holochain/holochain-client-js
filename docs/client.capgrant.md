@@ -4,6 +4,13 @@
 
 ## CapGrant type
 
+Represents a \_potentially\_ valid access grant to a zome call. Zome call response will be Unauthorized without a valid grant.
+
+The CapGrant is not always a dedicated entry in the chain. Notably AgentPubKey entries in the current chain act like root access to local zome calls.
+
+A `CapGrant` is valid if it matches the function, agent and secret for a given zome call.
+
+See `.is_valid()`
 
 **Signature:**
 

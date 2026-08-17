@@ -7,9 +7,9 @@
 **Signature:**
 
 ```typescript
-dumpNetworkStats(): Promise<DumpNetworkStatsResponse>;
+dumpNetworkStats(): Promise<HolochainTransportStats>;
 ```
 **Returns:**
 
-Promise&lt;[DumpNetworkStatsResponse](./client.dumpnetworkstatsresponse.md)<!-- -->&gt;
+Promise&lt;[HolochainTransportStats](./client.holochaintransportstats.md)<!-- -->&gt;
 

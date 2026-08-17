@@ -7,5 +7,5 @@
 **Signature:**
 
 ```typescript
-installApp: Requester<InstallAppRequest, InstallAppResponse>;
+installApp: Requester<InstallAppPayload, AppInfo>;
 ```

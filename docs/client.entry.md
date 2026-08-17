@@ -4,11 +4,27 @@
 
 ## Entry type
 
+Structure holding the entry portion of a chain record.
 
 **Signature:**
 
 ```typescript
-export type Entry = EntryContent<"Agent", AgentPubKey> | EntryContent<"App", Uint8Array> | EntryContent<"CounterSign", [CounterSigningSessionData, Uint8Array]> | EntryContent<"CapGrant", ZomeCallCapGrant> | EntryContent<"CapClaim", CapClaim>;
+export type Entry = {
+    entry_type: "Agent";
+    entry: AgentPubKey;
+} | {
+    entry_type: "App";
+    entry: AppEntryBytes;
+} | {
+    entry_type: "CounterSign";
+    entry: [CounterSigningSessionData, AppEntryBytes];
+} | {
+    entry_type: "CapClaim";
+    entry: CapClaim;
+} | {
+    entry_type: "CapGrant";
+    entry: ZomeCallCapGrant;
+};
 ```
-**References:** [EntryContent](./client.entrycontent.md)<!-- -->, [AgentPubKey](./client.agentpubkey.md)<!-- -->, [CounterSigningSessionData](./client.countersigningsessiondata.md)<!-- -->, [ZomeCallCapGrant](./client.zomecallcapgrant.md)<!-- -->, [CapClaim](./client.capclaim.md)
+**References:** [AgentPubKey](./client.agentpubkey.md)<!-- -->, [AppEntryBytes](./client.appentrybytes.md)<!-- -->, [CounterSigningSessionData](./client.countersigningsessiondata.md)<!-- -->, [CapClaim](./client.capclaim.md)<!-- -->, [ZomeCallCapGrant](./client.zomecallcapgrant.md)
 

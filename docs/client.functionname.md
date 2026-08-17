@@ -4,6 +4,7 @@
 
 ## FunctionName type
 
+A single function name.
 
 **Signature:**
 

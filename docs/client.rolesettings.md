@@ -4,6 +4,7 @@
 
 ## RoleSettings type
 
+Settings for a Role that may be passed on installation of an app
 
 **Signature:**
 
@@ -16,10 +17,11 @@ export type RoleSettings = {
 } | {
     type: "provisioned";
     value: {
-        membrane_proof?: MembraneProof;
-        modifiers?: DnaModifiersOpt;
+        membrane_proof?: MembraneProof | null;
+        modifiers?: DnaModifiersOpt<YamlProperties> | null;
+        init_properties?: InitProperties | null;
     };
 };
 ```
-**References:** [CellId](./client.cellid.md)<!-- -->, [MembraneProof](./client.membraneproof.md)<!-- -->, [DnaModifiersOpt](./client.dnamodifiersopt.md)
+**References:** [CellId](./client.cellid.md)<!-- -->, [MembraneProof](./client.membraneproof.md)<!-- -->, [DnaModifiersOpt](./client.dnamodifiersopt.md)<!-- -->, [YamlProperties](./client.yamlproperties.md)<!-- -->, [InitProperties](./client.initproperties.md)
 

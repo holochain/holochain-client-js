@@ -7,5 +7,5 @@
 **Signature:**
 
 ```typescript
-listDnas: Requester<ListDnasRequest, ListDnasResponse>;
+listDnas: Requester<void, Array<DnaHash>>;
 ```

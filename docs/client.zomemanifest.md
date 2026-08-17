@@ -4,16 +4,17 @@
 
 ## ZomeManifest type
 
+Manifest for an individual Zome
 
 **Signature:**
 
 ```typescript
 export type ZomeManifest = {
-    name: string;
+    name: ZomeName;
+    hash?: WasmHashB64 | null;
     path: string;
-    hash?: string;
-    dependencies?: ZomeDependency[];
+    dependencies?: Array<ZomeDependency> | null;
 };
 ```
-**References:** [ZomeDependency](./client.zomedependency.md)
+**References:** [ZomeName](./client.zomename.md)<!-- -->, [WasmHashB64](./client.wasmhashb64.md)<!-- -->, [ZomeDependency](./client.zomedependency.md)
 
