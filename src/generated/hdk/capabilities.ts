@@ -8,48 +8,21 @@ import type {
 } from "../types.js";
 
 /**
- * Represents access requirements for capability grants.
+ * Represents an attempt to access capabilities.
+ *
+ * Either a local agent is claiming to be the author of a source chain, and therefore gets
+ * unrestricted access implicitly. Or a remote agent is attempting an operation with a
+ * [`CapGrant`].
+ *
+ * In either case, Holochain checks the calling agent and requested capability against the
+ * [`CapAccess`] instance to determine whether to allow access. If access is denied, an
+ * unauthorized response is expected.
+ *
+ * See [`CapAccess::is_valid_for_zome_call`] to see how these checks are made.
  * @public
  */
 export type CapAccess =
-  | { type: "unrestricted" }
-  | {
-      type: "transferable";
-      value: {
-        /**
-         * The secret.
-         */
-        secret: CapSecret;
-      };
-    }
-  | {
-      type: "assigned";
-      value: {
-        /**
-         * The secret.
-         */
-        secret: CapSecret;
-        /**
-         * Agents who can use this grant.
-         */
-        assignees: Array<AgentPubKey>;
-      };
-    };
-
-/**
- * Represents access info for capability grants .
- * @public
- */
-export type CapAccessInfo = {
-  /**
-   * The access type.
-   */
-  access_type: string;
-  /**
-   * Agents who can use this grant.
-   */
-  assignees: Array<AgentPubKey> | null;
-};
+  { ChainAuthor: AgentPubKey } | { RemoteAgent: CapGrant };
 
 /**
  * System entry to hold a capability token claim for use as a caller.
@@ -77,19 +50,28 @@ export type CapClaim = {
 };
 
 /**
- * Represents a _potentially_ valid access grant to a zome call.
- * Zome call response will be Unauthorized without a valid grant.
+ * The entry for a capability grant.
  *
- * The CapGrant is not always a dedicated entry in the chain.
- * Notably AgentPubKey entries in the current chain act like root access to local zome calls.
- *
- * A `CapGrant` is valid if it matches the function, agent and secret for a given zome call.
- *
- * See `.is_valid()`
+ * This data is committed to the callee's source chain as a private entry. The remote calling
+ * agent must provide a secret and we source their pubkey from the active network connection.
+ * This must match the strictness of the [`GrantConstraint`].
  * @public
  */
-export type CapGrant =
-  { ChainAuthor: AgentPubKey } | { RemoteAgent: ZomeCallCapGrant };
+export type CapGrant = {
+  /**
+   * A string by which to later query for saved grants.
+   * This does not need to be unique within a source chain.
+   */
+  tag: string;
+  /**
+   * Specifies who may claim this capability, and by what means
+   */
+  constraint: GrantConstraint;
+  /**
+   * The capability to be granted.
+   */
+  capability: Capability;
+};
 
 /**
  * Information about a capability grant.
@@ -97,10 +79,9 @@ export type CapGrant =
  */
 export type CapGrantInfo = {
   /**
-   * Specifies the capability, consisting of zomes and functions to allow
-   * signing for as well as access level, secret and assignees.
+   * The granted capability and its constraint, with secrets removed.
    */
-  cap_grant: DesensitizedZomeCallCapGrant;
+  cap_grant: DesensitizedCapGrant;
   /**
    * The action hash of the grant.
    */
@@ -127,24 +108,77 @@ export type CapGrantInfo = {
 export type CapSecret = Uint8Array;
 
 /**
- * The outbound DTO of a ZomeCall capability grant info request.
- * CapAccess secrets are omitted, Access types and assignees are provided under CapAccessInfo.
+ * The capability to grant in a [`CapGrant`].
  * @public
  */
-export type DesensitizedZomeCallCapGrant = {
+export type Capability =
+  { type: "zome_call"; value: ZomeCallGrant } | { type: "direct_signal" };
+
+/**
+ * The outbound data transfer object of a [`CapGrant`].
+ *
+ * [`GrantConstraint`] secrets are omitted, access types and assignees are provided under
+ * [`GrantConstraintInfo`].
+ * @public
+ */
+export type DesensitizedCapGrant = {
   /**
    * A string by which to later query for saved grants.
    * This does not need to be unique within a source chain.
    */
   tag: string;
   /**
-   * Specifies who may claim this capability, and by what means omitting secrets
+   * Equivalent to the [`GrantConstraint`] type but with secrets removed.
    */
-  access: CapAccessInfo;
+  constraint: GrantConstraintInfo;
   /**
-   * Set of functions to which this capability grants ZomeCall access
+   * The capability that is granted.
    */
-  functions: GrantedFunctions;
+  capability: Capability;
+};
+
+/**
+ * Represents the constraints on the use of a capability grant.
+ * @public
+ */
+export type GrantConstraint =
+  | { type: "unrestricted" }
+  | {
+      type: "transferable";
+      value: {
+        /**
+         * The secret.
+         */
+        secret: CapSecret;
+      };
+    }
+  | {
+      type: "assigned";
+      value: {
+        /**
+         * The secret.
+         */
+        secret: CapSecret;
+        /**
+         * Agents who can use this grant.
+         */
+        assignees: Array<AgentPubKey>;
+      };
+    };
+
+/**
+ * Represents [`GrantConstraint`] info for capability grants, with secrets removed.
+ * @public
+ */
+export type GrantConstraintInfo = {
+  /**
+   * The access type.
+   */
+  access_type: string;
+  /**
+   * Agents who can use this grant.
+   */
+  assignees: Array<AgentPubKey> | null;
 };
 
 /**
@@ -160,22 +194,10 @@ export type GrantedFunctions =
   { type: "all" } | { type: "listed"; value: Array<GrantedFunction> };
 
 /**
- * The entry for the ZomeCall capability grant.
- * This data is committed to the callee's source chain as a private entry.
- * The remote calling agent must provide a secret and we source their pubkey from the active
- * network connection. This must match the strictness of the CapAccess.
+ * The inner properties of a [`Capability::ZomeCall`].
  * @public
  */
-export type ZomeCallCapGrant = {
-  /**
-   * A string by which to later query for saved grants.
-   * This does not need to be unique within a source chain.
-   */
-  tag: string;
-  /**
-   * Specifies who may claim this capability, and by what means
-   */
-  access: CapAccess;
+export type ZomeCallGrant = {
   /**
    * Set of functions to which this capability grants ZomeCall access
    */
