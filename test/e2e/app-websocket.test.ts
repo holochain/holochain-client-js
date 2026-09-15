@@ -268,11 +268,13 @@ test(
       cell_id,
       cap_grant: {
         tag: "test-grant",
-        access: {
+        constraint: {
           type: "unrestricted",
         },
-        functions: {
-          type: "all",
+        grant: {
+          functions: {
+            type: "all",
+          },
         },
       },
     };
@@ -293,8 +295,12 @@ test(
     assert.equal(grants.length, 2, "should have 2 grants");
     const capGrantInfo = grants[1];
     assert.equal(capGrantInfo.cap_grant.tag, "test-grant", "grant tag matches");
+    assert(
+      capGrantInfo.cap_grant.capability.type === "zome_call",
+      "cap grant is type zome call",
+    );
     assert.equal(
-      capGrantInfo.cap_grant.functions.type,
+      capGrantInfo.cap_grant.capability.value.functions.type,
       "all",
       "grant functions type matches",
     );

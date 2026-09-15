@@ -300,8 +300,10 @@ export class AdminWebsocket implements AdminApi {
       cell_id: cellId,
       cap_grant: {
         tag: "zome-call-signing-key",
-        functions,
-        access: {
+        grant: {
+          functions,
+        },
+        constraint: {
           type: "assigned",
           value: {
             secret: capSecret,
