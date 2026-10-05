@@ -4,7 +4,7 @@
 
 ## TauriHolochainEnvironment.PLUGIN\_NAME property
 
-The Tauri plugin name used to build the IPC command name. Defaults to `"holochain"` when not provided.
+The Tauri plugin name used to build the IPC command name. Defaults to`"holochain"` when not provided.
 
 **Signature:**
 

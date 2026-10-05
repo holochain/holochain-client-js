@@ -4,7 +4,7 @@
 
 ## AppResponsePayload type
 
-The payload carried by the [AppResponse](./client.appresponse.md) variant tagged `Tag`<!-- -->, or `void` when that variant carries no payload.
+The payload carried by the [AppResponse](./client.appresponse.md) variant tagged `Tag`<!-- -->, or`void` when that variant carries no payload.
 
 **Signature:**
 

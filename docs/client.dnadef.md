@@ -6,7 +6,7 @@
 
 The definition of a DNA: the hash of this data is what produces the DnaHash.
 
-Historical note: This struct was written before `DnaManifest` appeared. It is included as part of a `DnaFile`<!-- -->. There is still a lot of code that uses this type, but in function, it has mainly been superseded by `DnaManifest`<!-- -->. Hence, this type can basically be thought of as a fully validated, normalized `DnaManifest`
+Historical note: This struct was written before `DnaManifest` appeared. It is included as part of a `DnaFile`<!-- -->. There is still a lot of code that uses this type, but in function, it has mainly been superseded by `DnaManifest`<!-- -->. Hence, this type can basically be thought of as a fully validated, normalized`DnaManifest`
 
 **Signature:**
 

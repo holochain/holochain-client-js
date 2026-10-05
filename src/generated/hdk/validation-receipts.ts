@@ -7,17 +7,20 @@ import type { AgentPubKey, DhtOpHash, Signature, Timestamp } from "../types.js";
  */
 export type SignedValidationReceipt = {
   /**
-   * the content of the validation receipt.
+   * Content of the validation receipt.
    */
   receipt: ValidationReceipt;
   /**
-   * the signature of the remote validator.
+   * Signatures of the remote validators.
    */
   validators_signatures: Array<Signature>;
 };
 
 /**
  * Validation receipt content - to be signed.
+ *
+ * The validation receipt doesn't contain the original message. Therefore verification re-encodes this value to check its signatures, so fields must
+ * encode identically on the same messagepack version (i.e. no unordered map fields).
  * @public
  */
 export type ValidationReceipt = {

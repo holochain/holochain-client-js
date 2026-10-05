@@ -4,7 +4,7 @@
 
 ## DecodedSignal type
 
-The decoded counterpart of the generated [Signal](./client.signal.md)<!-- -->: system signals pass through unchanged, app signals carry a [DecodedAppSignal](./client.decodedappsignal.md)<!-- -->. This is what every [SignalCb](./client.signalcb.md) receives.
+The decoded counterpart of the generated [Signal](./client.signal.md)<!-- -->: system signals pass through unchanged, app signals carry a [DecodedAppSignal](./client.decodedappsignal.md)<!-- -->, direct signals carry a [DecodedDirectSignal](./client.decodeddirectsignal.md)<!-- -->. This is what every[SignalCb](./client.signalcb.md) receives.
 
 **Signature:**
 
@@ -13,9 +13,12 @@ export type DecodedSignal = {
     type: SignalType.App;
     value: DecodedAppSignal;
 } | {
+    type: SignalType.AppDirect;
+    value: DecodedDirectSignal;
+} | {
     type: SignalType.System;
     value: SystemSignal;
 };
 ```
-**References:** [SignalType.App](./client.signaltype.md)<!-- -->, [DecodedAppSignal](./client.decodedappsignal.md)<!-- -->, [SignalType.System](./client.signaltype.md)<!-- -->, [SystemSignal](./client.systemsignal.md)
+**References:** [SignalType.App](./client.signaltype.md)<!-- -->, [DecodedAppSignal](./client.decodedappsignal.md)<!-- -->, [SignalType.AppDirect](./client.signaltype.md)<!-- -->, [DecodedDirectSignal](./client.decodeddirectsignal.md)<!-- -->, [SignalType.System](./client.signaltype.md)<!-- -->, [SystemSignal](./client.systemsignal.md)
 

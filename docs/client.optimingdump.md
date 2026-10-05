@@ -8,7 +8,7 @@ Lifecycle timings for one DHT op in the DHT arc this conductor is currently hold
 
 The DHT database is shared by every cell running the same DNA, so a dump covers every op this conductor holds for that DNA rather than only the ops of one agent running the DNA.
 
-Ops that are still in a validation limbo report `when_integrated: None` and `validation_status: None`<!-- -->. `locally_validated` is only recorded for integrated chain ops; it is `None` for limbo ops and for warrants. A `Some(false)` value means the op was inserted by the cache rather than validated by this node, which is why its integration time can equal its received time.
+Ops that are still in a validation limbo report `when_integrated: None` and `validation_status: None`<!-- -->. `locally_validated` is only recorded for integrated chain ops; it is `None` for limbo ops and for warrants. A`Some(false)` value means the op was inserted by the cache rather than validated by this node, which is why its integration time can equal its received time.
 
 **Signature:**
 

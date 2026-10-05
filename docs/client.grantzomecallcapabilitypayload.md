@@ -11,8 +11,8 @@ Parameters for granting a zome call capability.
 ```typescript
 export type GrantZomeCallCapabilityPayload = {
     cell_id: CellId;
-    cap_grant: ZomeCallCapGrant;
+    cap_grant: GrantZomeCallCapabilityGrant;
 };
 ```
-**References:** [CellId](./client.cellid.md)<!-- -->, [ZomeCallCapGrant](./client.zomecallcapgrant.md)
+**References:** [CellId](./client.cellid.md)<!-- -->, [GrantZomeCallCapabilityGrant](./client.grantzomecallcapabilitygrant.md)
 

@@ -6,7 +6,7 @@
 
 Mirror of `kitsune2_api::DhtArc` for the conductor API.
 
-Serializes untagged, exactly like the kitsune2 original: `Empty` maps to null, `Arc(a, b)` maps to `[a, b]`<!-- -->.
+Serializes untagged, exactly like the kitsune2 original:`Empty` maps to null, `Arc(a, b)` maps to `[a, b]`<!-- -->.
 
 **Signature:**
 

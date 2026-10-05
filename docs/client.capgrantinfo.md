@@ -10,11 +10,11 @@ Information about a capability grant.
 
 ```typescript
 export type CapGrantInfo = {
-    cap_grant: DesensitizedZomeCallCapGrant;
+    cap_grant: DesensitizedCapGrant;
     action_hash: ActionHash;
     created_at: Timestamp;
     revoked_at: Timestamp | null;
 };
 ```
-**References:** [DesensitizedZomeCallCapGrant](./client.desensitizedzomecallcapgrant.md)<!-- -->, [ActionHash](./client.actionhash.md)<!-- -->, [Timestamp](./client.timestamp.md)
+**References:** [DesensitizedCapGrant](./client.desensitizedcapgrant.md)<!-- -->, [ActionHash](./client.actionhash.md)<!-- -->, [Timestamp](./client.timestamp.md)
 

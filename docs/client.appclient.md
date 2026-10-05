@@ -148,7 +148,25 @@ Description
 </td></tr>
 <tr><td>
 
+[grantDirectSignalCapability(args, timeout)](./client.appclient.grantdirectsignalcapability.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
 [on(eventName, listener)](./client.appclient.on.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[sendDirectSignal(args, timeout)](./client.appclient.senddirectsignal.md)
 
 
 </td><td>

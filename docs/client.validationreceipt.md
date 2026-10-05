@@ -6,6 +6,8 @@
 
 Validation receipt content - to be signed.
 
+The validation receipt doesn't contain the original message. Therefore verification re-encodes this value to check its signatures, so fields must encode identically on the same messagepack version (i.e. no unordered map fields).
+
 **Signature:**
 
 ```typescript

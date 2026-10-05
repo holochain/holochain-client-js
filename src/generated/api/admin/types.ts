@@ -254,6 +254,25 @@ export type AdminRequest =
       value: GrantZomeCallCapabilityPayload;
     }
   | {
+      type: "grant_direct_signal_capability";
+      value: {
+        /**
+         * The cell that will accept direct signals under this grant.
+         */
+        cell_id: CellId;
+        /**
+         * A string by which to later query for saved grants.
+         *
+         * This does not need to be unique within a source chain.
+         */
+        tag: string;
+        /**
+         * Specifies who may send direct signals under this grant, and by what means.
+         */
+        constraint: GrantConstraint;
+      };
+    }
+  | {
       type: "revoke_zome_call_capability";
       value: { action_hash: ActionHash; cell_id: CellId };
     }
@@ -312,6 +331,7 @@ export type AdminResponse =
   | { type: "agent_info"; value: Array<string> }
   | { type: "peer_meta_info"; value: PeerMetaInfoMap }
   | { type: "zome_call_capability_granted"; value: ActionHash }
+  | { type: "direct_signal_capability_granted"; value: ActionHash }
   | { type: "zome_call_capability_revoked" }
   | { type: "capability_grants_info"; value: AppCapGrantInfo }
   | { type: "clone_cell_deleted" }

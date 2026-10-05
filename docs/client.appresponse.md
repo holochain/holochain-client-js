@@ -19,6 +19,8 @@ export type AppResponse = {
     type: "agent_info";
     value: Array<string>;
 } | {
+    type: "agent_info_added";
+} | {
     type: "peer_meta_info";
     value: PeerMetaInfoMap;
 } | {
@@ -52,8 +54,11 @@ export type AppResponse = {
     type: "list_wasm_host_functions";
     value: Array<string>;
 } | {
+    type: "direct_signal_capability_granted";
+    value: ActionHash;
+} | {
     type: "ok";
 };
 ```
-**References:** [ExternalApiWireError](./client.externalapiwireerror.md)<!-- -->, [AppInfo](./client.appinfo.md)<!-- -->, [PeerMetaInfoMap](./client.peermetainfomap.md)<!-- -->, [ExternIO](./client.externio.md)<!-- -->, [CountersigningSessionState](./client.countersigningsessionstate.md)<!-- -->, [ClonedCell](./client.clonedcell.md)<!-- -->, [OpTimingsDump](./client.optimingsdump.md)<!-- -->, [NetworkMetricsMap](./client.networkmetricsmap.md)<!-- -->, [HolochainTransportStats](./client.holochaintransportstats.md)
+**References:** [ExternalApiWireError](./client.externalapiwireerror.md)<!-- -->, [AppInfo](./client.appinfo.md)<!-- -->, [PeerMetaInfoMap](./client.peermetainfomap.md)<!-- -->, [ExternIO](./client.externio.md)<!-- -->, [CountersigningSessionState](./client.countersigningsessionstate.md)<!-- -->, [ClonedCell](./client.clonedcell.md)<!-- -->, [OpTimingsDump](./client.optimingsdump.md)<!-- -->, [NetworkMetricsMap](./client.networkmetricsmap.md)<!-- -->, [HolochainTransportStats](./client.holochaintransportstats.md)<!-- -->, [ActionHash](./client.actionhash.md)
 

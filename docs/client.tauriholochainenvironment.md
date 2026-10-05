@@ -69,7 +69,7 @@ string
 
 </td><td>
 
-_(Optional)_ The Tauri plugin name used to build the IPC command name. Defaults to `"holochain"` when not provided.
+_(Optional)_ The Tauri plugin name used to build the IPC command name. Defaults to`"holochain"` when not provided.
 
 
 </td></tr>

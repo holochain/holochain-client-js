@@ -4,7 +4,7 @@
 
 ## AdminRequestPayload type
 
-The payload carried by the [AdminRequest](./client.adminrequest.md) variant tagged `Tag`<!-- -->, or `void` when that variant carries no payload.
+The payload carried by the [AdminRequest](./client.adminrequest.md) variant tagged `Tag`<!-- -->, or`void` when that variant carries no payload.
 
 **Signature:**
 

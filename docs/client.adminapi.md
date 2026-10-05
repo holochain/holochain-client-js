@@ -240,6 +240,23 @@ Description
 </td></tr>
 <tr><td>
 
+[grantDirectSignalCapability](./client.adminapi.grantdirectsignalcapability.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[Requester](./client.requester.md)<!-- -->&lt;[AdminRequestPayload](./client.adminrequestpayload.md)<!-- -->&lt;"grant\_direct\_signal\_capability"&gt;, [ActionHash](./client.actionhash.md)<!-- -->&gt;
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
 [grantZomeCallCapability](./client.adminapi.grantzomecallcapability.md)
 
 

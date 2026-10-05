@@ -20,6 +20,7 @@ export type Signal = {
     type: "app_direct";
     value: {
         cell_id: CellId;
+        from_agent: AgentPubKey;
         signal: Array<number>;
     };
 } | {
@@ -27,5 +28,5 @@ export type Signal = {
     value: SystemSignal;
 };
 ```
-**References:** [CellId](./client.cellid.md)<!-- -->, [ZomeName](./client.zomename.md)<!-- -->, [AppSignal](./client.appsignal.md)<!-- -->, [SystemSignal](./client.systemsignal.md)
+**References:** [CellId](./client.cellid.md)<!-- -->, [ZomeName](./client.zomename.md)<!-- -->, [AppSignal](./client.appsignal.md)<!-- -->, [AgentPubKey](./client.agentpubkey.md)<!-- -->, [SystemSignal](./client.systemsignal.md)
 

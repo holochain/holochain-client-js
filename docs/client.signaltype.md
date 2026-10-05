@@ -45,6 +45,20 @@ App
 </td></tr>
 <tr><td>
 
+AppDirect
+
+
+</td><td>
+
+`"app_direct"`
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
 System
 
 

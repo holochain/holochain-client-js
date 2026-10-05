@@ -2,7 +2,6 @@ import { decode } from "@msgpack/msgpack";
 import { encodeHashToBase64 } from "../../utils/base64.js";
 import { HolochainError } from "../common.js";
 import { DecodedSignal, RawSignal, SignalType } from "./client-types.js";
-import type { Signal } from "../../generated/api/app/types.js";
 
 /**
  * Convert msgpack map keys the way Holochain conductor responses require:
@@ -42,7 +41,9 @@ export function assertHolochainSignal(
     signal !== null &&
     "type" in signal &&
     "value" in signal &&
-    [SignalType.App, SignalType.System].some((type) => signal.type === type)
+    [SignalType.App, SignalType.AppDirect, SignalType.System].some(
+      (type) => signal.type === type,
+    )
   ) {
     return;
   }
@@ -57,71 +58,45 @@ export function assertHolochainSignal(
 }
 
 /**
- * The tag of the {@link Signal} variant emitted when a peer calls
- * `send_direct_signal`. Typed against the generated union so that a rename
- * upstream fails the build here.
- *
- * @internal
- */
-const APP_DIRECT_SIGNAL_TYPE: Signal["type"] = "app_direct";
-
-/**
- * Whether a decoded value is a direct signal from a remote agent.
- *
- * @internal
- */
-function isAppDirectSignal(signal: unknown): boolean {
-  return (
-    typeof signal === "object" &&
-    signal !== null &&
-    "type" in signal &&
-    signal.type === APP_DIRECT_SIGNAL_TYPE
-  );
-}
-
-/**
  * Turn an already-decoded raw signal into the {@link DecodedSignal} surfaced to
  * callers: system signals pass through; app signals have their inner payload
- * decoded. Shared by every transport so signal handling is identical whether
- * the bytes arrive over a websocket or Tauri IPC.
- *
- * Returns `null` for signals the client knows about but cannot surface, which
- * callers must skip rather than emit.
+ * decoded; direct signals have their payload turned into bytes. Shared by
+ * every transport so signal handling is identical whether the bytes arrive
+ * over a websocket or Tauri IPC.
  *
  * @internal
  */
-export function decodeSignal(rawSignal: unknown): DecodedSignal | null {
-  // Deliberate minimal guard: `app_direct` is a real, un-gated variant of the
-  // conductor's `Signal` enum, but its payload is opaque to Holochain and the
-  // client has no typed shape to hand to listeners. Dropping it with a warning
-  // keeps it from throwing inside the transports' async message handlers, where
-  // the throw would surface as an unhandled rejection and can take the process
-  // down. Actually surfacing direct signals needs a public `SignalType` variant
-  // and a `sendDirectSignal` method, which is separate, larger feature work.
-  if (isAppDirectSignal(rawSignal)) {
-    console.warn(
-      "received an app_direct signal, which this client does not support yet; dropping it",
-    );
-    return null;
-  }
-
+export function decodeSignal(rawSignal: unknown): DecodedSignal {
   assertHolochainSignal(rawSignal);
 
-  if (rawSignal.type === SignalType.System) {
-    return { type: SignalType.System, value: rawSignal.value };
+  switch (rawSignal.type) {
+    case SignalType.System:
+      return { type: SignalType.System, value: rawSignal.value };
+    case SignalType.AppDirect:
+      return {
+        type: SignalType.AppDirect,
+        value: {
+          cell_id: rawSignal.value.cell_id,
+          from_agent: rawSignal.value.from_agent,
+          // Rust serializes the opaque `Vec<u8>` payload as a msgpack array
+          // of integers. Hand callers bytes either way.
+          signal: Uint8Array.from(rawSignal.value.signal),
+        },
+      };
+    case SignalType.App: {
+      const encodedAppSignal = rawSignal.value;
+      return {
+        type: SignalType.App,
+        value: {
+          cell_id: encodedAppSignal.cell_id,
+          zome_name: encodedAppSignal.zome_name,
+          // In order to return readable content to the UI, the signal payload
+          // must also be deserialized. The wire type is the msgpack-encoded
+          // byte string, so what callers receive here is the decoded value,
+          // typed as `unknown` because only the emitting zome knows its shape.
+          signal: decode(encodedAppSignal.signal),
+        },
+      };
+    }
   }
-
-  const encodedAppSignal = rawSignal.value;
-  return {
-    type: SignalType.App,
-    value: {
-      cell_id: encodedAppSignal.cell_id,
-      zome_name: encodedAppSignal.zome_name,
-      // In order to return readable content to the UI, the signal payload must
-      // also be deserialized. The wire type is the msgpack-encoded byte string,
-      // so what callers receive here is the decoded value, typed as `unknown`
-      // because only the emitting zome knows its shape.
-      signal: decode(encodedAppSignal.signal),
-    },
-  };
 }

@@ -262,7 +262,7 @@ Dump the state of the specified cell, including its source chain, as JSON.
 
 The conductor answers with a JSON string holding a two-element array, so the resolved value is a [StateDump](./client.statedump.md) tuple of the structured dump and a human-readable summary of it.
 
-Because this payload is JSON rather than msgpack, byte fields nested in the dump (hashes, signatures, entry bytes) arrive as plain `number[]` at runtime, even where the generated types declare `Uint8Array`<!-- -->. See [StateDump](./client.statedump.md)<!-- -->.
+Because this payload is JSON rather than msgpack, byte fields nested in the dump (hashes, signatures, entry bytes) arrive as plain `number[]` at runtime, even where the generated types declare `Uint8Array`<!-- -->. See[StateDump](./client.statedump.md)<!-- -->.
 
 
 </td></tr>
@@ -320,6 +320,27 @@ Generate a new agent pub key.
 </td><td>
 
 Get the DNA definition for the specified DNA hash.
+
+
+</td></tr>
+<tr><td>
+
+[grantDirectSignalCapability](./client.adminwebsocket.grantdirectsignalcapability.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[Requester](./client.requester.md)<!-- -->&lt;[AdminRequestPayload](./client.adminrequestpayload.md)<!-- -->&lt;"grant\_direct\_signal\_capability"&gt;, [ActionHash](./client.actionhash.md)<!-- -->&gt;
+
+
+</td><td>
+
+Grant agents the capability to send direct signals to a cell.
+
+Unlike [AppWebsocket.grantDirectSignalCapability()](./client.appwebsocket.grantdirectsignalcapability.md)<!-- -->, any installed cell may be targeted. Returns the action hash of the committed grant.
 
 
 </td></tr>

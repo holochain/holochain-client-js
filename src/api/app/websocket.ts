@@ -13,7 +13,12 @@ import {
 } from "../../environments/tauri.js";
 import { TauriAppTransport } from "./tauri-transport.js";
 import { InstalledAppId, RoleName } from "../../client-types.js";
-import type { AgentPubKey, CellId, ClonedCell } from "../../generated/types.js";
+import type {
+  ActionHash,
+  AgentPubKey,
+  CellId,
+  ClonedCell,
+} from "../../generated/types.js";
 import { encodeHashToBase64 } from "../../utils/index.js";
 import { CellType } from "../admin/client-types.js";
 import type {
@@ -51,6 +56,7 @@ import {
   CallZomeResponseGeneric,
   CallZomeTransform,
   RoleNameCallZomeRequest,
+  SendDirectSignalRequest,
   SignalCb,
 } from "./client-types.js";
 import type {
@@ -129,6 +135,14 @@ export class AppWebsocket implements AppClient {
   private readonly publishCountersigningSessionRequester: Requester<
     AppRequestPayload<"publish_countersigning_session">,
     AppResponsePayload<"publish_countersigning_session_triggered">
+  >;
+  private readonly sendDirectSignalRequester: Requester<
+    SendDirectSignalRequest,
+    void
+  >;
+  private readonly grantDirectSignalCapabilityRequester: Requester<
+    AppRequestPayload<"grant_direct_signal_capability">,
+    AppResponsePayload<"direct_signal_capability_granted">
   >;
 
   private constructor(
@@ -214,6 +228,17 @@ export class AppWebsocket implements AppClient {
     this.publishCountersigningSessionRequester = AppWebsocket.requester(
       this.client,
       "publish_countersigning_session",
+      this.defaultTimeout,
+    );
+    this.sendDirectSignalRequester = AppWebsocket.requester(
+      this.client,
+      "send_direct_signal",
+      this.defaultTimeout,
+      sendDirectSignalTransform,
+    );
+    this.grantDirectSignalCapabilityRequester = AppWebsocket.requester(
+      this.client,
+      "grant_direct_signal_capability",
       this.defaultTimeout,
     );
 
@@ -626,6 +651,52 @@ export class AppWebsocket implements AppClient {
   }
 
   /**
+   * Send a signal directly to other agents, without running any zome code on
+   * either side.
+   *
+   * Each recipient only accepts the signal if it has committed a direct
+   * signal capability grant that permits this app's agent, see
+   * {@link AppWebsocket.grantDirectSignalCapability} and
+   * {@link AdminWebsocket.grantDirectSignalCapability}. If the recipients'
+   * grant carries a secret, pass it as `cap_secret`. Delivery is best effort:
+   * a resolved promise means the conductor accepted the request, not that any
+   * recipient got the signal. Recipients receive it as a
+   * {@link SignalType.AppDirect} signal through {@link AppWebsocket.on}.
+   *
+   * @param args - The network, recipients, payload and optional cap secret.
+   * @param timeout - A timeout to override the default.
+   */
+  async sendDirectSignal(
+    args: SendDirectSignalRequest,
+    timeout?: number,
+  ): Promise<void> {
+    await this.sendDirectSignalRequester(args, timeout);
+  }
+
+  /**
+   * Grant other agents the capability to send direct signals to a cell of
+   * this app.
+   *
+   * Commits a direct signal capability grant to the source chain of
+   * `cell_id`, no coordinator zome needed. The cell must belong to the app
+   * this connection is authenticated for; a request for any other cell is
+   * rejected and commits nothing. A grant whose constraint carries a secret
+   * is only satisfied by a {@link AppWebsocket.sendDirectSignal} call that
+   * offers that secret as `cap_secret`.
+   *
+   * @param args - The cell, a tag to find the grant by later, and who may
+   * use it.
+   * @param timeout - A timeout to override the default.
+   * @returns The action hash of the committed grant.
+   */
+  async grantDirectSignalCapability(
+    args: AppRequestPayload<"grant_direct_signal_capability">,
+    timeout?: number,
+  ): Promise<ActionHash> {
+    return this.grantDirectSignalCapabilityRequester(args, timeout);
+  }
+
+  /**
    * Register an event listener for signals.
    *
    * @param eventName - Event name to listen to (currently only "signal").
@@ -681,6 +752,25 @@ const defaultCallZomeTransform: Transformer<
     }
   },
   output: (response) => decode(response),
+};
+
+// Rust declares the direct signal payload as `Vec<u8>` without `serde_bytes`,
+// so the conductor expects a msgpack array of integers and rejects msgpack
+// bin. Convert the caller's bytes here so the public API can take a
+// Uint8Array like every other byte-valued argument.
+const sendDirectSignalTransform: Transformer<
+  SendDirectSignalRequest,
+  AppRequestPayload<"send_direct_signal">,
+  void,
+  void
+> = {
+  input: (request): AppRequestPayload<"send_direct_signal"> => ({
+    dna_hash: request.dna_hash,
+    agents: request.agents,
+    signal: Array.from(request.signal),
+    cap_secret: request.cap_secret ?? null,
+  }),
+  output: (): void => undefined,
 };
 
 /**

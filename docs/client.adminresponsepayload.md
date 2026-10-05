@@ -4,7 +4,7 @@
 
 ## AdminResponsePayload type
 
-The payload carried by the [AdminResponse](./client.adminresponse.md) variant tagged `Tag`<!-- -->, or `void` when that variant carries no payload.
+The payload carried by the [AdminResponse](./client.adminresponse.md) variant tagged `Tag`<!-- -->, or`void` when that variant carries no payload.
 
 **Signature:**
 

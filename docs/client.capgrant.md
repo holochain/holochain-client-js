@@ -4,22 +4,18 @@
 
 ## CapGrant type
 
-Represents a \_potentially\_ valid access grant to a zome call. Zome call response will be Unauthorized without a valid grant.
+The entry for a capability grant.
 
-The CapGrant is not always a dedicated entry in the chain. Notably AgentPubKey entries in the current chain act like root access to local zome calls.
-
-A `CapGrant` is valid if it matches the function, agent and secret for a given zome call.
-
-See `.is_valid()`
+This data is committed to the callee's source chain as a private entry. The remote calling agent must provide a secret and we source their pubkey from the active network connection. This must match the strictness of the \[`GrantConstraint`<!-- -->\].
 
 **Signature:**
 
 ```typescript
 export type CapGrant = {
-    ChainAuthor: AgentPubKey;
-} | {
-    RemoteAgent: ZomeCallCapGrant;
+    tag: string;
+    constraint: GrantConstraint;
+    capability: Capability;
 };
 ```
-**References:** [AgentPubKey](./client.agentpubkey.md)<!-- -->, [ZomeCallCapGrant](./client.zomecallcapgrant.md)
+**References:** [GrantConstraint](./client.grantconstraint.md)<!-- -->, [Capability](./client.capability.md)
 

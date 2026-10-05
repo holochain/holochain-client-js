@@ -6,7 +6,7 @@
 
 Represents the possible responses to an \[`AdminRequest`<!-- -->\] and follows a general convention of `noun_verb` as opposed to the `verb_noun` of `AdminRequest`<!-- -->.
 
-Will serialize as an object with any contents of the enum on a key `data` and the enum variant on a key `type`<!-- -->, e.g. `{ type: 'app_interface_attached', data: { port: 4000 } }`
+Will serialize as an object with any contents of the enum on a key `data` and the enum variant on a key `type`<!-- -->, e.g.`{ type: 'app_interface_attached', data: { port: 4000 } }`
 
 **Signature:**
 
@@ -79,6 +79,9 @@ export type AdminResponse = {
     value: PeerMetaInfoMap;
 } | {
     type: "zome_call_capability_granted";
+    value: ActionHash;
+} | {
+    type: "direct_signal_capability_granted";
     value: ActionHash;
 } | {
     type: "zome_call_capability_revoked";
