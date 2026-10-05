@@ -21,6 +21,11 @@ export type AppRequest = {
         dna_hashes?: Array<DnaHash> | null;
     };
 } | {
+    type: "add_agent_info";
+    value: {
+        agent_infos: Array<string>;
+    };
+} | {
     type: "peer_meta_info";
     value: {
         url: string;
@@ -75,8 +80,16 @@ export type AppRequest = {
         dna_hash: DnaHash;
         agents: Array<AgentPubKey>;
         signal: Array<number>;
+        cap_secret?: CapSecret | null;
+    };
+} | {
+    type: "grant_direct_signal_capability";
+    value: {
+        cell_id: CellId;
+        tag: string;
+        constraint: GrantConstraint;
     };
 };
 ```
-**References:** [DnaHash](./client.dnahash.md)<!-- -->, [ZomeCallParamsSigned](./client.zomecallparamssigned.md)<!-- -->, [CellId](./client.cellid.md)<!-- -->, [CreateCloneCellPayload](./client.createclonecellpayload.md)<!-- -->, [DisableCloneCellPayload](./client.disableclonecellpayload.md)<!-- -->, [EnableCloneCellPayload](./client.enableclonecellpayload.md)<!-- -->, [OpTimingsCursor](./client.optimingscursor.md)<!-- -->, [MemproofMap](./client.memproofmap.md)<!-- -->, [AgentPubKey](./client.agentpubkey.md)
+**References:** [DnaHash](./client.dnahash.md)<!-- -->, [ZomeCallParamsSigned](./client.zomecallparamssigned.md)<!-- -->, [CellId](./client.cellid.md)<!-- -->, [CreateCloneCellPayload](./client.createclonecellpayload.md)<!-- -->, [DisableCloneCellPayload](./client.disableclonecellpayload.md)<!-- -->, [EnableCloneCellPayload](./client.enableclonecellpayload.md)<!-- -->, [OpTimingsCursor](./client.optimingscursor.md)<!-- -->, [MemproofMap](./client.memproofmap.md)<!-- -->, [AgentPubKey](./client.agentpubkey.md)<!-- -->, [CapSecret](./client.capsecret.md)<!-- -->, [GrantConstraint](./client.grantconstraint.md)
 

@@ -11,14 +11,15 @@ import type {
  * Represents an attempt to access capabilities.
  *
  * Either a local agent is claiming to be the author of a source chain, and therefore gets
- * unrestricted access implicitly. Or a remote agent is attempting an operation with a
+ * implicit access to its own zome calls. Or an agent is attempting an operation with a
  * [`CapGrant`].
  *
  * In either case, Holochain checks the calling agent and requested capability against the
  * [`CapAccess`] instance to determine whether to allow access. If access is denied, an
  * unauthorized response is expected.
  *
- * See [`CapAccess::is_valid_for_zome_call`] to see how these checks are made.
+ * See [`CapAccess::is_valid_for_zome_call`] and [`CapAccess::is_valid_for_direct_signal`] to see
+ * how these checks are made.
  * @public
  */
 export type CapAccess =

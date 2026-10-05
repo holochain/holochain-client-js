@@ -107,6 +107,10 @@ export interface AdminApi {
     GrantZomeCallCapabilityPayload,
     ActionHash
   >;
+  grantDirectSignalCapability: Requester<
+    AdminRequestPayload<"grant_direct_signal_capability">,
+    ActionHash
+  >;
   revokeZomeCallCapability: Requester<
     AdminRequestPayload<"revoke_zome_call_capability">,
     void

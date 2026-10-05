@@ -4,7 +4,7 @@
 
 ## AppRequestPayload type
 
-The payload carried by the [AppRequest](./client.apprequest.md) variant tagged `Tag`<!-- -->, or `void` when that variant carries no payload.
+The payload carried by the [AppRequest](./client.apprequest.md) variant tagged `Tag`<!-- -->, or`void` when that variant carries no payload.
 
 **Signature:**
 

@@ -3,8 +3,10 @@ import { InstalledAppId, RoleName } from "../../client-types.js";
 import { CapSecret } from "../../hdk/index.js";
 import type {
   AgentPubKey,
+  ActionHash,
   CellId,
   ClonedCell,
+  DnaHash,
   FunctionName,
   ZomeName,
 } from "../../generated/types.js";
@@ -98,6 +100,7 @@ export type CallZomeResponse = CallZomeResponseGeneric<any>;
  */
 export enum SignalType {
   App = "app",
+  AppDirect = "app_direct",
   System = "system",
 }
 
@@ -108,6 +111,10 @@ export type RawSignal =
   | {
       type: SignalType.App;
       value: EncodedAppSignal;
+    }
+  | {
+      type: SignalType.AppDirect;
+      value: EncodedDirectSignal;
     }
   | {
       type: SignalType.System;
@@ -121,6 +128,20 @@ export type EncodedAppSignal = {
   cell_id: CellId;
   zome_name: string;
   signal: Uint8Array;
+};
+
+/**
+ * The wire form of the `app_direct` variant of the generated {@link Signal}:
+ * a direct signal sent by a remote agent with `send_direct_signal`. Rust
+ * serializes the `Vec<u8>` payload as a msgpack array of integers, hence
+ * `Array<number>` rather than bytes.
+ *
+ * @public
+ */
+export type EncodedDirectSignal = {
+  cell_id: CellId;
+  from_agent: AgentPubKey;
+  signal: Array<number>;
 };
 
 /**
@@ -138,9 +159,26 @@ export type DecodedAppSignal = {
 };
 
 /**
+ * The direct signal handed to listeners. Holochain treats the payload as
+ * opaque bytes, so it is surfaced as a `Uint8Array`; the application decides
+ * how to decode it.
+ *
+ * @public
+ */
+export type DecodedDirectSignal = {
+  /** The cell that received the signal. */
+  cell_id: CellId;
+  /** The agent that sent the signal. */
+  from_agent: AgentPubKey;
+  /** The opaque payload sent by the remote agent. */
+  signal: Uint8Array;
+};
+
+/**
  * The decoded counterpart of the generated {@link Signal}: system signals pass
- * through unchanged, app signals carry a {@link DecodedAppSignal}. This is what
- * every {@link SignalCb} receives.
+ * through unchanged, app signals carry a {@link DecodedAppSignal}, direct
+ * signals carry a {@link DecodedDirectSignal}. This is what every
+ * {@link SignalCb} receives.
  *
  * @public
  */
@@ -148,6 +186,10 @@ export type DecodedSignal =
   | {
       type: SignalType.App;
       value: DecodedAppSignal;
+    }
+  | {
+      type: SignalType.AppDirect;
+      value: DecodedDirectSignal;
     }
   | {
       type: SignalType.System;
@@ -185,6 +227,14 @@ export interface AppClient {
   createCloneCell(args: CreateCloneCellPayload): Promise<ClonedCell>;
   enableCloneCell(args: EnableCloneCellPayload): Promise<ClonedCell>;
   disableCloneCell(args: DisableCloneCellPayload): Promise<void>;
+  sendDirectSignal(
+    args: SendDirectSignalRequest,
+    timeout?: number,
+  ): Promise<void>;
+  grantDirectSignalCapability(
+    args: AppRequestPayload<"grant_direct_signal_capability">,
+    timeout?: number,
+  ): Promise<ActionHash>;
 }
 
 /**
@@ -224,3 +274,26 @@ export type CallZomeTransform = Transformer<
   CallZomeResponseGeneric<Uint8Array>,
   CallZomeResponse
 >;
+
+/**
+ * Arguments for {@link AppWebsocket.sendDirectSignal}.
+ *
+ * @public
+ */
+export type SendDirectSignalRequest = {
+  /** The network (DNA) the recipients are on. */
+  dna_hash: DnaHash;
+  /** The agents to deliver the signal to. Must not be empty. */
+  agents: Array<AgentPubKey>;
+  /**
+   * The opaque payload. Up to 1 MiB; Holochain never inspects it. On the wire
+   * it travels as a msgpack array of integers, which the client takes care
+   * of, so pass plain bytes here.
+   */
+  signal: Uint8Array;
+  /**
+   * The secret of the recipients' direct signal capability grant, when their
+   * grant carries one. The same secret is offered to every agent in `agents`.
+   */
+  cap_secret?: CapSecret;
+};

@@ -249,6 +249,17 @@ export class AdminWebsocket implements AdminApi {
   > = this._requester("grant_zome_call_capability");
 
   /**
+   * Grant agents the capability to send direct signals to a cell.
+   *
+   * Unlike {@link AppWebsocket.grantDirectSignalCapability}, any installed
+   * cell may be targeted. Returns the action hash of the committed grant.
+   */
+  grantDirectSignalCapability: Requester<
+    AdminRequestPayload<"grant_direct_signal_capability">,
+    ActionHash
+  > = this._requester("grant_direct_signal_capability");
+
+  /**
    * Revoke a zome call capability for an agent, which was previously granted
    * using {@link AdminWebsocket.grantZomeCallCapability}.
    */

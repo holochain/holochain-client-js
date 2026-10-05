@@ -4,25 +4,22 @@
 
 ## CapAccess type
 
-Represents access requirements for capability grants.
+Represents an attempt to access capabilities.
+
+Either a local agent is claiming to be the author of a source chain, and therefore gets implicit access to its own zome calls. Or an agent is attempting an operation with a \[`CapGrant`<!-- -->\].
+
+In either case, Holochain checks the calling agent and requested capability against the \[`CapAccess`<!-- -->\] instance to determine whether to allow access. If access is denied, an unauthorized response is expected.
+
+See \[`CapAccess::is_valid_for_zome_call`<!-- -->\] and \[`CapAccess::is_valid_for_direct_signal`<!-- -->\] to see how these checks are made.
 
 **Signature:**
 
 ```typescript
 export type CapAccess = {
-    type: "unrestricted";
+    ChainAuthor: AgentPubKey;
 } | {
-    type: "transferable";
-    value: {
-        secret: CapSecret;
-    };
-} | {
-    type: "assigned";
-    value: {
-        secret: CapSecret;
-        assignees: Array<AgentPubKey>;
-    };
+    RemoteAgent: CapGrant;
 };
 ```
-**References:** [CapSecret](./client.capsecret.md)<!-- -->, [AgentPubKey](./client.agentpubkey.md)
+**References:** [AgentPubKey](./client.agentpubkey.md)<!-- -->, [CapGrant](./client.capgrant.md)
 

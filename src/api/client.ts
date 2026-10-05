@@ -254,10 +254,7 @@ export class WsClient extends Emittery<AppEvents> {
             "incoming signal has no data",
           );
         }
-        const signal = decodeSignal(decode(message.data));
-        if (signal !== null) {
-          this.emit("signal", signal);
-        }
+        this.emit("signal", decodeSignal(decode(message.data)));
       } else if (message.type === "response") {
         this.handleResponse(message);
       } else {

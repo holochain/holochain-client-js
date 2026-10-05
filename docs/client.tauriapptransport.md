@@ -6,7 +6,7 @@
 
 Carries the App API over Tauri IPC into a Holochain conductor running in the same process, instead of over a websocket.
 
-From [AppWebsocket](./client.appwebsocket.md)<!-- -->'s perspective this is a drop-in for [WsClient](./client.wsclient.md)<!-- -->: it exposes the same `request` method and is an Emittery that emits `signal` events, so every AppWebsocket method works unchanged. Only the pipe differs — the same msgpack-encoded `{ type, value }` payloads a websocket would carry are sent through the `plugin:<name>|app_request` command. No app id is sent: the conductor scopes each request to the calling window on the Rust side, which replaces the per-app websocket auth token.
+From [AppWebsocket](./client.appwebsocket.md)<!-- -->'s perspective this is a drop-in for[WsClient](./client.wsclient.md)<!-- -->: it exposes the same `request` method and is an Emittery that emits `signal` events, so every AppWebsocket method works unchanged. Only the pipe differs — the same msgpack-encoded `{ type, value }` payloads a websocket would carry are sent through the `plugin:<name>|app_request` command. No app id is sent: the conductor scopes each request to the calling window on the Rust side, which replaces the per-app websocket auth token.
 
 **Signature:**
 

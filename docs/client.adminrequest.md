@@ -115,6 +115,13 @@ export type AdminRequest = {
     type: "grant_zome_call_capability";
     value: GrantZomeCallCapabilityPayload;
 } | {
+    type: "grant_direct_signal_capability";
+    value: {
+        cell_id: CellId;
+        tag: string;
+        constraint: GrantConstraint;
+    };
+} | {
     type: "revoke_zome_call_capability";
     value: {
         action_hash: ActionHash;
@@ -139,5 +146,5 @@ export type AdminRequest = {
     value: AppAuthenticationToken;
 };
 ```
-**References:** [AdminInterfaceConfig](./client.admininterfaceconfig.md)<!-- -->, [CellId](./client.cellid.md)<!-- -->, [UpdateCoordinatorsPayload](./client.updatecoordinatorspayload.md)<!-- -->, [InstallAppPayload](./client.installapppayload.md)<!-- -->, [AppStatusFilter](./client.appstatusfilter.md)<!-- -->, [AllowedOrigins](./client.allowedorigins.md)<!-- -->, [SourceChainCursor](./client.sourcechaincursor.md)<!-- -->, [DhtOpsCursor](./client.dhtopscursor.md)<!-- -->, [DnaHash](./client.dnahash.md)<!-- -->, [OpTimingsCursor](./client.optimingscursor.md)<!-- -->, [GrantZomeCallCapabilityPayload](./client.grantzomecallcapabilitypayload.md)<!-- -->, [ActionHash](./client.actionhash.md)<!-- -->, [DeleteCloneCellPayload](./client.deleteclonecellpayload.md)<!-- -->, [IssueAppAuthenticationTokenPayload](./client.issueappauthenticationtokenpayload.md)<!-- -->, [AppAuthenticationToken](./client.appauthenticationtoken.md)
+**References:** [AdminInterfaceConfig](./client.admininterfaceconfig.md)<!-- -->, [CellId](./client.cellid.md)<!-- -->, [UpdateCoordinatorsPayload](./client.updatecoordinatorspayload.md)<!-- -->, [InstallAppPayload](./client.installapppayload.md)<!-- -->, [AppStatusFilter](./client.appstatusfilter.md)<!-- -->, [AllowedOrigins](./client.allowedorigins.md)<!-- -->, [SourceChainCursor](./client.sourcechaincursor.md)<!-- -->, [DhtOpsCursor](./client.dhtopscursor.md)<!-- -->, [DnaHash](./client.dnahash.md)<!-- -->, [OpTimingsCursor](./client.optimingscursor.md)<!-- -->, [GrantZomeCallCapabilityPayload](./client.grantzomecallcapabilitypayload.md)<!-- -->, [GrantConstraint](./client.grantconstraint.md)<!-- -->, [ActionHash](./client.actionhash.md)<!-- -->, [DeleteCloneCellPayload](./client.deleteclonecellpayload.md)<!-- -->, [IssueAppAuthenticationTokenPayload](./client.issueappauthenticationtokenpayload.md)<!-- -->, [AppAuthenticationToken](./client.appauthenticationtoken.md)
 

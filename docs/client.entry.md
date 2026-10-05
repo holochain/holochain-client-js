@@ -23,8 +23,8 @@ export type Entry = {
     entry: CapClaim;
 } | {
     entry_type: "CapGrant";
-    entry: ZomeCallCapGrant;
+    entry: CapGrant;
 };
 ```
-**References:** [AgentPubKey](./client.agentpubkey.md)<!-- -->, [AppEntryBytes](./client.appentrybytes.md)<!-- -->, [CounterSigningSessionData](./client.countersigningsessiondata.md)<!-- -->, [CapClaim](./client.capclaim.md)<!-- -->, [ZomeCallCapGrant](./client.zomecallcapgrant.md)
+**References:** [AgentPubKey](./client.agentpubkey.md)<!-- -->, [AppEntryBytes](./client.appentrybytes.md)<!-- -->, [CounterSigningSessionData](./client.countersigningsessiondata.md)<!-- -->, [CapClaim](./client.capclaim.md)<!-- -->, [CapGrant](./client.capgrant.md)
 
