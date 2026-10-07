@@ -510,7 +510,8 @@ test(
     assert.equal(fromUtf8(received[0].signal), "hello bob");
 
     // The wrong secret and no secret are accepted by the sender but refused
-    // by the recipient.
+    // by the recipient. Follow them with a valid marker signal and wait for
+    // it, instead of sleeping for a fixed time.
     await alice.sendDirectSignal({
       dna_hash: dnaHash,
       agents: [bobCellId[1]],
@@ -522,7 +523,20 @@ test(
       agents: [bobCellId[1]],
       signal: utf8("no secret"),
     });
-    await new Promise((resolve) => setTimeout(resolve, 3000));
+    await retryUntilTimeout(
+      async () => {
+        await alice.sendDirectSignal({
+          dna_hash: dnaHash,
+          agents: [bobCellId[1]],
+          signal: utf8("marker"),
+          cap_secret: secret,
+        });
+        return received.some((signal) => fromUtf8(signal.signal) === "marker");
+      },
+      "bob did not receive the marker signal",
+      1000,
+      60_000,
+    );
     const refused = received.map((signal) => fromUtf8(signal.signal));
     assert.notInclude(refused, "wrong secret");
     assert.notInclude(refused, "no secret");
