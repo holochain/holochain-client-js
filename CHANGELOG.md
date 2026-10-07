@@ -4,6 +4,66 @@ All notable changes to this project will be documented in this file.
 
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## \[[0.22.0](https://github.com/holochain/holochain-client-js/compare/v0.21.0...v0.22.0)\] - 2026-10-07
+
+### Features
+
+- \[**BREAKING**\] Support direct signals by @veeso
+  - Direct signals sent by peers now reach listeners as SignalType.AppDirect signals carrying the receiving cell, the sending agent and the payload as bytes, instead of being dropped. AppWebsocket gains sendDirectSignal, which sends the payload as the msgpack integer array the conductor expects and takes an optional cap secret, and grantDirectSignalCapability, which commits a direct signal capability grant for a cell of the authenticated app. AdminWebsocket gains grantDirectSignalCapability for any cell. Generated API docs are refreshed.
+  - The wire types are regenerated from the Holochain commit that merged holochain/holochain#6008. That commit is not in a tagged release yet, so the Nix flake builds Holochain from it until one is.
+  - **Breaking Change**: SignalType, RawSignal and DecodedSignal gain an app_direct variant, and AppClient gains sendDirectSignal and grantDirectSignalCapability. Code that switches exhaustively over signal types or implements AppClient must handle them.
+- \[**BREAKING**\] Regenerate the wire types from Holochain source via ts-rs by @veeso in [#461](https://github.com/holochain/holochain-client-js/pull/461)
+  - Replace the hand-written Admin/App wire types with types exported directly from Holochain's Rust source (ts-rs), added via `npm run regen:types` (nix-built holochain exporter, pinned in flake.lock), and keep them drift-checked in CI.
+  - **Breaking Change**: Wire types now use the Rust source names, e.g.
+InstallAppPayload instead of InstallAppRequest, and the per-call
+request/response aliases are replaced by the AdminRequest,
+AdminResponse, AppRequest and AppResponse enum types. Client code and
+public exports now use these generated Rust wire names throughout.
+The `npm run regen:types` script builds holochain's
+export-ts-bindings binary with nix against the revision pinned in
+flake.lock; the holochain.branch package.json field and the
+.holochain-src clone directory are gone.
+
+### Bug Fixes
+
+- \[**BREAKING**\] Align ChainOp types and getChainOp* helpers with holochain 0.7 serialization by @veeso in [#455](https://github.com/holochain/holochain-client-js/pull/455)
+  - **Breaking Change**: ChainOp and OpEntry now model the 0.7 msgpack encoding. Newtype op variants carry a bare SignedAction instead of a one-element tuple, OpEntry unit variants are plain strings, and getChainOpAction/getChainOpEntry/getChainOpSignature read the SignedAction struct instead of the pre-0.7 tuple layout.
+- \[**BREAKING**\] Restore build after dependency updates by @ThetaSinner in [#452](https://github.com/holochain/holochain-client-js/pull/452)
+  - Every CI job failed at `npm ci`, so nothing downstream ran. typescript 7.0.2 conflicts with the peer range of @typescript-eslint 8.65.0 (">=4.8.4 <6.1.0"), and no stable typescript-eslint release supports TypeScript 7 yet. Hold TypeScript at 6.0.x, the newest the lint toolchain allows, and fix the breakages the failed install was hiding.
+  - Set an explicit rootDir, now required by TypeScript 6 (TS5011). - Declare KeyPair locally. @types/libsodium-wrappers is a deprecated stub and   libsodium-wrappers' own types export no such name, so drop the stub. - Unwrap emittery v2's `{ name, data }` listener pair at the transport   boundary, so the public SignalCb API keeps receiving a bare Signal. Type   the transports as Emittery<AppEvents> so the payload is Signal, not unknown. - Import js-yaml as a namespace; v5 dropped its default export, which threw at   module load. Drop the stale @types/js-yaml, which masked this by describing   the v4 API. - Select YAML11_SCHEMA when round-tripping DNA properties. The progenitor key   serialises as a `!!binary` scalar, which v5 moved out of its default core   schema, so loading it threw.
+  - **Breaking Change**: Emittery v2 hands listeners an `{ name, data }` pair instead
+of the bare event data. `AppClient.on("signal", ...)` is unchanged, but
+`AppClientTransport.on` now takes a listener receiving that pair, and
+listeners attached directly to `WsClient` or `TauriAppTransport` receive it
+too.
+
+### Testing
+
+- Drop direct signal unit test and wait for marker signal in e2e by @veeso in [#478](https://github.com/holochain/holochain-client-js/pull/478)
+  - The e2e test already covers direct signals, so the mocked unit test is redundant. Replace the fixed 3s sleep with a retry until a valid marker signal arrives.
+
+### Refactor
+
+- \[**BREAKING**\] Regen cap types and update tests by @jost-s in [#472](https://github.com/holochain/holochain-client-js/pull/472)
+
+### Automated Changes
+
+- *(deps)* Bump brace-expansion by @dependabot[bot] in [#477](https://github.com/holochain/holochain-client-js/pull/477)
+- *(deps)* Bump the npm group with 13 updates by @dependabot[bot] in [#475](https://github.com/holochain/holochain-client-js/pull/475)
+- *(deps)* Bump the nix group with 2 updates by @dependabot[bot] in [#476](https://github.com/holochain/holochain-client-js/pull/476)
+- *(deps)* Bump the nix group with 2 updates by @dependabot[bot]
+- *(deps-dev)* Bump @humanfs/node from 0.16.7 to 0.16.8 by @dependabot[bot] in [#468](https://github.com/holochain/holochain-client-js/pull/468)
+- *(deps)* Bump fast-uri from 3.1.5 to 3.1.7 by @dependabot[bot] in [#467](https://github.com/holochain/holochain-client-js/pull/467)
+- *(deps)* Bump the updates group across 1 directory with 2 updates by @dependabot[bot] in [#469](https://github.com/holochain/holochain-client-js/pull/469)
+- *(deps-dev)* Bump the npm group with 9 updates by @dependabot[bot] in [#473](https://github.com/holochain/holochain-client-js/pull/473)
+- Update dependabot.yml with shared content in [#471](https://github.com/holochain/holochain-client-js/pull/471)
+- *(deps)* Bump the npm group with 11 updates by @dependabot[bot] in [#464](https://github.com/holochain/holochain-client-js/pull/464)
+- *(deps)* Bump the nix group with 2 updates by @dependabot[bot] in [#465](https://github.com/holochain/holochain-client-js/pull/465)
+- *(deps)* Bump the updates group with 2 updates by @dependabot[bot] in [#462](https://github.com/holochain/holochain-client-js/pull/462)
+- *(deps)* Bump fast-uri from 3.1.4 to 3.1.5 by @dependabot[bot] in [#459](https://github.com/holochain/holochain-client-js/pull/459)
+- *(deps)* Bump brace-expansion by @dependabot[bot] in [#460](https://github.com/holochain/holochain-client-js/pull/460)
+- *(deps)* Bump the npm group with 19 updates by @dependabot[bot]
+
 ## \[[0.21.0](https://github.com/holochain/holochain-client-js/compare/v0.21.0-rc.0...v0.21.0)\] - 2026-07-31
 
 ### Features
