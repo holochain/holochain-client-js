@@ -9,19 +9,10 @@
 
 ```typescript
 export type CapAccess = {
-    type: "unrestricted";
+    ChainAuthor: AgentPubKey;
 } | {
-    type: "transferable";
-    value: {
-        secret: CapSecret;
-    };
-} | {
-    type: "assigned";
-    value: {
-        secret: CapSecret;
-        assignees: AgentPubKey[];
-    };
+    RemoteAgent: CapGrant;
 };
 ```
-**References:** [CapSecret](./client.capsecret.md)<!-- -->, [AgentPubKey](./client.agentpubkey.md)
+**References:** [AgentPubKey](./client.agentpubkey.md)<!-- -->, [CapGrant](./client.capgrant.md)
 

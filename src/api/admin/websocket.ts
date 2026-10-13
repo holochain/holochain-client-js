@@ -45,6 +45,8 @@ import {
   GenerateAgentPubKeyResponse,
   GetDnaDefinitionRequest,
   GetDnaDefinitionResponse,
+  GrantDirectSignalCapabilityRequest,
+  GrantDirectSignalCapabilityResponse,
   GrantZomeCallCapabilityRequest,
   GrantZomeCallCapabilityResponse,
   InstallAppRequest,
@@ -277,6 +279,17 @@ export class AdminWebsocket implements AdminApi {
   > = this._requester("grant_zome_call_capability");
 
   /**
+   * Grant agents the capability to send direct signals to a cell.
+   *
+   * Unlike {@link AppWebsocket.grantDirectSignalCapability}, any installed
+   * cell may be targeted. Returns the action hash of the committed grant.
+   */
+  grantDirectSignalCapability: Requester<
+    GrantDirectSignalCapabilityRequest,
+    GrantDirectSignalCapabilityResponse
+  > = this._requester("grant_direct_signal_capability");
+
+  /**
    * Revoke a zome call capability for an agent, which was previously granted
    * using {@link AdminWebsocket.grantZomeCallCapability}.
    */
@@ -331,8 +344,10 @@ export class AdminWebsocket implements AdminApi {
       cell_id: cellId,
       cap_grant: {
         tag: "zome-call-signing-key",
-        functions,
-        access: {
+        grant: {
+          functions,
+        },
+        constraint: {
           type: "assigned",
           value: {
             secret: capSecret,

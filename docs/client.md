@@ -1182,6 +1182,17 @@ The transport an [AppClient](./client.appclient.md) uses to reach the conductor:
 </td></tr>
 <tr><td>
 
+[CapGrant](./client.capgrant.md)
+
+
+</td><td>
+
+A capability grant, committed to the grantor's source chain as a private entry.
+
+
+</td></tr>
+<tr><td>
+
 [CapGrantInfo](./client.capgrantinfo.md)
 
 
@@ -1342,6 +1353,17 @@ The transport an [AppClient](./client.appclient.md) uses to reach the conductor:
 </td></tr>
 <tr><td>
 
+[DesensitizedCapGrant](./client.desensitizedcapgrant.md)
+
+
+</td><td>
+
+A [CapGrant](./client.capgrant.md) with secrets removed.
+
+
+</td></tr>
+<tr><td>
+
 [DhtSegmentState](./client.dhtsegmentstate.md)
 
 
@@ -1482,6 +1504,37 @@ Gossip round state summary.
 </td><td>
 
 Gossip state summary.
+
+
+</td></tr>
+<tr><td>
+
+[GrantConstraintInfo](./client.grantconstraintinfo.md)
+
+
+</td><td>
+
+[GrantConstraint](./client.grantconstraint.md) info with secrets removed.
+
+
+</td></tr>
+<tr><td>
+
+[GrantDirectSignalCapabilityRequest](./client.grantdirectsignalcapabilityrequest.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[GrantZomeCallCapabilityGrant](./client.grantzomecallcapabilitygrant.md)
+
+
+</td><td>
+
 
 
 </td></tr>
@@ -1900,11 +1953,12 @@ Options for a Websocket connection.
 </td></tr>
 <tr><td>
 
-[ZomeCallCapGrant](./client.zomecallcapgrant.md)
+[ZomeCallGrant](./client.zomecallgrant.md)
 
 
 </td><td>
 
+The inner properties of a zome call [Capability](./client.capability.md)<!-- -->.
 
 
 </td></tr>
@@ -2336,17 +2390,18 @@ This type is meant to be opaque
 </td></tr>
 <tr><td>
 
-[CapAccess](./client.capaccess.md)
+[Capability](./client.capability.md)
 
 
 </td><td>
 
+The capability a [CapGrant](./client.capgrant.md) grants.
 
 
 </td></tr>
 <tr><td>
 
-[CapGrant](./client.capgrant.md)
+[CapAccess](./client.capaccess.md)
 
 
 </td><td>
@@ -2532,6 +2587,17 @@ The definition of a storage arc compatible with the concept of storage and query
 
 </td><td>
 
+
+
+</td></tr>
+<tr><td>
+
+[DirectSignal](./client.directsignal.md)
+
+
+</td><td>
+
+A direct signal sent by a remote agent. Holochain treats the payload as opaque bytes; the application decides how to decode it.
 
 
 </td></tr>
@@ -2856,6 +2922,17 @@ The definition of a storage arc compatible with the concept of storage and query
 </td></tr>
 <tr><td>
 
+[EncodedDirectSignal](./client.encodeddirectsignal.md)
+
+
+</td><td>
+
+The wire form of a direct signal sent by a remote agent with `send_direct_signal`<!-- -->. Rust serializes the `Vec<u8>` payload as a msgpack array of integers, hence `number[]` rather than bytes.
+
+
+</td></tr>
+<tr><td>
+
 [Entry](./client.entry.md)
 
 
@@ -2988,6 +3065,27 @@ Cell id for which the countersigning session state is requested.
 <tr><td>
 
 [GetDnaDefinitionResponse](./client.getdnadefinitionresponse.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[GrantConstraint](./client.grantconstraint.md)
+
+
+</td><td>
+
+Who may claim a [CapGrant](./client.capgrant.md)<!-- -->, and by what means.
+
+
+</td></tr>
+<tr><td>
+
+[GrantDirectSignalCapabilityResponse](./client.grantdirectsignalcapabilityresponse.md)
 
 
 </td><td>
@@ -3544,6 +3642,27 @@ If the key could not be deleted from all cells, the call [RevokeAgentKeyRequest]
 <tr><td>
 
 [RoleSettingsMap](./client.rolesettingsmap.md)
+
+
+</td><td>
+
+
+
+</td></tr>
+<tr><td>
+
+[SendDirectSignalRequest](./client.senddirectsignalrequest.md)
+
+
+</td><td>
+
+Arguments for [AppWebsocket.sendDirectSignal()](./client.appwebsocket.senddirectsignal.md)<!-- -->.
+
+
+</td></tr>
+<tr><td>
+
+[SendDirectSignalResponse](./client.senddirectsignalresponse.md)
 
 
 </td><td>

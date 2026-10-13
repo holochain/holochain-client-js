@@ -41,7 +41,9 @@ export function assertHolochainSignal(
     signal !== null &&
     "type" in signal &&
     "value" in signal &&
-    [SignalType.App, SignalType.System].some((type) => signal.type === type)
+    [SignalType.App, SignalType.AppDirect, SignalType.System].some(
+      (type) => signal.type === type,
+    )
   ) {
     return;
   }
@@ -58,8 +60,9 @@ export function assertHolochainSignal(
 /**
  * Turn an already-decoded raw signal into the {@link Signal} surfaced to
  * callers: system signals pass through; app signals have their inner payload
- * decoded. Shared by every transport so signal handling is identical whether
- * the bytes arrive over a websocket or Tauri IPC.
+ * decoded; direct signals have their payload turned into bytes. Shared by
+ * every transport so signal handling is identical whether the bytes arrive
+ * over a websocket or Tauri IPC.
  *
  * @internal
  */
@@ -68,6 +71,19 @@ export function decodeSignal(rawSignal: unknown): Signal {
 
   if (rawSignal.type === SignalType.System) {
     return { type: SignalType.System, value: rawSignal.value } as Signal;
+  }
+
+  if (rawSignal.type === SignalType.AppDirect) {
+    return {
+      type: SignalType.AppDirect,
+      value: {
+        cell_id: rawSignal.value.cell_id,
+        from_agent: rawSignal.value.from_agent,
+        // Rust serializes the opaque `Vec<u8>` payload as a msgpack array of
+        // integers. Hand callers bytes either way.
+        signal: Uint8Array.from(rawSignal.value.signal),
+      },
+    };
   }
 
   const encodedAppSignal = rawSignal.value;

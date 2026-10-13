@@ -4,10 +4,10 @@
 
 ## GrantZomeCallCapabilityRequest.cap\_grant property
 
-Specifies the capability, consisting of zomes and functions to allow signing for as well as access level, secret and assignees.
+The zome call grant to commit, specifying the zomes and functions to allow and the constraint under which it may be used.
 
 **Signature:**
 
 ```typescript
-cap_grant: ZomeCallCapGrant;
+cap_grant: GrantZomeCallCapabilityGrant;
 ```

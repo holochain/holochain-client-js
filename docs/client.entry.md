@@ -8,7 +8,7 @@
 **Signature:**
 
 ```typescript
-export type Entry = EntryContent<"Agent", AgentPubKey> | EntryContent<"App", Uint8Array> | EntryContent<"CounterSign", [CounterSigningSessionData, Uint8Array]> | EntryContent<"CapGrant", ZomeCallCapGrant> | EntryContent<"CapClaim", CapClaim>;
+export type Entry = EntryContent<"Agent", AgentPubKey> | EntryContent<"App", Uint8Array> | EntryContent<"CounterSign", [CounterSigningSessionData, Uint8Array]> | EntryContent<"CapGrant", CapGrant> | EntryContent<"CapClaim", CapClaim>;
 ```
-**References:** [EntryContent](./client.entrycontent.md)<!-- -->, [AgentPubKey](./client.agentpubkey.md)<!-- -->, [CounterSigningSessionData](./client.countersigningsessiondata.md)<!-- -->, [ZomeCallCapGrant](./client.zomecallcapgrant.md)<!-- -->, [CapClaim](./client.capclaim.md)
+**References:** [EntryContent](./client.entrycontent.md)<!-- -->, [AgentPubKey](./client.agentpubkey.md)<!-- -->, [CounterSigningSessionData](./client.countersigningsessiondata.md)<!-- -->, [CapGrant](./client.capgrant.md)<!-- -->, [CapClaim](./client.capclaim.md)
 

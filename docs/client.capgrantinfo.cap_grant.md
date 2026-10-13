@@ -4,10 +4,10 @@
 
 ## CapGrantInfo.cap\_grant property
 
-The cap grant data.
+The cap grant data, with secrets removed.
 
 **Signature:**
 
 ```typescript
-cap_grant: ZomeCallCapGrant;
+cap_grant: DesensitizedCapGrant;
 ```
