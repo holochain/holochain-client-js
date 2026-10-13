@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file.
 
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## \[[0.21.1-rc.0](https://github.com/holochain/holochain-client-js/compare/v0.22.0...v0.21.1-rc.0)\] - 2026-10-13
+
+### Features
+
+- Upgrade to holochain v0.7.1-rc.2
+
+### Bug Fixes
+
+- \[**BREAKING**\] Align ChainOp types and getChainOp* helpers with holochain 0.7 serialization
+  - **Breaking Change**: ChainOp and OpEntry now model the 0.7 msgpack encoding. Newtype op variants carry a bare SignedAction instead of a one-element tuple, OpEntry unit variants are plain strings, and getChainOpAction/getChainOpEntry/getChainOpSignature read the SignedAction struct instead of the pre-0.7 tuple layout.
+
 ## \[[0.21.0](https://github.com/holochain/holochain-client-js/compare/v0.21.0-rc.0...v0.21.0)\] - 2026-07-31
 
 ### Features
