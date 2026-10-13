@@ -12,9 +12,12 @@ export type RawSignal = {
     type: SignalType.App;
     value: EncodedAppSignal;
 } | {
+    type: SignalType.AppDirect;
+    value: EncodedDirectSignal;
+} | {
     type: SignalType.System;
     value: SystemSignal;
 };
 ```
-**References:** [SignalType.App](./client.signaltype.md)<!-- -->, [EncodedAppSignal](./client.encodedappsignal.md)<!-- -->, [SignalType.System](./client.signaltype.md)<!-- -->, [SystemSignal](./client.systemsignal.md)
+**References:** [SignalType.App](./client.signaltype.md)<!-- -->, [EncodedAppSignal](./client.encodedappsignal.md)<!-- -->, [SignalType.AppDirect](./client.signaltype.md)<!-- -->, [EncodedDirectSignal](./client.encodeddirectsignal.md)<!-- -->, [SignalType.System](./client.signaltype.md)<!-- -->, [SystemSignal](./client.systemsignal.md)
 

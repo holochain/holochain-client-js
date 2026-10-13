@@ -223,6 +223,23 @@ Description
 </td></tr>
 <tr><td>
 
+[grantDirectSignalCapability](./client.adminapi.grantdirectsignalcapability.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[Requester](./client.requester.md)<!-- -->&lt;[GrantDirectSignalCapabilityRequest](./client.grantdirectsignalcapabilityrequest.md)<!-- -->, [GrantDirectSignalCapabilityResponse](./client.grantdirectsignalcapabilityresponse.md)<!-- -->&gt;
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
 [grantZomeCallCapability](./client.adminapi.grantzomecallcapability.md)
 
 

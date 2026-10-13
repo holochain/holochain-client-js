@@ -1,4 +1,11 @@
-import { Action, DhtOp, Entry, ZomeCallCapGrant } from "../../hdk/index.js";
+import {
+  Action,
+  DesensitizedCapGrant,
+  DhtOp,
+  Entry,
+  GrantConstraint,
+  ZomeCallGrant,
+} from "../../hdk/index.js";
 import {
   ActionHash,
   AgentPubKey,
@@ -662,16 +669,59 @@ export interface GrantZomeCallCapabilityRequest {
    */
   cell_id: CellId;
   /**
-   * Specifies the capability, consisting of zomes and functions to allow
-   * signing for as well as access level, secret and assignees.
+   * The zome call grant to commit, specifying the zomes and functions to
+   * allow and the constraint under which it may be used.
    */
-  cap_grant: ZomeCallCapGrant;
+  cap_grant: GrantZomeCallCapabilityGrant;
+}
+
+/**
+ * @public
+ */
+export interface GrantZomeCallCapabilityGrant {
+  /**
+   * A string by which to later query for saved grants.
+   * This does not need to be unique within a source chain.
+   */
+  tag: string;
+  /**
+   * Specifies who may claim this capability, and by what means.
+   */
+  constraint: GrantConstraint;
+  /**
+   * The zome functions to grant access to.
+   */
+  grant: ZomeCallGrant;
 }
 
 /**
  * @public
  */
 export type GrantZomeCallCapabilityResponse = ActionHash;
+
+/**
+ * @public
+ */
+export interface GrantDirectSignalCapabilityRequest {
+  /**
+   * The cell that will accept direct signals under this grant.
+   */
+  cell_id: CellId;
+  /**
+   * A string by which to later query for saved grants.
+   * This does not need to be unique within a source chain.
+   */
+  tag: string;
+  /**
+   * Specifies who may send direct signals under this grant, and by what means.
+   */
+  constraint: GrantConstraint;
+}
+
+/**
+ * @public
+ */
+export type GrantDirectSignalCapabilityResponse = ActionHash;
 
 /**
  * @public
@@ -716,9 +766,9 @@ export type ListCapabilityGrantsResponse = Array<[CellId, CapGrantInfo[]]>;
  */
 export interface CapGrantInfo {
   /**
-   * The cap grant data.
+   * The cap grant data, with secrets removed.
    */
-  cap_grant: ZomeCallCapGrant;
+  cap_grant: DesensitizedCapGrant;
   /**
    * The action hash of the cap grant.
    */
@@ -1375,6 +1425,10 @@ export interface AdminApi {
   grantZomeCallCapability: Requester<
     GrantZomeCallCapabilityRequest,
     GrantZomeCallCapabilityResponse
+  >;
+  grantDirectSignalCapability: Requester<
+    GrantDirectSignalCapabilityRequest,
+    GrantDirectSignalCapabilityResponse
   >;
   revokeZomeCallCapability: Requester<
     RevokeZomeCallCapabilityRequest,

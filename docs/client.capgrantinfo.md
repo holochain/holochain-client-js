@@ -63,12 +63,12 @@ The action hash of the cap grant.
 
 </td><td>
 
-[ZomeCallCapGrant](./client.zomecallcapgrant.md)
+[DesensitizedCapGrant](./client.desensitizedcapgrant.md)
 
 
 </td><td>
 
-The cap grant data.
+The cap grant data, with secrets removed.
 
 
 </td></tr>

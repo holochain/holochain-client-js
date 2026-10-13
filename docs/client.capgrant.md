@@ -2,17 +2,89 @@
 
 [Home](./index.md) &gt; [@holochain/client](./client.md) &gt; [CapGrant](./client.capgrant.md)
 
-## CapGrant type
+## CapGrant interface
 
+A capability grant, committed to the grantor's source chain as a private entry.
 
 **Signature:**
 
 ```typescript
-export type CapGrant = {
-    ChainAuthor: AgentPubKey;
-} | {
-    RemoteAgent: ZomeCallCapGrant;
-};
+export interface CapGrant 
 ```
-**References:** [AgentPubKey](./client.agentpubkey.md)<!-- -->, [ZomeCallCapGrant](./client.zomecallcapgrant.md)
+
+## Properties
+
+<table><thead><tr><th>
+
+Property
+
+
+</th><th>
+
+Modifiers
+
+
+</th><th>
+
+Type
+
+
+</th><th>
+
+Description
+
+
+</th></tr></thead>
+<tbody><tr><td>
+
+[capability](./client.capgrant.capability.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[Capability](./client.capability.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[constraint](./client.capgrant.constraint.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[GrantConstraint](./client.grantconstraint.md)
+
+
+</td><td>
+
+
+</td></tr>
+<tr><td>
+
+[tag](./client.capgrant.tag.md)
+
+
+</td><td>
+
+
+</td><td>
+
+string
+
+
+</td><td>
+
+
+</td></tr>
+</tbody></table>
 

@@ -12,9 +12,12 @@ export type Signal = {
     type: SignalType.App;
     value: AppSignal;
 } | {
+    type: SignalType.AppDirect;
+    value: DirectSignal;
+} | {
     type: SignalType.System;
     value: SystemSignal;
 };
 ```
-**References:** [SignalType.App](./client.signaltype.md)<!-- -->, [AppSignal](./client.appsignal.md)<!-- -->, [SignalType.System](./client.signaltype.md)<!-- -->, [SystemSignal](./client.systemsignal.md)
+**References:** [SignalType.App](./client.signaltype.md)<!-- -->, [AppSignal](./client.appsignal.md)<!-- -->, [SignalType.AppDirect](./client.signaltype.md)<!-- -->, [DirectSignal](./client.directsignal.md)<!-- -->, [SignalType.System](./client.signaltype.md)<!-- -->, [SystemSignal](./client.systemsignal.md)
 

@@ -321,6 +321,27 @@ Get the DNA definition for the specified DNA hash.
 </td></tr>
 <tr><td>
 
+[grantDirectSignalCapability](./client.adminwebsocket.grantdirectsignalcapability.md)
+
+
+</td><td>
+
+
+</td><td>
+
+[Requester](./client.requester.md)<!-- -->&lt;[GrantDirectSignalCapabilityRequest](./client.grantdirectsignalcapabilityrequest.md)<!-- -->, [GrantDirectSignalCapabilityResponse](./client.grantdirectsignalcapabilityresponse.md)<!-- -->&gt;
+
+
+</td><td>
+
+Grant agents the capability to send direct signals to a cell.
+
+Unlike [AppWebsocket.grantDirectSignalCapability()](./client.appwebsocket.grantdirectsignalcapability.md)<!-- -->, any installed cell may be targeted. Returns the action hash of the committed grant.
+
+
+</td></tr>
+<tr><td>
+
 [grantSigningKey](./client.adminwebsocket.grantsigningkey.md)
 
 

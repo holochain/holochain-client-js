@@ -55,8 +55,8 @@ export class TauriAppTransport extends Emittery implements AppClientTransport {
    * Decode a signal delivered by the plugin and emit it. The bytes are the same
    * the websocket carries, so this reuses the shared `decodeSignal` helper
    * (src/api/app/decode.ts): app signals have their inner payload decoded;
-   * system signals pass through. Malformed signals throw, exactly as on the
-   * websocket path.
+   * direct signals carry their payload as bytes; system signals pass through.
+   * Malformed signals throw, exactly as on the websocket path.
    */
   private handleSignalBytes(bytes: Uint8Array) {
     this.emit("signal", decodeSignal(decode(bytes))).catch(console.error);

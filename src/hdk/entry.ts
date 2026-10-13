@@ -1,4 +1,4 @@
-import { CapClaim, ZomeCallCapGrant } from "./capabilities.js";
+import { CapClaim, CapGrant } from "./capabilities.js";
 import { AgentPubKey } from "../types.js";
 import { CounterSigningSessionData } from "./countersigning.js";
 import { SignedActionHashed } from "./action.js";
@@ -40,7 +40,7 @@ export type Entry =
   | EntryContent<"Agent", AgentPubKey>
   | EntryContent<"App", Uint8Array>
   | EntryContent<"CounterSign", [CounterSigningSessionData, Uint8Array]>
-  | EntryContent<"CapGrant", ZomeCallCapGrant>
+  | EntryContent<"CapGrant", CapGrant>
   | EntryContent<"CapClaim", CapClaim>;
 
 /**

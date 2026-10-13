@@ -44,12 +44,12 @@ Description
 
 </td><td>
 
-[ZomeCallCapGrant](./client.zomecallcapgrant.md)
+[GrantZomeCallCapabilityGrant](./client.grantzomecallcapabilitygrant.md)
 
 
 </td><td>
 
-Specifies the capability, consisting of zomes and functions to allow signing for as well as access level, secret and assignees.
+The zome call grant to commit, specifying the zomes and functions to allow and the constraint under which it may be used.
 
 
 </td></tr>

@@ -10,6 +10,8 @@ import {
   DnaProperties,
   EntryHash,
   FunctionName,
+  GrantDirectSignalCapabilityRequest,
+  GrantDirectSignalCapabilityResponse,
   InstalledAppId,
   MembraneProof,
   MemproofMap,
@@ -408,6 +410,7 @@ export type SessionCompletionDecision =
  */
 export enum SignalType {
   App = "app",
+  AppDirect = "app_direct",
   System = "system",
 }
 
@@ -418,6 +421,10 @@ export type RawSignal =
   | {
       type: SignalType.App;
       value: EncodedAppSignal;
+    }
+  | {
+      type: SignalType.AppDirect;
+      value: EncodedDirectSignal;
     }
   | {
       type: SignalType.System;
@@ -431,6 +438,10 @@ export type Signal =
   | {
       type: SignalType.App;
       value: AppSignal;
+    }
+  | {
+      type: SignalType.AppDirect;
+      value: DirectSignal;
     }
   | {
       type: SignalType.System;
@@ -454,6 +465,58 @@ export type AppSignal = {
   zome_name: string;
   payload: unknown;
 };
+
+/**
+ * The wire form of a direct signal sent by a remote agent with
+ * `send_direct_signal`. Rust serializes the `Vec<u8>` payload as a msgpack
+ * array of integers, hence `number[]` rather than bytes.
+ *
+ * @public
+ */
+export type EncodedDirectSignal = {
+  cell_id: CellId;
+  from_agent: AgentPubKey;
+  signal: number[];
+};
+
+/**
+ * A direct signal sent by a remote agent. Holochain treats the payload as
+ * opaque bytes; the application decides how to decode it.
+ *
+ * @public
+ */
+export type DirectSignal = {
+  /** The cell that received the signal. */
+  cell_id: CellId;
+  /** The agent that sent the signal. */
+  from_agent: AgentPubKey;
+  /** The opaque payload sent by the remote agent. */
+  signal: Uint8Array;
+};
+
+/**
+ * Arguments for {@link AppWebsocket.sendDirectSignal}.
+ *
+ * @public
+ */
+export type SendDirectSignalRequest = {
+  /** The network (DNA) the recipients are on. */
+  dna_hash: DnaHash;
+  /** The agents to deliver the signal to. Must not be empty. */
+  agents: AgentPubKey[];
+  /** The opaque payload, up to 1 MiB. */
+  signal: Uint8Array;
+  /**
+   * The secret of the recipients' direct signal capability grant, when their
+   * grant carries one. The same secret is offered to every agent in `agents`.
+   */
+  cap_secret?: CapSecret;
+};
+
+/**
+ * @public
+ */
+export type SendDirectSignalResponse = void;
 
 /**
  * @public
@@ -497,6 +560,14 @@ export interface AppClient {
   disableCloneCell(
     args: DisableCloneCellRequest,
   ): Promise<DisableCloneCellResponse>;
+  sendDirectSignal(
+    args: SendDirectSignalRequest,
+    timeout?: number,
+  ): Promise<SendDirectSignalResponse>;
+  grantDirectSignalCapability(
+    args: GrantDirectSignalCapabilityRequest,
+    timeout?: number,
+  ): Promise<GrantDirectSignalCapabilityResponse>;
 }
 
 /**
