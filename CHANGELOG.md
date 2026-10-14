@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## \[[0.21.1](https://github.com/holochain/holochain-client-js/compare/v0.21.1-rc.0...v0.21.1)\] - 2026-10-14
+
+### Miscellaneous Tasks
+
+- Upgrade holochain deps to 0.7.1
+
+### Build System
+
+- *(nix)* Upgrade to holochain v0.7.1
+
 ## \[[0.21.1-rc.0](https://github.com/holochain/holochain-client-js/compare/v0.22.0...v0.21.1-rc.0)\] - 2026-10-13
 
 ### Features
