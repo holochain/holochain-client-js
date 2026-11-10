@@ -6,7 +6,7 @@
 
 Send a signal directly to other agents, without running any zome code on either side.
 
-Each recipient only accepts the signal if it has committed a direct signal capability grant that permits this app's agent, see[AppWebsocket.grantDirectSignalCapability()](./client.appwebsocket.grantdirectsignalcapability.md) and[AdminWebsocket.grantDirectSignalCapability](./client.adminwebsocket.grantdirectsignalcapability.md)<!-- -->. If the recipients' grant carries a secret, pass it as `cap_secret`<!-- -->. Delivery is best effort: a resolved promise means the conductor accepted the request, not that any recipient got the signal. Recipients receive it as a[SignalType.AppDirect](./client.signaltype.md) signal through [AppWebsocket.on()](./client.appwebsocket.on.md)<!-- -->.
+Each recipient only accepts the signal if it has committed a direct signal capability grant that permits this app's agent, see [AppWebsocket.grantDirectSignalCapability()](./client.appwebsocket.grantdirectsignalcapability.md) and [AdminWebsocket.grantDirectSignalCapability](./client.adminwebsocket.grantdirectsignalcapability.md)<!-- -->. If the recipients' grant carries a secret, pass it as `cap_secret`<!-- -->. Delivery is best effort: a resolved promise means the conductor accepted the request, not that any recipient got the signal. Recipients receive it as a [SignalType.AppDirect](./client.signaltype.md) signal through [AppWebsocket.on()](./client.appwebsocket.on.md)<!-- -->.
 
 **Signature:**
 

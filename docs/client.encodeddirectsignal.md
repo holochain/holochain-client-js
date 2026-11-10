@@ -4,7 +4,7 @@
 
 ## EncodedDirectSignal type
 
-The wire form of the `app_direct` variant of the generated [Signal](./client.signal.md)<!-- -->: a direct signal sent by a remote agent with `send_direct_signal`<!-- -->. Rust serializes the `Vec<u8>` payload as a msgpack array of integers, hence`Array<number>` rather than bytes.
+The wire form of the `app_direct` variant of the generated [Signal](./client.signal.md)<!-- -->: a direct signal sent by a remote agent with `send_direct_signal`<!-- -->. Rust serializes the `Vec<u8>` payload as a msgpack array of integers, hence `Array<number>` rather than bytes.
 
 **Signature:**
 

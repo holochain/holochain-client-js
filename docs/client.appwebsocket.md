@@ -350,7 +350,7 @@ Get the state of a countersigning session.
 
 Grant other agents the capability to send direct signals to a cell of this app.
 
-Commits a direct signal capability grant to the source chain of`cell_id`<!-- -->, no coordinator zome needed. The cell must belong to the app this connection is authenticated for; a request for any other cell is rejected and commits nothing. A grant whose constraint carries a secret is only satisfied by a [AppWebsocket.sendDirectSignal()](./client.appwebsocket.senddirectsignal.md) call that offers that secret as `cap_secret`<!-- -->.
+Commits a direct signal capability grant to the source chain of `cell_id`<!-- -->, no coordinator zome needed. The cell must belong to the app this connection is authenticated for; a request for any other cell is rejected and commits nothing. A grant whose constraint carries a secret is only satisfied by a [AppWebsocket.sendDirectSignal()](./client.appwebsocket.senddirectsignal.md) call that offers that secret as `cap_secret`<!-- -->.
 
 
 </td></tr>
@@ -442,7 +442,7 @@ In the countersigning workflow it will first be attempted to resolve the session
 
 Send a signal directly to other agents, without running any zome code on either side.
 
-Each recipient only accepts the signal if it has committed a direct signal capability grant that permits this app's agent, see[AppWebsocket.grantDirectSignalCapability()](./client.appwebsocket.grantdirectsignalcapability.md) and[AdminWebsocket.grantDirectSignalCapability](./client.adminwebsocket.grantdirectsignalcapability.md)<!-- -->. If the recipients' grant carries a secret, pass it as `cap_secret`<!-- -->. Delivery is best effort: a resolved promise means the conductor accepted the request, not that any recipient got the signal. Recipients receive it as a[SignalType.AppDirect](./client.signaltype.md) signal through [AppWebsocket.on()](./client.appwebsocket.on.md)<!-- -->.
+Each recipient only accepts the signal if it has committed a direct signal capability grant that permits this app's agent, see [AppWebsocket.grantDirectSignalCapability()](./client.appwebsocket.grantdirectsignalcapability.md) and [AdminWebsocket.grantDirectSignalCapability](./client.adminwebsocket.grantdirectsignalcapability.md)<!-- -->. If the recipients' grant carries a secret, pass it as `cap_secret`<!-- -->. Delivery is best effort: a resolved promise means the conductor accepted the request, not that any recipient got the signal. Recipients receive it as a [SignalType.AppDirect](./client.signaltype.md) signal through [AppWebsocket.on()](./client.appwebsocket.on.md)<!-- -->.
 
 
 </td></tr>
