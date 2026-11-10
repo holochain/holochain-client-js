@@ -6,7 +6,7 @@
 
 Grant other agents the capability to send direct signals to a cell of this app.
 
-Commits a direct signal capability grant to the source chain of`cell_id`<!-- -->, no coordinator zome needed. The cell must belong to the app this connection is authenticated for; a request for any other cell is rejected and commits nothing. A grant whose constraint carries a secret is only satisfied by a [AppWebsocket.sendDirectSignal()](./client.appwebsocket.senddirectsignal.md) call that offers that secret as `cap_secret`<!-- -->.
+Commits a direct signal capability grant to the source chain of `cell_id`<!-- -->, no coordinator zome needed. The cell must belong to the app this connection is authenticated for; a request for any other cell is rejected and commits nothing. A grant whose constraint carries a secret is only satisfied by a [AppWebsocket.sendDirectSignal()](./client.appwebsocket.senddirectsignal.md) call that offers that secret as `cap_secret`<!-- -->.
 
 **Signature:**
 

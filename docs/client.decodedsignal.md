@@ -4,7 +4,7 @@
 
 ## DecodedSignal type
 
-The decoded counterpart of the generated [Signal](./client.signal.md)<!-- -->: system signals pass through unchanged, app signals carry a [DecodedAppSignal](./client.decodedappsignal.md)<!-- -->, direct signals carry a [DecodedDirectSignal](./client.decodeddirectsignal.md)<!-- -->. This is what every[SignalCb](./client.signalcb.md) receives.
+The decoded counterpart of the generated [Signal](./client.signal.md)<!-- -->: system signals pass through unchanged, app signals carry a [DecodedAppSignal](./client.decodedappsignal.md)<!-- -->, direct signals carry a [DecodedDirectSignal](./client.decodeddirectsignal.md)<!-- -->. This is what every [SignalCb](./client.signalcb.md) receives.
 
 **Signature:**
 

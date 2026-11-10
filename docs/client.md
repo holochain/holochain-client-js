@@ -448,7 +448,7 @@ A HoloHashMap that will fetch and store a value if it is not found in a 'get' ca
 
 Carries the App API over Tauri IPC into a Holochain conductor running in the same process, instead of over a websocket.
 
-From [AppWebsocket](./client.appwebsocket.md)<!-- -->'s perspective this is a drop-in for[WsClient](./client.wsclient.md)<!-- -->: it exposes the same `request` method and is an Emittery that emits `signal` events, so every AppWebsocket method works unchanged. Only the pipe differs — the same msgpack-encoded `{ type, value }` payloads a websocket would carry are sent through the `plugin:<name>|app_request` command. No app id is sent: the conductor scopes each request to the calling window on the Rust side, which replaces the per-app websocket auth token.
+From [AppWebsocket](./client.appwebsocket.md)<!-- -->'s perspective this is a drop-in for [WsClient](./client.wsclient.md)<!-- -->: it exposes the same `request` method and is an Emittery that emits `signal` events, so every AppWebsocket method works unchanged. Only the pipe differs — the same msgpack-encoded `{ type, value }` payloads a websocket would carry are sent through the `plugin:<name>|app_request` command. No app id is sent: the conductor scopes each request to the calling window on the Rust side, which replaces the per-app websocket auth token.
 
 
 </td></tr>
@@ -1201,7 +1201,7 @@ Returns an \[`AdminResponse::Error`<!-- -->\] with a reason why the request fail
 
 </td><td>
 
-The payload carried by the [AdminRequest](./client.adminrequest.md) variant tagged `Tag`<!-- -->, or`void` when that variant carries no payload.
+The payload carried by the [AdminRequest](./client.adminrequest.md) variant tagged `Tag`<!-- -->, or `void` when that variant carries no payload.
 
 
 </td></tr>
@@ -1214,7 +1214,7 @@ The payload carried by the [AdminRequest](./client.adminrequest.md) variant tagg
 
 Represents the possible responses to an \[`AdminRequest`<!-- -->\] and follows a general convention of `noun_verb` as opposed to the `verb_noun` of `AdminRequest`<!-- -->.
 
-Will serialize as an object with any contents of the enum on a key `data` and the enum variant on a key `type`<!-- -->, e.g.`{ type: 'app_interface_attached', data: { port: 4000 } }`
+Will serialize as an object with any contents of the enum on a key `data` and the enum variant on a key `type`<!-- -->, e.g. `{ type: 'app_interface_attached', data: { port: 4000 } }`
 
 
 </td></tr>
@@ -1225,7 +1225,7 @@ Will serialize as an object with any contents of the enum on a key `data` and th
 
 </td><td>
 
-The payload carried by the [AdminResponse](./client.adminresponse.md) variant tagged `Tag`<!-- -->, or`void` when that variant carries no payload.
+The payload carried by the [AdminResponse](./client.adminresponse.md) variant tagged `Tag`<!-- -->, or `void` when that variant carries no payload.
 
 
 </td></tr>
@@ -1477,7 +1477,7 @@ Returns an \[`AppResponse::Error`<!-- -->\] with a reason why the request failed
 
 </td><td>
 
-The payload carried by the [AppRequest](./client.apprequest.md) variant tagged `Tag`<!-- -->, or`void` when that variant carries no payload.
+The payload carried by the [AppRequest](./client.apprequest.md) variant tagged `Tag`<!-- -->, or `void` when that variant carries no payload.
 
 
 </td></tr>
@@ -1499,7 +1499,7 @@ Represents the possible responses to an \[`AppRequest`<!-- -->\].
 
 </td><td>
 
-The payload carried by the [AppResponse](./client.appresponse.md) variant tagged `Tag`<!-- -->, or`void` when that variant carries no payload.
+The payload carried by the [AppResponse](./client.appresponse.md) variant tagged `Tag`<!-- -->, or `void` when that variant carries no payload.
 
 
 </td></tr>
@@ -2001,7 +2001,7 @@ The direct signal handed to listeners. Holochain treats the payload as opaque by
 
 </td><td>
 
-The decoded counterpart of the generated [Signal](./client.signal.md)<!-- -->: system signals pass through unchanged, app signals carry a [DecodedAppSignal](./client.decodedappsignal.md)<!-- -->, direct signals carry a [DecodedDirectSignal](./client.decodeddirectsignal.md)<!-- -->. This is what every[SignalCb](./client.signalcb.md) receives.
+The decoded counterpart of the generated [Signal](./client.signal.md)<!-- -->: system signals pass through unchanged, app signals carry a [DecodedAppSignal](./client.decodedappsignal.md)<!-- -->, direct signals carry a [DecodedDirectSignal](./client.decodeddirectsignal.md)<!-- -->. This is what every [SignalCb](./client.signalcb.md) receives.
 
 
 </td></tr>
@@ -2071,7 +2071,7 @@ Return type for get\_details calls. ActionHash returns a Record. EntryHash retur
 
 Mirror of `kitsune2_api::DhtArc` for the conductor API.
 
-Serializes untagged, exactly like the kitsune2 original:`Empty` maps to null, `Arc(a, b)` maps to `[a, b]`<!-- -->.
+Serializes untagged, exactly like the kitsune2 original: `Empty` maps to null, `Arc(a, b)` maps to `[a, b]`<!-- -->.
 
 
 </td></tr>
@@ -2183,7 +2183,7 @@ Per-variant data for \[`ActionType::Dna`<!-- -->\].
 
 The definition of a DNA: the hash of this data is what produces the DnaHash.
 
-Historical note: This struct was written before `DnaManifest` appeared. It is included as part of a `DnaFile`<!-- -->. There is still a lot of code that uses this type, but in function, it has mainly been superseded by `DnaManifest`<!-- -->. Hence, this type can basically be thought of as a fully validated, normalized`DnaManifest`
+Historical note: This struct was written before `DnaManifest` appeared. It is included as part of a `DnaFile`<!-- -->. There is still a lot of code that uses this type, but in function, it has mainly been superseded by `DnaManifest`<!-- -->. Hence, this type can basically be thought of as a fully validated, normalized `DnaManifest`
 
 
 </td></tr>
@@ -2358,7 +2358,7 @@ Storage info for DNA used by one or more hApps.
 
 </td><td>
 
-The wire form of the `app_direct` variant of the generated [Signal](./client.signal.md)<!-- -->: a direct signal sent by a remote agent with `send_direct_signal`<!-- -->. Rust serializes the `Vec<u8>` payload as a msgpack array of integers, hence`Array<number>` rather than bytes.
+The wire form of the `app_direct` variant of the generated [Signal](./client.signal.md)<!-- -->: a direct signal sent by a remote agent with `send_direct_signal`<!-- -->. Rust serializes the `Vec<u8>` payload as a msgpack array of integers, hence `Array<number>` rather than bytes.
 
 
 </td></tr>
@@ -2671,7 +2671,7 @@ There is a \[`DnaHash`<!-- -->\] instead of a \[`Space`<!-- -->\](kitsune2\_api:
 
 Opaque, app-defined bytes made available to a cell during its `init` callback.
 
-Supplied per role at install time (the `init_properties` field of`holochain_types::app::RoleSettings::Provisioned`<!-- -->), persisted conductor-side, and read back during `init` via the `hdk::migrate::get_init_properties` host function.
+Supplied per role at install time (the `init_properties` field of `holochain_types::app::RoleSettings::Provisioned`<!-- -->), persisted conductor-side, and read back during `init` via the `hdk::migrate::get_init_properties` host function.
 
 The bytes are never interpreted by the conductor and never written to the DHT. The app alone decides how to decode them. They are one way an app can use to seed a freshly migrated chain, for example by carrying a signed summary and the action hash of the `CloseChain` action from the chain it migrated from.
 
@@ -2987,7 +2987,7 @@ Lifecycle timings for one DHT op in the DHT arc this conductor is currently hold
 
 The DHT database is shared by every cell running the same DNA, so a dump covers every op this conductor holds for that DNA rather than only the ops of one agent running the DNA.
 
-Ops that are still in a validation limbo report `when_integrated: None` and `validation_status: None`<!-- -->. `locally_validated` is only recorded for integrated chain ops; it is `None` for limbo ops and for warrants. A`Some(false)` value means the op was inserted by the cache rather than validated by this node, which is why its integration time can equal its received time.
+Ops that are still in a validation limbo report `when_integrated: None` and `validation_status: None`<!-- -->. `locally_validated` is only recorded for integrated chain ops; it is `None` for limbo ops and for warrants. A `Some(false)` value means the op was inserted by the cache rather than validated by this node, which is why its integration time can equal its received time.
 
 
 </td></tr>
